@@ -455,7 +455,7 @@
     <value>Continuer</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Créer un compte</value>
+    <value>Créez un compte</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Création du compte...</value>
@@ -686,10 +686,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synchronisation terminée</value>
+    <value>Synchronisation achevée</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Échec de la synchronisation</value>
+    <value>Synchronisation échouée</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Synchroniser le coffre maintenant</value>
@@ -778,7 +778,7 @@
     <value>Le moyen le plus simple d'ajouter de nouveaux identifiants à votre coffre est d'utiliser le service de saisie automatique Bitwarden. Pour en savoir davantage sur l'utilisation du service de saisie automatique Bitwarden, naviguez jusqu'à l'écran "Paramètres".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Saisir automatiquement</value>
+    <value>Saisie automatique</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Voulez-vous saisir automatiquement ou afficher cet élément ?</value>
@@ -907,7 +907,7 @@ La numérisation se fera automatiquement.</value>
     <value>Copier le TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Si un identifiant a une clé d'authentification, copier le code de vérification TOTP dans votre presse-papier quand vous remplissez automatiquement l'identifiant.</value>
+    <value>Si un identifiant possède une clé d'authentification, copiez le code de vérification TOTP dans votre presse-papiers lorsque vous saisissez automatiquement l'identifiant.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Copier TOTP automatiquement</value>
@@ -1134,7 +1134,7 @@ La numérisation se fera automatiquement.</value>
     <value>Expiration</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Afficher les icônes du site web</value>
+    <value>Afficher les icônes des sites web</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>Affichez une image reconnaissable à côté de chaque identifiant.</value>
@@ -1304,13 +1304,13 @@ La numérisation se fera automatiquement.</value>
     <value>1. Allez dans l'application "Réglages" d'iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Appuyez sur "Mots de passe et comptes"</value>
+    <value>2. Appuyez sur "Mots de passe"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Appuyez sur "Préremplir mots de passe"</value>
+    <value>3. Appuyez sur "Options des mots de passe"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Activez "Préremplir mots de passe"</value>
+    <value>4. Activez "Remplir automatiquement les mots de passe et les clés d'identification"</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
     <value>5. Sélectionnez "Bitwarden"</value>
@@ -1378,10 +1378,10 @@ La numérisation se fera automatiquement.</value>
     <value>Rechercher dans la collection</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Rechercher des fichiers Sends</value>
+    <value>Rechercher des Send fichier</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Rechercher des textes Sends</value>
+    <value>Rechercher des Sends texte</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
     <value>Rechercher {0} :</value>
@@ -1400,7 +1400,7 @@ La numérisation se fera automatiquement.</value>
     <value>Divers</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Propriété</value>
+    <value>Propriétaire</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
     <value>À qui appartient cet élément ?</value>
@@ -1431,7 +1431,7 @@ La numérisation se fera automatiquement.</value>
     <value>Aucune organisation à lister.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé.</value>
+    <value>Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Le déplacement vers une organisation transfère le Propriétaire de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Nombre de mots</value>
@@ -1526,7 +1526,7 @@ La numérisation se fera automatiquement.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Effacer automatiquement de votre presse-papiers les valeurs copiées.</value>
+    <value>Effacez automatiquement les valeurs copiées de votre presse-papiers.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1750,7 +1750,7 @@ La numérisation se fera automatiquement.</value>
     <value>Autoriser la synchronisation au rafraîchissement</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Synchronisation du coffre avec un geste vers le bas</value>
+    <value>Synchronisez le coffre avec un geste vers le bas.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
     <value>Portail de connexion unique d'entreprise</value>
@@ -1853,10 +1853,10 @@ La numérisation se fera automatiquement.</value>
     <value>Si cette option est activée, l'accessibilité affichera une popup pour améliorer le service de remplissage automatique pour les anciennes applications qui ne prennent pas en charge les outils de remplissage automatique d'Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>En raison d'une Politique d'Entreprise, il vous est interdit d'enregistrer des objets dans votre coffre personnel. Changez l'option Propriété pour une organisation et choisissez parmi les Collections disponibles.</value>
+    <value>En raison d'une politique d'entreprise, il vous est interdit d'enregistrer des éléments dans votre coffre personnel. Changez l'option Propriétaire au profit d'une organisation et choisissez parmi les collections disponibles.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>Une politique d'organisation affecte vos options de propriété.</value>
+    <value>Une politique d'organisation affecte vos options de Propriétaire.</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Send</value>
@@ -1968,7 +1968,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Désactiver cet envoi pour que personne ne puisse y accéder.</value>
+    <value>Désactiver ce Send pour que personne ne puisse y accéder</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1998,7 +1998,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Ajouter un Send</value>
+    <value>Nouveau Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -2006,7 +2006,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Le Send a été supprimé.</value>
+    <value>Send supprimé</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
@@ -2014,7 +2014,7 @@ La numérisation se fera automatiquement.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Nouveau Send créé.</value>
+    <value>Send créé</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2036,7 +2036,7 @@ La numérisation se fera automatiquement.</value>
     <value>Personnalisé</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Partager ce Send lors de l'enregistrement.</value>
+    <value>Partagez ce Send au moment de l'enregistrement</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2355,7 +2355,7 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Approuver les demandes de connexion</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Utiliser cet appareil pour approuver les demandes de connexion faites à partir d'autres appareils.</value>
+    <value>Utiliser cet appareil pour approuver les demandes de connexion faites à partir d'autres appareils</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Autoriser les notifications</value>
@@ -2424,6 +2424,10 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   <data name="Fastmail" xml:space="preserve">
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Jeton d'accès API</value>
@@ -2542,7 +2546,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>La langue a été changée en {0}. Veuillez redémarrer l'application pour voir le changement</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Le changement de langue nécessite le redémarrage de l'application</value>
+    <value>Le changement de la langue nécessite le redémarrage de l'application.</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
     <value>Par défaut (système)</value>
@@ -2777,7 +2781,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Action après délai d'expiration de la session</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>La phrase d'empreinte du compte</value>
+    <value>Phrase d'empreinte du compte</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
@@ -2857,5 +2861,14 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Compte déconnecté.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Les autorisations de votre organisation ont été mises à jour, vous obligeant à définir un mot de passe principal.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Votre organisation vous demande de définir un mot de passe principal.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Configurez une méthode de déverrouillage pour modifier l'action après délai d'expiration de votre coffre.</value>
   </data>
 </root>

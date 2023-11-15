@@ -102,12 +102,14 @@ namespace Bit.Core.Models.Domain
                     return;
                 }
 
+                Region = copy.Region;
                 EnvironmentUrls = copy.EnvironmentUrls;
                 VaultTimeout = copy.VaultTimeout;
                 VaultTimeoutAction = copy.VaultTimeoutAction;
                 ScreenCaptureAllowed = copy.ScreenCaptureAllowed;
             }
 
+            public Region? Region;
             public EnvironmentUrlData EnvironmentUrls;
             [Obsolete("Feb 10 2023: VaultTimeout has been deprecated in favor of stored prefs to retain value after logout. It remains here to allow for migration during app upgrade.")]
             public int? VaultTimeout;

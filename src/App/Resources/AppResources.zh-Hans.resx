@@ -721,7 +721,7 @@
     <value>Bitwarden 网页版密码库</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>丢失了验证器应用？</value>
+    <value>丢失了验证器 App？</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>项目</value>
@@ -806,11 +806,11 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>验证器应用</value>
+    <value>验证器 App</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>请输入您的验证器应用中的 6 位数验证码。</value>
+    <value>请输入您的验证器 App 中的 6 位数验证码。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>此账户已设置两步登录，但此设备不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加其他跨设备支持的提供程序（例如验证器应用）。</value>
+    <value>此账户已设置两步登录，但此设备不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加能更好支持跨设备使用的其他提供程序（例如验证器 App）</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>恢复代码</value>
@@ -851,7 +851,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>要继续，请将您的 YubiKey 靠在设备背面或者将 YubiKey 插入您设备的 USB 端口，然后按下按钮。</value>
+    <value>要继续，请将您的 YubiKey NEO 靠在设备背面或者将 YubiKey 插入设备的 USB 端口，然后触摸其按钮。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey 安全钥匙</value>
@@ -1131,13 +1131,13 @@
     <value>地址</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>过期日</value>
+    <value>有效期</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
     <value>显示网站图标</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>在每个登录旁显示一个可识别的图像。</value>
+    <value>在每个登录项目旁边显示一个可识别的图像。</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>图标服务器 URL</value>
@@ -1269,7 +1269,7 @@
     <value>再试一次</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>要继续，请将您的 YubiKey 靠在设备背面。</value>
+    <value>要继续，请将您的 YubiKey NEO 靠在设备背面。</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>当应用程序不支持标准的自动填充服务时，无障碍服务可能会很有用。</value>
@@ -1340,7 +1340,7 @@
     <value>所有项目</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
@@ -1458,7 +1458,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>您的账户的指纹短语</value>
+    <value>您的账户指纹短语</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
@@ -1644,7 +1644,7 @@
     <value>文件格式</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>输入主密码来导出你的密码库。</value>
+    <value>输入您的主密码以导出你的密码库数据。</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
     <value>发送验证码到您的电子邮箱</value>
@@ -1795,7 +1795,7 @@
     <value>无效的密码</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>密码不符合组织要求。请检查策略信息并重试。</value>
+    <value>密码不符合组织要求。请检查策略信息然后重试。</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>载入中</value>
@@ -2354,7 +2354,7 @@
     <value>批准登录请求</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>使用此设备批准其他设备的登录请求</value>
+    <value>使用此设备批准来自其他设备的登录请求</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>允许通知</value>
@@ -2424,6 +2424,10 @@
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API 访问令牌</value>
   </data>
@@ -2455,7 +2459,7 @@
     <value>随机</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
-    <value>连接到手表</value>
+    <value>连接到 Watch</value>
   </data>
   <data name="AccessibilityServiceDisclosure" xml:space="preserve">
     <value>无障碍服务声明</value>
@@ -2493,7 +2497,7 @@
     <value>使用主密码登录</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>使用设备登录</value>
+    <value>使用其他设备登录</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>登录已发起</value>
@@ -2643,7 +2647,7 @@
     <value>通行密钥</value>
   </data>
   <data name="Application" xml:space="preserve">
-    <value>应用</value>
+    <value>应用程序</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
     <value>您不能编辑通行密钥应用程序，因为这会使通行密钥失效</value>
@@ -2655,7 +2659,7 @@
     <value>通行密钥将不会被复制到克隆的项目。要继续克隆这个项目吗？</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
-    <value>复制应用</value>
+    <value>复制应用程序</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
     <value>可用于两步登录</value>
@@ -2820,7 +2824,7 @@
     <value>接下来前往 App Store 吗？</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>在 Bitwarden 网页应用中设置两步登录，可以使您的账户更加安全。</value>
+    <value>通过在 Bitwarden 网页应用中设置两步登录，可以使您的账户更加安全。</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
     <value>您可以在 Bitwarden 网页应用上更改您的主密码。</value>
@@ -2842,7 +2846,7 @@
     <value>Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站以了解更多。</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>帮助别人了解 Bitwarden 是否适合他们。立即访问应用商店并留下评分。</value>
+    <value>帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
     <value>当设备的深色模式启用时，选择要使用的深色主题。</value>
@@ -2856,5 +2860,14 @@
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>账户已注销。</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>设置解锁选项以更改您的密码库超时操作。</value>
   </data>
 </root>

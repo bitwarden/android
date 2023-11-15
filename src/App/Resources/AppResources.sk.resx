@@ -2424,6 +2424,10 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Prístupový token API</value>
   </data>
@@ -2856,5 +2860,14 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Účet bol odhlásený.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Povolenia vašej organizácie boli aktualizované, čo si vyžaduje nastavenie hlavného hesla.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Vaša organizácia vyžaduje, aby ste nastavili hlavné heslo.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</value>
   </data>
 </root>

@@ -2424,6 +2424,10 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token dostępu API</value>
   </data>
@@ -2856,5 +2860,14 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Konto wylogowane.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Uprawnienia w Twojej organizacji zostały zaktualizowane, musisz teraz ustawić hasło główne.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Twoja organizacja wymaga ustawienia hasła głównego.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Ustaw opcje odblokowania, aby zmienić czas blokowania sejfu.</value>
   </data>
 </root>

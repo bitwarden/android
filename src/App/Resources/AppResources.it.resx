@@ -942,10 +942,10 @@
     <value>La dimensione massima del file è 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>Non puoi utilizzare questa funzione finché non aggiorni la tua chiave di criptografia.</value>
+    <value>Non puoi utilizzare questa funzione finché non aggiorni la tua chiave di crittografia.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Migrazione della chiave di criptografia obbligatoria. Accedi tramite la cassaforte web per aggiornare la tua chiave di criptografia.</value>
+    <value>Migrazione della chiave di crittografia obbligatoria. Accedi tramite la cassaforte web per aggiornare la tua chiave di crittografia.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Ulteriori informazioni</value>
@@ -1655,13 +1655,13 @@
     <value>Conferma la tua identità per continuare.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Questa esportazione contiene i dati della tua cassaforte in un formato non criptato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l'utilizzo.</value>
+    <value>Questa esportazione contiene i dati della tua cassaforte in un formato non crittografato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l'utilizzo.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>Questa esportazione cripta i tuoi dati usando la chiave di criptografia del tuo account. Se cambi la chiave di criptografia del tuo account, non potrai più decifrare il file esportato e dovrai eseguire una nuova esportazione.</value>
+    <value>Questa esportazione crittografa i tuoi dati usando la chiave di crittografia del tuo account. Se cambi la chiave di crittografia del tuo account, non potrai più decifrare il file esportato e dovrai eseguire una nuova esportazione.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Le chiavi di criptografia dell'account sono uniche per ogni account Bitwarden, quindi non puoi importare un file di esportazione criptato in un account diverso.</value>
+    <value>Le chiavi di crittografia dell'account sono uniche per ogni account Bitwarden, quindi non puoi importare un file di esportazione crittato in un account diverso.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>Conferma esportazione della cassaforte</value>
@@ -2095,7 +2095,7 @@
     <value>Rimuovi password principale</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} sta usando SSO con criptografia gestita dal cliente. Continuare rimuoverà la tua password principale dal tuo profilo e richiederà SSO per accedere.</value>
+    <value>{0} sta usando SSO con crittografia gestita dal cliente. Continuare rimuoverà la tua password principale dal tuo profilo e richiederà SSO per accedere.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
     <value>Se non vuoi rimuovere la tua password principale, puoi lasciare questa organizzazione.</value>
@@ -2297,7 +2297,7 @@
 clicca Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Sei sicuro di voler usare l'opzione "Mai"? Impostare le opzioni di blocco su "Mai" salverà la chiave di criptografia della cassaforte sul tuo dispositivo. Se utilizzi questa opzione, assicurati di mantenere il tuo dispositivo adeguatamente protetto.</value>
+    <value>Sei sicuro di voler usare l'opzione "Mai"? Impostare le opzioni di blocco su "Mai" salverà la chiave di crittografia della cassaforte sul tuo dispositivo. Se utilizzi questa opzione, assicurati di mantenere il tuo dispositivo adeguatamente protetto.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>L'URL inserito non è valido, controllalo e prova a salvarlo di nuovo.</value>
@@ -2354,7 +2354,7 @@ clicca Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>Approva richieste di accesso</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Usa questo dispositivo per approvare le richieste di accesso fatte da altri dispositivi.</value>
+    <value>Usa questo dispositivo per approvare le richieste di accesso fatte da altri dispositivi</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Consenti notifiche</value>
@@ -2423,6 +2423,10 @@ clicca Aggiungi TOTP per salvare la chiave in modo sicuro</value>
   <data name="Fastmail" xml:space="preserve">
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token di accesso API</value>
@@ -2820,32 +2824,32 @@ Vuoi passare a questo account?</value>
     <value>Continuare sull'App Store?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+    <value>Rendi il tuo account più sicuro impostando la verifica in due passaggi sul sito web di Bitwarden.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
-    <value>Puoi modificare la tua password principale sull'app web Bitwarden.</value>
+    <value>Puoi modificare la tua password principale sul sito web di Bitwarden.</value>
   </data>
   <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
-    <value>Puoi importare i dati nella tua cassaforte {0}.</value>
+    <value>Puoi importare i dati nella tua cassaforte su {0}.</value>
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>Learn more about how to use Bitwarden on the Help center.</value>
+    <value>Scopri di più su come usare Bitwarden nel centro assistenza.</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
-    <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+    <value>Non riesci a trovare quello che stai cercando? Contatta il supporto Bitwarden su bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
-    <value>Explore more features of your Bitwarden account on the web app.</value>
+    <value>Esplora altre funzionalità del tuo account Bitwarden sul sito web.</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden ti consente di condividere gli elementi della tua cassaforte con altri utilizzando un'organizzazione. Scopri di più sul sito bitwarden.com.</value>
+    <value>Bitwarden ti consente di condividere gli elementi della tua cassaforte con altri usando un'organizzazione. Scopri di più su bitwarden.com.</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
+    <value>Aiuta gli altri a decidere se Bitwarden è adatto a loro. Visita l'App Store e lascia una recensione.</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
-    <value>Scegli il tema scuro da utilizzare quando è in uso la modalità oscura del tuo dispositivo</value>
+    <value>Scegli il tema scuro da usare quando il tuo dispositivo è in modalità scura</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
     <value>Creato il {0} alle {1}</value>
@@ -2856,5 +2860,14 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Account uscito.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Le autorizzazioni della tua organizzazione sono state aggiornate, obbligandoti a impostare una password principale.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>La tua organizzazione ti obbliga di impostare di una password principale.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Imposta un metodo di sblocco per modificare l'azione timeout cassaforte.</value>
   </data>
 </root>

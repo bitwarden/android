@@ -76,7 +76,7 @@ namespace Bit.App.Pages
                 _logger,
                 OnVaultTimeoutActionChangingAsync,
                 AppResources.SessionTimeoutAction,
-                _ => _inited && !HasVaultTimeoutActionPolicy,
+                _ => _inited && !HasVaultTimeoutActionPolicy && IsVaultTimeoutActionLockAllowed,
                 ex => HandleException(ex));
 
             ToggleUseThisDeviceToApproveLoginRequestsCommand = CreateDefaultAsyncCommnad(ToggleUseThisDeviceToApproveLoginRequestsAsync, _ => _inited);
@@ -129,6 +129,7 @@ namespace Bit.App.Pages
             get => _canUnlockWithBiometrics;
             set
             {
+                TriggerVaultTimeoutActionLockAllowedPropertyChanged();
                 if (SetProperty(ref _canUnlockWithBiometrics, value))
                 {
                     ((ICommand)ToggleCanUnlockWithBiometricsCommand).Execute(null);
@@ -141,12 +142,17 @@ namespace Bit.App.Pages
             get => _canUnlockWithPin;
             set
             {
+                TriggerVaultTimeoutActionLockAllowedPropertyChanged();
                 if (SetProperty(ref _canUnlockWithPin, value))
                 {
                     ((ICommand)ToggleCanUnlockWithPinCommand).Execute(null);
                 }
             }
         }
+
+        public bool IsVaultTimeoutActionLockAllowed => _hasMasterPassword || _canUnlockWithBiometrics || _canUnlockWithPin;
+
+        public string SetUpUnlockMethodLabel => IsVaultTimeoutActionLockAllowed ? null : AppResources.SetUpAnUnlockOptionToChangeYourVaultTimeoutAction;
 
         public TimeSpan? CustomVaultTimeoutTime
         {
@@ -164,6 +170,7 @@ namespace Bit.App.Pages
                             MainThread.BeginInvokeOnMainThread(() => SetProperty(ref _customVaultTimeoutTime, oldValue));
                         });
                 }
+                TriggerVaultTimeoutActionLockAllowedPropertyChanged();
             }
         }
 
@@ -202,8 +209,6 @@ namespace Bit.App.Pages
         }
 
         public bool ShowChangeMasterPassword { get; private set; }
-
-        private bool IsVaultTimeoutActionLockAllowed => _hasMasterPassword || _canUnlockWithBiometrics || _canUnlockWithPin;
 
         private int? CurrentVaultTimeout => GetRawVaultTimeoutFrom(VaultTimeoutPickerViewModel.SelectedKey);
 
@@ -253,6 +258,7 @@ namespace Bit.App.Pages
                 TriggerPropertyChanged(nameof(VaultTimeoutPolicyDescription));
                 TriggerPropertyChanged(nameof(ShowChangeMasterPassword));
                 TriggerUpdateCustomVaultTimeoutPicker();
+                TriggerVaultTimeoutActionLockAllowedPropertyChanged();
                 ToggleUseThisDeviceToApproveLoginRequestsCommand.RaiseCanExecuteChanged();
                 ToggleCanUnlockWithBiometricsCommand.RaiseCanExecuteChanged();
                 ToggleCanUnlockWithPinCommand.RaiseCanExecuteChanged();
@@ -305,6 +311,7 @@ namespace Bit.App.Pages
             {
                 _customVaultTimeoutTime = TimeSpan.FromMinutes(vaultTimeout);
             }
+            TriggerVaultTimeoutActionLockAllowedPropertyChanged();
         }
 
         private async Task InitVaultTimeoutActionPickerAsync()
@@ -324,6 +331,7 @@ namespace Bit.App.Pages
             }
 
             VaultTimeoutActionPickerViewModel.Init(options, timeoutAction, IsVaultTimeoutActionLockAllowed ? VaultTimeoutAction.Lock : VaultTimeoutAction.Logout);
+            TriggerVaultTimeoutActionLockAllowedPropertyChanged();
         }
 
         private async Task ToggleUseThisDeviceToApproveLoginRequestsAsync()
@@ -360,6 +368,7 @@ namespace Bit.App.Pages
         {
             if (!_canUnlockWithBiometrics)
             {
+                MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(CanUnlockWithBiometrics)));
                 await UpdateVaultTimeoutActionIfNeededAsync();
                 await _biometricsService.SetCanUnlockWithBiometricsAsync(CanUnlockWithBiometrics);
                 return;
@@ -375,11 +384,12 @@ namespace Bit.App.Pages
             }
 
             await _biometricsService.SetCanUnlockWithBiometricsAsync(CanUnlockWithBiometrics);
+            await InitVaultTimeoutActionPickerAsync();
         }
 
         public async Task ToggleCanUnlockWithPinAsync()
         {
-            if (!CanUnlockWithPin)
+            if (!_canUnlockWithPin)
             {
                 await _vaultTimeoutService.ClearAsync();
                 await UpdateVaultTimeoutActionIfNeededAsync();
@@ -403,10 +413,12 @@ namespace Bit.App.Pages
                                                        AppResources.No);
 
             await _userPinService.SetupPinAsync(newPin, requireMasterPasswordOnRestart);
+            await InitVaultTimeoutActionPickerAsync();
         }
 
         private async Task UpdateVaultTimeoutActionIfNeededAsync()
         {
+            TriggerVaultTimeoutActionLockAllowedPropertyChanged();
             if (IsVaultTimeoutActionLockAllowed)
             {
                 return;
@@ -467,6 +479,16 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(CustomVaultTimeoutTime));
         }
 
+        private void TriggerVaultTimeoutActionLockAllowedPropertyChanged()
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                TriggerPropertyChanged(nameof(IsVaultTimeoutActionLockAllowed));
+                TriggerPropertyChanged(nameof(SetUpUnlockMethodLabel));
+                VaultTimeoutActionPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
+            });
+        }
+
         private int? GetRawVaultTimeoutFrom(int vaultTimeoutPickerKey)
         {
             if (vaultTimeoutPickerKey == NEVER_SESSION_TIMEOUT_VALUE)
@@ -501,7 +523,7 @@ namespace Bit.App.Pages
 
             await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(CurrentVaultTimeout, timeoutActionKey);
             _messagingService.Send(AppHelpers.VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND);
-
+            TriggerVaultTimeoutActionLockAllowedPropertyChanged();
             return true;
         }
 

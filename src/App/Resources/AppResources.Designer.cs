@@ -3236,6 +3236,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ForwardEmail.
+        /// </summary>
+        public static string ForwardEmail {
+            get {
+                return ResourceManager.GetString("ForwardEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 4 hours.
         /// </summary>
         public static string FourHours {
@@ -6219,6 +6228,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set up an unlock option to change your vault timeout action..
+        /// </summary>
+        public static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
+            get {
+                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set up TOTP.
         /// </summary>
         public static string SetupTotp {
@@ -7754,6 +7772,24 @@ namespace Bit.App.Resources {
         public static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your organization permissions were updated, requiring you to set a master password..
+        /// </summary>
+        public static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
+            get {
+                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your organization requires you to set a master password..
+        /// </summary>
+        public static string YourOrganizationRequiresYouToSetAMasterPassword {
+            get {
+                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
             }
         }
         

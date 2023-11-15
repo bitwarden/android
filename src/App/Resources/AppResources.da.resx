@@ -2424,6 +2424,10 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-adgangstoken</value>
   </data>
@@ -2856,5 +2860,14 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Konto logget ud.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Organisationstilladelserne er blevet opdateret, og der kræves nu oprettelse af en hovedadgangskode.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Organisationen kræver, at der oprettes en hovedadgangskode.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Opsæt en oplåsningsmetode for at ændre Bokstimeouthandlingen.</value>
   </data>
 </root>

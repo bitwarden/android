@@ -2424,6 +2424,10 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>Token d'accés a l'API</value>
   </data>
@@ -2856,5 +2860,14 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>S'ha tancat la sessió del compte.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Els permisos de la vostra organització s'han actualitzat, cal que establiu una contrasenya mestra.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>La vostra organització requereix que establiu una contrasenya mestra.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Configura una opció de desbloqueig per canviar l'acció de temps d'espera de la caixa forta.</value>
   </data>
 </root>

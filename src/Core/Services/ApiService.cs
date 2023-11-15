@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
-using Bit.Core.Models.Domain;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
@@ -54,7 +54,7 @@ namespace Bit.Core.Services
         public string IdentityBaseUrl { get; set; }
         public string EventsBaseUrl { get; set; }
 
-        public void SetUrls(EnvironmentUrls urls)
+        public void SetUrls(EnvironmentUrlData urls)
         {
             UrlsSet = true;
             if (!string.IsNullOrWhiteSpace(urls.Base))
