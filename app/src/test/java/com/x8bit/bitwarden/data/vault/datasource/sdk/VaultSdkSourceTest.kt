@@ -122,24 +122,48 @@ class VaultSdkSourceTest {
     }
 
     @Test
+    fun `Cipher decryptListCollection should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val mockCiphers = mockk<List<Cipher>>()
+            val expectedResult = mockk<List<CipherListView>>()
+            coEvery {
+                clientVault.ciphers().decryptList(
+                    ciphers = mockCiphers,
+                )
+            } returns expectedResult
+            val result = vaultSdkSource.decryptCipherListCollection(
+                cipherList = mockCiphers,
+            )
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientVault.ciphers().decryptList(
+                    ciphers = mockCiphers,
+                )
+            }
+        }
+
+    @Test
     fun `Cipher decryptList should call SDK and return a Result with correct data`() = runBlocking {
-        val mockCiphers = mockk<List<Cipher>>()
-        val expectedResult = mockk<List<CipherListView>>()
+        val mockCiphers = mockk<Cipher>()
+        val expectedResult = mockk<CipherView>()
         coEvery {
-            clientVault.ciphers().decryptList(
-                ciphers = mockCiphers,
+            clientVault.ciphers().decrypt(
+                cipher = mockCiphers,
             )
         } returns expectedResult
         val result = vaultSdkSource.decryptCipherList(
-            cipherList = mockCiphers,
+            cipherList = listOf(mockCiphers),
         )
         assertEquals(
-            expectedResult.asSuccess(),
+            listOf(expectedResult).asSuccess(),
             result,
         )
         coVerify {
-            clientVault.ciphers().decryptList(
-                ciphers = mockCiphers,
+            clientVault.ciphers().decrypt(
+                cipher = mockCiphers,
             )
         }
     }

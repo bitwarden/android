@@ -18,13 +18,18 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherListView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -51,7 +56,7 @@ class VaultRepositoryTest {
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
-            } returns listOf(createMockCipherListView(number = 1)).asSuccess()
+            } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
@@ -70,7 +75,7 @@ class VaultRepositoryTest {
             assertEquals(
                 DataState.Loaded(
                     data = VaultData(
-                        cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                        cipherViewList = listOf(createMockCipherView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                     ),
                 ),
@@ -86,7 +91,7 @@ class VaultRepositoryTest {
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
-            } returns listOf(createMockCipherListView(number = 1)).asSuccess()
+            } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
@@ -101,7 +106,7 @@ class VaultRepositoryTest {
                 assertEquals(
                     DataState.Loaded(
                         data = VaultData(
-                            cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -111,7 +116,7 @@ class VaultRepositoryTest {
                 assertEquals(
                     DataState.Pending(
                         data = VaultData(
-                            cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -120,7 +125,7 @@ class VaultRepositoryTest {
                 assertEquals(
                     DataState.Loaded(
                         data = VaultData(
-                            cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -161,7 +166,7 @@ class VaultRepositoryTest {
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
-            } returns listOf(createMockCipherListView(number = 1)).asSuccess()
+            } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns mockException.asFailure()
@@ -221,7 +226,7 @@ class VaultRepositoryTest {
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
-            } returns listOf(createMockCipherListView(number = 1)).asSuccess()
+            } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
@@ -236,7 +241,7 @@ class VaultRepositoryTest {
                 assertEquals(
                     DataState.Loaded(
                         data = VaultData(
-                            cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -249,7 +254,7 @@ class VaultRepositoryTest {
                 assertEquals(
                     DataState.Pending(
                         data = VaultData(
-                            cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -258,7 +263,7 @@ class VaultRepositoryTest {
                 assertEquals(
                     DataState.NoNetwork(
                         data = VaultData(
-                            cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -275,7 +280,7 @@ class VaultRepositoryTest {
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
-            } returns listOf(createMockCipherListView(number = 1)).asSuccess()
+            } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
@@ -309,6 +314,102 @@ class VaultRepositoryTest {
             )
             coVerify { syncService.sync() }
         }
+
+    @Test
+    fun `sync should be able to be called after unlockVaultAndSync is canceled`() = runTest {
+        coEvery {
+            syncService.sync()
+        } returns Result.success(createMockSyncResponse(number = 1))
+        coEvery {
+            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+        } returns listOf(createMockCipherView(number = 1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+        } returns listOf(createMockFolderView(number = 1)).asSuccess()
+        fakeAuthDiskSource.storePrivateKey(
+            userId = "mockUserId",
+            privateKey = "mockPrivateKey-1",
+        )
+        fakeAuthDiskSource.storeUserKey(
+            userId = "mockUserId",
+            userKey = "mockKey-1",
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.initializeCrypto(
+                request = InitCryptoRequest(
+                    kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
+                    email = "email",
+                    password = "mockPassword-1",
+                    userKey = "mockKey-1",
+                    privateKey = "mockPrivateKey-1",
+                    organizationKeys = mapOf(),
+                ),
+            )
+        } coAnswers {
+            delay(Long.MAX_VALUE)
+            Result.success(InitializeCryptoResult.Success)
+        }
+
+        val scope = CoroutineScope(Dispatchers.Unconfined)
+        scope.launch {
+            vaultRepository.unlockVaultAndSync(masterPassword = "mockPassword-1")
+        }
+        coVerify(exactly = 0) { syncService.sync() }
+        scope.cancel()
+        vaultRepository.sync()
+
+        coVerify(exactly = 1) { syncService.sync() }
+    }
+
+    @Test
+    fun `sync should not be able to be called while unlockVaultAndSync is called`() = runTest {
+        coEvery {
+            syncService.sync()
+        } returns Result.success(createMockSyncResponse(number = 1))
+        coEvery {
+            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+        } returns listOf(createMockCipherView(number = 1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+        } returns listOf(createMockFolderView(number = 1)).asSuccess()
+        fakeAuthDiskSource.storePrivateKey(
+            userId = "mockUserId",
+            privateKey = "mockPrivateKey-1",
+        )
+        fakeAuthDiskSource.storeUserKey(
+            userId = "mockUserId",
+            userKey = "mockKey-1",
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.initializeCrypto(
+                request = InitCryptoRequest(
+                    kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
+                    email = "email",
+                    password = "mockPassword-1",
+                    userKey = "mockKey-1",
+                    privateKey = "mockPrivateKey-1",
+                    organizationKeys = mapOf(),
+                ),
+            )
+        } coAnswers {
+            delay(Long.MAX_VALUE)
+            Result.success(InitializeCryptoResult.Success)
+        }
+
+        val scope = CoroutineScope(Dispatchers.Unconfined)
+        scope.launch {
+            vaultRepository.unlockVaultAndSync(masterPassword = "mockPassword-1")
+        }
+        // We call sync here but the call to the SyncService should be blocked
+        // by the active call to unlockVaultAndSync
+        vaultRepository.sync()
+
+        scope.cancel()
+
+        coVerify(exactly = 0) { syncService.sync() }
+    }
 
     @Test
     fun `unlockVaultAndSync with initializeCrypto failure should return GenericError`() =
@@ -451,7 +552,7 @@ class VaultRepositoryTest {
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
-            } returns listOf(createMockCipherListView(number = 1)).asSuccess()
+            } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
@@ -466,7 +567,7 @@ class VaultRepositoryTest {
                 assertEquals(
                     DataState.Loaded(
                         data = VaultData(
-                            cipherListViewList = listOf(createMockCipherListView(number = 1)),
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),

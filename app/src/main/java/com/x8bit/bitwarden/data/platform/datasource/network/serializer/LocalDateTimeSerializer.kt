@@ -8,31 +8,24 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeParseException
 
 /**
  * Used to serialize and deserialize [LocalDateTime].
  */
 class LocalDateTimeSerializer : KSerializer<LocalDateTime> {
-    private val localDateTimeFormatter =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SS'Z'")
-    private val localDateTimeFormatterNanoSeconds =
+    private val dateTimeFormatterDeserialization = DateTimeFormatter
+        .ofPattern("yyyy-MM-dd'T'HH:mm:ss.[SSSSSSS][SSSSSS][SSSSS][SSSS][SSS][SS][S]'Z'")
+    private val dateTimeFormatterSerialization =
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
     override val descriptor: SerialDescriptor
         get() = PrimitiveSerialDescriptor(serialName = "LocalDateTime", kind = PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): LocalDateTime =
         decoder.decodeString().let { dateString ->
-            try {
-                LocalDateTime
-                    .parse(dateString, localDateTimeFormatter)
-            } catch (exception: DateTimeParseException) {
-                LocalDateTime
-                    .parse(dateString, localDateTimeFormatterNanoSeconds)
-            }
+            LocalDateTime.parse(dateString, dateTimeFormatterDeserialization)
         }
 
     override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(localDateTimeFormatter.format(value))
+        encoder.encodeString(dateTimeFormatterSerialization.format(value))
     }
 }

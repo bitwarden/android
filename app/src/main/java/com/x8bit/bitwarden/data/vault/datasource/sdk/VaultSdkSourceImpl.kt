@@ -35,8 +35,13 @@ class VaultSdkSourceImpl(
     override suspend fun decryptCipher(cipher: Cipher): Result<CipherView> =
         runCatching { clientVault.ciphers().decrypt(cipher) }
 
-    override suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherListView>> =
+    override suspend fun decryptCipherListCollection(
+        cipherList: List<Cipher>,
+    ): Result<List<CipherListView>> =
         runCatching { clientVault.ciphers().decryptList(cipherList) }
+
+    override suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherView>> =
+        runCatching { cipherList.map { clientVault.ciphers().decrypt(it) } }
 
     override suspend fun decryptFolder(folder: Folder): Result<FolderView> =
         runCatching { clientVault.folders().decrypt(folder) }

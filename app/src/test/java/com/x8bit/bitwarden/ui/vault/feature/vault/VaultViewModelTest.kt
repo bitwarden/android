@@ -3,14 +3,30 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class VaultViewModelTest : BaseViewModelTest() {
+
+    private val mutableVaultDataStateFlow =
+        MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+
+    private val vaultRepository: VaultRepository =
+        mockk {
+            every { vaultDataStateFlow } returns mutableVaultDataStateFlow
+            every { sync() } returns Unit
+        }
 
     @Test
     fun `initial state should be correct when not set`() {
@@ -80,6 +96,113 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultAction.AddAccountClick)
             assertEquals(VaultEvent.NavigateToLoginScreen, awaitItem())
         }
+    }
+
+    @Test
+    fun `vaultDataStateFlow Loaded with items should update state to Content`() = runTest {
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                ),
+            ),
+        )
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            createMockVaultState(
+                viewState = VaultState.ViewState.Content(
+                    loginItemsCount = 1,
+                    cardItemsCount = 0,
+                    identityItemsCount = 0,
+                    secureNoteItemsCount = 0,
+                    favoriteItems = listOf(),
+                    folderItems = listOf(
+                        VaultState.ViewState.FolderItem(
+                            id = "mockId-1",
+                            name = "mockName-1".asText(),
+                            itemCount = 1,
+                        ),
+                    ),
+                    noFolderItems = listOf(),
+                    trashItemsCount = 0,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update state to NoItems`() = runTest {
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    folderViewList = emptyList(),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            createMockVaultState(viewState = VaultState.ViewState.NoItems),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `vaultDataStateFlow Loading should update state to Loading`() = runTest {
+        mutableVaultDataStateFlow.tryEmit(value = DataState.Loading)
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            createMockVaultState(viewState = VaultState.ViewState.Loading),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `vaultDataStateFlow Error should show toast and update state to NoItems`() = runTest {
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.Error(
+                error = IllegalStateException(),
+            ),
+        )
+
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            assertEquals(
+                VaultEvent.ShowToast("Vault error state not yet implemented"),
+                awaitItem(),
+            )
+        }
+        assertEquals(
+            createMockVaultState(viewState = VaultState.ViewState.NoItems),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `vaultDataStateFlow NoNetwork should show toast and update state to NoItems`() = runTest {
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.NoNetwork(),
+        )
+
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            assertEquals(
+                VaultEvent.ShowToast("Vault no network state not yet implemented"),
+                awaitItem(),
+            )
+        }
+        assertEquals(
+            createMockVaultState(viewState = VaultState.ViewState.NoItems),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -175,12 +298,19 @@ class VaultViewModelTest : BaseViewModelTest() {
         state: VaultState? = DEFAULT_STATE,
     ): VaultViewModel = VaultViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        vaultRepository = vaultRepository,
     )
 }
 
-private val DEFAULT_STATE: VaultState = VaultState(
-    avatarColorString = "FF0000FF",
-    initials = "BW",
-    accountSummaries = emptyList(),
-    viewState = VaultState.ViewState.Loading,
-)
+private const val DEFAULT_COLOR_STRING: String = "FF0000FF"
+private const val DEFAULE_INITIALS: String = "BW"
+private val DEFAULT_STATE: VaultState =
+    createMockVaultState(viewState = VaultState.ViewState.Loading)
+
+private fun createMockVaultState(viewState: VaultState.ViewState): VaultState =
+    VaultState(
+        avatarColorString = DEFAULT_COLOR_STRING,
+        initials = DEFAULE_INITIALS,
+        accountSummaries = emptyList(),
+        viewState = viewState,
+    )

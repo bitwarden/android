@@ -7,12 +7,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
@@ -32,8 +36,8 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
-    // TODO retrieve this from the data layer BIT-205
     initialState = savedStateHandle[KEY_STATE] ?: VaultState(
         initials = activeAccountSummary.initials,
         avatarColorString = activeAccountSummary.avatarColorHex,
@@ -46,30 +50,18 @@ class VaultViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
-
+        vaultRepository
+            .vaultDataStateFlow
+            .onEach { sendAction(VaultAction.Internal.VaultDataReceive(vaultData = it)) }
+            .launchIn(viewModelScope)
+        // TODO remove this block once vault unlocked is implemented in BIT-1082
         viewModelScope.launch {
-            // TODO will need to load actual vault items BIT-205
             @Suppress("MagicNumber")
-            delay(2000)
-            mutableStateFlow.update { currentState ->
-                currentState.copy(
-                    viewState = VaultState.ViewState.Content(
-                        loginItemsCount = 0,
-                        cardItemsCount = 0,
-                        identityItemsCount = 0,
-                        secureNoteItemsCount = 0,
-                        favoriteItems = emptyList(),
-                        folderItems = listOf(
-                            VaultState.ViewState.FolderItem(
-                                id = null,
-                                name = R.string.folder_none.asText(),
-                                itemCount = 0,
-                            ),
-                        ),
-                        // TODO Take into account the max threshold of no folder as well as the
-                        //  case where it is empty, in which case, no folder is a folder. BIT-205
-                        noFolderItems = emptyList(),
-                        trashItemsCount = 0,
+            delay(5000)
+            if (vaultRepository.vaultDataStateFlow.value == DataState.Loading) {
+                sendAction(
+                    VaultAction.Internal.VaultDataReceive(
+                        DataState.Error(error = IllegalStateException()),
                     ),
                 )
             }
@@ -78,17 +70,18 @@ class VaultViewModel @Inject constructor(
 
     override fun handleAction(action: VaultAction) {
         when (action) {
-            VaultAction.AddItemClick -> handleAddItemClick()
-            VaultAction.CardGroupClick -> handleCardClick()
+            is VaultAction.AddItemClick -> handleAddItemClick()
+            is VaultAction.CardGroupClick -> handleCardClick()
             is VaultAction.FolderClick -> handleFolderItemClick(action)
-            VaultAction.IdentityGroupClick -> handleIdentityClick()
-            VaultAction.LoginGroupClick -> handleLoginClick()
-            VaultAction.SearchIconClick -> handleSearchIconClick()
+            is VaultAction.IdentityGroupClick -> handleIdentityClick()
+            is VaultAction.LoginGroupClick -> handleLoginClick()
+            is VaultAction.SearchIconClick -> handleSearchIconClick()
             is VaultAction.AccountSwitchClick -> handleAccountSwitchClick(action)
-            VaultAction.AddAccountClick -> handleAddAccountClick()
-            VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
-            VaultAction.TrashClick -> handleTrashClick()
+            is VaultAction.AddAccountClick -> handleAddAccountClick()
+            is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
+            is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
+            is VaultAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
     }
 
@@ -149,6 +142,41 @@ class VaultViewModel @Inject constructor(
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
         sendEvent(VaultEvent.NavigateToVaultItem(action.vaultItem.id))
+    }
+
+    private fun handleVaultDataReceive(action: VaultAction.Internal.VaultDataReceive) {
+        when (val vaultData = action.vaultData) {
+            is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
+            is DataState.Loaded -> vaultLoadedReceive(vaultData = vaultData)
+            is DataState.Loading -> vaultLoadingReceive()
+            is DataState.NoNetwork -> vaultNoNetworkReceive(vaultData = vaultData)
+            is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
+        }
+    }
+    private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
+        // TODO update state to error state BIT-1157
+        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
+        sendEvent(VaultEvent.ShowToast(message = "Vault error state not yet implemented"))
+    }
+
+    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
+        mutableStateFlow.update { it.copy(viewState = vaultData.data.toViewState()) }
+    }
+
+    private fun vaultLoadingReceive() {
+        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
+    }
+
+    private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
+        // TODO update state to no network state BIT-1158
+        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
+        sendEvent(VaultEvent.ShowToast(message = "Vault no network state not yet implemented"))
+    }
+
+    private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
+        // TODO update state to refresh state BIT-505
+        mutableStateFlow.update { it.copy(viewState = vaultData.data.toViewState()) }
+        sendEvent(VaultEvent.ShowToast(message = "Refreshing"))
     }
     //endregion VaultAction Handlers
 }
@@ -499,4 +527,17 @@ sealed class VaultAction {
      * User clicked the trash button.
      */
     data object TrashClick : VaultAction()
+
+    /**
+     * Models actions that the [VaultViewModel] itself might send.
+     */
+    sealed class Internal : VaultAction() {
+
+        /**
+         * Indicates a vault data was received.
+         */
+        data class VaultDataReceive(
+            val vaultData: DataState<VaultData>,
+        ) : Internal()
+    }
 }
