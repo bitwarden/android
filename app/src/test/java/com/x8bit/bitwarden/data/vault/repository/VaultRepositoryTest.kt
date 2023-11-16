@@ -22,10 +22,10 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import com.x8bit.bitwarden.testingtools.hangs
-import com.x8bit.bitwarden.testingtools.just
+import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -347,7 +347,7 @@ class VaultRepositoryTest {
                     organizationKeys = mapOf(),
                 ),
             )
-        } just hangs()
+        } just awaits
 
         val scope = CoroutineScope(Dispatchers.Unconfined)
         scope.launch {
@@ -391,7 +391,7 @@ class VaultRepositoryTest {
                     organizationKeys = mapOf(),
                 ),
             )
-        } just hangs()
+        } just awaits
 
         val scope = CoroutineScope(Dispatchers.Unconfined)
         scope.launch {
