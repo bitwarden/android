@@ -62,7 +62,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
-            MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
+            MoreCommand = CreateDefaultAsyncRelayCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
         }
 
         public string TotpInstruction

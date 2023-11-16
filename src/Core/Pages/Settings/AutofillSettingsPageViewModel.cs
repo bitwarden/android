@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-using Microsoft.Maui.ApplicationModel;
-using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -36,7 +33,7 @@ namespace Bit.App.Pages
                 () => _inited,
                 ex => HandleException(ex));
 
-            ToggleCopyTotpAutomaticallyCommand = CreateDefaultAsyncCommnad(ToggleCopyTotpAutomaticallyAsync, () => _inited);
+            ToggleCopyTotpAutomaticallyCommand = CreateDefaultAsyncRelayCommand(ToggleCopyTotpAutomaticallyAsync, () => _inited, allowsMultipleExecutions: false);
 
             InitAndroidCommands();
             InitIOSCommands();
@@ -56,7 +53,7 @@ namespace Bit.App.Pages
 
         public PickerViewModel<UriMatchType> DefaultUriMatchDetectionPickerViewModel { get; }
 
-        public AsyncCommand ToggleCopyTotpAutomaticallyCommand { get; private set; }
+        public AsyncRelayCommand ToggleCopyTotpAutomaticallyCommand { get; private set; }
 
         public async Task InitAsync()
         {
@@ -72,11 +69,11 @@ namespace Bit.App.Pages
             {
                 TriggerPropertyChanged(nameof(CopyTotpAutomatically));
 
-                ToggleUseAutofillServicesCommand.RaiseCanExecuteChanged();
-                ToggleUseInlineAutofillCommand.RaiseCanExecuteChanged();
-                ToggleUseAccessibilityCommand.RaiseCanExecuteChanged();
-                ToggleUseDrawOverCommand.RaiseCanExecuteChanged();
-                DefaultUriMatchDetectionPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
+                ToggleUseAutofillServicesCommand.NotifyCanExecuteChanged();
+                ToggleUseInlineAutofillCommand.NotifyCanExecuteChanged();
+                ToggleUseAccessibilityCommand.NotifyCanExecuteChanged();
+                ToggleUseDrawOverCommand.NotifyCanExecuteChanged();
+                DefaultUriMatchDetectionPickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged();
             });
         }
 

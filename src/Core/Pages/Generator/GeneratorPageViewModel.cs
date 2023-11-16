@@ -89,11 +89,11 @@ namespace Bit.App.Pages
             };
 
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
-            RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            RegenerateCommand = CreateDefaultAsyncRelayCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            RegenerateUsernameCommand = CreateDefaultAsyncRelayCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             ToggleForwardedEmailHiddenValueCommand = new Command(() => ShowForwardedEmailApiSecret = !ShowForwardedEmailApiSecret);
-            CopyCommand = new AsyncCommand(CopyAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
-            CloseCommand = new AsyncCommand(CloseAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CopyCommand = CreateDefaultAsyncRelayCommand(CopyAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            CloseCommand = CreateDefaultAsyncRelayCommand(CloseAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
         }
 
         public List<GeneratorType> GeneratorTypeOptions { get; set; }

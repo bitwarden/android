@@ -25,7 +25,7 @@ namespace Bit.App.Pages
 
         public VaultFilterViewModel()
         {
-            VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
+            VaultFilterCommand = CreateDefaultAsyncRelayCommand(VaultFilterOptionsAsync,
                 onException: ex => logger.Exception(ex),
                 allowsMultipleExecutions: false);
         }

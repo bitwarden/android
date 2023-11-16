@@ -54,7 +54,7 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>();
 
             PageTitle = AppResources.Bitwarden;
-            LogInCommand = new AsyncCommand(LogInAsync, allowsMultipleExecutions: false);
+            LogInCommand = CreateDefaultAsyncRelayCommand(LogInAsync, allowsMultipleExecutions: false);
         }
 
         public string OrgIdentifier

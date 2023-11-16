@@ -20,7 +20,7 @@ namespace Bit.App.Pages
 
         public ScanPageViewModel()
         {
-            ToggleScanModeCommand = new AsyncCommand(ToggleScanMode, onException: HandleException);
+            ToggleScanModeCommand = CreateDefaultAsyncRelayCommand(ToggleScanMode, onException: HandleException);
             StartCameraCommand = new Command(StartCamera);
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");

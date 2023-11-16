@@ -37,7 +37,7 @@ namespace Bit.App.Pages
             OrganizationOptions = new List<KeyValuePair<string, string>>();
             PageTitle = AppResources.MoveToOrganization;
 
-            MoveCommand = new AsyncCommand(MoveAsync, onException: ex => HandleException(ex), allowsMultipleExecutions: false);
+            MoveCommand = CreateDefaultAsyncRelayCommand(MoveAsync, onException: ex => HandleException(ex), allowsMultipleExecutions: false);
         }
 
         public string CipherId { get; set; }

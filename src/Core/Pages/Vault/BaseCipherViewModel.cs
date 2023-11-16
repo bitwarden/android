@@ -7,6 +7,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -28,7 +29,7 @@ namespace Bit.App.Pages
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
-            CheckPasswordCommand = new AsyncCommand(CheckPasswordAsync, allowsMultipleExecutions: false);
+            CheckPasswordCommand = CreateDefaultAsyncRelayCommand(CheckPasswordAsync, allowsMultipleExecutions: false);
         }
 
         public CipherView Cipher
@@ -39,7 +40,7 @@ namespace Bit.App.Pages
 
         public string CreationDate => string.Format(AppResources.CreatedXY, Cipher?.CreationDate.ToShortDateString(), Cipher?.CreationDate.ToShortTimeString());
 
-        public AsyncCommand CheckPasswordCommand { get; }
+        public AsyncRelayCommand CheckPasswordCommand { get; }
 
         protected async Task CheckPasswordAsync()
         {

@@ -11,6 +11,7 @@ using Bit.Core.Utilities;
 
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -50,12 +51,12 @@ namespace Bit.App.Pages
                 AllowActiveAccountSelection = true
             };
             RememberEmailCommand = new Command(() => RememberEmail = !RememberEmail);
-            ContinueCommand = new AsyncCommand(ContinueToLoginStepAsync, allowsMultipleExecutions: false);
-            CreateAccountCommand = new AsyncCommand(async () => Device.InvokeOnMainThreadAsync(StartRegisterAction),
+            ContinueCommand = CreateDefaultAsyncRelayCommand(ContinueToLoginStepAsync, allowsMultipleExecutions: false);
+            CreateAccountCommand = CreateDefaultAsyncRelayCommand(async () => Device.InvokeOnMainThreadAsync(StartRegisterAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
-            CloseCommand = new AsyncCommand(async () => Device.InvokeOnMainThreadAsync(CloseAction),
+            CloseCommand = CreateDefaultAsyncRelayCommand(async () => Device.InvokeOnMainThreadAsync(CloseAction),
                 onException: _logger.Exception, allowsMultipleExecutions: false);
-            ShowEnvironmentPickerCommand = new AsyncCommand(ShowEnvironmentPickerAsync,
+            ShowEnvironmentPickerCommand = CreateDefaultAsyncRelayCommand(ShowEnvironmentPickerAsync,
                 onException: _logger.Exception, allowsMultipleExecutions: false);
             InitAsync().FireAndForget();
         }
@@ -113,10 +114,10 @@ namespace Bit.App.Pages
         public Action StartEnvironmentAction { get; set; }
         public Action CloseAction { get; set; }
         public Command RememberEmailCommand { get; set; }
-        public AsyncCommand ContinueCommand { get; }
-        public AsyncCommand CloseCommand { get; }
-        public AsyncCommand CreateAccountCommand { get; }
-        public AsyncCommand ShowEnvironmentPickerCommand { get; }
+        public AsyncRelayCommand ContinueCommand { get; }
+        public AsyncRelayCommand CloseCommand { get; }
+        public AsyncRelayCommand CreateAccountCommand { get; }
+        public AsyncRelayCommand ShowEnvironmentPickerCommand { get; }
 
         public async Task InitAsync()
         {

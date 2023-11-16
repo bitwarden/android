@@ -1,5 +1,6 @@
 ﻿using Bit.App.Utilities;
 using Bit.Core.Resources.Localization;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -7,7 +8,7 @@ namespace Bit.App.Pages
     {
         public SettingsPageViewModel()
         {
-            ExecuteSettingItemCommand = new AsyncCommand<SettingsPageListItem>(item => item.ExecuteAsync(),
+            ExecuteSettingItemCommand = CreateDefaultAsyncRelayCommand<SettingsPageListItem>(item => item.ExecuteAsync(),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -24,7 +25,7 @@ namespace Bit.App.Pages
 
         public List<SettingsPageListItem> SettingsItems { get; }
 
-        public AsyncCommand<SettingsPageListItem> ExecuteSettingItemCommand { get; }
+        public AsyncRelayCommand<SettingsPageListItem> ExecuteSettingItemCommand { get; }
 
         private async Task NavigateToAsync(Page page)
         {

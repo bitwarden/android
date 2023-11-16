@@ -39,8 +39,8 @@ namespace Bit.App.Pages
             PageTitle = AppResources.VerificationCode;
 
             TogglePasswordCommand = new Command(TogglePassword);
-            MainActionCommand = new AsyncCommand(MainActionAsync, allowsMultipleExecutions: false);
-            RequestOTPCommand = new AsyncCommand(RequestOTPAsync, allowsMultipleExecutions: false);
+            MainActionCommand = CreateDefaultAsyncRelayCommand(MainActionAsync, allowsMultipleExecutions: false);
+            RequestOTPCommand = CreateDefaultAsyncRelayCommand(RequestOTPAsync, allowsMultipleExecutions: false);
         }
 
         public bool ShowPassword

@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-
-using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -42,18 +35,20 @@ namespace Bit.App.Pages
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _logger = ServiceContainer.Resolve<ILogger>();
 
-            SyncCommand = CreateDefaultAsyncCommnad(SyncAsync, () => _inited);
-            ToggleIsScreenCaptureAllowedCommand = CreateDefaultAsyncCommnad(ToggleIsScreenCaptureAllowedAsync, () => _inited);
-            ToggleShouldConnectToWatchCommand = CreateDefaultAsyncCommnad(ToggleShouldConnectToWatchAsync, () => _inited);
+            SyncCommand = CreateDefaultAsyncRelayCommand(SyncAsync, CanExecuteIfInited, allowsMultipleExecutions: false);
+            ToggleIsScreenCaptureAllowedCommand = CreateDefaultAsyncRelayCommand(ToggleIsScreenCaptureAllowedAsync, CanExecuteIfInited, allowsMultipleExecutions: false);
+            ToggleShouldConnectToWatchCommand = CreateDefaultAsyncRelayCommand(ToggleShouldConnectToWatchAsync, CanExecuteIfInited, allowsMultipleExecutions: false);
 
             ClearClipboardPickerViewModel = new PickerViewModel<int>(
                 _deviceActionService,
                 _logger,
                 OnClearClipboardChangingAsync,
                 AppResources.ClearClipboard,
-                () => _inited,
+                CanExecuteIfInited,
                 ex => HandleException(ex));
         }
+
+        private bool CanExecuteIfInited() => _inited;
 
         public bool EnableSyncOnRefresh
         {
@@ -103,9 +98,9 @@ namespace Bit.App.Pages
 
         public bool CanToggleShouldConnectToWatch => ToggleShouldConnectToWatchCommand.CanExecute(null);
 
-        public AsyncCommand SyncCommand { get; }
-        public AsyncCommand ToggleIsScreenCaptureAllowedCommand { get; }
-        public AsyncCommand ToggleShouldConnectToWatchCommand { get; }
+        public AsyncRelayCommand SyncCommand { get; }
+        public AsyncRelayCommand ToggleIsScreenCaptureAllowedCommand { get; }
+        public AsyncRelayCommand ToggleShouldConnectToWatchCommand { get; }
 
         public async Task InitAsync()
         {
@@ -124,10 +119,10 @@ namespace Bit.App.Pages
             {
                 TriggerPropertyChanged(nameof(IsScreenCaptureAllowed));
                 TriggerPropertyChanged(nameof(ShouldConnectToWatch));
-                SyncCommand.RaiseCanExecuteChanged();
-                ClearClipboardPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
-                ToggleIsScreenCaptureAllowedCommand.RaiseCanExecuteChanged();
-                ToggleShouldConnectToWatchCommand.RaiseCanExecuteChanged();
+                SyncCommand.NotifyCanExecuteChanged();
+                ClearClipboardPickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged();
+                ToggleIsScreenCaptureAllowedCommand.NotifyCanExecuteChanged();
+                ToggleShouldConnectToWatchCommand.NotifyCanExecuteChanged();
             });
         }
 
@@ -141,8 +136,7 @@ namespace Bit.App.Pages
                 [30] = AppResources.ThirtySeconds,
                 [60] = AppResources.OneMinute
             };
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform != Device.iOS)
+            if (DeviceInfo.Platform != DevicePlatform.iOS)
             {
                 clearClipboardOptions.Add(120, AppResources.TwoMinutes);
                 clearClipboardOptions.Add(300, AppResources.FiveMinutes);

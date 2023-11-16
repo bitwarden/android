@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Pages.Accounts;
 using Bit.Core.Resources.Localization;
@@ -12,10 +8,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-
-using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -80,16 +73,16 @@ namespace Bit.App.Pages
                 () => _inited && !HasVaultTimeoutActionPolicy,
                 ex => HandleException(ex));
 
-            ToggleUseThisDeviceToApproveLoginRequestsCommand = CreateDefaultAsyncCommnad(ToggleUseThisDeviceToApproveLoginRequestsAsync, () => _inited);
-            GoToPendingLogInRequestsCommand = CreateDefaultAsyncCommnad(() => Page.Navigation.PushModalAsync(new NavigationPage(new LoginPasswordlessRequestsListPage())));
-            ToggleCanUnlockWithBiometricsCommand = CreateDefaultAsyncCommnad(ToggleCanUnlockWithBiometricsAsync, () => _inited);
-            ToggleCanUnlockWithPinCommand = CreateDefaultAsyncCommnad(ToggleCanUnlockWithPinAsync, () => _inited);
-            ShowAccountFingerprintPhraseCommand = CreateDefaultAsyncCommnad(ShowAccountFingerprintPhraseAsync);
-            GoToTwoStepLoginCommand = CreateDefaultAsyncCommnad(() => GoToWebVaultSettingsAsync(AppResources.TwoStepLoginDescriptionLong, AppResources.ContinueToWebApp));
-            GoToChangeMasterPasswordCommand = CreateDefaultAsyncCommnad(() => GoToWebVaultSettingsAsync(AppResources.ChangeMasterPasswordDescriptionLong, AppResources.ContinueToWebApp));
-            LockCommand = CreateDefaultAsyncCommnad(() => _vaultTimeoutService.LockAsync(true, true));
-            LogOutCommand = CreateDefaultAsyncCommnad(LogOutAsync);
-            DeleteAccountCommand = CreateDefaultAsyncCommnad(() => Page.Navigation.PushModalAsync(new NavigationPage(new DeleteAccountPage())));
+            ToggleUseThisDeviceToApproveLoginRequestsCommand = CreateDefaultAsyncRelayCommand(ToggleUseThisDeviceToApproveLoginRequestsAsync, () => _inited, allowsMultipleExecutions: false);
+            GoToPendingLogInRequestsCommand = CreateDefaultAsyncRelayCommand(() => Page.Navigation.PushModalAsync(new NavigationPage(new LoginPasswordlessRequestsListPage())), allowsMultipleExecutions: false);
+            ToggleCanUnlockWithBiometricsCommand = CreateDefaultAsyncRelayCommand(ToggleCanUnlockWithBiometricsAsync, () => _inited, allowsMultipleExecutions: false);
+            ToggleCanUnlockWithPinCommand = CreateDefaultAsyncRelayCommand(ToggleCanUnlockWithPinAsync, () => _inited, allowsMultipleExecutions: false);
+            ShowAccountFingerprintPhraseCommand = CreateDefaultAsyncRelayCommand(ShowAccountFingerprintPhraseAsync, allowsMultipleExecutions: false);
+            GoToTwoStepLoginCommand = CreateDefaultAsyncRelayCommand(() => GoToWebVaultSettingsAsync(AppResources.TwoStepLoginDescriptionLong, AppResources.ContinueToWebApp), allowsMultipleExecutions: false);
+            GoToChangeMasterPasswordCommand = CreateDefaultAsyncRelayCommand(() => GoToWebVaultSettingsAsync(AppResources.ChangeMasterPasswordDescriptionLong, AppResources.ContinueToWebApp), allowsMultipleExecutions: false);
+            LockCommand = CreateDefaultAsyncRelayCommand(() => _vaultTimeoutService.LockAsync(true, true), allowsMultipleExecutions: false);
+            LogOutCommand = CreateDefaultAsyncRelayCommand(LogOutAsync, allowsMultipleExecutions: false);
+            DeleteAccountCommand = CreateDefaultAsyncRelayCommand(() => Page.Navigation.PushModalAsync(new NavigationPage(new DeleteAccountPage())), allowsMultipleExecutions: false);
         }
 
         public bool UseThisDeviceToApproveLoginRequests
@@ -114,8 +107,7 @@ namespace Bit.App.Pages
                 }
 
                 var biometricName = AppResources.Biometrics;
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                if (Device.RuntimePlatform == Device.iOS)
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
                 {
                     biometricName = _deviceActionService.SupportsFaceBiometric()
                         ? AppResources.FaceID
@@ -209,18 +201,17 @@ namespace Bit.App.Pages
 
         private int? CurrentVaultTimeout => GetRawVaultTimeoutFrom(VaultTimeoutPickerViewModel.SelectedKey);
 
-        private bool IncludeLinksWithSubscriptionInfo => // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-Device.RuntimePlatform != Device.iOS;
+        private bool IncludeLinksWithSubscriptionInfo => DeviceInfo.Platform != DevicePlatform.iOS;
 
         private bool HasVaultTimeoutActionPolicy => !string.IsNullOrEmpty(_vaultTimeoutActionPolicy);
 
         public PickerViewModel<int> VaultTimeoutPickerViewModel { get; }
         public PickerViewModel<VaultTimeoutAction> VaultTimeoutActionPickerViewModel { get; }
 
-        public AsyncCommand ToggleUseThisDeviceToApproveLoginRequestsCommand { get; }
+        public AsyncRelayCommand ToggleUseThisDeviceToApproveLoginRequestsCommand { get; }
         public ICommand GoToPendingLogInRequestsCommand { get; }
-        public AsyncCommand ToggleCanUnlockWithBiometricsCommand { get; }
-        public AsyncCommand ToggleCanUnlockWithPinCommand { get; }
+        public AsyncRelayCommand ToggleCanUnlockWithBiometricsCommand { get; }
+        public AsyncRelayCommand ToggleCanUnlockWithPinCommand { get; }
         public ICommand ShowAccountFingerprintPhraseCommand { get; }
         public ICommand GoToTwoStepLoginCommand { get; }
         public ICommand GoToChangeMasterPasswordCommand { get; }
@@ -256,11 +247,11 @@ Device.RuntimePlatform != Device.iOS;
                 TriggerPropertyChanged(nameof(VaultTimeoutPolicyDescription));
                 TriggerPropertyChanged(nameof(ShowChangeMasterPassword));
                 TriggerUpdateCustomVaultTimeoutPicker();
-                ToggleUseThisDeviceToApproveLoginRequestsCommand.RaiseCanExecuteChanged();
-                ToggleCanUnlockWithBiometricsCommand.RaiseCanExecuteChanged();
-                ToggleCanUnlockWithPinCommand.RaiseCanExecuteChanged();
-                VaultTimeoutPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
-                VaultTimeoutActionPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
+                ToggleUseThisDeviceToApproveLoginRequestsCommand.NotifyCanExecuteChanged();
+                ToggleCanUnlockWithBiometricsCommand.NotifyCanExecuteChanged();
+                ToggleCanUnlockWithPinCommand.NotifyCanExecuteChanged();
+                VaultTimeoutPickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged();
+                VaultTimeoutActionPickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged();
             });
         }
 
@@ -275,7 +266,7 @@ Device.RuntimePlatform != Device.iOS;
             _maximumVaultTimeoutPolicy = maximumVaultTimeoutPolicy?.GetInt(Policy.MINUTES_KEY);
             _vaultTimeoutActionPolicy = maximumVaultTimeoutPolicy?.GetString(Policy.ACTION_KEY);
 
-            MainThread.BeginInvokeOnMainThread(VaultTimeoutActionPickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged);
+            MainThread.BeginInvokeOnMainThread(VaultTimeoutActionPickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged);
         }
 
         private async Task InitVaultTimeoutPickerAsync()
@@ -368,10 +359,9 @@ Device.RuntimePlatform != Device.iOS;
                 return;
             }
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
             if (!_supportsBiometric
                 ||
-                !await _platformUtilsService.AuthenticateBiometricAsync(null, Device.RuntimePlatform == Device.Android ? "." : null))
+                !await _platformUtilsService.AuthenticateBiometricAsync(null, DeviceInfo.Platform == DevicePlatform.Android ? "." : null))
             {
                 _canUnlockWithBiometrics = false;
                 MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(CanUnlockWithBiometrics)));

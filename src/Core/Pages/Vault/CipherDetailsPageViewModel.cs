@@ -14,7 +14,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 
@@ -66,15 +66,15 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
 
-            CopyCommand = new AsyncCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
-            CopyUriCommand = new AsyncCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
-            CopyFieldCommand = new AsyncCommand<FieldView>(field => CopyAsync(field.Type == FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyCommand = CreateDefaultAsyncRelayCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyUriCommand = CreateDefaultAsyncRelayCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyFieldCommand = CreateDefaultAsyncRelayCommand<FieldView>(field => CopyAsync(field.Type == FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             LaunchUriCommand = new Command<ILaunchableView>(LaunchUri);
-            CloneCommand = new AsyncCommand(CloneAsync, onException: ex => HandleException(ex), allowsMultipleExecutions: false);
+            CloneCommand = CreateDefaultAsyncRelayCommand(CloneAsync, onException: ex => HandleException(ex), allowsMultipleExecutions: false);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
-            DownloadAttachmentCommand = new AsyncCommand<AttachmentView>(DownloadAttachmentAsync, allowsMultipleExecutions: false);
+            DownloadAttachmentCommand = CreateDefaultAsyncRelayCommand<AttachmentView>(DownloadAttachmentAsync, allowsMultipleExecutions: false);
 
             PageTitle = AppResources.ViewItem;
         }
@@ -87,7 +87,7 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
-        public AsyncCommand<AttachmentView> DownloadAttachmentCommand { get; set; }
+        public AsyncRelayCommand<AttachmentView> DownloadAttachmentCommand { get; set; }
         public string CipherId { get; set; }
         protected override string[] AdditionalPropertiesToRaiseOnCipherChanged => new string[]
         {

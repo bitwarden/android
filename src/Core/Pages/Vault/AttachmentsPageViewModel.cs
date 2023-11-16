@@ -45,7 +45,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>();
             Attachments = new ExtendedObservableCollection<AttachmentView>();
             DeleteAttachmentCommand = new Command<AttachmentView>(DeleteAsync);
-            SubmitAsyncCommand = new AsyncCommand(SubmitAsync, allowsMultipleExecutions: false);
+            SubmitAsyncCommand = CreateDefaultAsyncRelayCommand(SubmitAsync, allowsMultipleExecutions: false);
             PageTitle = AppResources.Attachments;
         }
 

@@ -45,13 +45,13 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>();
 
             GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
-            CipherOptionsCommand = new AsyncCommand<CipherView>(cipher => AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
+            CipherOptionsCommand = CreateDefaultAsyncRelayCommand<CipherView>(cipher => AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
-            SelectCipherCommand = new AsyncCommand<IGroupingsPageListItem>(SelectCipherAsync,
+            SelectCipherCommand = CreateDefaultAsyncRelayCommand<IGroupingsPageListItem>(SelectCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
-            AddCipherCommand = new AsyncCommand(AddCipherAsync,
+            AddCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 

@@ -30,7 +30,7 @@ namespace Bit.App.Lists.ItemViewModels.CustomFields
             _eventService = eventService;
 
             CopyFieldCommand = new Command(() => copyFieldCommand?.Execute(Field));
-            ToggleHiddenValueCommand = new AsyncCommand(ToggleHiddenValueAsync, null, ex =>
+            ToggleHiddenValueCommand = CreateDefaultAsyncRelayCommand(ToggleHiddenValueAsync, null, ex =>
             {
 //#if !FDROID
 //                Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);

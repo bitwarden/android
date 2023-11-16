@@ -11,6 +11,7 @@ using Bit.Core.Utilities;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -25,14 +26,14 @@ namespace Bit.App.Pages
             PageTitle = AppResources.UpdateMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
-            SubmitCommand = new AsyncCommand(SubmitAsync,
+            SubmitCommand = CreateDefaultAsyncRelayCommand(SubmitAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
             _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>();
         }
 
-        public AsyncCommand SubmitCommand { get; }
+        public AsyncRelayCommand SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
         public Action UpdateTempPasswordSuccessAction { get; set; }
