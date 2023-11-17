@@ -10,6 +10,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJs
 interface AccountsService {
 
     /**
+     * Make delete account request.
+     */
+    suspend fun deleteAccount(masterPasswordHash: String): Result<Unit>
+
+    /**
      * Make pre login request to get KDF params.
      */
     suspend fun preLogin(email: String): Result<PreLoginResponseJson>

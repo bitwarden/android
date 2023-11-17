@@ -29,6 +29,11 @@ interface AuthRepository {
     var rememberedEmailAddress: String?
 
     /**
+     * Attempt to delete the current account and logout them out upon success.
+     */
+    suspend fun deleteAccount(password: String): Result<Unit>
+
+    /**
      * Attempt to login with the given email and password. Updated access token will be reflected
      * in [authStateFlow].
      */

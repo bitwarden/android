@@ -14,11 +14,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -42,6 +46,9 @@ import com.x8bit.bitwarden.R
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
  * @param hint optional hint text that will appear below the text input.
+ * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
+ * @param autoFocus When set to true, the view will request focus after the first recomposition.
+ * Setting this to true on multiple fields at once may have unexpected consequences.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -53,12 +60,16 @@ fun BitwardenPasswordField(
     modifier: Modifier = Modifier,
     hint: String? = null,
     showPasswordTestTag: String? = null,
+    autoFocus: Boolean = false,
 ) {
+    val focusRequester = remember { FocusRequester() }
     Column(
         modifier = modifier,
     ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
             textStyle = MaterialTheme.typography.bodyLarge,
             label = { Text(text = label) },
             value = value,
@@ -107,6 +118,9 @@ fun BitwardenPasswordField(
             )
         }
     }
+    if (autoFocus) {
+        LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    }
 }
 
 /**
@@ -120,6 +134,9 @@ fun BitwardenPasswordField(
  * @param hint optional hint text that will appear below the text input.
  * @param initialShowPassword The initial state of the show/hide password control. A value of
  * `false` (the default) indicates that that password should begin in the hidden state.
+ * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
+ * @param autoFocus When set to true, the view will request focus after the first recomposition.
+ * Setting this to true on multiple fields at once may have unexpected consequences.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -130,6 +147,7 @@ fun BitwardenPasswordField(
     hint: String? = null,
     initialShowPassword: Boolean = false,
     showPasswordTestTag: String? = null,
+    autoFocus: Boolean = false,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
     BitwardenPasswordField(
@@ -141,6 +159,7 @@ fun BitwardenPasswordField(
         onValueChange = onValueChange,
         hint = hint,
         showPasswordTestTag = showPasswordTestTag,
+        autoFocus = autoFocus,
     )
 }
 
