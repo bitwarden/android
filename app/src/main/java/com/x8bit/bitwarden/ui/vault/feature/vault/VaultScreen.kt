@@ -45,12 +45,15 @@ import kotlinx.collections.immutable.toImmutableList
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
     onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
+
+            is VaultEvent.NavigateToItemScreen -> onNavigateToVaultItemScreen(event.vaultItemId)
 
             VaultEvent.NavigateToVaultSearchScreen -> {
                 // TODO Create vault search screen and navigation implementation BIT-213

@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToNewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.newSendDestination
+import com.x8bit.bitwarden.ui.vault.feature.vault.item.navigateToVaultItem
+import com.x8bit.bitwarden.ui.vault.feature.vault.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultAddItem
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultAddItemDestination
 
@@ -34,11 +36,13 @@ fun NavGraphBuilder.vaultUnlockedGraph(
     ) {
         vaultUnlockedNavBarDestination(
             onNavigateToVaultAddItem = { navController.navigateToVaultAddItem() },
+            onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
             onNavigateToNewSend = { navController.navigateToNewSend() },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
         vaultAddItemDestination(onNavigateBack = { navController.popBackStack() })
+        vaultItemDestination(onNavigateBack = { navController.popBackStack() })
         newSendDestination(onNavigateBack = { navController.popBackStack() })
     }
 }
