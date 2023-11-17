@@ -6,6 +6,8 @@ import com.bitwarden.core.CipherView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.Send
+import com.bitwarden.core.SendView
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientVault
@@ -42,6 +44,12 @@ class VaultSdkSourceImpl(
 
     override suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherView>> =
         runCatching { cipherList.map { clientVault.ciphers().decrypt(it) } }
+
+    override suspend fun decryptSend(send: Send): Result<SendView> =
+        runCatching { clientVault.sends().decrypt(send) }
+
+    override suspend fun decryptSendList(sendList: List<Send>): Result<List<SendView>> =
+        runCatching { sendList.map { clientVault.sends().decrypt(it) } }
 
     override suspend fun decryptFolder(folder: Folder): Result<FolderView> =
         runCatching { clientVault.folders().decrypt(folder) }

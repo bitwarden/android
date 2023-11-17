@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.flow.StateFlow
@@ -16,9 +17,14 @@ interface VaultRepository {
     val vaultDataStateFlow: StateFlow<DataState<VaultData>>
 
     /**
-     * Clear the in memory vault data.
+     * Flow that represents the current send data.
      */
-    fun clearVaultData()
+    val sendDataStateFlow: StateFlow<DataState<SendData>>
+
+    /**
+     * Clear any previously unlocked, in-memory data (vault, send, etc).
+     */
+    fun clearUnlockedData()
 
     /**
      * Attempt to sync the vault data.
