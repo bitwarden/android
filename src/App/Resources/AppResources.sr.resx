@@ -2864,10 +2864,10 @@
     <value>Налог је одјављен.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Дозволе за вашу организацију су ажуриране, што захтева да поставите главну лозинку.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Ваша организација захтева да поставите главну лозинку.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Подесите опцију откључавања да бисте променили радњу временског ограничења сефа.</value>

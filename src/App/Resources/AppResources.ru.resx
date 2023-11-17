@@ -2864,10 +2864,10 @@
     <value>Аккаунт не авторизован.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Права доступа организации были обновлены, требуется установить мастер-пароль.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Необходимо установить мастер-пароль для организации.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Настройте опцию разблокировки для изменения действия по тайм-ауту хранилища.</value>

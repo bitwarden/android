@@ -2862,10 +2862,10 @@ select Add TOTP to store the key safely</value>
     <value>Акаунтът е отписан.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Правата Ви в организацията бяха променени, необходимо е да зададете главна парола.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Организацията Ви изисква да зададете главна парола.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Задайте начин за отключване, за да може да промените действието при изтичане на времето за достъп до трезора.</value>

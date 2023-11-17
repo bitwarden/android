@@ -946,7 +946,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Du kannst diese Funktion nicht nutzen, solange du deinen Verschlüsselungsschlüssel nicht aktualisiert hast.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>Verschlüsselungscode-Migration erforderlich. Bitte melde dich über den Web-Tresor an, um deinen Verschlüsselungscode zu aktualisieren.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Mehr erfahren</value>
@@ -2861,10 +2861,10 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Konto abgemeldet.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Deine Organisationsberechtigungen wurden aktualisiert und verlangen, dass du ein Master-Passwort festlegen musst.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Deine Organisation verlangt, dass du ein Master-Passwort festlegen musst.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Richte eine Entsperroption ein, um deine Aktion bei Tresor-Timeout zu ändern.</value>
