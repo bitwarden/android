@@ -26,10 +26,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -44,6 +46,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -116,6 +119,74 @@ class AuthRepositoryTest {
         // Updating AuthDiskSource updates the repository
         fakeAuthDiskSource.rememberedEmailAddress = null
         assertNull(repository.rememberedEmailAddress)
+    }
+
+    @Test
+    fun `delete account fails if not logged in`() = runTest {
+        val masterPassword = "hello world"
+        val result = repository.deleteAccount(password = masterPassword)
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `delete account fails if hashPassword fails`() = runTest {
+        val masterPassword = "hello world"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        coEvery {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.deleteAccount(password = masterPassword)
+
+        assertTrue(result.isFailure)
+        coVerify {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+        }
+    }
+
+    @Test
+    fun `delete account fails if deleteAccount fails`() = runTest {
+        val masterPassword = "hello world"
+        val hashedMasterPassword = "dlrow olleh"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        coEvery {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+        } returns hashedMasterPassword.asSuccess()
+        coEvery {
+            accountsService.deleteAccount(hashedMasterPassword)
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.deleteAccount(password = masterPassword)
+
+        assertTrue(result.isFailure)
+        coVerify {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            accountsService.deleteAccount(hashedMasterPassword)
+        }
+    }
+
+    @Test
+    fun `delete account succeeds`() = runTest {
+        val masterPassword = "hello world"
+        val hashedMasterPassword = "dlrow olleh"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        coEvery {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+        } returns hashedMasterPassword.asSuccess()
+        coEvery {
+            accountsService.deleteAccount(hashedMasterPassword)
+        } returns Unit.asSuccess()
+
+        val result = repository.deleteAccount(password = masterPassword)
+
+        assertTrue(result.isSuccess)
+        coVerify {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            accountsService.deleteAccount(hashedMasterPassword)
+        }
     }
 
     @Test

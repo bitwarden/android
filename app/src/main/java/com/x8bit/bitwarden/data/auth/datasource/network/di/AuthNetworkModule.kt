@@ -29,6 +29,7 @@ object AuthNetworkModule {
         json: Json,
     ): AccountsService = AccountsServiceImpl(
         accountsApi = retrofits.unauthenticatedApiRetrofit.create(),
+        authenticatedAccountsApi = retrofits.authenticatedApiRetrofit.create(),
         json = json,
     )
 

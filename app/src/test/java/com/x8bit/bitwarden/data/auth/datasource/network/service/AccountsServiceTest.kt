@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
@@ -17,12 +18,23 @@ import retrofit2.create
 class AccountsServiceTest : BaseServiceTest() {
 
     private val accountsApi: AccountsApi = retrofit.create()
+    private val authenticatedAccountsApi: AuthenticatedAccountsApi = retrofit.create()
     private val service = AccountsServiceImpl(
         accountsApi = accountsApi,
+        authenticatedAccountsApi = authenticatedAccountsApi,
         json = Json {
             ignoreUnknownKeys = true
         },
     )
+
+    @Test
+    fun `deleteAccount with empty response is success`() = runTest {
+        val masterPasswordHash = "37y4d8r379r4789nt387r39k3dr87nr93"
+        val json = ""
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertTrue(service.deleteAccount(masterPasswordHash).isSuccess)
+    }
 
     @Test
     fun `preLogin with unknown kdf type be failure`() = runTest {

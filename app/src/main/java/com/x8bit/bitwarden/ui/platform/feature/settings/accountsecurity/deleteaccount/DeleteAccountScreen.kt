@@ -18,7 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -28,10 +32,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 
 /**
  * Displays the delete account screen.
@@ -43,6 +53,7 @@ fun DeleteAccountScreen(
     viewModel: DeleteAccountViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
 ) {
+    val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
     val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
@@ -53,6 +64,26 @@ fun DeleteAccountScreen(
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    when (val dialog = state.dialog) {
+        is DeleteAccountState.DeleteAccountDialog.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = dialog.message,
+            ),
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(DeleteAccountAction.DismissDialog) }
+            },
+        )
+
+        DeleteAccountState.DeleteAccountDialog.Loading,
+
+        -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(R.string.loading.asText()),
+        )
+
+        null -> Unit
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -105,14 +136,10 @@ fun DeleteAccountScreen(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(24.dp))
-            BitwardenErrorButton(
-                label = stringResource(id = R.string.delete_account),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick) }
+            DeleteAccountButton(
+                onConfirmationClick = remember(viewModel) {
+                    { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(it)) }
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(12.dp))
             BitwardenOutlinedButton(
@@ -127,4 +154,28 @@ fun DeleteAccountScreen(
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
+}
+
+@Composable
+private fun DeleteAccountButton(
+    onConfirmationClick: (masterPassword: String) -> Unit,
+) {
+    var showPasswordDialog by remember { mutableStateOf(false) }
+    if (showPasswordDialog) {
+        BitwardenMasterPasswordDialog(
+            onConfirmClick = {
+                showPasswordDialog = false
+                onConfirmationClick(it)
+            },
+            onDismissRequest = { showPasswordDialog = false },
+        )
+    }
+
+    BitwardenErrorButton(
+        label = stringResource(id = R.string.delete_account),
+        onClick = { showPasswordDialog = true },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
 }

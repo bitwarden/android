@@ -17,10 +17,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -81,6 +83,19 @@ class AuthRepositoryImpl constructor(
         set(value) {
             authDiskSource.rememberedEmailAddress = value
         }
+
+    override suspend fun deleteAccount(password: String): Result<Unit> {
+        val profile = authDiskSource.userState?.activeAccount?.profile
+            ?: return IllegalStateException("Not logged in.").asFailure()
+        return authSdkSource
+            .hashPassword(
+                email = profile.email,
+                password = password,
+                kdf = profile.toSdkParams(),
+            )
+            .flatMap { hashedPassword -> accountsService.deleteAccount(hashedPassword) }
+            .onSuccess { logout() }
+    }
 
     override suspend fun login(
         email: String,
