@@ -153,6 +153,7 @@ class VaultViewModel @Inject constructor(
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
         }
     }
+
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
         // TODO update state to error state BIT-1157
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
@@ -406,6 +407,13 @@ sealed class VaultEvent {
      * Navigate to the Add Item screen.
      */
     data object NavigateToAddItemScreen : VaultEvent()
+
+    /**
+     * Navigate to the Vault Item screen.
+     */
+    data class NavigateToItemScreen(
+        val vaultItemId: String,
+    ) : VaultEvent()
 
     /**
      * Navigate to the item details screen.

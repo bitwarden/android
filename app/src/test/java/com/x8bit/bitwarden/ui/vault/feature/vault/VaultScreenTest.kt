@@ -28,6 +28,7 @@ import org.junit.Test
 class VaultScreenTest : BaseComposeTest() {
 
     private var onNavigateToVaultAddItemScreenCalled = false
+    private var onNavigateToVaultItemScreenCalled = false
     private var onDimBottomNavBarRequestCalled = false
 
     private val mutableEventFlow = MutableSharedFlow<VaultEvent>(
@@ -45,6 +46,7 @@ class VaultScreenTest : BaseComposeTest() {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemScreenCalled = true },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
             )
         }
@@ -113,6 +115,12 @@ class VaultScreenTest : BaseComposeTest() {
     fun `NavigateToAddItemScreen event should call onNavigateToVaultAddItemScreen`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToAddItemScreen)
         assertTrue(onNavigateToVaultAddItemScreenCalled)
+    }
+
+    @Test
+    fun `NavigateToItemScreen event should call onNavigateToVaultItemScreenCalled`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemScreen(vaultItemId = "id"))
+        assertTrue(onNavigateToVaultItemScreenCalled)
     }
 
     @Test

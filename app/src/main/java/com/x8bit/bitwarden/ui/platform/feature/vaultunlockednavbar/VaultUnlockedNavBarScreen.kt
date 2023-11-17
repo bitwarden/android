@@ -66,6 +66,7 @@ fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
     onNavigateToVaultAddItem: () -> Unit,
+    onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToNewSend: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
 ) {
@@ -93,6 +94,7 @@ fun VaultUnlockedNavBarScreen(
     }
     VaultUnlockedNavBarScaffold(
         navController = navController,
+        onNavigateToVaultItem = onNavigateToVaultItem,
         navigateToVaultAddItem = onNavigateToVaultAddItem,
         navigateToNewSend = onNavigateToNewSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
@@ -123,6 +125,7 @@ private fun VaultUnlockedNavBarScaffold(
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
     navigateToVaultAddItem: () -> Unit,
+    onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     navigateToNewSend: () -> Unit,
     navigateToDeleteAccount: () -> Unit,
 ) {
@@ -178,6 +181,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToVaultAddItemScreen = {
                     navigateToVaultAddItem()
                 },
+                onNavigateToVaultItemScreen = onNavigateToVaultItem,
                 onDimBottomNavBarRequest = { shouldDim ->
                     shouldDimNavBar = shouldDim
                 },
