@@ -12,7 +12,7 @@ fun createMockSend(number: Int): SyncResponseJson.Send =
         type = SendTypeJson.FILE,
         accessId = "mockAccessId-$number",
         password = "mockPassword-$number",
-        file = createMockFile(number = 1),
+        file = createMockFile(number = number),
         deletionDate = LocalDateTime.parse("2023-10-27T12:00:00"),
         name = "mockName-$number",
         isDisabled = false,

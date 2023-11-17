@@ -6,6 +6,8 @@ import com.bitwarden.core.CipherView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.Send
+import com.bitwarden.core.SendView
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientVault
@@ -167,6 +169,53 @@ class VaultSdkSourceTest {
             )
         }
     }
+
+    @Test
+    fun `decryptSendList should call SDK and return correct data wrapped in a Result`() =
+        runBlocking {
+            val mockSend = mockk<Send>()
+            val expectedResult = mockk<SendView>()
+            coEvery {
+                clientVault.sends().decrypt(
+                    send = mockSend,
+                )
+            } returns expectedResult
+            val result = vaultSdkSource.decryptSendList(
+                sendList = listOf(mockSend),
+            )
+            assertEquals(
+                listOf(expectedResult).asSuccess(),
+                result,
+            )
+            coVerify {
+                clientVault.sends().decrypt(
+                    send = mockSend,
+                )
+            }
+        }
+
+    @Test
+    fun `decryptSend should call SDK and return correct data wrapped in a Result`() =
+        runBlocking {
+            val mockSend = mockk<Send>()
+            val expectedResult = mockk<SendView>()
+            coEvery {
+                clientVault.sends().decrypt(
+                    send = mockSend,
+                )
+            } returns expectedResult
+            val result = vaultSdkSource.decryptSend(
+                send = mockSend,
+            )
+            assertEquals(
+               expectedResult.asSuccess(), result,
+            )
+            coVerify {
+                clientVault.sends().decrypt(
+                    send = mockSend,
+                )
+            }
+        }
 
     @Test
     fun `Folder decrypt should call SDK and return a Result with correct data`() = runBlocking {

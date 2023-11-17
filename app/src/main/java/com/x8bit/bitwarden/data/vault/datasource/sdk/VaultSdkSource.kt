@@ -6,6 +6,8 @@ import com.bitwarden.core.CipherView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.Send
+import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 
 /**
@@ -33,6 +35,16 @@ interface VaultSdkSource {
      * Decrypts a list of [Cipher]s returning a list of [CipherView] wrapped in a [Result].
      */
     suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherView>>
+
+    /**
+     * Decrypts a [Send] returning a [SendView] wrapped in a [Result].
+     */
+    suspend fun decryptSend(send: Send): Result<SendView>
+
+    /**
+     * Decrypts a list of [Send]s returning a list of [SendView] wrapped in a [Result].
+     */
+    suspend fun decryptSendList(sendList: List<Send>): Result<List<SendView>>
 
     /**
      * Decrypts a [Folder] returning a [FolderView] wrapped in a [Result].

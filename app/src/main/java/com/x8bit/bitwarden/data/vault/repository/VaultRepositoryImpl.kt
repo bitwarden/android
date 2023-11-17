@@ -10,10 +10,12 @@ import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -46,17 +48,29 @@ class VaultRepositoryImpl constructor(
     private val vaultDataMutableStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
+    private val sendDataMutableStateFlow =
+        MutableStateFlow<DataState<SendData>>(DataState.Loading)
+
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>>
         get() = vaultDataMutableStateFlow.asStateFlow()
 
-    override fun clearVaultData() {
+    override val sendDataStateFlow: StateFlow<DataState<SendData>>
+        get() = sendDataMutableStateFlow.asStateFlow()
+
+    override fun clearUnlockedData() {
         vaultDataMutableStateFlow.update { DataState.Loading }
+        sendDataMutableStateFlow.update { DataState.Loading }
     }
 
     override fun sync() {
         if (!syncJob.isCompleted || willSyncAfterUnlock) return
         vaultDataMutableStateFlow.value.data?.let { data ->
             vaultDataMutableStateFlow.update {
+                DataState.Pending(data = data)
+            }
+        }
+        sendDataMutableStateFlow.value.data?.let { data ->
+            sendDataMutableStateFlow.update {
                 DataState.Pending(data = data)
             }
         }
@@ -69,22 +83,19 @@ class VaultRepositoryImpl constructor(
                             userKey = syncResponse.profile?.key,
                             privateKey = syncResponse.profile?.privateKey,
                         )
-                        decryptSyncResponseAndUpdateVaultDataState(
-                            syncResponse = syncResponse,
-                        )
+                        decryptSyncResponseAndUpdateVaultDataState(syncResponse = syncResponse)
+                        decryptSendsAndUpdateSendDataState(sendList = syncResponse.sends)
                     },
                     onFailure = { throwable ->
-                        vaultDataMutableStateFlow.update {
-                            if (throwable.isNoConnectionError()) {
-                                DataState.NoNetwork(
-                                    data = it.data,
-                                )
-                            } else {
-                                DataState.Error(
-                                    error = throwable,
-                                    data = it.data,
-                                )
-                            }
+                        vaultDataMutableStateFlow.update { currentState ->
+                            throwable.toNetworkOrErrorState(
+                                data = currentState.data,
+                            )
+                        }
+                        sendDataMutableStateFlow.update { currentState ->
+                            throwable.toNetworkOrErrorState(
+                                data = currentState.data,
+                            )
                         }
                     },
                 )
@@ -148,16 +159,34 @@ class VaultRepositoryImpl constructor(
             )
     }
 
+    private suspend fun decryptSendsAndUpdateSendDataState(sendList: List<SyncResponseJson.Send>?) {
+        val newState = vaultSdkSource
+            .decryptSendList(
+                sendList = sendList
+                    .orEmpty()
+                    .toEncryptedSdkSendList(),
+            )
+            .fold(
+                onSuccess = { DataState.Loaded(data = SendData(sendViewList = it)) },
+                onFailure = { DataState.Error(error = it) },
+            )
+        sendDataMutableStateFlow.update { newState }
+    }
+
     private suspend fun decryptSyncResponseAndUpdateVaultDataState(syncResponse: SyncResponseJson) {
         val newState = vaultSdkSource
             .decryptCipherList(
-                cipherList = (syncResponse.ciphers ?: emptyList())
+                cipherList = syncResponse
+                    .ciphers
+                    .orEmpty()
                     .toEncryptedSdkCipherList(),
             )
             .flatMap { decryptedCipherList ->
                 vaultSdkSource
                     .decryptFolderList(
-                        folderList = (syncResponse.folders ?: emptyList())
+                        folderList = syncResponse
+                            .folders
+                            .orEmpty()
                             .toEncryptedSdkFolderList(),
                     )
                     .map { decryptedFolderList ->
@@ -178,3 +207,13 @@ class VaultRepositoryImpl constructor(
         vaultDataMutableStateFlow.update { newState }
     }
 }
+
+private fun <T> Throwable.toNetworkOrErrorState(data: T?): DataState<T> =
+    if (isNoConnectionError()) {
+        DataState.NoNetwork(data = data)
+    } else {
+        DataState.Error(
+            error = this,
+            data = data,
+        )
+    }
