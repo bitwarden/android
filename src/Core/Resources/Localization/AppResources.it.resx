@@ -2695,7 +2695,7 @@ Vuoi passare a questo account?</value>
     <value>Azione timeout cassaforte impostata su uscire</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Bocca riempimento automatico</value>
+    <value>Blocca riempimento automatico</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
     <value>Il riempimento automatico non sarà offerto per questi URI.</value>
@@ -2860,5 +2860,14 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Account uscito.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Le autorizzazioni della tua organizzazione sono state aggiornate, obbligandoti a impostare una password principale.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>La tua organizzazione ti obbliga di impostare di una password principale.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Imposta un metodo di sblocco per modificare l'azione timeout cassaforte.</value>
   </data>
 </root>

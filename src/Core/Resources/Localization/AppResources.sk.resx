@@ -2861,4 +2861,13 @@ Chcete prepnúť na toto konto?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Účet bol odhlásený.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Povolenia vašej organizácie boli aktualizované, čo si vyžaduje nastavenie hlavného hesla.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Vaša organizácia vyžaduje, aby ste nastavili hlavné heslo.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</value>
+  </data>
 </root>

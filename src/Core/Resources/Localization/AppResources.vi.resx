@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Báo lỗi</value>
+    <value>Gửi báo cáo lỗi</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Tạo một vấn đề tại trang GitHub của chúng tôi.</value>
@@ -279,7 +279,7 @@
     <value>Xóa tài khoản</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Bạn có chắc muốn xóa tài khoản này?</value>
+    <value>Bạn có chắc muốn xóa tài khoản này không?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Tài khoản này đã có rồi</value>
@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Trình xác thực</value>
+    <value>Authenticator</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -371,7 +371,7 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>Trường {0} là bắt buộc.</value>
+    <value>Vui lòng nhập {0}.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
@@ -394,7 +394,7 @@
     <value>Xem</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Ghé thăm trang chủ</value>
+    <value>Ghé thăm trang web</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Trang web</value>
@@ -419,7 +419,7 @@
     <value>Sử dụng dịch vụ trợ năng của Bitwarden để tự động điền thông tin đăng nhập của bạn vào các ứng dụng và trang web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Dịch vụ điền tự động</value>
+    <value>Dịch vụ tự động điền</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Tránh các ký tự dễ gây nhầm lẫn</value>
@@ -490,7 +490,7 @@
     <value>Bạn đã sẵn sàng để đăng nhập!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Dễ dàng truy cập thông tin đăng nhập của bạn từ Safari, Chrome và các ứng dụng được hỗ trợ khác.</value>
+    <value>Thông tin đăng nhập của bạn giờ đây có thể dễ dàng truy cập từ Safari, Chrome và các ứng dụng được hỗ trợ khác.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>Trong Safari và Chrome, tìm Bitwarden bằng cách sử dụng biểu tượng chia sẻ (gợi ý: di chuyển sang phải ở cuối cùng của trình đơn chia sẻ).</value>
@@ -544,7 +544,7 @@
     <value>4 giờ</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Lập tức</value>
+    <value>Tức thì</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
     <value>Thời gian mở kho</value>
@@ -569,7 +569,7 @@
     <value>Mật khẩu nhập lại không trùng khớp.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Mật khẩu chính là mật khẩu bạn sử dụng để truy cập kho mật khẩu của bạn. Nó rất quan trọng nên bạn không được quên mật khẩu chủ của mình. Không thể khôi phục lại mật khẩu chính nếu bạn quên nó.</value>
+    <value>Mật khẩu chính là mật khẩu bạn sử dụng để truy cập kho mật khẩu của bạn. Nó rất quan trọng vì sẽ không có cách nào để lấy lại mật khẩu nếu bạn quên.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Gợi ý mật khẩu chính (tùy chọn)</value>
@@ -578,7 +578,7 @@
     <value>Một gợi ý mật khẩu có thể giúp bạn nhớ lại mật khẩu chính của bạn nếu bạn quên nó.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Mật khẩu chính phải tối thiểu {0} kí tự.</value>
+    <value>Mật khẩu chính phải có tối thiểu {0} kí tự.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Số chữ số</value>
@@ -607,7 +607,7 @@
     <value>Không có mục nào trong kho của bạn.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Không có mục nào trong kho của bạn cho trang web này. Nhấn để thêm.</value>
+    <value>Không có mục nào trong kho của bạn phù hợp với trang web/app này. Nhấn để thêm.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Thông tin đăng nhập này không có tên người dùng hoặc mật khẩu được định cấu hình.</value>
@@ -806,7 +806,7 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Ứng dụng xác thực</value>
+    <value>Ứng dụng Authenticator</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Tài khoản này đã kích hoạt xác minh 2 bước, tuy nhiên dịch vụ xác minh 2 bước đã chọn không được hỗ trợ trên thiết bị này. Vui lòng sử dụng thiết bị được hỗ trợ hoặc cài đặt một ứng dụng xác thực tốt hơn.</value>
+    <value>Tài khoản này đã kích hoạt xác thực 2 bước, tuy nhiên dịch vụ xác thực hai bước đã chọn không được hỗ trợ trên thiết bị này. Vui lòng sử dụng thiết bị được hỗ trợ và/hoặc dịch vụ xác thực bổ sung có thể hoạt động tốt trên thiết bị (chẳng hạn như một ứng dụng Authenticator).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Mã khôi phục</value>
@@ -907,7 +907,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Sao chép TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Nếu thông tin đăng nhập có khóa xác thực, hãy sao chép mã xác minh TOTP vào bộ nhớ tạm khi bạn tự động điền thông tin đăng nhập.</value>
+    <value>Nếu thông tin đăng nhập có khóa xác thực, hãy sao chép mã xác minh TOTP khi bạn tự động điền thông tin đăng nhập.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Tự động sao chép mã TOTP</value>
@@ -987,7 +987,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Chạm vào thông báo này để xem thông tin đăng nhập từ kho của bạn.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Mục tùy chỉnh</value>
+    <value>Trường tùy chỉnh</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Chép số</value>
@@ -996,7 +996,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Sao chép mã bảo mật</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Số</value>
+    <value>Số thẻ</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Mã bảo mật</value>
@@ -1161,7 +1161,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Không có mục nào trong thư mục này.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>Không có gì trong thùng rác.</value>
+    <value>Không có gì trong thùng rác</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Tự động điền bằng trợ năng</value>
@@ -1195,7 +1195,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Chúng tôi không thể mở cài đặt tự động điền cho bạn. Bạn có thể đi đến cài đặt tự động điền theo cách thủ công bằng cách vào Cài đặt &gt; Hệ thống &gt; Ngôn ngữ và nhập liệu &gt; Nâng cao &gt; Dịch vụ tự động điền.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Tên mục tùy chỉnh</value>
+    <value>Tên trường tùy chỉnh</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Đúng/Sai</value>
@@ -1210,7 +1210,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Văn bản</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Thêm mục tùy chỉnh</value>
+    <value>Trường tùy chỉnh mới</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>Bạn muốn thêm loại trường tùy chỉnh nào?</value>
@@ -1753,7 +1753,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Đồng bộ kho bằng cách vuốt xuống.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Đăng nhập một lần cho doanh nghiệp</value>
+    <value>Đăng nhập doanh nghiệp</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Đăng nhập nhanh bằng cách sử dụng cổng đăng nhập một lần của tổ chức. Vui lòng nhập thông tin nhận dạng tổ chức để bắt đầu.</value>
@@ -1801,7 +1801,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Đang tải</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Bật tính năng nghĩa là bạn đồng ý các điều kiện sau:
+    <value>Bạn đồng ý các điều kiện sau:
 </value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
@@ -2600,7 +2600,7 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
     <value>Tìm kiếm một mục hoặc thêm mục mới</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>Không có mục nào phù hợp với tìm kiếm</value>
+    <value>Không tìm thấy</value>
   </data>
   <data name="US" xml:space="preserve">
     <value>Hoa Kỳ</value>
@@ -2699,7 +2699,7 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
     <value>Chặn tự động điền</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Tính năng tự động điền sẽ không được cung cấp cho các URI này.</value>
+    <value>Vô hiệu hóa tính năng tự động điền với các URI sau.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
     <value>URI bị chặn mới</value>
@@ -2800,10 +2800,10 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
     <value>{0} giờ</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
-    <value>Android Autofill Framework được dùng để hỗ trợ điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn.</value>
+    <value>Dùng Android Autofill Framework để điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Sử dụng tính năng tự động điền nội tuyến nếu bàn phím hỗ trợ tính năng này. Nếu không, hãy sử dụng lớp phủ mặc định.</value>
+    <value>Dùng tính năng tự động điền nội tuyến nếu bàn phím hỗ trợ. Nếu không, sẽ dùng lớp phủ mặc định.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Tùy chọn bổ sung</value>
@@ -2861,5 +2861,14 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Đã đăng xuất tài khoản.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Quyền tổ chức của bạn đã được cập nhật, yêu cầu bạn đặt mật khẩu chính.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Tổ chức của bạn yêu cầu bạn đặt mật khẩu chính.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Thiết lập khóa khi hết thời gian chờ kho.</value>
   </data>
 </root>

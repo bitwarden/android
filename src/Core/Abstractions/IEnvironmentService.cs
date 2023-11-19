@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Bit.Core.Models.Data;
+﻿using Bit.Core.Models.Data;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.Core.Abstractions
 {
@@ -12,10 +12,12 @@ namespace Bit.Core.Abstractions
         string NotificationsUrl { get; set; }
         string WebVaultUrl { get; set; }
         string EventsUrl { get; set; }
+        BwRegion SelectedRegion { get; set; }
 
         string GetWebVaultUrl(bool returnNullIfDefault = false);
         string GetWebSendUrl();
-        Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls);
+        string GetCurrentDomain();
         Task SetUrlsFromStorageAsync();
+        Task<EnvironmentUrlData> SetRegionAsync(BwRegion region, EnvironmentUrlData selfHostedUrls = null);
     }
 }

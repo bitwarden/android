@@ -2862,4 +2862,13 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Tili kirjattiin ulos.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Organisaatiosi käyttöoikeuksia muutettiin ja tämän seurauksena sinun on asetettava pääsalasana.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Organisaatiosi edellyttää, että asetat pääsalasanan.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Muuta holvisi aikakatkaisutoimintoa määrittämällä lukituksen avaustapa.</value>
+  </data>
 </root>

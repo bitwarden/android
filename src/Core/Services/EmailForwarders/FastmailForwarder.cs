@@ -9,16 +9,21 @@ using Newtonsoft.Json.Linq;
 
 namespace Bit.Core.Services.EmailForwarders
 {
-    public class FastmailForwarder : BaseForwarder<ForwarderOptions>
+    public class FastmailForwarderOptions : ForwarderOptions
+    {
+        public string Website { get; set; }
+    }
+
+    public class FastmailForwarder : BaseForwarder<FastmailForwarderOptions>
     {
         protected override string RequestUri => "https://api.fastmail.com/jmap/api/";
 
-        protected override void ConfigureHeaders(HttpRequestHeaders headers, ForwarderOptions options)
+        protected override void ConfigureHeaders(HttpRequestHeaders headers, FastmailForwarderOptions options)
         {
             headers.Add("Authorization", $"Bearer {options.ApiKey}");
         }
 
-        protected override async Task<HttpContent> GetContentAsync(IApiService apiService, ForwarderOptions options)
+        protected override async Task<HttpContent> GetContentAsync(IApiService apiService, FastmailForwarderOptions options)
         {
             string accountId = null;
             try
@@ -55,7 +60,8 @@ namespace Bit.Core.Services.EmailForwarders
                                         ["state"] = "enabled",
                                         ["description"] = "",
                                         ["url"] = "",
-                                        ["emailPrefix"] = ""
+                                        ["emailPrefix"] = "",
+                                        ["forDomain"] = options.Website ?? ""
                                     }
                                 }
                             },

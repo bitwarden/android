@@ -2860,4 +2860,13 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>A fiók kijelentkezett.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>A szervezeti jogosultságok frissítésre kerültek, ezért be kell állítani egy mesterjelszót.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>A szervezet megköveteli egy mesterjelszó beállítását.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Állítsunk be egy feloldási módot a széf időkifutási műveletének módosításához.</value>
+  </data>
 </root>

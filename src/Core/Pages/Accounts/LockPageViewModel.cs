@@ -208,13 +208,8 @@ namespace Bit.App.Pages
                 _logger.Exception(new NullReferenceException("Email not found in storage"));
                 return;
             }
-            var webVault = _environmentService.GetWebVaultUrl(true);
-            if (string.IsNullOrWhiteSpace(webVault))
-            {
-                webVault = "https://bitwarden.com";
-            }
-            var webVaultHostname = CoreHelpers.GetHostname(webVault);
-            LoggedInAsText = string.Format(AppResources.LoggedInAsOn, _email, webVaultHostname);
+
+            LoggedInAsText = string.Format(AppResources.LoggedInAsOn, _email, _environmentService.GetCurrentDomain());
             if (PinEnabled)
             {
                 PageTitle = AppResources.VerifyPIN;

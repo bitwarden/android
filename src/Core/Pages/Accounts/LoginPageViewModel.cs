@@ -163,7 +163,7 @@ namespace Bit.App.Pages
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
-                EnvironmentDomainName = CoreHelpers.GetDomain((await _stateService.GetPreAuthEnvironmentUrlsAsync())?.Base);
+                EnvironmentDomainName = _environmentService.GetCurrentDomain();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, await _appIdService.GetAppIdAsync());
             }
             catch (ApiException apiEx) when (apiEx.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)
