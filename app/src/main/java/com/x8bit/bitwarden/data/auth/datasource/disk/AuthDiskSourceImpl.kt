@@ -39,6 +39,7 @@ class AuthDiskSourceImpl(
                 key = STATE_KEY,
                 value = value?.let { json.encodeToString(value) },
             )
+            mutableUserStateFlow.tryEmit(value)
         }
 
     override val userStateFlow: Flow<UserStateJson?>
@@ -49,15 +50,6 @@ class AuthDiskSourceImpl(
         replay = 1,
         extraBufferCapacity = Int.MAX_VALUE,
     )
-
-    override fun onSharedPreferenceChanged(
-        sharedPreferences: SharedPreferences?,
-        key: String?,
-    ) {
-        when (key) {
-            STATE_KEY -> mutableUserStateFlow.tryEmit(userState)
-        }
-    }
 
     override fun getUserKey(userId: String): String? =
         getString(key = "${MASTER_KEY_ENCRYPTION_USER_KEY}_$userId")

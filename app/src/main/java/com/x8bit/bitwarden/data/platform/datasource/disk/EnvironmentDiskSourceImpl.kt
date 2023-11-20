@@ -26,6 +26,7 @@ class EnvironmentDiskSourceImpl(
                 key = PRE_AUTH_URLS_KEY,
                 value = value?.let { json.encodeToString(value) },
             )
+            mutableEnvironmentUrlDataFlow.tryEmit(value)
         }
 
     override val preAuthEnvironmentUrlDataFlow: Flow<EnvironmentUrlDataJson?>
@@ -36,13 +37,4 @@ class EnvironmentDiskSourceImpl(
         replay = 1,
         extraBufferCapacity = Int.MAX_VALUE,
     )
-
-    override fun onSharedPreferenceChanged(
-        sharedPreferences: SharedPreferences?,
-        key: String?,
-    ) {
-        when (key) {
-            PRE_AUTH_URLS_KEY -> mutableEnvironmentUrlDataFlow.tryEmit(preAuthEnvironmentUrlData)
-        }
-    }
 }
