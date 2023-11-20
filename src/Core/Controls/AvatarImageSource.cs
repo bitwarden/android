@@ -68,6 +68,14 @@ namespace Bit.App.Controls
             var textColor = CoreHelpers.TextColorFromBgColor(bgColor);
             var size = 50;
 
+            //Workaround: [MAUI-Migration] There is currently a bug in MAUI where the actual size of the image is used instead of the size it should occupy in the Toolbar.
+            //This causes some issues with the position of the icon. As a workaround we make the icon smaller until this is fixed.
+            //Github issues: https://github.com/dotnet/maui/issues/12359  and  https://github.com/dotnet/maui/pull/17120
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
+            {
+                size = 20;
+            }
+
             using (var bitmap = new SKBitmap(size * 2,
                 size * 2,
                 SKImageInfo.PlatformColorType,
