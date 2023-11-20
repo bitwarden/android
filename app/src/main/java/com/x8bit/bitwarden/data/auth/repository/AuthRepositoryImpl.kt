@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
@@ -47,6 +48,7 @@ class AuthRepositoryImpl constructor(
     private val identityService: IdentityService,
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
+    private val environmentRepository: EnvironmentRepository,
     private val vaultRepository: VaultRepository,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository {
@@ -126,6 +128,9 @@ class AuthRepositoryImpl constructor(
                         authDiskSource.userState = it
                             .toUserState(
                                 previousUserState = authDiskSource.userState,
+                                environmentUrlData = environmentRepository
+                                    .environment
+                                    .environmentUrlData,
                             )
                             .also { userState ->
                                 authDiskSource.storeUserKey(

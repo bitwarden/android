@@ -1,15 +1,20 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 
 /**
- * Converts the given [GetTokenResponseJson.Success] to a [UserStateJson], given the current
- * [previousUserState].
+ * Converts the given [GetTokenResponseJson.Success] to a [UserStateJson], given the following
+ * additional information:
+ *
+ * - the [previousUserState]
+ * - the current [environmentUrlData]
  */
 fun GetTokenResponseJson.Success.toUserState(
     previousUserState: UserStateJson?,
+    environmentUrlData: EnvironmentUrlDataJson,
 ): UserStateJson {
     val accessToken = this.accessToken
 
@@ -40,7 +45,7 @@ fun GetTokenResponseJson.Success.toUserState(
             refreshToken = this.refreshToken,
         ),
         settings = AccountJson.Settings(
-            environmentUrlData = null,
+            environmentUrlData = environmentUrlData,
         ),
     )
 
