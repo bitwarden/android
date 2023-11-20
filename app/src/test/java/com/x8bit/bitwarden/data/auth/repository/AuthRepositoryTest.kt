@@ -5,6 +5,7 @@ import com.bitwarden.core.Kdf
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RsaKeyPair
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
@@ -31,6 +32,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -59,6 +62,11 @@ class AuthRepositoryTest {
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
     private val vaultRepository: VaultRepository = mockk()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val fakeEnvironmentRepository =
+        FakeEnvironmentRepository()
+            .apply {
+                environment = Environment.Us
+            }
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
             hashPassword(
@@ -91,8 +99,9 @@ class AuthRepositoryTest {
         haveIBeenPwnedService = haveIBeenPwnedService,
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
-        dispatcherManager = dispatcherManager,
+        environmentRepository = fakeEnvironmentRepository,
         vaultRepository = vaultRepository,
+        dispatcherManager = dispatcherManager,
     )
 
     @BeforeEach
@@ -278,7 +287,10 @@ class AuthRepositoryTest {
                 vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
             } returns VaultUnlockResult.Success
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
             } returns SINGLE_USER_STATE_1
             val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
             assertEquals(LoginResult.Success, result)
@@ -684,7 +696,10 @@ class AuthRepositoryTest {
             vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
         } returns VaultUnlockResult.Success
         every {
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null)
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
         } returns SINGLE_USER_STATE_1
 
         repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
@@ -733,7 +748,10 @@ class AuthRepositoryTest {
                 vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
             } returns VaultUnlockResult.Success
             every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = SINGLE_USER_STATE_2)
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = SINGLE_USER_STATE_2,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
             } returns MULTI_USER_STATE
 
             repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)

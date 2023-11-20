@@ -1,7 +1,10 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -26,9 +29,11 @@ class EnvironmentRepositoryTest {
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
 
     private val fakeEnvironmentDiskSource = FakeEnvironmentDiskSource()
+    private val fakeAuthDiskSource = FakeAuthDiskSource()
 
     private val repository = EnvironmentRepositoryImpl(
         environmentDiskSource = fakeEnvironmentDiskSource,
+        authDiskSource = fakeAuthDiskSource,
         dispatcherManager = dispatcherManager,
     )
 
@@ -40,6 +45,46 @@ class EnvironmentRepositoryTest {
     @AfterEach
     fun tearDown() {
         unmockkStatic(ENVIRONMENT_EXTENSIONS_PATH)
+    }
+
+    @Test
+    fun `changes to the active user should update the environment if necessary`() {
+        assertEquals(
+            Environment.Us,
+            repository.environment,
+        )
+        assertEquals(
+            null,
+            fakeEnvironmentDiskSource.preAuthEnvironmentUrlData,
+        )
+
+        // Updating the environment for the active user to a non-null value triggers an update
+        // in the saved environment.
+        fakeAuthDiskSource.userState = getMockUserState(
+            environmentForActiveUser = EnvironmentUrlDataJson.DEFAULT_EU,
+        )
+        assertEquals(
+            Environment.Eu,
+            repository.environment,
+        )
+        assertEquals(
+            EnvironmentUrlDataJson.DEFAULT_EU,
+            fakeEnvironmentDiskSource.preAuthEnvironmentUrlData,
+        )
+
+        // Updating the environment for the active user to a null value leaves the current
+        // environment unchanged.
+        fakeAuthDiskSource.userState = getMockUserState(
+            environmentForActiveUser = null,
+        )
+        assertEquals(
+            Environment.Eu,
+            repository.environment,
+        )
+        assertEquals(
+            EnvironmentUrlDataJson.DEFAULT_EU,
+            fakeEnvironmentDiskSource.preAuthEnvironmentUrlData,
+        )
     }
 
     @Test
@@ -101,6 +146,22 @@ class EnvironmentRepositoryTest {
             assertEquals(environment, awaitItem())
         }
     }
+
+    private fun getMockUserState(
+        environmentForActiveUser: EnvironmentUrlDataJson?,
+    ): UserStateJson =
+        UserStateJson(
+            activeUserId = "activeUserId",
+            accounts = mapOf(
+                "activeUserId" to AccountJson(
+                    profile = mockk(),
+                    tokens = mockk(),
+                    settings = AccountJson.Settings(
+                        environmentUrlData = environmentForActiveUser,
+                    ),
+                ),
+            ),
+        )
 }
 
 private const val ENVIRONMENT_EXTENSIONS_PATH =

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -31,7 +32,10 @@ class GetTokenResponseExtensionsTest {
 
         assertEquals(
             SINGLE_USER_STATE_1,
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = null),
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            ),
         )
     }
 
@@ -41,7 +45,10 @@ class GetTokenResponseExtensionsTest {
 
         assertEquals(
             MULTI_USER_STATE,
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(previousUserState = SINGLE_USER_STATE_2),
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                previousUserState = SINGLE_USER_STATE_2,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            ),
         )
     }
 }
@@ -102,7 +109,7 @@ private val ACCOUNT_1 = AccountJson(
         refreshToken = "refreshToken",
     ),
     settings = AccountJson.Settings(
-        environmentUrlData = null,
+        environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
     ),
 )
 private val ACCOUNT_2 = AccountJson(
@@ -127,7 +134,7 @@ private val ACCOUNT_2 = AccountJson(
         refreshToken = "refreshToken",
     ),
     settings = AccountJson.Settings(
-        environmentUrlData = null,
+        environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
     ),
 )
 private val SINGLE_USER_STATE_1 = UserStateJson(

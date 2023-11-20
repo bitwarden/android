@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository.di
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -21,10 +22,12 @@ object PlatformRepositoryModule {
     @Singleton
     fun provideEnvironmentRepository(
         environmentDiskSource: EnvironmentDiskSource,
+        authDiskSource: AuthDiskSource,
         dispatcherManager: DispatcherManager,
     ): EnvironmentRepository =
         EnvironmentRepositoryImpl(
             environmentDiskSource = environmentDiskSource,
+            authDiskSource = authDiskSource,
             dispatcherManager = dispatcherManager,
         )
 }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -8,7 +9,9 @@ import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 
 /**
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.stateIn
  */
 class EnvironmentRepositoryImpl(
     private val environmentDiskSource: EnvironmentDiskSource,
+    private val authDiskSource: AuthDiskSource,
     dispatcherManager: DispatcherManager,
 ) : EnvironmentRepository {
 
@@ -38,6 +42,20 @@ class EnvironmentRepositoryImpl(
                 started = SharingStarted.Lazily,
                 initialValue = Environment.Us,
             )
+
+    init {
+        authDiskSource
+            .userStateFlow
+            .onEach { userState ->
+                // If the active account has environment data, set that as the current value.
+                userState
+                    ?.activeAccount
+                    ?.settings
+                    ?.environmentUrlData
+                    ?.let { environmentDiskSource.preAuthEnvironmentUrlData = it }
+            }
+            .launchIn(scope)
+    }
 }
 
 /**
