@@ -37,9 +37,9 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColorInt
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.supportingTextResOrNull

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.repository.model
+package com.x8bit.bitwarden.ui.platform.components.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
  * Summary information about a user's account.
  *
  * @property userId The ID of the user.
- * @property name The full name of the user.
+ * @property name The full name of the user (if applicable).
  * @property email The email of the user.
  * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
  * @property status The current status of the user's account locally.
@@ -15,7 +15,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AccountSummary(
     val userId: String,
-    val name: String,
+    val name: String?,
     val email: String,
     val avatarColorHex: String,
     val status: Status,
