@@ -625,5 +625,35 @@
         <Setter Property="IsVisible"
                 Value="{OnPlatform Android=True, iOS=False}" />
     </Style>
+
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="toolbar-title">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TitleTextColor}" />
+        <Setter Property="FontSize"
+                Value="Header" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+        <Setter Property="MaxLines"
+                Value="1" />
+        <Setter Property="LineBreakMode"
+                Value="TailTruncation" />
+    </Style>
+
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="toolbar-borderless-button">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TitleTextColor}" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderWidth"
+                Value="0" />
+        <Setter Property="FontSize"
+                Value="Header" />
+    </Style>
     
 </ResourceDictionary>

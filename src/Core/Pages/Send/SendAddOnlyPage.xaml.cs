@@ -70,7 +70,6 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                _accountAvatar?.OnAppearing();
                 await MainThread.InvokeOnMainThreadAsync(async () => _vm.AvatarImageSource = await GetAvatarImageSourceAsync());
 
                 await HandleCreateRequest();
@@ -85,13 +84,6 @@ namespace Bit.App.Pages
                 _logger.Value.Exception(ex);
                 await CloseAsync();
             }
-        }
-
-        protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
-        {
-            base.OnNavigatingFrom(args);
-
-            _accountAvatar?.OnDisappearing();
         }
 
         private async Task CloseAsync()

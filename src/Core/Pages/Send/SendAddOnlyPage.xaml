@@ -10,26 +10,44 @@
     xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:SendAddEditPageViewModel"
     HideSoftInputOnTapped="True"
-    x:Name="_page"
-    Title="{Binding PageTitle}">
+    x:Name="_page">
     <ContentPage.BindingContext>
         <pages:SendAddEditPageViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.ToolbarItems>
-        <!--Order matters here or the avatar's image won't be updated correctly, check iOS CustomNavigationRenderer for more info-->
-        <controls:ExtendedToolbarItem
-            x:Name="_accountAvatar"
-            IconImageSource="{Binding AvatarImageSource}"
-            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
-            Order="Primary"
-            Priority="-2"
-            UseOriginalImage="True"
-            SemanticProperties.Description="{u:I18n Account}"
-            AutomationId="AccountIconButton" />
-        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" x:Name="_closeItem" />
-        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" x:Name="_saveItem"/>
-    </ContentPage.ToolbarItems>
+    <!--Using a TitleView because ToolbarItem doesn't support adding the item to the left of the title-->
+    <NavigationPage.TitleView>
+        <Grid
+            ColumnDefinitions="Auto,*,Auto,Auto">
+            <ImageButton
+                Source="{Binding AvatarImageSource}"
+                Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+                SemanticProperties.Description="{u:I18n Account}"
+                AutomationId="AccountIconButton"/>
+            <Label
+                Grid.Column="1"
+                Text="{Binding PageTitle}"
+                StyleClass="toolbar-title"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                AutomationId="ViewTitleLabel"/>
+            <Button
+                Grid.Column="2"
+                Text="{u:I18n Cancel}"
+                StyleClass="toolbar-borderless-button"
+                Clicked="Close_Clicked"
+                SemanticProperties.Description="{u:I18n Cancel}"
+                AutomationId="CloseButton"/>
+            <Button
+                Grid.Column="3"
+                x:Name="_saveItem"
+                Text="{u:I18n Save}"
+                StyleClass="toolbar-borderless-button"
+                Clicked="Save_Clicked"
+                SemanticProperties.Description="{u:I18n Save}"
+                AutomationId="SaveButton"/>
+        </Grid>
+    </NavigationPage.TitleView>
 
     <ContentPage.Resources>
         <ResourceDictionary>

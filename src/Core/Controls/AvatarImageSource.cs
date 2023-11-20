@@ -1,12 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Bit.Core.Utilities;
+﻿using Bit.Core.Utilities;
 using SkiaSharp;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Controls
 {
@@ -48,11 +41,7 @@ namespace Bit.App.Controls
 
         private Task<Stream> GetStreamAsync(CancellationToken userToken = new CancellationToken())
         {
-            // TODO: [MAUI-Avatar] now methods are private protected so cannot be used here, figure out workaround
-            //OnLoadingStarted();
-            //userToken.Register(CancellationTokenSource.Cancel);
             var result = Draw();
-            //OnLoadingCompleted(CancellationTokenSource.IsCancellationRequested);
             return Task.FromResult(result);
         }
 
