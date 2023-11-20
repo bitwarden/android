@@ -1,11 +1,14 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import com.bitwarden.core.CipherView
+import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitCryptoRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
@@ -20,12 +23,15 @@ import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -101,6 +107,36 @@ class VaultRepositoryImpl constructor(
                 )
         }
     }
+
+    override fun getVaultItemStateFlow(itemId: String): StateFlow<DataState<CipherView?>> =
+        vaultDataStateFlow
+            .map { dataState ->
+                dataState.map { vaultData ->
+                    vaultData
+                        .cipherViewList
+                        .find { it.id == itemId }
+                }
+            }
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.Lazily,
+                initialValue = DataState.Loading,
+            )
+
+    override fun getVaultFolderStateFlow(folderId: String): StateFlow<DataState<FolderView?>> =
+        vaultDataStateFlow
+            .map { dataState ->
+                dataState.map { vaultData ->
+                    vaultData
+                        .folderViewList
+                        .find { it.id == folderId }
+                }
+            }
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.Lazily,
+                initialValue = DataState.Loading,
+            )
 
     override suspend fun unlockVaultAndSync(masterPassword: String): VaultUnlockResult {
         return flow {
