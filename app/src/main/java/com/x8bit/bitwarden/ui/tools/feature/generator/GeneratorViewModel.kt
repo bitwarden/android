@@ -5,8 +5,14 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password
@@ -15,6 +21,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AnonAddy
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -36,15 +43,20 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class GeneratorViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val generatorRepository: GeneratorRepository,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: INITIAL_STATE,
 ) {
 
     //region Initialization and Overrides
 
+    private var generateTextJob: Job = Job().apply { complete() }
+
     init {
-        viewModelScope.launch {
-            stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
+        stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
+        when (val selectedType = mutableStateFlow.value.selectedType) {
+            is Passcode -> loadPasscodeOptions(selectedType)
+            is Username -> loadUsernameOptions(selectedType)
         }
     }
 
@@ -73,29 +85,112 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase -> {
                 handlePassphraseSpecificAction(action)
             }
+
+            is GeneratorAction.Internal.UpdateGeneratedPasswordResult -> {
+                handleUpdateGeneratedPasswordResult(action)
+            }
         }
     }
 
     //endregion Initialization and Overrides
 
-    //region Generated Field Handlers
+    //region Generation Handlers
 
-    private fun handleRegenerationClick() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                // TODO(BIT-277): Replace placeholder text with function to generate new text
-                generatedText = currentState.generatedText.reversed(),
-            )
+    private fun loadPasscodeOptions(selectedType: Passcode) {
+        when (selectedType.selectedType) {
+            is Passphrase -> {
+                mutableStateFlow.update { it.copy(selectedType = selectedType) }
+                // TODO: App should generate passphrases (BIT-653)
+            }
+
+            is Password -> {
+                val options = generatorRepository.getPasswordGenerationOptions() ?: return
+                updateGeneratorMainType {
+                    Passcode(
+                        selectedType = Password(
+                            length = options.length,
+                            useCapitals = options.hasUppercase,
+                            useLowercase = options.hasLowercase,
+                            useNumbers = options.hasNumbers,
+                            useSpecialChars = options.allowSpecial,
+                            minNumbers = options.minNumber,
+                            minSpecial = options.minSpecial,
+                            avoidAmbiguousChars = options.allowAmbiguousChar,
+                        ),
+                    )
+                }
+            }
         }
     }
 
+    private fun loadUsernameOptions(selectedType: Username) {
+        mutableStateFlow.update {
+            it.copy(selectedType = selectedType)
+        }
+        // TODO: Generate different username types. Plus addressed email: BIT-655
+    }
+
+    private fun savePasswordOptionsToDisk(password: Password) {
+        val options = PasswordGenerationOptions(
+            length = password.length,
+            allowAmbiguousChar = password.avoidAmbiguousChars,
+            hasNumbers = password.useNumbers,
+            minNumber = password.minNumbers,
+            hasUppercase = password.useCapitals,
+            minUppercase = null,
+            hasLowercase = password.useLowercase,
+            minLowercase = null,
+            allowSpecial = password.useSpecialChars,
+            minSpecial = password.minSpecial,
+        )
+        generatorRepository.savePasswordGenerationOptions(options)
+    }
+
+    private suspend fun generatePassword(password: Password) {
+        val request = PasswordGeneratorRequest(
+            lowercase = password.useLowercase,
+            uppercase = password.useCapitals,
+            numbers = password.useNumbers,
+            special = password.useSpecialChars,
+            length = password.length.toUByte(),
+            avoidAmbiguous = password.avoidAmbiguousChars,
+            minLowercase = null,
+            minUppercase = null,
+            minNumber = null,
+            minSpecial = null,
+        )
+
+        val result = generatorRepository.generatePassword(request)
+        sendAction(GeneratorAction.Internal.UpdateGeneratedPasswordResult(result))
+    }
+
+    //endregion Generation Handlers
+
+    //region Generated Field Handlers
+
+    private fun handleRegenerationClick() {
+        // Go through the update process with the current state to trigger a
+        // regeneration of the generated text for the same state.
+        updateGeneratorMainType { mutableStateFlow.value.selectedType }
+    }
+
     private fun handleCopyClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = GeneratorEvent.ShowToast(
-                    message = "Copied",
-                ),
-            )
+        sendEvent(GeneratorEvent.CopyTextToClipboard)
+    }
+
+    private fun handleUpdateGeneratedPasswordResult(
+        action: GeneratorAction.Internal.UpdateGeneratedPasswordResult,
+    ) {
+        when (val result = action.result) {
+            is GeneratedPasswordResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(generatedText = result.generatedString)
+                }
+            }
+
+            GeneratedPasswordResult.InvalidRequest -> {
+                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+            }
         }
     }
 
@@ -105,24 +200,8 @@ class GeneratorViewModel @Inject constructor(
 
     private fun handleMainTypeOptionSelect(action: GeneratorAction.MainTypeOptionSelect) {
         when (action.mainTypeOption) {
-            GeneratorState.MainTypeOption.PASSWORD -> handleSwitchToPasscode()
-            GeneratorState.MainTypeOption.USERNAME -> handleSwitchToUsername()
-        }
-    }
-
-    private fun handleSwitchToPasscode() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = Passcode(),
-            )
-        }
-    }
-
-    private fun handleSwitchToUsername() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = Username(),
-            )
+            GeneratorState.MainTypeOption.PASSWORD -> loadPasscodeOptions(Passcode())
+            GeneratorState.MainTypeOption.USERNAME -> loadUsernameOptions(Username())
         }
     }
 
@@ -134,27 +213,12 @@ class GeneratorViewModel @Inject constructor(
         action: GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect,
     ) {
         when (action.passcodeTypeOption) {
-            PasscodeTypeOption.PASSWORD -> handleSwitchToPasswordType()
-            PasscodeTypeOption.PASSPHRASE -> handleSwitchToPassphraseType()
-        }
-    }
-
-    private fun handleSwitchToPasswordType() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = Passcode(
-                    selectedType = Password(),
-                ),
+            PasscodeTypeOption.PASSWORD -> loadPasscodeOptions(
+                selectedType = Passcode(selectedType = Password()),
             )
-        }
-    }
 
-    private fun handleSwitchToPassphraseType() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = Passcode(
-                    selectedType = Passphrase(),
-                ),
+            PasscodeTypeOption.PASSPHRASE -> loadPasscodeOptions(
+                selectedType = Passcode(selectedType = Passphrase()),
             )
         }
     }
@@ -356,29 +420,49 @@ class GeneratorViewModel @Inject constructor(
 
     //region Utility Functions
 
-    private inline fun updateGeneratorMainTypePassword(
+    private inline fun updateGeneratorMainType(
+        crossinline block: (GeneratorState.MainType) -> GeneratorState.MainType?,
+    ) {
+        val currentSelectedType = mutableStateFlow.value.selectedType
+        val updatedMainType = block(currentSelectedType) ?: return
+        mutableStateFlow.update { it.copy(selectedType = updatedMainType) }
+
+        generateTextJob.cancel()
+        generateTextJob = viewModelScope.launch {
+            when (updatedMainType) {
+                is Passcode -> when (val selectedType = updatedMainType.selectedType) {
+                    is Passphrase -> {
+                        // TODO: App should generate passphrases (BIT-653)
+                    }
+
+                    is Password -> {
+                        savePasswordOptionsToDisk(selectedType)
+                        generatePassword(selectedType)
+                    }
+                }
+
+                is Username -> {
+                    // TODO: Generate different username types. Plus addressed email: BIT-655
+                }
+            }
+        }
+    }
+
+    private inline fun updateGeneratorMainTypePasscode(
         crossinline block: (Passcode) -> Passcode,
     ) {
-        mutableStateFlow.update { currentState ->
-            val currentSelectedType = currentState.selectedType
-            if (currentSelectedType !is Passcode) return@update currentState
-
-            val updatedPasscode = block(currentSelectedType)
-
-            // TODO(BIT-277): Replace placeholder text with function to generate new text
-            val newText = currentState.generatedText.reversed()
-
-            currentState.copy(selectedType = updatedPasscode, generatedText = newText)
+        updateGeneratorMainType {
+            if (it !is Passcode) null else block(it)
         }
     }
 
     private inline fun updatePasswordType(
         crossinline block: (Password) -> Password,
     ) {
-        updateGeneratorMainTypePassword { currentSelectedType ->
+        updateGeneratorMainTypePasscode { currentSelectedType ->
             val currentPasswordType = currentSelectedType.selectedType
             if (currentPasswordType !is Password) {
-                return@updateGeneratorMainTypePassword currentSelectedType
+                return@updateGeneratorMainTypePasscode currentSelectedType
             }
             currentSelectedType.copy(selectedType = block(currentPasswordType))
         }
@@ -387,10 +471,10 @@ class GeneratorViewModel @Inject constructor(
     private inline fun updatePassphraseType(
         crossinline block: (Passphrase) -> Passphrase,
     ) {
-        updateGeneratorMainTypePassword { currentSelectedType ->
+        updateGeneratorMainTypePasscode { currentSelectedType ->
             val currentPasswordType = currentSelectedType.selectedType
             if (currentPasswordType !is Passphrase) {
-                return@updateGeneratorMainTypePassword currentSelectedType
+                return@updateGeneratorMainTypePasscode currentSelectedType
             }
             currentSelectedType.copy(selectedType = block(currentPasswordType))
         }
@@ -401,7 +485,7 @@ class GeneratorViewModel @Inject constructor(
     companion object {
         private const val PLACEHOLDER_GENERATED_TEXT = "Placeholder"
 
-        val INITIAL_STATE: GeneratorState = GeneratorState(
+        private val INITIAL_STATE: GeneratorState = GeneratorState(
             generatedText = PLACEHOLDER_GENERATED_TEXT,
             selectedType = Passcode(
                 selectedType = Password(),
@@ -950,6 +1034,18 @@ sealed class GeneratorAction {
          */
         sealed class Username : MainType()
     }
+
+    /**
+     * Models actions that the [GeneratorViewModel] itself might send.
+     */
+    sealed class Internal : GeneratorAction() {
+        /**
+         * Indicates a generated text update is received.
+         */
+        data class UpdateGeneratedPasswordResult(
+            val result: GeneratedPasswordResult,
+        ) : Internal()
+    }
 }
 
 /**
@@ -961,7 +1057,14 @@ sealed class GeneratorAction {
 sealed class GeneratorEvent {
 
     /**
-     * Shows a toast with the given [message].
+     * Copies text to the clipboard.
      */
-    data class ShowToast(val message: String) : GeneratorEvent()
+    data object CopyTextToClipboard : GeneratorEvent()
+
+    /**
+     * Displays the message in a snackbar.
+     */
+    data class ShowSnackbar(
+        val message: Text,
+    ) : GeneratorEvent()
 }

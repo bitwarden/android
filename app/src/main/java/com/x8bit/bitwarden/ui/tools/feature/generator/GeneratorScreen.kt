@@ -2,7 +2,6 @@
 
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +16,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -29,11 +31,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -68,14 +73,26 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
-fun GeneratorScreen(viewModel: GeneratorViewModel = hiltViewModel()) {
-
+fun GeneratorScreen(
+    viewModel: GeneratorViewModel = hiltViewModel(),
+    clipboardManager: ClipboardManager = LocalClipboardManager.current,
+) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = context.resources
+    val snackbarHostState = remember { SnackbarHostState() }
+
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is GeneratorEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            GeneratorEvent.CopyTextToClipboard -> {
+                clipboardManager.setText(AnnotatedString(state.generatedText))
+            }
+
+            is GeneratorEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(
+                    message = event.message(resources).toString(),
+                    duration = SnackbarDuration.Short,
+                )
             }
         }
     }
@@ -119,6 +136,9 @@ fun GeneratorScreen(viewModel: GeneratorViewModel = hiltViewModel()) {
                     BitwardenOverflowActionItem()
                 },
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
