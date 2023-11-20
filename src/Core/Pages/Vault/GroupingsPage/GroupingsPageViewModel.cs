@@ -216,8 +216,12 @@ namespace Bit.App.Pages
                     NestedFolders = NestedFolders.GetRange(0, NestedFolders.Count - 1);
                 }
 
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
+#if IOS
+                var uppercaseGroupNames = true;
+#else
+                var uppercaseGroupNames = false;
+#endif
+
                 var hasFavorites = FavoriteCiphers?.Any() ?? false;
                 if (hasFavorites)
                 {
@@ -296,8 +300,7 @@ namespace Bit.App.Pages
                 }
 
                 // TODO: refactor this
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                                if (Device.RuntimePlatform == Device.Android
+                if (DeviceInfo.Platform == DevicePlatform.Android
                     ||
                     GroupedItems.Any())
                 {
@@ -308,14 +311,13 @@ namespace Bit.App.Pages
                         items.AddRange(itemGroup);
                     }
 
-                    Device.BeginInvokeOnMainThread(() =>
+                    await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-                        if (Device.RuntimePlatform == Device.iOS)
-                        {
-                            // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                            // because of update to XF v5.0.0.2401
-                            GroupedItems.Clear();
-                        }
+#if IOS
+                        // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
+                        // because of update to XF v5.0.0.2401
+                        GroupedItems.Clear();
+#endif
                         GroupedItems.ReplaceRange(items);
                     });
                 }
@@ -337,16 +339,15 @@ namespace Bit.App.Pages
                         items.AddRange(itemGroup);
                     }
 
-                    Device.BeginInvokeOnMainThread(() =>
+                    await MainThread.InvokeOnMainThreadAsync(() =>
                     {
                         if (groupedItems.Any())
                         {
-                            if (Device.RuntimePlatform == Device.iOS)
-                            {
-                                // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                                // because of update to XF v5.0.0.2401
-                                GroupedItems.Clear();
-                            }
+#if IOS
+                            // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
+                            // because of update to XF v5.0.0.2401
+                            GroupedItems.Clear();
+#endif
                             GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
                             GroupedItems.AddRange(items);
                         }
@@ -362,7 +363,7 @@ namespace Bit.App.Pages
                 _doingLoad = false;
                 Loaded = true;
                 Loading = false;
-                Device.BeginInvokeOnMainThread(() =>
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
                     ShowList = !ShowNoData;
@@ -390,8 +391,11 @@ namespace Bit.App.Pages
 
         private void CreateCipherGroupedItems(List<GroupingsPageListGroup> groupedItems)
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
+#if IOS
+            var uppercaseGroupNames = true;
+#else
+            var uppercaseGroupNames = false;
+#endif
             _totpTickCts?.Cancel();
             if (ShowTotp)
             {
