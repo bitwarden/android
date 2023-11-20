@@ -1,14 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Models;
-using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Utilities.AccountManagement
 {
@@ -145,7 +141,7 @@ namespace Bit.App.Utilities.AccountManagement
                 switch (message.Command)
                 {
                     case AccountsManagerMessageCommands.LOCKED:
-                        await Device.InvokeOnMainThreadAsync(() => LockedAsync(message.Data as Tuple<string, bool>));
+                        await MainThread.InvokeOnMainThreadAsync(() => LockedAsync(message.Data as Tuple<string, bool>));
                         break;
                     case AccountsManagerMessageCommands.LOCK_VAULT:
                         await _vaultTimeoutService.LockAsync(true);
@@ -155,7 +151,7 @@ namespace Bit.App.Utilities.AccountManagement
                         var userId = extras?.Item1;
                         var userInitiated = extras?.Item2 ?? true;
                         var expired = extras?.Item3 ?? false;
-                        await Device.InvokeOnMainThreadAsync(() => LogOutAsync(userId, userInitiated, expired));
+                        await MainThread.InvokeOnMainThreadAsync(() => LogOutAsync(userId, userInitiated, expired));
                         break;
                     case AccountsManagerMessageCommands.LOGGED_OUT:
                         // Clean up old migrated key if they ever log out.
@@ -192,7 +188,7 @@ namespace Bit.App.Utilities.AccountManagement
 
             var autoPromptBiometric = !userInitiated;
             // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (autoPromptBiometric && Device.RuntimePlatform == Device.iOS)
+            if (autoPromptBiometric && DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 var vaultTimeout = await _stateService.GetVaultTimeoutAsync();
                 if (vaultTimeout == 0)
@@ -203,13 +199,13 @@ namespace Bit.App.Utilities.AccountManagement
 
             await _accountsManagerHost.SetPreviousPageInfoAsync();
 
-            await Device.InvokeOnMainThreadAsync(() => _accountsManagerHost.Navigate(NavigationTarget.Lock, new LockNavigationParams(autoPromptBiometric)));
+            await MainThread.InvokeOnMainThreadAsync(() => _accountsManagerHost.Navigate(NavigationTarget.Lock, new LockNavigationParams(autoPromptBiometric)));
         }
 
         private async Task AddAccountAsync()
         {
             await AppHelpers.ClearServiceCacheAsync();
-            await Device.InvokeOnMainThreadAsync(() =>
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 Options.HideAccountSwitcher = false;
                 _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
@@ -234,7 +230,7 @@ namespace Bit.App.Utilities.AccountManagement
         private async Task SwitchedAccountAsync()
         {
             await AppHelpers.OnAccountSwitchAsync();
-            await Device.InvokeOnMainThreadAsync(async () =>
+            await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 if (await _vaultTimeoutService.ShouldTimeoutAsync())
                 {

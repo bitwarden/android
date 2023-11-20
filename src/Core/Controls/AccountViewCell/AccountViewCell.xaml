@@ -11,10 +11,10 @@
     <Grid RowSpacing="0"
           ColumnSpacing="0">
         <Grid.Behaviors>
-            <!--TODO: [MAUI-Migration] Currently using a "copied" implementation from the github issue in the link until they add this to the Community Toolkit ( https://github.com/CommunityToolkit/Maui/issues/86 ) -->
+            <!--TODO: [TouchEffect] Currently using a "copied" implementation from the github issue in the link until they add this to the Community Toolkit ( https://github.com/CommunityToolkit/Maui/issues/86 ) -->
             <behaviors:TouchBehavior NativeAnimation="True" 
                                      LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}" 
-                                     LongPressCommandParameter="{Binding .BindingContext, Source={x:Reference _accountView}}" />
+                                     LongPressCommandParameter="{Binding BindingContext, Source={x:Reference _accountView}}" />
         </Grid.Behaviors>
         <Grid.GestureRecognizers>
             <TapGestureRecognizer Command="{Binding SelectAccountCommand, Source={x:Reference _accountView}}" CommandParameter="{Binding .}" />

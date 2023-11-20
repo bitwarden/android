@@ -8,7 +8,8 @@ using System.ComponentModel;
 
 namespace Bit.Core.Utilities
 {
-    // TODO: [MAUI-Migration] CHECK WHEN MIGRATION IS DONE
+    // TODO: Review this from time to time in case this gets added to MAUI or some toolkit, for now the api/feature
+    // has been rejected: https://github.com/CommunityToolkit/dotnet/issues/256
 
     /// <summary>
     /// Represents a dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed.

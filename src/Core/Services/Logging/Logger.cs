@@ -64,7 +64,7 @@ namespace Bit.Core.Services
             _userId = await ServiceContainer.Resolve<IStateService>("stateService").GetActiveUserIdAsync();
             _appId = await ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync();
 
-            // TODO: [MAUI-Migration] [Critical]
+            // TODO: [Error-Reporting]
             //switch (device)
             //{
             //    case Enums.DeviceType.Android:

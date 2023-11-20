@@ -48,7 +48,7 @@ namespace Bit.App.Controls
 
         private Task<Stream> GetStreamAsync(CancellationToken userToken = new CancellationToken())
         {
-            // TODO: [MAUI-Migration] [Critical] now methods are private protected so cannot be used here, figure out workaround
+            // TODO: [MAUI-Avatar] now methods are private protected so cannot be used here, figure out workaround
             //OnLoadingStarted();
             //userToken.Register(CancellationTokenSource.Cancel);
             var result = Draw();

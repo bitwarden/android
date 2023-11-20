@@ -21,7 +21,7 @@ namespace Bit.iOS.Core.Utilities
             _logger = ServiceContainer.Resolve<ILogger>("logger");
         }
 
-        public async Task<UIImage> CreateAvatarImageAsync()
+        public async Task<UIImage?> CreateAvatarImageAsync()
         {
             try
             {
@@ -66,11 +66,11 @@ namespace Bit.iOS.Core.Utilities
             overlay.BindingContext = vm;
             overlay.IsVisible = false;
 
-            // TODO: [MAUI-Migration] [Critical] check how to create a native view here.
-            //var renderer = Platform.CreateRenderer(overlay.Content);
-            //renderer.SetElementSize(new Size(containerView.Frame.Size.Width, containerView.Frame.Size.Height));
+            if (MauiContextSingleton.Instance.MauiContext is null)
+            {
+                throw new ArgumentNullException("Maui context should be set to create the account switching overlay view");
+            }
 
-            //var view = renderer.NativeView;
             var view = overlay.ToPlatform(MauiContextSingleton.Instance.MauiContext);
             view.TranslatesAutoresizingMaskIntoConstraints = false;
 

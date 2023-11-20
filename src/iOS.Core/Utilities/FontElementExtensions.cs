@@ -4,8 +4,6 @@ namespace Bit.iOS.Core.Utilities
 {
     public static class FontElementExtensions
     {
-        // TODO: [MAUI-Migration] [Critical] Compiling but big untested change
-
         public static UIFont ToUIFont(this Microsoft.Maui.Font font)
         {
             var fontSize = font.Size;

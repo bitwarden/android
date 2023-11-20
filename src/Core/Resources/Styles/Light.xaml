@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Light">
@@ -35,7 +35,6 @@
     <Color x:Key="ListHeaderTextColor">#175DDC</Color>
     <Color x:Key="ListHeaderBackgroundColor">#efeff4</Color>
 
-    <!--[MAUI-Migration][Color-default]-->
     <Color x:Key="SliderThumbColor">#ffffff</Color>
     <Color x:Key="SliderThumbBorderColor">#b5b5b5</Color>
     <Color x:Key="SliderTrackMinColor">#175DDC</Color>
