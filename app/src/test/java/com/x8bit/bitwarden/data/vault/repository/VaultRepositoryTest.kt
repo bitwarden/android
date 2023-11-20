@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.CipherView
+import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitCryptoRequest
 import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -796,6 +798,218 @@ class VaultRepositoryTest {
                     DataState.Loading,
                     awaitItem(),
                 )
+            }
+        }
+
+    @Test
+    fun `getVaultItemStateFlow should receive updates whenever a sync is called`() = runTest {
+        val itemId = 1234
+        val itemIdString = "mockId-$itemId"
+        val item = createMockCipherView(itemId)
+        coEvery {
+            syncService.sync()
+        } returns Result.success(createMockSyncResponse(itemId))
+        coEvery {
+            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(itemId)))
+        } returns listOf(item).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(itemId)))
+        } returns listOf(createMockFolderView(1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptSendList(listOf(createMockSdkSend(itemId)))
+        } returns listOf(createMockSendView(itemId)).asSuccess()
+
+        vaultRepository.getVaultItemStateFlow(itemIdString).test {
+            assertEquals(DataState.Loading, awaitItem())
+            vaultRepository.sync()
+            assertEquals(DataState.Loaded(item), awaitItem())
+            vaultRepository.sync()
+            assertEquals(DataState.Pending(item), awaitItem())
+            assertEquals(DataState.Loaded(item), awaitItem())
+        }
+
+        coVerify(exactly = 2) {
+            syncService.sync()
+            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(itemId)))
+            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(itemId)))
+            vaultSdkSource.decryptSendList(listOf(createMockSdkSend(itemId)))
+        }
+    }
+
+    @Test
+    fun `getVaultItemStateFlow should update to Error when a sync fails generically`() = runTest {
+        val folderId = 1234
+        val folderIdString = "mockId-$folderId"
+        val throwable = Throwable("Fail")
+        coEvery {
+            syncService.sync()
+        } returns throwable.asFailure()
+
+        vaultRepository.getVaultItemStateFlow(folderIdString).test {
+            assertEquals(DataState.Loading, awaitItem())
+            vaultRepository.sync()
+            assertEquals(DataState.Error<CipherView>(throwable), awaitItem())
+        }
+
+        coVerify(exactly = 1) {
+            syncService.sync()
+        }
+    }
+
+    @Test
+    fun `getVaultItemStateFlow should update to NoNetwork when a sync fails from no network`() =
+        runTest {
+            val itemId = 1234
+            val itemIdString = "mockId-$itemId"
+            coEvery {
+                syncService.sync()
+            } returns UnknownHostException().asFailure()
+
+            vaultRepository.getVaultItemStateFlow(itemIdString).test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.NoNetwork<CipherView>(), awaitItem())
+            }
+
+            coVerify(exactly = 1) {
+                syncService.sync()
+            }
+        }
+
+    @Test
+    fun `getVaultItemStateFlow should update to Loaded with null when a item cannot be found`() =
+        runTest {
+            val itemIdString = "mockId-1234"
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns listOf(createMockCipherView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns listOf(createMockFolderView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
+            } returns listOf(createMockSendView(1)).asSuccess()
+
+            vaultRepository.getVaultItemStateFlow(itemIdString).test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.Loaded(null), awaitItem())
+            }
+
+            coVerify(exactly = 1) {
+                syncService.sync()
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+                vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
+            }
+        }
+
+    @Test
+    fun `getVaultFolderStateFlow should receive updates whenever a sync is called`() = runTest {
+        val folderId = 1234
+        val folderIdString = "mockId-$folderId"
+        val folder = createMockFolderView(folderId)
+        coEvery {
+            syncService.sync()
+        } returns Result.success(createMockSyncResponse(folderId))
+        coEvery {
+            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(folderId)))
+        } returns listOf(createMockCipherView(folderId)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(folderId)))
+        } returns listOf(createMockFolderView(folderId)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptSendList(listOf(createMockSdkSend(folderId)))
+        } returns listOf(createMockSendView(folderId)).asSuccess()
+
+        vaultRepository.getVaultFolderStateFlow(folderIdString).test {
+            assertEquals(DataState.Loading, awaitItem())
+            vaultRepository.sync()
+            assertEquals(DataState.Loaded(folder), awaitItem())
+            vaultRepository.sync()
+            assertEquals(DataState.Pending(folder), awaitItem())
+            assertEquals(DataState.Loaded(folder), awaitItem())
+        }
+
+        coVerify(exactly = 2) {
+            syncService.sync()
+            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(folderId)))
+            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(folderId)))
+            vaultSdkSource.decryptSendList(listOf(createMockSdkSend(folderId)))
+        }
+    }
+
+    @Test
+    fun `getVaultFolderStateFlow should update to NoNetwork when a sync fails from no network`() =
+        runTest {
+            val folderId = 1234
+            val folderIdString = "mockId-$folderId"
+            coEvery {
+                syncService.sync()
+            } returns UnknownHostException().asFailure()
+
+            vaultRepository.getVaultFolderStateFlow(folderIdString).test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.NoNetwork<FolderView>(), awaitItem())
+            }
+
+            coVerify(exactly = 1) {
+                syncService.sync()
+            }
+        }
+
+    @Test
+    fun `getVaultFolderStateFlow should update to Error when a sync fails generically`() = runTest {
+        val folderId = 1234
+        val folderIdString = "mockId-$folderId"
+        val throwable = Throwable("Fail")
+        coEvery {
+            syncService.sync()
+        } returns throwable.asFailure()
+
+        vaultRepository.getVaultFolderStateFlow(folderIdString).test {
+            assertEquals(DataState.Loading, awaitItem())
+            vaultRepository.sync()
+            assertEquals(DataState.Error<FolderView>(throwable), awaitItem())
+        }
+
+        coVerify(exactly = 1) {
+            syncService.sync()
+        }
+    }
+
+    @Test
+    fun `getVaultFolderStateFlow should update to Loaded with null when a item cannot be found`() =
+        runTest {
+            val folderIdString = "mockId-1234"
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns listOf(createMockCipherView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns listOf(createMockFolderView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
+            } returns listOf(createMockSendView(1)).asSuccess()
+
+            vaultRepository.getVaultFolderStateFlow(folderIdString).test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.Loaded(null), awaitItem())
+            }
+
+            coVerify(exactly = 1) {
+                syncService.sync()
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+                vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
             }
         }
 }

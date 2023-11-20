@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import com.bitwarden.core.CipherView
+import com.bitwarden.core.FolderView
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -30,6 +32,18 @@ interface VaultRepository {
      * Attempt to sync the vault data.
      */
     fun sync()
+
+    /**
+     * Flow that represents the data for a specific vault item as found by ID. This may emit `null`
+     * if the item cannot be found.
+     */
+    fun getVaultItemStateFlow(itemId: String): StateFlow<DataState<CipherView?>>
+
+    /**
+     * Flow that represents the data for a specific vault folder as found by ID. This may emit
+     * `null` if the folder cannot be found.
+     */
+    fun getVaultFolderStateFlow(folderId: String): StateFlow<DataState<FolderView?>>
 
     /**
      * Attempt to initialize crypto and sync the vault data.
