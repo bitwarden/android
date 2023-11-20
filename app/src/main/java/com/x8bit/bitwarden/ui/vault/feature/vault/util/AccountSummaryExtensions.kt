@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 
 /**
  * Given the [AccountSummary], returns the first two "initials" found when looking at the
@@ -12,13 +12,17 @@ import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
  * Ex:
  * - "First Last" -> "FL"
  * - "First Second Last" -> "FS"
+ * - `null` -> ".."
  */
 val AccountSummary.initials: String
     get() = this
         .name
-        .split(" ")
-        .take(2)
-        .joinToString(separator = "") { it.first().toString() }
+        ?.let {
+            it.split(" ")
+                .take(2)
+                .joinToString(separator = "") { it.first().toString() }
+        }
+        ?: ".."
 
 /**
  * Drawable resource to display for the given [AccountSummary].

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.repository.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -10,12 +10,24 @@ import org.junit.jupiter.api.Test
 
 class AccountSummaryExtensionsTest {
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `initials should return the starting letters of the first two words in the name`() {
+    fun `initials should return the starting letters of the first two words in the name if present`() {
         assertEquals(
             "FS",
             mockk<AccountSummary>() {
                 every { name } returns "First Second Third"
+            }
+                .initials,
+        )
+    }
+
+    @Test
+    fun `initials should return a default value if the name is not present`() {
+        assertEquals(
+            "..",
+            mockk<AccountSummary>() {
+                every { name } returns null
             }
                 .initials,
         )
