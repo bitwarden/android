@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 @Composable
 fun <E> EventsEffect(
     viewModel: BaseViewModel<*, E, *>,
-    handler: (E) -> Unit,
+    handler: suspend (E) -> Unit,
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow

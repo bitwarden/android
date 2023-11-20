@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerat
  */
 class FakeGeneratorRepository : GeneratorRepository {
     private var generatePasswordResult: GeneratedPasswordResult = GeneratedPasswordResult.Success(
-        generatedString = "pa11w0rd",
+        generatedString = "updatedText",
     )
     private var passwordGenerationOptions: PasswordGenerationOptions? = null
 
@@ -26,6 +26,20 @@ class FakeGeneratorRepository : GeneratorRepository {
     }
 
     override fun savePasswordGenerationOptions(options: PasswordGenerationOptions) {
+        passwordGenerationOptions = options
+    }
+
+    /**
+     * Sets the mock result for the generatePassword function.
+     */
+    fun setMockGeneratePasswordResult(result: GeneratedPasswordResult) {
+        generatePasswordResult = result
+    }
+
+    /**
+     * Sets the mock password generation options.
+     */
+    fun setMockGeneratePasswordGenerationOptions(options: PasswordGenerationOptions?) {
         passwordGenerationOptions = options
     }
 }
