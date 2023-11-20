@@ -2,8 +2,7 @@
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-
-using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -33,10 +32,10 @@ namespace Bit.App.Pages
             _onSelectionChangingAsync = onSelectionChangingAsync;
             _title = title;
 
-            SelectOptionCommand = new AsyncCommand(SelectOptionAsync, canExecuteSelectOptionCommand, onSelectOptionCommandException, allowsMultipleExecutions: false);
+            SelectOptionCommand = CreateDefaultAsyncRelayCommand(SelectOptionAsync, canExecuteSelectOptionCommand, onSelectOptionCommandException, allowsMultipleExecutions: false);
         }
 
-        public AsyncCommand SelectOptionCommand { get; }
+        public AsyncRelayCommand SelectOptionCommand { get; }
 
         public TKey SelectedKey => _selectedKey;
 

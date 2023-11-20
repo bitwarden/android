@@ -10,6 +10,7 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -62,7 +63,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
-            MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
+            MoreCommand = CreateDefaultAsyncRelayCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
         }
 
         public string TotpInstruction
@@ -338,20 +339,18 @@ Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
                             StartDeviceApprovalOptionsAction?.Invoke();
                             return;
                         }
-                        // If user doesn't have a MP, but has reset password permission, they must set a MP
-                        if (!decryptOptions.HasMasterPassword &&
-                            decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
-                        {
-                            StartSetPasswordAction?.Invoke();
-                            return;
-                        }
                         // Update temp password only if the device is trusted and therefore has a decrypted User Key set
                         if (result.ForcePasswordReset)
                         {
                             UpdateTempPasswordAction?.Invoke();
                             return;
                         }
-
+                        // If user doesn't have a MP, but has reset password permission, they must set a MP
+                        if (!decryptOptions.HasMasterPassword &&
+                            decryptOptions.TrustedDeviceOption.HasManageResetPasswordPermission)
+                        {
+                            await _stateService.SetForcePasswordResetReasonAsync(ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission);
+                        }
                         // Device is trusted and has keys, so we can decrypt
                         _syncService.FullSyncAsync(true).FireAndForget();
                         await TwoFactorAuthSuccessAsync();

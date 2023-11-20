@@ -16,6 +16,7 @@ using Bit.Core.Utilities;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 #nullable enable
 
@@ -99,8 +100,8 @@ namespace Bit.App.Pages
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<ICustomFieldItemViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
-            CopyCommand = new AsyncCommand(CopyTotpClipboardAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
-            GenerateUsernameCommand = new AsyncCommand(GenerateUsernameAsync, onException: ex => OnGenerateUsernameException(ex), allowsMultipleExecutions: false);
+            CopyCommand = CreateDefaultAsyncRelayCommand(CopyTotpClipboardAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            GenerateUsernameCommand = CreateDefaultAsyncRelayCommand(GenerateUsernameAsync, onException: ex => OnGenerateUsernameException(ex), allowsMultipleExecutions: false);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<ICustomFieldItemViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -163,8 +164,8 @@ namespace Bit.App.Pages
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
         public Command PasswordPromptHelpCommand { get; set; }
-        public AsyncCommand CopyCommand { get; set; }
-        public AsyncCommand GenerateUsernameCommand { get; set; }
+        public AsyncRelayCommand CopyCommand { get; set; }
+        public AsyncRelayCommand GenerateUsernameCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
-using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Controls
 {
@@ -37,17 +37,14 @@ namespace Bit.App.Controls
         {
             InitializeComponent();
 
-            ToggleVisibililtyCommand = new AsyncCommand(ToggleVisibilityAsync,
-                onException: ex => _logger.Value.Exception(ex),
-                allowsMultipleExecutions: false);
+            ToggleVisibililtyCommand = new AsyncRelayCommand(ToggleVisibilityAsync,
+                AsyncRelayCommandOptions.None);
 
-            SelectAccountCommand = new AsyncCommand<AccountViewCellViewModel>(SelectAccountAsync,
-                onException: ex => _logger.Value.Exception(ex),
-                allowsMultipleExecutions: false);
+            SelectAccountCommand = new AsyncRelayCommand<AccountViewCellViewModel>(SelectAccountAsync,
+                AsyncRelayCommandOptions.None);
 
-            LongPressAccountCommand = new AsyncCommand<AccountViewCellViewModel>(LongPressAccountAsync,
-                onException: ex => _logger.Value.Exception(ex),
-                allowsMultipleExecutions: false);
+            LongPressAccountCommand = new AsyncRelayCommand<AccountViewCellViewModel>(LongPressAccountAsync,
+                AsyncRelayCommandOptions.None);
         }
 
         public AccountSwitchingOverlayViewModel ViewModel => BindingContext as AccountSwitchingOverlayViewModel;
@@ -70,13 +67,20 @@ namespace Bit.App.Controls
 
         public async Task ToggleVisibilityAsync()
         {
-            if (IsVisible)
+            try
             {
-                await HideAsync();
+                if (IsVisible)
+                {
+                    await HideAsync();
+                }
+                else
+                {
+                    await ShowAsync();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await ShowAsync();
+                _logger.Value.Exception(ex);
             }
         }
 
@@ -172,12 +176,13 @@ namespace Bit.App.Controls
 
         private async Task LongPressAccountAsync(AccountViewCellViewModel item)
         {
-            if (!LongPressAccountEnabled || item == null || !item.IsAccount)
-            {
-                return;
-            }
             try
             {
+                if (!LongPressAccountEnabled || item == null || !item.IsAccount)
+                {
+                    return;
+                }
+
                 await Task.Delay(100);
                 await HideAsync();
 

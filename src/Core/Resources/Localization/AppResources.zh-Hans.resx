@@ -273,13 +273,13 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>您确定要注销吗？</value>
+    <value>确定要注销吗？</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
     <value>移除账户</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>您确定要移除此账户吗？</value>
+    <value>确定要移除此账户吗？</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>账户已添加</value>
@@ -638,7 +638,7 @@
     <value>我们已经为您发送了包含主密码提示的邮件。</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>您确定要覆盖当前密码吗？</value>
+    <value>确定要覆盖当前密码吗？</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>Bitwarden 使用推送通知来自动同步您的密码库。为了获得最佳体验，接下来询问是否开启通知时，请选择「允许」。</value>
@@ -784,7 +784,7 @@
     <value>您想自动填充还是查看此项目？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>确定要自动填充吗？它与「{0}」并不完全匹配。</value>
+    <value>确定要自动填充此项目吗？它与「{0}」并不完全匹配。</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>匹配项目</value>
@@ -874,7 +874,7 @@
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>此附件大小是 {0} 。您确定要下载到设备吗？</value>
+    <value>此附件大小为 {0} 。确定要将其下载到您的设备上吗？</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -1340,7 +1340,7 @@
     <value>所有项目</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
@@ -1556,7 +1556,7 @@
     <value>退出</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>您确定要退出 Bitwarden 吗？</value>
+    <value>确定要退出 Bitwarden 吗？</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>当应用程序重启时，要求使用主密码解锁吗？</value>
@@ -2098,7 +2098,7 @@
     <value>{0} 正在使用客户管理加密的 SSO。继续操作将删除您的账户主密码并要求 SSO 登录。</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>如果您不想移除您的主密码，您可以退出这个组织。</value>
+    <value>如果您不想移除您的主密码，您可以退出该组织。</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>退出组织</value>
@@ -2432,7 +2432,7 @@
     <value>API 访问令牌</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>您确定要覆盖当前用户名吗？</value>
+    <value>确定要覆盖当前用户名吗？</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
     <value>生成用户名</value>
@@ -2527,7 +2527,7 @@
     <value>拒绝所有请求</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>您确定要拒绝所有待处理的登录请求吗？</value>
+    <value>确定要拒绝所有待处理的登录请求吗？</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
     <value>请求被拒绝</value>
@@ -2846,7 +2846,7 @@
     <value>Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站以了解更多。</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>帮助别人了解 Bitwarden 是否适合他们。立即访问应用商店并留下评分。</value>
+    <value>帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
     <value>当设备的深色模式启用时，选择要使用的深色主题。</value>
@@ -2860,5 +2860,14 @@
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>账户已注销。</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>您的组织权限已更新，要求您设置主密码。</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>您的组织要求您设置主密码。</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>设置解锁选项以更改您的密码库超时操作。</value>
   </data>
 </root>

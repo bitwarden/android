@@ -55,19 +55,19 @@ namespace Bit.App.Pages
             PageTitle = AppResources.LogInInitiated;
             RememberThisDevice = true;
 
-            ApproveWithMyOtherDeviceCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithDeviceAction),
+            ApproveWithMyOtherDeviceCommand = CreateDefaultAsyncRelayCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithDeviceAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            RequestAdminApprovalCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(RequestAdminApprovalAction),
+            RequestAdminApprovalCommand = CreateDefaultAsyncRelayCommand(() => SetDeviceTrustAndInvokeAsync(RequestAdminApprovalAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ApproveWithMasterPasswordCommand = new AsyncCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPasswordAction),
+            ApproveWithMasterPasswordCommand = CreateDefaultAsyncRelayCommand(() => SetDeviceTrustAndInvokeAsync(LogInWithMasterPasswordAction),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            ContinueCommand = new AsyncCommand(CreateNewSsoUserAsync,
+            ContinueCommand = CreateDefaultAsyncRelayCommand(CreateNewSsoUserAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 

@@ -28,11 +28,11 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>();
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
 
-            AddUriCommand = new AsyncCommand(AddUriAsync,
+            AddUriCommand = CreateDefaultAsyncRelayCommand(AddUriAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            EditUriCommand = new AsyncCommand<BlockAutofillUriItemViewModel>(EditUriAsync,
+            EditUriCommand = CreateDefaultAsyncRelayCommand<BlockAutofillUriItemViewModel>(EditUriAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }

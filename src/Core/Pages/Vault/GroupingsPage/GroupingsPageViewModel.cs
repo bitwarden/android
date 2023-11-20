@@ -71,10 +71,10 @@ namespace Bit.App.Pages
                 Refreshing = true;
                 await LoadAsync();
             });
-            CipherOptionsCommand = new AsyncCommand<CipherView>(cipher => AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
+            CipherOptionsCommand = CreateDefaultAsyncRelayCommand<CipherView>(cipher => AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
-            VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
+            VaultFilterCommand = CreateDefaultAsyncRelayCommand(VaultFilterOptionsAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
 

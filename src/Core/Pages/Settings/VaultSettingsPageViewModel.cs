@@ -22,15 +22,15 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
 
-            GoToFoldersCommand = new AsyncCommand(() => Page.Navigation.PushModalAsync(new NavigationPage(new FoldersPage())),
+            GoToFoldersCommand = CreateDefaultAsyncRelayCommand(() => Page.Navigation.PushModalAsync(new NavigationPage(new FoldersPage())),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            GoToExportVaultCommand = new AsyncCommand(() => Page.Navigation.PushModalAsync(new NavigationPage(new ExportVaultPage())),
+            GoToExportVaultCommand = CreateDefaultAsyncRelayCommand(() => Page.Navigation.PushModalAsync(new NavigationPage(new ExportVaultPage())),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            GoToImportItemsCommand = new AsyncCommand(GoToImportItemsAsync,
+            GoToImportItemsCommand = CreateDefaultAsyncRelayCommand(GoToImportItemsAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }

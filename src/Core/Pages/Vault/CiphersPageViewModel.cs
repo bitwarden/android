@@ -52,10 +52,10 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
-            CipherOptionsCommand = new AsyncCommand<CipherView>(cipher => Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
+            CipherOptionsCommand = CreateDefaultAsyncRelayCommand<CipherView>(cipher => Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
-            AddCipherCommand = new AsyncCommand(AddCipherAsync,
+            AddCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }

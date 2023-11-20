@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} bylo zkopírováno.</value>
+    <value>{0}: zkopírováno</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -499,7 +499,7 @@
     <value>Pro spuštění rozšíření klepněte  na ikonu Bitwardenu v menu.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu „Další“ v dolní části menu.</value>
+    <value>Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu "Další“ v dolní části menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Oblíbené</value>
@@ -958,10 +958,10 @@ Načtení proběhne automaticky.</value>
     <value>Vlastní prostředí</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Pro pokročilé uživatele. Můžete zadat základní URL adresu každé služby zvlášť.</value>
+    <value>Pro pokročilé uživatele. Můžete zadat základní URL každé služby zvlášť.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>URL adresy vlastního prostředí byly uloženy.</value>
+    <value>URL vlastního prostředí byly uloženy.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} nemá správný formát.</value>
@@ -975,7 +975,7 @@ Načtení proběhne automaticky.</value>
     <value>Vlastní hostované prostředí</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Zadejte základní URL adresu vlastní hostované aplikace Bitwarden.</value>
+    <value>Zadejte základní URL vlastní hostované aplikace Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL serveru</value>
@@ -1023,13 +1023,13 @@ Načtení proběhne automaticky.</value>
     <value>Adresa 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>Duben</value>
+    <value>duben</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>Srpen</value>
+    <value>srpen</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Značka</value>
+    <value>Vydavatel</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>Jméno držitele karty</value>
@@ -1044,10 +1044,10 @@ Načtení proběhne automaticky.</value>
     <value>Stát</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>Prosinec</value>
+    <value>prosinec</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>MUDr.</value>
+    <value>Dr.</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
     <value>Měsíc expirace</value>
@@ -1056,19 +1056,19 @@ Načtení proběhne automaticky.</value>
     <value>Rok expirace</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>Únor</value>
+    <value>únor</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Křestní jméno</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>Leden</value>
+    <value>leden</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>Červenec</value>
+    <value>červenec</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>Červen</value>
+    <value>červen</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Příjmení</value>
@@ -1080,10 +1080,10 @@ Načtení proběhne automaticky.</value>
     <value>Číslo dokladu totožnosti</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>Březen</value>
+    <value>březen</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>Květen</value>
+    <value>květen</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
     <value>Prostřední jméno</value>
@@ -1101,10 +1101,10 @@ Načtení proběhne automaticky.</value>
     <value>Neutrální</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>Listopad</value>
+    <value>listopad</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>Říjen</value>
+    <value>říjen</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
     <value>Číslo cestovního pasu</value>
@@ -1113,10 +1113,10 @@ Načtení proběhne automaticky.</value>
     <value>Telefon</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>Září</value>
+    <value>září</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Číslo sociálního pojištění</value>
+    <value>Rodné číslo</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Kraj / Provincie</value>
@@ -1298,22 +1298,22 @@ Načtení proběhne automaticky.</value>
     <value>Přistupujte k Vašemu trezoru přímo z Vaší klávesnice pro rychlejší automatické vyplnění hesel.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Pokyny pro zapnutí automatického vyplňování hesel na vašem zařízení:</value>
+    <value>Pokyny pro zapnutí automatického vyplňování hesel na Vašem zařízení:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Přejděte do aplikace "Nastavení" v iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Klepněte na „Hesla“ > „Volby hesla“</value>
+    <value>2. Klepněte na "Hesla" > "Volby hesla"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Povolte „Automatické vyplnění hesel“</value>
+    <value>3. Zapněte přepínač u položky "Automatické vyplnění hesel"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Najděte sekci „Povolit vyplňování z“</value>
+    <value>4. Najděte sekci "Povolit vyplňování z:"</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Zvolte „Bitwarden“</value>
+    <value>5. Zvolte "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
     <value>Automatické vyplňování hesel</value>
@@ -1562,7 +1562,7 @@ Načtení proběhne automaticky.</value>
     <value>Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Černá</value>
+    <value>Černý</value>
     <comment>The color black</comment>
   </data>
   <data name="Nord" xml:space="preserve">
@@ -1570,7 +1570,7 @@ Načtení proběhne automaticky.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Tmavý –⁠ Solarized</value>
+    <value>Tmavý (solární)</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -1947,7 +1947,7 @@ Načtení proběhne automaticky.</value>
     <value>Nové heslo</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Volitelně vyžadovat heslo pro přístup k tomuto Send.</value>
+    <value>Volitelně bude vyžadovat heslo pro přístup k tomuto Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -1967,7 +1967,7 @@ Načtení proběhne automaticky.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deaktivuje tento Send, díky čemuž k němu nebude moci nikdo přistoupit</value>
+    <value>Deaktivovat tento Send (nikdo k němu nebude mít přístup)</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2299,13 +2299,13 @@ Načtení proběhne automaticky.</value>
     <value>Nastavení zámku na "Nikdy" ponechá Váš trezor k dispozici komukoli s přístupem k Vašemu zařízení. Používáte-li tuto možnost, měli byste zajistit, aby Vaše zařízení bylo náležitě chráněno.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>Jedna nebo více zadaných adres URL jsou neplatné. Zkontrolujte je a opakujte akci znovu.</value>
+    <value>Jedna nebo více zadaných URL jsou neplatné. Zkontrolujte je a opakujte akci znovu.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
     <value>Nepodařilo se nám zpracovat Váš požadavek. Zkuste to znovu nebo nás kontaktujte.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Povolit záznam obrazovky</value>
+    <value>Zapnout záznam obrazovky</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Opravdu chcete zapnout záznam obrazovky?</value>
@@ -2544,7 +2544,7 @@ Chcete se přepnout na tento účet?</value>
     <value>Jazyk byl změněn na {0}. Pro zobrazení změn restartujte aplikaci.</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Změna jazyku vyžaduje restart aplikace</value>
+    <value>Změna jazyka vyžaduje restart aplikace.</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
     <value>Výchozí (Systémový)</value>
@@ -2859,5 +2859,14 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Účet byl odhlášen.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Oprávnění Vaší organizace byla aktualizována. To vyžaduje nastavení hlavního hesla.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Vaše organizace vyžaduje nastavení hlavního hesla.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Nastavte volbu odemknutí, abyste změnili časový limit Vašeho trezoru.</value>
   </data>
 </root>

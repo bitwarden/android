@@ -39,10 +39,10 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.LogInRequested;
 
-            AcceptRequestCommand = new AsyncCommand(() => PasswordlessLoginAsync(true),
+            AcceptRequestCommand = CreateDefaultAsyncRelayCommand(() => PasswordlessLoginAsync(true),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
-            RejectRequestCommand = new AsyncCommand(() => PasswordlessLoginAsync(false),
+            RejectRequestCommand = CreateDefaultAsyncRelayCommand(() => PasswordlessLoginAsync(false),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }

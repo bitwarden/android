@@ -46,6 +46,7 @@ namespace Bit.Core
         public const string PreLoginEmailKey = "preLoginEmailKey";
         public const string ConfigsKey = "configsKey";
         public const string DisplayEuEnvironmentFlag = "display-eu-environment";
+        public const string RegionEnvironment = "regionEnvironment";
 
         /// <summary>
         /// This key is used to store the value of "ShouldConnectToWatch" of the last user that had logged in
@@ -56,6 +57,7 @@ namespace Bit.Core
         public const string AppLocaleKey = "appLocale";
         public const string ClearSensitiveFields = "clearSensitiveFields";
         public const string ForceUpdatePassword = "forceUpdatePassword";
+        public const string ForceSetPassword = "forceSetPassword";
         public const string ShouldTrustDevice = "shouldTrustDevice";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;

@@ -62,8 +62,8 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
             LogInCommand = new Command(async () => await LogInAsync());
-            MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
-            LogInWithDeviceCommand = new AsyncCommand(() => Device.InvokeOnMainThreadAsync(LogInWithDeviceAction), onException: _logger.Exception, allowsMultipleExecutions: false);
+            MoreCommand = CreateDefaultAsyncRelayCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
+            LogInWithDeviceCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(LogInWithDeviceAction), onException: _logger.Exception, allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -163,7 +163,7 @@ namespace Bit.App.Pages
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
-                EnvironmentDomainName = CoreHelpers.GetDomain((await _stateService.GetPreAuthEnvironmentUrlsAsync())?.Base);
+                EnvironmentDomainName = _environmentService.GetCurrentDomain();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, await _appIdService.GetAppIdAsync());
             }
             catch (ApiException apiEx) when (apiEx.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)

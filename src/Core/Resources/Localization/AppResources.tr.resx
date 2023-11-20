@@ -2424,7 +2424,7 @@ Kod otomatik olarak taranacaktır.</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
   </data>
   <data name="ForwardEmail" xml:space="preserve">
-    <value>E-posta ilet</value>
+    <value>ForwardEmail</value>
     <comment>"ForwardEmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
@@ -2859,5 +2859,14 @@ Bu hesaba geçmek ister misiniz?</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Hesabın oturumu kapatıldı.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Kuruluş izinleriniz güncellendi ve bir ana parola belirlemeniz gerekiyor.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Kuruluşunuz bir ana parola belirlemenizi gerektiriyor.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Kasa zaman aşımı eyleminizi değiştirmek için bir kilit açma yöntemi ayarlayın.</value>
   </data>
 </root>

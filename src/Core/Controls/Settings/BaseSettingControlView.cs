@@ -6,10 +6,10 @@ namespace Bit.App.Controls
     public class BaseSettingItemView : ContentView
     {
         public static readonly BindableProperty TitleProperty = BindableProperty.Create(
-            nameof(Title), typeof(string), typeof(SwitchItemView), null, BindingMode.OneWay);
+            nameof(Title), typeof(string), typeof(SwitchItemView), null);
 
         public static readonly BindableProperty SubtitleProperty = BindableProperty.Create(
-            nameof(Subtitle), typeof(string), typeof(SwitchItemView), null, BindingMode.OneWay);
+            nameof(Subtitle), typeof(string), typeof(SwitchItemView), null);
 
         public string Title
         {

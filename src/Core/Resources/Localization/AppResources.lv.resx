@@ -2862,4 +2862,13 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Konts tika izrakstīts.</value>
   </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Apvienības atļaujas tika atjauninātas, un tās pieprasa iestatīt galveno paroli.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Apvienība pieprasa iestatīt galveno paroli.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Jāuzstāda atslēgšanas iespēja, lai mainītu glabātavas noildzes darbību.</value>
+  </data>
 </root>

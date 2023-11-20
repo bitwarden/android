@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -64,7 +58,7 @@ namespace Bit.App.Pages
                 () => _inited,
                 ex => HandleException(ex));
 
-            ToggleShowWebsiteIconsCommand = CreateDefaultAsyncCommnad(ToggleShowWebsiteIconsAsync, () => _inited);
+            ToggleShowWebsiteIconsCommand = CreateDefaultAsyncRelayCommand(ToggleShowWebsiteIconsAsync, () => _inited, allowsMultipleExecutions: false);
         }
 
         public PickerViewModel<string> LanguagePickerViewModel { get; }
@@ -87,7 +81,7 @@ namespace Bit.App.Pages
 
         public bool IsShowWebsiteIconsEnabled => ToggleShowWebsiteIconsCommand.CanExecute(null);
 
-        public AsyncCommand ToggleShowWebsiteIconsCommand { get; }
+        public AsyncRelayCommand ToggleShowWebsiteIconsCommand { get; }
 
         public async Task InitAsync()
         {
@@ -102,10 +96,10 @@ namespace Bit.App.Pages
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                ToggleShowWebsiteIconsCommand.RaiseCanExecuteChanged();
-                LanguagePickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
-                ThemePickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
-                DefaultDarkThemePickerViewModel.SelectOptionCommand.RaiseCanExecuteChanged();
+                ToggleShowWebsiteIconsCommand.NotifyCanExecuteChanged();
+                LanguagePickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged();
+                ThemePickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged();
+                DefaultDarkThemePickerViewModel.SelectOptionCommand.NotifyCanExecuteChanged();
             });
         }
 

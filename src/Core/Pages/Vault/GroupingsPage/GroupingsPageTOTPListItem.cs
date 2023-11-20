@@ -5,7 +5,7 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
@@ -37,13 +37,13 @@ namespace Bit.App.Pages
 
             Cipher = cipherView;
             WebsiteIconsEnabled = websiteIconsEnabled;
-            CopyCommand = new AsyncCommand(CopyToClipboardAsync,
+            CopyCommand = CreateDefaultAsyncRelayCommand(CopyToClipboardAsync,
                  onException: ex => _logger.Value.Exception(ex),
                  allowsMultipleExecutions: false);
             _totpTickHelper = new TotpHelper(cipherView);
         }
 
-        public AsyncCommand CopyCommand { get; set; }
+        public AsyncRelayCommand CopyCommand { get; set; }
 
         public CipherView Cipher
         {

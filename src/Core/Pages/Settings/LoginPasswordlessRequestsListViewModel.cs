@@ -13,6 +13,7 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -34,11 +35,11 @@ namespace Bit.App.Pages
             PageTitle = AppResources.PendingLogInRequests;
             LoginRequests = new ObservableRangeCollection<PasswordlessLoginResponse>();
 
-            AnswerRequestCommand = new AsyncCommand<PasswordlessLoginResponse>(PasswordlessLoginAsync,
+            AnswerRequestCommand = CreateDefaultAsyncRelayCommand<PasswordlessLoginResponse>(PasswordlessLoginAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            DeclineAllRequestsCommand = new AsyncCommand(DeclineAllRequestsAsync,
+            DeclineAllRequestsCommand = CreateDefaultAsyncRelayCommand(DeclineAllRequestsAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
@@ -47,9 +48,9 @@ namespace Bit.App.Pages
 
         public ICommand RefreshCommand { get; }
 
-        public AsyncCommand<PasswordlessLoginResponse> AnswerRequestCommand { get; }
+        public AsyncRelayCommand<PasswordlessLoginResponse> AnswerRequestCommand { get; }
 
-        public AsyncCommand DeclineAllRequestsCommand { get; }
+        public AsyncRelayCommand DeclineAllRequestsCommand { get; }
 
         public ObservableRangeCollection<PasswordlessLoginResponse> LoginRequests { get; }
 

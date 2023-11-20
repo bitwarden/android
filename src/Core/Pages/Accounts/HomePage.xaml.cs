@@ -58,7 +58,6 @@ namespace Bit.App.Pages
             try
             {
                 _accountAvatar?.OnAppearing();
-
                 if (!_appOptions?.HideAccountSwitcher ?? false)
                 {
                     await MainThread.InvokeOnMainThreadAsync(async () => _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false));
@@ -71,14 +70,14 @@ namespace Bit.App.Pages
                     }
                 });
 
-                await _vm.UpdateEnvironment();
+                await _vm.UpdateEnvironmentAsync();
             }
             catch (Exception ex)
             {
                 _logger.Value?.Exception(ex);
             }
         }
-
+        
         protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
         {
             base.OnNavigatingFrom(args);
@@ -89,7 +88,7 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
-             if (_accountListOverlay.IsVisible)
+            if (_accountListOverlay.IsVisible)
             {
                 _accountListOverlay.HideAsync().FireAndForget();
                 return true;

@@ -1,11 +1,9 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
-using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -25,7 +23,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>();
 
             PageTitle = AppResources.PasswordHint;
-            SubmitCommand = new AsyncCommand(SubmitAsync,
+            SubmitCommand = CreateDefaultAsyncRelayCommand(SubmitAsync,
                 onException: ex =>
                 {
                     _logger.Exception(ex);

@@ -56,11 +56,11 @@ namespace Bit.App.Pages
             _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>();
             _cryptoService = ServiceContainer.Resolve<ICryptoService>();
 
-            CreatePasswordlessLoginCommand = new AsyncCommand(CreatePasswordlessLoginAsync,
+            CreatePasswordlessLoginCommand = CreateDefaultAsyncRelayCommand(CreatePasswordlessLoginAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
 
-            CloseCommand = new AsyncCommand(() => MainThread.InvokeOnMainThreadAsync(CloseAction),
+            CloseCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(CloseAction),
                 onException: _logger.Exception,
                 allowsMultipleExecutions: false);
         }

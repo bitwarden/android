@@ -407,14 +407,15 @@ namespace Bit.App.Utilities
                         var settingValue = string.IsNullOrWhiteSpace(setting.Value) ? null : setting.Value;
                         if (environmentService.BaseUrl != settingValue)
                         {
-                            await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
+                            var urls = new EnvironmentUrlData
                             {
                                 Base = settingValue,
                                 Api = environmentService.ApiUrl,
                                 Identity = environmentService.IdentityUrl,
                                 WebVault = environmentService.WebVaultUrl,
                                 Icons = environmentService.IconsUrl
-                            });
+                            };
+                            await environmentService.SetRegionAsync(urls.Region, urls);
                         }
                         return;
                     default:

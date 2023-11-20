@@ -22,21 +22,7 @@ namespace Bit.Core.Models.View
             Email = a.Profile?.Email;
             Name = a.Profile?.Name;
             AvatarColor = a.Profile?.AvatarColor;
-            Hostname = ParseEndpoint(a.Settings?.EnvironmentUrls);
-        }
-
-        private string ParseEndpoint(EnvironmentUrlData urls)
-        {
-            var url = urls?.WebVault ?? urls?.Base;
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                if (url.Contains("bitwarden.com") || url.Contains("bitwarden.eu"))
-                {
-                    return CoreHelpers.GetDomain(url);
-                }
-                return CoreHelpers.GetHostname(url);
-            }
-            return string.Empty;
+            Hostname = a.Settings?.EnvironmentUrls?.GetDomainOrHostname();
         }
 
         public bool IsAccount { get; set; }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
-using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -13,9 +9,6 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Networking;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -29,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IPolicyService _policyService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly II18nService _i18nService;
+        private readonly ISyncService _syncService;
 
         private bool _showPassword;
         private bool _isPolicyInEffect;
@@ -47,6 +41,7 @@ namespace Bit.App.Pages
             _passwordGenerationService =
                 ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _syncService = ServiceContainer.Resolve<ISyncService>();
 
             PageTitle = AppResources.SetMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -101,11 +96,17 @@ namespace Bit.App.Pages
         public Action CloseAction { get; set; }
         public string OrgIdentifier { get; set; }
         public string OrgId { get; set; }
+        public ForcePasswordResetReason? ForceSetPasswordReason { get; private set; }
+
+        public string SetMasterPasswordSummary => ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission
+                                                    ? AppResources.YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword
+                                                    : AppResources.YourOrganizationRequiresYouToSetAMasterPassword;
 
         public async Task InitAsync()
         {
             await CheckPasswordPolicy();
-
+            ForceSetPasswordReason = await _stateService.GetForcePasswordResetReasonAsync();
+            TriggerPropertyChanged(nameof(SetMasterPasswordSummary));
             try
             {
                 var response = await _apiService.GetOrganizationAutoEnrollStatusAsync(OrgIdentifier);
@@ -172,8 +173,7 @@ namespace Bit.App.Pages
 
             var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
                 await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
-
-            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
+            var keysRequest = await GetKeysForSetPasswordRequestAsync(newUserKey);
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
@@ -184,16 +184,12 @@ namespace Bit.App.Pages
                 KdfMemory = kdfConfig.Memory,
                 KdfParallelism = kdfConfig.Parallelism,
                 OrgIdentifier = OrgIdentifier,
-                Keys = new KeysRequest
-                {
-                    PublicKey = newPublicKey,
-                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
-                }
+                Keys = keysRequest
             };
 
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);
@@ -201,7 +197,13 @@ namespace Bit.App.Pages
                 await _cryptoService.SetMasterKeyAsync(newMasterKey);
                 await _cryptoService.SetMasterKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
-                await _cryptoService.SetUserPrivateKeyAsync(newProtectedPrivateKey.EncryptedString);
+
+                // Set private key only for new JIT provisioned users in MP encryption orgs
+                // Existing TDE users will have private key set on sync or on login
+                if (keysRequest != null)
+                {
+                    await _cryptoService.SetUserPrivateKeyAsync(keysRequest.EncryptedPrivateKey);
+                }
 
                 if (ResetPasswordAutoEnroll)
                 {
@@ -222,6 +224,9 @@ namespace Bit.App.Pages
                     await _apiService.PutOrganizationUserResetPasswordEnrollmentAsync(OrgId, userId, resetRequest);
                 }
 
+                await _stateService.SetForcePasswordResetReasonAsync(null);
+                await _stateService.SetUserHasMasterPasswordAsync(true);
+                await _syncService.FullSyncAsync(true);
                 await _deviceActionService.HideLoadingAsync();
                 SetPasswordSuccessAction?.Invoke();
             }
@@ -234,6 +239,21 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+        }
+
+        private async Task<KeysRequest> GetKeysForSetPasswordRequestAsync(UserKey newUserKey)
+        {
+            if (ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+            {
+                return null;
+            }
+
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
+            return new KeysRequest
+            {
+                PublicKey = newPublicKey,
+                EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
+            };
         }
 
         public void TogglePassword()

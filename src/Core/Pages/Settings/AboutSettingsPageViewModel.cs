@@ -1,13 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.ApplicationModel;
-using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -29,32 +26,32 @@ namespace Bit.App.Pages
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>();
             var clipboardService = ServiceContainer.Resolve<IClipboardService>();
 
-            ToggleSubmitCrashLogsCommand = CreateDefaultAsyncCommnad(ToggleSubmitCrashLogsAsync);
+            ToggleSubmitCrashLogsCommand = CreateDefaultAsyncRelayCommand(ToggleSubmitCrashLogsAsync, allowsMultipleExecutions: false);
 
-            GoToHelpCenterCommand = CreateDefaultAsyncCommnad(
+            GoToHelpCenterCommand = CreateDefaultAsyncRelayCommand(
                 () => LaunchUriAsync(AppResources.LearnMoreAboutHowToUseBitwardenOnTheHelpCenter,
                                      AppResources.ContinueToHelpCenter,
-                                     ExternalLinksConstants.HELP_CENTER));
+                                     ExternalLinksConstants.HELP_CENTER), allowsMultipleExecutions: false);
 
-            ContactBitwardenSupportCommand = CreateDefaultAsyncCommnad(
+            ContactBitwardenSupportCommand = CreateDefaultAsyncRelayCommand(
                 () => LaunchUriAsync(AppResources.ContactSupportDescriptionLong,
                                      AppResources.ContinueToContactSupport,
-                                     ExternalLinksConstants.CONTACT_SUPPORT));
+                                     ExternalLinksConstants.CONTACT_SUPPORT), allowsMultipleExecutions: false);
 
-            GoToWebVaultCommand = CreateDefaultAsyncCommnad(
+            GoToWebVaultCommand = CreateDefaultAsyncRelayCommand(
                 () => LaunchUriAsync(AppResources.ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp,
                                      AppResources.ContinueToWebApp,
-                                     environmentService.GetWebVaultUrl()));
+                                     environmentService.GetWebVaultUrl()), allowsMultipleExecutions: false);
 
-            GoToLearnAboutOrgsCommand = CreateDefaultAsyncCommnad(
+            GoToLearnAboutOrgsCommand = CreateDefaultAsyncRelayCommand(
                 () => LaunchUriAsync(AppResources.LearnAboutOrganizationsDescriptionLong,
                                      string.Format(AppResources.ContinueToX, ExternalLinksConstants.BITWARDEN_WEBSITE),
-                                     ExternalLinksConstants.HELP_ABOUT_ORGANIZATIONS));
+                                     ExternalLinksConstants.HELP_ABOUT_ORGANIZATIONS), allowsMultipleExecutions: false);
 
-            RateTheAppCommand = CreateDefaultAsyncCommnad(RateAppAsync);
+            RateTheAppCommand = CreateDefaultAsyncRelayCommand(RateAppAsync, allowsMultipleExecutions: false);
 
-            CopyAppInfoCommand = CreateDefaultAsyncCommnad(
-                () => clipboardService.CopyTextAsync(AppInfo));
+            CopyAppInfoCommand = CreateDefaultAsyncRelayCommand(
+                () => clipboardService.CopyTextAsync(AppInfo), allowsMultipleExecutions: false);
         }
 
         public bool ShouldSubmitCrashLogs
@@ -80,7 +77,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public AsyncCommand ToggleSubmitCrashLogsCommand { get; }
+        public AsyncRelayCommand ToggleSubmitCrashLogsCommand { get; }
         public ICommand GoToHelpCenterCommand { get; }
         public ICommand ContactBitwardenSupportCommand { get; }
         public ICommand GoToWebVaultCommand { get; }
@@ -97,7 +94,7 @@ namespace Bit.App.Pages
             MainThread.BeginInvokeOnMainThread(() =>
             {
                 TriggerPropertyChanged(nameof(ShouldSubmitCrashLogs));
-                ToggleSubmitCrashLogsCommand.RaiseCanExecuteChanged();
+                ToggleSubmitCrashLogsCommand.NotifyCanExecuteChanged();
             });
         }
 

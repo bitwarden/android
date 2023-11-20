@@ -1,10 +1,6 @@
-﻿using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.Core.Resources.Localization;
-using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using Bit.App.Utilities;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Bit.App.Pages
 {
@@ -16,8 +12,7 @@ namespace Bit.App.Pages
         private bool _useDrawOver;
         private bool _askToAddLogin;
 
-        public bool SupportsAndroidAutofillServices => // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-Device.RuntimePlatform == Device.Android && _deviceActionService.SupportsAutofillServices();
+        public bool SupportsAndroidAutofillServices => DeviceInfo.Platform == DevicePlatform.Android && _deviceActionService.SupportsAutofillServices();
 
         public bool UseAutofillServices
         {
@@ -45,8 +40,7 @@ Device.RuntimePlatform == Device.Android && _deviceActionService.SupportsAutofil
             }
         }
 
-        public bool ShowUseAccessibilityToggle => // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-Device.RuntimePlatform == Device.Android;
+        public bool ShowUseAccessibilityToggle => DeviceInfo.Platform == DevicePlatform.Android;
 
         public string UseAccessibilityDescription => _deviceActionService.GetAutofillAccessibilityDescription();
 
@@ -90,21 +84,21 @@ Device.RuntimePlatform == Device.Android;
             }
         }
 
-        public AsyncCommand ToggleUseAutofillServicesCommand { get; private set; }
-        public AsyncCommand ToggleUseInlineAutofillCommand { get; private set; }
-        public AsyncCommand ToggleUseAccessibilityCommand { get; private set; }
-        public AsyncCommand ToggleUseDrawOverCommand { get; private set; }
-        public AsyncCommand ToggleAskToAddLoginCommand { get; private set; }
+        public AsyncRelayCommand ToggleUseAutofillServicesCommand { get; private set; }
+        public AsyncRelayCommand ToggleUseInlineAutofillCommand { get; private set; }
+        public AsyncRelayCommand ToggleUseAccessibilityCommand { get; private set; }
+        public AsyncRelayCommand ToggleUseDrawOverCommand { get; private set; }
+        public AsyncRelayCommand ToggleAskToAddLoginCommand { get; private set; }
         public ICommand GoToBlockAutofillUrisCommand { get; private set; }
 
         private void InitAndroidCommands()
         {
-            ToggleUseAutofillServicesCommand = CreateDefaultAsyncCommnad(() => MainThread.InvokeOnMainThreadAsync(() => ToggleUseAutofillServices()), () => _inited);
-            ToggleUseInlineAutofillCommand = CreateDefaultAsyncCommnad(() => MainThread.InvokeOnMainThreadAsync(() => ToggleUseInlineAutofillEnabledAsync()), () => _inited);
-            ToggleUseAccessibilityCommand = CreateDefaultAsyncCommnad(ToggleUseAccessibilityAsync, () => _inited);
-            ToggleUseDrawOverCommand = CreateDefaultAsyncCommnad(() => MainThread.InvokeOnMainThreadAsync(() => ToggleDrawOver()), () => _inited);
-            ToggleAskToAddLoginCommand = CreateDefaultAsyncCommnad(ToggleAskToAddLoginAsync, () => _inited);
-            GoToBlockAutofillUrisCommand = CreateDefaultAsyncCommnad(() => Page.Navigation.PushAsync(new BlockAutofillUrisPage()));
+            ToggleUseAutofillServicesCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleUseAutofillServices()), () => _inited, allowsMultipleExecutions: false);
+            ToggleUseInlineAutofillCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleUseInlineAutofillEnabledAsync()), () => _inited, allowsMultipleExecutions: false);
+            ToggleUseAccessibilityCommand = CreateDefaultAsyncRelayCommand(ToggleUseAccessibilityAsync, () => _inited, allowsMultipleExecutions: false);
+            ToggleUseDrawOverCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleDrawOver()), () => _inited, allowsMultipleExecutions: false);
+            ToggleAskToAddLoginCommand = CreateDefaultAsyncRelayCommand(ToggleAskToAddLoginAsync, () => _inited, allowsMultipleExecutions: false);
+            GoToBlockAutofillUrisCommand = CreateDefaultAsyncRelayCommand(() => Page.Navigation.PushAsync(new BlockAutofillUrisPage()), allowsMultipleExecutions: false);
         }
 
         private async Task InitAndroidAutofillSettingsAsync()
