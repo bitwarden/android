@@ -87,7 +87,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		  <PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<!-- <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2" /> -->
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Lists.ItemViewModels.CustomFields
 {
@@ -32,9 +28,9 @@ namespace Bit.App.Lists.ItemViewModels.CustomFields
             CopyFieldCommand = new Command(() => copyFieldCommand?.Execute(Field));
             ToggleHiddenValueCommand = CreateDefaultAsyncRelayCommand(ToggleHiddenValueAsync, null, ex =>
             {
-//#if !FDROID
-//                Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
-//#endif
+#if !FDROID
+                Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
+#endif
             });
         }
 
