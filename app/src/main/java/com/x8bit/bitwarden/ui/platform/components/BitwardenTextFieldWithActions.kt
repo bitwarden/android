@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param value Current text in the text field.
  * @param onValueChange Callback that is triggered when the text content changes.
  * @param modifier [Modifier] applied to this layout composable.
+ * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
  * providing flexibility in the layout definition.
@@ -32,6 +33,7 @@ fun BitwardenTextFieldWithActions(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -44,6 +46,7 @@ fun BitwardenTextFieldWithActions(
                 .weight(1f),
             label = label,
             value = value,
+            readOnly = readOnly,
             onValueChange = onValueChange,
             keyboardType = keyboardType,
         )

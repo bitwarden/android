@@ -1,10 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -13,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 
 /**
  * Component that allows the user to input text. This composable will manage the state of
@@ -26,6 +20,7 @@ import androidx.compose.ui.unit.dp
  * the [value] is empty.
  * @param hint optional hint text that will appear below the text input.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param enabled Whether or not the text field is enabled.
  * @param keyboardType the preferred type of keyboard input.
  */
 @Composable
@@ -37,38 +32,30 @@ fun BitwardenTextField(
     placeholder: String? = null,
     hint: String? = null,
     readOnly: Boolean = false,
+    enabled: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) {
-    Column(
+    OutlinedTextField(
         modifier = modifier,
-    ) {
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = label) },
-            value = value,
-            placeholder = placeholder?.let {
-                { Text(text = it) }
-            },
-            onValueChange = onValueChange,
-            singleLine = true,
-            readOnly = readOnly,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-        )
-
-        hint?.let {
-            Spacer(
-                modifier = Modifier.height(4.dp),
-            )
-            Text(
-                text = hint,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-        }
-    }
+        enabled = enabled,
+        label = { Text(text = label) },
+        value = value,
+        placeholder = placeholder?.let {
+            { Text(text = it) }
+        },
+        supportingText = {
+            hint?.let {
+                Text(
+                    text = hint,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        },
+        onValueChange = onValueChange,
+        singleLine = true,
+        readOnly = readOnly,
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+    )
 }
 
 @Preview
