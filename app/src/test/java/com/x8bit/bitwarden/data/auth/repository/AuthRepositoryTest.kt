@@ -42,8 +42,10 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -269,7 +271,7 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `login get token succeeds should return Success, update AuthState, update stored keys, and unlockVaultAndSync`() =
+    fun `login get token succeeds should return Success, unlockVault, update AuthState, update stored keys, and sync`() =
         runTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
@@ -284,8 +286,16 @@ class AuthRepositoryTest {
             }
                 .returns(Result.success(successResponse))
             coEvery {
-                vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
+                vaultRepository.unlockVault(
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationalKeys = emptyMap(),
+                    masterPassword = PASSWORD,
+                )
             } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.sync() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
@@ -310,9 +320,15 @@ class AuthRepositoryTest {
                     passwordHash = PASSWORD_HASH,
                     captchaToken = null,
                 )
-            }
-            coVerify {
-                vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
+                vaultRepository.unlockVault(
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationalKeys = emptyMap(),
+                    masterPassword = PASSWORD,
+                )
+                vaultRepository.sync()
             }
         }
 
@@ -679,7 +695,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `logout for single account should clear the access toke and stored keys`() = runTest {
+    fun `logout for single account should clear the access token and stored keys`() = runTest {
         // First login:
         val successResponse = GET_TOKEN_RESPONSE_SUCCESS
         coEvery {
@@ -693,8 +709,16 @@ class AuthRepositoryTest {
             )
         } returns Result.success(successResponse)
         coEvery {
-            vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
+            vaultRepository.unlockVault(
+                email = EMAIL,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                userKey = successResponse.key,
+                privateKey = successResponse.privateKey,
+                organizationalKeys = emptyMap(),
+                masterPassword = PASSWORD,
+            )
         } returns VaultUnlockResult.Success
+        coEvery { vaultRepository.sync() } just runs
         every {
             GET_TOKEN_RESPONSE_SUCCESS.toUserState(
                 previousUserState = null,
@@ -745,8 +769,16 @@ class AuthRepositoryTest {
                 )
             } returns Result.success(successResponse)
             coEvery {
-                vaultRepository.unlockVaultAndSync(masterPassword = PASSWORD)
+                vaultRepository.unlockVault(
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationalKeys = emptyMap(),
+                    masterPassword = PASSWORD,
+                )
             } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.sync() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
                     previousUserState = SINGLE_USER_STATE_2,

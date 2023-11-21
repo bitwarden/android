@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.repository
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
@@ -31,7 +32,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -146,18 +146,62 @@ class VaultRepositoryImpl constructor(
                 initialValue = DataState.Loading,
             )
 
-    override suspend fun unlockVaultAndSync(masterPassword: String): VaultUnlockResult {
-        return flow {
-            willSyncAfterUnlock = true
-            emit(initializeCrypto(masterPassword = masterPassword))
-        }
-            .onEach {
-                willSyncAfterUnlock = false
-                if (it is VaultUnlockResult.Success) sync()
+    @Suppress("ReturnCount")
+    override suspend fun unlockVaultAndSyncForCurrentUser(
+        masterPassword: String,
+    ): VaultUnlockResult {
+        val userState = authDiskSource.userState
+            ?: return VaultUnlockResult.InvalidStateError
+        val userKey = authDiskSource.getUserKey(userId = userState.activeUserId)
+            ?: return VaultUnlockResult.InvalidStateError
+        val privateKey = authDiskSource.getPrivateKey(userId = userState.activeUserId)
+            ?: return VaultUnlockResult.InvalidStateError
+        return unlockVault(
+            masterPassword = masterPassword,
+            email = userState.activeAccount.profile.email,
+            kdf = userState.activeAccount.profile.toSdkParams(),
+            userKey = userKey,
+            privateKey = privateKey,
+            // TODO use actual organization keys BIT-1091
+            organizationalKeys = emptyMap(),
+        )
+            .also {
+                if (it is VaultUnlockResult.Success) {
+                    sync()
+                }
             }
+    }
+
+    override suspend fun unlockVault(
+        masterPassword: String,
+        email: String,
+        kdf: Kdf,
+        userKey: String,
+        privateKey: String,
+        organizationalKeys: Map<String, String>,
+    ): VaultUnlockResult =
+        flow {
+            willSyncAfterUnlock = true
+            emit(
+                vaultSdkSource
+                    .initializeCrypto(
+                        request = InitCryptoRequest(
+                            kdfParams = kdf,
+                            email = email,
+                            password = masterPassword,
+                            userKey = userKey,
+                            privateKey = privateKey,
+                            organizationKeys = organizationalKeys,
+                        ),
+                    )
+                    .fold(
+                        onFailure = { VaultUnlockResult.GenericError },
+                        onSuccess = { it.toVaultUnlockResult() },
+                    ),
+            )
+        }
             .onCompletion { willSyncAfterUnlock = false }
             .first()
-    }
 
     private fun storeUserKeyAndPrivateKey(
         userKey: String?,
@@ -175,32 +219,6 @@ class VaultRepositoryImpl constructor(
                 privateKey = privateKey,
             )
         }
-    }
-
-    @Suppress("ReturnCount")
-    private suspend fun initializeCrypto(masterPassword: String): VaultUnlockResult {
-        val userState = authDiskSource.userState
-            ?: return VaultUnlockResult.InvalidStateError
-        val userKey = authDiskSource.getUserKey(userId = userState.activeUserId)
-            ?: return VaultUnlockResult.InvalidStateError
-        val privateKey = authDiskSource.getPrivateKey(userId = userState.activeUserId)
-            ?: return VaultUnlockResult.InvalidStateError
-        return vaultSdkSource
-            .initializeCrypto(
-                request = InitCryptoRequest(
-                    kdfParams = userState.activeAccount.profile.toSdkParams(),
-                    email = userState.activeAccount.profile.email,
-                    password = masterPassword,
-                    userKey = userKey,
-                    privateKey = privateKey,
-                    // TODO use actual organization keys BIT-1091
-                    organizationKeys = mapOf(),
-                ),
-            )
-            .fold(
-                onFailure = { VaultUnlockResult.GenericError },
-                onSuccess = { it.toVaultUnlockResult() },
-            )
     }
 
     private suspend fun decryptSendsAndUpdateSendDataState(sendList: List<SyncResponseJson.Send>?) {
