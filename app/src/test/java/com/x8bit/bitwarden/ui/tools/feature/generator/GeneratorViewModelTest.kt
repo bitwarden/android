@@ -25,7 +25,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val initialUsernameState = createUsernameState()
     private val usernameSavedStateHandle = createSavedStateHandleWithState(initialUsernameState)
 
-    private val fakeGeneratorRepository = FakeGeneratorRepository()
+    private val fakeGeneratorRepository = FakeGeneratorRepository().apply {
+        setMockGeneratePasswordResult(
+            GeneratedPasswordResult.Success("defaultPassword"),
+        )
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -40,10 +44,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `RegenerateClick action for password state updates generatedText and saves password generation options on successful password generation`() =
         runTest {
             val updatedGeneratedPassword = "updatedPassword"
-
-            fakeGeneratorRepository.setMockGeneratePasswordResult(
-                GeneratedPasswordResult.Success(updatedGeneratedPassword),
-            )
 
             val viewModel = createViewModel()
             val initialState = viewModel.stateFlow.value
@@ -61,6 +61,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 minSpecial = 1,
             )
 
+            fakeGeneratorRepository.setMockGeneratePasswordResult(
+                GeneratedPasswordResult.Success(updatedGeneratedPassword),
+            )
+
             viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
 
             val expectedState = initialState.copy(generatedText = updatedGeneratedPassword)
@@ -76,11 +80,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick action for password state sends ShowSnackbar event on password generation failure`() =
         runTest {
+            val viewModel = createViewModel()
+
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.InvalidRequest,
             )
-
-            val viewModel = createViewModel()
 
             viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
 
@@ -132,12 +136,19 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `MainTypeOptionSelect PASSWORD should switch to Passcode`() = runTest {
         val viewModel = createViewModel()
+        fakeGeneratorRepository.setMockGeneratePasswordResult(
+            GeneratedPasswordResult.Success("updatedText"),
+        )
+
         val action = GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD)
 
         viewModel.actionChannel.trySend(action)
 
         val expectedState =
-            initialState.copy(selectedType = GeneratorState.MainType.Passcode())
+            initialState.copy(
+                selectedType = GeneratorState.MainType.Passcode(),
+                generatedText = "updatedText",
+            )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -145,11 +156,16 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `MainTypeOptionSelect USERNAME should switch to Username`() = runTest {
         val viewModel = createViewModel()
+        fakeGeneratorRepository.setMockGeneratePasswordResult(
+            GeneratedPasswordResult.Success("updatedText"),
+        )
+
         val action = GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.USERNAME)
 
         viewModel.actionChannel.trySend(action)
 
-        val expectedState = initialState.copy(selectedType = GeneratorState.MainType.Username())
+        val expectedState =
+            initialState.copy(selectedType = GeneratorState.MainType.Username())
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -157,6 +173,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `PasscodeTypeOptionSelect PASSWORD should switch to PasswordType`() = runTest {
         val viewModel = createViewModel()
+        fakeGeneratorRepository.setMockGeneratePasswordResult(
+            GeneratedPasswordResult.Success("updatedText"),
+        )
+
         val action = GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
             passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSWORD,
         )
@@ -167,6 +187,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             selectedType = GeneratorState.MainType.Passcode(
                 selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(),
             ),
+            generatedText = "updatedText",
         )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
@@ -175,6 +196,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `PasscodeTypeOptionSelect PASSPHRASE should switch to PassphraseType`() = runTest {
         val viewModel = createViewModel()
+        fakeGeneratorRepository.setMockGeneratePasswordResult(
+            GeneratedPasswordResult.Success("updatedText"),
+        )
+
         val action = GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
             passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
         )
@@ -197,6 +222,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
+            fakeGeneratorRepository.setMockGeneratePasswordResult(
+                GeneratedPasswordResult.Success("defaultPassword"),
+            )
             viewModel = GeneratorViewModel(initialSavedStateHandle, fakeGeneratorRepository)
         }
 
@@ -467,6 +495,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
+            fakeGeneratorRepository.setMockGeneratePasswordResult(
+                GeneratedPasswordResult.Success("defaultPassphrase"),
+            )
             viewModel = GeneratorViewModel(passphraseSavedStateHandle, fakeGeneratorRepository)
         }
 
