@@ -165,7 +165,9 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
-            if (await IsPasswordWeakOrExposed())
+
+            //We only test weak/exposed password when "showLoading" is true otherwise it would be called twice in scenarios this method is called again after a Captcha
+            if (showLoading && await IsPasswordWeakOrExposed())
             {
                 return;
             }

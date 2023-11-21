@@ -530,7 +530,7 @@ namespace Bit.App
             NavigateImpl(navTarget, navParams);
         }
 
-        public void NavigateImpl(NavigationTarget navTarget, INavigationParams navParams)
+        private void NavigateImpl(NavigationTarget navTarget, INavigationParams navParams)
         {
             switch (navTarget)
             {
