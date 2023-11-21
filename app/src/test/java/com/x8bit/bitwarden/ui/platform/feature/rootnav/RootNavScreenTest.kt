@@ -72,6 +72,15 @@ class RootNavScreenTest : BaseComposeTest() {
         }
         assertTrue(isSplashScreenRemoved)
 
+        // Make sure navigating to vault locked works as expected:
+        rootNavStateFlow.value = RootNavState.VaultLocked
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_unlock",
+                navOptions = expectedNavOptions,
+            )
+        }
+
         // Make sure navigating to vault unlocked works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlocked
         composeTestRule.runOnIdle {

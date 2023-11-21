@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -14,6 +15,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.util.labelOrBaseUrlHost
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,18 +34,24 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class VaultUnlockViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
     environmentRepo: EnvironmentRepository,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: VaultUnlockState(
-        accountSummaries = emptyList(),
-        avatarColorString = "0000FF",
-        initials = "BW",
-        email = "bit@bitwarden.com",
-        dialog = null,
-        environmentUrl = environmentRepo.environment.labelOrBaseUrlHost,
-        passwordInput = "",
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val userState = requireNotNull(authRepository.userStateFlow.value)
+        val accountSummaries = userState.toAccountSummaries()
+        val activeAccountSummary = userState.toActiveAccountSummary()
+        VaultUnlockState(
+            accountSummaries = accountSummaries,
+            avatarColorString = activeAccountSummary.avatarColorHex,
+            initials = activeAccountSummary.initials,
+            email = activeAccountSummary.email,
+            dialog = null,
+            environmentUrl = environmentRepo.environment.labelOrBaseUrlHost,
+            passwordInput = "",
+        )
+    },
 ) {
     init {
         stateFlow

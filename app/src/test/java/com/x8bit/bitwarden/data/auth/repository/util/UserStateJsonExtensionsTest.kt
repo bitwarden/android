@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -79,6 +81,83 @@ class UserStateJsonExtensionsTest {
                             every { securityStamp } returns "securityStamp"
                         }
                     },
+                ),
+        )
+    }
+
+    @Test
+    fun `toUserState should return the correct UserState for an unlocked vault`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "activeAvatarColorHex",
+                        isVaultUnlocked = true,
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk() {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns "activeAvatarColorHex"
+                        },
+                        tokens = mockk(),
+                        settings = mockk(),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = VaultState(
+                        unlockedVaultUserIds = setOf("activeUserId"),
+                    ),
+                ),
+        )
+    }
+
+    @Test
+    fun `toUserState return the correct UserState for a locked vault`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        avatarColorHex = "activeAvatarColorHex",
+                        isVaultUnlocked = false,
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk() {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns "activeAvatarColorHex"
+                        },
+                        tokens = mockk(),
+                        settings = mockk(),
+                    ),
+                ),
+
+                )
+                .toUserState(
+                    vaultState = VaultState(
+                        unlockedVaultUserIds = emptySet(),
+                    ),
                 ),
         )
     }

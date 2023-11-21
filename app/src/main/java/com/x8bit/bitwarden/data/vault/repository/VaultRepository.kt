@@ -6,6 +6,7 @@ import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.flow.StateFlow
 
@@ -18,6 +19,11 @@ interface VaultRepository {
      * Flow that represents the current vault data.
      */
     val vaultDataStateFlow: StateFlow<DataState<VaultData>>
+
+    /**
+     * Flow that represents the current vault state.
+     */
+    val vaultStateFlow: StateFlow<VaultState>
 
     /**
      * Flow that represents the current send data.
@@ -56,6 +62,7 @@ interface VaultRepository {
      */
     @Suppress("LongParameterList")
     suspend fun unlockVault(
+        userId: String,
         masterPassword: String,
         email: String,
         kdf: Kdf,

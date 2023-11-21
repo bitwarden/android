@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -47,6 +48,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -62,7 +64,10 @@ class AuthRepositoryTest {
     private val accountsService: AccountsService = mockk()
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
-    private val vaultRepository: VaultRepository = mockk()
+    private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
+    private val vaultRepository: VaultRepository = mockk() {
+        every { vaultStateFlow } returns mutableVaultStateFlow
+    }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeEnvironmentRepository =
         FakeEnvironmentRepository()
@@ -115,6 +120,41 @@ class AuthRepositoryTest {
     @AfterEach
     fun tearDown() {
         unmockkStatic(GET_TOKEN_RESPONSE_EXTENSIONS_PATH)
+    }
+
+    @Test
+    fun `userStateFlow should update with changes to the UserStateJson and VaultState data`() {
+        fakeAuthDiskSource.userState = null
+        assertEquals(
+            null,
+            repository.userStateFlow.value,
+        )
+
+        mutableVaultStateFlow.value = VAULT_STATE
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        assertEquals(
+            SINGLE_USER_STATE_1.toUserState(
+                vaultState = VAULT_STATE,
+            ),
+            repository.userStateFlow.value,
+        )
+
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
+        assertEquals(
+            MULTI_USER_STATE.toUserState(
+                vaultState = VAULT_STATE,
+            ),
+            repository.userStateFlow.value,
+        )
+
+        val emptyVaultState = VaultState(unlockedVaultUserIds = emptySet())
+        mutableVaultStateFlow.value = emptyVaultState
+        assertEquals(
+            MULTI_USER_STATE.toUserState(
+                vaultState = emptyVaultState,
+            ),
+            repository.userStateFlow.value,
+        )
     }
 
     @Test
@@ -287,6 +327,7 @@ class AuthRepositoryTest {
                 .returns(Result.success(successResponse))
             coEvery {
                 vaultRepository.unlockVault(
+                    userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
@@ -321,6 +362,7 @@ class AuthRepositoryTest {
                     captchaToken = null,
                 )
                 vaultRepository.unlockVault(
+                    userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
@@ -710,6 +752,7 @@ class AuthRepositoryTest {
         } returns Result.success(successResponse)
         coEvery {
             vaultRepository.unlockVault(
+                userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 userKey = successResponse.key,
@@ -770,6 +813,7 @@ class AuthRepositoryTest {
             } returns Result.success(successResponse)
             coEvery {
                 vaultRepository.unlockVault(
+                    userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
@@ -933,6 +977,9 @@ class AuthRepositoryTest {
                 USER_ID_1 to ACCOUNT_1,
                 USER_ID_2 to ACCOUNT_2,
             ),
+        )
+        private val VAULT_STATE = VaultState(
+            unlockedVaultUserIds = setOf(USER_ID_1),
         )
     }
 }
