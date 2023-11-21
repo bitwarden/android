@@ -78,14 +78,22 @@ class NewSendScreenTest : BaseComposeTest() {
     fun `name input should change according to the state`() {
         composeTestRule
             .onNodeWithText("Name")
-            .assertTextEquals("Name", "")
+            .assertTextEquals(
+                "Name",
+                "A friendly name to describe this Send.",
+                "",
+            )
 
         mutableStateFlow.update {
             it.copy(name = "input")
         }
         composeTestRule
             .onNodeWithText("Name")
-            .assertTextEquals("Name", "input")
+            .assertTextEquals(
+                "Name",
+                "A friendly name to describe this Send.",
+                "input",
+            )
     }
 
     @Test
@@ -129,7 +137,11 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText("Text")
             .filterToOne(hasSetTextAction())
-            .assertTextEquals("Text", "")
+            .assertTextEquals(
+                "Text",
+                "The text you want to send.",
+                "",
+            )
 
         mutableStateFlow.update {
             it.copy(
@@ -142,7 +154,11 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText("Text")
             .filterToOne(hasSetTextAction())
-            .assertTextEquals("Text", "input")
+            .assertTextEquals(
+                "Text",
+                "The text you want to send.",
+                "input",
+            )
     }
 
     @Test
@@ -311,7 +327,11 @@ class NewSendScreenTest : BaseComposeTest() {
             .performClick()
         composeTestRule
             .onNodeWithText("New password")
-            .assertTextEquals("New password", "")
+            .assertTextEquals(
+                "New password",
+                "Optionally require a password for users to access this Send.",
+                "",
+            )
 
         mutableStateFlow.update {
             it.copy(
@@ -320,7 +340,11 @@ class NewSendScreenTest : BaseComposeTest() {
         }
         composeTestRule
             .onNodeWithText("New password")
-            .assertTextEquals("New password", "•••••")
+            .assertTextEquals(
+                "New password",
+                "Optionally require a password for users to access this Send.",
+                "•••••",
+            )
     }
 
     @Test
@@ -346,7 +370,11 @@ class NewSendScreenTest : BaseComposeTest() {
             .performClick()
         composeTestRule
             .onNodeWithText("Notes")
-            .assertTextEquals("Notes", "")
+            .assertTextEquals(
+                "Notes",
+                "Private notes about this Send.",
+                "",
+            )
 
         mutableStateFlow.update {
             it.copy(
@@ -355,7 +383,11 @@ class NewSendScreenTest : BaseComposeTest() {
         }
         composeTestRule
             .onNodeWithText("Notes")
-            .assertTextEquals("Notes", "input")
+            .assertTextEquals(
+                "Notes",
+                "Private notes about this Send.",
+                "input",
+            )
     }
 
     @Test

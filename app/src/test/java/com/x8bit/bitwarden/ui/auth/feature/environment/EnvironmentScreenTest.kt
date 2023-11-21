@@ -114,13 +114,22 @@ class EnvironmentScreenTest : BaseComposeTest() {
             .onNodeWithText("Server URL")
             // Click to focus to see placeholder
             .performClick()
-            .assertTextEquals("Server URL", "ex. https://bitwarden.company.com", "")
+            .assertTextEquals(
+                "Server URL",
+                "Specify the base URL of your on-premise hosted Bitwarden installation.",
+                "ex. https://bitwarden.company.com",
+                "",
+            )
 
         mutableStateFlow.update { it.copy(serverUrl = "server-url") }
 
         composeTestRule
             .onNodeWithText("Server URL")
-            .assertTextEquals("Server URL", "server-url")
+            .assertTextEquals(
+                "Server URL",
+                "Specify the base URL of your on-premise hosted Bitwarden installation.",
+                "server-url",
+            )
     }
 
     @Test
@@ -216,13 +225,21 @@ class EnvironmentScreenTest : BaseComposeTest() {
     fun `icons server URL should change according to the state`() {
         composeTestRule
             .onNodeWithText("Icons server URL")
-            .assertTextEquals("Icons server URL", "")
+            .assertTextEquals(
+                "Icons server URL",
+                "For advanced users. You can specify the base URL of each service independently.",
+                "",
+            )
 
         mutableStateFlow.update { it.copy(iconsServerUrl = "icons-url") }
 
         composeTestRule
             .onNodeWithText("Icons server URL")
-            .assertTextEquals("Icons server URL", "icons-url")
+            .assertTextEquals(
+                "Icons server URL",
+                "For advanced users. You can specify the base URL of each service independently.",
+                "icons-url",
+            )
     }
 
     @Test
