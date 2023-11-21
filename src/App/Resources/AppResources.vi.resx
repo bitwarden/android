@@ -2863,10 +2863,10 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
     <value>Đã đăng xuất tài khoản.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Quyền tổ chức của bạn đã được cập nhật, yêu cầu bạn đặt mật khẩu chính.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Tổ chức của bạn yêu cầu bạn đặt mật khẩu chính.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Thiết lập khóa khi hết thời gian chờ kho.</value>
