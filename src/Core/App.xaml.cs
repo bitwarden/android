@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.Core.Resources.Localization;
@@ -15,9 +12,6 @@ using Bit.Core.Models.Data;
 using Bit.Core.Models.Response;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls.Xaml;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Bit.App
@@ -44,6 +38,11 @@ namespace Bit.App
         // these variables are static because the app is launching new activities on notification click, creating new instances of App. 
         private static bool _pendingCheckPasswordlessLoginRequests;
         private static object _processingLoginRequestLock = new object();
+
+        // [MAUI-Migration] Workaround to avoid issue on Android where trying to show the LockPage when the app is resuming or in background breaks the app.
+        // This queue keeps those actions so that when the app has resumed they can still be executed.
+        // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
+        private readonly Queue<Action> _onResumeActions = new Queue<Action>();
 
         public App() : this(null)
         {
@@ -82,32 +81,30 @@ namespace Bit.App
                         var confirmed = true;
                         var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                             AppResources.Ok : details.ConfirmText;
-                        Device.BeginInvokeOnMainThread(async () =>
+                        MainThread.BeginInvokeOnMainThread(async () =>
                         {
                             if (!string.IsNullOrWhiteSpace(details.CancelText))
                             {
-                                confirmed = await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText,
+                                confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
                                     details.CancelText);
                             }
                             else
                             {
-                                await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText);
+                                await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
                             }
                             _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                         });
                     }
                     else if (message.Command == AppHelpers.RESUMED_MESSAGE_COMMAND)
                     {
-                        // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                        if (Device.RuntimePlatform == Device.iOS)
+                        if (DeviceInfo.Platform == DevicePlatform.iOS)
                         {
                             ResumedAsync().FireAndForget();
                         }
                     }
                     else if (message.Command == "slept")
                     {
-                        // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                        if (Device.RuntimePlatform == Device.iOS)
+                        if (DeviceInfo.Platform == DevicePlatform.iOS)
                         {
                             await SleptAsync();
                         }
@@ -128,9 +125,9 @@ namespace Bit.App
                             Options.OtpData = new OtpData((string)message.Data);
                         }
 
-                        Device.InvokeOnMainThreadAsync(async () =>
+                        MainThread.InvokeOnMainThreadAsync(async () =>
                         {
-                            if (Current.MainPage is TabsPage tabsPage)
+                            if (MainPage is TabsPage tabsPage)
                             {
                                 while (tabsPage.Navigation.ModalStack.Count > 0)
                                 {
@@ -138,7 +135,7 @@ namespace Bit.App
                                 }
                                 if (message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE)
                                 {
-                                    Current.MainPage = new NavigationPage(new CipherSelectionPage(Options));
+                                    MainPage = new NavigationPage(new CipherSelectionPage(Options));
                                 }
                                 else if (message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE)
                                 {
@@ -164,23 +161,23 @@ namespace Bit.App
                     }
                     else if (message.Command == "convertAccountToKeyConnector")
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
+                        MainThread.BeginInvokeOnMainThread(async () =>
                         {
-                            await Application.Current.MainPage.Navigation.PushModalAsync(
+                            await MainPage.Navigation.PushModalAsync(
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
                     else if (message.Command == Constants.ForceUpdatePassword)
                     {
-                        Device.BeginInvokeOnMainThread(async () =>
+                        MainThread.BeginInvokeOnMainThread(async () =>
                         {
-                            await Application.Current.MainPage.Navigation.PushModalAsync(
+                            await MainPage.Navigation.PushModalAsync(
                                 new NavigationPage(new UpdateTempPasswordPage()));
                         });
                     }
                     else if (message.Command == Constants.ForceSetPassword)
                     {
-                        await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(
+                        await MainThread.InvokeOnMainThreadAsync(() => MainPage.Navigation.PushModalAsync(
                                 new NavigationPage(new SetPasswordPage(orgIdentifier: (string)message.Data))));
                     }
                     else if (message.Command == "syncCompleted")
@@ -232,7 +229,7 @@ namespace Bit.App
             // Delay to wait for the vault page to appear
             await Task.Delay(2000);
             // if there is a request modal opened ignore all incoming requests
-            if (App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
+            if (MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
             {
                 return;
             }
@@ -252,7 +249,7 @@ namespace Bit.App
             _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
             if (!loginRequestData.IsExpired)
             {
-                await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
+                await MainThread.InvokeOnMainThreadAsync(() => MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
             }
         }
 
@@ -265,7 +262,7 @@ namespace Bit.App
             }
 
             var notificationUserEmail = await _stateService.GetEmailAsync(notification.UserId);
-            Device.BeginInvokeOnMainThread(async () =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 try
                 {
@@ -286,7 +283,7 @@ namespace Bit.App
 
         public AppOptions Options { get; private set; }
 
-        protected async override void OnStart()
+        protected override async void OnStart()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
             _isResumed = true;
@@ -305,8 +302,7 @@ namespace Bit.App
             {
                 _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 await _vaultTimeoutService.CheckVaultTimeoutAsync();
                 // Reset delay on every start
@@ -317,12 +313,11 @@ namespace Bit.App
             _messagingService.Send("startEventTimer");
         }
 
-        protected async override void OnSleep()
+        protected override async void OnSleep()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
             _isResumed = false;
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 var isLocked = await _vaultTimeoutService.IsLockedAsync();
                 if (!isLocked)
@@ -345,8 +340,7 @@ namespace Bit.App
             {
                 _messagingService.Send(Constants.PasswordlessLoginRequestKey);
             }
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
+            if (DeviceInfo.Platform == DevicePlatform.Android)
             {
                 ResumedAsync().FireAndForget();
             }
@@ -369,24 +363,33 @@ namespace Bit.App
             await ClearCacheIfNeededAsync();
             Prime();
             SyncIfNeeded();
-            if (Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
+            if (MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
             {
                 await lockPage.PromptBiometricAfterResumeAsync();
+            }
+
+            // [MAUI-Migration] Workaround to avoid issue on Android where trying to show the LockPage when the app is resuming or in background breaks the app.
+            // Currently we keep those actions in a queue until the app has resumed and execute them here.
+            // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
+            await Task.Delay(50); //Small delay that is part of the workaround and ensures the app is ready to set "MainPage"
+            while (_onResumeActions.TryDequeue(out var action))
+            {
+                MainThread.BeginInvokeOnMainThread(action);
             }
         }
 
         public async Task UpdateThemeAsync()
         {
-            await Device.InvokeOnMainThreadAsync(() =>
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                ThemeManager.SetTheme(Current.Resources);
+                ThemeManager.SetTheme(Resources);
                 _messagingService.Send(ThemeManager.UPDATED_THEME_MESSAGE_KEY);
             });
         }
 
         private async Task ClearSensitiveFieldsAsync()
         {
-            await Device.InvokeOnMainThreadAsync(() =>
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 _messagingService.Send(Constants.ClearSensitiveFields);
             });
@@ -411,8 +414,7 @@ namespace Bit.App
 
         private void ClearAutofillUri()
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri))
+            if (DeviceInfo.Platform == DevicePlatform.Android && !string.IsNullOrWhiteSpace(Options.Uri))
             {
                 Options.Uri = null;
             }
@@ -420,22 +422,21 @@ namespace Bit.App
 
         private bool SetTabsPageFromAutofill(bool isLocked)
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri) &&
+            if (DeviceInfo.Platform == DevicePlatform.Android && !string.IsNullOrWhiteSpace(Options.Uri) &&
                 !Options.FromAutofillFramework)
             {
                 Task.Run(() =>
                 {
-                    Device.BeginInvokeOnMainThread(() =>
+                    MainThread.BeginInvokeOnMainThread(() =>
                     {
                         Options.Uri = null;
                         if (isLocked)
                         {
-                            Current.MainPage = new NavigationPage(new LockPage());
+                            MainPage = new NavigationPage(new LockPage());
                         }
                         else
                         {
-                            Current.MainPage = new TabsPage();
+                            MainPage = new TabsPage();
                         }
                     });
                 });
@@ -457,12 +458,12 @@ namespace Bit.App
         {
             InitializeComponent();
             SetCulture();
-            ThemeManager.SetTheme(Current.Resources);
-            Current.RequestedThemeChanged += (s, a) =>
+            ThemeManager.SetTheme(Resources);
+            RequestedThemeChanged += (s, a) =>
             {
                 UpdateThemeAsync();
             };
-            Current.MainPage = new NavigationPage(new HomePage(Options));
+            MainPage = new NavigationPage(new HomePage(Options));
             _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
         }
@@ -487,7 +488,7 @@ namespace Bit.App
         public async Task SetPreviousPageInfoAsync()
         {
             PreviousPageInfo lastPageBeforeLock = null;
-            if (Current.MainPage is TabbedPage tabbedPage && tabbedPage.Navigation.ModalStack.Count > 0)
+            if (MainPage is TabbedPage tabbedPage && tabbedPage.Navigation.ModalStack.Count > 0)
             {
                 var topPage = tabbedPage.Navigation.ModalStack[tabbedPage.Navigation.ModalStack.Count - 1];
                 if (topPage is NavigationPage navPage)
@@ -515,39 +516,55 @@ namespace Bit.App
 
         public void Navigate(NavigationTarget navTarget, INavigationParams navParams)
         {
+
+            // [MAUI-Migration] Workaround to avoid issue on Android where trying to show the LockPage when the app is resuming or in background breaks the app.
+            // If we are in background we add the Navigation Actions to a queue to execute when the app resumes.
+            // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
+#if ANDROID
+            if (!_isResumed)
+            {
+                _onResumeActions.Enqueue(() => NavigateImpl(navTarget, navParams));
+                return;
+            }
+#endif
+            NavigateImpl(navTarget, navParams);
+        }
+
+        public void NavigateImpl(NavigationTarget navTarget, INavigationParams navParams)
+        {
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    Current.MainPage = new NavigationPage(new HomePage(Options));
+                    MainPage = new NavigationPage(new HomePage(Options));
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)
                     {
-                        Current.MainPage = new NavigationPage(new LoginPage(loginParams.Email, Options));
+                        MainPage = new NavigationPage(new LoginPage(loginParams.Email, Options));
                     }
                     break;
                 case NavigationTarget.Lock:
                     if (navParams is LockNavigationParams lockParams)
                     {
-                        Current.MainPage = new NavigationPage(new LockPage(Options, lockParams.AutoPromptBiometric));
+                        MainPage = new NavigationPage(new LockPage(Options, lockParams.AutoPromptBiometric));
                     }
                     else
                     {
-                        Current.MainPage = new NavigationPage(new LockPage(Options));
+                        MainPage = new NavigationPage(new LockPage(Options));
                     }
                     break;
                 case NavigationTarget.Home:
-                    Current.MainPage = new TabsPage(Options);
+                    MainPage = new TabsPage(Options);
                     break;
                 case NavigationTarget.AddEditCipher:
-                    Current.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: Options));
+                    MainPage = new NavigationPage(new CipherAddEditPage(appOptions: Options));
                     break;
                 case NavigationTarget.AutofillCiphers:
                 case NavigationTarget.OtpCipherSelection:
-                    Current.MainPage = new NavigationPage(new CipherSelectionPage(Options));
+                    MainPage = new NavigationPage(new CipherSelectionPage(Options));
                     break;
                 case NavigationTarget.SendAddEdit:
-                    Current.MainPage = new NavigationPage(new SendAddEditPage(Options));
+                    MainPage = new NavigationPage(new SendAddEditPage(Options));
                     break;
             }
         }
