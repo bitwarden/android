@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
@@ -76,13 +76,6 @@ fun BitwardenAccountSwitcher(
     modifier: Modifier = Modifier,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
 ) {
-    // Match the color of the switcher the different states of the app bar.
-    val contentBackgroundColor =
-        lerp(
-            start = MaterialTheme.colorScheme.surface,
-            stop = MaterialTheme.colorScheme.surfaceContainer,
-            fraction = topAppBarScrollBehavior.state.collapsedFraction,
-        )
     Box(modifier = modifier) {
         BitwardenAnimatedScrim(
             isVisible = isVisible,
@@ -101,13 +94,14 @@ fun BitwardenAccountSwitcher(
                 onDismissRequest()
                 onAddAccountClick()
             },
-            contentBackgroundColor = contentBackgroundColor,
+            topAppBarScrollBehavior = topAppBarScrollBehavior,
             modifier = Modifier
                 .fillMaxWidth(),
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AnimatedAccountSwitcher(
     isVisible: Boolean,
@@ -115,8 +109,10 @@ private fun AnimatedAccountSwitcher(
     onAccountSummaryClick: (AccountSummary) -> Unit,
     onAddAccountClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentBackgroundColor: Color,
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
 ) {
+    val expandedColor = MaterialTheme.colorScheme.surface
+    val collapsedColor = MaterialTheme.colorScheme.surfaceContainer
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically { -it },
@@ -127,7 +123,16 @@ private fun AnimatedAccountSwitcher(
                 // To prevent going all the way up to the bottom of the screen, we'll add some small
                 // bottom padding.
                 .padding(bottom = 24.dp)
-                .background(contentBackgroundColor),
+                // Match the color of the switcher the different states of the app bar.
+                .drawBehind {
+                    val contentBackgroundColor =
+                        lerp(
+                            start = expandedColor,
+                            stop = collapsedColor,
+                            fraction = topAppBarScrollBehavior.state.collapsedFraction,
+                        )
+                    drawRect(contentBackgroundColor)
+                },
         ) {
             items(accountSummaries) { accountSummary ->
                 AccountSummaryItem(
