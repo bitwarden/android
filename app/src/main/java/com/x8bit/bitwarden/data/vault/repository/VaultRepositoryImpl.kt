@@ -5,6 +5,7 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitCryptoRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -85,6 +86,13 @@ class VaultRepositoryImpl constructor(
                 .sync()
                 .fold(
                     onSuccess = { syncResponse ->
+                        // Update user information with additional information from sync response
+                        authDiskSource.userState = authDiskSource
+                            .userState
+                            ?.toUpdatedUserStateJson(
+                                syncResponse = syncResponse,
+                            )
+
                         storeUserKeyAndPrivateKey(
                             userKey = syncResponse.profile?.key,
                             privateKey = syncResponse.profile?.privateKey,
