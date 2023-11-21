@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -46,7 +47,20 @@ interface VaultRepository {
     fun getVaultFolderStateFlow(folderId: String): StateFlow<DataState<FolderView?>>
 
     /**
-     * Attempt to initialize crypto and sync the vault data.
+     * Attempt to unlock the vault and sync the vault data for the currently active user.
      */
-    suspend fun unlockVaultAndSync(masterPassword: String): VaultUnlockResult
+    suspend fun unlockVaultAndSyncForCurrentUser(masterPassword: String): VaultUnlockResult
+
+    /**
+     * Attempt to unlock the vault with the specified user information.
+     */
+    @Suppress("LongParameterList")
+    suspend fun unlockVault(
+        masterPassword: String,
+        email: String,
+        kdf: Kdf,
+        userKey: String,
+        privateKey: String,
+        organizationalKeys: Map<String, String>,
+    ): VaultUnlockResult
 }

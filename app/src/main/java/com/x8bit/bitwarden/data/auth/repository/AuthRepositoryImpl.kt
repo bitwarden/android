@@ -121,33 +121,40 @@ class AuthRepositoryImpl constructor(
         }
         .fold(
             onFailure = { LoginResult.Error(errorMessage = null) },
-            onSuccess = {
-                when (it) {
-                    is CaptchaRequired -> LoginResult.CaptchaRequired(it.captchaKey)
+            onSuccess = { loginResponse ->
+                when (loginResponse) {
+                    is CaptchaRequired -> LoginResult.CaptchaRequired(loginResponse.captchaKey)
                     is Success -> {
-                        authDiskSource.userState = it
-                            .toUserState(
-                                previousUserState = authDiskSource.userState,
-                                environmentUrlData = environmentRepository
-                                    .environment
-                                    .environmentUrlData,
-                            )
-                            .also { userState ->
-                                authDiskSource.storeUserKey(
-                                    userId = userState.activeUserId,
-                                    userKey = it.key,
-                                )
-                                authDiskSource.storePrivateKey(
-                                    userId = userState.activeUserId,
-                                    privateKey = it.privateKey,
-                                )
-                            }
-                        vaultRepository.unlockVaultAndSync(masterPassword = password)
+                        val userStateJson = loginResponse.toUserState(
+                            previousUserState = authDiskSource.userState,
+                            environmentUrlData = environmentRepository
+                                .environment
+                                .environmentUrlData,
+                        )
+                        vaultRepository.unlockVault(
+                            email = userStateJson.activeAccount.profile.email,
+                            kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                            userKey = loginResponse.key,
+                            privateKey = loginResponse.privateKey,
+                            // TODO use actual organization keys BIT-1091
+                            organizationalKeys = emptyMap(),
+                            masterPassword = password,
+                        )
+                        authDiskSource.userState = userStateJson
+                        authDiskSource.storeUserKey(
+                            userId = userStateJson.activeUserId,
+                            userKey = loginResponse.key,
+                        )
+                        authDiskSource.storePrivateKey(
+                            userId = userStateJson.activeUserId,
+                            privateKey = loginResponse.privateKey,
+                        )
+                        vaultRepository.sync()
                         LoginResult.Success
                     }
 
                     is GetTokenResponseJson.Invalid -> {
-                        LoginResult.Error(errorMessage = it.errorModel.errorMessage)
+                        LoginResult.Error(errorMessage = loginResponse.errorModel.errorMessage)
                     }
                 }
             },
