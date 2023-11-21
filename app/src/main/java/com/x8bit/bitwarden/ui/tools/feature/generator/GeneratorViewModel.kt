@@ -104,20 +104,23 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is Password -> {
-                val options = generatorRepository.getPasswordGenerationOptions() ?: return
-                updateGeneratorMainType {
-                    Passcode(
-                        selectedType = Password(
-                            length = options.length,
-                            useCapitals = options.hasUppercase,
-                            useLowercase = options.hasLowercase,
-                            useNumbers = options.hasNumbers,
-                            useSpecialChars = options.allowSpecial,
-                            minNumbers = options.minNumber,
-                            minSpecial = options.minSpecial,
-                            avoidAmbiguousChars = options.allowAmbiguousChar,
-                        ),
+                val options = generatorRepository.getPasswordGenerationOptions()
+                val password = if (options != null) {
+                    Password(
+                        length = options.length,
+                        useCapitals = options.hasUppercase,
+                        useLowercase = options.hasLowercase,
+                        useNumbers = options.hasNumbers,
+                        useSpecialChars = options.allowSpecial,
+                        minNumbers = options.minNumber,
+                        minSpecial = options.minSpecial,
+                        avoidAmbiguousChars = options.allowAmbiguousChar,
                     )
+                } else {
+                    Password()
+                }
+                updateGeneratorMainType {
+                    Passcode(selectedType = password)
                 }
             }
         }
