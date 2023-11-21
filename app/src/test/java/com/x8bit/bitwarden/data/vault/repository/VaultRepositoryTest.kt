@@ -74,12 +74,26 @@ class VaultRepositoryTest {
 
             vaultRepository.sync()
 
+            val updatedUserState = MOCK_USER_STATE
+                .copy(
+                    accounts = mapOf(
+                        "mockId-1" to MOCK_ACCOUNT.copy(
+                            profile = MOCK_PROFILE.copy(
+                                avatarColorHex = "mockAvatarColor-1",
+                                stamp = "mockSecurityStamp-1",
+                            ),
+                        ),
+                    ),
+                )
+            fakeAuthDiskSource.assertUserState(
+                userState = updatedUserState,
+            )
             fakeAuthDiskSource.assertUserKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 userKey = "mockKey-1",
             )
             fakeAuthDiskSource.assertPrivateKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 privateKey = "mockPrivateKey-1",
             )
             assertEquals(
@@ -462,11 +476,11 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
             fakeAuthDiskSource.storePrivateKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 privateKey = "mockPrivateKey-1",
             )
             fakeAuthDiskSource.storeUserKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 userKey = "mockKey-1",
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -507,11 +521,11 @@ class VaultRepositoryTest {
             vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
         } returns listOf(createMockSendView(number = 1)).asSuccess()
         fakeAuthDiskSource.storePrivateKey(
-            userId = "mockUserId",
+            userId = "mockId-1",
             privateKey = "mockPrivateKey-1",
         )
         fakeAuthDiskSource.storeUserKey(
-            userId = "mockUserId",
+            userId = "mockId-1",
             userKey = "mockKey-1",
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -551,11 +565,11 @@ class VaultRepositoryTest {
             vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
         } returns listOf(createMockFolderView(number = 1)).asSuccess()
         fakeAuthDiskSource.storePrivateKey(
-            userId = "mockUserId",
+            userId = "mockId-1",
             privateKey = "mockPrivateKey-1",
         )
         fakeAuthDiskSource.storeUserKey(
-            userId = "mockUserId",
+            userId = "mockId-1",
             userKey = "mockKey-1",
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -598,11 +612,11 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns mockk()
             fakeAuthDiskSource.storePrivateKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 privateKey = "mockPrivateKey-1",
             )
             fakeAuthDiskSource.storeUserKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 userKey = "mockKey-1",
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -639,11 +653,11 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns mockk()
             fakeAuthDiskSource.storePrivateKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 privateKey = "mockPrivateKey-1",
             )
             fakeAuthDiskSource.storeUserKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 userKey = "mockKey-1",
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -685,11 +699,11 @@ class VaultRepositoryTest {
         runTest {
             val result = vaultRepository.unlockVaultAndSync(masterPassword = "")
             fakeAuthDiskSource.storeUserKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 userKey = null,
             )
             fakeAuthDiskSource.storePrivateKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 privateKey = "mockPrivateKey-1",
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -704,11 +718,11 @@ class VaultRepositoryTest {
         runTest {
             val result = vaultRepository.unlockVaultAndSync(masterPassword = "")
             fakeAuthDiskSource.storeUserKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 userKey = "mockKey-1",
             )
             fakeAuthDiskSource.storePrivateKey(
-                userId = "mockUserId",
+                userId = "mockId-1",
                 privateKey = null,
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -1014,33 +1028,37 @@ class VaultRepositoryTest {
         }
 }
 
+private val MOCK_PROFILE = AccountJson.Profile(
+    userId = "mockId-1",
+    email = "email",
+    isEmailVerified = true,
+    name = null,
+    stamp = null,
+    organizationId = null,
+    avatarColorHex = null,
+    hasPremium = true,
+    forcePasswordResetReason = null,
+    kdfType = null,
+    kdfIterations = null,
+    kdfMemory = null,
+    kdfParallelism = null,
+    userDecryptionOptions = null,
+)
+
+private val MOCK_ACCOUNT = AccountJson(
+    profile = MOCK_PROFILE,
+    tokens = AccountJson.Tokens(
+        accessToken = "accessToken",
+        refreshToken = "refreshToken",
+    ),
+    settings = AccountJson.Settings(
+        environmentUrlData = null,
+    ),
+)
+
 private val MOCK_USER_STATE = UserStateJson(
-    activeUserId = "mockUserId",
+    activeUserId = "mockId-1",
     accounts = mapOf(
-        "mockUserId" to AccountJson(
-            profile = AccountJson.Profile(
-                userId = "activeUserId",
-                email = "email",
-                isEmailVerified = true,
-                name = null,
-                stamp = null,
-                organizationId = null,
-                avatarColorHex = null,
-                hasPremium = true,
-                forcePasswordResetReason = null,
-                kdfType = null,
-                kdfIterations = null,
-                kdfMemory = null,
-                kdfParallelism = null,
-                userDecryptionOptions = null,
-            ),
-            tokens = AccountJson.Tokens(
-                accessToken = "accessToken",
-                refreshToken = "refreshToken",
-            ),
-            settings = AccountJson.Settings(
-                environmentUrlData = null,
-            ),
-        ),
+        "mockId-1" to MOCK_ACCOUNT,
     ),
 )

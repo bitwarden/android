@@ -42,6 +42,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedPrivateKeys = mutableMapOf<String, String?>()
 
     /**
+     * Assert that the given [userState] matches the currently tracked value.
+     */
+    fun assertUserState(userState: UserStateJson) {
+        assertEquals(userState, this.userState)
+    }
+
+    /**
      * Assert that the [userKey] was stored successfully using the [userId].
      */
     fun assertUserKey(userId: String, userKey: String?) {
