@@ -407,13 +407,6 @@ sealed class VaultEvent {
     data object NavigateToAddItemScreen : VaultEvent()
 
     /**
-     * Navigate to the Vault Item screen.
-     */
-    data class NavigateToItemScreen(
-        val vaultItemId: String,
-    ) : VaultEvent()
-
-    /**
      * Navigate to the item details screen.
      */
     data class NavigateToVaultItem(

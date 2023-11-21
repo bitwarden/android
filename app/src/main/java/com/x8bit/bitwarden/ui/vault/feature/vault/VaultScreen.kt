@@ -53,8 +53,6 @@ fun VaultScreen(
         when (event) {
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
 
-            is VaultEvent.NavigateToItemScreen -> onNavigateToVaultItemScreen(event.vaultItemId)
-
             VaultEvent.NavigateToVaultSearchScreen -> {
                 // TODO Create vault search screen and navigation implementation BIT-213
                 Toast
@@ -62,11 +60,7 @@ fun VaultScreen(
                     .show()
             }
 
-            is VaultEvent.NavigateToVaultItem -> {
-                Toast
-                    .makeText(context, "Navigate to the item details screen", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            is VaultEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.itemId)
 
             VaultEvent.NavigateToCardGroup -> {
                 Toast

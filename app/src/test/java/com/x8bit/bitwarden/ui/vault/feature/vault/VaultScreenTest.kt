@@ -118,8 +118,8 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToItemScreen event should call onNavigateToVaultItemScreenCalled`() {
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemScreen(vaultItemId = "id"))
+    fun `NavigateToVaultItem event should call onNavigateToVaultItemScreenCalled`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = "id"))
         assertTrue(onNavigateToVaultItemScreenCalled)
     }
 
