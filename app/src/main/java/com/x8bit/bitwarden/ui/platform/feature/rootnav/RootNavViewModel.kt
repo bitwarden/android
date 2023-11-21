@@ -1,10 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -20,44 +19,33 @@ private const val KEY_NAV_DESTINATION = "nav_state"
  */
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val savedStateHandle: SavedStateHandle,
+    authRepository: AuthRepository,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
-
-    private var savedRootNavState: RootNavState?
-        get() = savedStateHandle[KEY_NAV_DESTINATION]
-        set(value) {
-            savedStateHandle[KEY_NAV_DESTINATION] = value
-        }
-
     init {
-        savedRootNavState?.let { savedState: RootNavState ->
-            mutableStateFlow.update { savedState }
-        }
-        // Every time the nav state changes, update saved state handle:
-        stateFlow
-            .onEach { savedRootNavState = it }
-            .launchIn(viewModelScope)
         authRepository
-            .authStateFlow
-            .onEach { trySendAction(RootNavAction.AuthStateUpdated(it)) }
+            .userStateFlow
+            .onEach { sendAction(RootNavAction.Internal.UserStateUpdateReceive(it)) }
             .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: RootNavAction) {
         when (action) {
-            is RootNavAction.AuthStateUpdated -> handleAuthStateUpdated(action)
+            is RootNavAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
         }
     }
 
-    private fun handleAuthStateUpdated(action: RootNavAction.AuthStateUpdated) {
-        when (action.newState) {
-            is AuthState.Authenticated -> mutableStateFlow.update { RootNavState.VaultUnlocked }
-            is AuthState.Unauthenticated -> mutableStateFlow.update { RootNavState.Auth }
-            is AuthState.Uninitialized -> mutableStateFlow.update { RootNavState.Splash }
+    private fun handleUserStateUpdateReceive(
+        action: RootNavAction.Internal.UserStateUpdateReceive,
+    ) {
+        val userState = action.userState
+        val updatedRootNavState = when {
+            userState == null -> RootNavState.Auth
+            userState.activeAccount.isVaultUnlocked -> RootNavState.VaultUnlocked
+            else -> RootNavState.VaultLocked
         }
+        mutableStateFlow.update { updatedRootNavState }
     }
 }
 
@@ -78,6 +66,12 @@ sealed class RootNavState : Parcelable {
     data object Splash : RootNavState()
 
     /**
+     * App should show vault locked nav graph.
+     */
+    @Parcelize
+    data object VaultLocked : RootNavState()
+
+    /**
      * App should show vault unlocked nav graph.
      */
     @Parcelize
@@ -90,7 +84,13 @@ sealed class RootNavState : Parcelable {
 sealed class RootNavAction {
 
     /**
-     * Auth state in the repository layer changed.
+     * Internal ViewModel actions.
      */
-    data class AuthStateUpdated(val newState: AuthState) : RootNavAction()
+    sealed class Internal {
+
+        /**
+         * User state in the repository layer changed.
+         */
+        data class UserStateUpdateReceive(val userState: UserState?) : RootNavAction()
+    }
 }

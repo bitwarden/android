@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -16,6 +18,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -23,6 +26,9 @@ import org.junit.jupiter.api.Test
 class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     private val environmentRepository = FakeEnvironmentRepository()
+    private val authRepository = mockk<AuthRepository>() {
+        every { userStateFlow } returns MutableStateFlow(DEFAULT_USER_STATE)
+    }
     private val vaultRepository = mockk<VaultRepository>()
 
     @Test
@@ -191,17 +197,39 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         vaultRepo: VaultRepository = vaultRepository,
     ): VaultUnlockViewModel = VaultUnlockViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        authRepository = authRepository,
         vaultRepo = vaultRepo,
         environmentRepo = environmentRepo,
     )
 }
 
 private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
-    accountSummaries = emptyList(),
-    avatarColorString = "0000FF",
-    email = "bit@bitwarden.com",
-    initials = "BW",
+    accountSummaries = listOf(
+        AccountSummary(
+            userId = "activeUserId",
+            name = "Active User",
+            email = "active@bitwarden.com",
+            avatarColorHex = "#aa00aa",
+            status = AccountSummary.Status.ACTIVE,
+        ),
+    ),
+    avatarColorString = "#aa00aa",
+    email = "active@bitwarden.com",
+    initials = "AU",
     dialog = null,
     environmentUrl = Environment.Us.label,
     passwordInput = "",
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "Active User",
+            email = "active@bitwarden.com",
+            avatarColorHex = "#aa00aa",
+            isVaultUnlocked = true,
+        ),
+    ),
 )

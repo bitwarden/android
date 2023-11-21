@@ -13,6 +13,9 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestinations
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
@@ -47,12 +50,14 @@ fun RootNavScreen(
     ) {
         splashDestination()
         authGraph(navController)
+        vaultUnlockDestinations()
         vaultUnlockedGraph(navController)
     }
 
     val targetRoute = when (state) {
         RootNavState.Auth -> AUTH_GRAPH_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
+        RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
         RootNavState.VaultUnlocked -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -77,6 +82,7 @@ fun RootNavScreen(
     when (state) {
         RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
         RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
+        RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
         RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(rootNavOptions)
     }
 }

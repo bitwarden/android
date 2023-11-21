@@ -3,9 +3,10 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -16,9 +17,10 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,29 +29,29 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-private const val KEY_STATE = "state"
-
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    authRepository: AuthRepository,
     vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: VaultState(
-        initials = activeAccountSummary.initials,
-        avatarColorString = activeAccountSummary.avatarColorHex,
-        accountSummaries = accountSummaries,
-        viewState = VaultState.ViewState.Loading,
-    ),
+    initialState = run {
+        val userState = requireNotNull(authRepository.userStateFlow.value)
+        val accountSummaries = userState.toAccountSummaries()
+        val activeAccountSummary = userState.toActiveAccountSummary()
+        VaultState(
+            initials = activeAccountSummary.initials,
+            avatarColorString = activeAccountSummary.avatarColorHex,
+            accountSummaries = accountSummaries,
+            viewState = VaultState.ViewState.Loading,
+        )
+    },
 ) {
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
         vaultRepository
             .vaultDataStateFlow
             .onEach { sendAction(VaultAction.Internal.VaultDataReceive(vaultData = it)) }
@@ -66,6 +68,13 @@ class VaultViewModel @Inject constructor(
                 )
             }
         }
+
+        authRepository
+            .userStateFlow
+            .onEach {
+                sendAction(VaultAction.Internal.UserStateUpdateReceive(userState = it))
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultAction) {
@@ -81,6 +90,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
+            is VaultAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
             is VaultAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
     }
@@ -144,6 +154,22 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToVaultItem(action.vaultItem.id))
     }
 
+    private fun handleUserStateUpdateReceive(action: VaultAction.Internal.UserStateUpdateReceive) {
+        // Leave the current data alone if there is no UserState; we are in the process of logging
+        // out.
+        val userState = action.userState ?: return
+
+        mutableStateFlow.update {
+            val accountSummaries = userState.toAccountSummaries()
+            val activeAccountSummary = userState.toActiveAccountSummary()
+            it.copy(
+                initials = activeAccountSummary.initials,
+                avatarColorString = activeAccountSummary.avatarColorHex,
+                accountSummaries = accountSummaries,
+            )
+        }
+    }
+
     private fun handleVaultDataReceive(action: VaultAction.Internal.VaultDataReceive) {
         when (val vaultData = action.vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
@@ -181,34 +207,6 @@ class VaultViewModel @Inject constructor(
     }
     //endregion VaultAction Handlers
 }
-
-// TODO: Get data from repository (BIT-205)
-private val accountSummaries = persistentListOf(
-    AccountSummary(
-        userId = "lockedUserId",
-        name = "Locked User",
-        email = "locked@bitwarden.com",
-        avatarColorHex = "#00aaaa",
-        status = AccountSummary.Status.LOCKED,
-    ),
-    AccountSummary(
-        userId = "activeUserId",
-        name = "Active User",
-        email = "active@bitwarden.com",
-        avatarColorHex = "#aa00aa",
-        status = AccountSummary.Status.ACTIVE,
-    ),
-    AccountSummary(
-        userId = "unlockedUserId",
-        name = "Unlocked User",
-        email = "unlocked@bitwarden.com",
-        avatarColorHex = "#aaaa00",
-        status = AccountSummary.Status.UNLOCKED,
-    ),
-)
-
-private val activeAccountSummary = accountSummaries
-    .first { it.status == AccountSummary.Status.ACTIVE }
 
 /**
  * Represents the overall state for the [VaultScreen].
@@ -540,6 +538,13 @@ sealed class VaultAction {
      * Models actions that the [VaultViewModel] itself might send.
      */
     sealed class Internal : VaultAction() {
+
+        /**
+         * Indicates a change in user state has been received.
+         */
+        data class UserStateUpdateReceive(
+            val userState: UserState?,
+        ) : Internal()
 
         /**
          * Indicates a vault data was received.

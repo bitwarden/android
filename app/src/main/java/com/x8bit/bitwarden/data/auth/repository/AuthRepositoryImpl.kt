@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -33,6 +34,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Singleton
@@ -73,6 +75,22 @@ class AuthRepositoryImpl constructor(
             scope = scope,
             started = SharingStarted.Eagerly,
             initialValue = AuthState.Uninitialized,
+        )
+
+    override val userStateFlow: StateFlow<UserState?> = combine(
+        authDiskSource.userStateFlow,
+        vaultRepository.vaultStateFlow,
+    ) { userStateJson, vaultState ->
+        userStateJson?.toUserState(vaultState = vaultState)
+    }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = authDiskSource
+                .userState
+                ?.toUserState(
+                    vaultState = vaultRepository.vaultStateFlow.value,
+                ),
         )
 
     private val mutableCaptchaTokenFlow =
@@ -132,6 +150,7 @@ class AuthRepositoryImpl constructor(
                                 .environmentUrlData,
                         )
                         vaultRepository.unlockVault(
+                            userId = userStateJson.activeUserId,
                             email = userStateJson.activeAccount.profile.email,
                             kdf = userStateJson.activeAccount.profile.toSdkParams(),
                             userKey = loginResponse.key,

@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -19,8 +20,16 @@ import org.junit.jupiter.api.Test
 
 class VaultViewModelTest : BaseViewModelTest() {
 
+    private val mutableUserStateFlow =
+        MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+
+    private val authRepository: AuthRepository =
+        mockk {
+            every { userStateFlow } returns mutableUserStateFlow
+        }
 
     private val vaultRepository: VaultRepository =
         mockk {
@@ -29,19 +38,54 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `initial state should be correct when not set`() {
+    fun `initial state should be correct`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
 
     @Test
-    fun `initial state should be correct when set`() {
-        val state = DEFAULT_STATE.copy(
-            initials = "WB",
-            avatarColorString = "00FF00",
+    fun `UserState updates with a null value should do nothing`() {
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        mutableUserStateFlow.value = null
+
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `UserState updates with a non-null value update the account information in the state`() {
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                UserState.Account(
+                    userId = "activeUserId",
+                    name = "Other User",
+                    email = "active@bitwarden.com",
+                    avatarColorHex = "#00aaaa",
+                    isVaultUnlocked = true,
+                ),
+            ),
         )
-        val viewModel = createViewModel(state = state)
-        assertEquals(state, viewModel.stateFlow.value)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                avatarColorString = "#00aaaa",
+                initials = "OU",
+                accountSummaries = listOf(
+                    AccountSummary(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        status = AccountSummary.Status.ACTIVE,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -294,23 +338,41 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel(
-        state: VaultState? = DEFAULT_STATE,
-    ): VaultViewModel = VaultViewModel(
-        savedStateHandle = SavedStateHandle().apply { set("state", state) },
-        vaultRepository = vaultRepository,
-    )
+    private fun createViewModel(): VaultViewModel =
+        VaultViewModel(
+            authRepository = authRepository,
+            vaultRepository = vaultRepository,
+        )
 }
 
-private const val DEFAULT_COLOR_STRING: String = "FF0000FF"
-private const val DEFAULE_INITIALS: String = "BW"
 private val DEFAULT_STATE: VaultState =
     createMockVaultState(viewState = VaultState.ViewState.Loading)
 
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "Active User",
+            email = "active@bitwarden.com",
+            avatarColorHex = "#aa00aa",
+            isVaultUnlocked = true,
+        ),
+    ),
+)
+
 private fun createMockVaultState(viewState: VaultState.ViewState): VaultState =
     VaultState(
-        avatarColorString = DEFAULT_COLOR_STRING,
-        initials = DEFAULE_INITIALS,
-        accountSummaries = emptyList(),
+        avatarColorString = "#aa00aa",
+        initials = "AU",
+        accountSummaries = listOf(
+            AccountSummary(
+                userId = "activeUserId",
+                name = "Active User",
+                email = "active@bitwarden.com",
+                avatarColorHex = "#aa00aa",
+                status = AccountSummary.Status.ACTIVE,
+            ),
+        ),
         viewState = viewState,
     )

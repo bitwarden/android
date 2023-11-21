@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -16,6 +17,11 @@ interface AuthRepository {
      * Models the current auth state.
      */
     val authStateFlow: StateFlow<AuthState>
+
+    /**
+     * Emits updates for changes to the [UserState].
+     */
+    val userStateFlow: StateFlow<UserState?>
 
     /**
      * Flow of the current [CaptchaCallbackTokenResult]. Subscribers should listen to the flow

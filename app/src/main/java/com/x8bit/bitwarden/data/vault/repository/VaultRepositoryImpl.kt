@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
@@ -39,6 +40,7 @@ import kotlinx.coroutines.launch
 /**
  * Default implementation of [VaultRepository].
  */
+@Suppress("TooManyFunctions")
 class VaultRepositoryImpl constructor(
     private val syncService: SyncService,
     private val vaultSdkSource: VaultSdkSource,
@@ -55,11 +57,17 @@ class VaultRepositoryImpl constructor(
     private val vaultDataMutableStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
+    private val vaultMutableStateFlow =
+        MutableStateFlow(VaultState(unlockedVaultUserIds = emptySet()))
+
     private val sendDataMutableStateFlow =
         MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>>
         get() = vaultDataMutableStateFlow.asStateFlow()
+
+    override val vaultStateFlow: StateFlow<VaultState>
+        get() = vaultMutableStateFlow.asStateFlow()
 
     override val sendDataStateFlow: StateFlow<DataState<SendData>>
         get() = sendDataMutableStateFlow.asStateFlow()
@@ -157,6 +165,7 @@ class VaultRepositoryImpl constructor(
         val privateKey = authDiskSource.getPrivateKey(userId = userState.activeUserId)
             ?: return VaultUnlockResult.InvalidStateError
         return unlockVault(
+            userId = userState.activeUserId,
             masterPassword = masterPassword,
             email = userState.activeAccount.profile.email,
             kdf = userState.activeAccount.profile.toSdkParams(),
@@ -173,6 +182,7 @@ class VaultRepositoryImpl constructor(
     }
 
     override suspend fun unlockVault(
+        userId: String,
         masterPassword: String,
         email: String,
         kdf: Kdf,
@@ -196,12 +206,30 @@ class VaultRepositoryImpl constructor(
                     )
                     .fold(
                         onFailure = { VaultUnlockResult.GenericError },
-                        onSuccess = { it.toVaultUnlockResult() },
+                        onSuccess = { initializeCryptoResult ->
+                            initializeCryptoResult
+                                .toVaultUnlockResult()
+                                .also {
+                                    if (it is VaultUnlockResult.Success) {
+                                        setVaultToUnlocked(userId = userId)
+                                    }
+                                }
+                        },
                     ),
             )
         }
             .onCompletion { willSyncAfterUnlock = false }
             .first()
+
+    // TODO: This is temporary. Eventually this needs to be based on the presence of various
+    //  user keys but this will likely require SDK updates to support this (BIT-1190).
+    private fun setVaultToUnlocked(userId: String) {
+        vaultMutableStateFlow.update {
+            it.copy(
+                unlockedVaultUserIds = it.unlockedVaultUserIds + userId,
+            )
+        }
+    }
 
     private fun storeUserKeyAndPrivateKey(
         userKey: String?,
