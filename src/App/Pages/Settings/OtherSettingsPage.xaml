@@ -53,6 +53,7 @@
                 Title="{u:I18n AllowScreenCapture}"
                 IsToggled="{Binding IsScreenCaptureAllowed}"
                 IsEnabled="{Binding CanToggleeScreenCaptureAllowed}"
+                IsVisible="{OnPlatform Android=True, iOS=False}"
                 AutomationId="AllowScreenCaptureSwitch"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand" />
