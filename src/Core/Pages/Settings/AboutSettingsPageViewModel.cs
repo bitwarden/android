@@ -5,6 +5,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using CommunityToolkit.Mvvm.Input;
+using Sentry;
 
 namespace Bit.App.Pages
 {
@@ -52,6 +53,42 @@ namespace Bit.App.Pages
 
             CopyAppInfoCommand = CreateDefaultAsyncRelayCommand(
                 () => clipboardService.CopyTextAsync(AppInfo), allowsMultipleExecutions: false);
+
+            ThrowAndCaptureCommand = CreateDefaultAsyncRelayCommand(
+                OnCapturedExceptionClicked, allowsMultipleExecutions: false);
+
+            ThrowUnhandledCommand = CreateDefaultAsyncRelayCommand(
+                () =>
+                {
+#pragma warning disable CS0618 // These are test Crash methods!
+                    SentrySdk.CauseCrash(CrashType.Managed);
+                    return Task.CompletedTask;
+                }, allowsMultipleExecutions: false);
+
+            ThrowBackgroundUnhandledCommand = CreateDefaultAsyncRelayCommand(
+
+                () =>
+                {
+                    SentrySdk.CauseCrash(CrashType.ManagedBackgroundThread);
+                    return Task.CompletedTask;
+                }, allowsMultipleExecutions: false);
+
+            JavaCrashCommand = CreateDefaultAsyncRelayCommand(
+                () =>
+                {
+#if ANDROID
+                    SentrySdk.CauseCrash(CrashType.Java);
+#endif
+                    return Task.CompletedTask;
+                }, allowsMultipleExecutions: false);
+
+            NativeCrashCommand = CreateDefaultAsyncRelayCommand(
+                () =>
+                {
+                    SentrySdk.CauseCrash(CrashType.Native);
+                    return Task.CompletedTask;
+#pragma warning restore CS0618 // Type or member is obsolete
+                }, allowsMultipleExecutions: false);
         }
 
         public bool ShouldSubmitCrashLogs
@@ -84,6 +121,11 @@ namespace Bit.App.Pages
         public ICommand GoToLearnAboutOrgsCommand { get; }
         public ICommand RateTheAppCommand { get; }
         public ICommand CopyAppInfoCommand { get; }
+        public ICommand ThrowAndCaptureCommand { get; }
+        public ICommand ThrowUnhandledCommand { get; }
+        public ICommand ThrowBackgroundUnhandledCommand { get; }
+        public ICommand JavaCrashCommand { get; }
+        public ICommand NativeCrashCommand { get; }
 
         public async Task InitAsync()
         {
@@ -120,6 +162,20 @@ namespace Bit.App.Pages
             {
                 await MainThread.InvokeOnMainThreadAsync(_deviceActionService.RateApp);
             }
+        }
+
+        private Task OnCapturedExceptionClicked()
+        {
+            try
+            {
+                throw new ApplicationException("This exception was thrown and captured manually, without crashing the app.");
+            }
+            catch (Exception ex)
+            {
+                SentrySdk.CaptureException(ex);
+            }
+
+            return Task.CompletedTask;
         }
 
         /// INFO: Left here in case we need to debug push notifications

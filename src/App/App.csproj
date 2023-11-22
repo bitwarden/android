@@ -33,6 +33,24 @@
 		<!--<ForceSimulatorX64ArchitectureInIDE>true</ForceSimulatorX64ArchitectureInIDE>-->
 	</PropertyGroup>
 
+  <!-- Sentry -->
+
+<!--
+  For testing also uploading Debug builds but in general just Release is fine:
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+  -->
+  <PropertyGroup>
+    <!-- TODO Change. Can be set via env var or via command line to msbuild -->
+    <SentryOrg>bruno-garcia</SentryOrg>
+    <SentryProject>playground</SentryProject>
+    <!-- Missing property: Set SENTRY_AUTH_TOKEN env var at build time to upload symbols/sources -->
+
+    <!-- To get line number for release builds for C#, Java/Kotlin and Native (C/C++/Objective-C/Swift) stack traces. -->
+    <SentryUploadSymbols>true</SentryUploadSymbols>
+    <!-- Embeds all sources into the PDBs to get source context in Sentry -->
+    <EmbedAllSources>true</EmbedAllSources>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
     <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
     <UseInterpreter>False</UseInterpreter>
@@ -99,6 +117,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+		<PackageReference Include="Sentry.Maui" Version="4.0.0-beta.1" />
 	</ItemGroup>
 
 	<!--<ItemGroup>

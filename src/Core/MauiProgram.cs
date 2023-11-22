@@ -18,6 +18,9 @@ public static class MauiProgram
             builder.UseMauiApp<Bit.App.App>();
         }
         builder
+            .UseSentry(o => {
+                o.Dsn = "https://e247e6e48f8f482499052a65adaa9f6b@o117736.ingest.sentry.io/4504930623356928";
+            })
             .UseMauiCommunityToolkit()
             .UseMauiCompatibility()
             .UseMauiCameraView()

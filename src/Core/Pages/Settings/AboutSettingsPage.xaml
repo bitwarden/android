@@ -58,6 +58,41 @@
             HorizontalOptions="FillAndExpand" />
         <BoxView StyleClass="box-row-separator" />
 
+        <controls:ExternalLinkItemView
+            Title="{u:I18n ThrowAndCapture}"
+            GoToLinkCommand="{Binding ThrowAndCaptureCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n ThrowUnhandled}"
+            GoToLinkCommand="{Binding ThrowUnhandledCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n ThrowBackgroundUnhandled}"
+            GoToLinkCommand="{Binding ThrowBackgroundUnhandledCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n JavaCrash}"
+            GoToLinkCommand="{Binding JavaCrashCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
+        <controls:ExternalLinkItemView
+            Title="{u:I18n NativeCrash}"
+            GoToLinkCommand="{Binding NativeCrashCommand}"
+            StyleClass="settings-external-link-item"
+            HorizontalOptions="FillAndExpand" />
+        <BoxView StyleClass="box-row-separator" />
+
         <StackLayout
             Padding="16,12"
             Orientation="Horizontal">
@@ -80,5 +115,30 @@
             </controls:IconLabel>
 
         </StackLayout>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Image
+                Source="dotnet_bot.png"
+                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                HeightRequest="200"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Hello, World!"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Welcome to .NET Multi-platform App UI"
+                SemanticProperties.HeadingLevel="Level2"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
     </StackLayout>
 </pages:BaseContentPage>
