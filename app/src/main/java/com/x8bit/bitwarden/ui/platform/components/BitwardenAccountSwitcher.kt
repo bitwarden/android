@@ -29,15 +29,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColorInt
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
+import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
@@ -185,7 +184,7 @@ private fun AccountSummaryItem(
             Icon(
                 painter = painterResource(id = R.drawable.ic_account_initials_container),
                 contentDescription = null,
-                tint = Color(accountSummary.avatarColorHex.toColorInt()),
+                tint = accountSummary.avatarColor,
                 modifier = Modifier.size(40.dp),
             )
 
@@ -194,7 +193,7 @@ private fun AccountSummaryItem(
                 style = MaterialTheme.typography.titleMedium
                     // Do not allow scaling
                     .copy(fontSize = 16.dp.toUnscaledTextUnit()),
-                color = MaterialTheme.colorScheme.surface,
+                color = accountSummary.avatarColor.toSafeOverlayColor(),
                 modifier = Modifier.clearAndSetSemantics { },
             )
         }
