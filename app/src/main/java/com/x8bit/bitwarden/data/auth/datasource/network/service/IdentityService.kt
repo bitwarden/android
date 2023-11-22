@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 
 /**
  * Provides an API for querying identity endpoints.
@@ -19,4 +20,11 @@ interface IdentityService {
         passwordHash: String,
         captchaToken: String?,
     ): Result<GetTokenResponseJson>
+
+    /**
+     * Synchronously makes a request to get refresh the access token.
+     *
+     * @param refreshToken The refresh token needed to obtain a new token.
+     */
+    fun refreshTokenSynchronously(refreshToken: String): Result<RefreshTokenResponseJson>
 }

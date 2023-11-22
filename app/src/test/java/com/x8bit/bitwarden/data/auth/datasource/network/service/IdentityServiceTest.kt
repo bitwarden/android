@@ -5,10 +5,12 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.MasterPasswordPolicyOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -76,11 +78,43 @@ class IdentityServiceTest : BaseServiceTest() {
         assertEquals(Result.success(INVALID_LOGIN), result)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `refreshTokenSynchronously when response is success should return RefreshTokenResponseJson`() {
+        server.enqueue(MockResponse().setResponseCode(200).setBody(REFRESH_TOKEN_JSON))
+        val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
+        assertEquals(REFRESH_TOKEN_BODY.asSuccess(), result)
+    }
+
+    @Test
+    fun `refreshTokenSynchronously when response is an error should return an error`() {
+        server.enqueue(MockResponse().setResponseCode(400))
+        val result = identityService.refreshTokenSynchronously(refreshToken = REFRESH_TOKEN)
+        assertTrue(result.isFailure)
+    }
+
     companion object {
+        private const val REFRESH_TOKEN = "refreshToken"
         private const val EMAIL = "email"
         private const val PASSWORD_HASH = "passwordHash"
     }
 }
+
+private const val REFRESH_TOKEN_JSON = """
+{
+  "access_token": "accessToken",
+  "expires_in": 3600,
+  "refresh_token": "refreshToken",
+  "token_type": "Bearer"
+}
+"""
+
+private val REFRESH_TOKEN_BODY = RefreshTokenResponseJson(
+    accessToken = "accessToken",
+    expiresIn = 3600,
+    refreshToken = "refreshToken",
+    tokenType = "Bearer",
+)
 
 private const val CAPTCHA_BODY_JSON = """
 {
