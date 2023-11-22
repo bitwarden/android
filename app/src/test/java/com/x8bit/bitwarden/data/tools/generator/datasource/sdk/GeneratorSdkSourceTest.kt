@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
+import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.sdk.ClientGenerators
 import io.mockk.coEvery
@@ -40,6 +41,30 @@ class GeneratorSdkSourceTest {
 
         coVerify {
             clientGenerators.password(request)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generatePassphrase should call SDK and return a Result with the generated passphrase`() = runBlocking {
+        val request = PassphraseGeneratorRequest(
+            numWords = 4.toUByte(),
+            wordSeparator = "-",
+            capitalize = true,
+            includeNumber = true,
+        )
+        val expectedResult = "Generated-Passphrase123"
+
+        coEvery {
+            clientGenerators.passphrase(request)
+        } returns expectedResult
+
+        val result = generatorSdkSource.generatePassphrase(request)
+
+        assertEquals(Result.success(expectedResult), result)
+
+        coVerify {
+            clientGenerators.passphrase(request)
         }
     }
 }

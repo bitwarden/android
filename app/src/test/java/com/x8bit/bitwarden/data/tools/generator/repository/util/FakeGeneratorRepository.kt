@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.data.tools.generator.repository.util
 
+import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 
 /**
  * A fake implementation of [GeneratorRepository] for testing purposes.
@@ -13,7 +15,11 @@ class FakeGeneratorRepository : GeneratorRepository {
     private var generatePasswordResult: GeneratedPasswordResult = GeneratedPasswordResult.Success(
         generatedString = "updatedText",
     )
-    private var passwordGenerationOptions: PasswordGenerationOptions? = null
+    private var generatePassphraseResult: GeneratedPassphraseResult =
+        GeneratedPassphraseResult.Success(
+            generatedString = "updatedPassphrase",
+        )
+    private var passcodeGenerationOptions: PasscodeGenerationOptions? = null
 
     override suspend fun generatePassword(
         passwordGeneratorRequest: PasswordGeneratorRequest,
@@ -21,12 +27,18 @@ class FakeGeneratorRepository : GeneratorRepository {
         return generatePasswordResult
     }
 
-    override fun getPasswordGenerationOptions(): PasswordGenerationOptions? {
-        return passwordGenerationOptions
+    override suspend fun generatePassphrase(
+        passphraseGeneratorRequest: PassphraseGeneratorRequest,
+    ): GeneratedPassphraseResult {
+        return generatePassphraseResult
     }
 
-    override fun savePasswordGenerationOptions(options: PasswordGenerationOptions) {
-        passwordGenerationOptions = options
+    override fun getPasscodeGenerationOptions(): PasscodeGenerationOptions? {
+        return passcodeGenerationOptions
+    }
+
+    override fun savePasscodeGenerationOptions(options: PasscodeGenerationOptions) {
+        passcodeGenerationOptions = options
     }
 
     /**
@@ -37,9 +49,9 @@ class FakeGeneratorRepository : GeneratorRepository {
     }
 
     /**
-     * Sets the mock password generation options.
+     * Sets the mock result for the generatePassphrase function.
      */
-    fun setMockGeneratePasswordGenerationOptions(options: PasswordGenerationOptions?) {
-        passwordGenerationOptions = options
+    fun setMockGeneratePassphraseResult(result: GeneratedPassphraseResult) {
+        generatePassphraseResult = result
     }
 }

@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.data.tools.generator.repository
 
+import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import javax.inject.Singleton
 
 /**
@@ -28,13 +30,23 @@ class GeneratorRepositoryImpl constructor(
                 onFailure = { GeneratedPasswordResult.InvalidRequest },
             )
 
-    override fun getPasswordGenerationOptions(): PasswordGenerationOptions? {
+    override suspend fun generatePassphrase(
+        passphraseGeneratorRequest: PassphraseGeneratorRequest,
+    ): GeneratedPassphraseResult =
+        generatorSdkSource
+            .generatePassphrase(passphraseGeneratorRequest)
+            .fold(
+                onSuccess = { GeneratedPassphraseResult.Success(it) },
+                onFailure = { GeneratedPassphraseResult.InvalidRequest },
+            )
+
+    override fun getPasscodeGenerationOptions(): PasscodeGenerationOptions? {
         val userId = authDiskSource.userState?.activeUserId
-        return userId?.let { generatorDiskSource.getPasswordGenerationOptions(it) }
+        return userId?.let { generatorDiskSource.getPasscodeGenerationOptions(it) }
     }
 
-    override fun savePasswordGenerationOptions(options: PasswordGenerationOptions) {
+    override fun savePasscodeGenerationOptions(options: PasscodeGenerationOptions) {
         val userId = authDiskSource.userState?.activeUserId
-        userId?.let { generatorDiskSource.storePasswordGenerationOptions(it, options) }
+        userId?.let { generatorDiskSource.storePasscodeGenerationOptions(it, options) }
     }
 }

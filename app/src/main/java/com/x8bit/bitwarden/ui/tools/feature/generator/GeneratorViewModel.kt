@@ -9,7 +9,7 @@ import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -104,7 +104,7 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is Password -> {
-                val options = generatorRepository.getPasswordGenerationOptions()
+                val options = generatorRepository.getPasscodeGenerationOptions()
                 val password = if (options != null) {
                     Password(
                         length = options.length,
@@ -134,19 +134,39 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun savePasswordOptionsToDisk(password: Password) {
-        val options = PasswordGenerationOptions(
+        val options = generatorRepository
+            .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
+        val newOptions = options.copy(
             length = password.length,
             allowAmbiguousChar = password.avoidAmbiguousChars,
             hasNumbers = password.useNumbers,
             minNumber = password.minNumbers,
             hasUppercase = password.useCapitals,
-            minUppercase = null,
             hasLowercase = password.useLowercase,
-            minLowercase = null,
             allowSpecial = password.useSpecialChars,
             minSpecial = password.minSpecial,
         )
-        generatorRepository.savePasswordGenerationOptions(options)
+        generatorRepository.savePasscodeGenerationOptions(newOptions)
+    }
+
+    private fun generatePasscodeDefaultOptions(): PasscodeGenerationOptions {
+        val defaultPassword = Password()
+        val defaultPassphrase = Passphrase()
+
+        return PasscodeGenerationOptions(
+            length = defaultPassword.length,
+            allowAmbiguousChar = defaultPassword.avoidAmbiguousChars,
+            hasNumbers = defaultPassword.useNumbers,
+            minNumber = defaultPassword.minNumbers,
+            hasUppercase = defaultPassword.useCapitals,
+            hasLowercase = defaultPassword.useLowercase,
+            allowSpecial = defaultPassword.useSpecialChars,
+            minSpecial = defaultPassword.minSpecial,
+            allowCapitalize = defaultPassphrase.capitalize,
+            allowIncludeNumber = defaultPassphrase.includeNumber,
+            wordSeparator = defaultPassphrase.wordSeparator.toString(),
+            numWords = defaultPassphrase.numWords,
+        )
     }
 
     private suspend fun generatePassword(password: Password) {

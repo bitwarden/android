@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -48,7 +48,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val initialState = viewModel.stateFlow.value
 
-            val updatedPasswordOptions = PasswordGenerationOptions(
+            val updatedPasswordOptions = PasscodeGenerationOptions(
                 length = 14,
                 allowAmbiguousChar = false,
                 hasNumbers = true,
@@ -59,6 +59,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 minLowercase = null,
                 allowSpecial = false,
                 minSpecial = 1,
+                allowCapitalize = false,
+                allowIncludeNumber = false,
+                wordSeparator = "-",
+                numWords = 3,
             )
 
             fakeGeneratorRepository.setMockGeneratePasswordResult(
@@ -72,7 +76,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 updatedPasswordOptions,
-                fakeGeneratorRepository.getPasswordGenerationOptions(),
+                fakeGeneratorRepository.getPasscodeGenerationOptions(),
             )
         }
 

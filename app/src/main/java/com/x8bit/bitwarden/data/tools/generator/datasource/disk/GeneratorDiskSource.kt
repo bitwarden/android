@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 
 /**
  * Primary access point for disk information related to generation.
@@ -8,12 +8,12 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerat
 interface GeneratorDiskSource {
 
     /**
-     * Retrieves a user's password generation options using a [userId].
+     * Retrieves a user's passcode generation options using a [userId].
      */
-    fun getPasswordGenerationOptions(userId: String): PasswordGenerationOptions?
+    fun getPasscodeGenerationOptions(userId: String): PasscodeGenerationOptions?
 
     /**
-     * Stores a user's password generation options using a [userId].
+     * Stores a user's passcode generation options using a [userId].
      */
-    fun storePasswordGenerationOptions(userId: String, options: PasswordGenerationOptions?)
+    fun storePasscodeGenerationOptions(userId: String, options: PasscodeGenerationOptions?)
 }
