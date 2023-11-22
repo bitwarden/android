@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.base
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -23,5 +25,22 @@ abstract class BaseComposeTest {
 
     init {
         ShadowLog.stream = System.out
+    }
+
+    /**
+     * Helper for testing a basic Composable function that only requires a Composable environment
+     * with the [BitwardenTheme].
+     */
+    protected fun runTestWithTheme(
+        isDarkTheme: Boolean,
+        test: @Composable () -> Unit,
+    ) {
+        composeTestRule.setContent {
+            BitwardenTheme(
+                darkTheme = isDarkTheme,
+            ) {
+                test()
+            }
+        }
     }
 }

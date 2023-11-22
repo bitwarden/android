@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 
 /**
@@ -48,7 +49,7 @@ fun BitwardenAccountActionItem(
                 fontFamily = FontFamily(Font(R.font.sf_pro)),
                 fontWeight = FontWeight.W400,
             ),
-            color = colorResource(id = R.color.white),
+            color = color.toSafeOverlayColor(),
         )
     }
 }
