@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -17,14 +17,14 @@ class GeneratorDiskSourceImpl(
 ) : BaseDiskSource(sharedPreferences),
     GeneratorDiskSource {
 
-    override fun getPasswordGenerationOptions(userId: String): PasswordGenerationOptions? {
+    override fun getPasscodeGenerationOptions(userId: String): PasscodeGenerationOptions? {
         val key = getPasswordGenerationOptionsKey(userId)
         return getString(key)?.let { json.decodeFromString(it) }
     }
 
-    override fun storePasswordGenerationOptions(
+    override fun storePasscodeGenerationOptions(
         userId: String,
-        options: PasswordGenerationOptions?,
+        options: PasscodeGenerationOptions?,
     ) {
         val key = getPasswordGenerationOptionsKey(userId)
         putString(

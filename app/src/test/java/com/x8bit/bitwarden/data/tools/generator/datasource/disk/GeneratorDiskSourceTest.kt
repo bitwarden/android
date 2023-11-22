@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
@@ -25,9 +25,9 @@ class GeneratorDiskSourceTest {
     )
 
     @Test
-    fun `getPasswordGenerationOptions should return correct options when available`() {
+    fun `getPasscodeGenerationOptions should return correct options when available`() {
         val userId = "user123"
-        val options = PasswordGenerationOptions(
+        val options = PasscodeGenerationOptions(
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -38,29 +38,33 @@ class GeneratorDiskSourceTest {
             minLowercase = null,
             allowSpecial = false,
             minSpecial = 1,
+            allowCapitalize = false,
+            allowIncludeNumber = false,
+            wordSeparator = "-",
+            numWords = 3,
         )
 
         val key = "bwPreferencesStorage_passwordGenerationOptions_$userId"
         fakeSharedPreferences.edit().putString(key, json.encodeToString(options)).apply()
 
-        val result = generatorDiskSource.getPasswordGenerationOptions(userId)
+        val result = generatorDiskSource.getPasscodeGenerationOptions(userId)
 
         assertEquals(options, result)
     }
 
     @Test
-    fun `getPasswordGenerationOptions should return null when options are not available`() {
+    fun `getPasscodeGenerationOptions should return null when options are not available`() {
         val userId = "user123"
 
-        val result = generatorDiskSource.getPasswordGenerationOptions(userId)
+        val result = generatorDiskSource.getPasscodeGenerationOptions(userId)
 
         assertNull(result)
     }
 
     @Test
-    fun `storePasswordGenerationOptions should correctly store options`() {
+    fun `storePasscodeGenerationOptions should correctly store options`() {
         val userId = "user123"
-        val options = PasswordGenerationOptions(
+        val options = PasscodeGenerationOptions(
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -71,11 +75,15 @@ class GeneratorDiskSourceTest {
             minLowercase = null,
             allowSpecial = false,
             minSpecial = 1,
+            allowCapitalize = false,
+            allowIncludeNumber = false,
+            wordSeparator = "-",
+            numWords = 3,
         )
 
         val key = "bwPreferencesStorage_passwordGenerationOptions_$userId"
 
-        generatorDiskSource.storePasswordGenerationOptions(userId, options)
+        generatorDiskSource.storePasscodeGenerationOptions(userId, options)
 
         val storedValue = fakeSharedPreferences.getString(key, null)
         assertNotNull(storedValue)

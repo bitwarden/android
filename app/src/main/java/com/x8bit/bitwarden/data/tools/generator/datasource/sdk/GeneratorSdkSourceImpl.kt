@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
+import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.sdk.ClientGenerators
 
@@ -16,5 +17,11 @@ class GeneratorSdkSourceImpl(
         request: PasswordGeneratorRequest,
     ): Result<String> = runCatching {
         clientGenerator.password(request)
+    }
+
+    override suspend fun generatePassphrase(
+        request: PassphraseGeneratorRequest,
+    ): Result<String> = runCatching {
+        clientGenerator.passphrase(request)
     }
 }

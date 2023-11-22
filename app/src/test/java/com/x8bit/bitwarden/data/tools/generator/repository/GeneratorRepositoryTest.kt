@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.repository
 
+import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -12,8 +13,9 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserD
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.PasswordGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.coEvery
@@ -93,9 +95,49 @@ class GeneratorRepositoryTest {
     }
 
     @Test
-    fun `getPasswordGenerationOptions should return options when available`() = runTest {
+    fun `generatePassphrase should emit Success result with the generated passphrase`() = runTest {
+        val request = PassphraseGeneratorRequest(
+            numWords = 5.toUByte(),
+            capitalize = true,
+            includeNumber = true,
+            wordSeparator = '-'.toString(),
+        )
+        val expectedResult = "Generated-Passphrase-123!"
+        coEvery {
+            generatorSdkSource.generatePassphrase(request)
+        } returns Result.success(expectedResult)
+
+        val result = repository.generatePassphrase(request)
+
+        assertEquals(expectedResult, (result as GeneratedPassphraseResult.Success).generatedString)
+        coVerify { generatorSdkSource.generatePassphrase(request) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generatePassphrase should emit InvalidRequest result when SDK throws exception`() =
+        runTest {
+            val request = PassphraseGeneratorRequest(
+                numWords = 5.toUByte(),
+                capitalize = true,
+                includeNumber = true,
+                wordSeparator = '-'.toString(),
+            )
+            val exception = RuntimeException("An error occurred")
+            coEvery { generatorSdkSource.generatePassphrase(request) } returns Result.failure(
+                exception,
+            )
+
+            val result = repository.generatePassphrase(request)
+
+            assertTrue(result is GeneratedPassphraseResult.InvalidRequest)
+            coVerify { generatorSdkSource.generatePassphrase(request) }
+        }
+
+    @Test
+    fun `getPasscodeGenerationOptions should return options when available`() = runTest {
         val userId = "activeUserId"
-        val expectedOptions = PasswordGenerationOptions(
+        val expectedOptions = PasscodeGenerationOptions(
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -106,47 +148,51 @@ class GeneratorRepositoryTest {
             minLowercase = null,
             allowSpecial = false,
             minSpecial = 1,
+            allowCapitalize = false,
+            allowIncludeNumber = false,
+            wordSeparator = "-",
+            numWords = 3,
         )
 
         coEvery { authDiskSource.userState } returns USER_STATE
 
         coEvery {
-            generatorDiskSource.getPasswordGenerationOptions(userId)
+            generatorDiskSource.getPasscodeGenerationOptions(userId)
         } returns expectedOptions
 
-        val result = repository.getPasswordGenerationOptions()
+        val result = repository.getPasscodeGenerationOptions()
 
         assertEquals(expectedOptions, result)
-        coVerify { generatorDiskSource.getPasswordGenerationOptions(userId) }
+        coVerify { generatorDiskSource.getPasscodeGenerationOptions(userId) }
     }
 
     @Test
-    fun `getPasswordGenerationOptions should return null when there is no active user`() = runTest {
+    fun `getPasscodeGenerationOptions should return null when there is no active user`() = runTest {
         coEvery { authDiskSource.userState } returns null
 
-        val result = repository.getPasswordGenerationOptions()
+        val result = repository.getPasscodeGenerationOptions()
 
         assertNull(result)
-        coVerify(exactly = 0) { generatorDiskSource.getPasswordGenerationOptions(any()) }
+        coVerify(exactly = 0) { generatorDiskSource.getPasscodeGenerationOptions(any()) }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getPasswordGenerationOptions should return null when no data is stored for active user`() = runTest {
+    fun `getPasscodeGenerationOptions should return null when no data is stored for active user`() = runTest {
         val userId = "activeUserId"
         coEvery { authDiskSource.userState } returns USER_STATE
-        coEvery { generatorDiskSource.getPasswordGenerationOptions(userId) } returns null
+        coEvery { generatorDiskSource.getPasscodeGenerationOptions(userId) } returns null
 
-        val result = repository.getPasswordGenerationOptions()
+        val result = repository.getPasscodeGenerationOptions()
 
         assertNull(result)
-        coVerify { generatorDiskSource.getPasswordGenerationOptions(userId) }
+        coVerify { generatorDiskSource.getPasscodeGenerationOptions(userId) }
     }
 
     @Test
-    fun `savePasswordGenerationOptions should store options correctly`() = runTest {
+    fun `savePasscodeGenerationOptions should store options correctly`() = runTest {
         val userId = "activeUserId"
-        val optionsToSave = PasswordGenerationOptions(
+        val optionsToSave = PasscodeGenerationOptions(
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -157,23 +203,27 @@ class GeneratorRepositoryTest {
             minLowercase = null,
             allowSpecial = false,
             minSpecial = 1,
+            allowCapitalize = false,
+            allowIncludeNumber = false,
+            wordSeparator = "-",
+            numWords = 3,
         )
 
         coEvery { authDiskSource.userState } returns USER_STATE
 
         coEvery {
-            generatorDiskSource.storePasswordGenerationOptions(userId, optionsToSave)
+            generatorDiskSource.storePasscodeGenerationOptions(userId, optionsToSave)
         } just Runs
 
-        repository.savePasswordGenerationOptions(optionsToSave)
+        repository.savePasscodeGenerationOptions(optionsToSave)
 
-        coVerify { generatorDiskSource.storePasswordGenerationOptions(userId, optionsToSave) }
+        coVerify { generatorDiskSource.storePasscodeGenerationOptions(userId, optionsToSave) }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `savePasswordGenerationOptions should not store options when there is no active user`() = runTest {
-        val optionsToSave = PasswordGenerationOptions(
+    fun `savePasscodeGenerationOptions should not store options when there is no active user`() = runTest {
+        val optionsToSave = PasscodeGenerationOptions(
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -184,13 +234,17 @@ class GeneratorRepositoryTest {
             minLowercase = null,
             allowSpecial = false,
             minSpecial = 1,
+            allowCapitalize = false,
+            allowIncludeNumber = false,
+            wordSeparator = "-",
+            numWords = 3,
         )
 
         coEvery { authDiskSource.userState } returns null
 
-        repository.savePasswordGenerationOptions(optionsToSave)
+        repository.savePasscodeGenerationOptions(optionsToSave)
 
-        coVerify(exactly = 0) { generatorDiskSource.storePasswordGenerationOptions(any(), any()) }
+        coVerify(exactly = 0) { generatorDiskSource.storePasscodeGenerationOptions(any(), any()) }
     }
 
     private val USER_STATE = UserStateJson(

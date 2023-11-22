@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * A data class representing the configuration options for password generation.
+ * A data class representing the configuration options for both password and passphrase generation.
  *
  * @property length The total length of the generated password.
  * @property allowAmbiguousChar Indicates whether ambiguous characters are allowed in the password.
@@ -16,9 +16,16 @@ import kotlinx.serialization.Serializable
  * @property minLowercase The minimum number of lowercase characters required in the password.
  * @property allowSpecial Indicates whether special characters are allowed in the password.
  * @property minSpecial The minimum number of special characters required in the password.
+ * @property numWords The number of words in the generated passphrase.
+ * @property wordSeparator The character used to separate words in the passphrase.
+ * @property allowCapitalize Indicates whether to use capitals in the passphrase.
+ * @property allowIncludeNumber Indicates whether to include numbers in the passphrase.
  */
 @Serializable
-data class PasswordGenerationOptions(
+data class PasscodeGenerationOptions(
+
+    // Password-specific options
+
     @SerialName("length")
     val length: Int,
 
@@ -35,17 +42,31 @@ data class PasswordGenerationOptions(
     val hasUppercase: Boolean,
 
     @SerialName("minUppercase")
-    val minUppercase: Int?,
+    val minUppercase: Int? = null,
 
     @SerialName("lowercase")
     val hasLowercase: Boolean,
 
     @SerialName("minLowercase")
-    val minLowercase: Int?,
+    val minLowercase: Int? = null,
 
     @SerialName("special")
     val allowSpecial: Boolean,
 
     @SerialName("minSpecial")
     val minSpecial: Int,
+
+    // Passphrase-specific options
+
+    @SerialName("numWords")
+    val numWords: Int,
+
+    @SerialName("wordSeparator")
+    val wordSeparator: String,
+
+    @SerialName("capitalize")
+    val allowCapitalize: Boolean,
+
+    @SerialName("includeNumber")
+    val allowIncludeNumber: Boolean,
 )
