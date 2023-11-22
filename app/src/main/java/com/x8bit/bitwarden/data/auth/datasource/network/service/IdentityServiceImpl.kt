@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
+import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForResult
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
@@ -44,4 +46,14 @@ class IdentityServiceImpl constructor(
                 json = json,
             ) ?: throw throwable
         }
+
+    override fun refreshTokenSynchronously(
+        refreshToken: String,
+    ): Result<RefreshTokenResponseJson> = api
+        .refreshTokenCall(
+            clientId = "mobile",
+            grantType = "refresh_token",
+            refreshToken = refreshToken,
+        )
+        .executeForResult()
 }

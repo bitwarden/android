@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.core
 
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import okhttp3.Request
+import okio.IOException
 import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,9 +50,29 @@ class ResultCall<T>(
         },
     )
 
-    override fun execute(): Response<Result<T>> = throw UnsupportedOperationException(
-        "This call can't be executed synchronously",
-    )
+    /**
+     * Synchronously send the request and return its response as a [Result].
+     */
+    fun executeForResult(): Result<T> = requireNotNull(execute().body())
+
+    @Suppress("ReturnCount", "TooGenericExceptionCaught")
+    override fun execute(): Response<Result<T>> {
+        val response = try {
+            backingCall.execute()
+        } catch (ioException: IOException) {
+            return success(ioException.asFailure())
+        } catch (runtimeException: RuntimeException) {
+            return success(runtimeException.asFailure())
+        }
+
+        return success(
+            if (!response.isSuccessful) {
+                HttpException(response).asFailure()
+            } else {
+                createResult(response.body())
+            },
+        )
+    }
 
     override fun isCanceled(): Boolean = backingCall.isCanceled
 
