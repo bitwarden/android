@@ -492,12 +492,17 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-12
+    runs-on: macos-13
     needs: setup
     env:
       ios_folder_path: src/App/Platforms/iOS
       app_output_name: App
     steps:
+      - name: Set XCode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: 15.0.1
+
       - name: Setup NuGet
         uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
         with:
