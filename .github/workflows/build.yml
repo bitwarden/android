@@ -64,6 +64,7 @@ jobs:
 
   android:
     name: Android
+    if: github.ref == 'refs/heads/master'
     runs-on: windows-2022
     needs: setup
     strategy:
@@ -489,299 +490,305 @@ jobs:
   #         if-no-files-found: error
 
 
-  # ios:
-  #   name: Apple iOS
-  #   runs-on: macos-12
-  #   needs: setup
-  #   steps:
-  #     - name: Setup NuGet
-  #       uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
-  #       with:
-  #         nuget-version: 5.9.0
+  ios:
+    name: Apple iOS
+    runs-on: macos-12
+    needs: setup
+    env:
+      ios_folder_path: src/App/Platforms/iOS
+      app_output_name: App
+    steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
+        with:
+          nuget-version: 6.4.0
+      
+      - name: Set up .NET
+        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        with:
+          dotnet-version: '8.0.x'
+  
+      # This step might be obsolete at some point as .NET MAUI workloads 
+      # are starting to come pre-installed on the GH Actions build agents.
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
 
-  #     - name: Print environment
-  #       run: |
-  #         nuget help | grep Version
-  #         msbuild -version
-  #         dotnet --info
-  #         echo "GitHub ref: $GITHUB_REF"
-  #         echo "GitHub event: $GITHUB_EVENT"
+      - name: Print environment
+        run: |
+          nuget help | grep Version
+          dotnet --info
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
 
-  #     - name: Checkout repo
-  #       uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
-  #       with:
-  #         submodules: 'true'
+      - name: Checkout repo
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+        with:
+          submodules: 'true'
 
-  #     - name: Login to Azure - CI Subscription
-  #       uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.6
-  #       with:
-  #         creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.6
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
-  #     - name: Retrieve secrets
-  #       id: retrieve-secrets
-  #       env:
-  #         KEYVAULT: bitwarden-ci
-  #         SECRETS: |
-  #           appcenter-ios-token
-  #       run: |
-  #         for i in ${SECRETS//,/ }
-  #         do
-  #           VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
-  #           echo "::add-mask::$VALUE"
-  #           echo "$i=$VALUE" >> $GITHUB_OUTPUT
-  #         done
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        env:
+          KEYVAULT: bitwarden-ci
+          SECRETS: |
+            appcenter-ios-token
+        run: |
+          for i in ${SECRETS//,/ }
+          do
+            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
+            echo "::add-mask::$VALUE"
+            echo "$i=$VALUE" >> $GITHUB_OUTPUT
+          done
 
-  #     - name: Decrypt secrets
-  #       env:
-  #         DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
-  #       run: |
-  #         mkdir -p ~/secrets
+      - name: Decrypt secrets
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+        run: |
+          mkdir -p ~/secrets
 
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/dist_share_extension.mobileprovision \
-  #           ./.github/secrets/dist_share_extension.mobileprovision.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/dist_watch_app.mobileprovision \
-  #           ./.github/secrets/dist_watch_app.mobileprovision.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
-  #           ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
-  #       shell: bash
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_share_extension.mobileprovision \
+            ./.github/secrets/dist_share_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_watch_app.mobileprovision \
+            ./.github/secrets/dist_watch_app.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
+            ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
+        shell: bash
 
-  #     - name: Increment version
-  #       run: |
-  #         BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
+      - name: Increment version
+        run: |
+          BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
-  #         echo "########################################"
-  #         echo "##### Setting CFBundleVersion $BUILD_NUMBER"
-  #         echo "########################################"
+          echo "########################################"
+          echo "##### Setting CFBundleVersion $BUILD_NUMBER"
+          echo "########################################"
 
-  #         perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS/Info.plist
-  #         perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
-  #         perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
-  #         perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
-  #         cd src/watchOS/bitwarden
-  #         agvtool new-version -all  $BUILD_NUMBER
-  #         cd ../../..
-  #       shell: bash
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./${{ env.ios_folder_path }}/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
+          cd src/watchOS/bitwarden
+          agvtool new-version -all  $BUILD_NUMBER
+          cd ../../..
+        shell: bash
 
-  #     - name: Update Entitlements
-  #       run: |
-  #         echo "########################################"
-  #         echo "##### Updating Entitlements"
-  #         echo "########################################"
+      - name: Update Entitlements
+        run: |
+          echo "########################################"
+          echo "##### Updating Entitlements"
+          echo "########################################"
 
-  #         perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>production<\/string>/' ./src/iOS/Entitlements.plist
-  #       shell: bash
+          perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>production<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
+        shell: bash
 
-  #     - name: Set up Keychain
-  #       env:
-  #         KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
-  #         MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
-  #         DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
-  #       run: |
-  #         security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
-  #         security default-keychain -s build.keychain
-  #         security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
-  #         security set-keychain-settings -lut 1200 build.keychain
-  #         security import ~/secrets/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD \
-  #           -T /usr/bin/codesign -T /usr/bin/security
-  #         security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD \
-  #           -T /usr/bin/codesign -T /usr/bin/security
-  #         security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
-  #       shell: bash
+      - name: Set up Keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+          MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
+          DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
+        run: |
+          security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
+          security set-keychain-settings -lut 1200 build.keychain
+          security import ~/secrets/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD \
+            -T /usr/bin/codesign -T /usr/bin/security
+          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD \
+            -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
+        shell: bash
 
-  #     - name: Set up provisioning profiles
-  #       run: |
-  #         AUTOFILL_PROFILE_PATH=$HOME/secrets/dist_autofill.mobileprovision
-  #         BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_bitwarden.mobileprovision
-  #         EXTENSION_PROFILE_PATH=$HOME/secrets/dist_extension.mobileprovision
-  #         SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_share_extension.mobileprovision
-  #         WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_watch_app.mobileprovision
-  #         WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_watch_app_extension.mobileprovision
-  #         PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
+      - name: Set up provisioning profiles
+        run: |
+          AUTOFILL_PROFILE_PATH=$HOME/secrets/dist_autofill.mobileprovision
+          BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_bitwarden.mobileprovision
+          EXTENSION_PROFILE_PATH=$HOME/secrets/dist_extension.mobileprovision
+          SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_share_extension.mobileprovision
+          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_watch_app.mobileprovision
+          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_watch_app_extension.mobileprovision
+          PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
 
-  #         mkdir -p "$PROFILES_DIR_PATH"
+          mkdir -p "$PROFILES_DIR_PATH"
 
-  #         AUTOFILL_UUID=$(grep UUID -A1 -a $AUTOFILL_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
-  #         cp $AUTOFILL_PROFILE_PATH "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
+          AUTOFILL_UUID=$(grep UUID -A1 -a $AUTOFILL_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $AUTOFILL_PROFILE_PATH "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
 
-  #         BITWARDEN_UUID=$(grep UUID -A1 -a $BITWARDEN_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
-  #         cp $BITWARDEN_PROFILE_PATH "$PROFILES_DIR_PATH/$BITWARDEN_UUID.mobileprovision"
+          BITWARDEN_UUID=$(grep UUID -A1 -a $BITWARDEN_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $BITWARDEN_PROFILE_PATH "$PROFILES_DIR_PATH/$BITWARDEN_UUID.mobileprovision"
 
-  #         EXTENSION_UUID=$(grep UUID -A1 -a $EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
-  #         cp $EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$EXTENSION_UUID.mobileprovision"
+          EXTENSION_UUID=$(grep UUID -A1 -a $EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$EXTENSION_UUID.mobileprovision"
 
-  #         SHARE_EXTENSION_UUID=$(grep UUID -A1 -a $SHARE_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
-  #         cp $SHARE_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$SHARE_EXTENSION_UUID.mobileprovision"
+          SHARE_EXTENSION_UUID=$(grep UUID -A1 -a $SHARE_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $SHARE_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$SHARE_EXTENSION_UUID.mobileprovision"
 
-  #         WATCH_APP_UUID=$(grep UUID -A1 -a $WATCH_APP_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
-  #         cp $WATCH_APP_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_UUID.mobileprovision"
+          WATCH_APP_UUID=$(grep UUID -A1 -a $WATCH_APP_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_UUID.mobileprovision"
 
-  #         WATCH_APP_EXTENSION_UUID=$(grep UUID -A1 -a $WATCH_APP_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
-  #         cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
-  #       shell: bash
+          WATCH_APP_EXTENSION_UUID=$(grep UUID -A1 -a $WATCH_APP_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
+        shell: bash
 
-  #     - name: Bulid WatchApp
-  #       run: |
-  #         echo "########################################"
-  #         echo "##### Build WatchApp with Release Configuration"
-  #         echo "########################################"
+      - name: Bulid WatchApp
+        run: |
+          echo "########################################"
+          echo "##### Build WatchApp with Release Configuration"
+          echo "########################################"
 
-  #         xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
+          xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
-  #         echo "########################################"
-  #         echo "##### Done"
-  #         echo "########################################"
-  #       shell: bash
+          echo "########################################"
+          echo "##### Done"
+          echo "########################################"
+        shell: bash
 
-  #     - name: Restore packages
-  #       run: nuget restore
+      - name: Restore packages
+        run: nuget restore
 
-  #     - name: Archive Build for App Store
-  #       run: |
-  #         $configuration = "AppStore";
-  #         $platform = "iPhone";
+      - name: Archive Build for App Store
+        run: |
+          Write-Output "########################################"
+          Write-Output "##### Archive for Release ios-arm64
+          Write-Output "########################################"
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Archive $configuration Configuration for $platform Platform"
-  #         Write-Output "########################################"
-  #         msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" `
-  #           "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
+          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Done"
-  #         Write-Output "########################################"
-  #       shell: pwsh
+          Write-Output "########################################"
+          Write-Output "##### Done"
+          Write-Output "########################################"
+        shell: pwsh
 
-  #     - name: Archive Build for Mobile Automation
-  #       run: |
-  #         $configuration = "Release";
-  #         $platform = "iPhoneSimulator";
+      - name: Archive Build for Mobile Automation
+        run: |
+          Write-Output "########################################"
+          Write-Output "##### Archive Releae for iossimulator-arm64
+          Write-Output "########################################"
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Archive $configuration Configuration for $platform Platform"
-  #         Write-Output "########################################"
-  #         msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" `
-  #           "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
+          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-arm64 /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Done"
-  #         Write-Output "########################################"
-  #         ls ~/Library/Developer/Xcode/Archives
-  #       shell: pwsh
+          Write-Output "########################################"
+          Write-Output "##### Done"
+          Write-Output "########################################"
+          ls ~/Library/Developer/Xcode/Archives
+        shell: pwsh
 
-  #     - name: Export .ipa for App Store
-  #       run: |
-  #         EXPORT_OPTIONS_PATH="./.github/resources/export-options-app-store.plist"
-  #         ARCHIVE_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive"
-  #         EXPORT_PATH="./bitwarden-export"
+      - name: Export .ipa for App Store
+        run: |
+          EXPORT_OPTIONS_PATH="./.github/resources/export-options-app-store.plist"
+          ARCHIVE_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive"
+          EXPORT_PATH="./bitwarden-export"
 
-  #         xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
-  #           -exportOptionsPlist $EXPORT_OPTIONS_PATH
-  #       shell: bash
+          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
+            -exportOptionsPlist $EXPORT_OPTIONS_PATH
+        shell: bash
 
-  #     - name: Export .app for Automation CI
-  #       run: |
-  #         ARCHIVE_PATH="./src/iOS/bin/iPhoneSimulator/Release/BitwardeniOS.app"
-  #         EXPORT_PATH="./bitwarden-export"
+      - name: Export .app for Automation CI
+        run: |
+          ARCHIVE_PATH="./${{ env.main_app_folder_path }}/bin/Release/iossimulator-arm64/publish/${{ env.app_output_name }}.app"
+          EXPORT_PATH="./bitwarden-export"
 
-  #         zip -r -q BitwardeniOS.app.zip $ARCHIVE_PATH
-  #         mv BitwardeniOS.app.zip $EXPORT_PATH
-  #       shell: bash
+          zip -r -q ${{ env.app_output_name }}.app.zip $ARCHIVE_PATH
+          mv ${{ env.app_output_name }}.app.zip $EXPORT_PATH
+        shell: bash
 
-  #     - name: Copy all dSYMs files to upload
-  #       run: |
-  #         ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
-  #         EXPORT_PATH="./bitwarden-export"
+      - name: Copy all dSYMs files to upload
+        run: |
+          ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
+          EXPORT_PATH="./bitwarden-export"
 
-  #         WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
-  #         WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
+          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
+          WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
 
-  #         cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
-  #         mkdir $WATCH_DSYMS_EXPORT_PATH
-  #         cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
-  #       shell: bash
+          cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          mkdir $WATCH_DSYMS_EXPORT_PATH
+          cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
+        shell: bash
 
-  #     - name: Upload App Store .ipa & dSYMs artifacts
-  #       uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
-  #       with:
-  #         name: Bitwarden iOS
-  #         path: |
-  #           ./bitwarden-export/Bitwarden.ipa
-  #           ./bitwarden-export/dSYMs/*.*
-  #         if-no-files-found: error
+      - name: Upload App Store .ipa & dSYMs artifacts
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
+        with:
+          name: Bitwarden iOS
+          path: |
+            ./bitwarden-export/${{ env.app_output_name }}.ipa
+            ./bitwarden-export/dSYMs/*.*
+          if-no-files-found: error
 
-  #     - name: Upload .app file for Automation CI
-  #       uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
-  #       with:
-  #         name: BitwardeniOS.app.zip
-  #         path: ./bitwarden-export/BitwardeniOS.app.zip
-  #         if-no-files-found: error
+      - name: Upload .app file for Automation CI
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
+        with:
+          name: ${{ env.app_output_name }}.app.zip
+          path: ./bitwarden-export/${{ env.app_output_name }}.app.zip
+          if-no-files-found: error
 
-  #     - name: Install AppCenter CLI
-  #       if: |
-  #         (github.ref == 'refs/heads/master'
-  #           && needs.setup.outputs.rc_branch_exists == 0
-  #           && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || github.ref == 'refs/heads/hotfix-rc'
-  #       run: npm install -g appcenter-cli
+      - name: Install AppCenter CLI
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        run: npm install -g appcenter-cli
 
-  #     - name: Upload dSYMs to App Center
-  #       if: |
-  #         (github.ref == 'refs/heads/master'
-  #           && needs.setup.outputs.rc_branch_exists == 0
-  #           && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || github.ref == 'refs/heads/hotfix-rc'
-  #       env:
-  #         APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
-  #       run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
-  #       shell: bash
+      - name: Upload dSYMs to App Center
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        env:
+          APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
+        run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+        shell: bash
 
-  #     - name: Upload Watch dSYMs to Firebase Crashlytics
-  #       if: |
-  #         (github.ref == 'refs/heads/master'
-  #           && needs.setup.outputs.rc_branch_exists == 0
-  #           && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || github.ref == 'refs/heads/hotfix-rc'
-  #       run: |
+      - name: Upload Watch dSYMs to Firebase Crashlytics
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        run: |
 
-  #         echo "########################################"
-  #         echo "##### Uploading Watch dSYMs to Firebase"
-  #         echo "########################################"
+          echo "########################################"
+          echo "##### Uploading Watch dSYMs to Firebase"
+          echo "########################################"
 
-  #         find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
-  #       shell: bash
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
+        shell: bash
 
-  #     - name: Deploy to App Store
-  #       if: |
-  #         (github.ref == 'refs/heads/master'
-  #           && needs.setup.outputs.rc_branch_exists == 0
-  #           && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-  #         || github.ref == 'refs/heads/hotfix-rc'
-  #       env:
-  #         APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
-  #         APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-  #       run: |
-  #         xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
-  #             --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
-  #       shell: bash
+      - name: Deploy to App Store
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        run: |
+          xcrun altool --upload-app --type ios --file "./bitwarden-export/${{ env.app_output_name }}.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+        shell: bash
 
 
   # crowdin-push:
