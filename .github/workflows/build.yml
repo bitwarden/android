@@ -647,6 +647,9 @@ jobs:
           cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
         shell: bash
 
+      - name: Restore packages
+        run: dotnet restore
+
       - name: Bulid WatchApp
         run: |
           echo "########################################"
@@ -659,9 +662,6 @@ jobs:
           echo "##### Done"
           echo "########################################"
         shell: bash
-
-      - name: Restore packages
-        run: nuget restore
 
       - name: Archive Build for App Store
         run: |
