@@ -16,7 +16,7 @@ class LocalDateTimeSerializer : KSerializer<LocalDateTime> {
     private val dateTimeFormatterDeserialization = DateTimeFormatter
         .ofPattern("yyyy-MM-dd'T'HH:mm:ss.[SSSSSSS][SSSSSS][SSSSS][SSSS][SSS][SS][S]'Z'")
     private val dateTimeFormatterSerialization =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'")
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     override val descriptor: SerialDescriptor
         get() = PrimitiveSerialDescriptor(serialName = "LocalDateTime", kind = PrimitiveKind.STRING)
 

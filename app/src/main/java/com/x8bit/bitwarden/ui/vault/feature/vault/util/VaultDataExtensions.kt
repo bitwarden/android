@@ -10,21 +10,22 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
  * Transforms a [CipherView] into a [VaultState.ViewState.VaultItem].
  */
 @Suppress("MagicNumber")
-private fun CipherView.toVaultItem(): VaultState.ViewState.VaultItem =
-    when (type) {
+private fun CipherView.toVaultItemOrNull(): VaultState.ViewState.VaultItem? {
+    val id = this.id ?: return null
+    return when (type) {
         CipherType.LOGIN -> VaultState.ViewState.VaultItem.Login(
-            id = id.toString(),
+            id = id,
             name = name.asText(),
             username = login?.username?.asText(),
         )
 
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
-            id = id.toString(),
+            id = id,
             name = name.asText(),
         )
 
         CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
-            id = id.toString(),
+            id = id,
             name = name.asText(),
             brand = card?.brand?.asText(),
             lastFourDigits = card?.number
@@ -33,11 +34,12 @@ private fun CipherView.toVaultItem(): VaultState.ViewState.VaultItem =
         )
 
         CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
-            id = id.toString(),
+            id = id,
             name = name.asText(),
             firstName = identity?.firstName?.asText(),
         )
     }
+}
 
 /**
  * Transforms [VaultData] into [VaultState.ViewState].
@@ -46,24 +48,28 @@ fun VaultData.toViewState(): VaultState.ViewState =
     if (cipherViewList.isEmpty() && folderViewList.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
+        // Filter out any items with invalid IDs in the unlikely case they exist
+        val filteredCipherViewList = cipherViewList.filterNot { it.id.isNullOrBlank() }
         VaultState.ViewState.Content(
-            loginItemsCount = cipherViewList.count { it.type == CipherType.LOGIN },
-            cardItemsCount = cipherViewList.count { it.type == CipherType.CARD },
-            identityItemsCount = cipherViewList.count { it.type == CipherType.IDENTITY },
-            secureNoteItemsCount = cipherViewList.count { it.type == CipherType.SECURE_NOTE },
+            loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
+            cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },
+            identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },
+            secureNoteItemsCount = filteredCipherViewList
+                .count { it.type == CipherType.SECURE_NOTE },
             favoriteItems = cipherViewList
                 .filter { it.favorite }
-                .map { it.toVaultItem() },
+                .mapNotNull { it.toVaultItemOrNull() },
             folderItems = folderViewList.map { folderView ->
                 VaultState.ViewState.FolderItem(
                     id = folderView.id,
                     name = folderView.name.asText(),
-                    itemCount = cipherViewList.count { folderView.id == it.folderId },
+                    itemCount = cipherViewList
+                        .count { !it.id.isNullOrBlank() && folderView.id == it.folderId },
                 )
             },
             noFolderItems = cipherViewList
                 .filter { it.folderId.isNullOrBlank() }
-                .map { it.toVaultItem() },
+                .mapNotNull { it.toVaultItemOrNull() },
             // TODO need to populate trash item count in BIT-969
             trashItemsCount = 0,
         )
