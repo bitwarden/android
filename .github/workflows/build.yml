@@ -69,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: ["qa"]
+        variant: ["prod", "qa"]
     env:
       android_folder_path: src/App/Platforms/Android
     steps:
@@ -180,8 +180,6 @@ jobs:
           Write-Output "########################################"
           
           dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android
-      #    msbuild "$($env:GITHUB_WORKSPACE + "/src/App/App.csproj")" "/p:Configuration=$configuration"
-
         shell: pwsh
 
       - name: Sign Android Build
