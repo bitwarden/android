@@ -69,7 +69,7 @@ class LocalDateTimeSerializerTest {
             json.parseToJsonElement(
                 """
                 {
-                  "dataAsLocalDateTime": "2023-10-06T17:22:28.4400000Z"
+                  "dataAsLocalDateTime": "2023-10-06T17:22:28.440Z"
                 }
                 """,
             ),

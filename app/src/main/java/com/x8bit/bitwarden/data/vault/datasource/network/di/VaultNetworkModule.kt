@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.vault.datasource.network.di
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
+import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
+import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +18,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object VaultNetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideCiphersService(
+        retrofits: Retrofits,
+    ): CiphersService = CiphersServiceImpl(
+        ciphersApi = retrofits.authenticatedApiRetrofit.create(),
+    )
 
     @Provides
     @Singleton

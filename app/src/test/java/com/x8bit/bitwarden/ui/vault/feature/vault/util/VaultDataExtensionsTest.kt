@@ -54,4 +54,34 @@ class VaultDataExtensionsTest {
             actual,
         )
     }
+
+    @Test
+    fun `toViewState should not transform ciphers with no ID into ViewState items`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(createMockCipherView(number = 1).copy(id = null)),
+            folderViewList = listOf(createMockFolderView(number = 1)),
+        )
+
+        val actual = vaultData.toViewState()
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 0,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = emptyList(),
+                folderItems = listOf(
+                    VaultState.ViewState.FolderItem(
+                        id = "mockId-1",
+                        name = "mockName-1".asText(),
+                        itemCount = 0,
+                    ),
+                ),
+                noFolderItems = emptyList(),
+                trashItemsCount = 0,
+            ),
+            actual,
+        )
+    }
 }
