@@ -35,7 +35,8 @@
 	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
     <CreatePackage>false</CreatePackage>
-    <MtouchExtraArgs>--linkskip=LiteDB --linkskip=CsvHelper --linkskip=Core --linkskip=iOS.Core --linkskip=iOS.Autofill --linkskip=iOS.Extension --linkskip=iOS.ShareExtension --linkskip=App -gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
+	  <MtouchLink>None</MtouchLink>
+    <MtouchExtraArgs>--weak-framework=NewsstandKit.framework/NewsstandKit --linkskip=LiteDB --linkskip=CsvHelper --linkskip=Core --linkskip=iOS.Core --linkskip=iOS.Autofill --linkskip=iOS.Extension --linkskip=iOS.ShareExtension --linkskip=App -gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignProvision>Automatic:AppStore</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
