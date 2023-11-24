@@ -492,7 +492,7 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-13
+    runs-on: macos-13-arm64
     needs: setup
     env:
       ios_folder_path: src/App/Platforms/iOS
@@ -674,7 +674,7 @@ jobs:
           Write-Output "##### Archive for Release ios-arm64
           Write-Output "########################################"
 
-          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true
 
           Write-Output "########################################"
           Write-Output "##### Done"
@@ -687,7 +687,7 @@ jobs:
           Write-Output "##### Archive Releae for iossimulator-arm64
           Write-Output "########################################"
 
-          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-arm64 /p:ArchiveOnBuild=true /p:EnableAssemblyILStripping=false
+          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-arm64 /p:ArchiveOnBuild=true
 
           Write-Output "########################################"
           Write-Output "##### Done"
