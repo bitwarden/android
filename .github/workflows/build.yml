@@ -61,7 +61,8 @@ jobs:
           fi
         shell: bash
 
-
+  # Disabling Android build from this branch to improve testing
+  # the iOS build job
   android:
     name: Android
     if: github.ref == 'refs/heads/master'
@@ -489,9 +490,11 @@ jobs:
   #         path: ./bw-fdroid-apk-sha256.txt
   #         if-no-files-found: error
 
-
+  # Disabling iOS build from this branch until fixing publish/build
+  # really long time
   ios:
     name: Apple iOS
+    if: github.ref == 'refs/heads/master'
     runs-on: macos-13
     needs: setup
     env:
