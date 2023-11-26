@@ -61,7 +61,7 @@
         <StackLayout
             Padding="16,12"
             Orientation="Horizontal">
-            <controls:CustomLabel
+            <controls:TruncatedMultilineCustomLabel
                 Text="{Binding AppInfo}"
                 MaxLines="10"
                 StyleClass="box-footer-label"
