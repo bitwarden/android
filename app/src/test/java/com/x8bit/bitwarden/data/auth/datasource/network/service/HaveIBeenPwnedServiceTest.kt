@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.api.HaveIBeenPwnedApi
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -15,14 +16,38 @@ class HaveIBeenPwnedServiceTest : BaseServiceTest() {
     private val service = HaveIBeenPwnedServiceImpl(haveIBeenPwnedApi)
 
     @Test
-    fun `when service returns failure should return failure`() = runTest {
+    fun `getPasswordBreachCount should return failure when service returns failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+        assertTrue(service.getPasswordBreachCount(PWNED_PASSWORD).isFailure)
+    }
+
+    @Test
+    fun `getPasswordBreachCount should return breach count when password is in response`() =
+        runTest {
+            val response = MockResponse().setBody(HIBP_RESPONSE)
+            server.enqueue(response)
+            val result = service.getPasswordBreachCount(PWNED_PASSWORD)
+            assertEquals(36865, result.getOrThrow())
+        }
+
+    @Test
+    fun `getPasswordBreachCount should returns 0 when password is not in response`() = runTest {
+        val response = MockResponse().setBody(HIBP_RESPONSE)
+        server.enqueue(response)
+        val result = service.getPasswordBreachCount("testpassword")
+        assertEquals(0, result.getOrThrow())
+    }
+
+    @Test
+    fun `hasPasswordBeenBreached should return failure when service returns failure`() = runTest {
         val response = MockResponse().setResponseCode(400)
         server.enqueue(response)
         assertTrue(service.hasPasswordBeenBreached(PWNED_PASSWORD).isFailure)
     }
 
     @Test
-    fun `when given password is in response returns true`() = runTest {
+    fun `hasPasswordBeenBreached should return true when password is in response`() = runTest {
         val response = MockResponse().setBody(HIBP_RESPONSE)
         server.enqueue(response)
         val result = service.hasPasswordBeenBreached(PWNED_PASSWORD)
@@ -30,7 +55,7 @@ class HaveIBeenPwnedServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `when given password is not in response returns false`() = runTest {
+    fun `hasPasswordBeenBreached should return false when password is not in response`() = runTest {
         val response = MockResponse().setBody(HIBP_RESPONSE)
         server.enqueue(response)
         val result = service.hasPasswordBeenBreached("testpassword")
