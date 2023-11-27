@@ -53,6 +53,7 @@ fun UserStateJson.toUserState(
                     email = accountJson.profile.email,
                     // TODO Calculate default color (BIT-1191)
                     avatarColorHex = accountJson.profile.avatarColorHex ?: "#00aaaa",
+                    isPremium = accountJson.profile.hasPremium == true,
                     isVaultUnlocked = userId in vaultState.unlockedVaultUserIds,
                 )
             },

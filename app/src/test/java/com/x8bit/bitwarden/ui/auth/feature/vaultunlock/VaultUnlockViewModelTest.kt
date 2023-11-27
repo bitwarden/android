@@ -229,6 +229,7 @@ private val DEFAULT_USER_STATE = UserState(
             name = "Active User",
             email = "active@bitwarden.com",
             avatarColorHex = "#aa00aa",
+            isPremium = true,
             isVaultUnlocked = true,
         ),
     ),

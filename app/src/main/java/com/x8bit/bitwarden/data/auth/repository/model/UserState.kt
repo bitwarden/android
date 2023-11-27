@@ -31,6 +31,7 @@ data class UserState(
      * @property email The user's email address.
      * @property name The user's name (if applicable).
      * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
+     * @property isPremium `true` if the account has a premium membership.
      * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
      */
     data class Account(
@@ -38,6 +39,7 @@ data class UserState(
         val name: String?,
         val email: String,
         val avatarColorHex: String,
+        val isPremium: Boolean,
         val isVaultUnlocked: Boolean,
     )
 }
