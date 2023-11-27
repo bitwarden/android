@@ -17,20 +17,20 @@ env:
   target-net-version: net8.0
 
 jobs:
-  cloc:
-    name: CLOC
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+  # cloc:
+  #   name: CLOC
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
-      - name: Set up CLOC
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install cloc
+  #     - name: Set up CLOC
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get -y install cloc
 
-      - name: Print lines of code
-        run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
+  #     - name: Print lines of code
+  #       run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
 
 
   setup:
@@ -290,202 +290,194 @@ jobs:
         shell: bash
 
 
-  # f-droid:
-  #   name: F-Droid Build
-  #   runs-on: windows-2022
-  #   steps:
-  #     - name: Setup NuGet
-  #       uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
-  #       with:
-  #         nuget-version: 5.9.0
+  f-droid:
+    name: F-Droid Build
+    runs-on: windows-2022
+    env:
+      android_folder_path: src/App/Platforms/Android
+      android_manifest_path: src/App/Platforms/Android/AndroidManifest.xml
+    steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
+        with:
+          nuget-version: 6.4.0
 
-  #     - name: Set up MSBuild
-  #       uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
+      - name: Set up .NET
+        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        with:
+          dotnet-version: '8.0.x'
 
-  #     - name: Setup Windows builder
-  #       run: choco install checksum --no-progress
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
 
-  #     - name: Work Around for broken Windows 2022 Runner Image
-  #       run: |
-  #         Set-Location "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
-  #         $InstallPath = "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
-  #         $componentsToAdd = @(
-  #           "Component.Xamarin"
-  #         )
-  #         [string]$workloadArgs = $componentsToAdd | ForEach-Object {" --add " +  $_}
-  #         $Arguments = ('/c', "vs_installer.exe", 'modify', '--installPath', "`"$InstallPath`"",$workloadArgs, '--quiet', '--norestart', '--nocache')
-  #         $process = Start-Process -FilePath cmd.exe -ArgumentList $Arguments -Wait -PassThru -WindowStyle Hidden
-  #         if ($process.ExitCode -eq 0)
-  #         {
-  #             Write-Host "components have been successfully added"
-  #         }
-  #         else
-  #         {
-  #             Write-Host "components were not installed"
-  #             exit 1
-  #         }
+      # This step might be obsolete at some point as .NET MAUI workloads 
+      # are starting to come pre-installed on the GH Actions build agents.
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
 
-  #     - name: Print environment
-  #       run: |
-  #         nuget help | grep Version
-  #         msbuild -version
-  #         dotnet --info
-  #         echo "GitHub ref: $GITHUB_REF"
-  #         echo "GitHub event: $GITHUB_EVENT"
+      - name: Setup Windows builder
+        run: choco install checksum --no-progress
 
-  #     - name: Checkout repo
-  #       uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
+      - name: Print environment
+        run: |
+          nuget help | grep Version
+          msbuild -version
+          dotnet --info
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
 
-  #     - name: Decrypt secrets
-  #       env:
-  #         DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
-  #       run: |
-  #         mkdir -p ~/secrets
+      - name: Checkout repo
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3.3.0
 
-  #         gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-  #           --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
-  #       shell: bash
+      - name: Decrypt secrets
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+        run: |
+          mkdir -p ~/secrets
 
-  #     - name: Increment version
-  #       run: |
-  #         BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./${{ env.main_app_folder_path }}/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
+        shell: bash
 
-  #         echo "########################################"
-  #         echo "##### Setting Version Code $BUILD_NUMBER"
-  #         echo "########################################"
+      - name: Increment version
+        run: |
+          BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
 
-  #         sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
-  #           ./src/Android/Properties/AndroidManifest.xml
-  #       shell: bash
+          echo "########################################"
+          echo "##### Setting Version Code $BUILD_NUMBER"
+          echo "########################################"
 
-  #     - name: Clean for F-Droid
-  #       run: |
-  #         $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
-  #         $appPath = $($env:GITHUB_WORKSPACE + "/src/App/App.csproj");
-  #         $corePath = $($env:GITHUB_WORKSPACE + "/src/Core/Core.csproj");
+          sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
+            ./${{ env.android_manifest_path }}
+        shell: bash
 
-  #         $androidManifest = $($env:GITHUB_WORKSPACE + "/src/Android/Properties/AndroidManifest.xml");
+      - name: Clean for F-Droid
+        run: |
+          $appPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
+          $corePath = $($env:GITHUB_WORKSPACE + "/src/Core/Core.csproj");
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Clean Android and App"
-  #         Write-Output "########################################"
+          $androidManifest = $($env:GITHUB_WORKSPACE + "/${{ env.android_manifest_path }}");
 
-  #         msbuild "$($androidPath)" "/t:Clean" "/p:Configuration=FDroid"
-  #         msbuild "$($appPath)" "/t:Clean" "/p:Configuration=FDroid"
+          # Write-Output "########################################"
+          # Write-Output "##### Clean Android and App"
+          # Write-Output "########################################"
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Backup project files"
-  #         Write-Output "########################################"
+          # msbuild "$($androidPath)" "/t:Clean" "/p:Configuration=FDroid"
+          # msbuild "$($appPath)" "/t:Clean" "/p:Configuration=FDroid"
 
-  #         Copy-Item $androidManifest $($androidManifest + ".original");
-  #         Copy-Item $androidPath $($androidPath + ".original");
-  #         Copy-Item $appPath $($appPath + ".original");
+          Write-Output "########################################"
+          Write-Output "##### Backup project files"
+          Write-Output "########################################"
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Cleanup Android Manifest"
-  #         Write-Output "########################################"
+          Copy-Item $androidManifest $($androidManifest + ".original");
+          Copy-Item $appPath $($appPath + ".original");
 
-  #         $xml=New-Object XML;
-  #         $xml.Load($androidManifest);
+          Write-Output "########################################"
+          Write-Output "##### Cleanup Android Manifest"
+          Write-Output "########################################"
 
-  #         $nsAndroid=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
-  #         $nsAndroid.AddNamespace("android", "http://schemas.android.com/apk/res/android");
+          $xml=New-Object XML;
+          $xml.Load($androidManifest);
 
-  #         $xml.Save($androidManifest);
+          $nsAndroid=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
+          $nsAndroid.AddNamespace("android", "http://schemas.android.com/apk/res/android");
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Uninstall from Android.csproj"
-  #         Write-Output "########################################"
+          $xml.Save($androidManifest);
 
-  #         $xml=New-Object XML;
-  #         $xml.Load($androidPath);
+          # Write-Output "########################################"
+          # Write-Output "##### Uninstall from App.csproj"
+          # Write-Output "########################################"
 
-  #         $ns=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
-  #         $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
+          # $xml=New-Object XML;
+          # $xml.Load($appPath);
 
-  #         $firebaseNode=$xml.SelectSingleNode(`
-  #             "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Firebase.Messaging']", $ns);
-  #         $firebaseNode.ParentNode.RemoveChild($firebaseNode);
+          # $ns=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
+          # $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
 
-  #         $daggerNode=$xml.SelectSingleNode(`
-  #             "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Google.Dagger']", $ns);
-  #         $daggerNode.ParentNode.RemoveChild($daggerNode);
+          # $firebaseNode=$xml.SelectSingleNode(`
+          #     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Firebase.Messaging']", $ns);
+          # $firebaseNode.ParentNode.RemoveChild($firebaseNode);
 
-  #         $safetyNetNode=$xml.SelectSingleNode(`
-  #             "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.SafetyNet']", $ns);
-  #         $safetyNetNode.ParentNode.RemoveChild($safetyNetNode);
+          # $daggerNode=$xml.SelectSingleNode(`
+          #     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Google.Dagger']", $ns);
+          # $daggerNode.ParentNode.RemoveChild($daggerNode);
 
-  #         $xml.Save($androidPath);
+          # $safetyNetNode=$xml.SelectSingleNode(`
+          #     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.SafetyNet']", $ns);
+          # $safetyNetNode.ParentNode.RemoveChild($safetyNetNode);
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Uninstall from Core.csproj"
-  #         Write-Output "########################################"
+          # $xml.Save($appPath);
 
-  #         $xml=New-Object XML;
-  #         $xml.Load($corePath);
+          # Write-Output "########################################"
+          # Write-Output "##### Uninstall from Core.csproj"
+          # Write-Output "########################################"
 
-  #         $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
-  #         $appCenterNode.ParentNode.RemoveChild($appCenterNode);
+          # $xml=New-Object XML;
+          # $xml.Load($corePath);
 
-  #         $xml.Save($corePath);
-  #       shell: pwsh
+          # $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
+          # $appCenterNode.ParentNode.RemoveChild($appCenterNode);
 
-  #     - name: Restore packages
-  #       run: nuget restore
+          # $xml.Save($corePath);
+        shell: pwsh
 
-  #     - name: Build for F-Droid
-  #       run: |
-  #         $configuration = "FDroid";
+      - name: Restore packages
+        run: dotnet restore
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Build $configuration Configuration"
-  #         Write-Output "########################################"
+      - name: Build for F-Droid
+        run: |
+          $configuration = "Release";
+          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
 
-  #         msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
-  #       shell: pwsh
+          Write-Output "########################################"
+          Write-Output "##### Build $configuration FDROID
+          Write-Output "########################################"
+          
+          dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android /p:CustomConstants="FDROID"
 
-  #     - name: Sign for F-Droid
-  #       env:
-  #         FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
-  #       run: |
-  #         Write-Output "########################################"
-  #         Write-Output "##### Sign FDroid Configuration"
-  #         Write-Output "########################################"
+        shell: pwsh
 
-  #         msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" `
-  #           "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" `
-  #           "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:FDROID_KEYSTORE_PASSWORD)" `
-  #           "/p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks")" `
-  #           "/p:AndroidSigningStorePass=$($env:FDROID_KEYSTORE_PASSWORD)" "/v:quiet"
+      - name: Sign for F-Droid
+        env:
+          FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
+        run: |
+          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
+          $packageName = "com.x8bit.bitwarden";
 
-  #         Write-Output "########################################"
-  #         Write-Output "##### Copy FDroid apk to project root"
-  #         Write-Output "########################################"
+          Write-Output "########################################"
+          Write-Output "##### Sign FDroid"
+          Write-Output "########################################"
 
-  #         $signedApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/FDroid/com.x8bit.bitwarden-Signed.apk");
-  #         $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden-fdroid.apk");
+          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks") /p:AndroidSigningKeyAlias=bitwarden /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:CustomConstants="FDROID" --no-restore
 
-  #         Copy-Item $signedApkPath $signedApkDestPath
-  #       shell: pwsh
+          Write-Output "########################################"
+          Write-Output "##### Copy FDroid apk to project root"
+          Write-Output "########################################"
 
-  #     - name: Upload F-Droid .apk artifact
-  #       uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
-  #       with:
-  #         name: com.x8bit.bitwarden-fdroid.apk
-  #         path: ./com.x8bit.bitwarden-fdroid.apk
-  #         if-no-files-found: error
+          $signedApkPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk");
+          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden-fdroid.apk");
 
-  #     - name: Create checksum for F-Droid artifact
-  #       run: |
-  #         checksum -f="./com.x8bit.bitwarden-fdroid.apk" `
-  #           -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
+          Copy-Item $signedApkPath $signedApkDestPath
+        shell: pwsh
 
-  #     - name: Upload F-Droid sha file
-  #       uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
-  #       with:
-  #         name: bw-fdroid-apk-sha256.txt
-  #         path: ./bw-fdroid-apk-sha256.txt
-  #         if-no-files-found: error
+      - name: Upload F-Droid .apk artifact
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
+        with:
+          name: com.x8bit.bitwarden-fdroid.apk
+          path: ./com.x8bit.bitwarden-fdroid.apk
+          if-no-files-found: error
+
+      - name: Create checksum for F-Droid artifact
+        run: |
+          checksum -f="./com.x8bit.bitwarden-fdroid.apk" `
+            -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
+
+      - name: Upload F-Droid sha file
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535 # v3.0.0
+        with:
+          name: bw-fdroid-apk-sha256.txt
+          path: ./bw-fdroid-apk-sha256.txt
+          if-no-files-found: error
 
   # Disabling iOS build from this branch until fixing publish/build
   # really long time

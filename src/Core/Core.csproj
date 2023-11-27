@@ -15,31 +15,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
     <CreatePackage>false</CreatePackage>
   </PropertyGroup>
-  <!--<ItemGroup>
-    <None Remove="Resources\eff_long_word_list.txt" />
-    <None Remove="Resources\public_suffix_list.dat" />
-    <None Remove="Microsoft.AppCenter.Crashes" />
-    <None Remove="Services\Logging\" />
-    <None Remove="Attributes\" />
-    <None Remove="MessagePack" />
-    <None Remove="MessagePack.MSBuild.Tasks" />
-    <None Remove="Services\EmailForwarders\" />
-    <None Remove="Resources\Fonts\" />
-    <None Remove="Resources\Fonts\bwi-font.ttf" />
-    <None Remove="Resources\Fonts\MaterialIcons_Regular.ttf" />
-    <None Remove="Resources\Fonts\RobotoMono_Regular.ttf" />
-    <None Remove="Effects\" />
-    <None Remove="Resources\Raw\" />
-    <None Remove="Pages\" />
-    <None Remove="Behaviors\" />
-    <None Remove="Controls\" />
-    <None Remove="Lists\" />
-    <None Remove="Resources\Styles\" />
-    <None Remove="Utilities\AccountManagement\" />
-    <None Remove="Utilities\Automation\" />
-    <None Remove="Utilities\Prompts\" />
-    <None Remove="Resources\Localization\" />
-  </ItemGroup>-->
+	<PropertyGroup>
+    <DefineConstants Condition=" '$(CustomConstants)' != '' ">$(DefineConstants);$(CustomConstants)</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\eff_long_word_list.txt" />
     <EmbeddedResource Include="Resources\public_suffix_list.dat" />
@@ -53,7 +31,6 @@
 	  <PackageReference Include="MessagePack" Version="2.5.124" />
 	  <PackageReference Include="CsvHelper" Version="30.0.1" />
 	  <PackageReference Include="LiteDB" Version="5.0.17" />
-	  <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
 	  <PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
 	  <PackageReference Include="zxcvbn-core" Version="7.0.92" />
 	  <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.5.124">
@@ -70,11 +47,16 @@
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
-	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
 	  <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
 	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
-	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
 	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.7.2.1" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND !$(DefineConstants.Contains(FDROID))">
+	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
+	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
+	</ItemGroup>
+	<ItemGroup Condition="!$(DefineConstants.Contains(FDROID))">
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
 	</ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Logging\" />
@@ -100,81 +82,7 @@
 	  <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 		<MauiFont Include="Resources\Fonts\*" />
 	</ItemGroup>
-	<!--<ItemGroup>
-	  <MauiXaml Update="Pages\Accounts\DeleteAccountPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\EnvironmentPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\HintPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\HomePage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\LockPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\LoginApproveDevicePage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\LoginPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\LoginPasswordlessPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\LoginPasswordlessRequestPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\LoginSsoPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\RegisterPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\RemoveMasterPasswordPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\SetPasswordPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\TwoFactorPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\UpdateTempPasswordPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Accounts\VerificationCodePage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Generator\GeneratorHistoryPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Generator\GeneratorPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Send\SendAddEditPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Send\SendAddOnlyOptionsView.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Send\SendAddOnlyPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Send\SendGroupingsPage\SendGroupingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Send\SendsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\AboutSettingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\AppearanceSettingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\AutofillPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\AutofillSettingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\BlockAutofillUrisPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\ExportVaultPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\ExtensionPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\FolderAddEditPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\FoldersPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\LoginPasswordlessRequestsListPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\OtherSettingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\SecuritySettingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\SettingsPage\SettingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Settings\VaultSettingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\AttachmentsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\CipherAddEditPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\CipherDetailsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\CipherSelectionPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\CiphersPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\CollectionsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\GroupingsPage\GroupingsPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\PasswordHistoryPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\ScanPage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Pages\Vault\SharePage.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\AccountSwitchingOverlay\AccountSwitchingOverlayView.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\AccountViewCell\AccountViewCell.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\AuthenticatorViewCell\AuthenticatorViewCell.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\CipherViewCell\CipherViewCell.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\DateTime\DateTimePicker.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\ExternalLinkItemView.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\IconLabelButton\IconLabelButton.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\PasswordStrengthProgressBar\PasswordStrengthProgressBar.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\SendViewCell\SendViewCell.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\Settings\SettingChooserItemView.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Controls\Settings\SwitchItemView.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\BooleanCustomFieldItemLayout.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\HiddenCustomFieldItemLayout.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\LinkedCustomFieldItemLayout.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Lists\ItemLayouts\CustomFields\TextCustomFieldItemLayout.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\Android.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\Base.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\Black.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\ControlTemplates.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\Dark.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\iOS.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\Light.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\Nord.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\SolarizedDark.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	  <MauiXaml Update="Resources\Styles\Variables.xaml" Condition=" '$(EnableDefaultXamlItems)' == 'true' " />
-	</ItemGroup>-->
-	 <ItemGroup>
+	<ItemGroup>
 		<EmbeddedResource Update="Resources\Localization\AppResources.resx">
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>

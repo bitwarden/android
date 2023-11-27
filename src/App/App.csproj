@@ -29,10 +29,10 @@
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-
-		<!--<ForceSimulatorX64ArchitectureInIDE>true</ForceSimulatorX64ArchitectureInIDE>-->
 	</PropertyGroup>
-
+	<PropertyGroup>
+    <DefineConstants Condition=" '$(CustomConstants)' != '' ">$(DefineConstants);$(CustomConstants)</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
     <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
     <UseInterpreter>False</UseInterpreter>
@@ -87,7 +87,6 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		  <PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
@@ -100,41 +99,6 @@
 		<PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	</ItemGroup>
-
-	<!--<ItemGroup>
-	  <None Remove="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-mdpi\ic_launcher_round.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher_round.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-hdpi\ic_launcher.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-hdpi\ic_launcher_round.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-xhdpi\logo_legacy.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-xhdpi\yubikey.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-xhdpi\logo_white_legacy.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-xxhdpi\logo_legacy.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-xxhdpi\yubikey.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-xxhdpi\logo_white_legacy.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-hdpi\logo_legacy.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-hdpi\yubikey.png" />
-	  <None Remove="Platforms\Android\Resources\drawable-hdpi\logo_white_legacy.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher.png" />
-	  <None Remove="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher_round.png" />
-	  <None Remove="Effects\" />
-	  <None Remove="Resources\" />
-	  <None Remove="Resources\Splash\splash.svg" />
-	  <None Remove="Resources\Splash\" />
-	  <None Remove="Platforms\Android\Accessibility\" />
-	  <None Remove="Platforms\Android\Autofill\" />
-	  <None Remove="Platforms\Android\Push\" />
-	  <None Remove="Platforms\Android\Receivers\" />
-	  <None Remove="Platforms\Android\Services\" />
-	  <None Remove="Platforms\Android\Tiles\" />
-	  <None Remove="Platforms\Android\Utilities\" />
-	  <None Remove="Platforms\Android\google-services.json" />
-	  <None Remove="Platforms\Android\google-services.json.enc" />
-	</ItemGroup>-->
 	<ItemGroup>
 	  <Folder Include="Effects\" />
 	  <Folder Include="Resources\" />
@@ -148,12 +112,17 @@
 	  <Folder Include="Platforms\Android\Tiles\" />
 	  <Folder Include="Platforms\Android\Utilities\" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
-	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
 	  <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
 	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
-	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
 	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.7.2.1" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND !$(DefineConstants.Contains(FDROID))">
+	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
+	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
+	</ItemGroup>
+	<ItemGroup Condition="!$(DefineConstants.Contains(FDROID))">
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
 	</ItemGroup>
 	<ItemGroup>
 	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />

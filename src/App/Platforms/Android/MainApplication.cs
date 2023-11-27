@@ -36,7 +36,7 @@ namespace Bit.Droid
 #endif
     [Register("com.x8bit.bitwarden.MainApplication")]
 #if FDROID
-    public class MainApplication : Application
+    public class MainApplication : MauiApplication
 #else
     public class MainApplication : MauiApplication, ProviderInstaller.IProviderInstallListener
 #endif
