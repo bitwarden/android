@@ -36,16 +36,16 @@ fun BitwardenBasicDialog(
                 )
             },
             title = {
-                Text(
-                    text = visibilityState.title(),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.headlineSmall,
-                )
+                visibilityState.title?.let {
+                    Text(
+                        text = it(),
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                }
             },
             text = {
                 Text(
                     text = visibilityState.message(),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium,
                 )
             },
@@ -84,7 +84,7 @@ sealed class BasicDialogState : Parcelable {
      */
     @Parcelize
     data class Shown(
-        val title: Text,
+        val title: Text?,
         val message: Text,
     ) : BasicDialogState()
 }
