@@ -843,11 +843,11 @@
     <value>कोई दूसरा दो-कदम लॉगइन तरीका इस्तेमाल करें</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>जांच के लिए मेईल भेजने में असमर्थ। फिर से प्रयास करें ।</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent</value>
+    <value>जांच के लिए मेईल भेजा गया है</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -858,23 +858,23 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add new attachment</value>
+    <value>नई अटैचमेंट जोडे</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>अटॅचमेंट्स</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>फाइल डाउनलोड करने में असफल</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>आपका उपकरण इस तरह की फाइल नहीं खोल सकता</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>डाउनलोड कर रहा है...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>इस अटैचमेंट की साईज {0} है. क्या आप निश्चित रूप से उसे अपने उपकरण में डाउनलोड करना चाहते हैं?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -891,8 +891,7 @@
     <value>Cannot read authenticator key.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>अपने कैमरे को QR CODE कि और रखें। स्कैन अपने आप होगा।</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR कोड को स्कैन करें</value>
@@ -913,10 +912,10 @@ Scanning will happen automatically.</value>
     <value>Copy TOTP automatically</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>इस सुविधा का उपयोग करने के लिए प्रीमियम सदस्यता की आवश्यकता होती है।</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>अटैचमेंट डालि गई।</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
     <value>संग्लित वस्तु डिलीट करी गई</value>
