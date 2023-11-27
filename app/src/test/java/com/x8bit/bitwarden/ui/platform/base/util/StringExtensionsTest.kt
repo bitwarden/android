@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -65,6 +66,24 @@ class StringExtensionsTest {
         )
             .forEach { badUri ->
                 assertFalse(badUri.isValidUri())
+            }
+    }
+
+    @Test
+    fun `toHexColorRepresentation should return valid hex color values`() {
+        mapOf(
+            "First" to "#ff90e20b",
+            "Second" to "#ff943060",
+            "Multiple words" to "#ffb9d46a",
+            "1234567890-=!@#$%^&*()_+[]\\;',./{}|:\"<>?" to "#ff171178",
+            "" to "#ff000000",
+            " " to "#ff200000",
+        )
+            .forEach { (input, colorHexOutput) ->
+                assertEquals(
+                    colorHexOutput,
+                    input.toHexColorRepresentation(),
+                )
             }
     }
 }

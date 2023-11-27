@@ -135,7 +135,8 @@ class UserStateJsonExtensionsTest {
                         userId = "activeUserId",
                         name = "activeName",
                         email = "activeEmail",
-                        avatarColorHex = "activeAvatarColorHex",
+                        // This value is calculated from the userId
+                        avatarColorHex = "#ffecbc49",
                         isPremium = true,
                         isVaultUnlocked = false,
                     ),
@@ -149,7 +150,7 @@ class UserStateJsonExtensionsTest {
                             every { userId } returns "activeUserId"
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
-                            every { avatarColorHex } returns "activeAvatarColorHex"
+                            every { avatarColorHex } returns null
                             every { hasPremium } returns true
                         },
                         tokens = mockk(),
