@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.di
 
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
@@ -25,6 +26,7 @@ object PlatformManagerModule {
     @Singleton
     fun provideBitwardenDispatchers(): DispatcherManager = DispatcherManagerImpl()
 
+    @Suppress("LongParameterList")
     @Provides
     @Singleton
     fun provideNetworkConfigManager(
@@ -32,6 +34,7 @@ object PlatformManagerModule {
         authTokenInterceptor: AuthTokenInterceptor,
         environmentRepository: EnvironmentRepository,
         baseUrlInterceptors: BaseUrlInterceptors,
+        refreshAuthenticator: RefreshAuthenticator,
         dispatcherManager: DispatcherManager,
     ): NetworkConfigManager =
         NetworkConfigManagerImpl(
@@ -39,6 +42,7 @@ object PlatformManagerModule {
             authTokenInterceptor = authTokenInterceptor,
             environmentRepository = environmentRepository,
             baseUrlInterceptors = baseUrlInterceptors,
+            refreshAuthenticator = refreshAuthenticator,
             dispatcherManager = dispatcherManager,
         )
 }

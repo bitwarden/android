@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -29,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
+import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -114,12 +116,18 @@ class AuthRepositoryTest {
     @BeforeEach
     fun beforeEach() {
         clearMocks(identityService, accountsService, haveIBeenPwnedService)
-        mockkStatic(GET_TOKEN_RESPONSE_EXTENSIONS_PATH)
+        mockkStatic(
+            GET_TOKEN_RESPONSE_EXTENSIONS_PATH,
+            REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH,
+        )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(GET_TOKEN_RESPONSE_EXTENSIONS_PATH)
+        unmockkStatic(
+            GET_TOKEN_RESPONSE_EXTENSIONS_PATH,
+            REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH,
+        )
     }
 
     @Test
@@ -237,6 +245,54 @@ class AuthRepositoryTest {
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
             accountsService.deleteAccount(hashedMasterPassword)
+        }
+    }
+
+    @Test
+    fun `refreshTokenSynchronously returns failure if not logged in`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = repository.refreshAccessTokenSynchronously(USER_ID_1)
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `refreshTokenSynchronously returns failure and logs out on failure`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+        } returns Throwable("Fail").asFailure()
+
+        assertTrue(repository.refreshAccessTokenSynchronously(USER_ID_1).isFailure)
+
+        coVerify(exactly = 1) {
+            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+        }
+    }
+
+    @Test
+    fun `refreshTokenSynchronously returns success and update user state on success`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+        } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
+        every {
+            REFRESH_TOKEN_RESPONSE_JSON.toUserStateJson(
+                userId = USER_ID_1,
+                previousUserState = SINGLE_USER_STATE_1,
+            )
+        } returns SINGLE_USER_STATE_1
+
+        val result = repository.refreshAccessTokenSynchronously(USER_ID_1)
+
+        assertEquals(REFRESH_TOKEN_RESPONSE_JSON.asSuccess(), result)
+        coVerify(exactly = 1) {
+            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            REFRESH_TOKEN_RESPONSE_JSON.toUserStateJson(
+                userId = USER_ID_1,
+                previousUserState = SINGLE_USER_STATE_1,
+            )
         }
     }
 
@@ -855,6 +911,36 @@ class AuthRepositoryTest {
         }
 
     @Test
+    fun `logout for non-active accounts should leave the active user unchanged`() = runTest {
+        // First populate multiple user accounts and active user is #3
+        val initialUserState = MULTI_USER_STATE_2
+        val finalUserState = initialUserState.copy(
+            accounts = initialUserState.accounts.filter { it.key != USER_ID_2 },
+        )
+        fakeAuthDiskSource.userState = initialUserState
+
+        assertEquals(initialUserState, fakeAuthDiskSource.userState)
+
+        repository.authStateFlow.test {
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN_3), awaitItem())
+
+            repository.logout(USER_ID_2)
+
+            // The auth state does not actually change
+            expectNoEvents()
+            assertEquals(finalUserState, fakeAuthDiskSource.userState)
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_2,
+                privateKey = null,
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_2,
+                userKey = null,
+            )
+        }
+    }
+
+    @Test
     fun `getPasswordStrength should be based on password length`() = runTest {
         // TODO: Replace with SDK call (BIT-964)
         assertEquals(LEVEL_0.asSuccess(), repository.getPasswordStrength(EMAIL, "1"))
@@ -878,11 +964,17 @@ class AuthRepositoryTest {
     companion object {
         private const val GET_TOKEN_RESPONSE_EXTENSIONS_PATH =
             "com.x8bit.bitwarden.data.auth.repository.util.GetTokenResponseExtensionsKt"
+        private const val REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH =
+            "com.x8bit.bitwarden.data.auth.repository.util.RefreshTokenResponseExtensionsKt"
         private const val EMAIL = "test@bitwarden.com"
+        private const val EMAIL_2 = "test2@bitwarden.com"
         private const val PASSWORD = "password"
         private const val PASSWORD_HASH = "passwordHash"
         private const val ACCESS_TOKEN = "accessToken"
         private const val ACCESS_TOKEN_2 = "accessToken2"
+        private const val ACCESS_TOKEN_3 = "accessToken3"
+        private const val REFRESH_TOKEN = "refreshToken"
+        private const val REFRESH_TOKEN_2 = "refreshToken2"
         private const val CAPTCHA_KEY = "captcha"
         private const val DEFAULT_KDF_ITERATIONS = 600000
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"
@@ -890,8 +982,15 @@ class AuthRepositoryTest {
         private const val PRIVATE_KEY = "privateKey"
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
+        private const val USER_ID_3 = "3816ef34-0747-4133-9b7a-ba35d3768a68"
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
+        )
+        private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson(
+            accessToken = ACCESS_TOKEN_2,
+            expiresIn = 3600,
+            refreshToken = REFRESH_TOKEN_2,
+            tokenType = "Bearer",
         )
         private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
             accessToken = ACCESS_TOKEN,
@@ -928,7 +1027,7 @@ class AuthRepositoryTest {
             ),
             tokens = AccountJson.Tokens(
                 accessToken = ACCESS_TOKEN,
-                refreshToken = "refreshToken",
+                refreshToken = REFRESH_TOKEN,
             ),
             settings = AccountJson.Settings(
                 environmentUrlData = null,
@@ -937,7 +1036,7 @@ class AuthRepositoryTest {
         private val ACCOUNT_2 = AccountJson(
             profile = AccountJson.Profile(
                 userId = USER_ID_2,
-                email = "test2@bitwarden.com",
+                email = EMAIL_2,
                 isEmailVerified = true,
                 name = "Bitwarden Tester 2",
                 hasPremium = false,
@@ -953,6 +1052,31 @@ class AuthRepositoryTest {
             ),
             tokens = AccountJson.Tokens(
                 accessToken = ACCESS_TOKEN_2,
+                refreshToken = "refreshToken",
+            ),
+            settings = AccountJson.Settings(
+                environmentUrlData = null,
+            ),
+        )
+        private val ACCOUNT_3 = AccountJson(
+            profile = AccountJson.Profile(
+                userId = USER_ID_3,
+                email = "test3@bitwarden.com",
+                isEmailVerified = true,
+                name = "Bitwarden Tester 3",
+                hasPremium = false,
+                stamp = null,
+                organizationId = null,
+                avatarColorHex = null,
+                forcePasswordResetReason = null,
+                kdfType = KdfTypeJson.PBKDF2_SHA256,
+                kdfIterations = 400000,
+                kdfMemory = null,
+                kdfParallelism = null,
+                userDecryptionOptions = null,
+            ),
+            tokens = AccountJson.Tokens(
+                accessToken = ACCESS_TOKEN_3,
                 refreshToken = "refreshToken",
             ),
             settings = AccountJson.Settings(
@@ -976,6 +1100,14 @@ class AuthRepositoryTest {
             accounts = mapOf(
                 USER_ID_1 to ACCOUNT_1,
                 USER_ID_2 to ACCOUNT_2,
+            ),
+        )
+        private val MULTI_USER_STATE_2 = UserStateJson(
+            activeUserId = USER_ID_3,
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1,
+                USER_ID_2 to ACCOUNT_2,
+                USER_ID_3 to ACCOUNT_3,
             ),
         )
         private val VAULT_STATE = VaultState(

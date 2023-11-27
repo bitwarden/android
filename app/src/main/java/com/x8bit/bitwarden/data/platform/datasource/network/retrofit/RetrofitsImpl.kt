@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
@@ -17,6 +18,7 @@ import retrofit2.Retrofit
 class RetrofitsImpl(
     authTokenInterceptor: AuthTokenInterceptor,
     baseUrlInterceptors: BaseUrlInterceptors,
+    refreshAuthenticator: RefreshAuthenticator,
     json: Json,
 ) : Retrofits {
     //region Authenticated Retrofits
@@ -73,6 +75,7 @@ class RetrofitsImpl(
     private val authenticatedOkHttpClient: OkHttpClient by lazy {
         baseOkHttpClient
             .newBuilder()
+            .authenticator(refreshAuthenticator)
             .addInterceptor(authTokenInterceptor)
             .build()
     }

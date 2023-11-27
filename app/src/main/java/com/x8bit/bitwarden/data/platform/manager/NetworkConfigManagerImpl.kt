@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -18,6 +19,7 @@ class NetworkConfigManagerImpl(
     private val authTokenInterceptor: AuthTokenInterceptor,
     private val environmentRepository: EnvironmentRepository,
     private val baseUrlInterceptors: BaseUrlInterceptors,
+    refreshAuthenticator: RefreshAuthenticator,
     dispatcherManager: DispatcherManager,
 ) : NetworkConfigManager {
 
@@ -41,5 +43,7 @@ class NetworkConfigManagerImpl(
                 baseUrlInterceptors.environment = environment
             }
             .launchIn(scope)
+
+        refreshAuthenticator.authenticatorProvider = authRepository
     }
 }

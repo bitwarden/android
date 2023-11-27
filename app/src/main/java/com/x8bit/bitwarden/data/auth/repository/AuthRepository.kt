@@ -1,18 +1,19 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Provides an API for observing an modifying authentication state.
  */
-interface AuthRepository {
+interface AuthRepository : AuthenticatorProvider {
     /**
      * Models the current auth state.
      */

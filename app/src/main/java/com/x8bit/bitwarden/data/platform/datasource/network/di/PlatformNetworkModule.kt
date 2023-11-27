@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
@@ -38,14 +39,20 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
+    fun providesRefreshAuthenticator(): RefreshAuthenticator = RefreshAuthenticator()
+
+    @Provides
+    @Singleton
     fun provideRetrofits(
         authTokenInterceptor: AuthTokenInterceptor,
         baseUrlInterceptors: BaseUrlInterceptors,
+        refreshAuthenticator: RefreshAuthenticator,
         json: Json,
     ): Retrofits =
         RetrofitsImpl(
             authTokenInterceptor = authTokenInterceptor,
             baseUrlInterceptors = baseUrlInterceptors,
+            refreshAuthenticator = refreshAuthenticator,
             json = json,
         )
 
