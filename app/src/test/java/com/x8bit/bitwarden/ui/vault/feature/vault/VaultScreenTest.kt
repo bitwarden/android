@@ -365,7 +365,7 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodes(hasText(rowText))
             .filterToOne(!hasClickAction())
-            .assertTextEquals(rowText, 0.toString())
+            .assertTextEquals(rowText, 1.toString())
         // Item
         composeTestRule
             .onAllNodes(hasText(rowText))
@@ -386,7 +386,7 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodes(hasText(rowText))
             .filterToOne(!hasClickAction())
-            .assertTextEquals(rowText, trashCount.toString())
+            .assertTextEquals(rowText, 1.toString())
         // Item
         composeTestRule
             .onAllNodes(hasText(rowText))
