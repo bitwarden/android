@@ -5,9 +5,11 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -89,6 +91,10 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.Internal.UpdateGeneratedPasswordResult -> {
                 handleUpdateGeneratedPasswordResult(action)
             }
+
+            is GeneratorAction.Internal.UpdateGeneratedPassphraseResult -> {
+                handleUpdateGeneratedPassphraseResult(action)
+            }
         }
     }
 
@@ -97,28 +103,33 @@ class GeneratorViewModel @Inject constructor(
     //region Generation Handlers
 
     private fun loadPasscodeOptions(selectedType: Passcode) {
+        val options = generatorRepository.getPasscodeGenerationOptions()
+            ?: generatePasscodeDefaultOptions()
+
         when (selectedType.selectedType) {
             is Passphrase -> {
-                mutableStateFlow.update { it.copy(selectedType = selectedType) }
-                // TODO: App should generate passphrases (BIT-653)
+                val passphrase = Passphrase(
+                    numWords = options.numWords,
+                    wordSeparator = options.wordSeparator.toCharArray().first(),
+                    capitalize = options.allowCapitalize,
+                    includeNumber = options.allowIncludeNumber,
+                )
+                updateGeneratorMainType {
+                    Passcode(selectedType = passphrase)
+                }
             }
 
             is Password -> {
-                val options = generatorRepository.getPasscodeGenerationOptions()
-                val password = if (options != null) {
-                    Password(
-                        length = options.length,
-                        useCapitals = options.hasUppercase,
-                        useLowercase = options.hasLowercase,
-                        useNumbers = options.hasNumbers,
-                        useSpecialChars = options.allowSpecial,
-                        minNumbers = options.minNumber,
-                        minSpecial = options.minSpecial,
-                        avoidAmbiguousChars = options.allowAmbiguousChar,
-                    )
-                } else {
-                    Password()
-                }
+                val password = Password(
+                    length = options.length,
+                    useCapitals = options.hasUppercase,
+                    useLowercase = options.hasLowercase,
+                    useNumbers = options.hasNumbers,
+                    useSpecialChars = options.allowSpecial,
+                    minNumbers = options.minNumber,
+                    minSpecial = options.minSpecial,
+                    avoidAmbiguousChars = options.allowAmbiguousChar,
+                )
                 updateGeneratorMainType {
                     Passcode(selectedType = password)
                 }
@@ -145,6 +156,18 @@ class GeneratorViewModel @Inject constructor(
             hasLowercase = password.useLowercase,
             allowSpecial = password.useSpecialChars,
             minSpecial = password.minSpecial,
+        )
+        generatorRepository.savePasscodeGenerationOptions(newOptions)
+    }
+
+    private fun savePassphraseOptionsToDisk(passphrase: Passphrase) {
+        val options = generatorRepository
+            .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
+        val newOptions = options.copy(
+            numWords = passphrase.numWords,
+            wordSeparator = passphrase.wordSeparator.toString(),
+            allowCapitalize = passphrase.capitalize,
+            allowIncludeNumber = passphrase.includeNumber,
         )
         generatorRepository.savePasscodeGenerationOptions(newOptions)
     }
@@ -187,6 +210,18 @@ class GeneratorViewModel @Inject constructor(
         sendAction(GeneratorAction.Internal.UpdateGeneratedPasswordResult(result))
     }
 
+    private suspend fun generatePassphrase(passphrase: Passphrase) {
+        val request = PassphraseGeneratorRequest(
+            numWords = passphrase.numWords.toUByte(),
+            wordSeparator = passphrase.wordSeparator.toString(),
+            capitalize = passphrase.capitalize,
+            includeNumber = passphrase.includeNumber,
+        )
+
+        val result = generatorRepository.generatePassphrase(request)
+        sendAction(GeneratorAction.Internal.UpdateGeneratedPassphraseResult(result))
+    }
+
     //endregion Generation Handlers
 
     //region Generated Field Handlers
@@ -212,6 +247,22 @@ class GeneratorViewModel @Inject constructor(
             }
 
             GeneratedPasswordResult.InvalidRequest -> {
+                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+            }
+        }
+    }
+
+    private fun handleUpdateGeneratedPassphraseResult(
+        action: GeneratorAction.Internal.UpdateGeneratedPassphraseResult,
+    ) {
+        when (val result = action.result) {
+            is GeneratedPassphraseResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(generatedText = result.generatedString)
+                }
+            }
+
+            GeneratedPassphraseResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
@@ -455,7 +506,8 @@ class GeneratorViewModel @Inject constructor(
             when (updatedMainType) {
                 is Passcode -> when (val selectedType = updatedMainType.selectedType) {
                     is Passphrase -> {
-                        // TODO: App should generate passphrases (BIT-653)
+                        savePassphraseOptionsToDisk(selectedType)
+                        generatePassphrase(selectedType)
                     }
 
                     is Password -> {
@@ -1067,6 +1119,13 @@ sealed class GeneratorAction {
          */
         data class UpdateGeneratedPasswordResult(
             val result: GeneratedPasswordResult,
+        ) : Internal()
+
+        /**
+         * Indicates a generated text update is received.
+         */
+        data class UpdateGeneratedPassphraseResult(
+            val result: GeneratedPassphraseResult,
         ) : Internal()
     }
 }

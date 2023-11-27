@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
@@ -100,18 +101,66 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `RegenerateClick for passphrase state should do nothing`() = runTest {
-        val viewModel = GeneratorViewModel(passphraseSavedStateHandle, fakeGeneratorRepository)
+    fun `RegenerateClick action for passphrase state updates generatedText and saves passphrase generation options on successful passphrase generation`() =
+        runTest {
+            val updatedGeneratedPassphrase = "updatedPassphrase"
 
-        fakeGeneratorRepository.setMockGeneratePasswordResult(
-            GeneratedPasswordResult.Success("DifferentPassphrase"),
-        )
+            val viewModel = createViewModel(initialPassphraseState)
+            val initialState = viewModel.stateFlow.value
 
-        viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            val updatedPassphraseOptions = PasscodeGenerationOptions(
+                length = 14,
+                allowAmbiguousChar = false,
+                hasNumbers = true,
+                minNumber = 1,
+                hasUppercase = true,
+                minUppercase = null,
+                hasLowercase = true,
+                minLowercase = null,
+                allowSpecial = false,
+                minSpecial = 1,
+                allowCapitalize = false,
+                allowIncludeNumber = false,
+                wordSeparator = "-",
+                numWords = 3,
+            )
 
-        assertEquals(initialPassphraseState, viewModel.stateFlow.value)
-    }
+            fakeGeneratorRepository.setMockGeneratePassphraseResult(
+                GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
+            )
+
+            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+
+            val expectedState = initialState.copy(generatedText = updatedGeneratedPassphrase)
+            assertEquals(expectedState, viewModel.stateFlow.value)
+
+            assertEquals(
+                updatedPassphraseOptions,
+                fakeGeneratorRepository.getPasscodeGenerationOptions(),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RegenerateClick action for passphrase state sends ShowSnackbar event on passphrase generation failure`() =
+        runTest {
+            val viewModel = createViewModel(initialPassphraseState)
+
+            fakeGeneratorRepository.setMockGeneratePassphraseResult(
+                GeneratedPassphraseResult.InvalidRequest,
+            )
+
+            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `RegenerateClick for username state should do nothing`() = runTest {
@@ -200,8 +249,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `PasscodeTypeOptionSelect PASSPHRASE should switch to PassphraseType`() = runTest {
         val viewModel = createViewModel()
+        val updatedText = "updatedPassphrase"
+
         fakeGeneratorRepository.setMockGeneratePasswordResult(
-            GeneratedPasswordResult.Success("updatedText"),
+            GeneratedPasswordResult.Success(updatedText),
         )
 
         val action = GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
@@ -211,6 +262,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         viewModel.actionChannel.trySend(action)
 
         val expectedState = initialState.copy(
+            generatedText = updatedText,
             selectedType = GeneratorState.MainType.Passcode(
                 selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
             ),
@@ -492,9 +544,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     inner class PassphraseActions {
 
         private val defaultPassphraseState = createPassphraseState()
-        private val passphraseSavedStateHandle =
-            createSavedStateHandleWithState(defaultPassphraseState)
-
         private lateinit var viewModel: GeneratorViewModel
 
         @BeforeEach
@@ -508,6 +557,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @Test
         fun `NumWordsCounterChange should update the numWords property correctly`() =
             runTest {
+                val updatedGeneratedPassphrase = "updatedPassword"
+                fakeGeneratorRepository.setMockGeneratePassphraseResult(
+                    GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
+                )
+
                 val newNumWords = 4
                 viewModel.actionChannel.trySend(
                     GeneratorAction
@@ -521,6 +575,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = defaultPassphraseState.copy(
+                    generatedText = updatedGeneratedPassphrase,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
                             numWords = newNumWords,
@@ -534,6 +589,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @Test
         fun `WordSeparatorTextChange should update wordSeparator correctly to new value`() =
             runTest {
+                val updatedGeneratedPassphrase = "updatedPassword"
+                fakeGeneratorRepository.setMockGeneratePassphraseResult(
+                    GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
+                )
+
                 val newWordSeparatorChar = '_'
 
                 viewModel.actionChannel.trySend(
@@ -547,6 +607,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = defaultPassphraseState.copy(
+                    generatedText = updatedGeneratedPassphrase,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
                             wordSeparator = newWordSeparatorChar,
@@ -560,6 +621,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @Test
         fun `ToggleIncludeNumberChange should update the includeNumber property correctly`() =
             runTest {
+                val updatedGeneratedPassphrase = "updatedPassword"
+                fakeGeneratorRepository.setMockGeneratePassphraseResult(
+                    GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
+                )
+
                 viewModel.actionChannel.trySend(
                     GeneratorAction
                         .MainType
@@ -572,6 +638,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = defaultPassphraseState.copy(
+                    generatedText = updatedGeneratedPassphrase,
                     selectedType = GeneratorState.MainType.Passcode(
                         selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
                             includeNumber = true,
@@ -585,6 +652,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @Test
         fun `ToggleCapitalizeChange should update the capitalize property correctly`() =
             runTest {
+                val updatedGeneratedPassphrase = "updatedPassword"
+                fakeGeneratorRepository.setMockGeneratePassphraseResult(
+                    GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
+                )
+
                 viewModel.actionChannel.trySend(
                     GeneratorAction
                         .MainType
@@ -597,6 +669,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = defaultPassphraseState.copy(
+                    generatedText = updatedGeneratedPassphrase,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
                             capitalize = true,
