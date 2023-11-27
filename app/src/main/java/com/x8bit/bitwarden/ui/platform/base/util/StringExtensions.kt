@@ -54,3 +54,28 @@ fun String.hexToColor(): Color = if (startsWith("#")) {
 } else {
     Color("#$this".toColorInt())
 }
+
+/**
+ * Creates a new [String] that represents a unique color in the hex representation (`"#AARRGGBB"`).
+ * This can be applied to any [String] in order to provide some deterministic color value based on
+ * arbitrary [String] properties.
+ */
+@OptIn(ExperimentalStdlibApi::class)
+@Suppress("MagicNumber")
+fun String.toHexColorRepresentation(): String {
+    // Produces a string with exactly two hexadecimal digits.
+    // Ex:
+    // 0 -> "00"
+    // 10 -> "0a"
+    // 1000 -> "e8"
+    fun Int.toTwoDigitHexString(): String =
+        this.toHexString().takeLast(2)
+
+    // Calculates separate red, blue, and green values from different positions in the hash and then
+    // combines then into a single color.
+    val hash = this.hashCode()
+    val red = (hash and 0x0000FF).toTwoDigitHexString()
+    val green = ((hash and 0x00FF00) shr 8).toTwoDigitHexString()
+    val blue = ((hash and 0xFF0000) shr 16).toTwoDigitHexString()
+    return "#ff$red$green$blue"
+}
