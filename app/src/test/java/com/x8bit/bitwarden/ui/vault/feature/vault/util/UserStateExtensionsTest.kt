@@ -40,6 +40,7 @@ class UserStateExtensionsTest {
                         name = "activeName",
                         email = "activeEmail",
                         avatarColorHex = "activeAvatarColorHex",
+                        isPremium = true,
                         isVaultUnlocked = true,
                     ),
                     UserState.Account(
@@ -47,6 +48,7 @@ class UserStateExtensionsTest {
                         name = "lockedName",
                         email = "lockedEmail",
                         avatarColorHex = "lockedAvatarColorHex",
+                        isPremium = false,
                         isVaultUnlocked = false,
                     ),
                     UserState.Account(
@@ -54,6 +56,7 @@ class UserStateExtensionsTest {
                         name = "unlockedName",
                         email = "unlockedEmail",
                         avatarColorHex = "unlockedAvatarColorHex",
+                        isPremium = true,
                         isVaultUnlocked = true,
                     ),
                 ),
@@ -77,6 +80,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                isPremium = true,
                 isVaultUnlocked = true,
             )
                 .toAccountSummary(isActive = true),
@@ -98,6 +102,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                isPremium = false,
                 isVaultUnlocked = false,
             )
                 .toAccountSummary(isActive = false),
@@ -119,6 +124,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                isPremium = true,
                 isVaultUnlocked = true,
             )
                 .toAccountSummary(isActive = false),
@@ -144,6 +150,7 @@ class UserStateExtensionsTest {
                         name = "name",
                         email = "email",
                         avatarColorHex = "avatarColorHex",
+                        isPremium = true,
                         isVaultUnlocked = true,
                     ),
                 ),

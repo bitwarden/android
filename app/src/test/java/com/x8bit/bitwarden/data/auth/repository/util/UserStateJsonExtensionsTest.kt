@@ -96,6 +96,7 @@ class UserStateJsonExtensionsTest {
                         name = "activeName",
                         email = "activeEmail",
                         avatarColorHex = "activeAvatarColorHex",
+                        isPremium = false,
                         isVaultUnlocked = true,
                     ),
                 ),
@@ -104,11 +105,12 @@ class UserStateJsonExtensionsTest {
                 activeUserId = "activeUserId",
                 accounts = mapOf(
                     "activeUserId" to AccountJson(
-                        profile = mockk() {
+                        profile = mockk {
                             every { userId } returns "activeUserId"
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns "activeAvatarColorHex"
+                            every { hasPremium } returns null
                         },
                         tokens = mockk(),
                         settings = mockk(),
@@ -134,6 +136,7 @@ class UserStateJsonExtensionsTest {
                         name = "activeName",
                         email = "activeEmail",
                         avatarColorHex = "activeAvatarColorHex",
+                        isPremium = true,
                         isVaultUnlocked = false,
                     ),
                 ),
@@ -142,18 +145,18 @@ class UserStateJsonExtensionsTest {
                 activeUserId = "activeUserId",
                 accounts = mapOf(
                     "activeUserId" to AccountJson(
-                        profile = mockk() {
+                        profile = mockk {
                             every { userId } returns "activeUserId"
                             every { name } returns "activeName"
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns "activeAvatarColorHex"
+                            every { hasPremium } returns true
                         },
                         tokens = mockk(),
                         settings = mockk(),
                     ),
                 ),
-
-                )
+            )
                 .toUserState(
                     vaultState = VaultState(
                         unlockedVaultUserIds = emptySet(),
