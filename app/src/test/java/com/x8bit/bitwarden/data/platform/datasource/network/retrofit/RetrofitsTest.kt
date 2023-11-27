@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import io.mockk.every
@@ -8,6 +9,7 @@ import io.mockk.slot
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
+import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -35,12 +37,16 @@ class RetrofitsTest {
             mockIntercept { isEventsInterceptorCalled = true }
         }
     }
+    private val refreshAuthenticator = mockk<RefreshAuthenticator> {
+        mockAuthenticate { isRefreshAuthenticatorCalled = true }
+    }
     private val json = Json
     private val server = MockWebServer()
 
     private val retrofits = RetrofitsImpl(
         authTokenInterceptor = authTokenInterceptor,
         baseUrlInterceptors = baseUrlInterceptors,
+        refreshAuthenticator = refreshAuthenticator,
         json = json,
     )
 
@@ -48,6 +54,7 @@ class RetrofitsTest {
     private var isApiInterceptorCalled = false
     private var isIdentityInterceptorCalled = false
     private var isEventsInterceptorCalled = false
+    private var isRefreshAuthenticatorCalled = false
 
     @Before
     fun setUp() {
@@ -57,6 +64,49 @@ class RetrofitsTest {
     @After
     fun tearDown() {
         server.shutdown()
+    }
+
+    @Test
+    fun `authenticatedApiRetrofit should not invoke the RefreshAuthenticator on success`() =
+        runBlocking {
+            val testApi = retrofits
+                .authenticatedApiRetrofit
+                .createMockRetrofit()
+                .create<TestApi>()
+
+            server.enqueue(MockResponse().setBody("""{}"""))
+
+            testApi.test()
+
+            assertFalse(isRefreshAuthenticatorCalled)
+        }
+
+    @Test
+    fun `authenticatedApiRetrofit should invoke the RefreshAuthenticator on 401`() = runBlocking {
+        val testApi = retrofits
+            .authenticatedApiRetrofit
+            .createMockRetrofit()
+            .create<TestApi>()
+
+        server.enqueue(MockResponse().setResponseCode(401).setBody("""{}"""))
+
+        testApi.test()
+
+        assertTrue(isRefreshAuthenticatorCalled)
+    }
+
+    @Test
+    fun `unauthenticatedApiRetrofit should not invoke the RefreshAuthenticator`() = runBlocking {
+        val testApi = retrofits
+            .unauthenticatedApiRetrofit
+            .createMockRetrofit()
+            .create<TestApi>()
+
+        server.enqueue(MockResponse().setResponseCode(401).setBody("""{}"""))
+
+        testApi.test()
+
+        assertFalse(isRefreshAuthenticatorCalled)
     }
 
     @Test
@@ -138,7 +188,18 @@ class RetrofitsTest {
 
 interface TestApi {
     @GET("/test")
-    suspend fun test(): JsonObject
+    suspend fun test(): Result<JsonObject>
+}
+
+/**
+ * Mocks the given [Authenticator] such that the [Authenticator.authenticate] is a no-op and
+ * returns `null` but triggers the [isCalledCallback].
+ */
+private fun Authenticator.mockAuthenticate(isCalledCallback: () -> Unit) {
+    every { authenticate(any(), any()) } answers {
+        isCalledCallback()
+        null
+    }
 }
 
 /**

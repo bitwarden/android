@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -20,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
+import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -56,12 +58,13 @@ class AuthRepositoryImpl constructor(
 ) : AuthRepository {
     private val scope = CoroutineScope(dispatcherManager.io)
 
+    override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
+
     override val authStateFlow: StateFlow<AuthState> = authDiskSource
         .userStateFlow
         .map { userState ->
             userState
                 ?.let {
-                    @Suppress("UnsafeCallOnNullableType")
                     AuthState.Authenticated(
                         userState
                             .activeAccount
@@ -179,21 +182,42 @@ class AuthRepositoryImpl constructor(
             },
         )
 
-    override fun logout() {
-        val currentUserState = authDiskSource.userState ?: return
+    override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> {
+        val refreshAccount = authDiskSource.userState?.accounts?.get(userId)
+            ?: return IllegalStateException("Must be logged in.").asFailure()
+        return identityService
+            .refreshTokenSynchronously(refreshAccount.tokens.refreshToken)
+            .onSuccess {
+                // Update the existing UserState with updated token information
+                authDiskSource.userState = it.toUserStateJson(
+                    userId = userId,
+                    previousUserState = requireNotNull(authDiskSource.userState),
+                )
+            }
+    }
 
-        val activeUserId = currentUserState.activeUserId
+    override fun logout() {
+        activeUserId?.let { userId -> logout(userId) }
+    }
+
+    override fun logout(userId: String) {
+        val currentUserState = authDiskSource.userState ?: return
 
         // Remove the active user from the accounts map
         val updatedAccounts = currentUserState
             .accounts
-            .filterKeys { it != activeUserId }
-        authDiskSource.storeUserKey(userId = activeUserId, userKey = null)
-        authDiskSource.storePrivateKey(userId = activeUserId, privateKey = null)
+            .filterKeys { it != userId }
+        authDiskSource.storeUserKey(userId = userId, userKey = null)
+        authDiskSource.storePrivateKey(userId = userId, privateKey = null)
         // Check if there is a new active user
         if (updatedAccounts.isNotEmpty()) {
-            val (updatedActiveUserId, updatedActiveAccount) =
-                updatedAccounts.entries.first()
+            // If we logged out a non-active user, we want to leave the active user unchanged.
+            // If we logged out the active user, we want to set the active user to the first one
+            // in the list.
+            val updatedActiveUserId = currentUserState
+                .activeUserId
+                .takeUnless { it == userId }
+                ?: updatedAccounts.entries.first().key
 
             // Update the user information and emit an updated token
             authDiskSource.userState = currentUserState.copy(

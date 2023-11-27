@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
 
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_BEARER_PREFIX
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
@@ -22,7 +24,10 @@ class AuthTokenInterceptor : Interceptor {
         val request = chain
             .request()
             .newBuilder()
-            .addHeader("Authorization", "Bearer $token")
+            .addHeader(
+                name = HEADER_KEY_AUTHORIZATION,
+                value = "$HEADER_VALUE_BEARER_PREFIX$token",
+            )
             .build()
         return chain
             .proceed(request)

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -22,7 +23,7 @@ class NetworkConfigManagerTest {
     private val mutableAuthStateFlow = MutableStateFlow<AuthState>(AuthState.Uninitialized)
     private val mutableEnvironmentStateFlow = MutableStateFlow<Environment>(Environment.Us)
 
-    private val authRepository: AuthRepository = mockk() {
+    private val authRepository: AuthRepository = mockk {
         every { authStateFlow } returns mutableAuthStateFlow
     }
 
@@ -30,6 +31,7 @@ class NetworkConfigManagerTest {
         every { environmentStateFlow } returns mutableEnvironmentStateFlow
     }
 
+    private val refreshAuthenticator = RefreshAuthenticator()
     private val authTokenInterceptor = AuthTokenInterceptor()
     private val baseUrlInterceptors = BaseUrlInterceptors()
 
@@ -42,7 +44,16 @@ class NetworkConfigManagerTest {
             authTokenInterceptor = authTokenInterceptor,
             environmentRepository = environmentRepository,
             baseUrlInterceptors = baseUrlInterceptors,
+            refreshAuthenticator = refreshAuthenticator,
             dispatcherManager = dispatcherManager,
+        )
+    }
+
+    @Test
+    fun `authenticatorProvider should be set on initialization`() {
+        assertEquals(
+            authRepository,
+            refreshAuthenticator.authenticatorProvider,
         )
     }
 
