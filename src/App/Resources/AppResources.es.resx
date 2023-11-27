@@ -946,7 +946,7 @@ El escaneo se realizará automáticamente.</value>
     <value>No puedes usar esta característica hasta que actualices tu clave de cifrado.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>Se requiere migración de la clave de cifrado. Por favor, inicie sesión a través de la bóveda web para actualizar su clave de cifrado.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Aprender más</value>
@@ -2630,16 +2630,16 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Aprobar con mi otro dispositivo</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Solicitar aprobación del administrador</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Aprobar con contraseña maestra</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Deshabilitar usando un dispositivo público</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Recordar este dispositivo</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2648,28 +2648,29 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Passkeys</value>
   </data>
   <data name="Application" xml:space="preserve">
-    <value>Application</value>
+    <value>Aplicación</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>No puedes editar la aplicación de contraseñas maestras porque podría invalidar la contraseña maestra</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>La contraseña maestra no será copiada</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>La contraseña maestra no será copiada al elemento clonado.
+¿Deseas continuar clonando este elemento?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
-    <value>Copy application</value>
+    <value>Copiar aplicación</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
-    <value>Available for two-step login</value>
+    <value>Disponible para inicio de sesión en dos pasos</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ayuda de volver a pedir contraseña maestra</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>El desbloqueo puede fallar por falta de memoria. Disminuye los ajustes de memoria KDF o configura el desbloqueo biométrico para resolverlo.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Clave API no válida</value>
@@ -2678,126 +2679,126 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Token de API no válido</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Aprobación del administrador solicitada</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Tu solicitud ha sido enviada a tu administrador.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Se te notificará una vez aprobada. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>¿Problema para iniciar sesión?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Iniciando sesión como {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>Acción después del tiempo de espera de la caja fuerte cambiado a cerrar sesión</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Block auto-fill</value>
+    <value>Bloquear autocompletar</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Auto-fill will not be offered for these URIs.</value>
+    <value>Autocompletar no se ofrecerá para estas URLs.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
-    <value>New blocked URI</value>
+    <value>Nueva URI bloqueada</value>
   </data>
   <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
+    <value>URI guardada</value>
   </data>
   <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
-    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <value>Formato no válido. Use https://, http://, o androidapp://</value>
     <comment>https://, http://, androidapp:// should not be translated</comment>
   </data>
   <data name="EditURI" xml:space="preserve">
-    <value>Edit URI</value>
+    <value>Editar URI</value>
   </data>
   <data name="EnterURI" xml:space="preserve">
-    <value>Enter URI</value>
+    <value>Escribir URI</value>
   </data>
   <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
-    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+    <value>Formato: {0}. Separar múltiples URIs con una coma.</value>
   </data>
   <data name="FormatX" xml:space="preserve">
-    <value>Format: {0}</value>
+    <value>Formato: {0}</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
-    <value>Invalid URI</value>
+    <value>URI no válida</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
-    <value>URI removed</value>
+    <value>URI eliminada</value>
   </data>
   <data name="ThereAreNoBlockedURIs" xml:space="preserve">
-    <value>There are no blocked URIs</value>
+    <value>No hay URIs bloqueadas</value>
   </data>
   <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
-    <value>The URI {0} is already blocked</value>
+    <value>El URI {0} ya está bloqueada</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
-    <value>Cannot edit multiple URIs at once</value>
+    <value>No se pueden editar múltiples URIs a la vez</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Inicio de sesión aprobado</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>Iniciar sesión con el dispositivo debe configurarse en los ajustes de la aplicación Bitwarden. ¿Necesitas otra opción?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Iniciar sesión con el dispositivo</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>Iniciando sesión en</value>
   </data>
   <data name="Vault" xml:space="preserve">
-    <value>Vault</value>
+    <value>Caja fuerte</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Apariencia</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
-    <value>Account security</value>
+    <value>Seguridad de la cuenta</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
-    <value>Bitwarden Help Center</value>
+    <value>Centro de ayuda de Bitwarden</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
-    <value>Contact Bitwarden support</value>
+    <value>Contactar al soporte de Bitwarden</value>
   </data>
   <data name="CopyAppInformation" xml:space="preserve">
-    <value>Copy app information</value>
+    <value>Copiar información de la aplicación</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>Sincronizar ahora</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Unlock options</value>
+    <value>Opciónes de desbloqueo</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
-    <value>Session timeout</value>
+    <value>Tiempo de espera de sesión</value>
   </data>
   <data name="SessionTimeoutAction" xml:space="preserve">
-    <value>Session timeout action</value>
+    <value>Acción de tiempo de espera de sesión</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>Account fingerprint phrase</value>
+    <value>Frase de huella digital de su cuenta</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
-    <value>One hour and one minute</value>
+    <value>Una hora y un minuto</value>
   </data>
   <data name="OneHourAndXMinute" xml:space="preserve">
-    <value>One hour and {0} minutes</value>
+    <value>Una hora y {0} minutos</value>
   </data>
   <data name="XHoursAndOneMinute" xml:space="preserve">
-    <value>{0} hours and one minute</value>
+    <value>{0} horas y un minuto</value>
   </data>
   <data name="XHoursAndYMinutes" xml:space="preserve">
-    <value>{0} hours and {1} minutes</value>
+    <value>{0} horas y {1} minutos</value>
   </data>
   <data name="XHours" xml:space="preserve">
-    <value>{0} hours</value>
+    <value>{0} horas</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
