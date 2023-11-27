@@ -5,7 +5,7 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -19,7 +19,7 @@ interface VaultSdkSource {
      * Attempts to initialize cryptography functionality for the Bitwarden SDK
      * with a given [InitCryptoRequest].
      */
-    suspend fun initializeCrypto(request: InitCryptoRequest): Result<InitializeCryptoResult>
+    suspend fun initializeCrypto(request: InitUserCryptoRequest): Result<InitializeCryptoResult>
 
     /**
      * Decrypts a [Cipher] returning a [CipherView] wrapped in a [Result].

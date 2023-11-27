@@ -5,7 +5,7 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.sdk.BitwardenException
@@ -22,11 +22,11 @@ class VaultSdkSourceImpl(
     private val clientCrypto: ClientCrypto,
 ) : VaultSdkSource {
     override suspend fun initializeCrypto(
-        request: InitCryptoRequest,
+        request: InitUserCryptoRequest,
     ): Result<InitializeCryptoResult> =
         runCatching {
             try {
-                clientCrypto.initializeCrypto(req = request)
+                clientCrypto.initializeUserCrypto(req = request)
                 InitializeCryptoResult.Success
             } catch (exception: BitwardenException) {
                 // The only truly expected error from the SDK is an incorrect password.
