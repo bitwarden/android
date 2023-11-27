@@ -61,11 +61,8 @@ jobs:
           fi
         shell: bash
 
-  # Disabling Android build from this branch to improve testing
-  # the iOS build job
   android:
     name: Android
-    if: github.ref == 'refs/heads/master'
     runs-on: windows-2022
     needs: setup
     strategy:
