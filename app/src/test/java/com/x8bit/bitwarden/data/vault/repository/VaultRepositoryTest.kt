@@ -3,7 +3,8 @@ package com.x8bit.bitwarden.data.vault.repository
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -489,13 +490,14 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultSdkSource.initializeCrypto(
-                    request = InitCryptoRequest(
+                    request = InitUserCryptoRequest(
                         kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
                         email = "email",
-                        password = "mockPassword-1",
-                        userKey = "mockKey-1",
                         privateKey = "mockPrivateKey-1",
-                        organizationKeys = mapOf(),
+                        method = InitUserCryptoMethod.Password(
+                            password = "mockPassword-1",
+                            userKey = "mockKey-1",
+                        ),
                     ),
                 )
             } returns Result.success(InitializeCryptoResult.Success)
@@ -549,13 +551,14 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultSdkSource.initializeCrypto(
-                    request = InitCryptoRequest(
+                    request = InitUserCryptoRequest(
                         kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
                         email = "email",
-                        password = "mockPassword-1",
-                        userKey = "mockKey-1",
                         privateKey = "mockPrivateKey-1",
-                        organizationKeys = mapOf(),
+                        method = InitUserCryptoMethod.Password(
+                            password = "mockPassword-1",
+                            userKey = "mockKey-1",
+                        ),
                     ),
                 )
             } just awaits
@@ -594,13 +597,14 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultSdkSource.initializeCrypto(
-                    request = InitCryptoRequest(
+                    request = InitUserCryptoRequest(
                         kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
                         email = "email",
-                        password = "mockPassword-1",
-                        userKey = "mockKey-1",
                         privateKey = "mockPrivateKey-1",
-                        organizationKeys = mapOf(),
+                        method = InitUserCryptoMethod.Password(
+                            password = "mockPassword-1",
+                            userKey = "mockKey-1",
+                        ),
                     ),
                 )
             } just awaits
@@ -641,13 +645,14 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultSdkSource.initializeCrypto(
-                    request = InitCryptoRequest(
+                    request = InitUserCryptoRequest(
                         kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
                         email = "email",
-                        password = "mockPassword-1",
-                        userKey = "mockKey-1",
                         privateKey = "mockPrivateKey-1",
-                        organizationKeys = mapOf(),
+                        method = InitUserCryptoMethod.Password(
+                            password = "mockPassword-1",
+                            userKey = "mockKey-1",
+                        ),
                     ),
                 )
             } returns Result.failure(IllegalStateException())
@@ -696,13 +701,14 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultSdkSource.initializeCrypto(
-                    request = InitCryptoRequest(
+                    request = InitUserCryptoRequest(
                         kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
                         email = "email",
-                        password = "",
-                        userKey = "mockKey-1",
                         privateKey = "mockPrivateKey-1",
-                        organizationKeys = mapOf(),
+                        method = InitUserCryptoMethod.Password(
+                            password = "",
+                            userKey = "mockKey-1",
+                        ),
                     ),
                 )
             } returns Result.success(InitializeCryptoResult.AuthenticationError)
@@ -828,13 +834,14 @@ class VaultRepositoryTest {
         val organizationalKeys = emptyMap<String, String>()
         coEvery {
             vaultSdkSource.initializeCrypto(
-                request = InitCryptoRequest(
+                request = InitUserCryptoRequest(
                     kdfParams = kdf,
                     email = email,
-                    password = masterPassword,
-                    userKey = userKey,
                     privateKey = privateKey,
-                    organizationKeys = organizationalKeys,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
@@ -864,13 +871,14 @@ class VaultRepositoryTest {
         )
         coVerify(exactly = 1) {
             vaultSdkSource.initializeCrypto(
-                request = InitCryptoRequest(
+                request = InitUserCryptoRequest(
                     kdfParams = kdf,
                     email = email,
-                    password = masterPassword,
-                    userKey = userKey,
                     privateKey = privateKey,
-                    organizationKeys = organizationalKeys,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
                 ),
             )
         }
@@ -889,13 +897,14 @@ class VaultRepositoryTest {
             val organizationalKeys = emptyMap<String, String>()
             coEvery {
                 vaultSdkSource.initializeCrypto(
-                    request = InitCryptoRequest(
+                    request = InitUserCryptoRequest(
                         kdfParams = kdf,
                         email = email,
-                        password = masterPassword,
-                        userKey = userKey,
                         privateKey = privateKey,
-                        organizationKeys = organizationalKeys,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError.asSuccess()
@@ -925,13 +934,14 @@ class VaultRepositoryTest {
             )
             coVerify(exactly = 1) {
                 vaultSdkSource.initializeCrypto(
-                    request = InitCryptoRequest(
+                    request = InitUserCryptoRequest(
                         kdfParams = kdf,
                         email = email,
-                        password = masterPassword,
-                        userKey = userKey,
                         privateKey = privateKey,
-                        organizationKeys = organizationalKeys,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
                     ),
                 )
             }
@@ -948,13 +958,14 @@ class VaultRepositoryTest {
         val organizationalKeys = emptyMap<String, String>()
         coEvery {
             vaultSdkSource.initializeCrypto(
-                request = InitCryptoRequest(
+                request = InitUserCryptoRequest(
                     kdfParams = kdf,
                     email = email,
-                    password = masterPassword,
-                    userKey = userKey,
                     privateKey = privateKey,
-                    organizationKeys = organizationalKeys,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
                 ),
             )
         } returns Throwable("Fail").asFailure()
@@ -984,13 +995,14 @@ class VaultRepositoryTest {
         )
         coVerify(exactly = 1) {
             vaultSdkSource.initializeCrypto(
-                request = InitCryptoRequest(
+                request = InitUserCryptoRequest(
                     kdfParams = kdf,
                     email = email,
-                    password = masterPassword,
-                    userKey = userKey,
                     privateKey = privateKey,
-                    organizationKeys = organizationalKeys,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
                 ),
             )
         }
@@ -1007,13 +1019,14 @@ class VaultRepositoryTest {
         val organizationalKeys = emptyMap<String, String>()
         coEvery {
             vaultSdkSource.initializeCrypto(
-                request = InitCryptoRequest(
+                request = InitUserCryptoRequest(
                     kdfParams = kdf,
                     email = email,
-                    password = masterPassword,
-                    userKey = userKey,
                     privateKey = privateKey,
-                    organizationKeys = organizationalKeys,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
                 ),
             )
         } just awaits
@@ -1037,13 +1050,14 @@ class VaultRepositoryTest {
         coVerify(exactly = 0) { syncService.sync() }
         coVerify(exactly = 1) {
             vaultSdkSource.initializeCrypto(
-                request = InitCryptoRequest(
+                request = InitUserCryptoRequest(
                     kdfParams = kdf,
                     email = email,
-                    password = masterPassword,
-                    userKey = userKey,
                     privateKey = privateKey,
-                    organizationKeys = organizationalKeys,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
                 ),
             )
         }

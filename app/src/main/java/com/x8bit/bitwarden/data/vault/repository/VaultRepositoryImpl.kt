@@ -2,7 +2,8 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -195,13 +196,14 @@ class VaultRepositoryImpl constructor(
             emit(
                 vaultSdkSource
                     .initializeCrypto(
-                        request = InitCryptoRequest(
+                        request = InitUserCryptoRequest(
                             kdfParams = kdf,
                             email = email,
-                            password = masterPassword,
-                            userKey = userKey,
                             privateKey = privateKey,
-                            organizationKeys = organizationalKeys,
+                            method = InitUserCryptoMethod.Password(
+                                password = masterPassword,
+                                userKey = userKey,
+                            ),
                         ),
                     )
                     .fold(
