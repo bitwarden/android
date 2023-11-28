@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,6 +43,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * The top level composable for the Login screen.
@@ -87,16 +88,14 @@ fun LoginScreen(
                 },
                 actions = {
                     BitwardenOverflowActionItem(
-                        dropdownMenuItemContent = {
-                            DropdownMenuItem(
-                                text = {
-                                    Text(text = stringResource(id = R.string.get_password_hint))
-                                },
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.get_password_hint),
                                 onClick = remember(viewModel) {
                                     { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
                                 },
-                            )
-                        },
+                            ),
+                        ),
                     )
                 },
             )
