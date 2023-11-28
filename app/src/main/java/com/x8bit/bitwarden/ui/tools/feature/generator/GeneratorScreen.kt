@@ -2,11 +2,12 @@
 
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -170,7 +171,6 @@ private fun ScrollContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
             .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
@@ -182,11 +182,15 @@ private fun ScrollContent(
             onRegenerateClick = onRegenerateClick,
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
         MainStateOptionsItem(
             selectedType = state.selectedType,
             possibleMainStates = state.typeOptions,
             onMainStateOptionClicked = onMainStateOptionClicked,
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenListHeaderText(
             label = stringResource(id = R.string.options),
@@ -194,6 +198,8 @@ private fun ScrollContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         when (val selectedType = state.selectedType) {
             is GeneratorState.MainType.Passcode -> {
@@ -328,11 +334,16 @@ private fun PasswordTypeContent(
     passwordTypeState: GeneratorState.MainType.Passcode.PasscodeType.Password,
     passwordHandlers: PasswordHandlers,
 ) {
+    Spacer(modifier = Modifier.height(8.dp))
+
     PasswordLengthSliderItem(
         length = passwordTypeState.length,
         onPasswordSliderLengthChange =
         passwordHandlers.onPasswordSliderLengthChange,
     )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -358,16 +369,25 @@ private fun PasswordTypeContent(
             passwordHandlers.onPasswordToggleSpecialCharactersChange,
         )
     }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
     PasswordMinNumbersCounterItem(
         minNumbers = passwordTypeState.minNumbers,
         onPasswordMinNumbersCounterChange =
         passwordHandlers.onPasswordMinNumbersCounterChange,
     )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
     PasswordMinSpecialCharactersCounterItem(
         minSpecial = passwordTypeState.minSpecial,
         onPasswordMinSpecialCharactersChange =
         passwordHandlers.onPasswordMinSpecialCharactersChange,
     )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
     PasswordAvoidAmbiguousCharsToggleItem(
         avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
         onPasswordToggleAvoidAmbiguousCharsChange =
@@ -544,16 +564,24 @@ private fun PassphraseTypeContent(
     passphraseTypeState: GeneratorState.MainType.Passcode.PasscodeType.Passphrase,
     passphraseHandlers: PassphraseHandlers,
 ) {
+    Spacer(modifier = Modifier.height(8.dp))
+
     PassphraseNumWordsCounterItem(
         numWords = passphraseTypeState.numWords,
         onPassphraseNumWordsCounterChange =
         passphraseHandlers.onPassphraseNumWordsCounterChange,
     )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
     PassphraseWordSeparatorInputItem(
         wordSeparator = passphraseTypeState.wordSeparator,
         onPassphraseWordSeparatorChange =
         passphraseHandlers.onPassphraseWordSeparatorChange,
     )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
     Column(
         modifier = Modifier.fillMaxWidth(),
     ) {
