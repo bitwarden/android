@@ -3,6 +3,12 @@ package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -75,6 +81,58 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText("Add account").performClick()
         verify { viewModel.trySendAction(VaultUnlockAction.AddAccountClick) }
         composeTestRule.onNodeWithText("Add account").assertDoesNotExist()
+    }
+
+    @Test
+    fun `logout click in the overflow menu should show the logout confirmation dialog`() {
+        // Confirm neither the popup nor the dialog are showing
+        composeTestRule.onNode(isPopup()).assertDoesNotExist()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        // Expand the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule.onNode(isPopup()).assertIsDisplayed()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        // Click on the logout item
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        // Check for the dialog
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Are you sure you want to log out?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Yes click in the logout confirmation dialog should send the ConfirmLogoutClick action`() {
+        // Expand the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+
+        // Click on the logout item to display the dialog
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        // Click on the Yes button in the dialog
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultUnlockAction.ConfirmLogoutClick) }
     }
 
     @Test
