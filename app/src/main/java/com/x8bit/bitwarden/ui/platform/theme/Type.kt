@@ -206,6 +206,18 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
+    labelMediumProminent = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W600,
+        letterSpacing = 0.5.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    ),
 )
 
 /**
@@ -213,4 +225,5 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
  */
 data class NonMaterialTypography(
     val fingerprint: TextStyle,
+    val labelMediumProminent: TextStyle,
 )

@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param description An optional description label to be displayed below the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
+ * @param readOnly Disables the click functionality without modifying the other UI characteristics.
  */
 @Composable
 fun BitwardenWideSwitch(
@@ -44,6 +45,7 @@ fun BitwardenWideSwitch(
     modifier: Modifier = Modifier,
     description: String? = null,
     contentDescription: String? = null,
+    readOnly: Boolean = false,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -54,6 +56,7 @@ fun BitwardenWideSwitch(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
                 onClick = { onCheckedChange?.invoke(!isChecked) },
+                enabled = !readOnly,
             )
             .semantics(mergeDescendants = true) {
                 toggleableState = ToggleableState(isChecked)
