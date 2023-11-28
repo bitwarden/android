@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLogoutConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
@@ -39,7 +40,6 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
@@ -76,8 +76,8 @@ fun AccountSecurityScreen(
     }
 
     when (state.dialog) {
-        AccountSecurityDialog.ConfirmLogout -> ConfirmLogoutDialog(
-            onDismiss = remember(viewModel) {
+        AccountSecurityDialog.ConfirmLogout -> BitwardenLogoutConfirmationDialog(
+            onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
             },
             onConfirmClick = remember(viewModel) {
@@ -284,22 +284,6 @@ fun AccountSecurityScreen(
             )
         }
     }
-}
-
-@Composable
-private fun ConfirmLogoutDialog(
-    onDismiss: () -> Unit,
-    onConfirmClick: () -> Unit,
-) {
-    BitwardenTwoButtonDialog(
-        title = stringResource(id = R.string.log_out),
-        message = stringResource(id = R.string.logout_confirmation),
-        confirmButtonText = stringResource(id = R.string.yes),
-        onConfirmClick = onConfirmClick,
-        dismissButtonText = stringResource(id = R.string.cancel),
-        onDismissClick = onDismiss,
-        onDismissRequest = onDismiss,
-    )
 }
 
 @Composable

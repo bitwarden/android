@@ -38,11 +38,14 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLogoutConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -76,6 +79,7 @@ fun VaultUnlockScreen(
         canScroll = { !accountMenuVisible },
     )
 
+    // Dynamic dialogs
     when (val dialog = state.dialog) {
         is VaultUnlockState.VaultUnlockDialog.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
@@ -94,6 +98,23 @@ fun VaultUnlockScreen(
         null -> Unit
     }
 
+    // Static dialogs
+    var showLogoutConfirmationDialog by remember { mutableStateOf(false) }
+    if (showLogoutConfirmationDialog) {
+        BitwardenLogoutConfirmationDialog(
+            onDismissRequest = { showLogoutConfirmationDialog = false },
+            onConfirmClick = remember(viewModel) {
+                {
+                    showLogoutConfirmationDialog = false
+                    viewModel.trySendAction(
+                        VaultUnlockAction.ConfirmLogoutClick,
+                    )
+                }
+            },
+        )
+    }
+
+    // Content
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -109,7 +130,14 @@ fun VaultUnlockScreen(
                         color = state.avatarColor,
                         onClick = { accountMenuVisible = !accountMenuVisible },
                     )
-                    BitwardenOverflowActionItem()
+                    BitwardenOverflowActionItem(
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.log_out),
+                                onClick = { showLogoutConfirmationDialog = true },
+                            ),
+                        ),
+                    )
                 },
             )
         },

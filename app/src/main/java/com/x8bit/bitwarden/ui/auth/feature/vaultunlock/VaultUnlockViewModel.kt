@@ -71,6 +71,7 @@ class VaultUnlockViewModel @Inject constructor(
         when (action) {
             VaultUnlockAction.AddAccountClick -> handleAddAccountClick()
             VaultUnlockAction.DismissDialog -> handleDismissDialog()
+            VaultUnlockAction.ConfirmLogoutClick -> handleConfirmLogoutClick()
             is VaultUnlockAction.PasswordInputChanged -> handlePasswordInputChanged(action)
             is VaultUnlockAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             VaultUnlockAction.UnlockClick -> handleUnlockClick()
@@ -86,6 +87,10 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun handleDismissDialog() {
         mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleConfirmLogoutClick() {
+        authRepository.logout()
     }
 
     private fun handlePasswordInputChanged(action: VaultUnlockAction.PasswordInputChanged) {
@@ -212,6 +217,11 @@ sealed class VaultUnlockAction {
      * The user dismissed the currently displayed dialog.
      */
     data object DismissDialog : VaultUnlockAction()
+
+    /**
+     * The user has clicked on the logout confirmation button.
+     */
+    data object ConfirmLogoutClick : VaultUnlockAction()
 
     /**
      * The user has modified the password input.

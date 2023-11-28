@@ -17,7 +17,10 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -28,6 +31,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     private val environmentRepository = FakeEnvironmentRepository()
     private val authRepository = mockk<AuthRepository>() {
         every { userStateFlow } returns MutableStateFlow(DEFAULT_USER_STATE)
+        every { logout() } just runs
     }
     private val vaultRepository = mockk<VaultRepository>()
 
@@ -78,6 +82,13 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             initialState.copy(dialog = null),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `on ConfirmLogoutClick should call logout on the AuthRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultUnlockAction.ConfirmLogoutClick)
+        verify { authRepository.logout() }
     }
 
     @Test
