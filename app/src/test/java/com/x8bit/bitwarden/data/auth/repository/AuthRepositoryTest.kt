@@ -50,6 +50,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -69,6 +70,8 @@ class AuthRepositoryTest {
     private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
     private val vaultRepository: VaultRepository = mockk() {
         every { vaultStateFlow } returns mutableVaultStateFlow
+        every { lockVaultIfNecessary(any()) } just runs
+        every { clearUnlockedData() } just runs
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeEnvironmentRepository =
@@ -846,6 +849,8 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 userKey = null,
             )
+            verify { vaultRepository.clearUnlockedData() }
+            verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
         }
     }
 
@@ -907,6 +912,8 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     userKey = null,
                 )
+                verify { vaultRepository.clearUnlockedData() }
+                verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
             }
         }
 
@@ -937,6 +944,8 @@ class AuthRepositoryTest {
                 userId = USER_ID_2,
                 userKey = null,
             )
+            verify(exactly = 0) { vaultRepository.clearUnlockedData() }
+            verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
         }
     }
 

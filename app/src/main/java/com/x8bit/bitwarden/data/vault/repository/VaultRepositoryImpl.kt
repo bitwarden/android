@@ -155,6 +155,10 @@ class VaultRepositoryImpl constructor(
                 initialValue = DataState.Loading,
             )
 
+    override fun lockVaultIfNecessary(userId: String) {
+        setVaultToLocked(userId = userId)
+    }
+
     @Suppress("ReturnCount")
     override suspend fun unlockVaultAndSyncForCurrentUser(
         masterPassword: String,
@@ -229,6 +233,16 @@ class VaultRepositoryImpl constructor(
         vaultMutableStateFlow.update {
             it.copy(
                 unlockedVaultUserIds = it.unlockedVaultUserIds + userId,
+            )
+        }
+    }
+
+    // TODO: This is temporary. Eventually this needs to be based on the presence of various
+    //  user keys but this will likely require SDK updates to support this (BIT-1190).
+    private fun setVaultToLocked(userId: String) {
+        vaultMutableStateFlow.update {
+            it.copy(
+                unlockedVaultUserIds = it.unlockedVaultUserIds - userId,
             )
         }
     }
