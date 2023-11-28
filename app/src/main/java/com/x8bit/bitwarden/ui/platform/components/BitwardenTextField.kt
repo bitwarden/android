@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
  * @param hint optional hint text that will appear below the text input.
+ * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
+ * instead of wrapping onto multiple lines.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param enabled Whether or not the text field is enabled.
  * @param keyboardType the preferred type of keyboard input.
@@ -31,6 +33,7 @@ fun BitwardenTextField(
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     hint: String? = null,
+    singleLine: Boolean = true,
     readOnly: Boolean = false,
     enabled: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -52,7 +55,7 @@ fun BitwardenTextField(
             }
         },
         onValueChange = onValueChange,
-        singleLine = true,
+        singleLine = singleLine,
         readOnly = readOnly,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
     )

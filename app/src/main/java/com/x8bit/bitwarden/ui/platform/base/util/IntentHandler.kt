@@ -31,6 +31,11 @@ class IntentHandler(private val context: Context) {
      * Start an activity to view the given [uri] in an external browser.
      */
     fun launchUri(uri: Uri) {
-        startActivity(Intent(Intent.ACTION_VIEW, uri))
+        val newUri = if (uri.scheme == null) {
+            uri.buildUpon().scheme("https").build()
+        } else {
+            uri.normalizeScheme()
+        }
+        startActivity(Intent(Intent.ACTION_VIEW, newUri))
     }
 }
