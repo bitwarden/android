@@ -1,22 +1,30 @@
 package com.x8bit.bitwarden.ui.platform.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Represents a composable overflow item specifically tailored for Bitwarden's UI.
@@ -25,13 +33,12 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * indicate more actions available that are not immediately visible on the interface.
  * The item is centrally aligned within a predefined [Box] of size 24.dp.
  *
- * @param dropdownMenuItemContent A single overflow menu in the right with contents
- *   defined by the [dropdownMenuItemContent]. It is strongly recommended that this content
- *   be a stack of [DropdownMenuItem].
+ * @param menuItemDataList The list of [OverflowMenuItemData] that will populate the overflow
+ * dropdown menu.
  */
 @Composable
 fun BitwardenOverflowActionItem(
-    dropdownMenuItemContent: @Composable ColumnScope.() -> Unit = {},
+    menuItemDataList: ImmutableList<OverflowMenuItemData> = persistentListOf(),
 ) {
     var isOverflowMenuVisible by remember { mutableStateOf(false) }
     Box(
@@ -47,7 +54,29 @@ fun BitwardenOverflowActionItem(
         DropdownMenu(
             expanded = isOverflowMenuVisible,
             onDismissRequest = { isOverflowMenuVisible = false },
-            content = dropdownMenuItemContent,
+            offset = DpOffset(x = (-12).dp, y = 0.dp),
+            modifier = Modifier
+                .widthIn(
+                    min = 112.dp,
+                    max = 280.dp,
+                )
+                .background(MaterialTheme.colorScheme.surfaceContainer),
+            content = {
+                menuItemDataList.forEach { dropdownMenuItemData ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = dropdownMenuItemData.text,
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                        },
+                        onClick = {
+                            isOverflowMenuVisible = false
+                            dropdownMenuItemData.onClick()
+                        },
+                    )
+                }
+            },
         )
     }
 }
@@ -56,6 +85,24 @@ fun BitwardenOverflowActionItem(
 @Composable
 private fun BitwardenOverflowActionItem_preview() {
     BitwardenTheme {
-        BitwardenOverflowActionItem(dropdownMenuItemContent = {})
+        BitwardenOverflowActionItem(
+            menuItemDataList = persistentListOf(
+                OverflowMenuItemData(
+                    text = "Test",
+                    onClick = {},
+                ),
+            ),
+        )
     }
 }
+
+/**
+ * Data used to populate one row of an overflow dropdown menu.
+ *
+ * @param text The text displayed for the item in the menu.
+ * @param onClick A callback for when the menu item is clicked.
+ */
+data class OverflowMenuItemData(
+    val text: String,
+    val onClick: () -> Unit,
+)
