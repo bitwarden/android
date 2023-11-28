@@ -73,8 +73,8 @@ fun BitwardenPasswordField(
         singleLine = true,
         readOnly = readOnly,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        supportingText = {
-            hint?.let {
+        supportingText = hint?.let {
+            {
                 Text(
                     text = hint,
                     style = MaterialTheme.typography.bodySmall,

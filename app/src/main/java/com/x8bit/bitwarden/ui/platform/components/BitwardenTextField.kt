@@ -43,8 +43,8 @@ fun BitwardenTextField(
         placeholder = placeholder?.let {
             { Text(text = it) }
         },
-        supportingText = {
-            hint?.let {
+        supportingText = hint?.let {
+            {
                 Text(
                     text = hint,
                     style = MaterialTheme.typography.bodySmall,

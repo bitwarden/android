@@ -35,8 +35,8 @@ fun BitwardenBasicDialog(
                     onClick = onDismissRequest,
                 )
             },
-            title = {
-                visibilityState.title?.let {
+            title = visibilityState.title?.let {
+                {
                     Text(
                         text = it(),
                         style = MaterialTheme.typography.headlineSmall,
