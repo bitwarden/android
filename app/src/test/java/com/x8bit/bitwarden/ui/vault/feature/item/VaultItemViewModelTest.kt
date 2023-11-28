@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault.item
+package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test

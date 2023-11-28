@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault.item
+package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

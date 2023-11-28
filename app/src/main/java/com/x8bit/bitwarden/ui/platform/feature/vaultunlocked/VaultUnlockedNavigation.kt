@@ -10,10 +10,10 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToNewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.newSendDestination
-import com.x8bit.bitwarden.ui.vault.feature.vault.item.navigateToVaultItem
-import com.x8bit.bitwarden.ui.vault.feature.vault.item.vaultItemDestination
-import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultAddItem
-import com.x8bit.bitwarden.ui.vault.feature.vault.vaultAddItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
+import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddItem
+import com.x8bit.bitwarden.ui.vault.feature.additem.vaultAddItemDestination
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
 

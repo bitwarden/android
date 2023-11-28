@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault.item
+package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
