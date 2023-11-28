@@ -463,6 +463,29 @@ class VaultRepositoryTest {
             }
         }
 
+    @Test
+    fun `lockVaultIfNecessary should lock the given account if it is currently unlocked`() =
+        runTest {
+            val userId = "userId"
+            verifyUnlockedVault(userId = userId)
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = setOf(userId),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            vaultRepository.lockVaultIfNecessary(userId = userId)
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `unlockVaultAndSyncForCurrentUser with unlockVault Success should sync and return Success`() =
@@ -1357,6 +1380,60 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
             }
         }
+
+    //region Helper functions
+
+    /**
+     * Helper to ensures that the vault for the user with the given [userId] is unlocked.
+     */
+    private suspend fun verifyUnlockedVault(userId: String) {
+        val kdf = MOCK_PROFILE.toSdkParams()
+        val email = MOCK_PROFILE.email
+        val masterPassword = "drowssap"
+        val userKey = "12345"
+        val privateKey = "54321"
+        val organizationalKeys = emptyMap<String, String>()
+        coEvery {
+            vaultSdkSource.initializeCrypto(
+                request = InitUserCryptoRequest(
+                    kdfParams = kdf,
+                    email = email,
+                    privateKey = privateKey,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+
+        val result = vaultRepository.unlockVault(
+            userId = userId,
+            masterPassword = masterPassword,
+            kdf = kdf,
+            email = email,
+            userKey = userKey,
+            privateKey = privateKey,
+            organizationalKeys = organizationalKeys,
+        )
+
+        assertEquals(VaultUnlockResult.Success, result)
+        coVerify(exactly = 1) {
+            vaultSdkSource.initializeCrypto(
+                request = InitUserCryptoRequest(
+                    kdfParams = kdf,
+                    email = email,
+                    privateKey = privateKey,
+                    method = InitUserCryptoMethod.Password(
+                        password = masterPassword,
+                        userKey = userKey,
+                    ),
+                ),
+            )
+        }
+    }
+
+    //endregion Helper functions
 }
 
 private val MOCK_PROFILE = AccountJson.Profile(

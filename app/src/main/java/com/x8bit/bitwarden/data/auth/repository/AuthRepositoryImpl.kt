@@ -202,6 +202,7 @@ class AuthRepositoryImpl constructor(
 
     override fun logout(userId: String) {
         val currentUserState = authDiskSource.userState ?: return
+        val wasActiveUser = userId == activeUserId
 
         // Remove the active user from the accounts map
         val updatedAccounts = currentUserState
@@ -228,6 +229,12 @@ class AuthRepositoryImpl constructor(
             // Update the user information and log out
             authDiskSource.userState = null
         }
+
+        // Lock the vault for the logged out user
+        vaultRepository.lockVaultIfNecessary(userId)
+
+        // Clear the current vault data if the logged out user was the active one.
+        if (wasActiveUser) vaultRepository.clearUnlockedData()
     }
 
     @Suppress("ReturnCount", "LongMethod")
