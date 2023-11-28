@@ -1,13 +1,13 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault
+package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAddItemState.ItemType.Card.displayStringResId
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAddItemState.ItemType.Identity.displayStringResId
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAddItemState.ItemType.SecureNotes.displayStringResId
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Card.displayStringResId
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Identity.displayStringResId
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.SecureNotes.displayStringResId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

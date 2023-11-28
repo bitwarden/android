@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault.item
+package com.x8bit.bitwarden.ui.vault.feature.item
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle

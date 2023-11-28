@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault
+package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column

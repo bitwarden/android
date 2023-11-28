@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.vault
+package com.x8bit.bitwarden.ui.vault.feature.additem
 
 /**
  * A collection of handler functions specifically tailored for managing actions
