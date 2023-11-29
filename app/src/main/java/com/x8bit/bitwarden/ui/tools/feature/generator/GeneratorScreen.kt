@@ -134,11 +134,17 @@ fun GeneratorScreen(
             }
         }
 
-    val passwordHandlers = PasswordHandlers.create(viewModel = viewModel)
+    val passwordHandlers = remember(viewModel) {
+        PasswordHandlers.create(viewModel = viewModel)
+    }
 
-    val passphraseHandlers = PassphraseHandlers.create(viewModel = viewModel)
+    val passphraseHandlers = remember(viewModel) {
+        PassphraseHandlers.create(viewModel = viewModel)
+    }
 
-    val plusAddressedEmailHandlers = PlusAddressedEmailHandlers.create(viewModel = viewModel)
+    val plusAddressedEmailHandlers = remember(viewModel) {
+        PlusAddressedEmailHandlers.create(viewModel = viewModel)
+    }
 
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
