@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -275,8 +276,7 @@ private fun MainStateOptionsItem(
     possibleMainStates: List<GeneratorState.MainTypeOption>,
     onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
 ) {
-    val optionsWithStrings =
-        possibleMainStates.associateBy({ it }, { stringResource(id = it.labelRes) })
+    val optionsWithStrings = possibleMainStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.what_would_you_like_to_generate),
@@ -298,7 +298,7 @@ private fun MainStateOptionsItem(
 //region PasscodeType Composables
 
 @Composable
-private fun PasscodeTypeItems(
+private fun ColumnScope.PasscodeTypeItems(
     passcodeState: GeneratorState.MainType.Passcode,
     onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
     passwordHandlers: PasswordHandlers,
@@ -329,8 +329,7 @@ private fun PasscodeOptionsItem(
     onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
 ) {
     val possibleSubStates = GeneratorState.MainType.Passcode.PasscodeTypeOption.values().toList()
-    val optionsWithStrings =
-        possibleSubStates.associateBy({ it }, { stringResource(id = it.labelRes) })
+    val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.password_type),
@@ -352,7 +351,7 @@ private fun PasscodeOptionsItem(
 //region PasswordType Composables
 
 @Composable
-private fun PasswordTypeContent(
+private fun ColumnScope.PasswordTypeContent(
     passwordTypeState: GeneratorState.MainType.Passcode.PasscodeType.Password,
     passwordHandlers: PasswordHandlers,
 ) {
@@ -582,7 +581,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
 //region PassphraseType Composables
 
 @Composable
-private fun PassphraseTypeContent(
+private fun ColumnScope.PassphraseTypeContent(
     passphraseTypeState: GeneratorState.MainType.Passcode.PasscodeType.Passphrase,
     passphraseHandlers: PassphraseHandlers,
 ) {
@@ -686,7 +685,7 @@ private fun PassphraseIncludeNumberToggleItem(
 //region UsernameType Composables
 
 @Composable
-private fun UsernameTypeItems(
+private fun ColumnScope.UsernameTypeItems(
     usernameState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
@@ -721,8 +720,7 @@ private fun UsernameOptionsItem(
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
 ) {
     val possibleSubStates = GeneratorState.MainType.Username.UsernameTypeOption.values().toList()
-    val optionsWithStrings =
-        possibleSubStates.associateBy({ it }, { stringResource(id = it.labelRes) })
+    val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.username_type),
@@ -744,7 +742,7 @@ private fun UsernameOptionsItem(
 //region PlusAddressedEmailType Composables
 
 @Composable
-private fun PlusAddressedEmailTypeContent(
+private fun ColumnScope.PlusAddressedEmailTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
 ) {
