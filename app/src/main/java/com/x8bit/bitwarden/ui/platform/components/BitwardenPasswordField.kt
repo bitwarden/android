@@ -40,6 +40,8 @@ import com.x8bit.bitwarden.R
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
+ * instead of wrapping onto multiple lines.
  * @param hint optional hint text that will appear below the text input.
  * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
  * @param autoFocus When set to true, the view will request focus after the first recomposition.
@@ -54,6 +56,7 @@ fun BitwardenPasswordField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
+    singleLine: Boolean = true,
     hint: String? = null,
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
@@ -70,7 +73,7 @@ fun BitwardenPasswordField(
         } else {
             PasswordVisualTransformation()
         },
-        singleLine = true,
+        singleLine = singleLine,
         readOnly = readOnly,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         supportingText = hint?.let {
@@ -117,6 +120,8 @@ fun BitwardenPasswordField(
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
+ * instead of wrapping onto multiple lines.
  * @param hint optional hint text that will appear below the text input.
  * @param initialShowPassword The initial state of the show/hide password control. A value of
  * `false` (the default) indicates that that password should begin in the hidden state.
@@ -131,6 +136,7 @@ fun BitwardenPasswordField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
+    singleLine: Boolean = true,
     hint: String? = null,
     initialShowPassword: Boolean = false,
     showPasswordTestTag: String? = null,
@@ -145,6 +151,7 @@ fun BitwardenPasswordField(
         showPasswordChange = { showPassword = !showPassword },
         onValueChange = onValueChange,
         readOnly = readOnly,
+        singleLine = singleLine,
         hint = hint,
         showPasswordTestTag = showPasswordTestTag,
         autoFocus = autoFocus,

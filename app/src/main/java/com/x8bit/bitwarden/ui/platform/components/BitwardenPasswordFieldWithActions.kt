@@ -25,6 +25,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
+ * instead of wrapping onto multiple lines.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
@@ -36,6 +38,7 @@ fun BitwardenPasswordFieldWithActions(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
+    singleLine: Boolean = false,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
@@ -47,6 +50,7 @@ fun BitwardenPasswordFieldWithActions(
             value = value,
             onValueChange = onValueChange,
             readOnly = readOnly,
+            singleLine = singleLine,
             modifier = Modifier
                 .weight(1f)
                 .padding(end = 8.dp),

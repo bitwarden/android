@@ -23,6 +23,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onValueChange Callback that is triggered when the text content changes.
  * @param modifier [Modifier] applied to this layout composable.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
+ * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
+ * instead of wrapping onto multiple lines.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
  * providing flexibility in the layout definition.
@@ -34,6 +36,7 @@ fun BitwardenTextFieldWithActions(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
+    singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -47,6 +50,7 @@ fun BitwardenTextFieldWithActions(
             label = label,
             value = value,
             readOnly = readOnly,
+            singleLine = singleLine,
             onValueChange = onValueChange,
             keyboardType = keyboardType,
         )
