@@ -320,6 +320,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
             )
         }
             .returns(Result.failure(RuntimeException()))
@@ -332,6 +333,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
             )
         }
     }
@@ -346,6 +348,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
             )
         } returns Result.success(
             GetTokenResponseJson.Invalid(
@@ -364,6 +367,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
             )
         }
     }
@@ -381,6 +385,7 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
                     captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
                 )
             }
                 .returns(Result.success(successResponse))
@@ -419,6 +424,7 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
                     captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -441,6 +447,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
             )
         }
             .returns(Result.success(GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY)))
@@ -453,6 +460,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
             )
         }
     }
@@ -807,6 +815,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 passwordHash = PASSWORD_HASH,
                 captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
             )
         } returns Result.success(successResponse)
         coEvery {
@@ -870,6 +879,7 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
                     captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns Result.success(successResponse)
             coEvery {
@@ -975,6 +985,7 @@ class AuthRepositoryTest {
             "com.x8bit.bitwarden.data.auth.repository.util.GetTokenResponseExtensionsKt"
         private const val REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH =
             "com.x8bit.bitwarden.data.auth.repository.util.RefreshTokenResponseExtensionsKt"
+        private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val EMAIL = "test@bitwarden.com"
         private const val EMAIL_2 = "test2@bitwarden.com"
         private const val PASSWORD = "password"

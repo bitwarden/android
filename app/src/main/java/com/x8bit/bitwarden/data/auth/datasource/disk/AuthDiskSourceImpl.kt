@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.UUID
 
+private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "masterKeyEncryptedUserKey"
@@ -23,6 +25,9 @@ class AuthDiskSourceImpl(
     private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     AuthDiskSource {
+    override val uniqueAppId: String
+        get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
+
     override var rememberedEmailAddress: String?
         get() = getString(key = REMEMBERED_EMAIL_ADDRESS_KEY)
         set(value) {
@@ -70,4 +75,12 @@ class AuthDiskSourceImpl(
             value = privateKey,
         )
     }
+
+    private fun generateAndStoreUniqueAppId(): String =
+        UUID
+            .randomUUID()
+            .toString()
+            .also {
+                putString(key = UNIQUE_APP_ID_KEY, value = it)
+            }
 }

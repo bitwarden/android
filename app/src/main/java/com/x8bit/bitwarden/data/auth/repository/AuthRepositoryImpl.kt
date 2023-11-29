@@ -135,6 +135,7 @@ class AuthRepositoryImpl constructor(
         }
         .flatMap { passwordHash ->
             identityService.getToken(
+                uniqueAppId = authDiskSource.uniqueAppId,
                 email = email,
                 passwordHash = passwordHash,
                 captchaToken = captchaToken,

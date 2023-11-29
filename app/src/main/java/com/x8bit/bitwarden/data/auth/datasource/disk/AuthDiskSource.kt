@@ -8,6 +8,13 @@ import kotlinx.coroutines.flow.Flow
  */
 interface AuthDiskSource {
     /**
+     * Retrieves a unique ID for the application that is stored locally. This will generate a new
+     * one if it does not yet exist and it will only be reset for new installs or when clearing
+     * application data.
+     */
+    val uniqueAppId: String
+
+    /**
      * The currently persisted saved email address (or `null` if not set).
      */
     var rememberedEmailAddress: String?
