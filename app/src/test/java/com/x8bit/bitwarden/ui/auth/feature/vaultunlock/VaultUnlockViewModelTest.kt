@@ -28,9 +28,10 @@ import org.junit.jupiter.api.Test
 
 class VaultUnlockViewModelTest : BaseViewModelTest() {
 
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val environmentRepository = FakeEnvironmentRepository()
     private val authRepository = mockk<AuthRepository>() {
-        every { userStateFlow } returns MutableStateFlow(DEFAULT_USER_STATE)
+        every { userStateFlow } returns mutableUserStateFlow
         every { logout() } just runs
     }
     private val vaultRepository = mockk<VaultRepository>()
@@ -44,8 +45,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when set`() {
         val state = DEFAULT_STATE.copy(
-            initials = "WB",
-            avatarColorString = "00FF00",
+            passwordInput = "pass",
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
@@ -60,6 +60,62 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             DEFAULT_STATE.copy(environmentUrl = "vault.bitwarden.eu".asText()),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `UserState updates with a null value should do nothing`() {
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value = null
+
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `UserState updates with a non-null value update the account information in the state`() {
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value =
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        isPremium = true,
+                        isVaultUnlocked = true,
+                    ),
+                ),
+            )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                avatarColorString = "#00aaaa",
+                initials = "OU",
+                accountSummaries = listOf(
+                    AccountSummary(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        status = AccountSummary.Status.ACTIVE,
+                    ),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }

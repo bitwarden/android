@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -65,6 +66,12 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
             .launchIn(viewModelScope)
+        authRepository
+            .userStateFlow
+            .onEach {
+                sendAction(VaultUnlockAction.Internal.UserStateUpdateReceive(userState = it))
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultUnlockAction) {
@@ -77,6 +84,10 @@ class VaultUnlockViewModel @Inject constructor(
             VaultUnlockAction.UnlockClick -> handleUnlockClick()
             is VaultUnlockAction.Internal.ReceiveVaultUnlockResult -> {
                 handleReceiveVaultUnlockResult(action)
+            }
+
+            is VaultUnlockAction.Internal.UserStateUpdateReceive -> {
+                handleUserStateUpdateReceive(action)
             }
         }
     }
@@ -144,6 +155,24 @@ class VaultUnlockViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialog = null) }
                 // Don't do anything, we'll navigate to the right place.
             }
+        }
+    }
+
+    private fun handleUserStateUpdateReceive(
+        action: VaultUnlockAction.Internal.UserStateUpdateReceive,
+    ) {
+        // Leave the current data alone if there is no UserState; we are in the process of logging
+        // out.
+        val userState = action.userState ?: return
+
+        mutableStateFlow.update {
+            val accountSummaries = userState.toAccountSummaries()
+            val activeAccountSummary = userState.toActiveAccountSummary()
+            it.copy(
+                initials = activeAccountSummary.initials,
+                avatarColorString = activeAccountSummary.avatarColorHex,
+                accountSummaries = accountSummaries,
+            )
         }
     }
 }
@@ -251,6 +280,13 @@ sealed class VaultUnlockAction {
          */
         data class ReceiveVaultUnlockResult(
             val vaultUnlockResult: VaultUnlockResult,
+        ) : Internal()
+
+        /**
+         * Indicates a change in user state has been received.
+         */
+        data class UserStateUpdateReceive(
+            val userState: UserState?,
         ) : Internal()
     }
 }
