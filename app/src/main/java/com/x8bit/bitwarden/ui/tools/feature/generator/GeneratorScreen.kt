@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarDuration
@@ -121,9 +122,22 @@ fun GeneratorScreen(
             }
         }
 
+    val onUsernameOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit =
+        remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
+                        it,
+                    ),
+                )
+            }
+        }
+
     val passwordHandlers = PasswordHandlers.create(viewModel = viewModel)
 
     val passphraseHandlers = PassphraseHandlers.create(viewModel = viewModel)
+
+    val plusAddressedEmailHandlers = PlusAddressedEmailHandlers.create(viewModel = viewModel)
 
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
@@ -148,9 +162,11 @@ fun GeneratorScreen(
             onRegenerateClick = onRegenerateClick,
             onCopyClick = onCopyClick,
             onMainStateOptionClicked = onMainStateOptionClicked,
-            onSubStateOptionClicked = onPasscodeOptionClicked,
+            onPasscodeSubStateOptionClicked = onPasscodeOptionClicked,
+            onUsernameSubStateOptionClicked = onUsernameOptionClicked,
             passwordHandlers = passwordHandlers,
             passphraseHandlers = passphraseHandlers,
+            plusAddressedEmailHandlers = plusAddressedEmailHandlers,
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -165,9 +181,11 @@ private fun ScrollContent(
     onRegenerateClick: () -> Unit,
     onCopyClick: () -> Unit,
     onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
-    onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
+    onPasscodeSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
+    onUsernameSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     passwordHandlers: PasswordHandlers,
     passphraseHandlers: PassphraseHandlers,
+    plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -205,14 +223,18 @@ private fun ScrollContent(
             is GeneratorState.MainType.Passcode -> {
                 PasscodeTypeItems(
                     passcodeState = selectedType,
-                    onSubStateOptionClicked = onSubStateOptionClicked,
+                    onSubStateOptionClicked = onPasscodeSubStateOptionClicked,
                     passwordHandlers = passwordHandlers,
                     passphraseHandlers = passphraseHandlers,
                 )
             }
 
             is GeneratorState.MainType.Username -> {
-                // TODO(BIT-335): Username state to handle Plus Addressed Email
+                UsernameTypeItems(
+                    usernameState = selectedType,
+                    onSubStateOptionClicked = onUsernameSubStateOptionClicked,
+                    plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                )
             }
         }
     }
@@ -661,6 +683,109 @@ private fun PassphraseIncludeNumberToggleItem(
 
 //endregion PassphraseType Composables
 
+//region UsernameType Composables
+
+@Composable
+private fun UsernameTypeItems(
+    usernameState: GeneratorState.MainType.Username,
+    onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
+    plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
+) {
+    UsernameOptionsItem(usernameState, onSubStateOptionClicked)
+
+    when (val selectedType = usernameState.selectedType) {
+        is GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail -> {
+            PlusAddressedEmailTypeContent(
+                usernameTypeState = selectedType,
+                plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+            )
+        }
+
+        is GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias -> {
+            // TODO: Implement ForwardedEmailAlias BIT-657
+        }
+
+        is GeneratorState.MainType.Username.UsernameType.CatchAllEmail -> {
+            // TODO: Implement CatchAllEmail BIT-656
+        }
+
+        is GeneratorState.MainType.Username.UsernameType.RandomWord -> {
+            // TODO: Implement RandomWord BIT-658
+        }
+    }
+}
+
+@Composable
+private fun UsernameOptionsItem(
+    currentSubState: GeneratorState.MainType.Username,
+    onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
+) {
+    val possibleSubStates = GeneratorState.MainType.Username.UsernameTypeOption.values().toList()
+    val optionsWithStrings =
+        possibleSubStates.associateBy({ it }, { stringResource(id = it.labelRes) })
+
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.username_type),
+        options = optionsWithStrings.values.toList(),
+        selectedOption = stringResource(id = currentSubState.selectedType.displayStringResId),
+        onOptionSelected = { selectedOption ->
+            val selectedOptionId =
+                optionsWithStrings.entries.first { it.value == selectedOption }.key
+            onSubStateOptionClicked(selectedOptionId)
+        },
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+    )
+}
+
+//endregion UsernameType Composables
+
+//region PlusAddressedEmailType Composables
+
+@Composable
+private fun PlusAddressedEmailTypeContent(
+    usernameTypeState: GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail,
+    plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
+) {
+    Spacer(modifier = Modifier.height(4.dp))
+
+    Text(
+        text = stringResource(id = R.string.plus_addressed_email_description),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp),
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    PlusAddressedEmailTextInputItem(
+        email = usernameTypeState.email,
+        onPlusAddressedEmailTextChange = plusAddressedEmailHandlers.onEmailChange,
+    )
+}
+
+@Composable
+private fun PlusAddressedEmailTextInputItem(
+    email: String,
+    onPlusAddressedEmailTextChange: (email: String) -> Unit,
+) {
+    BitwardenTextField(
+        label = stringResource(id = R.string.email_required_parenthesis),
+        value = email,
+        onValueChange = {
+            onPlusAddressedEmailTextChange(it)
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+}
+
+//endregion PlusAddressedEmailType Composables
+
 @Preview(showBackground = true)
 @Composable
 private fun GeneratorPreview() {
@@ -801,6 +926,35 @@ private class PassphraseHandlers(
                         GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
                             .ToggleIncludeNumberChange(
                                 includeNumber = shouldIncludeNumber,
+                            ),
+                    )
+                },
+            )
+        }
+    }
+}
+
+/**
+ * A class dedicated to handling user interactions related to plus addressed email
+ * configuration.
+ * Each lambda corresponds to a specific user action, allowing for easy delegation of
+ * logic when user input is detected.
+ */
+private class PlusAddressedEmailHandlers(
+    val onEmailChange: (String) -> Unit,
+) {
+    companion object {
+        fun create(viewModel: GeneratorViewModel): PlusAddressedEmailHandlers {
+            return PlusAddressedEmailHandlers(
+                onEmailChange = { newEmail ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .PlusAddressedEmail
+                            .EmailTextChange(
+                                email = newEmail,
                             ),
                     )
                 },

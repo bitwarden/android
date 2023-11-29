@@ -17,13 +17,14 @@ import org.junit.jupiter.api.Test
 
 class GeneratorViewModelTest : BaseViewModelTest() {
 
-    private val initialState = createPasswordState()
-    private val initialSavedStateHandle = createSavedStateHandleWithState(initialState)
+    private val initialPasscodeState = createPasswordState()
+    private val initialPasscodeSavedStateHandle =
+        createSavedStateHandleWithState(initialPasscodeState)
 
     private val initialPassphraseState = createPassphraseState()
     private val passphraseSavedStateHandle = createSavedStateHandleWithState(initialPassphraseState)
 
-    private val initialUsernameState = createUsernameState()
+    private val initialUsernameState = createPlusAddressedEmailState()
     private val usernameSavedStateHandle = createSavedStateHandleWithState(initialUsernameState)
 
     private val fakeGeneratorRepository = FakeGeneratorRepository().apply {
@@ -36,7 +37,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
-            assertEquals(initialState, awaitItem())
+            assertEquals(initialPasscodeState, awaitItem())
         }
     }
 
@@ -198,7 +199,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         viewModel.actionChannel.trySend(action)
 
         val expectedState =
-            initialState.copy(
+            initialPasscodeState.copy(
                 selectedType = GeneratorState.MainType.Passcode(),
                 generatedText = "updatedText",
             )
@@ -218,7 +219,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         viewModel.actionChannel.trySend(action)
 
         val expectedState =
-            initialState.copy(selectedType = GeneratorState.MainType.Username())
+            initialPasscodeState.copy(selectedType = GeneratorState.MainType.Username())
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -236,7 +237,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         viewModel.actionChannel.trySend(action)
 
-        val expectedState = initialState.copy(
+        val expectedState = initialPasscodeState.copy(
             selectedType = GeneratorState.MainType.Passcode(
                 selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(),
             ),
@@ -261,10 +262,113 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         viewModel.actionChannel.trySend(action)
 
-        val expectedState = initialState.copy(
+        val expectedState = initialPasscodeState.copy(
             generatedText = updatedText,
             selectedType = GeneratorState.MainType.Passcode(
                 selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `UsernameTypeOptionSelect PLUS_ADDRESSED_EMAIL should switch to PlusAddressedEmail type`() =
+        runTest {
+            val viewModel = createViewModel(initialUsernameState)
+
+            viewModel.actionChannel.trySend(
+                GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
+                    usernameTypeOption = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameTypeOption
+                        .PLUS_ADDRESSED_EMAIL,
+                ),
+            )
+
+            val expectedState = initialUsernameState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    selectedType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .PlusAddressedEmail(),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Test
+    fun `UsernameTypeOptionSelect CATCH_ALL_EMAIL should switch to CatchAllEmail type`() = runTest {
+        val viewModel = createViewModel(initialUsernameState)
+
+        viewModel.actionChannel.trySend(
+            GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
+                usernameTypeOption = GeneratorState
+                    .MainType
+                    .Username
+                    .UsernameTypeOption
+                    .CATCH_ALL_EMAIL,
+            ),
+        )
+
+        val expectedState = initialUsernameState.copy(
+            selectedType = GeneratorState.MainType.Username(
+                selectedType = GeneratorState.MainType.Username.UsernameType.CatchAllEmail(),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UsernameTypeOptionSelect FORWARDED_EMAIL_ALIAS should switch to ForwardedEmailAlias type`() =
+        runTest {
+            val viewModel = createViewModel(initialUsernameState)
+
+            viewModel.actionChannel.trySend(
+                GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
+                    usernameTypeOption = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameTypeOption
+                        .FORWARDED_EMAIL_ALIAS,
+                ),
+            )
+
+            val expectedState = initialUsernameState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    selectedType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias(),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Test
+    fun `UsernameTypeOptionSelect RANDOM_WORD should switch to RandomWord type`() = runTest {
+        val viewModel = createViewModel(initialUsernameState)
+
+        viewModel.actionChannel.trySend(
+            GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
+                usernameTypeOption = GeneratorState
+                    .MainType
+                    .Username
+                    .UsernameTypeOption
+                    .RANDOM_WORD,
+            ),
+        )
+
+        val expectedState = initialUsernameState.copy(
+            selectedType = GeneratorState.MainType.Username(
+                selectedType = GeneratorState.MainType.Username.UsernameType.RandomWord(),
             ),
         )
 
@@ -281,7 +385,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassword"),
             )
-            viewModel = GeneratorViewModel(initialSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(initialPasscodeSavedStateHandle, fakeGeneratorRepository)
         }
 
         @Suppress("MaxLineLength")
@@ -680,6 +784,48 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
     }
+
+    @Nested
+    inner class PlusAddressedEmailActions {
+        private val defaultPlusAddressedEmailState = createPlusAddressedEmailState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(usernameSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `EmailTextChange should update email correctly`() =
+            runTest {
+                val newEmail = "test@example.com"
+                viewModel.actionChannel.trySend(
+                    GeneratorAction
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .PlusAddressedEmail
+                        .EmailTextChange(
+                            email = newEmail,
+                        ),
+                )
+
+                val expectedState = defaultPlusAddressedEmailState.copy(
+                    selectedType = GeneratorState.MainType.Username(
+                        selectedType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .PlusAddressedEmail(
+                                email = newEmail,
+                            ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+    }
     //region Helper Functions
 
     @Suppress("LongParameterList")
@@ -729,10 +875,18 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             ),
         )
 
-    private fun createUsernameState(): GeneratorState = GeneratorState(
-        generatedText = "defaultUsername",
-        selectedType = GeneratorState.MainType.Username(),
-    )
+    private fun createPlusAddressedEmailState(
+        generatedText: String = "defaultPlusAddressedEmail",
+        email: String = "defaultEmail",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                    email = email,
+                ),
+            ),
+        )
 
     private fun createSavedStateHandleWithState(state: GeneratorState) =
         SavedStateHandle().apply {
@@ -740,7 +894,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         }
 
     private fun createViewModel(
-        state: GeneratorState? = initialState,
+        state: GeneratorState? = initialPasscodeState,
     ): GeneratorViewModel = GeneratorViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
         generatorRepository = fakeGeneratorRepository,

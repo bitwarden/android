@@ -54,7 +54,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         extraBufferCapacity = Int.MAX_VALUE,
     )
 
-    private val viewModel = mockk< GeneratorViewModel >(relaxed = true) {
+    private val viewModel = mockk<GeneratorViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
@@ -155,6 +155,49 @@ class GeneratorScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
                     GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
+                ),
+            )
+        }
+
+        // Make sure dialog is hidden:
+        composeTestRule
+            .onNode(isDialog())
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `clicking a UsernameOption should send UsernameTypeOption action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                        email = "email",
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescription(label = "Username type, Plus addressed email")
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "Random word")
+            .onLast()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
+                    GeneratorState.MainType.Username.UsernameTypeOption.RANDOM_WORD,
                 ),
             )
         }
@@ -912,6 +955,45 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     //endregion Passcode Passphrase Tests
+
+    //region Username Plus Addressed Email Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_PlusAddressedEmail state, updating text in email field should send EmailTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                        email = "",
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        val newEmail = "test@example.com"
+
+        // Find the text field for PlusAddressedEmail and input text
+        composeTestRule
+            .onNodeWithText("Email (required)")
+            .performScrollTo()
+            .performTextInput(newEmail)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange(
+                    email = newEmail,
+                ),
+            )
+        }
+    }
+
+    //endregion Username Plus Addressed Email Tests
 
     private fun updateState(state: GeneratorState) {
         mutableStateFlow.value = state

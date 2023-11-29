@@ -95,6 +95,15 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.Internal.UpdateGeneratedPassphraseResult -> {
                 handleUpdateGeneratedPassphraseResult(action)
             }
+
+            is GeneratorAction.MainType.Username.UsernameTypeOptionSelect -> {
+                handleUsernameTypeOptionSelect(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange ->
+            {
+                handlePlusAddressedEmailTextInputChange(action)
+            }
         }
     }
 
@@ -492,6 +501,45 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion Passphrase Specific Handlers
 
+    //region Username Type Handlers
+
+    private fun handleUsernameTypeOptionSelect(
+        action: GeneratorAction.MainType.Username.UsernameTypeOptionSelect,
+    ) {
+        when (action.usernameTypeOption) {
+            Username.UsernameTypeOption.PLUS_ADDRESSED_EMAIL -> loadUsernameOptions(
+                selectedType = Username(selectedType = PlusAddressedEmail()),
+            )
+
+            Username.UsernameTypeOption.CATCH_ALL_EMAIL -> loadUsernameOptions(
+                selectedType = Username(selectedType = Username.UsernameType.CatchAllEmail()),
+            )
+
+            Username.UsernameTypeOption.FORWARDED_EMAIL_ALIAS -> loadUsernameOptions(
+                selectedType = Username(selectedType = Username.UsernameType.ForwardedEmailAlias()),
+            )
+
+            Username.UsernameTypeOption.RANDOM_WORD -> loadUsernameOptions(
+                selectedType = Username(selectedType = Username.UsernameType.RandomWord()),
+            )
+        }
+    }
+
+    //endregion Username Type Handlers
+
+    //region Plus Addressed Email Specific Handlers
+
+    private fun handlePlusAddressedEmailTextInputChange(
+        action: GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange,
+    ) {
+        updatePlusAddressedEmailType { plusAddressedEmailType ->
+            val newEmail = action.email
+            plusAddressedEmailType.copy(email = newEmail)
+        }
+    }
+
+    //endregion Plus Addressed Email Specific Handlers
+
     //region Utility Functions
 
     private inline fun updateGeneratorMainType(
@@ -552,6 +600,26 @@ class GeneratorViewModel @Inject constructor(
                 return@updateGeneratorMainTypePasscode currentSelectedType
             }
             currentSelectedType.copy(selectedType = block(currentPasswordType))
+        }
+    }
+
+    private inline fun updateGeneratorMainTypeUsername(
+        crossinline block: (Username) -> Username,
+    ) {
+        updateGeneratorMainType {
+            if (it !is Username) null else block(it)
+        }
+    }
+
+    private inline fun updatePlusAddressedEmailType(
+        crossinline block: (PlusAddressedEmail) -> PlusAddressedEmail,
+    ) {
+        updateGeneratorMainTypeUsername { currentSelectedType ->
+            val currentUsernameType = currentSelectedType.selectedType
+            if (currentUsernameType !is PlusAddressedEmail) {
+                return@updateGeneratorMainTypeUsername currentSelectedType
+            }
+            currentSelectedType.copy(selectedType = block(currentUsernameType))
         }
     }
 
@@ -1107,7 +1175,36 @@ sealed class GeneratorAction {
          * This sealed class serves as a placeholder for future extensions
          * related to the username actions in the generator.
          */
-        sealed class Username : MainType()
+        sealed class Username : MainType() {
+
+            /**
+             * Represents the action of selecting a username type option.
+             *
+             * @property usernameTypeOption The selected username type option.
+             */
+            data class UsernameTypeOptionSelect(
+                val usernameTypeOption: GeneratorState.MainType.Username.UsernameTypeOption,
+            ) : Username()
+
+            /**
+             * Represents actions related to the different types of usernames.
+             */
+            sealed class UsernameType : Username() {
+
+                /**
+                 * Represents actions specifically related to Plus Addressed Email.
+                 */
+                sealed class PlusAddressedEmail : UsernameType() {
+
+                    /**
+                     * Fired when the email text input is changed.
+                     *
+                     * @property email The new email text.
+                     */
+                    data class EmailTextChange(val email: String) : PlusAddressedEmail()
+                }
+            }
+        }
     }
 
     /**
