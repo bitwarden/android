@@ -41,6 +41,7 @@ class IdentityServiceTest : BaseServiceTest() {
             email = EMAIL,
             passwordHash = PASSWORD_HASH,
             captchaToken = null,
+            uniqueAppId = UNIQUE_APP_ID,
         )
         assertEquals(Result.success(LOGIN_SUCCESS), result)
     }
@@ -52,6 +53,7 @@ class IdentityServiceTest : BaseServiceTest() {
             email = EMAIL,
             passwordHash = PASSWORD_HASH,
             captchaToken = null,
+            uniqueAppId = UNIQUE_APP_ID,
         )
         assertTrue(result.isFailure)
     }
@@ -63,6 +65,7 @@ class IdentityServiceTest : BaseServiceTest() {
             email = EMAIL,
             passwordHash = PASSWORD_HASH,
             captchaToken = null,
+            uniqueAppId = UNIQUE_APP_ID,
         )
         assertEquals(Result.success(CAPTCHA_BODY), result)
     }
@@ -74,6 +77,7 @@ class IdentityServiceTest : BaseServiceTest() {
             email = EMAIL,
             passwordHash = PASSWORD_HASH,
             captchaToken = null,
+            uniqueAppId = UNIQUE_APP_ID,
         )
         assertEquals(Result.success(INVALID_LOGIN), result)
     }
@@ -94,6 +98,7 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     companion object {
+        private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val EMAIL = "email"
         private const val PASSWORD_HASH = "passwordHash"

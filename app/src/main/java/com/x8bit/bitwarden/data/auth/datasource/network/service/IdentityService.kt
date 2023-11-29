@@ -11,11 +11,13 @@ interface IdentityService {
     /**
      * Make request to get an access token.
      *
+     * @param uniqueAppId applications unique identifier.
      * @param email user's email address.
      * @param passwordHash password hashed with the Bitwarden SDK.
      * @param captchaToken captcha token to be passed to the API (nullable).
      */
     suspend fun getToken(
+        uniqueAppId: String,
         email: String,
         passwordHash: String,
         captchaToken: String?,

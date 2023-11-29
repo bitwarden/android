@@ -32,6 +32,34 @@ class AuthDiskSourceTest {
     )
 
     @Test
+    fun `uniqueAppId should generate a new ID and update SharedPreferences if none exists`() {
+        val rememberedUniqueAppIdKey = "bwPreferencesStorage:appId"
+
+        // Assert that the SharedPreferences are empty
+        assertNull(fakeSharedPreferences.getString(rememberedUniqueAppIdKey, null))
+
+        // Generate a new uniqueAppId and retrieve it
+        val newId = authDiskSource.uniqueAppId
+
+        // Ensure that the SharedPreferences were updated
+        assertEquals(
+            newId,
+            fakeSharedPreferences.getString(rememberedUniqueAppIdKey, null),
+        )
+    }
+
+    @Test
+    fun `uniqueAppId should not generate a new ID if one exists`() {
+        val rememberedUniqueAppIdKey = "bwPreferencesStorage:appId"
+        val testId = "testId"
+
+        // Update preferences to hold test value
+        fakeSharedPreferences.edit().putString(rememberedUniqueAppIdKey, testId).apply()
+
+        assertEquals(testId, authDiskSource.uniqueAppId)
+    }
+
+    @Test
     fun `rememberedEmailAddress should pull from and update SharedPreferences`() {
         val rememberedEmailKey = "bwPreferencesStorage:rememberedEmail"
 

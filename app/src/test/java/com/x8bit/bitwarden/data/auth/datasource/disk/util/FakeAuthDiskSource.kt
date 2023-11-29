@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.onSubscription
 import org.junit.Assert.assertEquals
 
 class FakeAuthDiskSource : AuthDiskSource {
+    override val uniqueAppId: String = "testUniqueAppId"
+
     override var rememberedEmailAddress: String? = null
 
     override var userState: UserStateJson? = null

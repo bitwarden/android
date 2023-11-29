@@ -9,7 +9,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForResul
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
-import java.util.UUID
 
 class IdentityServiceImpl constructor(
     private val api: IdentityApi,
@@ -19,6 +18,7 @@ class IdentityServiceImpl constructor(
 
     @Suppress("MagicNumber")
     override suspend fun getToken(
+        uniqueAppId: String,
         email: String,
         passwordHash: String,
         captchaToken: String?,
@@ -27,8 +27,7 @@ class IdentityServiceImpl constructor(
             scope = "api+offline_access",
             clientId = "mobile",
             authEmail = email.base64UrlEncode(),
-            // TODO: use correct device identifier here BIT-325
-            deviceIdentifier = UUID.randomUUID().toString(),
+            deviceIdentifier = uniqueAppId,
             deviceName = deviceModelProvider.deviceModel,
             deviceType = "0",
             grantType = "password",
