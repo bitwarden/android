@@ -2,6 +2,7 @@
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Microsoft.Maui.Platform;
 
 namespace Bit.App.Pages
 {
@@ -77,7 +78,21 @@ namespace Bit.App.Pages
                 _logger.Value?.Exception(ex);
             }
         }
-        
+
+        //protected override void OnHandlerChanged()
+        //{
+        //    base.OnHandlerChanged();
+
+        //    if (!_appOptions.IosExtension)
+        //    {
+        //        return;
+        //    }
+
+        //    var window = new Window();
+        //    window.ToHandler(this.Handler.MauiContext);
+        //    window.Page = this;
+        //}
+
         protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
         {
             base.OnNavigatingFrom(args);

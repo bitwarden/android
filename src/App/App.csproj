@@ -29,6 +29,8 @@
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+
+		<ForceSimulatorX64ArchitectureInIDE>true</ForceSimulatorX64ArchitectureInIDE>
 	</PropertyGroup>
 	<PropertyGroup>
     <DefineConstants Condition=" '$(CustomConstants)' != '' ">$(DefineConstants);$(CustomConstants)</DefineConstants>
