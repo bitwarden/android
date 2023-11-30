@@ -200,6 +200,10 @@ namespace Bit.iOS.ShareExtension
         private void NavigateToPage(ContentPage page)
         {
             var navigationPage = new NavigationPage(page);
+
+            var window = new Window(navigationPage);
+            window.ToHandler(MauiContextSingleton.Instance.MauiContext);
+
             _currentModalController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             _presentingOnNavigationPage = true;

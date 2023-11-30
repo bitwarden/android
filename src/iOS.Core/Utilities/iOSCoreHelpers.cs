@@ -35,7 +35,7 @@ namespace Bit.iOS.Core.Utilities
                 })
                 .UseMauiEmbedding<Application>();
             // Register the Window
-            builder.Services.Add(new ServiceDescriptor(typeof(UIWindow), UIApplication.SharedApplication.KeyWindow));
+            builder.Services.Add(new ServiceDescriptor(typeof(UIWindow), _ => UIApplication.SharedApplication.KeyWindow, ServiceLifetime.Singleton));
             var mauiApp = builder.Build();
 
             MauiContextSingleton.Instance.Init(new MauiContext(mauiApp.Services));

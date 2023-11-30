@@ -79,20 +79,6 @@ namespace Bit.App.Pages
             }
         }
 
-        //protected override void OnHandlerChanged()
-        //{
-        //    base.OnHandlerChanged();
-
-        //    if (!_appOptions.IosExtension)
-        //    {
-        //        return;
-        //    }
-
-        //    var window = new Window();
-        //    window.ToHandler(this.Handler.MauiContext);
-        //    window.Page = this;
-        //}
-
         protected override void OnNavigatingFrom(NavigatingFromEventArgs args)
         {
             base.OnNavigatingFrom(args);

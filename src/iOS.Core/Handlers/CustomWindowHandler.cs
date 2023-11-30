@@ -16,8 +16,8 @@ namespace Bit.iOS.Core.Handlers
         protected override UIWindow CreatePlatformElement()
         {
             // Haven't tested
-            return UIApplication.SharedApplication.Delegate.GetWindow();
-            //return Platform.GetCurrentUIViewController().View.Window;
+            //return UIApplication.SharedApplication.Delegate.GetWindow();
+            return Platform.GetCurrentUIViewController().View.Window;
         }
     }
 }
