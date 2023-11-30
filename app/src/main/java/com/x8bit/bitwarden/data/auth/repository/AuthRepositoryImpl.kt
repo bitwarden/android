@@ -15,7 +15,9 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -27,7 +29,6 @@ import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
@@ -107,9 +108,9 @@ class AuthRepositoryImpl constructor(
             authDiskSource.rememberedEmailAddress = value
         }
 
-    override suspend fun deleteAccount(password: String): Result<Unit> {
+    override suspend fun deleteAccount(password: String): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return IllegalStateException("Not logged in.").asFailure()
+            ?: return DeleteAccountResult.Error
         return authSdkSource
             .hashPassword(
                 email = profile.email,
@@ -118,6 +119,10 @@ class AuthRepositoryImpl constructor(
             )
             .flatMap { hashedPassword -> accountsService.deleteAccount(hashedPassword) }
             .onSuccess { logout() }
+            .fold(
+                onFailure = { DeleteAccountResult.Error },
+                onSuccess = { DeleteAccountResult.Success },
+            )
     }
 
     override suspend fun login(
@@ -322,17 +327,18 @@ class AuthRepositoryImpl constructor(
     override suspend fun getPasswordStrength(
         email: String,
         password: String,
-    ): Result<PasswordStrength> {
+    ): PasswordStrengthResult {
         // TODO: Replace with SDK call (BIT-964)
         // Ex: return authSdkSource.passwordStrength(email, password)
         val length = password.length
-        return when {
-            length <= 3 -> PasswordStrength.LEVEL_0
-            length <= 6 -> PasswordStrength.LEVEL_1
-            length <= 9 -> PasswordStrength.LEVEL_2
-            length <= 11 -> PasswordStrength.LEVEL_3
-            else -> PasswordStrength.LEVEL_4
-        }
-            .asSuccess()
+        return PasswordStrengthResult.Success(
+            passwordStrength = when {
+                length <= 3 -> PasswordStrength.LEVEL_0
+                length <= 6 -> PasswordStrength.LEVEL_1
+                length <= 9 -> PasswordStrength.LEVEL_2
+                length <= 11 -> PasswordStrength.LEVEL_3
+                else -> PasswordStrength.LEVEL_4
+            },
+        )
     }
 }

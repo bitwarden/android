@@ -25,7 +25,9 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -187,7 +189,7 @@ class AuthRepositoryTest {
     fun `delete account fails if not logged in`() = runTest {
         val masterPassword = "hello world"
         val result = repository.deleteAccount(password = masterPassword)
-        assertTrue(result.isFailure)
+        assertEquals(DeleteAccountResult.Error, result)
     }
 
     @Test
@@ -201,7 +203,7 @@ class AuthRepositoryTest {
 
         val result = repository.deleteAccount(password = masterPassword)
 
-        assertTrue(result.isFailure)
+        assertEquals(DeleteAccountResult.Error, result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
         }
@@ -222,7 +224,7 @@ class AuthRepositoryTest {
 
         val result = repository.deleteAccount(password = masterPassword)
 
-        assertTrue(result.isFailure)
+        assertEquals(DeleteAccountResult.Error, result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
             accountsService.deleteAccount(hashedMasterPassword)
@@ -244,7 +246,7 @@ class AuthRepositoryTest {
 
         val result = repository.deleteAccount(password = masterPassword)
 
-        assertTrue(result.isSuccess)
+        assertEquals(DeleteAccountResult.Success, result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
             accountsService.deleteAccount(hashedMasterPassword)
@@ -962,22 +964,58 @@ class AuthRepositoryTest {
     @Test
     fun `getPasswordStrength should be based on password length`() = runTest {
         // TODO: Replace with SDK call (BIT-964)
-        assertEquals(LEVEL_0.asSuccess(), repository.getPasswordStrength(EMAIL, "1"))
-        assertEquals(LEVEL_0.asSuccess(), repository.getPasswordStrength(EMAIL, "12"))
-        assertEquals(LEVEL_0.asSuccess(), repository.getPasswordStrength(EMAIL, "123"))
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_0),
+            repository.getPasswordStrength(EMAIL, "1"),
+        )
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_0),
+            repository.getPasswordStrength(EMAIL, "12"),
+        )
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_0),
+            repository.getPasswordStrength(EMAIL, "123"),
+        )
 
-        assertEquals(LEVEL_1.asSuccess(), repository.getPasswordStrength(EMAIL, "1234"))
-        assertEquals(LEVEL_1.asSuccess(), repository.getPasswordStrength(EMAIL, "12345"))
-        assertEquals(LEVEL_1.asSuccess(), repository.getPasswordStrength(EMAIL, "123456"))
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_1),
+            repository.getPasswordStrength(EMAIL, "1234"),
+        )
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_1),
+            repository.getPasswordStrength(EMAIL, "12345"),
+        )
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_1),
+            repository.getPasswordStrength(EMAIL, "123456"),
+        )
 
-        assertEquals(LEVEL_2.asSuccess(), repository.getPasswordStrength(EMAIL, "1234567"))
-        assertEquals(LEVEL_2.asSuccess(), repository.getPasswordStrength(EMAIL, "12345678"))
-        assertEquals(LEVEL_2.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789"))
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_2),
+            repository.getPasswordStrength(EMAIL, "1234567"),
+        )
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_2),
+            repository.getPasswordStrength(EMAIL, "12345678"),
+        )
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_2),
+            repository.getPasswordStrength(EMAIL, "123456789"),
+        )
 
-        assertEquals(LEVEL_3.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789a"))
-        assertEquals(LEVEL_3.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789ab"))
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_3),
+            repository.getPasswordStrength(EMAIL, "123456789a"),
+        )
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_3),
+            repository.getPasswordStrength(EMAIL, "123456789ab"),
+        )
 
-        assertEquals(LEVEL_4.asSuccess(), repository.getPasswordStrength(EMAIL, "123456789abc"))
+        assertEquals(
+            PasswordStrengthResult.Success(LEVEL_4),
+            repository.getPasswordStrength(EMAIL, "123456789abc"),
+        )
     }
 
     companion object {

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -74,12 +75,13 @@ class DeleteAccountViewModel @Inject constructor(
     private fun handleDeleteAccountComplete(
         action: DeleteAccountAction.Internal.DeleteAccountComplete,
     ) {
-        action.result.fold(
-            onSuccess = {
+        when (action.result) {
+            DeleteAccountResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
                 // TODO: Display a dialog confirming account deletion (BIT-1184)
-            },
-            onFailure = {
+            }
+
+            DeleteAccountResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = DeleteAccountState.DeleteAccountDialog.Error(
@@ -87,8 +89,8 @@ class DeleteAccountViewModel @Inject constructor(
                         ),
                     )
                 }
-            },
-        )
+            }
+        }
     }
 }
 
@@ -171,7 +173,7 @@ sealed class DeleteAccountAction {
          * Indicates that the delete account request has completed.
          */
         data class DeleteAccountComplete(
-            val result: Result<Unit>,
+            val result: DeleteAccountResult,
         ) : Internal()
     }
 }
