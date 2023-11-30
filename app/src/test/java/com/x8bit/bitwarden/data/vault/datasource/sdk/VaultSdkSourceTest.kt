@@ -100,6 +100,29 @@ class VaultSdkSourceTest {
         }
 
     @Test
+    fun `decryptCipher should call SDK and return a Result with correct data`() = runBlocking {
+        val mockCipher = mockk<CipherView>()
+        val expectedResult = mockk<Cipher>()
+        coEvery {
+            clientVault.ciphers().encrypt(
+                cipherView = mockCipher,
+            )
+        } returns expectedResult
+        val result = vaultSdkSource.encryptCipher(
+            cipherView = mockCipher,
+        )
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        coVerify {
+            clientVault.ciphers().encrypt(
+                cipherView = mockCipher,
+            )
+        }
+    }
+
+    @Test
     fun `Cipher decrypt should call SDK and return a Result with correct data`() = runBlocking {
         val mockCipher = mockk<Cipher>()
         val expectedResult = mockk<CipherView>()

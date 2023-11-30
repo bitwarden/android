@@ -22,6 +22,11 @@ interface VaultSdkSource {
     suspend fun initializeCrypto(request: InitUserCryptoRequest): Result<InitializeCryptoResult>
 
     /**
+     * Encrypts a [CipherView] returning a [Cipher] wrapped in a [Result].
+     */
+    suspend fun encryptCipher(cipherView: CipherView): Result<Cipher>
+
+    /**
      * Decrypts a [Cipher] returning a [CipherView] wrapped in a [Result].
      */
     suspend fun decryptCipher(cipher: Cipher): Result<CipherView>
