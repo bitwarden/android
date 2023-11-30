@@ -65,11 +65,6 @@ fun VaultUnlockScreen(
             is VaultUnlockEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
-
-            VaultUnlockEvent.NavigateToLoginScreen -> {
-                // TODO: Handle adding accounts (BIT-853)
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
-            }
         }
     }
 

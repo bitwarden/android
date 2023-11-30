@@ -37,6 +37,15 @@ interface AuthRepository : AuthenticatorProvider {
     var rememberedEmailAddress: String?
 
     /**
+     * Any special account circumstances that may be relevant (ex: pending multi-user account
+     * additions).
+     *
+     * This allows a direct view into and modification of [UserState.specialCircumstance].
+     * Note that this call has no effect when there is no [UserState] information available.
+     */
+    var specialCircumstance: UserState.SpecialCircumstance?
+
+    /**
      * Attempt to delete the current account and logout them out upon success.
      */
     suspend fun deleteAccount(password: String): DeleteAccountResult

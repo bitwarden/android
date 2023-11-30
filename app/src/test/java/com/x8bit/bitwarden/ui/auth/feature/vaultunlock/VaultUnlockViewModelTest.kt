@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -32,6 +33,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     private val environmentRepository = FakeEnvironmentRepository()
     private val authRepository = mockk<AuthRepository>() {
         every { userStateFlow } returns mutableUserStateFlow
+        every { specialCircumstance } returns null
+        every { specialCircumstance = any() } just runs
         every { logout() } just runs
     }
     private val vaultRepository = mockk<VaultRepository>()
@@ -120,12 +123,13 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on AddAccountClick should emit NavigateToLoginScreen`() = runTest {
+    fun `on AddAccountClick should update the SpecialCircumstance of the AuthRepository to PendingAccountAddition`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultUnlockAction.AddAccountClick)
-            assertEquals(VaultUnlockEvent.NavigateToLoginScreen, awaitItem())
+        viewModel.trySendAction(VaultUnlockAction.AddAccountClick)
+        verify {
+            authRepository.specialCircumstance = SpecialCircumstance.PendingAccountAddition
         }
     }
 

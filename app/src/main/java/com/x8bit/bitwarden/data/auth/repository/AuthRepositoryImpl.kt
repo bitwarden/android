@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -57,6 +58,8 @@ class AuthRepositoryImpl constructor(
     private val vaultRepository: VaultRepository,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository {
+    private val mutableSpecialCircumstanceStateFlow =
+        MutableStateFlow<UserState.SpecialCircumstance?>(null)
     private val scope = CoroutineScope(dispatcherManager.io)
 
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
@@ -84,8 +87,13 @@ class AuthRepositoryImpl constructor(
     override val userStateFlow: StateFlow<UserState?> = combine(
         authDiskSource.userStateFlow,
         vaultRepository.vaultStateFlow,
-    ) { userStateJson, vaultState ->
-        userStateJson?.toUserState(vaultState = vaultState)
+        mutableSpecialCircumstanceStateFlow,
+    ) { userStateJson, vaultState, specialCircumstance ->
+        userStateJson
+            ?.toUserState(
+                vaultState = vaultState,
+                specialCircumstance = specialCircumstance,
+            )
     }
         .stateIn(
             scope = scope,
@@ -94,6 +102,7 @@ class AuthRepositoryImpl constructor(
                 .userState
                 ?.toUserState(
                     vaultState = vaultRepository.vaultStateFlow.value,
+                    specialCircumstance = mutableSpecialCircumstanceStateFlow.value,
                 ),
         )
 
@@ -103,6 +112,9 @@ class AuthRepositoryImpl constructor(
         mutableCaptchaTokenFlow.asSharedFlow()
 
     override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
+
+    override var specialCircumstance: UserState.SpecialCircumstance?
+        by mutableSpecialCircumstanceStateFlow::value
 
     override suspend fun deleteAccount(password: String): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
@@ -121,6 +133,7 @@ class AuthRepositoryImpl constructor(
             )
     }
 
+    @Suppress("LongMethod")
     override suspend fun login(
         email: String,
         password: String,
@@ -148,12 +161,16 @@ class AuthRepositoryImpl constructor(
                 when (loginResponse) {
                     is CaptchaRequired -> LoginResult.CaptchaRequired(loginResponse.captchaKey)
                     is Success -> {
+                        activeUserId?.let { previousActiveUserId ->
+                            vaultRepository.lockVaultIfNecessary(userId = previousActiveUserId)
+                        }
                         val userStateJson = loginResponse.toUserState(
                             previousUserState = authDiskSource.userState,
                             environmentUrlData = environmentRepository
                                 .environment
                                 .environmentUrlData,
                         )
+                        vaultRepository.clearUnlockedData()
                         vaultRepository.unlockVault(
                             userId = userStateJson.activeUserId,
                             email = userStateJson.activeAccount.profile.email,
@@ -174,6 +191,7 @@ class AuthRepositoryImpl constructor(
                             privateKey = loginResponse.privateKey,
                         )
                         vaultRepository.sync()
+                        specialCircumstance = null
                         LoginResult.Success
                     }
 

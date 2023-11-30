@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -148,6 +149,7 @@ class AuthRepositoryTest {
         assertEquals(
             SINGLE_USER_STATE_1.toUserState(
                 vaultState = VAULT_STATE,
+                specialCircumstance = null,
             ),
             repository.userStateFlow.value,
         )
@@ -156,6 +158,7 @@ class AuthRepositoryTest {
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = VAULT_STATE,
+                specialCircumstance = null,
             ),
             repository.userStateFlow.value,
         )
@@ -165,6 +168,7 @@ class AuthRepositoryTest {
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
+                specialCircumstance = null,
             ),
             repository.userStateFlow.value,
         )
@@ -183,6 +187,31 @@ class AuthRepositoryTest {
         // Updating AuthDiskSource updates the repository
         fakeAuthDiskSource.rememberedEmailAddress = null
         assertNull(repository.rememberedEmailAddress)
+    }
+
+    @Test
+    fun `specialCircumstance update should trigger a change in UserState`() {
+        // Populate the initial UserState
+        assertNull(repository.specialCircumstance)
+        val initialUserState = SINGLE_USER_STATE_1.toUserState(
+            vaultState = VAULT_STATE,
+            specialCircumstance = null,
+        )
+        mutableVaultStateFlow.value = VAULT_STATE
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        assertEquals(
+            initialUserState,
+            repository.userStateFlow.value,
+        )
+
+        repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+
+        assertEquals(
+            initialUserState.copy(
+                specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
+            ),
+            repository.userStateFlow.value,
+        )
     }
 
     @Test
@@ -439,6 +468,94 @@ class AuthRepositoryTest {
                 )
                 vaultRepository.sync()
             }
+            assertEquals(
+                SINGLE_USER_STATE_1,
+                fakeAuthDiskSource.userState,
+            )
+            assertNull(repository.specialCircumstance)
+            verify(exactly = 0) { vaultRepository.lockVaultIfNecessary(any()) }
+            verify { vaultRepository.clearUnlockedData() }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `login get token succeeds when there is an existing user should switch to the new logged in user and lock the old user's vault`() =
+        runTest {
+            // Ensure the initial state for User 2 with a account addition
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+            repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+
+            // Set up login for User 1
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                accountsService.preLogin(email = EMAIL)
+            } returns Result.success(PRE_LOGIN_SUCCESS)
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+                .returns(Result.success(successResponse))
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationalKeys = emptyMap(),
+                    masterPassword = PASSWORD,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.sync() } just runs
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = SINGLE_USER_STATE_2,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns MULTI_USER_STATE
+
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            coVerify { accountsService.preLogin(email = EMAIL) }
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationalKeys = emptyMap(),
+                    masterPassword = PASSWORD,
+                )
+                vaultRepository.sync()
+            }
+            assertEquals(
+                MULTI_USER_STATE,
+                fakeAuthDiskSource.userState,
+            )
+            assertNull(repository.specialCircumstance)
+            verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
+            verify { vaultRepository.clearUnlockedData() }
         }
 
     @Test

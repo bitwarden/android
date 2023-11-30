@@ -93,7 +93,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleAddAccountClick() {
-        sendEvent(VaultUnlockEvent.NavigateToLoginScreen)
+        authRepository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
     }
 
     private fun handleDismissDialog() {
@@ -220,11 +220,6 @@ data class VaultUnlockState(
  * Models events for the vault unlock screen.
  */
 sealed class VaultUnlockEvent {
-    /**
-     * Navigates to the login flow.
-     */
-    data object NavigateToLoginScreen : VaultUnlockEvent()
-
     /**
      * Displays a toast to the user.
      */

@@ -35,7 +35,7 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
-    authRepository: AuthRepository,
+    private val authRepository: AuthRepository,
     vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -139,7 +139,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleAddAccountClick() {
-        sendEvent(VaultEvent.NavigateToLoginScreen)
+        authRepository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
     }
 
     private fun handleTrashClick() {
@@ -444,11 +444,6 @@ sealed class VaultEvent {
      * Navigate to the secure notes group screen.
      */
     data object NavigateToSecureNotesGroup : VaultEvent()
-
-    /**
-     * Navigate to the login flow for an additional account.
-     */
-    data object NavigateToLoginScreen : VaultEvent()
 
     /**
      * Navigate to the vault unlock screen.
