@@ -27,6 +27,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val initialUsernameState = createPlusAddressedEmailState()
     private val usernameSavedStateHandle = createSavedStateHandleWithState(initialUsernameState)
 
+    private val initialCatchAllEmailState = createCatchAllEmailState()
+    private val catchAllEmailSavedStateHandle =
+        createSavedStateHandleWithState(initialCatchAllEmailState)
+
     private val fakeGeneratorRepository = FakeGeneratorRepository().apply {
         setMockGeneratePasswordResult(
             GeneratedPasswordResult.Success("defaultPassword"),
@@ -826,6 +830,48 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
     }
+
+    @Nested
+    inner class CatchAllEmailActions {
+        private val defaultCatchAllEmailState = createCatchAllEmailState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(catchAllEmailSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `DomainTextChange should update domain correctly`() =
+            runTest {
+                val newDomain = "test.com"
+                viewModel.actionChannel.trySend(
+                    GeneratorAction
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .CatchAllEmail
+                        .DomainTextChange(
+                            domain = newDomain,
+                        ),
+                )
+
+                val expectedState = defaultCatchAllEmailState.copy(
+                    selectedType = GeneratorState.MainType.Username(
+                        selectedType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .CatchAllEmail(
+                                domainName = newDomain,
+                            ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+    }
     //region Helper Functions
 
     @Suppress("LongParameterList")
@@ -884,6 +930,19 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
                     email = email,
+                ),
+            ),
+        )
+
+    private fun createCatchAllEmailState(
+        generatedText: String = "defaultCatchAllEmail",
+        domain: String = "defaultDomain",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
+                    domainName = domain,
                 ),
             ),
         )

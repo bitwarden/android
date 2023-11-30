@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AnonAddy
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -103,6 +104,10 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange ->
             {
                 handlePlusAddressedEmailTextInputChange(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.CatchAllEmail.DomainTextChange -> {
+                handleCatchAllEmailTextInputChange(action)
             }
         }
     }
@@ -540,6 +545,19 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion Plus Addressed Email Specific Handlers
 
+    //region Catch-All Email Specific Handlers
+
+    private fun handleCatchAllEmailTextInputChange(
+        action: GeneratorAction.MainType.Username.UsernameType.CatchAllEmail.DomainTextChange,
+    ) {
+        updateCatchAllEmailType { catchAllEmailType ->
+            val newDomain = action.domain
+            catchAllEmailType.copy(domainName = newDomain)
+        }
+    }
+
+    //endregion Catch-All Email Specific Handlers
+
     //region Utility Functions
 
     private inline fun updateGeneratorMainType(
@@ -617,6 +635,18 @@ class GeneratorViewModel @Inject constructor(
         updateGeneratorMainTypeUsername { currentSelectedType ->
             val currentUsernameType = currentSelectedType.selectedType
             if (currentUsernameType !is PlusAddressedEmail) {
+                return@updateGeneratorMainTypeUsername currentSelectedType
+            }
+            currentSelectedType.copy(selectedType = block(currentUsernameType))
+        }
+    }
+
+    private inline fun updateCatchAllEmailType(
+        crossinline block: (CatchAllEmail) -> CatchAllEmail,
+    ) {
+        updateGeneratorMainTypeUsername { currentSelectedType ->
+            val currentUsernameType = currentSelectedType.selectedType
+            if (currentUsernameType !is CatchAllEmail) {
                 return@updateGeneratorMainTypeUsername currentSelectedType
             }
             currentSelectedType.copy(selectedType = block(currentUsernameType))
@@ -821,11 +851,15 @@ data class GeneratorState(
 
                 /**
                  * Represents the resource ID for the display string specific to each
-                 * PasscodeType subclass. Every subclass of UsernameType must override
-                 * this property to provide the appropriate string resource ID for
-                 * its display string.
+                 * UsernameType subclass.
                  */
                 abstract val displayStringResId: Int
+
+                /**
+                 * Represents the resource ID for the supporting display string specific to each
+                 * UsernameType subclass.
+                 */
+                abstract val supportingStringResId: Int?
 
                 /**
                  * Represents a PlusAddressedEmail type.
@@ -838,6 +872,9 @@ data class GeneratorState(
                 ) : UsernameType(), Parcelable {
                     override val displayStringResId: Int
                         get() = UsernameTypeOption.PLUS_ADDRESSED_EMAIL.labelRes
+
+                    override val supportingStringResId: Int
+                        get() = R.string.plus_addressed_email_description
                 }
 
                 /**
@@ -852,6 +889,9 @@ data class GeneratorState(
                 ) : UsernameType(), Parcelable {
                     override val displayStringResId: Int
                         get() = UsernameTypeOption.CATCH_ALL_EMAIL.labelRes
+
+                    override val supportingStringResId: Int
+                        get() = R.string.catch_all_email_description
                 }
 
                 /**
@@ -868,6 +908,9 @@ data class GeneratorState(
                 ) : UsernameType(), Parcelable {
                     override val displayStringResId: Int
                         get() = UsernameTypeOption.RANDOM_WORD.labelRes
+
+                    override val supportingStringResId: Int?
+                        get() = null
                 }
 
                 /**
@@ -882,6 +925,9 @@ data class GeneratorState(
                 ) : UsernameType(), Parcelable {
                     override val displayStringResId: Int
                         get() = UsernameTypeOption.FORWARDED_EMAIL_ALIAS.labelRes
+
+                    override val supportingStringResId: Int
+                        get() = R.string.forwarded_email_description
 
                     /**
                      * Enum representing the types of services,
@@ -1202,6 +1248,19 @@ sealed class GeneratorAction {
                      * @property email The new email text.
                      */
                     data class EmailTextChange(val email: String) : PlusAddressedEmail()
+                }
+
+                /**
+                 * Represents actions specifically related to Catch-All Email.
+                 */
+                sealed class CatchAllEmail : UsernameType() {
+
+                    /**
+                     * Fired when the domain text input is changed.
+                     *
+                     * @property domain The new domain text.
+                     */
+                    data class DomainTextChange(val domain: String) : CatchAllEmail()
                 }
             }
         }
