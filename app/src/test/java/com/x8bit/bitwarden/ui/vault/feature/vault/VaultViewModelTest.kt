@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -12,7 +13,10 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -29,6 +33,8 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository =
         mockk {
             every { userStateFlow } returns mutableUserStateFlow
+            every { specialCircumstance } returns null
+            every { specialCircumstance = any() } just runs
         }
 
     private val vaultRepository: VaultRepository =
@@ -134,12 +140,13 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on AddAccountClick should emit NavigateToLoginScreen`() = runTest {
+    fun `on AddAccountClick should update the SpecialCircumstance of the AuthRepository to PendingAccountAddition`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.AddAccountClick)
-            assertEquals(VaultEvent.NavigateToLoginScreen, awaitItem())
+        viewModel.trySendAction(VaultAction.AddAccountClick)
+        verify {
+            authRepository.specialCircumstance = SpecialCircumstance.PendingAccountAddition
         }
     }
 

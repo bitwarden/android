@@ -36,10 +36,12 @@ fun UserStateJson.toUpdatedUserStateJson(
 }
 
 /**
- * Converts the given [UserStateJson] to a [UserState] using the given [vaultState].
+ * Converts the given [UserStateJson] to a [UserState] using the given [vaultState] and
+ * [specialCircumstance].
  */
 fun UserStateJson.toUserState(
     vaultState: VaultState,
+    specialCircumstance: UserState.SpecialCircumstance?,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
@@ -58,4 +60,5 @@ fun UserStateJson.toUserState(
                     isVaultUnlocked = userId in vaultState.unlockedVaultUserIds,
                 )
             },
+        specialCircumstance = specialCircumstance,
     )

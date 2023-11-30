@@ -121,6 +121,7 @@ class UserStateJsonExtensionsTest {
                     vaultState = VaultState(
                         unlockedVaultUserIds = setOf("activeUserId"),
                     ),
+                    specialCircumstance = null,
                 ),
         )
     }
@@ -141,6 +142,7 @@ class UserStateJsonExtensionsTest {
                         isVaultUnlocked = false,
                     ),
                 ),
+                specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
             ),
             UserStateJson(
                 activeUserId = "activeUserId",
@@ -162,6 +164,7 @@ class UserStateJsonExtensionsTest {
                     vaultState = VaultState(
                         unlockedVaultUserIds = emptySet(),
                     ),
+                    specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
                 ),
         )
     }
