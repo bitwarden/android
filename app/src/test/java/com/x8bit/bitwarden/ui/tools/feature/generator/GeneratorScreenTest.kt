@@ -993,6 +993,41 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_CatchAllEmail state, updating text in email field should send EmailTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
+                        domainName = "",
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        val newDomain = "test.com"
+
+        // Find the text field for Catch-All Email and input text
+        composeTestRule
+            .onNodeWithText("Domain name (required)")
+            .performScrollTo()
+            .performTextInput(newDomain)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.CatchAllEmail.DomainTextChange(
+                    domain = newDomain,
+                ),
+            )
+        }
+    }
+
     //endregion Username Plus Addressed Email Tests
 
     private fun updateState(state: GeneratorState) {

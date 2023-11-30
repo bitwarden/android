@@ -16,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarDuration
@@ -146,6 +145,10 @@ fun GeneratorScreen(
         PlusAddressedEmailHandlers.create(viewModel = viewModel)
     }
 
+    val catchAllEmailHandlers = remember(viewModel) {
+        CatchAllEmailHandlers.create(viewModel = viewModel)
+    }
+
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
@@ -174,6 +177,7 @@ fun GeneratorScreen(
             passwordHandlers = passwordHandlers,
             passphraseHandlers = passphraseHandlers,
             plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+            catchAllEmailHandlers = catchAllEmailHandlers,
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -193,6 +197,7 @@ private fun ScrollContent(
     passwordHandlers: PasswordHandlers,
     passphraseHandlers: PassphraseHandlers,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
+    catchAllEmailHandlers: CatchAllEmailHandlers,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -241,6 +246,7 @@ private fun ScrollContent(
                     usernameState = selectedType,
                     onSubStateOptionClicked = onUsernameSubStateOptionClicked,
                     plusAddressedEmailHandlers = plusAddressedEmailHandlers,
+                    catchAllEmailHandlers = catchAllEmailHandlers,
                 )
             }
         }
@@ -695,6 +701,7 @@ private fun ColumnScope.UsernameTypeItems(
     usernameState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
+    catchAllEmailHandlers: CatchAllEmailHandlers,
 ) {
     UsernameOptionsItem(usernameState, onSubStateOptionClicked)
 
@@ -711,7 +718,10 @@ private fun ColumnScope.UsernameTypeItems(
         }
 
         is GeneratorState.MainType.Username.UsernameType.CatchAllEmail -> {
-            // TODO: Implement CatchAllEmail BIT-656
+            CatchAllEmailTypeContent(
+                usernameTypeState = selectedType,
+                catchAllEmailHandlers = catchAllEmailHandlers,
+            )
         }
 
         is GeneratorState.MainType.Username.UsernameType.RandomWord -> {
@@ -740,6 +750,9 @@ private fun UsernameOptionsItem(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth(),
+        supportingText = currentSubState.selectedType.supportingStringResId?.let {
+            stringResource(id = it)
+        },
     )
 }
 
@@ -752,17 +765,6 @@ private fun ColumnScope.PlusAddressedEmailTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
 ) {
-    Spacer(modifier = Modifier.height(4.dp))
-
-    Text(
-        text = stringResource(id = R.string.plus_addressed_email_description),
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp),
-    )
-
     Spacer(modifier = Modifier.height(8.dp))
 
     PlusAddressedEmailTextInputItem(
@@ -789,6 +791,40 @@ private fun PlusAddressedEmailTextInputItem(
 }
 
 //endregion PlusAddressedEmailType Composables
+
+//region CatchAllEmailType Composables
+
+@Composable
+private fun ColumnScope.CatchAllEmailTypeContent(
+    usernameTypeState: GeneratorState.MainType.Username.UsernameType.CatchAllEmail,
+    catchAllEmailHandlers: CatchAllEmailHandlers,
+) {
+    Spacer(modifier = Modifier.height(8.dp))
+
+    CatchAllEmailTextInputItem(
+        domain = usernameTypeState.domainName,
+        onDomainTextChange = catchAllEmailHandlers.onDomainChange,
+    )
+}
+
+@Composable
+private fun CatchAllEmailTextInputItem(
+    domain: String,
+    onDomainTextChange: (domain: String) -> Unit,
+) {
+    BitwardenTextField(
+        label = stringResource(id = R.string.domain_name_required_parenthesis),
+        value = domain,
+        onValueChange = {
+            onDomainTextChange(it)
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+}
+
+//endregion CatchAllEmailType Composables
 
 @Preview(showBackground = true)
 @Composable
@@ -959,6 +995,35 @@ private class PlusAddressedEmailHandlers(
                             .PlusAddressedEmail
                             .EmailTextChange(
                                 email = newEmail,
+                            ),
+                    )
+                },
+            )
+        }
+    }
+}
+
+/**
+ * A class dedicated to handling user interactions related to plus addressed email
+ * configuration.
+ * Each lambda corresponds to a specific user action, allowing for easy delegation of
+ * logic when user input is detected.
+ */
+private class CatchAllEmailHandlers(
+    val onDomainChange: (String) -> Unit,
+) {
+    companion object {
+        fun create(viewModel: GeneratorViewModel): CatchAllEmailHandlers {
+            return CatchAllEmailHandlers(
+                onDomainChange = { newDomain ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .CatchAllEmail
+                            .DomainTextChange(
+                                domain = newDomain,
                             ),
                     )
                 },

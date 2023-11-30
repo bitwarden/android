@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onOptionSelected A lambda that is invoked when an option
  * is selected from the dropdown menu.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
+ * @param supportingText A optional supporting text that will appear below the text field.
  */
 @Suppress("LongMethod")
 @Composable
@@ -47,6 +48,7 @@ fun BitwardenMultiSelectButton(
     selectedOption: String,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
+    supportingText: String? = null,
 ) {
     var shouldShowDialog by remember { mutableStateOf(false) }
 
@@ -93,7 +95,16 @@ fun BitwardenMultiSelectButton(
                 disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
+            supportingText = supportingText?.let {
+                {
+                    Text(
+                        text = supportingText,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+            },
         )
         if (shouldShowDialog) {
             BitwardenSelectionDialog(
