@@ -34,6 +34,9 @@ class VaultSdkSourceImpl(
             }
         }
 
+    override suspend fun encryptCipher(cipherView: CipherView): Result<Cipher> =
+        runCatching { clientVault.ciphers().encrypt(cipherView) }
+
     override suspend fun decryptCipher(cipher: Cipher): Result<CipherView> =
         runCatching { clientVault.ciphers().decrypt(cipher) }
 

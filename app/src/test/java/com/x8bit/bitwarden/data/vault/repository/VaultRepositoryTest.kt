@@ -16,7 +16,10 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -26,6 +29,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
@@ -50,9 +54,11 @@ class VaultRepositoryTest {
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val syncService: SyncService = mockk()
+    private val ciphersService: CiphersService = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val vaultRepository = VaultRepositoryImpl(
         syncService = syncService,
+        ciphersService = ciphersService,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
         dispatcherManager = dispatcherManager,
@@ -1380,6 +1386,76 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
             }
         }
+
+    @Test
+    fun `createCipher with encryptCipher failure should return CreateCipherResult failure`() =
+        runTest {
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(cipherView = mockCipherView)
+            } returns IllegalStateException().asFailure()
+
+            val result = vaultRepository.createCipher(cipherView = mockCipherView)
+
+            assertEquals(
+                CreateCipherResult.Error,
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createCipher with ciphersService createCipher failure should return CreateCipherResult failure`() = runTest {
+        val mockCipherView = createMockCipherView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptCipher(cipherView = mockCipherView)
+        } returns createMockSdkCipher(number = 1).asSuccess()
+        coEvery {
+            ciphersService.createCipher(
+                body = createMockCipherJsonRequest(number = 1),
+            )
+        } returns IllegalStateException().asFailure()
+
+        val result = vaultRepository.createCipher(cipherView = mockCipherView)
+
+        assertEquals(
+            CreateCipherResult.Error,
+            result,
+        )
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createCipher with ciphersService createCipher success should return CreateCipherResult success`() = runTest {
+        val mockCipherView = createMockCipherView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptCipher(cipherView = mockCipherView)
+        } returns createMockSdkCipher(number = 1).asSuccess()
+        coEvery {
+            ciphersService.createCipher(
+                body = createMockCipherJsonRequest(number = 1),
+            )
+        } returns createMockCipher(number = 1).asSuccess()
+        coEvery {
+            syncService.sync()
+        } returns Result.success(createMockSyncResponse(1))
+        coEvery {
+            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+        } returns listOf(createMockCipherView(1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+        } returns listOf(createMockFolderView(1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
+        } returns listOf(createMockSendView(1)).asSuccess()
+
+        val result = vaultRepository.createCipher(cipherView = mockCipherView)
+
+        assertEquals(
+            CreateCipherResult.Success,
+            result,
+        )
+    }
 
     //region Helper functions
 

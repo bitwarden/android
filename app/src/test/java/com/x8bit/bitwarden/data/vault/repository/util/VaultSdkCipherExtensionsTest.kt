@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCard
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockField
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockIdentity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockLogin
@@ -30,6 +31,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class VaultSdkCipherExtensionsTest {
+
+    @Test
+    fun `toEncryptedNetworkCipher should convert an Sdk Cipher to a Network Cipher`() {
+        val sdkCipher = createMockSdkCipher(number = 1)
+        val syncCipher = sdkCipher.toEncryptedNetworkCipher()
+        assertEquals(
+            createMockCipherJsonRequest(number = 1),
+            syncCipher,
+        )
+    }
 
     @Test
     fun `toEncryptedSdkCipherList should convert list of Network Cipher to List of Sdk Cipher`() {

@@ -14,12 +14,15 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
@@ -44,6 +47,7 @@ import kotlinx.coroutines.launch
 @Suppress("TooManyFunctions")
 class VaultRepositoryImpl constructor(
     private val syncService: SyncService,
+    private val ciphersService: CiphersService,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
     dispatcherManager: DispatcherManager,
@@ -226,6 +230,25 @@ class VaultRepositoryImpl constructor(
         }
             .onCompletion { willSyncAfterUnlock = false }
             .first()
+
+    override suspend fun createCipher(cipherView: CipherView): CreateCipherResult =
+        vaultSdkSource
+            .encryptCipher(cipherView = cipherView)
+            .flatMap { cipher ->
+                ciphersService
+                    .createCipher(
+                        body = cipher.toEncryptedNetworkCipher(),
+                    )
+            }
+            .fold(
+                onFailure = {
+                    CreateCipherResult.Error
+                },
+                onSuccess = {
+                    sync()
+                    CreateCipherResult.Success
+                },
+            )
 
     // TODO: This is temporary. Eventually this needs to be based on the presence of various
     //  user keys but this will likely require SDK updates to support this (BIT-1190).

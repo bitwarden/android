@@ -2,7 +2,11 @@ package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -13,10 +17,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
     private val initialState = createVaultAddLoginItemState()
     private val initialSavedStateHandle = createSavedStateHandleWithState(initialState)
+    private val vaultRepository: VaultRepository = mockk()
 
     @Test
     fun `initial state should be correct`() = runTest {
-        val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+        val viewModel = createAddVaultItemViewModel()
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
         }
@@ -24,7 +29,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `CloseClick should emit NavigateBack`() = runTest {
-        val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+        val viewModel = createAddVaultItemViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultAddItemAction.CloseClick)
             assertEquals(VaultAddItemEvent.NavigateBack, awaitItem())
@@ -32,17 +37,31 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick should emit ShowToast`() = runTest {
-        val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+    fun `SaveClick createCipher success should emit NavigateBack`() = runTest {
+        val viewModel = createAddVaultItemViewModel()
+        coEvery {
+            vaultRepository.createCipher(any())
+        } returns CreateCipherResult.Success
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultAddItemAction.SaveClick)
-            assertEquals(VaultAddItemEvent.ShowToast("Save Item"), awaitItem())
+            assertEquals(VaultAddItemEvent.NavigateBack, awaitItem())
         }
     }
 
     @Test
+    fun `SaveClick createCipher error should emit ShowToast`() = runTest {
+        val viewModel = createAddVaultItemViewModel()
+        coEvery {
+            vaultRepository.createCipher(any())
+        } returns CreateCipherResult.Error
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(VaultAddItemAction.SaveClick)
+            assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure"), awaitItem())
+        }
+    }
+    @Test
     fun `TypeOptionSelect LOGIN should switch to LoginItem`() = runTest {
-        val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+        val viewModel = createAddVaultItemViewModel()
         val action = VaultAddItemAction.TypeOptionSelect(VaultAddItemState.ItemTypeOption.LOGIN)
 
         viewModel.actionChannel.trySend(action)
@@ -58,12 +77,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            viewModel = createAddVaultItemViewModel()
         }
 
         @Test
         fun `NameTextChange should update name in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action = VaultAddItemAction.ItemType.LoginType.NameTextChange("newName")
 
             viewModel.actionChannel.trySend(action)
@@ -80,7 +99,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `UsernameTextChange should update username in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action = VaultAddItemAction.ItemType.LoginType.UsernameTextChange("newUsername")
 
             viewModel.actionChannel.trySend(action)
@@ -97,7 +116,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `PasswordTextChange should update password in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action = VaultAddItemAction.ItemType.LoginType.PasswordTextChange("newPassword")
 
             viewModel.actionChannel.trySend(action)
@@ -113,7 +132,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `UriTextChange should update uri in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action = VaultAddItemAction.ItemType.LoginType.UriTextChange("newUri")
 
             viewModel.actionChannel.trySend(action)
@@ -129,7 +148,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `FolderChange should update folder in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action = VaultAddItemAction.ItemType.LoginType.FolderChange("newFolder")
 
             viewModel.actionChannel.trySend(action)
@@ -145,7 +164,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `ToggleFavorite should update favorite in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action = VaultAddItemAction.ItemType.LoginType.ToggleFavorite(true)
 
             viewModel.actionChannel.trySend(action)
@@ -163,7 +182,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `ToggleMasterPasswordReprompt should update masterPasswordReprompt in LoginItem`() =
             runTest {
-                val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+                val viewModel = createAddVaultItemViewModel()
                 val action = VaultAddItemAction.ItemType.LoginType.ToggleMasterPasswordReprompt(
                     isMasterPasswordReprompt = true,
                 )
@@ -181,7 +200,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `NotesTextChange should update notes in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action = VaultAddItemAction.ItemType.LoginType.NotesTextChange(notes = "newNotes")
 
             viewModel.actionChannel.trySend(action)
@@ -198,7 +217,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `OwnershipChange should update ownership in LoginItem`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
             val action =
                 VaultAddItemAction.ItemType.LoginType.OwnershipChange(ownership = "newOwner")
 
@@ -217,7 +236,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `OpenUsernameGeneratorClick should emit ShowToast with 'Open Username Generator' message`() =
             runTest {
-                val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+                val viewModel = createAddVaultItemViewModel()
 
                 viewModel.eventFlow.test {
                     viewModel.actionChannel.trySend(
@@ -233,7 +252,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `PasswordCheckerClick should emit ShowToast with 'Password Checker' message`() =
             runTest {
-                val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+                val viewModel = createAddVaultItemViewModel()
 
                 viewModel.eventFlow.test {
                     viewModel
@@ -248,7 +267,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `OpenPasswordGeneratorClick should emit ShowToast with 'Open Password Generator' message`() =
             runTest {
-                val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+                val viewModel = createAddVaultItemViewModel()
 
                 viewModel.eventFlow.test {
                     viewModel
@@ -265,7 +284,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `SetupTotpClick should emit ShowToast with 'Setup TOTP' message`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
 
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(VaultAddItemAction.ItemType.LoginType.SetupTotpClick)
@@ -276,7 +295,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `UriSettingsClick should emit ShowToast with 'URI Settings' message`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
 
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(VaultAddItemAction.ItemType.LoginType.UriSettingsClick)
@@ -286,7 +305,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `AddNewUriClick should emit ShowToast with 'Add New URI' message`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
 
             viewModel.eventFlow.test {
                 viewModel
@@ -301,7 +320,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `TooltipClick should emit ShowToast with 'Tooltip' message`() = runTest {
-            val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+            val viewModel = createAddVaultItemViewModel()
 
             viewModel.eventFlow.test {
                 viewModel
@@ -316,7 +335,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `AddNewCustomFieldClick should emit ShowToast with 'Add New Custom Field' message`() =
             runTest {
-                val viewModel = VaultAddItemViewModel(initialSavedStateHandle)
+                val viewModel = createAddVaultItemViewModel()
 
                 viewModel.eventFlow.test {
                     viewModel
@@ -359,4 +378,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         SavedStateHandle().apply {
             set("state", state)
         }
+
+    private fun createAddVaultItemViewModel(): VaultAddItemViewModel =
+        VaultAddItemViewModel(
+            savedStateHandle = initialSavedStateHandle,
+            vaultRepository = vaultRepository,
+        )
 }

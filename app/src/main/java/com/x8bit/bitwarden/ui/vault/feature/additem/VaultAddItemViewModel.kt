@@ -4,10 +4,13 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Card.displayStringResId
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Identity.displayStringResId
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.SecureNotes.displayStringResId
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,6 +34,7 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions")
 class VaultAddItemViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultAddItemState, VaultAddItemEvent, VaultAddItemAction>(
     initialState = savedStateHandle[KEY_STATE] ?: INITIAL_STATE,
 ) {
@@ -58,6 +62,10 @@ class VaultAddItemViewModel @Inject constructor(
             is VaultAddItemAction.ItemType.LoginType -> {
                 handleAddLoginTypeAction(action)
             }
+
+            is VaultAddItemAction.Internal.CreateCipherResultReceive -> {
+                handleCreateCipherResultReceive(action)
+            }
         }
     }
 
@@ -67,9 +75,11 @@ class VaultAddItemViewModel @Inject constructor(
 
     private fun handleSaveClick() {
         viewModelScope.launch {
-            sendEvent(
-                event = VaultAddItemEvent.ShowToast(
-                    message = "Save Item",
+            sendAction(
+                action = VaultAddItemAction.Internal.CreateCipherResultReceive(
+                    createCipherResult = vaultRepository.createCipher(
+                        cipherView = stateFlow.value.selectedType.toCipherView(),
+                    ),
                 ),
             )
         }
@@ -106,6 +116,7 @@ class VaultAddItemViewModel @Inject constructor(
 
     //region Add Login Item Type Handlers
 
+    @Suppress("LongMethod")
     private fun handleAddLoginTypeAction(
         action: VaultAddItemAction.ItemType.LoginType,
     ) {
@@ -357,6 +368,30 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     //endregion Add Login Item Type Handlers
+
+    //region Internal Type Handlers
+
+    @Suppress("MaxLineLength")
+    private fun handleCreateCipherResultReceive(action: VaultAddItemAction.Internal.CreateCipherResultReceive) {
+        when (action.createCipherResult) {
+            is CreateCipherResult.Error -> {
+                // TODO Display error dialog BIT-501
+                sendEvent(
+                    event = VaultAddItemEvent.ShowToast(
+                        message = "Save Item Failure",
+                    ),
+                )
+            }
+
+            is CreateCipherResult.Success -> {
+                sendEvent(
+                    event = VaultAddItemEvent.NavigateBack,
+                )
+            }
+        }
+    }
+
+    //endregion Internal Type Handlers
 
     //region Utility Functions
 
@@ -668,5 +703,18 @@ sealed class VaultAddItemAction {
              */
             data object AddNewCustomFieldClick : LoginType()
         }
+    }
+
+    /**
+     * Models actions that the [VaultAddItemViewModel] itself might send.
+     */
+    sealed class Internal : VaultAddItemAction() {
+
+        /**
+         * Indicates a result for creating a cipher has been received.
+         */
+        data class CreateCipherResultReceive(
+            val createCipherResult: CreateCipherResult,
+        ) : Internal()
     }
 }

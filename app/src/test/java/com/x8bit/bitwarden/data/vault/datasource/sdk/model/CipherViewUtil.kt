@@ -152,7 +152,7 @@ fun createMockPasswordHistoryView(number: Int): PasswordHistoryView =
     )
 
 /**
- * Create a mock [SecureNoteView] with a given [number].
+ * Create a mock [SecureNoteView].
  */
 fun createMockSecureNoteView(): SecureNoteView =
     SecureNoteView(
