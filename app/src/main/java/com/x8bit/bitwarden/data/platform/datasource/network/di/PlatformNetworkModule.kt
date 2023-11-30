@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.di
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.serializer.LocalDateTimeSerializer
@@ -39,6 +40,10 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
+    fun providesHeadersInterceptor(): HeadersInterceptor = HeadersInterceptor()
+
+    @Provides
+    @Singleton
     fun providesRefreshAuthenticator(): RefreshAuthenticator = RefreshAuthenticator()
 
     @Provides
@@ -46,12 +51,14 @@ object PlatformNetworkModule {
     fun provideRetrofits(
         authTokenInterceptor: AuthTokenInterceptor,
         baseUrlInterceptors: BaseUrlInterceptors,
+        headersInterceptor: HeadersInterceptor,
         refreshAuthenticator: RefreshAuthenticator,
         json: Json,
     ): Retrofits =
         RetrofitsImpl(
             authTokenInterceptor = authTokenInterceptor,
             baseUrlInterceptors = baseUrlInterceptors,
+            headersInterceptor = headersInterceptor,
             refreshAuthenticator = refreshAuthenticator,
             json = json,
         )
