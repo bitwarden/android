@@ -9,6 +9,24 @@ import java.net.URI
 import java.util.Locale
 
 /**
+ * This character takes up no space but can be used to ensure a string is not empty. It can also
+ * be used to insert "safe" line-break positions in a string.
+ *
+ * Note: Is a string only contains this charactor, it is _not_ considered blank.
+ */
+const val ZERO_WIDTH_CHARACTER: String = "\u200B"
+
+/**
+ * Returns the original [String] only if:
+ *
+ * - it is non-null
+ * - it is not blank (where blank refers to empty strings of those containing only white space)
+ *
+ * Otherwise [ZERO_WIDTH_CHARACTER] is returned.
+ */
+fun String?.orZeroWidthSpace(): String = this.orNullIfBlank() ?: ZERO_WIDTH_CHARACTER
+
+/**
  * Whether or not string is a valid email address.
  *
  * This just checks if the string contains the "@" symbol.
@@ -27,6 +45,16 @@ fun String.isValidUri(): Boolean =
     } catch (_: IllegalArgumentException) {
         false
     }
+
+/**
+ * Returns the original [String] only if:
+ *
+ * - it is non-null
+ * - it is not blank (where blank refers to empty strings of those containing only white space)
+ *
+ * Otherwise `null` is returned.
+ */
+fun String?.orNullIfBlank(): String? = this?.takeUnless { it.isBlank() }
 
 /**
  * Returns the given [String] in a lowercase form using the primary [Locale] from the current
