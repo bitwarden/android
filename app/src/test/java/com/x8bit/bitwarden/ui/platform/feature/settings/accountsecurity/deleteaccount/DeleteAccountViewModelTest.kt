@@ -4,8 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
@@ -56,7 +55,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     fun `on DeleteAccountClick should make the delete call`() = runTest {
         val viewModel = createViewModel()
         val masterPassword = "ckasb kcs ja"
-        coEvery { authRepo.deleteAccount(masterPassword) } returns Unit.asSuccess()
+        coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Success
 
         viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(masterPassword))
 
@@ -70,7 +69,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     fun `on DeleteAccountClick should update dialog state`() = runTest {
         val viewModel = createViewModel()
         val masterPassword = "ckasb kcs ja"
-        coEvery { authRepo.deleteAccount(masterPassword) } returns Throwable("Fail").asFailure()
+        coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Error
 
         viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(masterPassword))
 

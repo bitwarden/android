@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
@@ -111,18 +112,24 @@ class CreateAccountViewModel @Inject constructor(
     }
 
     private fun handlePasswordStrengthResult(action: ReceivePasswordStrengthResult) {
-        action.result.onSuccess {
-            val updatedState = when (it) {
-                PasswordStrength.LEVEL_0 -> PasswordStrengthState.WEAK_1
-                PasswordStrength.LEVEL_1 -> PasswordStrengthState.WEAK_2
-                PasswordStrength.LEVEL_2 -> PasswordStrengthState.WEAK_3
-                PasswordStrength.LEVEL_3 -> PasswordStrengthState.GOOD
-                PasswordStrength.LEVEL_4 -> PasswordStrengthState.STRONG
+        when (val result = action.result) {
+            is PasswordStrengthResult.Success -> {
+                val updatedState = when (result.passwordStrength) {
+                    PasswordStrength.LEVEL_0 -> PasswordStrengthState.WEAK_1
+                    PasswordStrength.LEVEL_1 -> PasswordStrengthState.WEAK_2
+                    PasswordStrength.LEVEL_2 -> PasswordStrengthState.WEAK_3
+                    PasswordStrength.LEVEL_3 -> PasswordStrengthState.GOOD
+                    PasswordStrength.LEVEL_4 -> PasswordStrengthState.STRONG
+                }
+                mutableStateFlow.update { oldState ->
+                    oldState.copy(
+                        passwordStrengthState = updatedState,
+                    )
+                }
             }
-            mutableStateFlow.update { oldState ->
-                oldState.copy(
-                    passwordStrengthState = updatedState,
-                )
+
+            PasswordStrengthResult.Error -> {
+                // TODO: Assess possible error conditions (BIT-964)
             }
         }
     }
@@ -510,7 +517,7 @@ sealed class CreateAccountAction {
          * Indicates a password strength result has been received.
          */
         data class ReceivePasswordStrengthResult(
-            val result: Result<PasswordStrength>,
+            val result: PasswordStrengthResult,
         ) : Internal()
     }
 }

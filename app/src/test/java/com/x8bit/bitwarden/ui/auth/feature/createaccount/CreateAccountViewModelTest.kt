@@ -11,10 +11,9 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.ConfirmPasswordInputChange
@@ -141,7 +140,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val input = "abcdefghikl"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", input)
-        } returns Throwable().asFailure()
+        } returns PasswordStrengthResult.Error
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -169,7 +168,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val input = "testtesttesttest"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", input)
-        } returns Throwable().asFailure()
+        } returns PasswordStrengthResult.Error
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -197,7 +196,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val password = "testtesttesttest"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", password)
-        } returns Throwable().asFailure()
+        } returns PasswordStrengthResult.Error
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -504,7 +503,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     fun `PasswordInputChange update passwordInput and call getPasswordStrength`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength("", "input")
-        } returns Result.failure(Throwable())
+        } returns PasswordStrengthResult.Error
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -554,7 +553,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_0.asSuccess()))
+            viewModel.trySendAction(
+                ReceivePasswordStrengthResult(PasswordStrengthResult.Success(LEVEL_0)),
+            )
             assertEquals(
                 DEFAULT_STATE.copy(
                     passwordStrengthState = PasswordStrengthState.WEAK_1,
@@ -562,7 +563,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_1.asSuccess()))
+            viewModel.trySendAction(
+                ReceivePasswordStrengthResult(PasswordStrengthResult.Success(LEVEL_1)),
+            )
             assertEquals(
                 DEFAULT_STATE.copy(
                     passwordStrengthState = PasswordStrengthState.WEAK_2,
@@ -570,7 +573,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_2.asSuccess()))
+            viewModel.trySendAction(
+                ReceivePasswordStrengthResult(PasswordStrengthResult.Success(LEVEL_2)),
+            )
             assertEquals(
                 DEFAULT_STATE.copy(
                     passwordStrengthState = PasswordStrengthState.WEAK_3,
@@ -578,7 +583,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_3.asSuccess()))
+            viewModel.trySendAction(
+                ReceivePasswordStrengthResult(PasswordStrengthResult.Success(LEVEL_3)),
+            )
             assertEquals(
                 DEFAULT_STATE.copy(
                     passwordStrengthState = PasswordStrengthState.GOOD,
@@ -586,7 +593,9 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            viewModel.trySendAction(ReceivePasswordStrengthResult(LEVEL_4.asSuccess()))
+            viewModel.trySendAction(
+                ReceivePasswordStrengthResult(PasswordStrengthResult.Success(LEVEL_4)),
+            )
             assertEquals(
                 DEFAULT_STATE.copy(
                     passwordStrengthState = PasswordStrengthState.STRONG,

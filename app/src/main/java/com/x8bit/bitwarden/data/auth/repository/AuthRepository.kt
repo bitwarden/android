@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.data.auth.repository
 
-import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -38,7 +39,7 @@ interface AuthRepository : AuthenticatorProvider {
     /**
      * Attempt to delete the current account and logout them out upon success.
      */
-    suspend fun deleteAccount(password: String): Result<Unit>
+    suspend fun deleteAccount(password: String): DeleteAccountResult
 
     /**
      * Attempt to login with the given email and password. Updated access token will be reflected
@@ -74,5 +75,5 @@ interface AuthRepository : AuthenticatorProvider {
     /**
      * Get the password strength for the given [email] and [password] combo.
      */
-    suspend fun getPasswordStrength(email: String, password: String): Result<PasswordStrength>
+    suspend fun getPasswordStrength(email: String, password: String): PasswordStrengthResult
 }
