@@ -102,11 +102,7 @@ class AuthRepositoryImpl constructor(
     override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
         mutableCaptchaTokenFlow.asSharedFlow()
 
-    override var rememberedEmailAddress: String?
-        get() = authDiskSource.rememberedEmailAddress
-        set(value) {
-            authDiskSource.rememberedEmailAddress = value
-        }
+    override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
 
     override suspend fun deleteAccount(password: String): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
