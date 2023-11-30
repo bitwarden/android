@@ -61,6 +61,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
@@ -753,6 +754,12 @@ private fun UsernameOptionsItem(
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
+        tooltip = TooltipData(
+            onClick = {
+                // TODO: "?" icon redirects user to appropriate link (BIT-1087)
+            },
+            contentDescription = stringResource(id = R.string.learn_more),
+        ),
     )
 }
 

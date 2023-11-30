@@ -3,8 +3,14 @@ package com.x8bit.bitwarden.ui.platform.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -22,8 +28,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -39,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * is selected from the dropdown menu.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param supportingText A optional supporting text that will appear below the text field.
+ * @param tooltip A nullable [TooltipData], representing the tooltip icon.
  */
 @Suppress("LongMethod")
 @Composable
@@ -49,6 +58,7 @@ fun BitwardenMultiSelectButton(
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
+    tooltip: TooltipData? = null,
 ) {
     var shouldShowDialog by remember { mutableStateOf(false) }
 
@@ -65,7 +75,6 @@ fun BitwardenMultiSelectButton(
                 }
                 .fillMaxWidth()
                 .clickable(
-                    // Disable the ripple
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
                 ) {
@@ -74,9 +83,24 @@ fun BitwardenMultiSelectButton(
             textStyle = MaterialTheme.typography.bodyLarge,
             readOnly = true,
             label = {
-                Text(
-                    text = label,
-                )
+                Row {
+                    Text(text = label)
+                    tooltip?.let {
+                        Spacer(modifier = Modifier.width(3.dp))
+                        IconButton(
+                            onClick = it.onClick,
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = MaterialTheme.colorScheme.primary,
+                            ),
+                            modifier = Modifier.size(16.dp),
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_tooltip_small),
+                                contentDescription = it.contentDescription,
+                            )
+                        }
+                    }
+                }
             },
             value = selectedOption,
             onValueChange = onOptionSelected,
