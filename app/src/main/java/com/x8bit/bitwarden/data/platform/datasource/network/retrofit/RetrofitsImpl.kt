@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapt
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -18,6 +19,7 @@ import retrofit2.Retrofit
 class RetrofitsImpl(
     authTokenInterceptor: AuthTokenInterceptor,
     baseUrlInterceptors: BaseUrlInterceptors,
+    headersInterceptor: HeadersInterceptor,
     refreshAuthenticator: RefreshAuthenticator,
     json: Json,
 ) : Retrofits {
@@ -70,6 +72,7 @@ class RetrofitsImpl(
 
     private val baseOkHttpClient: OkHttpClient =
         OkHttpClient.Builder()
+            .addInterceptor(headersInterceptor)
             .build()
 
     private val authenticatedOkHttpClient: OkHttpClient by lazy {

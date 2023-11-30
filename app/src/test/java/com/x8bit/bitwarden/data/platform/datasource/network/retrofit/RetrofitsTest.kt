@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -37,6 +38,9 @@ class RetrofitsTest {
             mockIntercept { isEventsInterceptorCalled = true }
         }
     }
+    private val headersInterceptors = mockk<HeadersInterceptor> {
+        mockIntercept { isheadersInterceptorCalled = true }
+    }
     private val refreshAuthenticator = mockk<RefreshAuthenticator> {
         mockAuthenticate { isRefreshAuthenticatorCalled = true }
     }
@@ -46,12 +50,14 @@ class RetrofitsTest {
     private val retrofits = RetrofitsImpl(
         authTokenInterceptor = authTokenInterceptor,
         baseUrlInterceptors = baseUrlInterceptors,
+        headersInterceptor = headersInterceptors,
         refreshAuthenticator = refreshAuthenticator,
         json = json,
     )
 
     private var isAuthInterceptorCalled = false
     private var isApiInterceptorCalled = false
+    private var isheadersInterceptorCalled = false
     private var isIdentityInterceptorCalled = false
     private var isEventsInterceptorCalled = false
     private var isRefreshAuthenticatorCalled = false
@@ -122,6 +128,7 @@ class RetrofitsTest {
 
         assertTrue(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
+        assertTrue(isheadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -139,6 +146,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertTrue(isApiInterceptorCalled)
+        assertTrue(isheadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -156,6 +164,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
+        assertTrue(isheadersInterceptorCalled)
         assertTrue(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
@@ -175,6 +184,7 @@ class RetrofitsTest {
 
         assertFalse(isAuthInterceptorCalled)
         assertFalse(isApiInterceptorCalled)
+        assertTrue(isheadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
     }
