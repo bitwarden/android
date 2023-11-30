@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
@@ -1076,6 +1077,37 @@ class AuthRepositoryTest {
             verify(exactly = 0) { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
         }
+    }
+
+    @Test
+    fun `getPasswordBreachCount should return failure when service returns failure`() = runTest {
+        val password = "password"
+        coEvery {
+            haveIBeenPwnedService.getPasswordBreachCount(password)
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.getPasswordBreachCount(password)
+
+        coVerify(exactly = 1) {
+            haveIBeenPwnedService.getPasswordBreachCount(password)
+        }
+        assertEquals(BreachCountResult.Error, result)
+    }
+
+    @Test
+    fun `getPasswordBreachCount should return success when service returns success`() = runTest {
+        val password = "password"
+        val breachCount = 5
+        coEvery {
+            haveIBeenPwnedService.getPasswordBreachCount(password)
+        } returns breachCount.asSuccess()
+
+        val result = repository.getPasswordBreachCount(password)
+
+        coVerify(exactly = 1) {
+            haveIBeenPwnedService.getPasswordBreachCount(password)
+        }
+        assertEquals(BreachCountResult.Success(breachCount), result)
     }
 
     @Test

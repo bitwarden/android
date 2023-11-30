@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
@@ -336,6 +337,14 @@ class AuthRepositoryImpl constructor(
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         mutableCaptchaTokenFlow.tryEmit(tokenResult)
     }
+
+    override suspend fun getPasswordBreachCount(password: String): BreachCountResult =
+        haveIBeenPwnedService
+            .getPasswordBreachCount(password)
+            .fold(
+                onFailure = { BreachCountResult.Error },
+                onSuccess = { BreachCountResult.Success(it) },
+            )
 
     @Suppress("MagicNumber")
     override suspend fun getPasswordStrength(
