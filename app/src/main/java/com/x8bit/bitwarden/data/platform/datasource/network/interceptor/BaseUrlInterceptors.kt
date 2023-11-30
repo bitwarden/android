@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
 
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import javax.inject.Inject
 import javax.inject.Singleton
 
