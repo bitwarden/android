@@ -93,7 +93,8 @@
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
                             ReturnType="Go"
-                            ReturnCommand="{Binding SubmitCommand}" />
+                            ReturnCommand="{Binding SubmitCommand}"
+                            TextChanged="Token_TextChanged" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
