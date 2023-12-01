@@ -11,7 +11,8 @@ namespace Bit.App.Controls
             // TODO: [TouchEffect] When this TouchBehavior is replaced we can delete the existing TouchBehavior support files (which is all the files and folders inside "Core.Behaviors.PlatformBehaviors.MCTTouch.*")
             var touchBehavior = new TouchBehavior()
             {
-                NativeAnimation = true
+                NativeAnimation = true,
+                ShouldMakeChildrenInputTransparent = false
             };
             Behaviors.Add(touchBehavior);
 #endif

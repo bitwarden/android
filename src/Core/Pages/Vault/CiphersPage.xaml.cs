@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
-using Bit.App.Controls;
+﻿using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -41,8 +37,7 @@ namespace Bit.App.Pages
             }
             _vm.VaultFilterDescription = vaultFilterSelection;
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+            if (DeviceInfo.Platform == DevicePlatform.iOS)
             {
                 ToolbarItems.Add(_closeItem);
                 _searchBar.Placeholder = AppResources.Search;
@@ -59,7 +54,7 @@ namespace Bit.App.Pages
 
         public SearchBar SearchBar => _searchBar;
 
-        protected async override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             await _vm.InitAsync();
