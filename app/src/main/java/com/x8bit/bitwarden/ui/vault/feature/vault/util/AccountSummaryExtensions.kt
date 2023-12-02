@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import java.util.Locale
 
 /**
  * Given the [AccountSummary], returns the first two "initials" found when looking at the
@@ -12,17 +13,21 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
  * Ex:
  * - "First Last" -> "FL"
  * - "First Second Last" -> "FS"
- * - `null` -> ".."
+ * - "First" -> "FI"
+ * - name is `null`, email is "test@bitwarden.com" -> "TE"
  */
 val AccountSummary.initials: String
-    get() = this
-        .name
-        ?.let {
-            it.split(" ")
+    get() {
+        val names = this.name.orEmpty().split(" ")
+        return if (names.size >= 2) {
+            names
                 .take(2)
                 .joinToString(separator = "") { it.first().toString() }
+        } else {
+            (this.name ?: this.email).take(2)
         }
-        ?: ".."
+            .uppercase(Locale.getDefault())
+    }
 
 /**
  * Drawable resource to display for the given [AccountSummary].
