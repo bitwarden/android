@@ -58,10 +58,6 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
                 <Label
                     Grid.Row="0"
                     Text="{Binding AccountView.Email}"

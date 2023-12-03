@@ -64,23 +64,25 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Label 
-            LineBreakMode="TailTruncation"
             Grid.Column="0"
             Grid.Row="0"
+            HorizontalTextAlignment="Start"
+            LineBreakMode="TailTruncation"
             StyleClass="list-title, list-title-platform"
             Text="{Binding Cipher.Name}"
             AutomationId="CipherNameLabel" />
         <Label
-            LineBreakMode="TailTruncation"
             Grid.Column="0"
             Grid.Row="1"
             Grid.ColumnSpan="3"
+            HorizontalTextAlignment="Start"
+            LineBreakMode="TailTruncation"
             StyleClass="list-subtitle, list-subtitle-platform"
             Text="{Binding Cipher.SubTitle}"
             IsVisible="{Binding Source={RelativeSource Self}, Path=Text,
