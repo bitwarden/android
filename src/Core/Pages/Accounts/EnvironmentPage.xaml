@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -21,6 +21,10 @@
     <ScrollView>
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="MAUI APP"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n SelfHostedEnvironment, Header=True}"
                            StyleClass="box-header, box-header-platform" />
