@@ -20,9 +20,10 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AnonAddy
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -108,6 +109,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameType.CatchAllEmail.DomainTextChange -> {
                 handleCatchAllEmailTextInputChange(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.RandomWord -> {
+                handleRandomWordSpecificAction(action)
             }
         }
     }
@@ -451,12 +456,12 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleCapitalizeChange,
             -> {
-                handleToggleCapitalizeChange(action)
+                handlePassphraseToggleCapitalizeChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleIncludeNumberChange,
             -> {
-                handleToggleIncludeNumberChange(action)
+                handlePassphraseToggleIncludeNumberChange(action)
             }
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.WordSeparatorTextChange,
@@ -466,7 +471,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleToggleCapitalizeChange(
+    private fun handlePassphraseToggleCapitalizeChange(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleCapitalizeChange,
     ) {
         updatePassphraseType { currentPassphraseType ->
@@ -476,7 +481,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleToggleIncludeNumberChange(
+    private fun handlePassphraseToggleIncludeNumberChange(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.ToggleIncludeNumberChange,
     ) {
         updatePassphraseType { currentPassphraseType ->
@@ -557,6 +562,50 @@ class GeneratorViewModel @Inject constructor(
     }
 
     //endregion Catch-All Email Specific Handlers
+
+    //region Random Word Specific Handlers
+
+    private fun handleRandomWordSpecificAction(
+        action: GeneratorAction.MainType.Username.UsernameType.RandomWord,
+    ) {
+        when (action) {
+            is GeneratorAction.MainType.Username.UsernameType.RandomWord.ToggleCapitalizeChange -> {
+                handleRandomWordToggleCapitalizeChange(action)
+            }
+
+            is GeneratorAction
+            .MainType
+            .Username
+            .UsernameType
+            .RandomWord
+            .ToggleIncludeNumberChange,
+            -> {
+                handleRandomWordToggleIncludeNumberChange(action)
+            }
+        }
+    }
+
+    private fun handleRandomWordToggleCapitalizeChange(
+        action: GeneratorAction.MainType.Username.UsernameType.RandomWord.ToggleCapitalizeChange,
+    ) {
+        updateRandomWordType { currentRandomWordType ->
+            currentRandomWordType.copy(
+                capitalize = action.capitalize,
+            )
+        }
+    }
+
+    private fun handleRandomWordToggleIncludeNumberChange(
+        action: GeneratorAction.MainType.Username.UsernameType.RandomWord.ToggleIncludeNumberChange,
+    ) {
+        updateRandomWordType { currentRandomWordType ->
+            currentRandomWordType.copy(
+                includeNumber = action.includeNumber,
+            )
+        }
+    }
+
+    //endregion Random Word Specific Handlers
 
     //region Utility Functions
 
@@ -647,6 +696,18 @@ class GeneratorViewModel @Inject constructor(
         updateGeneratorMainTypeUsername { currentSelectedType ->
             val currentUsernameType = currentSelectedType.selectedType
             if (currentUsernameType !is CatchAllEmail) {
+                return@updateGeneratorMainTypeUsername currentSelectedType
+            }
+            currentSelectedType.copy(selectedType = block(currentUsernameType))
+        }
+    }
+
+    private inline fun updateRandomWordType(
+        crossinline block: (RandomWord) -> RandomWord,
+    ) {
+        updateGeneratorMainTypeUsername { currentSelectedType ->
+            val currentUsernameType = currentSelectedType.selectedType
+            if (currentUsernameType !is RandomWord) {
                 return@updateGeneratorMainTypeUsername currentSelectedType
             }
             currentSelectedType.copy(selectedType = block(currentUsernameType))
@@ -1261,6 +1322,26 @@ sealed class GeneratorAction {
                      * @property domain The new domain text.
                      */
                     data class DomainTextChange(val domain: String) : CatchAllEmail()
+                }
+
+                /**
+                 * Represents actions specifically related to Random Word.
+                 */
+                sealed class RandomWord : UsernameType() {
+
+                    /**
+                     * Fired when the "capitalize" toggle is changed.
+                     *
+                     * @property capitalize The new value of the "capitalize" toggle.
+                     */
+                    data class ToggleCapitalizeChange(val capitalize: Boolean) : RandomWord()
+
+                    /**
+                     * Fired when the "include number" toggle is changed.
+                     *
+                     * @property includeNumber The new value of the "include number" toggle.
+                     */
+                    data class ToggleIncludeNumberChange(val includeNumber: Boolean) : RandomWord()
                 }
             }
         }
