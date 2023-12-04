@@ -33,6 +33,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * A custom composable representing a multi-select button.
@@ -53,7 +55,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenMultiSelectButton(
     label: String,
-    options: List<String>,
+    options: ImmutableList<String>,
     selectedOption: String,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -156,7 +158,7 @@ private fun BitwardenMultiSelectButton_preview() {
     BitwardenTheme {
         BitwardenMultiSelectButton(
             label = "Label",
-            options = listOf("a", "b"),
+            options = persistentListOf("a", "b"),
             selectedOption = "",
             onOptionSelected = {},
         )

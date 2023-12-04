@@ -69,6 +69,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MAX
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MIN
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Top level composable for the generator screen.
@@ -300,7 +301,7 @@ private fun MainStateOptionsItem(
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.what_would_you_like_to_generate),
-        options = optionsWithStrings.values.toList(),
+        options = optionsWithStrings.values.toImmutableList(),
         selectedOption = stringResource(id = selectedType.displayStringResId),
         onOptionSelected = { selectedOption ->
             val selectedOptionId =
@@ -353,7 +354,7 @@ private fun PasscodeOptionsItem(
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.password_type),
-        options = optionsWithStrings.values.toList(),
+        options = optionsWithStrings.values.toImmutableList(),
         selectedOption = stringResource(id = currentSubState.selectedType.displayStringResId),
         onOptionSelected = { selectedOption ->
             val selectedOptionId =
@@ -752,7 +753,7 @@ private fun UsernameOptionsItem(
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.username_type),
-        options = optionsWithStrings.values.toList(),
+        options = optionsWithStrings.values.toImmutableList(),
         selectedOption = stringResource(id = currentSubState.selectedType.displayStringResId),
         onOptionSelected = { selectedOption ->
             val selectedOptionId =
