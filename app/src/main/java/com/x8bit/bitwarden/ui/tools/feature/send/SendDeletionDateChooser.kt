@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays UX for choosing deletion date of a send.
@@ -43,7 +44,7 @@ fun SendDeletionDateChooser(
     ) {
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.deletion_date),
-            options = options,
+            options = options.toImmutableList(),
             selectedOption = selectedOption,
             onOptionSelected = { selectedOption = it },
         )

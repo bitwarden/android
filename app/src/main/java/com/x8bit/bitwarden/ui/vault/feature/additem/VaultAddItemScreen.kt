@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Top level composable for the vault add item screen.
@@ -159,7 +160,7 @@ private fun TypeOptionsItem(
 
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.type),
-        options = optionsWithStrings.values.toList(),
+        options = optionsWithStrings.values.toImmutableList(),
         selectedOption = stringResource(id = selectedType.displayStringResId),
         onOptionSelected = { selectedOption ->
             val selectedOptionId =
@@ -290,7 +291,7 @@ private fun AddLoginTypeItemContent(
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.folder),
-        options = state.availableFolders,
+        options = state.availableFolders.toImmutableList(),
         selectedOption = state.folder,
         onOptionSelected = loginItemTypeHandlers.onFolderTextChange,
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -375,7 +376,7 @@ private fun AddLoginTypeItemContent(
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.who_owns_this_item),
-        options = state.availableOwners,
+        options = state.availableOwners.toImmutableList(),
         selectedOption = state.ownership,
         onOptionSelected = loginItemTypeHandlers.onOwnershipTextChange,
         modifier = Modifier.padding(horizontal = 16.dp),
