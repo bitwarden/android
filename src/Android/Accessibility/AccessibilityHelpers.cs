@@ -125,6 +125,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.ungoogled.chromium.extensions.stable", "url_bar"),
             new Browser("org.ungoogled.chromium.stable", "url_bar"),
             new Browser("us.spotco.fennec_dos", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
+            new Browser("net.waterfox.android.release", "mozac_browser_toolbar_url_view"),
 
             // [Section B] Entries only present here
             //
