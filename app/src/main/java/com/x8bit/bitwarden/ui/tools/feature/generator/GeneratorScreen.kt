@@ -150,6 +150,10 @@ fun GeneratorScreen(
         CatchAllEmailHandlers.create(viewModel = viewModel)
     }
 
+    val randomWordHandlers = remember(viewModel) {
+        RandomWordHandlers.create(viewModel = viewModel)
+    }
+
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
@@ -179,6 +183,7 @@ fun GeneratorScreen(
             passphraseHandlers = passphraseHandlers,
             plusAddressedEmailHandlers = plusAddressedEmailHandlers,
             catchAllEmailHandlers = catchAllEmailHandlers,
+            randomWordHandlers = randomWordHandlers,
             modifier = Modifier.padding(innerPadding),
         )
     }
@@ -199,6 +204,7 @@ private fun ScrollContent(
     passphraseHandlers: PassphraseHandlers,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
+    randomWordHandlers: RandomWordHandlers,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -248,6 +254,7 @@ private fun ScrollContent(
                     onSubStateOptionClicked = onUsernameSubStateOptionClicked,
                     plusAddressedEmailHandlers = plusAddressedEmailHandlers,
                     catchAllEmailHandlers = catchAllEmailHandlers,
+                    randomWordHandlers = randomWordHandlers,
                 )
             }
         }
@@ -703,6 +710,7 @@ private fun ColumnScope.UsernameTypeItems(
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
+    randomWordHandlers: RandomWordHandlers,
 ) {
     UsernameOptionsItem(usernameState, onSubStateOptionClicked)
 
@@ -726,7 +734,10 @@ private fun ColumnScope.UsernameTypeItems(
         }
 
         is GeneratorState.MainType.Username.UsernameType.RandomWord -> {
-            // TODO: Implement RandomWord BIT-658
+            RandomWordTypeContent(
+                randomWordTypeState = selectedType,
+                randomWordHandlers = randomWordHandlers,
+            )
         }
     }
 }
@@ -832,6 +843,58 @@ private fun CatchAllEmailTextInputItem(
 }
 
 //endregion CatchAllEmailType Composables
+
+//region Random Word Composables
+
+@Composable
+private fun ColumnScope.RandomWordTypeContent(
+    randomWordTypeState: GeneratorState.MainType.Username.UsernameType.RandomWord,
+    randomWordHandlers: RandomWordHandlers,
+) {
+    Spacer(modifier = Modifier.height(16.dp))
+
+    RandomWordCapitalizeToggleItem(
+        capitalize = randomWordTypeState.capitalize,
+        onRandomWordCapitalizeToggleChange = randomWordHandlers.onCapitalizeChange,
+    )
+
+    RandomWordIncludeNumberToggleItem(
+        includeNumber = randomWordTypeState.includeNumber,
+        onRandomWordIncludeNumberToggleChange = randomWordHandlers.onIncludeNumberChange,
+    )
+}
+
+@Composable
+private fun RandomWordCapitalizeToggleItem(
+    capitalize: Boolean,
+    onRandomWordCapitalizeToggleChange: (Boolean) -> Unit,
+) {
+    BitwardenWideSwitch(
+        label = stringResource(id = R.string.capitalize),
+        isChecked = capitalize,
+        onCheckedChange = onRandomWordCapitalizeToggleChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+}
+
+@Composable
+private fun RandomWordIncludeNumberToggleItem(
+    includeNumber: Boolean,
+    onRandomWordIncludeNumberToggleChange: (Boolean) -> Unit,
+) {
+    BitwardenWideSwitch(
+        label = stringResource(id = R.string.include_number),
+        isChecked = includeNumber,
+        onCheckedChange = onRandomWordIncludeNumberToggleChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+}
+
+//endregion Random Word Composables
 
 @Preview(showBackground = true)
 @Composable
@@ -1031,6 +1094,48 @@ private class CatchAllEmailHandlers(
                             .CatchAllEmail
                             .DomainTextChange(
                                 domain = newDomain,
+                            ),
+                    )
+                },
+            )
+        }
+    }
+}
+
+/**
+ * A class dedicated to handling user interactions related to Random Word
+ * configuration.
+ * Each lambda corresponds to a specific user action, allowing for easy delegation of
+ * logic when user input is detected.
+ */
+private class RandomWordHandlers(
+    val onCapitalizeChange: (Boolean) -> Unit,
+    val onIncludeNumberChange: (Boolean) -> Unit,
+) {
+    companion object {
+        fun create(viewModel: GeneratorViewModel): RandomWordHandlers {
+            return RandomWordHandlers(
+                onCapitalizeChange = { shouldCapitalize ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .RandomWord
+                            .ToggleCapitalizeChange(
+                                capitalize = shouldCapitalize,
+                            ),
+                    )
+                },
+                onIncludeNumberChange = { shouldIncludeNumber ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .RandomWord
+                            .ToggleIncludeNumberChange(
+                                includeNumber = shouldIncludeNumber,
                             ),
                     )
                 },

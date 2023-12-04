@@ -31,6 +31,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val catchAllEmailSavedStateHandle =
         createSavedStateHandleWithState(initialCatchAllEmailState)
 
+    private val initialRandomWordState = createRandomWordState()
+    private val randomWordSavedStateHandle = createSavedStateHandleWithState(initialRandomWordState)
+
     private val fakeGeneratorRepository = FakeGeneratorRepository().apply {
         setMockGeneratePasswordResult(
             GeneratedPasswordResult.Success("defaultPassword"),
@@ -872,6 +875,67 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
     }
+
+    @Nested
+    inner class RandomWordActions {
+        private val defaultRandomWordState = createRandomWordState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(randomWordSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ToggleCapitalizeChange should update the capitalize property correctly`() = runTest {
+            viewModel.actionChannel.trySend(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .RandomWord
+                    .ToggleCapitalizeChange(
+                        capitalize = true,
+                    ),
+            )
+
+            val expectedState = defaultRandomWordState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.RandomWord(
+                        capitalize = true,
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ToggleIncludeNumberChange should update the includeNumber property correctly`() = runTest {
+            viewModel.actionChannel.trySend(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .RandomWord
+                    .ToggleIncludeNumberChange(
+                        includeNumber = true,
+                    ),
+            )
+
+            val expectedState = defaultRandomWordState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.RandomWord(
+                        includeNumber = true,
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
     //region Helper Functions
 
     @Suppress("LongParameterList")
@@ -943,6 +1007,21 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
                     domainName = domain,
+                ),
+            ),
+        )
+
+    private fun createRandomWordState(
+        generatedText: String = "defaultRandomWord",
+        capitalize: Boolean = false,
+        includeNumber: Boolean = false,
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.RandomWord(
+                    capitalize = capitalize,
+                    includeNumber = includeNumber,
                 ),
             ),
         )

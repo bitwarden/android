@@ -993,6 +993,10 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    //endregion Username Plus Addressed Email Tests
+
+    //region Catch-All Email Tests
+
     @Suppress("MaxLineLength")
     @Test
     fun `in Username_CatchAllEmail state, updating text in email field should send EmailTextChange action`() {
@@ -1028,7 +1032,69 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
-    //endregion Username Plus Addressed Email Tests
+    //endregion Catch-All Email Tests
+
+    //region Random Word Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_RandomWord state, toggling capitalize should send ToggleCapitalizeChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.RandomWord(),
+                ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithText("Capitalize")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.RandomWord.ToggleCapitalizeChange(
+                    capitalize = true,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_RandomWord state, toggling the include number toggle should send ToggleIncludeNumberChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.RandomWord(),
+                ),
+            ),
+        )
+
+        composeTestRule.setContent {
+            GeneratorScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.onNodeWithText("Include number")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.RandomWord.ToggleIncludeNumberChange(
+                    includeNumber = true,
+                ),
+            )
+        }
+    }
+
+    //endregion Random Word Tests
 
     private fun updateState(state: GeneratorState) {
         mutableStateFlow.value = state
