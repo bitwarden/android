@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.Core.Resources.Localization;
@@ -12,10 +7,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -164,7 +155,7 @@ namespace Bit.App.Pages
                 {
                     ciphers = new List<CipherView>();
                 }
-                Device.BeginInvokeOnMainThread(() =>
+                MainThread.BeginInvokeOnMainThread(() =>
                 {
                     Ciphers.ResetWithRange(ciphers);
                     ShowNoData = !shouldShowAllWhenEmpty && searchable && Ciphers.Count == 0;

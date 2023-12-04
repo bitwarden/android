@@ -68,7 +68,8 @@ namespace Bit.App.Pages
         {
             get
             {
-                var appInfo = string.Format("{0}: {1} ({2})",
+                // TODO: REMOVE WHEN MERGED INTO MAIN BRANCH
+                var appInfo = string.Format("MAUI {0}: {1} ({2})",
                     AppResources.Version,
                     _platformUtilsService.GetApplicationVersion(),
                     _deviceActionService.GetBuildNumber());

@@ -2670,7 +2670,7 @@ Vill du byta till detta konto?</value>
     <value>Återupprepa huvudlösenord hjälp</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Upplåsning kan misslyckas på grund av otillräckligt minne. Minska dina KDF-minnesinställningar för att lösa detta.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ogiltig API-nyckel</value>
@@ -2764,7 +2764,7 @@ Vill du byta till detta konto?</value>
     <value>Bitwarden Hjälpcenter</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
-    <value>Contact Bitwarden support</value>
+    <value>Kontakta Bitwarden support</value>
   </data>
   <data name="CopyAppInformation" xml:space="preserve">
     <value>Copy app information</value>
@@ -2854,7 +2854,7 @@ Vill du byta till detta konto?</value>
     <value>Choose the dark theme to use when your device’s dark mode is in use</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
-    <value>Created {0}, {1}</value>
+    <value>Skapad {0}, {1}</value>
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
@@ -2864,10 +2864,10 @@ Vill du byta till detta konto?</value>
     <value>Account logged out.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Din organisations behörigheter uppdaterades, vilket kräver att du anger ett huvudlösenord.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Din organisation kräver att du anger ett huvudlösenord.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Set up an unlock option to change your vault timeout action.</value>

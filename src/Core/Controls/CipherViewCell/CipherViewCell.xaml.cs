@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Bit.App.Abstractions;
+using Bit.App.Pages;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
@@ -59,10 +60,21 @@ namespace Bit.App.Controls
 
         private void MoreButton_Clicked(object sender, EventArgs e)
         {
-            var cipher = ((sender as MiButton)?.BindingContext as CipherViewCellViewModel)?.Cipher;
-            if (cipher != null)
+            // WORKAROUND: Added a temporary workaround so that the MoreButton still works in all pages even if it uses GroupingsPageListItem instead of CipherViewCellViewModel.
+            // Ideally this should be fixed so that even Groupings Page uses CipherViewCellViewModel
+            CipherView cipherView = null;
+            if (BindingContext is CipherViewCellViewModel cipherViewCellViewModel)
             {
-                ButtonCommand?.Execute(cipher);
+                cipherView = cipherViewCellViewModel.Cipher;
+            }
+            else if (BindingContext is GroupingsPageListItem groupingsPageListItem)
+            {
+                cipherView = groupingsPageListItem.Cipher;
+            }
+
+            if (cipherView != null)
+            {
+                ButtonCommand?.Execute(cipherView);
             }
         }
     }
