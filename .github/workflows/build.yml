@@ -484,16 +484,14 @@ jobs:
           path: ./bw-fdroid-apk-sha256.txt
           if-no-files-found: error
 
-  # Disabling iOS build from this branch until fixing publish/build
-  # really long time
   ios:
     name: Apple iOS
-    if: github.ref == 'refs/heads/master'
     runs-on: macos-13
     needs: setup
     env:
       ios_folder_path: src/App/Platforms/iOS
       app_output_name: App
+      app_ci_output_filename: App_x64_Debug
     steps:
       - name: Set XCode version
         uses: maxim-lobanov/setup-xcode@v1
@@ -657,7 +655,7 @@ jobs:
           Write-Output "##### Archive for Release ios-arm64
           Write-Output "########################################"
 
-          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true
+          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "########################################"
           Write-Output "##### Done"
@@ -667,10 +665,10 @@ jobs:
       - name: Archive Build for Mobile Automation
         run: |
           Write-Output "########################################"
-          Write-Output "##### Archive Releae for iossimulator-arm64
+          Write-Output "##### Archive Debug for iossimulator-x64
           Write-Output "########################################"
 
-          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-arm64 /p:ArchiveOnBuild=true
+          dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "########################################"
           Write-Output "##### Done"
@@ -689,11 +687,11 @@ jobs:
 
       - name: Export .app for Automation CI
         run: |
-          ARCHIVE_PATH="./${{ env.main_app_folder_path }}/bin/Release/iossimulator-arm64/publish/${{ env.app_output_name }}.app"
+          ARCHIVE_PATH="./${{ env.main_app_folder_path }}/bin/Debug/${{ env.target-net-version }}-ios/iossimulator-x64"
           EXPORT_PATH="./bitwarden-export"
 
-          zip -r -q ${{ env.app_output_name }}.app.zip $ARCHIVE_PATH
-          mv ${{ env.app_output_name }}.app.zip $EXPORT_PATH
+          zip -r -q ${{ env.app_ci_output_filename }}.app.zip $ARCHIVE_PATH
+          mv ${{ env.app_ci_output_filename }}.app.zip $EXPORT_PATH
 
       - name: Copy all dSYMs files to upload
         run: |
@@ -719,8 +717,8 @@ jobs:
       - name: Upload .app file for Automation CI
         uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
         with:
-          name: ${{ env.app_output_name }}.app.zip
-          path: ./bitwarden-export/${{ env.app_output_name }}.app.zip
+          name: ${{ env.app_ci_output_filename }}.app.zip
+          path: ./bitwarden-export/${{ env.app_ci_output_filename }}.app.zip
           if-no-files-found: error
 
       - name: Install AppCenter CLI
