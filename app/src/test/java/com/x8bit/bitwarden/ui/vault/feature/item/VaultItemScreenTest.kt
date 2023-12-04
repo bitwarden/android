@@ -48,4 +48,6 @@ private const val VAULT_ITEM_ID = "vault_item_id"
 
 private val DEFAULT_STATE: VaultItemState = VaultItemState(
     vaultItemId = VAULT_ITEM_ID,
+    viewState = VaultItemState.ViewState.Loading,
+    dialog = null,
 )
