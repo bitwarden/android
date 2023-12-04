@@ -757,6 +757,21 @@ jobs:
 
           find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
 
+      - name: Validate app in App Store
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        run: |
+          xcrun altool --validate-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+        shell: bash
+
       - name: Deploy to App Store
         if: |
           (github.ref == 'refs/heads/master'
