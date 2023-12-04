@@ -72,7 +72,6 @@
         <Label 
             Grid.Column="0"
             Grid.Row="0"
-            HorizontalTextAlignment="Start"
             LineBreakMode="TailTruncation"
             StyleClass="list-title, list-title-platform"
             Text="{Binding Cipher.Name}"
@@ -81,7 +80,6 @@
             Grid.Column="0"
             Grid.Row="1"
             Grid.ColumnSpan="3"
-            HorizontalTextAlignment="Start"
             LineBreakMode="TailTruncation"
             StyleClass="list-subtitle, list-subtitle-platform"
             Text="{Binding Cipher.SubTitle}"
