@@ -45,6 +45,12 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.supportingTextResOrNull
 import kotlinx.collections.immutable.ImmutableList
 
 /**
+ * The maximum number of accounts before the "Add account" button will be hidden to prevent the user
+ * from adding any more.
+ */
+private const val MAXIMUM_ACCOUNT_LIMIT = 5
+
+/**
  * An account switcher that will slide down inside whatever parent is it placed in and add a
  * a scrim via a [BitwardenAnimatedScrim] to all content below it (but not above it). Additional
  * [BitwardenAnimatedScrim] may be manually placed over other components that might not be covered
@@ -148,13 +154,15 @@ private fun AnimatedAccountSwitcher(
                     color = MaterialTheme.colorScheme.outlineVariant,
                 )
             }
-            item {
-                AddAccountItem(
-                    onClick = onAddAccountClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
+            if (accountSummaries.size < MAXIMUM_ACCOUNT_LIMIT) {
+                item {
+                    AddAccountItem(
+                        onClick = onAddAccountClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                }
             }
         }
     }
