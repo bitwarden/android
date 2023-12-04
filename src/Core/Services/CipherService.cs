@@ -1153,6 +1153,8 @@ namespace Bit.Core.Services
                                 Match = uri.Match
                             };
                             await EncryptObjPropertyAsync(uri, loginUri, new HashSet<string> { "Uri" }, key);
+                            var uriHash = await _cryptoService.HashAsync(uri.Uri, CryptoHashAlgorithm.Sha256);
+                            loginUri.UriChecksum = await _cryptoService.EncryptAsync(uriHash, key);
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }

@@ -93,6 +93,7 @@ namespace Bit.Core.Models.Domain
         public async Task<CipherView> DecryptAsync()
         {
             var model = new CipherView(this);
+            var bypassValidation = true;
 
             if (Key != null)
             {
@@ -104,6 +105,7 @@ namespace Bit.Core.Models.Domain
 
                 var key = await cryptoService.DecryptToBytesAsync(Key, orgKey);
                 model.Key = new CipherKey(key);
+                bypassValidation = false;
             }
 
             await DecryptObjAsync(model, this, new HashSet<string>
@@ -115,7 +117,7 @@ namespace Bit.Core.Models.Domain
             switch (Type)
             {
                 case Enums.CipherType.Login:
-                    model.Login = await Login.DecryptAsync(OrganizationId, model.Key);
+                    model.Login = await Login.DecryptAsync(OrganizationId, bypassValidation, model.Key);
                     break;
                 case Enums.CipherType.SecureNote:
                     model.SecureNote = await SecureNote.DecryptAsync(OrganizationId, model.Key);

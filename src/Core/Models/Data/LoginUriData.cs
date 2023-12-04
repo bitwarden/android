@@ -11,9 +11,12 @@ namespace Bit.Core.Models.Data
         {
             Uri = data.Uri;
             Match = data.Match;
+            UriChecksum = data.UriChecksum;
         }
 
         public string Uri { get; set; }
         public UriMatchType? Match { get; set; }
+        public string UriChecksum { get; set; }
     }
 }
+    

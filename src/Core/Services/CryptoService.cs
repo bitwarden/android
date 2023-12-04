@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -728,6 +728,12 @@ namespace Bit.Core.Services
             {
                 await SetUserKeyAsync(userKey);
             }
+        }
+
+        public async Task<string> HashAsync(string value, CryptoHashAlgorithm hashAlgorithm)
+        {
+            var hashArray = await _cryptoFunctionService.HashAsync(value, hashAlgorithm);
+            return Convert.ToBase64String(hashArray);
         }
 
         // --HELPER METHODS--
