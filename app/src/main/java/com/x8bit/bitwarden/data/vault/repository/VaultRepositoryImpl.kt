@@ -159,6 +159,12 @@ class VaultRepositoryImpl constructor(
                 initialValue = DataState.Loading,
             )
 
+    override fun lockVaultForCurrentUser() {
+        authDiskSource.userState?.activeUserId?.let {
+            lockVaultIfNecessary(it)
+        }
+    }
+
     override fun lockVaultIfNecessary(userId: String) {
         setVaultToLocked(userId = userId)
     }

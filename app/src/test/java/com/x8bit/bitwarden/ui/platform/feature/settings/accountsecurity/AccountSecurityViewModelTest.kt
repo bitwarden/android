@@ -3,10 +3,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -80,12 +83,13 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `on LockNowClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AccountSecurityAction.LockNowClick)
-            assertEquals(AccountSecurityEvent.ShowToast("Lock the app.".asText()), awaitItem())
+    fun `on LockNowClick should call lockVaultForCurrentUser`() {
+        val vaultRepository = mockk<VaultRepository>(relaxed = true) {
+            every { lockVaultForCurrentUser() } just runs
         }
+        val viewModel = createViewModel(vaultRepository = vaultRepository)
+        viewModel.trySendAction(AccountSecurityAction.LockNowClick)
+        verify { vaultRepository.lockVaultForCurrentUser() }
     }
 
     @Test
@@ -230,11 +234,13 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         authRepository: AuthRepository = mockk(relaxed = true),
+        vaultRepository: VaultRepository = mockk(relaxed = true),
         savedStateHandle: SavedStateHandle = SavedStateHandle().apply {
             set("state", DEFAULT_STATE)
         },
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
+        vaultRepository = vaultRepository,
         savedStateHandle = savedStateHandle,
     )
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -24,6 +25,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AccountSecurityViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -99,8 +101,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleLockNowClick() {
-        // TODO BIT-467: Lock the app
-        sendEvent(AccountSecurityEvent.ShowToast("Lock the app.".asText()))
+        vaultRepository.lockVaultForCurrentUser()
     }
 
     private fun handleLoginRequestToggle(action: AccountSecurityAction.LoginRequestToggle) {
