@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
-import CipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import retrofit2.http.Body
 import retrofit2.http.POST

@@ -2,7 +2,6 @@
 
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import CipherJsonRequest
 import com.bitwarden.core.Attachment
 import com.bitwarden.core.Card
 import com.bitwarden.core.Cipher
@@ -17,6 +16,7 @@ import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.SecureNote
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.UriMatchType
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FieldTypeJson
