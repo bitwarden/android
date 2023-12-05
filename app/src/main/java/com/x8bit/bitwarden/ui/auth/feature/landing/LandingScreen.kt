@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -46,14 +47,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPlaceholderAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The top level composable for the Landing screen.
@@ -86,17 +91,34 @@ fun LandingScreen(
         },
     )
 
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val isAppBarVisible = state.accountSummaries.isNotEmpty()
+    var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(
+        state = rememberTopAppBarState(),
+        canScroll = { !isAccountMenuVisible },
+    )
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            // Empty
+            if (isAppBarVisible) {
+                BitwardenTopAppBar(
+                    title = "",
+                    scrollBehavior = scrollBehavior,
+                    navigationIcon = null,
+                    actions = {
+                        BitwardenPlaceholderAccountActionItem(
+                            onClick = { isAccountMenuVisible = !isAccountMenuVisible },
+                        )
+                    },
+                )
+            }
         },
     ) { innerPadding ->
         LandingScreenContent(
             state = state,
+            isAppBarVisible = isAppBarVisible,
             onEmailInputChange = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
             },
@@ -116,6 +138,23 @@ fun LandingScreen(
                 .padding(innerPadding)
                 .fillMaxSize(),
         )
+
+        BitwardenAccountSwitcher(
+            isVisible = isAccountMenuVisible,
+            accountSummaries = state.accountSummaries.toImmutableList(),
+            onAccountSummaryClick = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.SwitchAccountClick(it)) }
+            },
+            onAddAccountClick = {
+                // Not available
+            },
+            onDismissRequest = { isAccountMenuVisible = false },
+            isAddAccountAvailable = false,
+            topAppBarScrollBehavior = scrollBehavior,
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+        )
     }
 }
 
@@ -124,6 +163,7 @@ fun LandingScreen(
 @Composable
 private fun LandingScreenContent(
     state: LandingState,
+    isAppBarVisible: Boolean,
     onEmailInputChange: (String) -> Unit,
     onEnvironmentTypeSelect: (Environment.Type) -> Unit,
     onRememberMeToggle: (Boolean) -> Unit,
@@ -138,7 +178,8 @@ private fun LandingScreenContent(
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
-        Spacer(modifier = Modifier.height(104.dp))
+        val topPadding = if (isAppBarVisible) 40.dp else 104.dp
+        Spacer(modifier = Modifier.height(topPadding))
 
         Image(
             painter = painterResource(id = R.drawable.logo),

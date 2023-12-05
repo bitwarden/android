@@ -266,7 +266,8 @@ class AuthRepositoryImpl constructor(
         val previousActiveUserId = currentUserState.activeUserId
 
         if (userId == previousActiveUserId) {
-            // Nothing to do
+            // No switching to do but clear any special circumstances
+            specialCircumstance = null
             return SwitchAccountResult.NoChange
         }
 
@@ -281,6 +282,10 @@ class AuthRepositoryImpl constructor(
         // Lock and clear data for the previous user
         vaultRepository.lockVaultIfNecessary(previousActiveUserId)
         vaultRepository.clearUnlockedData()
+
+        // Clear any special circumstances
+        specialCircumstance = null
+
         return SwitchAccountResult.AccountSwitched
     }
 
