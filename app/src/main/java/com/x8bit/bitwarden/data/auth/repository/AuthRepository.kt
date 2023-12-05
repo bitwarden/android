@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
@@ -65,6 +66,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Log out the current user.
      */
     fun logout()
+
+    /**
+     * Switches to the account corresponding to the given [userId] if possible.
+     */
+    fun switchAccount(userId: String): SwitchAccountResult
 
     /**
      * Attempt to register a new account with the given parameters.

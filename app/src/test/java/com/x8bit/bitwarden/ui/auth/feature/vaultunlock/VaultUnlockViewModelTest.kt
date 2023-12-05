@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
 import androidx.lifecycle.SavedStateHandle
-import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -36,6 +36,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { specialCircumstance } returns null
         every { specialCircumstance = any() } just runs
         every { logout() } just runs
+        every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
     }
     private val vaultRepository = mockk<VaultRepository>()
 
@@ -163,15 +164,17 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on SwitchAccountClick should emit ShowToast`() = runTest {
+    fun `on SwitchAccountClick should switch to the given account`() = runTest {
         val viewModel = createViewModel()
-        val accountSummary = mockk<AccountSummary> {
-            every { status } returns AccountSummary.Status.ACTIVE
-        }
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(accountSummary))
-            assertEquals(VaultUnlockEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
-        }
+        val updatedUserId = "updatedUserId"
+        viewModel.trySendAction(
+            VaultUnlockAction.SwitchAccountClick(
+                accountSummary = mockk {
+                    every { userId } returns updatedUserId
+                },
+            ),
+        )
+        verify { authRepository.switchAccount(userId = updatedUserId) }
     }
 
     @Test

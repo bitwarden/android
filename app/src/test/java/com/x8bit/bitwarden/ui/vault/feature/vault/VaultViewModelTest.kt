@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -30,11 +31,14 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
+    private var switchAccountResult: SwitchAccountResult = SwitchAccountResult.NoChange
+
     private val authRepository: AuthRepository =
         mockk {
             every { userStateFlow } returns mutableUserStateFlow
             every { specialCircumstance } returns null
             every { specialCircumstance = any() } just runs
+            every { switchAccount(any()) } answers { switchAccountResult }
         }
 
     private val vaultRepository: VaultRepository =
@@ -52,30 +56,70 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `UserState updates with a null value should do nothing`() {
         val viewModel = createViewModel()
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
 
         mutableUserStateFlow.value = null
 
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `UserState updates with a non-null value update the account information in the state`() {
+    fun `UserState updates with a non-null value when switching accounts should do nothing`() {
         val viewModel = createViewModel()
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
 
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(
-                UserState.Account(
-                    userId = "activeUserId",
-                    name = "Other User",
-                    email = "active@bitwarden.com",
-                    avatarColorHex = "#00aaaa",
-                    isPremium = true,
-                    isVaultUnlocked = true,
-                ),
+        // Ensure we are currently switching accounts
+        val initialState = DEFAULT_STATE.copy(isSwitchingAccounts = true)
+        switchAccountResult = SwitchAccountResult.AccountSwitched
+        val updatedUserId = "lockedUserId"
+        viewModel.trySendAction(
+            VaultAction.AccountSwitchClick(
+                accountSummary = mockk() {
+                    every { userId } returns updatedUserId
+                },
             ),
         )
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(activeUserId = updatedUserId)
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserState updates with a non-null value when not switching accounts should update the account information in the state`() {
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value =
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        isPremium = true,
+                        isVaultUnlocked = true,
+                    ),
+                ),
+            )
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -95,50 +139,47 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on AccountSwitchClick for the active account should do nothing`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+    fun `on AccountSwitchClick when result is NoChange should try to switch to the given account and set isSwitchingAccounts to false`() =
+        runTest {
+            val viewModel = createViewModel()
+            switchAccountResult = SwitchAccountResult.NoChange
+            val updatedUserId = "lockedUserId"
             viewModel.trySendAction(
                 VaultAction.AccountSwitchClick(
                     accountSummary = mockk {
-                        every { status } returns AccountSummary.Status.ACTIVE
+                        every { userId } returns updatedUserId
                     },
                 ),
             )
-            expectNoEvents()
+            verify { authRepository.switchAccount(userId = updatedUserId) }
+            assertEquals(
+                DEFAULT_STATE.copy(isSwitchingAccounts = false),
+                viewModel.stateFlow.value,
+            )
         }
-    }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on AccountSwitchClick for a locked account emit NavigateToVaultUnlockScreen`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+    fun `on AccountSwitchClick when result is AccountSwitched should switch to the given account and set isSwitchingAccounts to true`() =
+        runTest {
+            val viewModel = createViewModel()
+            switchAccountResult = SwitchAccountResult.AccountSwitched
+            val updatedUserId = "lockedUserId"
             viewModel.trySendAction(
                 VaultAction.AccountSwitchClick(
                     accountSummary = mockk {
-                        every { status } returns AccountSummary.Status.LOCKED
+                        every { userId } returns updatedUserId
                     },
                 ),
             )
-            assertEquals(VaultEvent.NavigateToVaultUnlockScreen, awaitItem())
-        }
-    }
-
-    @Test
-    fun `on AccountSwitchClick for an unlocked account emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(
-                VaultAction.AccountSwitchClick(
-                    accountSummary = mockk {
-                        every { status } returns AccountSummary.Status.UNLOCKED
-                    },
-                ),
+            verify { authRepository.switchAccount(userId = updatedUserId) }
+            assertEquals(
+                DEFAULT_STATE.copy(isSwitchingAccounts = true),
+                viewModel.stateFlow.value,
             )
-            assertEquals(VaultEvent.ShowToast("Not yet implemented."), awaitItem())
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -258,6 +299,39 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `vaultDataStateFlow updates should do nothing when switching accounts`() {
+        val viewModel = createViewModel()
+
+        // Ensure we are currently switching accounts
+        val initialState = DEFAULT_STATE.copy(isSwitchingAccounts = true)
+        switchAccountResult = SwitchAccountResult.AccountSwitched
+        val updatedUserId = "lockedUserId"
+        viewModel.trySendAction(
+            VaultAction.AccountSwitchClick(
+                accountSummary = mockk() {
+                    every { userId } returns updatedUserId
+                },
+            ),
+        )
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                cipherViewList = emptyList(),
+                folderViewList = emptyList(),
+            ),
+        )
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `AddItemClick should emit NavigateToAddItemScreen`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -367,6 +441,14 @@ private val DEFAULT_USER_STATE = UserState(
             isPremium = true,
             isVaultUnlocked = true,
         ),
+        UserState.Account(
+            userId = "lockedUserId",
+            name = "Locked User",
+            email = "locked@bitwarden.com",
+            avatarColorHex = "#00aaaa",
+            isPremium = false,
+            isVaultUnlocked = false,
+        ),
     ),
 )
 
@@ -382,6 +464,14 @@ private fun createMockVaultState(viewState: VaultState.ViewState): VaultState =
                 avatarColorHex = "#aa00aa",
                 status = AccountSummary.Status.ACTIVE,
             ),
+            AccountSummary(
+                userId = "lockedUserId",
+                name = "Locked User",
+                email = "locked@bitwarden.com",
+                avatarColorHex = "#00aaaa",
+                status = AccountSummary.Status.LOCKED,
+            ),
         ),
         viewState = viewState,
+        isSwitchingAccounts = false,
     )
