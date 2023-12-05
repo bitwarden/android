@@ -71,6 +71,9 @@ fun BitwardenTopAppBar(
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
             scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
         ),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
@@ -81,7 +84,6 @@ fun BitwardenTopAppBar(
                     Icon(
                         painter = it.navigationIcon,
                         contentDescription = it.navigationIconContentDescription,
-                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -90,7 +92,6 @@ fun BitwardenTopAppBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface,
             )
         },
         actions = actions,

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.components
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -27,14 +28,10 @@ fun BitwardenTextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = isEnabled,
+        colors = ButtonDefaults.textButtonColors(),
     ) {
         Text(
             text = label,
-            color = if (isEnabled) {
-                MaterialTheme.colorScheme.primary
-            } else {
-                MaterialTheme.colorScheme.onSurface.copy(alpha = .38f)
-            },
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
                 .padding(

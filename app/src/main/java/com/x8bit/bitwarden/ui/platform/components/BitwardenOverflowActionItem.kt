@@ -48,7 +48,6 @@ fun BitwardenOverflowActionItem(
             Icon(
                 painter = painterResource(id = R.drawable.ic_more),
                 contentDescription = stringResource(id = R.string.more),
-                tint = MaterialTheme.colorScheme.onSurface,
             )
         }
         DropdownMenu(
