@@ -24,33 +24,47 @@ import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
+import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 
 class LandingScreenTest : BaseComposeTest() {
+    private var capturedEmail: String? = null
+    private var onNavigateToCreateAccountCalled = false
+    private var onNavigateToLoginCalled = false
+    private var onNavigateToEnvironmentCalled = false
+    private val mutableEventFlow = MutableSharedFlow<LandingEvent>(
+        extraBufferCapacity = Int.MAX_VALUE,
+    )
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+    private val viewModel = mockk<LandingViewModel>(relaxed = true) {
+        every { eventFlow } returns mutableEventFlow
+        every { stateFlow } returns mutableStateFlow
+    }
     private val resources
         get() = ApplicationProvider.getApplicationContext<Application>().resources
 
-    @Test
-    fun `continue button should be enabled or disabled according to the state`() {
-        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns mutableStateFlow
-        }
+    @Before
+    fun setUp() {
         composeTestRule.setContent {
             LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
+                onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
+                onNavigateToLogin = { capturedEmail ->
+                    this.capturedEmail = capturedEmail
+                    onNavigateToLoginCalled = true
+                },
+                onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `continue button should be enabled or disabled according to the state`() {
         composeTestRule.onNodeWithText("Continue").assertIsEnabled()
 
         mutableStateFlow.update { it.copy(isContinueButtonEnabled = false) }
@@ -60,18 +74,6 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `continue button click should send ContinueButtonClick action`() {
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Continue").performScrollTo().performClick()
         verify {
             viewModel.trySendAction(LandingAction.ContinueButtonClick)
@@ -80,19 +82,6 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `remember me should be toggled on or off according to the state`() {
-        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns mutableStateFlow
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Remember me").assertIsOff()
 
         mutableStateFlow.update { it.copy(isRememberMeEnabled = true) }
@@ -102,18 +91,6 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `remember me click should send RememberMeToggle action`() {
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule
             .onNodeWithText("Remember me")
             .performClick()
@@ -124,18 +101,6 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `create account click should send CreateAccountClick action`() {
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Create account").performScrollTo().performClick()
         verify {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
@@ -144,20 +109,6 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `email address should change according to state`() {
-        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns mutableStateFlow
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
-
         composeTestRule
             .onNodeWithText("Email address")
             .assertTextEquals("Email address", "")
@@ -172,18 +123,6 @@ class LandingScreenTest : BaseComposeTest() {
     @Test
     fun `email address change should send EmailInputChanged action`() {
         val input = "email"
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Email address").performTextInput(input)
         verify {
             viewModel.trySendAction(LandingAction.EmailInputChanged(input))
@@ -192,19 +131,7 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateToCreateAccount event should call onNavigateToCreateAccount`() {
-        var onNavigateToCreateAccountCalled = false
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LandingEvent.NavigateToCreateAccount)
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
+        mutableEventFlow.tryEmit(LandingEvent.NavigateToCreateAccount)
         assertTrue(onNavigateToCreateAccountCalled)
     }
 
@@ -212,61 +139,21 @@ class LandingScreenTest : BaseComposeTest() {
     fun `NavigateToLogin event should call onNavigateToLogin`() {
         val testEmail = "test@test.com"
 
-        var capturedEmail: String? = null
-
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LandingEvent.NavigateToLogin(testEmail))
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = { },
-                onNavigateToLogin = { email ->
-                    capturedEmail = email
-                },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
+        mutableEventFlow.tryEmit(LandingEvent.NavigateToLogin(testEmail))
 
         assertEquals(testEmail, capturedEmail)
+        assertTrue(onNavigateToLoginCalled)
     }
 
     @Test
     fun `NavigateToEnvironment event should call onNavigateToEvent`() {
-        var onNavigateToEnvironmentCalled = false
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LandingEvent.NavigateToEnvironment)
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = { },
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
-                viewModel = viewModel,
-            )
-        }
+        mutableEventFlow.tryEmit(LandingEvent.NavigateToEnvironment)
         assertTrue(onNavigateToEnvironmentCalled)
     }
 
     @Test
     fun `selecting environment should send EnvironmentOptionSelect action`() {
         val selectedEnvironment = Environment.Eu
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-        }
-
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
 
         // Clicking to open dialog
         composeTestRule
@@ -291,20 +178,6 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `error dialog should be shown or hidden according to the state`() {
-        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns mutableStateFlow
-        }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
-
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -334,40 +207,27 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `error dialog OK click should send ErrorDialogDismiss action`() {
-        val viewModel = mockk<LandingViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                DEFAULT_STATE.copy(
-                    errorDialogState = BasicDialogState.Shown(
-                        title = "title".asText(),
-                        message = "message".asText(),
-                    ),
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                errorDialogState = BasicDialogState.Shown(
+                    title = "title".asText(),
+                    message = "message".asText(),
                 ),
             )
-            every { trySendAction(LandingAction.ErrorDialogDismiss) } returns Unit
         }
-        composeTestRule.setContent {
-            LandingScreen(
-                onNavigateToCreateAccount = {},
-                onNavigateToLogin = { _ -> },
-                onNavigateToEnvironment = {},
-                viewModel = viewModel,
-            )
-        }
+
         composeTestRule
             .onAllNodesWithText("Ok")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(LandingAction.ErrorDialogDismiss) }
     }
-
-    companion object {
-        val DEFAULT_STATE = LandingState(
-            emailInput = "",
-            isContinueButtonEnabled = true,
-            isRememberMeEnabled = false,
-            selectedEnvironmentType = Environment.Type.US,
-            errorDialogState = BasicDialogState.Hidden,
-        )
-    }
 }
+
+private val DEFAULT_STATE = LandingState(
+    emailInput = "",
+    isContinueButtonEnabled = true,
+    isRememberMeEnabled = false,
+    selectedEnvironmentType = Environment.Type.US,
+    errorDialogState = BasicDialogState.Hidden,
+)
