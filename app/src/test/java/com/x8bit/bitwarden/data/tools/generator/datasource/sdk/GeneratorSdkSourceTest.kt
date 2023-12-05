@@ -24,10 +24,10 @@ class GeneratorSdkSourceTest {
             special = true,
             length = 12.toUByte(),
             avoidAmbiguous = false,
-            minLowercase = true,
-            minUppercase = true,
-            minNumber = true,
-            minSpecial = true,
+            minLowercase = 1U,
+            minUppercase = 1U,
+            minNumber = 1U,
+            minSpecial = 1U,
         )
         val expectedResult = "GeneratedPassword123!"
 
