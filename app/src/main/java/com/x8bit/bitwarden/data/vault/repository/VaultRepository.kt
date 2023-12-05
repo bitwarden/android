@@ -54,6 +54,11 @@ interface VaultRepository {
     fun getVaultFolderStateFlow(folderId: String): StateFlow<DataState<FolderView?>>
 
     /**
+     * Locks the vault for the current user if currently unlocked.
+     */
+    fun lockVaultForCurrentUser()
+
+    /**
      * Locks the vault for the user with the given [userId] if necessary.
      */
     fun lockVaultIfNecessary(userId: String)

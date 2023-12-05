@@ -469,6 +469,31 @@ class VaultRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `lockVaultForCurrentUser should lock the vault for the current user if it is currently unlocked`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            verifyUnlockedVault(userId = userId)
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = setOf(userId),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            vaultRepository.lockVaultForCurrentUser()
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
     @Test
     fun `lockVaultIfNecessary should lock the given account if it is currently unlocked`() =
         runTest {
