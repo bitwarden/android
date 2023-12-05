@@ -66,6 +66,9 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
  * @param onAddAccountClick A callback when the Add Account row is clicked.
  * @param onDismissRequest A callback when the component requests to be dismissed. This is triggered
  * whenever the user clicks on the scrim or any of the switcher items.
+ * @param isAddAccountAvailable Whether or not the "Add account" button is available. Note that even
+ * when `true`, this button may be hidden when there are more than [MAXIMUM_ACCOUNT_LIMIT] accounts
+ * present.
  * @param modifier A [Modifier] for the composable.
  * @param topAppBarScrollBehavior Used to derive the background color of the content and keep it in
  * sync with the associated app bar.
@@ -79,6 +82,7 @@ fun BitwardenAccountSwitcher(
     onAddAccountClick: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    isAddAccountAvailable: Boolean = true,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
 ) {
     Box(modifier = modifier) {
@@ -99,6 +103,7 @@ fun BitwardenAccountSwitcher(
                 onDismissRequest()
                 onAddAccountClick()
             },
+            isAddAccountAvailable = isAddAccountAvailable,
             topAppBarScrollBehavior = topAppBarScrollBehavior,
             modifier = Modifier
                 .fillMaxWidth(),
@@ -113,6 +118,7 @@ private fun AnimatedAccountSwitcher(
     accountSummaries: ImmutableList<AccountSummary>,
     onAccountSummaryClick: (AccountSummary) -> Unit,
     onAddAccountClick: () -> Unit,
+    isAddAccountAvailable: Boolean,
     modifier: Modifier = Modifier,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
 ) {
@@ -130,11 +136,16 @@ private fun AnimatedAccountSwitcher(
                 .padding(bottom = 24.dp)
                 // Match the color of the switcher the different states of the app bar.
                 .drawBehind {
+                    val progressFraction = if (topAppBarScrollBehavior.isPinned) {
+                        topAppBarScrollBehavior.state.overlappedFraction
+                    } else {
+                        topAppBarScrollBehavior.state.collapsedFraction
+                    }
                     val contentBackgroundColor =
                         lerp(
                             start = expandedColor,
                             stop = collapsedColor,
-                            fraction = topAppBarScrollBehavior.state.collapsedFraction,
+                            fraction = progressFraction,
                         )
                     drawRect(contentBackgroundColor)
                 },
@@ -154,7 +165,7 @@ private fun AnimatedAccountSwitcher(
                     color = MaterialTheme.colorScheme.outlineVariant,
                 )
             }
-            if (accountSummaries.size < MAXIMUM_ACCOUNT_LIMIT) {
+            if (accountSummaries.size < MAXIMUM_ACCOUNT_LIMIT && isAddAccountAvailable) {
                 item {
                     AddAccountItem(
                         onClick = onAddAccountClick,

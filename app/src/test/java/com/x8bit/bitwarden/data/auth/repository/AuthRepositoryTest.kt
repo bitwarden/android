@@ -1099,7 +1099,7 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `switchAccount when the given userId is the same as the current activeUserId should do nothing`() {
+    fun `switchAccount when the given userId is the same as the current activeUserId should only clear any special circumstances`() {
         val originalUserId = USER_ID_1
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
@@ -1110,6 +1110,7 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
+        repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
 
         assertEquals(
             SwitchAccountResult.NoChange,
@@ -1120,6 +1121,7 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
+        assertNull(repository.specialCircumstance)
         verify(exactly = 0) { vaultRepository.lockVaultIfNecessary(originalUserId) }
         verify(exactly = 0) { vaultRepository.clearUnlockedData() }
     }
@@ -1154,7 +1156,7 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `switchAccount when the userId is valid should update the current UserState, lock the vault of the previous active user, and clear the previously unlocked data`() {
+    fun `switchAccount when the userId is valid should update the current UserState, lock the vault of the previous active user, clear the previously unlocked data, and reset the special circumstance`() {
         val originalUserId = USER_ID_1
         val updatedUserId = USER_ID_2
         val originalUserState = MULTI_USER_STATE.toUserState(
@@ -1166,6 +1168,7 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
+        repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
 
         assertEquals(
             SwitchAccountResult.AccountSwitched,
@@ -1176,6 +1179,7 @@ class AuthRepositoryTest {
             originalUserState.copy(activeUserId = updatedUserId),
             repository.userStateFlow.value,
         )
+        assertNull(repository.specialCircumstance)
         verify { vaultRepository.lockVaultIfNecessary(originalUserId) }
         verify { vaultRepository.clearUnlockedData() }
     }

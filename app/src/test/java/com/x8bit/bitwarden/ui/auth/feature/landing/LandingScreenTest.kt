@@ -12,6 +12,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -21,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -61,6 +63,58 @@ class LandingScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `account menu icon is present according to the state`() {
+        composeTestRule.onNodeWithContentDescription("Account").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
+        }
+
+        composeTestRule.onNodeWithContentDescription("Account").assertIsDisplayed()
+    }
+
+    @Test
+    fun `account menu icon click should show the account switcher`() {
+        mutableStateFlow.update {
+            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
+        }
+
+        composeTestRule.onNodeWithContentDescription("Account").performClick()
+
+        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account click in the account switcher should send SwitchAccountClick and close switcher`() {
+        // Show the account switcher
+        mutableStateFlow.update {
+            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
+        }
+        composeTestRule.onNodeWithContentDescription("Account").performClick()
+        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("active@bitwarden.com").performClick()
+
+        verify {
+            viewModel.trySendAction(LandingAction.SwitchAccountClick(ACTIVE_ACCOUNT_SUMMARY))
+        }
+        composeTestRule.onNodeWithText("active@bitwarden.com").assertDoesNotExist()
+    }
+
+    @Test
+    fun `add account button in the account switcher does not exist`() {
+        // Show the account switcher
+        mutableStateFlow.update {
+            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
+        }
+        composeTestRule.onNodeWithContentDescription("Account").performClick()
+        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
+
+        composeTestRule.onNodeWithText("Add account").assertDoesNotExist()
     }
 
     @Test
@@ -224,10 +278,19 @@ class LandingScreenTest : BaseComposeTest() {
     }
 }
 
+private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    avatarColorHex = "#aa00aa",
+    status = AccountSummary.Status.ACTIVE,
+)
+
 private val DEFAULT_STATE = LandingState(
     emailInput = "",
     isContinueButtonEnabled = true,
     isRememberMeEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
     errorDialogState = BasicDialogState.Hidden,
+    accountSummaries = emptyList(),
 )

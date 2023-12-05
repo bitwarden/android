@@ -11,6 +11,8 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,6 +38,7 @@ class LandingViewModel @Inject constructor(
             isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
             selectedEnvironmentType = environmentRepository.environment.type,
             errorDialogState = BasicDialogState.Hidden,
+            accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
         ),
 ) {
 
@@ -61,6 +64,7 @@ class LandingViewModel @Inject constructor(
 
     override fun handleAction(action: LandingAction) {
         when (action) {
+            is LandingAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
             is LandingAction.ContinueButtonClick -> handleContinueButtonClicked()
             LandingAction.CreateAccountClick -> handleCreateAccountClicked()
             is LandingAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
@@ -71,6 +75,10 @@ class LandingViewModel @Inject constructor(
                 handleUpdatedEnvironmentReceive(action)
             }
         }
+    }
+
+    private fun handleSwitchAccountClicked(action: LandingAction.SwitchAccountClick) {
+        authRepository.switchAccount(userId = action.account.userId)
     }
 
     private fun handleEmailInputUpdated(action: LandingAction.EmailInputChanged) {
@@ -156,6 +164,7 @@ data class LandingState(
     val isRememberMeEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
     val errorDialogState: BasicDialogState,
+    val accountSummaries: List<AccountSummary>,
 ) : Parcelable
 
 /**
@@ -184,6 +193,13 @@ sealed class LandingEvent {
  * Models actions for the landing screen.
  */
 sealed class LandingAction {
+    /**
+     * Indicates the user has clicked on the given [account] information in order to switch to it.
+     */
+    data class SwitchAccountClick(
+        val account: AccountSummary,
+    ) : LandingAction()
+
     /**
      * Indicates that the continue button has been clicked and the app should navigate to Login.
      */

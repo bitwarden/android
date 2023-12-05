@@ -3,13 +3,16 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -40,6 +43,30 @@ class LandingViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `initial state should set the account summaries based on the UserState`() {
+        val userState = UserState(
+            activeUserId = "activeUserId",
+            accounts = listOf(
+                UserState.Account(
+                    userId = "activeUserId",
+                    name = "name",
+                    email = "email",
+                    avatarColorHex = "avatarColorHex",
+                    isPremium = true,
+                    isVaultUnlocked = true,
+                ),
+            ),
+        )
+        val viewModel = createViewModel(userState = userState)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                accountSummaries = userState.toAccountSummaries(),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -180,10 +207,12 @@ class LandingViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         rememberedEmail: String? = null,
+        userState: UserState? = null,
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
     ): LandingViewModel = LandingViewModel(
         authRepository = mockk(relaxed = true) {
             every { rememberedEmailAddress } returns rememberedEmail
+            every { userStateFlow } returns MutableStateFlow(userState)
         },
         environmentRepository = fakeEnvironmentRepository,
         savedStateHandle = savedStateHandle,
@@ -198,6 +227,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isRememberMeEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             errorDialogState = BasicDialogState.Hidden,
+            accountSummaries = emptyList(),
         )
     }
 }
