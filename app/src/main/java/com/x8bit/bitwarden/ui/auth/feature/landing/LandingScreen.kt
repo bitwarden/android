@@ -1,25 +1,28 @@
 package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -44,6 +48,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
@@ -53,7 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 /**
  * The top level composable for the Landing screen.
  */
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("LongMethod")
 fun LandingScreen(
@@ -81,17 +86,59 @@ fun LandingScreen(
         },
     )
 
-    val scrollState = rememberScrollState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    BitwardenScaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            // Empty
+        },
+    ) { innerPadding ->
+        LandingScreenContent(
+            state = state,
+            onEmailInputChange = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
+            },
+            onEnvironmentTypeSelect = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it)) }
+            },
+            onRememberMeToggle = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) }
+            },
+            onContinueClick = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.ContinueButtonClick) }
+            },
+            onCreateAccountClick = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.CreateAccountClick) }
+            },
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+        )
+    }
+}
+
+@Suppress("LongMethod")
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun LandingScreenContent(
+    state: LandingState,
+    onEmailInputChange: (String) -> Unit,
+    onEnvironmentTypeSelect: (Environment.Type) -> Unit,
+    onRememberMeToggle: (Boolean) -> Unit,
+    onContinueClick: () -> Unit,
+    onCreateAccountClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .semantics { testTagsAsResourceId = true }
-            .background(MaterialTheme.colorScheme.surface)
-            .safeDrawingPadding()
-            .fillMaxHeight()
-            .verticalScroll(scrollState),
+            .imePadding()
+            .verticalScroll(rememberScrollState()),
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(104.dp))
 
         Image(
             painter = painterResource(id = R.drawable.logo),
@@ -131,9 +178,7 @@ fun LandingScreen(
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
             value = state.emailInput,
-            onValueChange = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.EmailInputChanged(it)) }
-            },
+            onValueChange = onEmailInputChange,
             label = stringResource(id = R.string.email_address),
             keyboardType = KeyboardType.Email,
         )
@@ -142,9 +187,7 @@ fun LandingScreen(
 
         EnvironmentSelector(
             selectedOption = state.selectedEnvironmentType,
-            onOptionSelected = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(it)) }
-            },
+            onOptionSelected = onEnvironmentTypeSelect,
             modifier = Modifier
                 .semantics { testTag = "RegionSelectorDropdown" }
                 .padding(horizontal = 16.dp)
@@ -156,9 +199,7 @@ fun LandingScreen(
         BitwardenSwitch(
             label = stringResource(id = R.string.remember_me),
             isChecked = state.isRememberMeEnabled,
-            onCheckedChange = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.RememberMeToggle(it)) }
-            },
+            onCheckedChange = onRememberMeToggle,
             modifier = Modifier
                 .semantics { testTag = "RememberMeSwitch" }
                 .padding(horizontal = 16.dp)
@@ -169,9 +210,7 @@ fun LandingScreen(
 
         BitwardenFilledButton(
             label = stringResource(id = R.string.continue_text),
-            onClick = remember(viewModel) {
-                { viewModel.trySendAction(LandingAction.ContinueButtonClick) }
-            },
+            onClick = onContinueClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
                 .semantics { testTag = "ContinueButton" }
@@ -197,15 +236,14 @@ fun LandingScreen(
 
             BitwardenTextButton(
                 label = stringResource(id = R.string.create_account),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(LandingAction.CreateAccountClick) }
-                },
+                onClick = onCreateAccountClick,
                 modifier = Modifier
                     .semantics { testTag = "CreateAccountLabel" },
             )
         }
 
         Spacer(modifier = Modifier.height(58.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
