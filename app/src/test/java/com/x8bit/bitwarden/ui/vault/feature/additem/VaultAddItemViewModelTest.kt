@@ -5,6 +5,8 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -59,6 +61,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure"), awaitItem())
         }
     }
+
     @Test
     fun `TypeOptionSelect LOGIN should switch to LoginItem`() = runTest {
         val viewModel = createAddVaultItemViewModel()
@@ -348,6 +351,149 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             }
     }
 
+    @Nested
+    inner class VaultAddSecureNotesTypeItemActions {
+        private lateinit var viewModel: VaultAddItemViewModel
+        private lateinit var initialState: VaultAddItemState
+        private lateinit var initialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            initialState = createVaultAddSecureNotesItemState()
+            initialSavedStateHandle = createSavedStateHandleWithState(initialState)
+            viewModel = VaultAddItemViewModel(
+                savedStateHandle = initialSavedStateHandle,
+                vaultRepository = vaultRepository,
+            )
+        }
+
+        @Test
+        fun `NameTextChange should update name in SecureNotesItem`() = runTest {
+            val action = VaultAddItemAction.ItemType.SecureNotesType.NameTextChange("newName")
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedSecureNotesItem =
+                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                    .copy(name = "newName")
+
+            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `FolderChange should update folder in SecureNotesItem`() = runTest {
+            val action = VaultAddItemAction.ItemType.SecureNotesType.FolderChange(
+                "newFolder".asText(),
+            )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedSecureNotesItem =
+                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                    .copy(folderName = "newFolder".asText())
+
+            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `ToggleFavorite should update favorite in SecureNotesItem`() = runTest {
+            val action = VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite(true)
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedSecureNotesItem =
+                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                    .copy(favorite = true)
+
+            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ToggleMasterPasswordReprompt should update masterPasswordReprompt in SecureNotesItem`() =
+            runTest {
+                val action =
+                    VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt(
+                        isMasterPasswordReprompt = true,
+                    )
+
+                viewModel.actionChannel.trySend(action)
+
+                val expectedSecureNotesItem =
+                    (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                        .copy(masterPasswordReprompt = true)
+
+                val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `NotesTextChange should update notes in SecureNotesItem`() = runTest {
+            val action =
+                VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange(note = "newNotes")
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedSecureNotesItem =
+                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                    .copy(notes = "newNotes")
+
+            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `OwnershipChange should update ownership in SecureNotesItem`() = runTest {
+            val action =
+                VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange(ownership = "newOwner")
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedSecureNotesItem =
+                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                    .copy(ownership = "newOwner")
+
+            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `TooltipClick should emit ShowToast with 'Tooltip' message`() = runTest {
+            viewModel.eventFlow.test {
+                viewModel
+                    .actionChannel
+                    .trySend(
+                        VaultAddItemAction.ItemType.SecureNotesType.TooltipClick,
+                    )
+                assertEquals(VaultAddItemEvent.ShowToast("Not yet implemented"), awaitItem())
+            }
+        }
+
+        @Test
+        fun `AddNewCustomFieldClick should emit ShowToast with 'Add New Custom Field' message`() =
+            runTest {
+                viewModel.eventFlow.test {
+                    viewModel
+                        .actionChannel
+                        .trySend(
+                            VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick,
+                        )
+                    assertEquals(VaultAddItemEvent.ShowToast("Not yet implemented"), awaitItem())
+                }
+            }
+    }
+
     @Suppress("LongParameterList")
     private fun createVaultAddLoginItemState(
         name: String = "",
@@ -367,6 +513,26 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 password = password,
                 uri = uri,
                 folder = folder,
+                favorite = favorite,
+                masterPasswordReprompt = masterPasswordReprompt,
+                notes = notes,
+                ownership = ownership,
+            ),
+        )
+
+    @Suppress("LongParameterList")
+    private fun createVaultAddSecureNotesItemState(
+        name: String = "",
+        folder: Text = "No Folder".asText(),
+        favorite: Boolean = false,
+        masterPasswordReprompt: Boolean = false,
+        notes: String = "",
+        ownership: String = "placeholder@email.com",
+    ): VaultAddItemState =
+        VaultAddItemState(
+            selectedType = VaultAddItemState.ItemType.SecureNotes(
+                name = name,
+                folderName = folder,
                 favorite = favorite,
                 masterPasswordReprompt = masterPasswordReprompt,
                 notes = notes,

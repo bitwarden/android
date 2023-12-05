@@ -7,9 +7,10 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Card.displayStringResId
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Identity.displayStringResId
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.SecureNotes.displayStringResId
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -63,6 +64,10 @@ class VaultAddItemViewModel @Inject constructor(
                 handleAddLoginTypeAction(action)
             }
 
+            is VaultAddItemAction.ItemType.SecureNotesType -> {
+                handleAddSecureNoteTypeAction(action)
+            }
+
             is VaultAddItemAction.Internal.CreateCipherResultReceive -> {
                 handleCreateCipherResultReceive(action)
             }
@@ -75,13 +80,29 @@ class VaultAddItemViewModel @Inject constructor(
 
     private fun handleSaveClick() {
         viewModelScope.launch {
-            sendAction(
-                action = VaultAddItemAction.Internal.CreateCipherResultReceive(
-                    createCipherResult = vaultRepository.createCipher(
-                        cipherView = stateFlow.value.selectedType.toCipherView(),
-                    ),
-                ),
-            )
+            when (state.selectedType) {
+                is VaultAddItemState.ItemType.Login -> {
+                    sendAction(
+                        action = VaultAddItemAction.Internal.CreateCipherResultReceive(
+                            createCipherResult = vaultRepository.createCipher(
+                                cipherView = stateFlow.value.selectedType.toCipherView(),
+                            ),
+                        ),
+                    )
+                }
+
+                is VaultAddItemState.ItemType.SecureNotes -> {
+                    // TODO Add Saving of SecureNotes (BIT-509)
+                }
+
+                VaultAddItemState.ItemType.Card -> {
+                    // TODO Add Saving of SecureNotes (BIT-668)
+                }
+
+                VaultAddItemState.ItemType.Identity -> {
+                    // TODO Add Saving of SecureNotes (BIT-508)
+                }
+            }
         }
     }
 
@@ -108,6 +129,30 @@ class VaultAddItemViewModel @Inject constructor(
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 selectedType = VaultAddItemState.ItemType.Login(),
+            )
+        }
+    }
+
+    private fun handleSwitchToAddSecureNotesItem() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                selectedType = VaultAddItemState.ItemType.SecureNotes(),
+            )
+        }
+    }
+
+    private fun handleSwitchToAddCardItem() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                selectedType = VaultAddItemState.ItemType.Card,
+            )
+        }
+    }
+
+    private fun handleSwitchToAddIdentityItem() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                selectedType = VaultAddItemState.ItemType.Identity,
             )
         }
     }
@@ -188,30 +233,6 @@ class VaultAddItemViewModel @Inject constructor(
             is VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick -> {
                 handleAddNewCustomFieldClick()
             }
-        }
-    }
-
-    private fun handleSwitchToAddCardItem() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = VaultAddItemState.ItemType.Card,
-            )
-        }
-    }
-
-    private fun handleSwitchToAddIdentityItem() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = VaultAddItemState.ItemType.Identity,
-            )
-        }
-    }
-
-    private fun handleSwitchToAddSecureNotesItem() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = VaultAddItemState.ItemType.SecureNotes,
-            )
         }
     }
 
@@ -369,6 +390,114 @@ class VaultAddItemViewModel @Inject constructor(
 
     //endregion Add Login Item Type Handlers
 
+    //region Secure Note Item Type Handlers
+
+    private fun handleAddSecureNoteTypeAction(
+        action: VaultAddItemAction.ItemType.SecureNotesType,
+    ) {
+        when (action) {
+            is VaultAddItemAction.ItemType.SecureNotesType.NameTextChange -> {
+                handleSecureNoteNameTextInputChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.FolderChange -> {
+                handleSecureNoteFolderTextInputChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite -> {
+                handleSecureNoteToggleFavorite(action)
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt -> {
+                handleSecureNoteToggleMasterPasswordReprompt(action)
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange -> {
+                handleSecureNoteNotesTextInputChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange -> {
+                handleSecureNoteOwnershipTextInputChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.TooltipClick -> {
+                handleSecureNoteTooltipClick()
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick -> {
+                handleSecureNoteAddNewCustomFieldClick()
+            }
+        }
+    }
+
+    private fun handleSecureNoteNameTextInputChange(
+        action: VaultAddItemAction.ItemType.SecureNotesType.NameTextChange,
+    ) {
+        updateSecureNoteType { secureNoteType ->
+            secureNoteType.copy(name = action.name)
+        }
+    }
+
+    private fun handleSecureNoteFolderTextInputChange(
+        action: VaultAddItemAction.ItemType.SecureNotesType.FolderChange,
+    ) {
+        updateSecureNoteType { secureNoteType ->
+            secureNoteType.copy(folderName = action.folderName)
+        }
+    }
+
+    private fun handleSecureNoteToggleFavorite(
+        action: VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite,
+    ) {
+        updateSecureNoteType { secureNoteType ->
+            secureNoteType.copy(favorite = action.isFavorite)
+        }
+    }
+
+    private fun handleSecureNoteToggleMasterPasswordReprompt(
+        action: VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt,
+    ) {
+        updateSecureNoteType { secureNoteType ->
+            secureNoteType.copy(masterPasswordReprompt = action.isMasterPasswordReprompt)
+        }
+    }
+
+    private fun handleSecureNoteNotesTextInputChange(
+        action: VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange,
+    ) {
+        updateSecureNoteType { secureNoteType ->
+            secureNoteType.copy(notes = action.note)
+        }
+    }
+
+    private fun handleSecureNoteOwnershipTextInputChange(
+        action: VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange,
+    ) {
+        updateSecureNoteType { secureNoteType ->
+            secureNoteType.copy(ownership = action.ownership)
+        }
+    }
+
+    private fun handleSecureNoteTooltipClick() {
+        // TODO Add the text for the prompt (BIT-1079)
+        sendEvent(
+            event = VaultAddItemEvent.ShowToast(
+                message = "Not yet implemented",
+            ),
+        )
+    }
+
+    private fun handleSecureNoteAddNewCustomFieldClick() {
+        // TODO Implement custom text fields (BIT-529)
+        sendEvent(
+            event = VaultAddItemEvent.ShowToast(
+                message = "Not yet implemented",
+            ),
+        )
+    }
+
+    //endregion Secure Notes Item Type Handlers
+
     //region Internal Type Handlers
 
     @Suppress("MaxLineLength")
@@ -405,6 +534,23 @@ class VaultAddItemViewModel @Inject constructor(
             val updatedLogin = block(currentSelectedType)
 
             currentState.copy(selectedType = updatedLogin)
+        }
+    }
+
+    private inline fun updateSecureNoteType(
+        crossinline block: (
+            VaultAddItemState.ItemType.SecureNotes,
+        ) -> VaultAddItemState.ItemType.SecureNotes,
+    ) {
+        mutableStateFlow.update { currentState ->
+            val currentSelectedType = currentState.selectedType
+            if (currentSelectedType !is VaultAddItemState.ItemType.SecureNotes) {
+                return@update currentState
+            }
+
+            val updatedSecureNote = block(currentSelectedType)
+
+            currentState.copy(selectedType = updatedSecureNote)
         }
     }
 
@@ -540,9 +686,28 @@ data class VaultAddItemState(
          * @property displayStringResId Resource ID for the display string of the secure notes type.
          */
         @Parcelize
-        data object SecureNotes : ItemType() {
+        data class SecureNotes(
+            val name: String = "",
+            val folderName: Text = DEFAULT_FOLDER,
+            val favorite: Boolean = false,
+            val masterPasswordReprompt: Boolean = false,
+            val notes: String = "",
+            val ownership: String = DEFAULT_OWNERSHIP,
+            val availableFolders: List<Text> = listOf(
+                "Folder 1".asText(),
+                "Folder 2".asText(),
+                "Folder 3".asText(),
+            ),
+            val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+        ) : ItemType() {
+
             override val displayStringResId: Int
                 get() = ItemTypeOption.SECURE_NOTES.labelRes
+
+            companion object {
+                private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
+                private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
+            }
         }
     }
 }
@@ -702,6 +867,66 @@ sealed class VaultAddItemAction {
              * Represents the action to add a new custom field.
              */
             data object AddNewCustomFieldClick : LoginType()
+        }
+
+        /**
+         * Represents actions specific to the SecureNotes type.
+         */
+        sealed class SecureNotesType : ItemType() {
+            /**
+             * Fired when the name text input is changed.
+             *
+             * @property name The new name text.
+             */
+            data class NameTextChange(val name: String) : SecureNotesType()
+
+            /**
+             * Fired when the folder text input is changed.
+             *
+             * @property folderName The new folder text.
+             */
+            data class FolderChange(val folderName: Text) : SecureNotesType()
+
+            /**
+             * Fired when the Favorite toggle is changed.
+             *
+             * @property isFavorite The new state of the Favorite toggle.
+             */
+            data class ToggleFavorite(val isFavorite: Boolean) : SecureNotesType()
+
+            /**
+             * Fired when the Master Password Reprompt toggle is changed.
+             *
+             * @property isMasterPasswordReprompt The new state of the Master
+             * Password Re-prompt toggle.
+             */
+            data class ToggleMasterPasswordReprompt(
+                val isMasterPasswordReprompt: Boolean,
+            ) : SecureNotesType()
+
+            /**
+             * Fired when the note text input is changed.
+             *
+             * @property note The new note text.
+             */
+            data class NotesTextChange(val note: String) : SecureNotesType()
+
+            /**
+             * Fired when the ownership text input is changed.
+             *
+             * @property ownership The new ownership text.
+             */
+            data class OwnershipChange(val ownership: String) : SecureNotesType()
+
+            /**
+             * Represents the action to open tooltip
+             */
+            data object TooltipClick : SecureNotesType()
+
+            /**
+             * Represents the action to add a new custom field.
+             */
+            data object AddNewCustomFieldClick : SecureNotesType()
         }
     }
 

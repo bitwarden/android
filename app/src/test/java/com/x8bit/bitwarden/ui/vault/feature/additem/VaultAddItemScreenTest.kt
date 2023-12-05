@@ -21,6 +21,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -29,6 +30,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Test
 
+@Suppress("LargeClass")
 class VaultAddItemScreenTest : BaseComposeTest() {
     private val mutableStateFlow = MutableStateFlow(
         VaultAddItemState(
@@ -625,6 +627,341 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Test
+    fun `in ItemType_SecureNotes state changing Name text field should trigger NameTextChange`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Name")
+            .performTextInput(text = "TestName")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.NameTextChange(name = "TestName"),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_SecureNotes the name control should display the text provided by the state`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Name")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateSecureNotesType(currentState) { copy(name = "NewName") }
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Name")
+            .assertTextContains("NewName")
+    }
+
+    @Test
+    fun `in ItemType_SecureNotes state clicking a Folder Option should send FolderChange action`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescription(label = "Folder, No Folder")
+            .performScrollTo()
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "Folder 1")
+            .onLast()
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.FolderChange("Folder 1".asText()),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes the folder control should display the text provided by the state`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Folder, No Folder")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateSecureNotesType(currentState) { copy(folderName = "Folder 2".asText()) }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Folder, Folder 2")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state, toggling the favorite toggle should send ToggleFavorite action`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithText("Favorite")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite(
+                    isFavorite = true,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes the favorite toggle should be enabled or disabled according to state`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithText("Favorite")
+            .assertIsOff()
+
+        mutableStateFlow.update { currentState ->
+            updateSecureNotesType(currentState) { copy(favorite = true) }
+        }
+
+        composeTestRule
+            .onNodeWithText("Favorite")
+            .assertIsOn()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state, toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithText("Master password re-prompt")
+            .performScrollTo()
+            .performTouchInput {
+                click(position = Offset(x = 1f, y = center.y))
+            }
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt(
+                    isMasterPasswordReprompt = true,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes the master password re-prompt toggle should be enabled or disabled according to state`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithText("Master password re-prompt")
+            .assertIsOff()
+
+        mutableStateFlow.update { currentState ->
+            updateSecureNotesType(currentState) { copy(masterPasswordReprompt = true) }
+        }
+
+        composeTestRule
+            .onNodeWithText("Master password re-prompt")
+            .assertIsOn()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state, toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Master password re-prompt help")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.TooltipClick,
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_SecureNotes state changing Notes text field should trigger NotesTextChange`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNode(hasSetTextAction() and hasText("Notes"))
+            .performScrollTo()
+            .performTextInput("TestNotes")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange("TestNotes"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes the Notes control should display the text provided by the state`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNode(hasSetTextAction() and hasText("Notes"))
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateSecureNotesType(currentState) { copy(notes = "NewNote") }
+        }
+
+        composeTestRule
+            .onNode(hasSetTextAction() and hasText("Notes"))
+            .assertTextContains("NewNote")
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking New Custom Field button should trigger AddNewCustomFieldClick`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "New custom field")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking a Ownership option should send OwnershipChange action`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescription(label = "Who owns this item?, placeholder@email.com")
+            .performScrollTo()
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "a@b.com")
+            .onLast()
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange("a@b.com"),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes the Ownership control should display the text provided by the state`() {
+        mutableStateFlow.value =
+            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Who owns this item?, placeholder@email.com")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateSecureNotesType(currentState) { copy(ownership = "Owner 2") }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Who owns this item?, Owner 2")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
     //region Helper functions
 
     private fun updateLoginType(
@@ -633,6 +970,18 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     ): VaultAddItemState {
         val updatedType = when (val currentType = currentState.selectedType) {
             is VaultAddItemState.ItemType.Login -> currentType.transform()
+            else -> currentType
+        }
+        return currentState.copy(selectedType = updatedType)
+    }
+
+    @Suppress("MaxLineLength")
+    private fun updateSecureNotesType(
+        currentState: VaultAddItemState,
+        transform: VaultAddItemState.ItemType.SecureNotes.() -> VaultAddItemState.ItemType.SecureNotes,
+    ): VaultAddItemState {
+        val updatedType = when (val currentType = currentState.selectedType) {
+            is VaultAddItemState.ItemType.SecureNotes -> currentType.transform()
             else -> currentType
         }
         return currentState.copy(selectedType = updatedType)
