@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -1077,6 +1078,106 @@ class AuthRepositoryTest {
             verify(exactly = 0) { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
         }
+    }
+
+    @Test
+    fun `switchAccount when there is no saved UserState should do nothing`() {
+        val updatedUserId = USER_ID_2
+
+        fakeAuthDiskSource.userState = null
+        assertNull(repository.userStateFlow.value)
+
+        assertEquals(
+            SwitchAccountResult.NoChange,
+            repository.switchAccount(userId = updatedUserId),
+        )
+
+        assertNull(repository.userStateFlow.value)
+        verify(exactly = 0) { vaultRepository.lockVaultIfNecessary(any()) }
+        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `switchAccount when the given userId is the same as the current activeUserId should do nothing`() {
+        val originalUserId = USER_ID_1
+        val originalUserState = SINGLE_USER_STATE_1.toUserState(
+            vaultState = VAULT_STATE,
+            specialCircumstance = null,
+        )
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        assertEquals(
+            originalUserState,
+            repository.userStateFlow.value,
+        )
+
+        assertEquals(
+            SwitchAccountResult.NoChange,
+            repository.switchAccount(userId = originalUserId),
+        )
+
+        assertEquals(
+            originalUserState,
+            repository.userStateFlow.value,
+        )
+        verify(exactly = 0) { vaultRepository.lockVaultIfNecessary(originalUserId) }
+        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `switchAccount when the given userId does not correspond to a saved account should do nothing`() {
+        val originalUserId = USER_ID_1
+        val invalidId = "invalidId"
+        val originalUserState = SINGLE_USER_STATE_1.toUserState(
+            vaultState = VAULT_STATE,
+            specialCircumstance = null,
+        )
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        assertEquals(
+            originalUserState,
+            repository.userStateFlow.value,
+        )
+
+        assertEquals(
+            SwitchAccountResult.NoChange,
+            repository.switchAccount(userId = invalidId),
+        )
+
+        assertEquals(
+            originalUserState,
+            repository.userStateFlow.value,
+        )
+        verify(exactly = 0) { vaultRepository.lockVaultIfNecessary(originalUserId) }
+        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `switchAccount when the userId is valid should update the current UserState, lock the vault of the previous active user, and clear the previously unlocked data`() {
+        val originalUserId = USER_ID_1
+        val updatedUserId = USER_ID_2
+        val originalUserState = MULTI_USER_STATE.toUserState(
+            vaultState = VAULT_STATE,
+            specialCircumstance = null,
+        )
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
+        assertEquals(
+            originalUserState,
+            repository.userStateFlow.value,
+        )
+
+        assertEquals(
+            SwitchAccountResult.AccountSwitched,
+            repository.switchAccount(userId = updatedUserId),
+        )
+
+        assertEquals(
+            originalUserState.copy(activeUserId = updatedUserId),
+            repository.userStateFlow.value,
+        )
+        verify { vaultRepository.lockVaultIfNecessary(originalUserId) }
+        verify { vaultRepository.clearUnlockedData() }
     }
 
     @Test

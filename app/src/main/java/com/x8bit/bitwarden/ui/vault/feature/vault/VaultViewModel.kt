@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -121,20 +122,13 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleAccountSwitchClick(action: VaultAction.AccountSwitchClick) {
-        when (action.accountSummary.status) {
-            AccountSummary.Status.ACTIVE -> {
-                // Nothing to do for the active account
+        val isSwitchingAccounts =
+            when (authRepository.switchAccount(userId = action.accountSummary.userId)) {
+                SwitchAccountResult.AccountSwitched -> true
+                SwitchAccountResult.NoChange -> false
             }
-
-            AccountSummary.Status.LOCKED -> {
-                // TODO: Handle switching accounts (BIT-853)
-                sendEvent(VaultEvent.NavigateToVaultUnlockScreen)
-            }
-
-            AccountSummary.Status.UNLOCKED -> {
-                // TODO: Handle switching accounts (BIT-853)
-                sendEvent(VaultEvent.ShowToast(message = "Not yet implemented."))
-            }
+        mutableStateFlow.update {
+            it.copy(isSwitchingAccounts = isSwitchingAccounts)
         }
     }
 
@@ -159,6 +153,10 @@ class VaultViewModel @Inject constructor(
         // out.
         val userState = action.userState ?: return
 
+        // Avoid updating the UI if we are actively switching users to avoid changes while
+        // navigating.
+        if (state.isSwitchingAccounts) return
+
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
             val activeAccountSummary = userState.toActiveAccountSummary()
@@ -171,6 +169,10 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleVaultDataReceive(action: VaultAction.Internal.VaultDataReceive) {
+        // Avoid updating the UI if we are actively switching users to avoid changes while
+        // navigating.
+        if (state.isSwitchingAccounts) return
+
         when (val vaultData = action.vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
             is DataState.Loaded -> vaultLoadedReceive(vaultData = vaultData)
@@ -213,7 +215,9 @@ class VaultViewModel @Inject constructor(
  *
  * @property avatarColorString The color of the avatar in HEX format.
  * @property initials The initials to be displayed on the avatar.
+ * @property accountSummaries List of all the current accounts.
  * @property viewState The specific view state representing loading, no items, or content state.
+ * @property isSwitchingAccounts Whether or not we are actively switching accounts.
  */
 @Parcelize
 data class VaultState(
@@ -221,6 +225,8 @@ data class VaultState(
     val initials: String,
     val accountSummaries: List<AccountSummary>,
     val viewState: ViewState,
+    // Internal-use properties
+    val isSwitchingAccounts: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -444,11 +450,6 @@ sealed class VaultEvent {
      * Navigate to the secure notes group screen.
      */
     data object NavigateToSecureNotesGroup : VaultEvent()
-
-    /**
-     * Navigate to the vault unlock screen.
-     */
-    data object NavigateToVaultUnlockScreen : VaultEvent()
 
     /**
      * Show a toast with the given [message].

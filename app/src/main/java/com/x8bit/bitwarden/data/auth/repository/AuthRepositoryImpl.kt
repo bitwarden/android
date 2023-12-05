@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -256,6 +257,31 @@ class AuthRepositoryImpl constructor(
 
         // Clear the current vault data if the logged out user was the active one.
         if (wasActiveUser) vaultRepository.clearUnlockedData()
+    }
+
+    @Suppress("ReturnCount")
+    override fun switchAccount(userId: String): SwitchAccountResult {
+        val currentUserState = authDiskSource.userState
+            ?: return SwitchAccountResult.NoChange
+        val previousActiveUserId = currentUserState.activeUserId
+
+        if (userId == previousActiveUserId) {
+            // Nothing to do
+            return SwitchAccountResult.NoChange
+        }
+
+        if (userId !in currentUserState.accounts.keys) {
+            // The requested user is not currently stored
+            return SwitchAccountResult.NoChange
+        }
+
+        // Switch to the new user
+        authDiskSource.userState = currentUserState.copy(activeUserId = userId)
+
+        // Lock and clear data for the previous user
+        vaultRepository.lockVaultIfNecessary(previousActiveUserId)
+        vaultRepository.clearUnlockedData()
+        return SwitchAccountResult.AccountSwitched
     }
 
     @Suppress("ReturnCount", "LongMethod")

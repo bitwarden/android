@@ -111,8 +111,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleSwitchAccountClick(action: VaultUnlockAction.SwitchAccountClick) {
-        // TODO: Handle switching accounts (BIT-853)
-        sendEvent(VaultUnlockEvent.ShowToast("Not yet implemented.".asText()))
+        authRepository.switchAccount(userId = action.accountSummary.userId)
     }
 
     private fun handleUnlockClick() {

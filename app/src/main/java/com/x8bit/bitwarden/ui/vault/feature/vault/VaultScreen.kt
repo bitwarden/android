@@ -98,13 +98,6 @@ fun VaultScreen(
                     .show()
             }
 
-            VaultEvent.NavigateToVaultUnlockScreen -> {
-                // TODO: Handle unlocking accounts (BIT-853)
-                Toast
-                    .makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
             is VaultEvent.ShowToast -> {
                 Toast
                     .makeText(context, event.message, Toast.LENGTH_SHORT)
