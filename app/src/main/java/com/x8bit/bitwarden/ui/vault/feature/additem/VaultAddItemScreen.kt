@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -55,7 +57,6 @@ fun VaultAddItemScreen(
     onNavigateBack: () -> Unit,
     viewModel: VaultAddItemViewModel = hiltViewModel(),
 ) {
-
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -74,10 +75,15 @@ fun VaultAddItemScreen(
         VaultAddLoginItemTypeHandlers.create(viewModel = viewModel)
     }
 
+    val secureNotesTypeHandlers = remember(viewModel) {
+        VaultAddSecureNotesItemTypeHandlers.create(viewModel = viewModel)
+    }
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     BitwardenScaffold(
         modifier = Modifier
+            .imePadding()
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -139,8 +145,11 @@ fun VaultAddItemScreen(
                     // TODO(BIT-667): Create UI for identity-type item creation
                 }
 
-                VaultAddItemState.ItemType.SecureNotes -> {
-                    // TODO(BIT-666): Create UI for secure notes type item creation
+                is VaultAddItemState.ItemType.SecureNotes -> {
+                    AddSecureNotesTypeItemContent(
+                        state = selectedType,
+                        secureNotesTypeHandlers = secureNotesTypeHandlers,
+                    )
                 }
             }
         }
@@ -173,7 +182,7 @@ private fun TypeOptionsItem(
 
 @Suppress("LongMethod")
 @Composable
-private fun AddLoginTypeItemContent(
+private fun ColumnScope.AddLoginTypeItemContent(
     state: VaultAddItemState.ItemType.Login,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
 ) {
@@ -340,6 +349,7 @@ private fun AddLoginTypeItemContent(
 
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextField(
+        singleLine = false,
         label = stringResource(id = R.string.notes),
         value = state.notes,
         onValueChange = loginItemTypeHandlers.onNotesTextChange,
@@ -380,6 +390,128 @@ private fun AddLoginTypeItemContent(
         selectedOption = state.ownership,
         onOptionSelected = loginItemTypeHandlers.onOwnershipTextChange,
         modifier = Modifier.padding(horizontal = 16.dp),
+    )
+    Spacer(modifier = Modifier.height(24.dp))
+    Spacer(modifier = Modifier.navigationBarsPadding())
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun ColumnScope.AddSecureNotesTypeItemContent(
+    state: VaultAddItemState.ItemType.SecureNotes,
+    secureNotesTypeHandlers: VaultAddSecureNotesItemTypeHandlers,
+) {
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenTextField(
+        label = stringResource(id = R.string.name),
+        value = state.name,
+        onValueChange = secureNotesTypeHandlers.onNameTextChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(24.dp))
+    BitwardenListHeaderText(
+        label = stringResource(id = R.string.miscellaneous),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.folder),
+        options = state.availableFolders.map { it.invoke() }.toImmutableList(),
+        selectedOption = state.folderName.invoke(),
+        onOptionSelected = secureNotesTypeHandlers.onFolderTextChange,
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+    BitwardenSwitch(
+        label = stringResource(id = R.string.favorite),
+        isChecked = state.favorite,
+        onCheckedChange = secureNotesTypeHandlers.onToggleFavorite,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+    BitwardenSwitchWithActions(
+        label = stringResource(id = R.string.password_prompt),
+        isChecked = state.masterPasswordReprompt,
+        onCheckedChange = secureNotesTypeHandlers.onToggleMasterPasswordReprompt,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        actions = {
+            IconButton(onClick = secureNotesTypeHandlers.onTooltipClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_tooltip),
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    contentDescription = stringResource(
+                        id = R.string.master_password_re_prompt_help,
+                    ),
+                )
+            }
+        },
+    )
+
+    Spacer(modifier = Modifier.height(24.dp))
+    BitwardenListHeaderText(
+        label = stringResource(id = R.string.notes),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenTextField(
+        singleLine = false,
+        label = stringResource(id = R.string.notes),
+        value = state.notes,
+        onValueChange = secureNotesTypeHandlers.onNotesTextChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(24.dp))
+    BitwardenListHeaderText(
+        label = stringResource(id = R.string.custom_fields),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+    BitwardenFilledTonalButton(
+        label = stringResource(id = R.string.new_custom_field),
+        onClick = secureNotesTypeHandlers.onAddNewCustomFieldClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(24.dp))
+    BitwardenListHeaderText(
+        label = stringResource(id = R.string.ownership),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.who_owns_this_item),
+        options = state.availableOwners.toImmutableList(),
+        selectedOption = state.ownership,
+        onOptionSelected = secureNotesTypeHandlers.onOwnershipTextChange,
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
     )
     Spacer(modifier = Modifier.height(24.dp))
     Spacer(modifier = Modifier.navigationBarsPadding())
