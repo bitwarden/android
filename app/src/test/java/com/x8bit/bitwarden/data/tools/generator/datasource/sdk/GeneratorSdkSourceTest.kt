@@ -14,57 +14,57 @@ class GeneratorSdkSourceTest {
     private val clientGenerators = mockk<ClientGenerators>()
     private val generatorSdkSource: GeneratorSdkSource = GeneratorSdkSourceImpl(clientGenerators)
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `generatePassword should call SDK and return a Result with the generated password`() = runBlocking {
-        val request = PasswordGeneratorRequest(
-            lowercase = true,
-            uppercase = true,
-            numbers = true,
-            special = true,
-            length = 12.toUByte(),
-            avoidAmbiguous = false,
-            minLowercase = 1U,
-            minUppercase = 1U,
-            minNumber = 1U,
-            minSpecial = 1U,
-        )
-        val expectedResult = "GeneratedPassword123!"
+    fun `generatePassword should call SDK and return a Result with the generated password`() =
+        runBlocking {
+            val request = PasswordGeneratorRequest(
+                lowercase = true,
+                uppercase = true,
+                numbers = true,
+                special = true,
+                length = 12U,
+                avoidAmbiguous = false,
+                minLowercase = 1U,
+                minUppercase = 1U,
+                minNumber = 1U,
+                minSpecial = 1U,
+            )
+            val expectedResult = "GeneratedPassword123!"
 
-        coEvery {
-            clientGenerators.password(request)
-        } returns expectedResult
+            coEvery {
+                clientGenerators.password(request)
+            } returns expectedResult
 
-        val result = generatorSdkSource.generatePassword(request)
+            val result = generatorSdkSource.generatePassword(request)
 
-        assertEquals(Result.success(expectedResult), result)
+            assertEquals(Result.success(expectedResult), result)
 
-        coVerify {
-            clientGenerators.password(request)
+            coVerify {
+                clientGenerators.password(request)
+            }
         }
-    }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `generatePassphrase should call SDK and return a Result with the generated passphrase`() = runBlocking {
-        val request = PassphraseGeneratorRequest(
-            numWords = 4.toUByte(),
-            wordSeparator = "-",
-            capitalize = true,
-            includeNumber = true,
-        )
-        val expectedResult = "Generated-Passphrase123"
+    fun `generatePassphrase should call SDK and return a Result with the generated passphrase`() =
+        runBlocking {
+            val request = PassphraseGeneratorRequest(
+                numWords = 4U,
+                wordSeparator = "-",
+                capitalize = true,
+                includeNumber = true,
+            )
+            val expectedResult = "Generated-Passphrase123"
 
-        coEvery {
-            clientGenerators.passphrase(request)
-        } returns expectedResult
+            coEvery {
+                clientGenerators.passphrase(request)
+            } returns expectedResult
 
-        val result = generatorSdkSource.generatePassphrase(request)
+            val result = generatorSdkSource.generatePassphrase(request)
 
-        assertEquals(Result.success(expectedResult), result)
+            assertEquals(Result.success(expectedResult), result)
 
-        coVerify {
-            clientGenerators.passphrase(request)
+            coVerify {
+                clientGenerators.passphrase(request)
+            }
         }
-    }
 }
