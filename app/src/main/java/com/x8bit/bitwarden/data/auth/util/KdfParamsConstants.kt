@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.data.auth.util
 
 import com.bitwarden.core.Kdf
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
  * Constants relating to [Kdf] initialization defaults.
  */
+@OmitFromCoverage
 object KdfParamsConstants {
 
     /**

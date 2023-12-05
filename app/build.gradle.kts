@@ -144,7 +144,9 @@ koverReport {
         excludes {
             annotatedBy(
                 // Compose previews
-                "androidx.compose.ui.tooling.preview.Preview"
+                "androidx.compose.ui.tooling.preview.Preview",
+                // Manually excluded classes/files/etc.
+                "com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage"
             )
             classes(
                 // Navigation helpers
