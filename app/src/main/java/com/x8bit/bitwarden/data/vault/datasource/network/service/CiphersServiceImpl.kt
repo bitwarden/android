@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
-import CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 
 class CiphersServiceImpl constructor(

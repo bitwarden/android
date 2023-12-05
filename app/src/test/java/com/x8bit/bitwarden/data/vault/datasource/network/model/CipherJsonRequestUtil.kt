@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
-import CipherJsonRequest
 import java.time.LocalDateTime
 
 /**
