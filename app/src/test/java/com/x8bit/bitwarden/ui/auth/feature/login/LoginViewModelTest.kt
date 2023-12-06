@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -38,10 +39,10 @@ class LoginViewModelTest : BaseViewModelTest() {
     private val mutableCaptchaTokenResultFlow = MutableSharedFlow<CaptchaCallbackTokenResult>(
         extraBufferCapacity = Int.MAX_VALUE,
     )
-    private val mutableStateFlow = MutableStateFlow<UserState?>(null)
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
-        every { userStateFlow } returns mutableStateFlow
+        every { userStateFlow } returns mutableUserStateFlow
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
@@ -99,6 +100,31 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `initial state should set the account summaries based on the UserState`() {
+        val userState = UserState(
+            activeUserId = "activeUserId",
+            accounts = listOf(
+                UserState.Account(
+                    userId = "activeUserId",
+                    name = "name",
+                    email = "email",
+                    avatarColorHex = "avatarColorHex",
+                    isPremium = true,
+                    isVaultUnlocked = true,
+                ),
+            ),
+        )
+        mutableUserStateFlow.value = userState
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE.copy(
+                accountSummaries = userState.toAccountSummaries(),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `initial state should pull from handle when present`() = runTest {
@@ -301,6 +327,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = null,
+            accountSummaries = emptyList(),
         )
 
         private const val LOGIN_RESULT_PATH =
