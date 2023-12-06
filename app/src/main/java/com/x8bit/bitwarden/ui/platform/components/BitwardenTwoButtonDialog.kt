@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 /**
  * Represents a Bitwarden-styled dialog with two buttons.
  *
- * @param title title to show.
+ * @param title the optional title to show.
  * @param message message to show.
  * @param confirmButtonText text to show on confirm button.
  * @param dismissButtonText text to show on dismiss button.
@@ -19,7 +19,7 @@ import androidx.compose.runtime.Composable
  */
 @Composable
 fun BitwardenTwoButtonDialog(
-    title: String,
+    title: String?,
     message: String,
     confirmButtonText: String,
     dismissButtonText: String,
@@ -41,17 +41,17 @@ fun BitwardenTwoButtonDialog(
                 onClick = onConfirmClick,
             )
         },
-        title = {
-            Text(
-                text = title,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.headlineSmall,
-            )
+        title = title?.let {
+            {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+            }
         },
         text = {
             Text(
                 text = message,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
             )
         },
