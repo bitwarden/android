@@ -64,6 +64,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
+    @Suppress("MaxLineLength")
     override fun handleAction(action: GeneratorAction) {
         when (action) {
             is GeneratorAction.RegenerateClick -> {
@@ -102,8 +103,7 @@ class GeneratorViewModel @Inject constructor(
                 handleUsernameTypeOptionSelect(action)
             }
 
-            is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange ->
-            {
+            is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange -> {
                 handlePlusAddressedEmailTextInputChange(action)
             }
 

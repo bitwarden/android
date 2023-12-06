@@ -176,18 +176,18 @@ class GeneratorRepositoryTest {
         coVerify(exactly = 0) { generatorDiskSource.getPasscodeGenerationOptions(any()) }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `getPasscodeGenerationOptions should return null when no data is stored for active user`() = runTest {
-        val userId = "activeUserId"
-        coEvery { authDiskSource.userState } returns USER_STATE
-        coEvery { generatorDiskSource.getPasscodeGenerationOptions(userId) } returns null
+    fun `getPasscodeGenerationOptions should return null when no data is stored for active user`() =
+        runTest {
+            val userId = "activeUserId"
+            coEvery { authDiskSource.userState } returns USER_STATE
+            coEvery { generatorDiskSource.getPasscodeGenerationOptions(userId) } returns null
 
-        val result = repository.getPasscodeGenerationOptions()
+            val result = repository.getPasscodeGenerationOptions()
 
-        assertNull(result)
-        coVerify { generatorDiskSource.getPasscodeGenerationOptions(userId) }
-    }
+            assertNull(result)
+            coVerify { generatorDiskSource.getPasscodeGenerationOptions(userId) }
+        }
 
     @Test
     fun `savePasscodeGenerationOptions should store options correctly`() = runTest {
@@ -220,32 +220,34 @@ class GeneratorRepositoryTest {
         coVerify { generatorDiskSource.storePasscodeGenerationOptions(userId, optionsToSave) }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `savePasscodeGenerationOptions should not store options when there is no active user`() = runTest {
-        val optionsToSave = PasscodeGenerationOptions(
-            length = 14,
-            allowAmbiguousChar = false,
-            hasNumbers = true,
-            minNumber = 0,
-            hasUppercase = true,
-            minUppercase = null,
-            hasLowercase = false,
-            minLowercase = null,
-            allowSpecial = false,
-            minSpecial = 1,
-            allowCapitalize = false,
-            allowIncludeNumber = false,
-            wordSeparator = "-",
-            numWords = 3,
-        )
+    fun `savePasscodeGenerationOptions should not store options when there is no active user`() =
+        runTest {
+            val optionsToSave = PasscodeGenerationOptions(
+                length = 14,
+                allowAmbiguousChar = false,
+                hasNumbers = true,
+                minNumber = 0,
+                hasUppercase = true,
+                minUppercase = null,
+                hasLowercase = false,
+                minLowercase = null,
+                allowSpecial = false,
+                minSpecial = 1,
+                allowCapitalize = false,
+                allowIncludeNumber = false,
+                wordSeparator = "-",
+                numWords = 3,
+            )
 
-        coEvery { authDiskSource.userState } returns null
+            coEvery { authDiskSource.userState } returns null
 
-        repository.savePasscodeGenerationOptions(optionsToSave)
+            repository.savePasscodeGenerationOptions(optionsToSave)
 
-        coVerify(exactly = 0) { generatorDiskSource.storePasscodeGenerationOptions(any(), any()) }
-    }
+            coVerify(exactly = 0) {
+                generatorDiskSource.storePasscodeGenerationOptions(any(), any())
+            }
+        }
 
     private val USER_STATE = UserStateJson(
         activeUserId = "activeUserId",

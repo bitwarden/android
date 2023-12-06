@@ -911,30 +911,30 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `ToggleIncludeNumberChange should update the includeNumber property correctly`() = runTest {
-            viewModel.actionChannel.trySend(
-                GeneratorAction
-                    .MainType
-                    .Username
-                    .UsernameType
-                    .RandomWord
-                    .ToggleIncludeNumberChange(
-                        includeNumber = true,
-                    ),
-            )
+        fun `ToggleIncludeNumberChange should update the includeNumber property correctly`() =
+            runTest {
+                viewModel.actionChannel.trySend(
+                    GeneratorAction
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .RandomWord
+                        .ToggleIncludeNumberChange(
+                            includeNumber = true,
+                        ),
+                )
 
-            val expectedState = defaultRandomWordState.copy(
-                selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.RandomWord(
-                        includeNumber = true,
+                val expectedState = defaultRandomWordState.copy(
+                    selectedType = GeneratorState.MainType.Username(
+                        GeneratorState.MainType.Username.UsernameType.RandomWord(
+                            includeNumber = true,
+                        ),
                     ),
-                ),
-            )
+                )
 
-            assertEquals(expectedState, viewModel.stateFlow.value)
-        }
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
     }
     //region Helper Functions
 

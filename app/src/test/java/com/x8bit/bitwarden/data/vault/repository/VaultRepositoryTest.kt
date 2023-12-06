@@ -1430,57 +1430,59 @@ class VaultRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `createCipher with ciphersService createCipher failure should return CreateCipherResult failure`() = runTest {
-        val mockCipherView = createMockCipherView(number = 1)
-        coEvery {
-            vaultSdkSource.encryptCipher(cipherView = mockCipherView)
-        } returns createMockSdkCipher(number = 1).asSuccess()
-        coEvery {
-            ciphersService.createCipher(
-                body = createMockCipherJsonRequest(number = 1),
+    fun `createCipher with ciphersService createCipher failure should return CreateCipherResult failure`() =
+        runTest {
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(cipherView = mockCipherView)
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            coEvery {
+                ciphersService.createCipher(
+                    body = createMockCipherJsonRequest(number = 1),
+                )
+            } returns IllegalStateException().asFailure()
+
+            val result = vaultRepository.createCipher(cipherView = mockCipherView)
+
+            assertEquals(
+                CreateCipherResult.Error,
+                result,
             )
-        } returns IllegalStateException().asFailure()
-
-        val result = vaultRepository.createCipher(cipherView = mockCipherView)
-
-        assertEquals(
-            CreateCipherResult.Error,
-            result,
-        )
-    }
+        }
 
     @Test
     @Suppress("MaxLineLength")
-    fun `createCipher with ciphersService createCipher success should return CreateCipherResult success`() = runTest {
-        val mockCipherView = createMockCipherView(number = 1)
-        coEvery {
-            vaultSdkSource.encryptCipher(cipherView = mockCipherView)
-        } returns createMockSdkCipher(number = 1).asSuccess()
-        coEvery {
-            ciphersService.createCipher(
-                body = createMockCipherJsonRequest(number = 1),
+    fun `createCipher with ciphersService createCipher success should return CreateCipherResult success`() =
+        runTest {
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(cipherView = mockCipherView)
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            coEvery {
+                ciphersService.createCipher(
+                    body = createMockCipherJsonRequest(number = 1),
+                )
+            } returns createMockCipher(number = 1).asSuccess()
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns listOf(createMockCipherView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns listOf(createMockFolderView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
+            } returns listOf(createMockSendView(1)).asSuccess()
+
+            val result = vaultRepository.createCipher(cipherView = mockCipherView)
+
+            assertEquals(
+                CreateCipherResult.Success,
+                result,
             )
-        } returns createMockCipher(number = 1).asSuccess()
-        coEvery {
-            syncService.sync()
-        } returns Result.success(createMockSyncResponse(1))
-        coEvery {
-            vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
-        } returns listOf(createMockCipherView(1)).asSuccess()
-        coEvery {
-            vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
-        } returns listOf(createMockFolderView(1)).asSuccess()
-        coEvery {
-            vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
-        } returns listOf(createMockSendView(1)).asSuccess()
-
-        val result = vaultRepository.createCipher(cipherView = mockCipherView)
-
-        assertEquals(
-            CreateCipherResult.Success,
-            result,
-        )
-    }
+        }
 
     //region Helper functions
 
