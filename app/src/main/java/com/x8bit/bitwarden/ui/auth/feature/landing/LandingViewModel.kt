@@ -8,9 +8,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
-import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +37,7 @@ class LandingViewModel @Inject constructor(
             isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
             isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
             selectedEnvironmentType = environmentRepository.environment.type,
-            errorDialogState = BasicDialogState.Hidden,
+            dialog = null,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
         ),
 ) {
@@ -67,7 +67,7 @@ class LandingViewModel @Inject constructor(
             is LandingAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
             is LandingAction.ContinueButtonClick -> handleContinueButtonClicked()
             LandingAction.CreateAccountClick -> handleCreateAccountClicked()
-            is LandingAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
+            is LandingAction.DialogDismiss -> handleDialogDismiss()
             is LandingAction.RememberMeToggle -> handleRememberMeToggled(action)
             is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action)
             is LandingAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
@@ -95,8 +95,7 @@ class LandingViewModel @Inject constructor(
         if (!mutableStateFlow.value.emailInput.isValidEmail()) {
             mutableStateFlow.update {
                 it.copy(
-                    errorDialogState = BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
+                    dialog = LandingState.DialogState.Error(
                         message = R.string.invalid_email.asText(),
                     ),
                 )
@@ -117,9 +116,9 @@ class LandingViewModel @Inject constructor(
         sendEvent(LandingEvent.NavigateToCreateAccount)
     }
 
-    private fun handleErrorDialogDismiss() {
+    private fun handleDialogDismiss() {
         mutableStateFlow.update {
-            it.copy(errorDialogState = BasicDialogState.Hidden)
+            it.copy(dialog = null)
         }
     }
 
@@ -163,9 +162,23 @@ data class LandingState(
     val isContinueButtonEnabled: Boolean,
     val isRememberMeEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
-    val errorDialogState: BasicDialogState,
+    val dialog: DialogState?,
     val accountSummaries: List<AccountSummary>,
-) : Parcelable
+) : Parcelable {
+    /**
+     * Represents the current state of any dialogs on screen.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Represents an error dialog with the given [message].
+         */
+        @Parcelize
+        data class Error(
+            val message: Text,
+        ) : DialogState()
+    }
+}
 
 /**
  * Models events for the landing screen.
@@ -211,9 +224,9 @@ sealed class LandingAction {
     data object CreateAccountClick : LandingAction()
 
     /**
-     * Indicates that an error dialog is attempting to be dismissed.
+     * Indicates that a dialog is attempting to be dismissed.
      */
-    data object ErrorDialogDismiss : LandingAction()
+    data object DialogDismiss : LandingAction()
 
     /**
      * Indicates that the Remember Me switch has been toggled.

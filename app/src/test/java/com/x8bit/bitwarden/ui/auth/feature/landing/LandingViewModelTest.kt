@@ -8,7 +8,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import io.mockk.every
 import io.mockk.mockk
@@ -112,8 +111,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
             assertEquals(
                 initialState.copy(
-                    errorDialogState = BasicDialogState.Shown(
-                        title = R.string.an_error_has_occurred.asText(),
+                    dialog = LandingState.DialogState.Error(
                         message = R.string.invalid_email.asText(),
                     ),
                 ),
@@ -132,6 +130,27 @@ class LandingViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `DialogDismiss should clear the active dialog`() {
+        val initialState = DEFAULT_STATE.copy(
+            dialog = LandingState.DialogState.Error(
+                message = "Error".asText(),
+            ),
+        )
+        val viewModel = createViewModel(initialState = initialState)
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        viewModel.trySendAction(LandingAction.DialogDismiss)
+
+        assertEquals(
+            initialState.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -206,9 +225,12 @@ class LandingViewModelTest : BaseViewModelTest() {
     //region Helper methods
 
     private fun createViewModel(
+        initialState: LandingState? = null,
         rememberedEmail: String? = null,
         userState: UserState? = null,
-        savedStateHandle: SavedStateHandle = SavedStateHandle(),
+        savedStateHandle: SavedStateHandle = SavedStateHandle(
+            initialState = mapOf("state" to initialState),
+        ),
     ): LandingViewModel = LandingViewModel(
         authRepository = mockk(relaxed = true) {
             every { rememberedEmailAddress } returns rememberedEmail
@@ -226,7 +248,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
-            errorDialogState = BasicDialogState.Hidden,
+            dialog = null,
             accountSummaries = emptyList(),
         )
     }
