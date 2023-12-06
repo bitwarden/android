@@ -62,6 +62,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
+import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
@@ -271,6 +272,7 @@ private fun GeneratedStringItem(
     BitwardenReadOnlyTextFieldWithActions(
         label = "",
         value = generatedText,
+        singleLine = false,
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
@@ -287,6 +289,7 @@ private fun GeneratedStringItem(
                 onClick = onRegenerateClick,
             )
         },
+        visualTransformation = nonLetterColorVisualTransformation(),
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 }

@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -28,7 +29,9 @@ import com.x8bit.bitwarden.R
  * @param label Label for the text field.
  * @param value Current text in the text field.
  * @param modifier [Modifier] applied to this layout composable.
- * @param readOnly If `true`, user input is disabled for the text field, making it read-only.
+ * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
+ * instead of wrapping onto multiple lines.
+ * @param visualTransformation Transforms the visual representation of the input [value].
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
  * providing flexibility in the layout definition.
@@ -38,7 +41,8 @@ fun BitwardenReadOnlyTextFieldWithActions(
     label: String,
     value: String,
     modifier: Modifier = Modifier,
-    readOnly: Boolean = true,
+    singleLine: Boolean = true,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
@@ -54,10 +58,12 @@ fun BitwardenReadOnlyTextFieldWithActions(
                     contentDescription = "$label, $value"
                     text = AnnotatedString(label)
                 },
-            readOnly = readOnly,
+            readOnly = true,
+            singleLine = singleLine,
             label = label,
             value = value,
             onValueChange = {},
+            visualTransformation = visualTransformation,
         )
         BitwardenRowOfActions(actions)
     }
@@ -69,7 +75,6 @@ private fun BitwardenReadOnlyTextFieldWithActions_preview() {
     BitwardenReadOnlyTextFieldWithActions(
         label = "Username",
         value = "john.doe",
-        readOnly = true,
         actions = {
             Icon(
                 painter = painterResource(id = R.drawable.ic_tooltip),
