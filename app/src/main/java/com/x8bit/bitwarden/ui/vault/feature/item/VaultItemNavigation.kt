@@ -27,6 +27,7 @@ class VaultItemArgs(val vaultItemId: String) {
  */
 fun NavGraphBuilder.vaultItemDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
 ) {
     composable(
         route = VAULT_ITEM_ROUTE,
@@ -34,11 +35,14 @@ fun NavGraphBuilder.vaultItemDestination(
             navArgument(VAULT_ITEM_ID) { type = NavType.StringType },
         ),
         enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.slideDown,
-        popEnterTransition = TransitionProviders.Enter.slideUp,
+        exitTransition = TransitionProviders.Exit.stay,
+        popEnterTransition = TransitionProviders.Enter.stay,
         popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
-        VaultItemScreen(onNavigateBack = onNavigateBack)
+        VaultItemScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToVaultEditItem = onNavigateToVaultEditItem,
+        )
     }
 }
 

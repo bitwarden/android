@@ -46,6 +46,7 @@ fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
+    onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
@@ -61,6 +62,8 @@ fun VaultScreen(
             }
 
             is VaultEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.itemId)
+
+            is VaultEvent.NavigateToEditVaultItem -> onNavigateToVaultEditItemScreen(event.itemId)
 
             VaultEvent.NavigateToCardGroup -> {
                 Toast

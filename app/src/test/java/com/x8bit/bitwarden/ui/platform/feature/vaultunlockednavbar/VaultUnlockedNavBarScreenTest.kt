@@ -34,6 +34,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )
@@ -58,6 +59,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )
@@ -83,6 +85,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )
@@ -107,6 +110,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )
@@ -132,6 +136,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )
@@ -156,6 +161,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )
@@ -181,6 +187,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )
@@ -205,6 +212,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     navController = fakeNavHostController,
                     onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
+                    onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
                 )

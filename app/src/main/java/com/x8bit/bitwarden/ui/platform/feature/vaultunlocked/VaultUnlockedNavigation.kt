@@ -10,10 +10,12 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToNewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.newSendDestination
-import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
-import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddItem
 import com.x8bit.bitwarden.ui.vault.feature.additem.vaultAddItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.edit.navigateToVaultEditItem
+import com.x8bit.bitwarden.ui.vault.feature.edit.vaultEditItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
+import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
 
@@ -37,12 +39,17 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         vaultUnlockedNavBarDestination(
             onNavigateToVaultAddItem = { navController.navigateToVaultAddItem() },
             onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
+            onNavigateToVaultEditItem = { navController.navigateToVaultEditItem(it) },
             onNavigateToNewSend = { navController.navigateToNewSend() },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
         vaultAddItemDestination(onNavigateBack = { navController.popBackStack() })
-        vaultItemDestination(onNavigateBack = { navController.popBackStack() })
+        vaultItemDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVaultEditItem = { navController.navigateToVaultEditItem(it) },
+        )
+        vaultEditItemDestination(onNavigateBack = { navController.popBackStack() })
         newSendDestination(onNavigateBack = { navController.popBackStack() })
     }
 }

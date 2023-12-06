@@ -49,6 +49,7 @@ fun VaultItemScreen(
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
     onNavigateBack: () -> Unit,
+    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -61,9 +62,7 @@ fun VaultItemScreen(
 
             VaultItemEvent.NavigateBack -> onNavigateBack()
 
-            is VaultItemEvent.NavigateToEdit -> {
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
-            }
+            is VaultItemEvent.NavigateToEdit -> onNavigateToVaultEditItem(event.itemId)
 
             is VaultItemEvent.NavigateToPasswordHistory -> {
                 Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
