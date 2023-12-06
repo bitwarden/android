@@ -420,6 +420,13 @@ sealed class VaultEvent {
     ) : VaultEvent()
 
     /**
+     * Navigate to the item edit screen.
+     */
+    data class NavigateToEditVaultItem(
+        val itemId: String,
+    ) : VaultEvent()
+
+    /**
      * Navigate to the card group screen.
      */
     data object NavigateToCardGroup : VaultEvent()

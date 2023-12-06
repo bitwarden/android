@@ -20,6 +20,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -28,7 +29,8 @@ import org.junit.Test
 class VaultScreenTest : BaseComposeTest() {
 
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToVaultItemScreenCalled = false
+    private var onNavigateToVaultItemId: String? = null
+    private var onNavigateToVaultEditItemId: String? = null
     private var onDimBottomNavBarRequestCalled = false
 
     private val mutableEventFlow = MutableSharedFlow<VaultEvent>(
@@ -46,7 +48,8 @@ class VaultScreenTest : BaseComposeTest() {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemScreenCalled = true },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
+                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
             )
         }
@@ -118,9 +121,17 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToVaultItem event should call onNavigateToVaultItemScreenCalled`() {
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = "id"))
-        assertTrue(onNavigateToVaultItemScreenCalled)
+    fun `NavigateToVaultItem event should call onNavigateToVaultItemScreen`() {
+        val id = "id4321"
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id))
+        assertEquals(id, onNavigateToVaultItemId)
+    }
+
+    @Test
+    fun `NavigateToEditVaultItem event should call onNavigateToVaultEditItemScreen`() {
+        val id = "id1234"
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToEditVaultItem(itemId = id))
+        assertEquals(id, onNavigateToVaultEditItemId)
     }
 
     @Test

@@ -8,12 +8,14 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class VaultItemScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToVaultEditItemId: String? = null
 
     private val mutableEventFlow = MutableSharedFlow<VaultItemEvent>(
         extraBufferCapacity = Int.MAX_VALUE,
@@ -30,8 +32,16 @@ class VaultItemScreenTest : BaseComposeTest() {
             VaultItemScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToVaultEditItem = { onNavigateToVaultEditItemId = it },
             )
         }
+    }
+
+    @Test
+    fun `NavigateToEdit event should invoke onNavigateToVaultEditItem`() {
+        val id = "id1234"
+        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToEdit(id))
+        assertEquals(id, onNavigateToVaultEditItemId)
     }
 
     @Test

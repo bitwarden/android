@@ -24,6 +24,7 @@ fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) 
 fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToVaultAddItem: () -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
+    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToNewSend: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
 ) {
@@ -37,6 +38,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
         VaultUnlockedNavBarScreen(
             onNavigateToVaultAddItem = onNavigateToVaultAddItem,
             onNavigateToVaultItem = onNavigateToVaultItem,
+            onNavigateToVaultEditItem = onNavigateToVaultEditItem,
             onNavigateToNewSend = onNavigateToNewSend,
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
         )
