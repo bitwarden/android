@@ -158,8 +158,6 @@ private fun AnimatedAccountSwitcher(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
-            }
-            item {
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.outlineVariant,
