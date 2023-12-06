@@ -882,7 +882,7 @@ data class SyncResponseJson(
         val password: String?,
 
         @SerialName("file")
-        val file: File,
+        val file: File?,
 
         @SerialName("deletionDate")
         @Contextual
