@@ -17,7 +17,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.util.labelOrBaseUrlHost
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -46,6 +48,7 @@ class LoginViewModel @Inject constructor(
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = LoginArgs(savedStateHandle).captchaToken,
+            accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
         ),
 ) {
 
@@ -67,6 +70,7 @@ class LoginViewModel @Inject constructor(
 
     override fun handleAction(action: LoginAction) {
         when (action) {
+            is LoginAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
             is LoginAction.CloseButtonClick -> handleCloseButtonClicked()
             LoginAction.LoginButtonClick -> handleLoginButtonClicked()
             LoginAction.MasterPasswordHintClick -> handleMasterPasswordHintClicked()
@@ -82,6 +86,10 @@ class LoginViewModel @Inject constructor(
                 handleReceiveLoginResult(action = action)
             }
         }
+    }
+
+    private fun handleSwitchAccountClicked(action: LoginAction.SwitchAccountClick) {
+        authRepository.switchAccount(userId = action.account.userId)
     }
 
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
@@ -201,6 +209,7 @@ data class LoginState(
     val isLoginButtonEnabled: Boolean,
     val loadingDialogState: LoadingDialogState,
     val errorDialogState: BasicDialogState,
+    val accountSummaries: List<AccountSummary>,
 ) : Parcelable
 
 /**
@@ -227,6 +236,13 @@ sealed class LoginEvent {
  * Models actions for the login screen.
  */
 sealed class LoginAction {
+    /**
+     * Indicates the user has clicked on the given [account] information in order to switch to it.
+     */
+    data class SwitchAccountClick(
+        val account: AccountSummary,
+    ) : LoginAction()
+
     /**
      * Indicates that the top-bar close button was clicked.
      */

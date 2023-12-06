@@ -18,7 +18,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -36,16 +39,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPlaceholderAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The top level composable for the Login screen.
@@ -73,6 +79,8 @@ fun LoginScreen(
         }
     }
 
+    val isAccountButtonVisible = state.accountSummaries.isNotEmpty()
+    var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
@@ -88,6 +96,11 @@ fun LoginScreen(
                     { viewModel.trySendAction(LoginAction.CloseButtonClick) }
                 },
                 actions = {
+                    if (isAccountButtonVisible) {
+                        BitwardenPlaceholderAccountActionItem(
+                            onClick = { isAccountMenuVisible = !isAccountMenuVisible },
+                        )
+                    }
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
@@ -122,6 +135,23 @@ fun LoginScreen(
             onNotYouButtonClick = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.NotYouButtonClick) }
             },
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+        )
+
+        BitwardenAccountSwitcher(
+            isVisible = isAccountMenuVisible,
+            accountSummaries = state.accountSummaries.toImmutableList(),
+            onAccountSummaryClick = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.SwitchAccountClick(it)) }
+            },
+            onAddAccountClick = {
+                // Not available
+            },
+            onDismissRequest = { isAccountMenuVisible = false },
+            isAddAccountAvailable = false,
+            topAppBarScrollBehavior = scrollBehavior,
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
