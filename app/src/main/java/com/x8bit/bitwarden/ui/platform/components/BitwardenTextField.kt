@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 
@@ -26,6 +27,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
  * instead of wrapping onto multiple lines.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param enabled Whether or not the text field is enabled.
+ * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  */
 @Composable
@@ -41,6 +43,7 @@ fun BitwardenTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     OutlinedTextField(
         modifier = modifier,
@@ -71,6 +74,7 @@ fun BitwardenTextField(
         singleLine = singleLine,
         readOnly = readOnly,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+        visualTransformation = visualTransformation,
     )
 }
 
