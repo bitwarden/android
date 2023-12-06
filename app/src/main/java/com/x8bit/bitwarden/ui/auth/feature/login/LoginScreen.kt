@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -49,7 +50,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * The top level composable for the Login screen.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Suppress("LongMethod")
 fun LoginScreen(
@@ -101,108 +102,137 @@ fun LoginScreen(
             )
         },
     ) { innerPadding ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+        LoginScreenContent(
+            state = state,
+            onErrorDialogDismiss = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) }
+            },
+            onPasswordInputChanged = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.PasswordInputChanged(it)) }
+            },
+            onMasterPasswordClick = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
+            },
+            onLoginButtonClick = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.LoginButtonClick) }
+            },
+            onSingleSignOnClick = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.SingleSignOnClick) }
+            },
+            onNotYouButtonClick = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.NotYouButtonClick) }
+            },
             modifier = Modifier
-                .semantics { testTagsAsResourceId = true }
                 .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize(),
+        )
+    }
+}
+
+@Suppress("LongMethod")
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun LoginScreenContent(
+    state: LoginState,
+    onErrorDialogDismiss: () -> Unit,
+    onPasswordInputChanged: (String) -> Unit,
+    onMasterPasswordClick: () -> Unit,
+    onLoginButtonClick: () -> Unit,
+    onSingleSignOnClick: () -> Unit,
+    onNotYouButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .semantics { testTagsAsResourceId = true }
+            .imePadding()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        BitwardenLoadingDialog(
+            visibilityState = state.loadingDialogState,
+        )
+        BitwardenBasicDialog(
+            visibilityState = state.errorDialogState,
+            onDismissRequest = onErrorDialogDismiss,
+        )
+
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
         ) {
-            BitwardenLoadingDialog(
-                visibilityState = state.loadingDialogState,
+            BitwardenPasswordField(
+                modifier = Modifier
+                    .semantics { testTag = "MasterPasswordEntry" }
+                    .fillMaxWidth(),
+                value = state.passwordInput,
+                onValueChange = onPasswordInputChanged,
+                label = stringResource(id = R.string.master_password),
+                showPasswordTestTag = "PasswordVisibilityToggle",
             )
-            BitwardenBasicDialog(
-                visibilityState = state.errorDialogState,
-                onDismissRequest = { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) },
-            )
 
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
-            ) {
-                BitwardenPasswordField(
-                    modifier = Modifier
-                        .semantics { testTag = "MasterPasswordEntry" }
-                        .fillMaxWidth(),
-                    value = state.passwordInput,
-                    onValueChange = remember(viewModel) {
-                        { viewModel.trySendAction(LoginAction.PasswordInputChanged(it)) }
-                    },
-                    label = stringResource(id = R.string.master_password),
-                    showPasswordTestTag = "PasswordVisibilityToggle",
-                )
-
-                // TODO: Need to figure out better handling for very small clickable text (BIT-724)
-                Text(
-                    text = stringResource(id = R.string.get_password_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .semantics { testTag = "GetMasterPasswordHintLabel" }
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                        .clickable {
-                            viewModel.trySendAction(LoginAction.MasterPasswordHintClick)
-                        }
-                        .padding(
-                            vertical = 4.dp,
-                            horizontal = 16.dp,
-                        ),
-                )
-
-                BitwardenFilledButton(
-                    label = stringResource(id = R.string.log_in_with_master_password),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(LoginAction.LoginButtonClick) }
-                    },
-                    isEnabled = state.isLoginButtonEnabled,
-                    modifier = Modifier
-                        .semantics { testTag = "LogInWithMasterPasswordButton" }
-                        .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                )
-
-                BitwardenOutlinedButtonWithIcon(
-                    label = stringResource(id = R.string.log_in_sso),
-                    icon = painterResource(id = R.drawable.ic_light_bulb),
-                    onClick =
-                    remember(viewModel) {
-                        { viewModel.trySendAction(LoginAction.SingleSignOnClick) }
-                    },
-                    modifier = Modifier
-                        .semantics { testTag = "LogInWithSsoButton" }
-                        .fillMaxWidth()
-                        .padding(bottom = 24.dp),
-                    isEnabled = state.isLoginButtonEnabled,
-                )
-
-                Text(
-                    text = stringResource(
-                        id = R.string.logging_in_as_x_on_y,
-                        state.emailAddress,
-                        state.environmentLabel(),
+            // TODO: Need to figure out better handling for very small clickable text (BIT-724)
+            Text(
+                text = stringResource(id = R.string.get_password_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .semantics { testTag = "GetMasterPasswordHintLabel" }
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+                    .clickable { onMasterPasswordClick() }
+                    .padding(
+                        vertical = 4.dp,
+                        horizontal = 16.dp,
                     ),
-                    textAlign = TextAlign.Start,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier
-                        .semantics { testTag = "LoggingInAsLabel" }
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                )
+            )
 
-                // TODO: Need to figure out better handling for very small clickable text (BIT-724)
-                Text(
-                    modifier = Modifier
-                        .semantics { testTag = "NotYouLabel" }
-                        .clickable { viewModel.trySendAction(LoginAction.NotYouButtonClick) },
-                    text = stringResource(id = R.string.not_you),
-                    textAlign = TextAlign.Start,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.labelLarge,
-                )
-                Spacer(modifier = Modifier.navigationBarsPadding())
-            }
+            BitwardenFilledButton(
+                label = stringResource(id = R.string.log_in_with_master_password),
+                onClick = onLoginButtonClick,
+                isEnabled = state.isLoginButtonEnabled,
+                modifier = Modifier
+                    .semantics { testTag = "LogInWithMasterPasswordButton" }
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+            )
+
+            BitwardenOutlinedButtonWithIcon(
+                label = stringResource(id = R.string.log_in_sso),
+                icon = painterResource(id = R.drawable.ic_light_bulb),
+                onClick = onSingleSignOnClick,
+                modifier = Modifier
+                    .semantics { testTag = "LogInWithSsoButton" }
+                    .fillMaxWidth()
+                    .padding(bottom = 24.dp),
+                isEnabled = state.isLoginButtonEnabled,
+            )
+
+            Text(
+                text = stringResource(
+                    id = R.string.logging_in_as_x_on_y,
+                    state.emailAddress,
+                    state.environmentLabel(),
+                ),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .semantics { testTag = "LoggingInAsLabel" }
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+            )
+
+            // TODO: Need to figure out better handling for very small clickable text (BIT-724)
+            Text(
+                modifier = Modifier
+                    .semantics { testTag = "NotYouLabel" }
+                    .clickable { onNotYouButtonClick() },
+                text = stringResource(id = R.string.not_you),
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelLarge,
+            )
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
