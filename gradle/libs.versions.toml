@@ -26,7 +26,7 @@ androidxSplash = "1.1.0-alpha02"
 bitwardenSdk = "0.3.1-20231205.145329-16"
 detekt = "1.23.1"
 firebaseBom = "32.5.0"
-glide = "4.15.1"
+glide = "1.0.0-beta01"
 hilt = "2.47"
 junit5 = "5.8.2"
 jvmTarget = "1.8"
@@ -70,7 +70,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
-bumptech-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
