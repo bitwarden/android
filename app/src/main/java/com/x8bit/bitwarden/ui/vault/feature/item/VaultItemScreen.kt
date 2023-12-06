@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -106,17 +109,23 @@ fun VaultItemScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultItemAction.EditClick) }
-                },
-                modifier = Modifier.padding(bottom = 16.dp),
+            AnimatedVisibility(
+                visible = state.viewState is VaultItemState.ViewState.Content,
+                enter = scaleIn(),
+                exit = scaleOut(),
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_edit),
-                    contentDescription = stringResource(id = R.string.edit_item),
-                )
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(VaultItemAction.EditClick) }
+                    },
+                    modifier = Modifier.padding(bottom = 16.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_edit),
+                        contentDescription = stringResource(id = R.string.edit_item),
+                    )
+                }
             }
         },
     ) { innerPadding ->
