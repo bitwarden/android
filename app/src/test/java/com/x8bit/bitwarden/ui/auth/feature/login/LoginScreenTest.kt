@@ -21,35 +21,38 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
+import org.junit.Before
 import org.junit.Test
 
 class LoginScreenTest : BaseComposeTest() {
+    private val intentHandler = mockk<IntentHandler>(relaxed = true) {
+        every { startCustomTabsActivity(any()) } returns Unit
+    }
+    private var onNavigateBackCalled = false
+    private val mutableEventFlow = MutableSharedFlow<LoginEvent>(
+        extraBufferCapacity = Int.MAX_VALUE,
+    )
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+    private val viewModel = mockk<LoginViewModel>(relaxed = true) {
+        every { eventFlow } returns mutableEventFlow
+        every { stateFlow } returns mutableStateFlow
+    }
+
+    @Before
+    fun setUp() {
+        composeTestRule.setContent {
+            LoginScreen(
+                onNavigateBack = { onNavigateBackCalled = true },
+                viewModel = viewModel,
+                intentHandler = intentHandler,
+            )
+        }
+    }
 
     @Test
     fun `close button click should send CloseButtonClick action`() {
-        val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LoginState(
-                    emailAddress = "",
-                    captchaToken = null,
-                    isLoginButtonEnabled = false,
-                    passwordInput = "",
-                    environmentLabel = "".asText(),
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Hidden,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            LoginScreen(
-                onNavigateBack = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithContentDescription("Close").performClick()
         verify {
             viewModel.trySendAction(LoginAction.CloseButtonClick)
@@ -58,26 +61,6 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `Not you text click should send NotYouButtonClick action`() {
-        val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LoginState(
-                    emailAddress = "",
-                    captchaToken = null,
-                    isLoginButtonEnabled = false,
-                    passwordInput = "",
-                    environmentLabel = "".asText(),
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Hidden,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            LoginScreen(
-                onNavigateBack = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Not you?").performScrollTo().performClick()
         verify {
             viewModel.trySendAction(LoginAction.NotYouButtonClick)
@@ -86,26 +69,6 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `master password hint text click should send MasterPasswordHintClick action`() {
-        val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LoginState(
-                    emailAddress = "",
-                    captchaToken = null,
-                    isLoginButtonEnabled = false,
-                    passwordInput = "",
-                    environmentLabel = "".asText(),
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Hidden,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            LoginScreen(
-                onNavigateBack = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Get your master password hint").performClick()
         verify {
             viewModel.trySendAction(LoginAction.MasterPasswordHintClick)
@@ -114,26 +77,6 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `master password hint option menu click should send MasterPasswordHintClick action`() {
-        val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LoginState(
-                    emailAddress = "",
-                    captchaToken = null,
-                    isLoginButtonEnabled = false,
-                    passwordInput = "",
-                    environmentLabel = "".asText(),
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Hidden,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            LoginScreen(
-                onNavigateBack = {},
-                viewModel = viewModel,
-            )
-        }
         // Confirm dropdown version of item is absent
         composeTestRule
             .onAllNodesWithText("Get your master password hint")
@@ -154,26 +97,6 @@ class LoginScreenTest : BaseComposeTest() {
     @Test
     fun `password input change should send PasswordInputChanged action`() {
         val input = "input"
-        val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(
-                LoginState(
-                    emailAddress = "",
-                    captchaToken = null,
-                    isLoginButtonEnabled = false,
-                    passwordInput = "",
-                    environmentLabel = "".asText(),
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Hidden,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            LoginScreen(
-                onNavigateBack = {},
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Master password").performTextInput(input)
         verify {
             viewModel.trySendAction(LoginAction.PasswordInputChanged(input))
@@ -182,57 +105,25 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateBack should call onNavigateBack`() {
-        var onNavigateBackCalled = false
-        val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LoginEvent.NavigateBack)
-            every { stateFlow } returns MutableStateFlow(
-                LoginState(
-                    emailAddress = "",
-                    captchaToken = null,
-                    isLoginButtonEnabled = false,
-                    passwordInput = "",
-                    environmentLabel = "".asText(),
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Hidden,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            LoginScreen(
-                onNavigateBack = { onNavigateBackCalled = true },
-                viewModel = viewModel,
-            )
-        }
+        mutableEventFlow.tryEmit(LoginEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
     }
 
     @Test
     fun `NavigateToCaptcha should call intentHandler startCustomTabsActivity`() {
-        val intentHandler = mockk<IntentHandler>(relaxed = true) {
-            every { startCustomTabsActivity(any()) } returns Unit
-        }
         val mockUri = mockk<Uri>()
-        val viewModel = mockk<LoginViewModel>(relaxed = true) {
-            every { eventFlow } returns flowOf(LoginEvent.NavigateToCaptcha(mockUri))
-            every { stateFlow } returns MutableStateFlow(
-                LoginState(
-                    emailAddress = "",
-                    captchaToken = null,
-                    isLoginButtonEnabled = false,
-                    passwordInput = "",
-                    environmentLabel = "".asText(),
-                    loadingDialogState = LoadingDialogState.Hidden,
-                    errorDialogState = BasicDialogState.Hidden,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            LoginScreen(
-                onNavigateBack = {},
-                intentHandler = intentHandler,
-                viewModel = viewModel,
-            )
-        }
+        mutableEventFlow.tryEmit(LoginEvent.NavigateToCaptcha(mockUri))
         verify { intentHandler.startCustomTabsActivity(mockUri) }
     }
 }
+
+private val DEFAULT_STATE =
+    LoginState(
+        emailAddress = "",
+        captchaToken = null,
+        isLoginButtonEnabled = false,
+        passwordInput = "",
+        environmentLabel = "".asText(),
+        loadingDialogState = LoadingDialogState.Hidden,
+        errorDialogState = BasicDialogState.Hidden,
+    )
