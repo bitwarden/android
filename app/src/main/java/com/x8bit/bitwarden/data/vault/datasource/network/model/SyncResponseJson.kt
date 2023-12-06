@@ -204,7 +204,7 @@ data class SyncResponseJson(
          * @property type The type of organization.
          * @property seats The number of seats in the organization (nullable).
          * @property isEnabled If the organization is enabled.
-         * @property providerType They type of provider for the organization.
+         * @property providerType They type of provider for the organization (nullable).
          * @property isResetPasswordEnrolled If reset password has been
          * enrolled for the organization.
          * @property shouldUseSecretsManager If the organization should use the secrets manager.
@@ -267,7 +267,7 @@ data class SyncResponseJson(
             val isEnabled: Boolean,
 
             @SerialName("providerType")
-            val providerType: Int,
+            val providerType: Int?,
 
             @SerialName("resetPasswordEnrolled")
             val isResetPasswordEnrolled: Boolean,
