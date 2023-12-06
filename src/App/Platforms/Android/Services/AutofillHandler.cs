@@ -12,7 +12,6 @@ using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.Droid.Autofill;
-using Plugin.CurrentActivity;
 using Application = Android.App.Application;
 
 namespace Bit.Droid.Services
@@ -46,7 +45,7 @@ namespace Bit.Droid.Services
             }
             try
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
                 var afm = (AutofillManager)activity.GetSystemService(
                     Java.Lang.Class.FromType(typeof(AutofillManager)));
                 return afm.IsEnabled && afm.HasEnabledAutofillServices;
@@ -65,7 +64,7 @@ namespace Bit.Droid.Services
             }
             try
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
                 var type = Java.Lang.Class.FromType(typeof(AutofillManager));
                 var manager = activity.GetSystemService(type) as AutofillManager;
                 return manager.IsAutofillSupported;
@@ -78,7 +77,7 @@ namespace Bit.Droid.Services
 
         public void Autofill(CipherView cipher)
         {
-            var activity = CrossCurrentActivity.Current.Activity as MauiAppCompatActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MauiAppCompatActivity;
             if (activity == null)
             {
                 return;
@@ -170,7 +169,7 @@ namespace Bit.Droid.Services
         {
             try
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
                 var type = Java.Lang.Class.FromType(typeof(AutofillManager));
                 var manager = activity.GetSystemService(type) as AutofillManager;
                 manager.DisableAutofillServices();

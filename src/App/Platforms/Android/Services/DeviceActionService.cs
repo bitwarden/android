@@ -18,7 +18,6 @@ using Bit.App.Utilities.Prompts;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.App.Droid.Utilities;
-using Plugin.CurrentActivity;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Resource = Bit.Core.Resource;
 using Application = Android.App.Application;
@@ -66,7 +65,7 @@ namespace Bit.Droid.Services
                 _toast.Dispose();
                 _toast = null;
             }
-            _toast = Android.Widget.Toast.MakeText(CrossCurrentActivity.Current.Activity, text,
+            _toast = Android.Widget.Toast.MakeText(Microsoft.Maui.ApplicationModel.Platform.CurrentActivity, text,
                 longDuration ? ToastLength.Long : ToastLength.Short);
             _toast.Show();
         }
@@ -79,7 +78,7 @@ namespace Bit.Droid.Services
                 // https://developer.android.com/reference/android/content/pm/PackageManager#getLaunchIntentSenderForPackage(java.lang.String)
                 return false;
             }
-            var activity = CrossCurrentActivity.Current.Activity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             appName = appName.Replace("androidapp://", string.Empty);
             var launchIntentSender = activity?.PackageManager?.GetLaunchIntentSenderForPackage(appName);
             launchIntentSender?.SendIntent(activity, Result.Ok, null, null, null);
@@ -93,7 +92,7 @@ namespace Bit.Droid.Services
                 await HideLoadingAsync();
             }
 
-            var activity = CrossCurrentActivity.Current.Activity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             var inflater = (LayoutInflater)activity.GetSystemService(Context.LayoutInflaterService);
             var dialogView = inflater.Inflate(Resource.Layout.progress_dialog_layout, null);
             
@@ -159,7 +158,7 @@ namespace Bit.Droid.Services
                 }
 
                 // Finally if all else fails, let's see if current activity is MainActivity
-                if (CrossCurrentActivity.Current.Activity is MainActivity activity && IsAlive(activity))
+                if (Microsoft.Maui.ApplicationModel.Platform.CurrentActivity is MainActivity activity && IsAlive(activity))
                 {
                     activity.RunOnUiThread(actionDismiss);
                     return Task.CompletedTask;
@@ -193,7 +192,7 @@ namespace Bit.Droid.Services
             string text = null, string okButtonText = null, string cancelButtonText = null,
             bool numericKeyboard = false, bool autofocus = true, bool password = false)
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return Task.FromResult<string>(null);
@@ -250,7 +249,7 @@ namespace Bit.Droid.Services
 
         public Task<ValidatablePromptResponse?> DisplayValidatablePromptAsync(ValidatablePromptConfig config)
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return Task.FromResult<ValidatablePromptResponse?>(null);
@@ -327,7 +326,7 @@ namespace Bit.Droid.Services
 
         public void RateApp()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             try
             {
                 var rateIntent = RateIntentForUrl("market://details", activity);
@@ -360,14 +359,14 @@ namespace Bit.Droid.Services
 
         public bool SupportsNfc()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             var manager = activity.GetSystemService(Context.NfcService) as NfcManager;
             return manager.DefaultAdapter?.IsEnabled ?? false;
         }
 
         public bool SupportsCamera()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             return activity.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
         }
 
@@ -383,7 +382,7 @@ namespace Bit.Droid.Services
 
         public Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return Task.FromResult<string>(null);
@@ -464,7 +463,7 @@ namespace Bit.Droid.Services
 
         public void OpenAccessibilityOverlayPermissionSettings()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             try
             {
                 var intent = new Intent(Settings.ActionManageOverlayPermission);
@@ -495,7 +494,7 @@ namespace Bit.Droid.Services
         {
             try
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
                 var intent = new Intent(Settings.ActionAccessibilitySettings);
                 activity.StartActivity(intent);
             }
@@ -504,7 +503,7 @@ namespace Bit.Droid.Services
 
         public void OpenAutofillSettings()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             try
             {
                 var intent = new Intent(Settings.ActionRequestSetAutofillService);
@@ -535,7 +534,7 @@ namespace Bit.Droid.Services
         
         public void CloseMainApp()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return;
@@ -574,7 +573,7 @@ namespace Bit.Droid.Services
 
         public float GetSystemFontSizeScale()
         {
-            var activity = CrossCurrentActivity.Current?.Activity as MainActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
             return activity?.Resources?.Configuration?.FontScale ?? 1;
         }
         
@@ -585,7 +584,7 @@ namespace Bit.Droid.Services
 
         public async Task SetScreenCaptureAllowedAsync()
         {
-            var activity = CrossCurrentActivity.Current?.Activity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (await _stateService.GetScreenCaptureAllowedAsync())
             {
                 activity.RunOnUiThread(() => activity.Window.ClearFlags(WindowManagerFlags.Secure));
