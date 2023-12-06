@@ -20,6 +20,12 @@ namespace Bit.Core.Models.Domain
         public LoginUri(LoginUriData obj, bool alreadyEncrypted = false)
         {
             Match = obj.Match;
+
+            if (obj.UriChecksum != null)
+            {
+                UriChecksum = new EncString(obj.UriChecksum);
+            }
+
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
@@ -41,6 +47,11 @@ namespace Bit.Core.Models.Domain
 
         public async Task<bool> ValidateChecksum(string clearTextUri, string orgId, SymmetricCryptoKey key)
         {
+            if (this.UriChecksum == null)
+            {
+                return false;
+            }
+
             // HACK: I don't like resolving this here but I can't see a better way without
             // refactoring a lot of things.
             var cryptoService = ServiceContainer.Resolve<ICryptoService>();

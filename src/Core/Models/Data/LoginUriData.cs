@@ -19,4 +19,3 @@ namespace Bit.Core.Models.Data
         public string UriChecksum { get; set; }
     }
 }
-    

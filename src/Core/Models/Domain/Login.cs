@@ -45,7 +45,8 @@ namespace Bit.Core.Models.Domain
                 foreach (var uri in Uris)
                 {
                     var loginUriView = await uri.DecryptAsync(orgId, key);
-                    if (bypassValidation || (await uri.ValidateChecksum(loginUriView.Uri, orgId, key))) {
+                    if (bypassValidation || (await uri.ValidateChecksum(loginUriView.Uri, orgId, key)))
+                    {
                         view.Uris.Add(loginUriView);
                     }
                 }
