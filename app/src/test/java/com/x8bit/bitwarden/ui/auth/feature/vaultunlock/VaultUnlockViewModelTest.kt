@@ -98,7 +98,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                     UserState.Account(
                         userId = "activeUserId",
                         name = "Other User",
-                        email = "active@bitwarden.com",
+                        email = "active+test@bitwarden.com",
                         avatarColorHex = "#00aaaa",
                         isPremium = true,
                         isVaultUnlocked = true,
@@ -110,11 +110,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 avatarColorString = "#00aaaa",
                 initials = "OU",
+                email = "active+test@bitwarden.com",
                 accountSummaries = listOf(
                     AccountSummary(
                         userId = "activeUserId",
                         name = "Other User",
-                        email = "active@bitwarden.com",
+                        email = "active+test@bitwarden.com",
                         avatarColorHex = "#00aaaa",
                         status = AccountSummary.Status.ACTIVE,
                     ),

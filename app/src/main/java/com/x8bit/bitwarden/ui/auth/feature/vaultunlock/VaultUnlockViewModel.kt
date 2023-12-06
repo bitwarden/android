@@ -171,6 +171,7 @@ class VaultUnlockViewModel @Inject constructor(
                 initials = activeAccountSummary.initials,
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
+                email = activeAccountSummary.email,
             )
         }
     }
