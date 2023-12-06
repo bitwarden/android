@@ -21,7 +21,6 @@ import androidx.test.core.app.ApplicationProvider
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
 import io.mockk.mockk
@@ -236,8 +235,7 @@ class LandingScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                errorDialogState = BasicDialogState.Shown(
-                    title = "Error dialog title".asText(),
+                dialog = LandingState.DialogState.Error(
                     message = "Error dialog message".asText(),
                 ),
             )
@@ -246,7 +244,7 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Error dialog title")
+            .onNodeWithText("An error has occurred.")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -260,11 +258,10 @@ class LandingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `error dialog OK click should send ErrorDialogDismiss action`() {
+    fun `error dialog OK click should send DialogDismiss action`() {
         mutableStateFlow.update {
             DEFAULT_STATE.copy(
-                errorDialogState = BasicDialogState.Shown(
-                    title = "title".asText(),
+                dialog = LandingState.DialogState.Error(
                     message = "message".asText(),
                 ),
             )
@@ -274,7 +271,7 @@ class LandingScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Ok")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(LandingAction.ErrorDialogDismiss) }
+        verify { viewModel.trySendAction(LandingAction.DialogDismiss) }
     }
 }
 
@@ -291,6 +288,6 @@ private val DEFAULT_STATE = LandingState(
     isContinueButtonEnabled = true,
     isRememberMeEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
-    errorDialogState = BasicDialogState.Hidden,
+    dialog = null,
     accountSummaries = emptyList(),
 )

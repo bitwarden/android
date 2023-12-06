@@ -47,6 +47,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
@@ -84,12 +86,21 @@ fun LandingScreen(
         }
     }
 
-    BitwardenBasicDialog(
-        visibilityState = state.errorDialogState,
-        onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(LandingAction.ErrorDialogDismiss) }
-        },
-    )
+    when (val dialog = state.dialog) {
+        is LandingState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = dialog.message,
+                ),
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
+                },
+            )
+        }
+
+        null -> Unit
+    }
 
     val isAppBarVisible = state.accountSummaries.isNotEmpty()
     var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
