@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
@@ -68,10 +69,10 @@ fun BitwardenPasswordField(
         label = { Text(text = label) },
         value = value,
         onValueChange = onValueChange,
-        visualTransformation = if (showPassword) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
+        visualTransformation = when {
+            !showPassword -> PasswordVisualTransformation()
+            readOnly -> nonLetterColorVisualTransformation()
+            else -> VisualTransformation.None
         },
         singleLine = singleLine,
         readOnly = readOnly,
