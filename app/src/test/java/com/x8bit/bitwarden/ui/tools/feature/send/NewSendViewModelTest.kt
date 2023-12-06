@@ -99,7 +99,8 @@ class NewSendViewModelTest : BaseViewModelTest() {
                         input = "input",
                         isHideByDefaultChecked = false,
                     ),
-                ), awaitItem(),
+                ),
+                awaitItem(),
             )
         }
     }

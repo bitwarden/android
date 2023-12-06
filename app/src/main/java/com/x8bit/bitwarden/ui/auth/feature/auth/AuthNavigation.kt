@@ -8,12 +8,12 @@ import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestinations
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
+import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
+import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
 import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestinations
 import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
-import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
-import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 
 const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 
