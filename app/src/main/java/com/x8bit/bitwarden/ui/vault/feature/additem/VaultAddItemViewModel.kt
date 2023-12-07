@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Card.displayStringResId
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Identity.displayStringResId
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -37,7 +38,12 @@ class VaultAddItemViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultAddItemState, VaultAddItemEvent, VaultAddItemAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: INITIAL_STATE,
+    initialState = savedStateHandle[KEY_STATE]
+        ?: VaultAddItemState(
+            vaultAddEditType = VaultAddEditItemArgs(savedStateHandle).vaultAddEditType,
+            selectedType = VaultAddItemState.ItemType.Login(),
+            dialog = null,
+        ),
 ) {
 
     //region Initialization and Overrides
@@ -565,13 +571,6 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     //endregion Utility Functions
-
-    companion object {
-        val INITIAL_STATE: VaultAddItemState = VaultAddItemState(
-            selectedType = VaultAddItemState.ItemType.Login(),
-            dialog = null,
-        )
-    }
 }
 
 /**
@@ -583,15 +582,30 @@ class VaultAddItemViewModel @Inject constructor(
  */
 @Parcelize
 data class VaultAddItemState(
+    val vaultAddEditType: VaultAddEditType,
     val selectedType: ItemType,
     val dialog: DialogState?,
 ) : Parcelable {
 
     /**
+     * Helper to determine the screen display name.
+     */
+    val screenDisplayName: Text
+        get() = when (vaultAddEditType) {
+            VaultAddEditType.AddItem -> R.string.add_item.asText()
+            is VaultAddEditType.EditItem -> R.string.edit_item.asText()
+        }
+
+    /**
+     * Helper to determine if the UI should display the type selector.
+     */
+    val shouldShowTypeSelector: Boolean get() = vaultAddEditType == VaultAddEditType.AddItem
+
+    /**
      * Provides a list of available item types for the vault.
      */
     val typeOptions: List<ItemTypeOption>
-        get() = ItemTypeOption.values().toList()
+        get() = ItemTypeOption.entries.toList()
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.

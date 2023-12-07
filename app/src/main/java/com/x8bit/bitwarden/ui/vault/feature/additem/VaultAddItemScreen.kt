@@ -82,7 +82,7 @@ fun VaultAddItemScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.add_item),
+                title = state.screenDisplayName(),
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
@@ -114,17 +114,21 @@ fun VaultAddItemScreen(
                         .padding(horizontal = 16.dp),
                 )
             }
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                TypeOptionsItem(
-                    selectedType = state.selectedType,
-                    onTypeOptionClicked = remember(viewModel) {
-                        { typeOption: VaultAddItemState.ItemTypeOption ->
-                            viewModel.trySendAction(VaultAddItemAction.TypeOptionSelect(typeOption))
-                        }
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                )
+            if (state.shouldShowTypeSelector) {
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TypeOptionsItem(
+                        selectedType = state.selectedType,
+                        onTypeOptionClicked = remember(viewModel) {
+                            { typeOption: VaultAddItemState.ItemTypeOption ->
+                                viewModel.trySendAction(
+                                    VaultAddItemAction.TypeOptionSelect(typeOption),
+                                )
+                            }
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
+                }
             }
 
             when (val selectedType = state.selectedType) {
