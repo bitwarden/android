@@ -3,14 +3,18 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,6 +22,7 @@ import org.junit.jupiter.api.Test
 
 class LandingViewModelTest : BaseViewModelTest() {
 
+    private val authRepository: AuthRepository = mockk(relaxed = true)
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @Test
@@ -83,6 +88,32 @@ class LandingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `SwitchAccountClick should call switchAccount for the given account`() {
+        val matchingAccountUserId = "matchingAccountUserId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns matchingAccountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(LandingAction.SwitchAccountClick(accountSummary))
+
+        verify { authRepository.switchAccount(userId = matchingAccountUserId) }
+    }
+
+    @Test
+    fun `ConfirmSwitchToMatchingAccountClick should call switchAccount for the given account`() {
+        val matchingAccountUserId = "matchingAccountUserId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns matchingAccountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(LandingAction.ConfirmSwitchToMatchingAccountClick(accountSummary))
+
+        verify { authRepository.switchAccount(userId = matchingAccountUserId) }
+    }
+
+    @Test
     fun `ContinueButtonClick with valid email should emit NavigateToLogin`() = runTest {
         val validEmail = "email@bitwarden.com"
         val viewModel = createViewModel()
@@ -118,6 +149,51 @@ class LandingViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick with an email input matching an existing account should show the account already added dialog`() {
+        val rememberedEmail = "active@bitwarden.com"
+        val activeAccount = UserState.Account(
+            userId = "activeUserId",
+            name = "name",
+            email = rememberedEmail,
+            avatarColorHex = "avatarColorHex",
+            isPremium = true,
+            isVaultUnlocked = true,
+        )
+        val userState = UserState(
+            activeUserId = "activeUserId",
+            accounts = listOf(activeAccount),
+        )
+        val viewModel = createViewModel(
+            rememberedEmail = rememberedEmail,
+            userState = userState,
+        )
+        val activeAccountSummary = activeAccount.toAccountSummary(isActive = true)
+        val accountSummaries = userState.toAccountSummaries()
+        val initialState = DEFAULT_STATE.copy(
+            emailInput = rememberedEmail,
+            isContinueButtonEnabled = true,
+            isRememberMeEnabled = true,
+            accountSummaries = accountSummaries,
+        )
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        viewModel.trySendAction(LandingAction.ContinueButtonClick)
+
+        assertEquals(
+            initialState.copy(
+                dialog = LandingState.DialogState.AccountAlreadyAdded(
+                    accountSummary = activeAccountSummary,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -232,7 +308,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             initialState = mapOf("state" to initialState),
         ),
     ): LandingViewModel = LandingViewModel(
-        authRepository = mockk(relaxed = true) {
+        authRepository = authRepository.apply {
             every { rememberedEmailAddress } returns rememberedEmail
             every { userStateFlow } returns MutableStateFlow(userState)
         },

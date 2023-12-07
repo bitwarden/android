@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -87,6 +88,32 @@ fun LandingScreen(
     }
 
     when (val dialog = state.dialog) {
+        is LandingState.DialogState.AccountAlreadyAdded -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.account_already_added),
+                message = stringResource(
+                    id = R.string.switch_to_already_added_account_confirmation,
+                ),
+                confirmButtonText = stringResource(id = R.string.yes),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            LandingAction.ConfirmSwitchToMatchingAccountClick(
+                                account = dialog.accountSummary,
+                            ),
+                        )
+                    }
+                },
+                onDismissClick = remember(viewModel) {
+                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
+                },
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(LandingAction.DialogDismiss) }
+                },
+            )
+        }
+
         is LandingState.DialogState.Error -> {
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(

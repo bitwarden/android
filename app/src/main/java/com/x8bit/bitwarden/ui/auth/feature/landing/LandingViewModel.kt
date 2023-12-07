@@ -42,6 +42,17 @@ class LandingViewModel @Inject constructor(
         ),
 ) {
 
+    /**
+     * Returns the [AccountSummary] from the current state that matches the current email input,
+     * of `null` if there is no match.
+     */
+    private val matchingAccountSummary: AccountSummary?
+        get() {
+            val currentEmail = state.emailInput
+            val accountSummaries = state.accountSummaries
+            return accountSummaries.find { it.email == currentEmail }
+        }
+
     init {
         // As state updates:
         // - write to saved state handle
@@ -65,6 +76,10 @@ class LandingViewModel @Inject constructor(
     override fun handleAction(action: LandingAction) {
         when (action) {
             is LandingAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
+            is LandingAction.ConfirmSwitchToMatchingAccountClick -> {
+                handleConfirmSwitchToMatchingAccountClicked(action)
+            }
+
             is LandingAction.ContinueButtonClick -> handleContinueButtonClicked()
             LandingAction.CreateAccountClick -> handleCreateAccountClicked()
             is LandingAction.DialogDismiss -> handleDialogDismiss()
@@ -78,6 +93,12 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleSwitchAccountClicked(action: LandingAction.SwitchAccountClick) {
+        authRepository.switchAccount(userId = action.account.userId)
+    }
+
+    private fun handleConfirmSwitchToMatchingAccountClicked(
+        action: LandingAction.ConfirmSwitchToMatchingAccountClick,
+    ) {
         authRepository.switchAccount(userId = action.account.userId)
     }
 
@@ -97,6 +118,17 @@ class LandingViewModel @Inject constructor(
                 it.copy(
                     dialog = LandingState.DialogState.Error(
                         message = R.string.invalid_email.asText(),
+                    ),
+                )
+            }
+            return
+        }
+
+        matchingAccountSummary?.let { accountSummary ->
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = LandingState.DialogState.AccountAlreadyAdded(
+                        accountSummary = accountSummary,
                     ),
                 )
             }
@@ -171,6 +203,15 @@ data class LandingState(
     sealed class DialogState : Parcelable {
 
         /**
+         * Represents a dialog indicating that the current email matches the existing
+         * [accountSummary].
+         */
+        @Parcelize
+        data class AccountAlreadyAdded(
+            val accountSummary: AccountSummary,
+        ) : DialogState()
+
+        /**
          * Represents an error dialog with the given [message].
          */
         @Parcelize
@@ -210,6 +251,13 @@ sealed class LandingAction {
      * Indicates the user has clicked on the given [account] information in order to switch to it.
      */
     data class SwitchAccountClick(
+        val account: AccountSummary,
+    ) : LandingAction()
+
+    /**
+     * Indicates the user has confirmed they would like to switch to the existing [account].
+     */
+    data class ConfirmSwitchToMatchingAccountClick(
         val account: AccountSummary,
     ) : LandingAction()
 
