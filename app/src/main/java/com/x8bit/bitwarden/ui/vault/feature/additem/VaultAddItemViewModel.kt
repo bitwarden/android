@@ -167,76 +167,76 @@ class VaultAddItemViewModel @Inject constructor(
     ) {
         when (action) {
             is VaultAddItemAction.ItemType.LoginType.NameTextChange -> {
-                handleNameTextInputChange(action)
+                handleLoginNameTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.UsernameTextChange -> {
-                handleUsernameTextInputChange(action)
+                handleLoginUsernameTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.PasswordTextChange -> {
-                handlePasswordTextInputChange(action)
+                handleLoginPasswordTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.UriTextChange -> {
-                handleURITextInputChange(action)
+                handleLoginURITextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.FolderChange -> {
-                handleFolderTextInputChange(action)
+                handleLoginFolderTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.ToggleFavorite -> {
-                handleToggleFavorite(action)
+                handleLoginToggleFavorite(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.ToggleMasterPasswordReprompt -> {
-                handleToggleMasterPasswordReprompt(action)
+                handleLoginToggleMasterPasswordReprompt(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.NotesTextChange -> {
-                handleNotesTextInputChange(action)
+                handleLoginNotesTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.OwnershipChange -> {
-                handleOwnershipTextInputChange(action)
+                handleLoginOwnershipTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.OpenUsernameGeneratorClick -> {
-                handleOpenUsernameGeneratorClick()
+                handleLoginOpenUsernameGeneratorClick()
             }
 
             is VaultAddItemAction.ItemType.LoginType.PasswordCheckerClick -> {
-                handlePasswordCheckerClick()
+                handleLoginPasswordCheckerClick()
             }
 
             is VaultAddItemAction.ItemType.LoginType.OpenPasswordGeneratorClick -> {
-                handleOpenPasswordGeneratorClick()
+                handleLoginOpenPasswordGeneratorClick()
             }
 
             is VaultAddItemAction.ItemType.LoginType.SetupTotpClick -> {
-                handleSetupTotpClick()
+                handleLoginSetupTotpClick()
             }
 
             is VaultAddItemAction.ItemType.LoginType.UriSettingsClick -> {
-                handleUriSettingsClick()
+                handleLoginUriSettingsClick()
             }
 
             is VaultAddItemAction.ItemType.LoginType.AddNewUriClick -> {
-                handleAddNewUriClick()
+                handleLoginAddNewUriClick()
             }
 
             is VaultAddItemAction.ItemType.LoginType.TooltipClick -> {
-                handleTooltipClick()
+                handleLoginTooltipClick()
             }
 
             is VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick -> {
-                handleAddNewCustomFieldClick()
+                handleLoginAddNewCustomFieldClick()
             }
         }
     }
 
-    private fun handleNameTextInputChange(
+    private fun handleLoginNameTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.NameTextChange,
     ) {
         updateLoginType { loginType ->
@@ -244,7 +244,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleUsernameTextInputChange(
+    private fun handleLoginUsernameTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.UsernameTextChange,
     ) {
         updateLoginType { loginType ->
@@ -252,7 +252,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handlePasswordTextInputChange(
+    private fun handleLoginPasswordTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.PasswordTextChange,
     ) {
         updateLoginType { loginType ->
@@ -260,7 +260,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleURITextInputChange(
+    private fun handleLoginURITextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.UriTextChange,
     ) {
         updateLoginType { loginType ->
@@ -268,15 +268,15 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleFolderTextInputChange(
+    private fun handleLoginFolderTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.FolderChange,
     ) {
         updateLoginType { loginType ->
-            loginType.copy(folder = action.folder)
+            loginType.copy(folderName = action.folder)
         }
     }
 
-    private fun handleToggleFavorite(
+    private fun handleLoginToggleFavorite(
         action: VaultAddItemAction.ItemType.LoginType.ToggleFavorite,
     ) {
         updateLoginType { loginType ->
@@ -284,7 +284,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleToggleMasterPasswordReprompt(
+    private fun handleLoginToggleMasterPasswordReprompt(
         action: VaultAddItemAction.ItemType.LoginType.ToggleMasterPasswordReprompt,
     ) {
         updateLoginType { loginType ->
@@ -292,7 +292,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleNotesTextInputChange(
+    private fun handleLoginNotesTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.NotesTextChange,
     ) {
         updateLoginType { loginType ->
@@ -300,7 +300,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleOwnershipTextInputChange(
+    private fun handleLoginOwnershipTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.OwnershipChange,
     ) {
         updateLoginType { loginType ->
@@ -308,7 +308,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleOpenUsernameGeneratorClick() {
+    private fun handleLoginOpenUsernameGeneratorClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -318,7 +318,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handlePasswordCheckerClick() {
+    private fun handleLoginPasswordCheckerClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -328,7 +328,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleOpenPasswordGeneratorClick() {
+    private fun handleLoginOpenPasswordGeneratorClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -338,7 +338,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleSetupTotpClick() {
+    private fun handleLoginSetupTotpClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -348,7 +348,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleUriSettingsClick() {
+    private fun handleLoginUriSettingsClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -358,7 +358,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleAddNewUriClick() {
+    private fun handleLoginAddNewUriClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -368,7 +368,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleTooltipClick() {
+    private fun handleLoginTooltipClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -378,7 +378,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleAddNewCustomFieldClick() {
+    private fun handleLoginAddNewCustomFieldClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
@@ -613,11 +613,13 @@ data class VaultAddItemState(
          * @property username The username required for the login item.
          * @property password The password required for the login item.
          * @property uri The URI associated with the login item.
-         * @property folder The folder used for the login item
+         * @property folderName The folder used for the login item
          * @property favorite Indicates whether this login item is marked as a favorite.
          * @property masterPasswordReprompt Indicates if a master password reprompt is required.
          * @property notes Any additional notes or comments associated with the login item.
          * @property ownership The ownership email associated with the login item.
+         * @property availableFolders Retrieves a list of available folders.
+         * @property availableOwners Retrieves a list of available owners.
          */
         @Parcelize
         data class Login(
@@ -625,35 +627,25 @@ data class VaultAddItemState(
             val username: String = "",
             val password: String = "",
             val uri: String = "",
-            val folder: String = DEFAULT_FOLDER,
+            val folderName: Text = DEFAULT_FOLDER,
             val favorite: Boolean = false,
             val masterPasswordReprompt: Boolean = false,
             val notes: String = "",
             val ownership: String = DEFAULT_OWNERSHIP,
+            // TODO: Update this property to pull available owners from the data layer. (BIT-501)
+            val availableFolders: List<Text> = listOf(
+                "Folder 1".asText(),
+                "Folder 2".asText(),
+                "Folder 3".asText(),
+            ),
+            // TODO: Update this property to pull available owners from the data layer. (BIT-501)
+            val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
         ) : ItemType() {
             override val displayStringResId: Int
                 get() = ItemTypeOption.LOGIN.labelRes
 
-            /**
-             * Retrieves a list of available folders.
-             *
-             * TODO(BIT-501): Update this property to pull available folders from the data layer.
-             * Currently, it returns a hardcoded list of folders.
-             */
-            val availableFolders: List<String>
-                get() = listOf("Folder 1", "Folder 2", "Folder 3")
-
-            /**
-             * Retrieves a list of available owners.
-             *
-             * TODO(BIT-501): Update this property to pull available owners from the data layer.
-             * Currently, it returns a hardcoded list of email addresses.
-             */
-            val availableOwners: List<String>
-                get() = listOf("a@b.com", "c@d.com")
-
             companion object {
-                private const val DEFAULT_FOLDER: String = "No Folder"
+                private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
                 private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
             }
         }
@@ -795,7 +787,7 @@ sealed class VaultAddItemAction {
              *
              * @property folder The new folder text.
              */
-            data class FolderChange(val folder: String) : LoginType()
+            data class FolderChange(val folder: Text) : LoginType()
 
             /**
              * Fired when the Favorite toggle is changed.

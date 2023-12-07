@@ -395,7 +395,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.FolderChange("Folder 1"),
+                VaultAddItemAction.ItemType.LoginType.FolderChange("Folder 1".asText()),
             )
         }
     }
@@ -411,7 +411,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(folder = "Folder 2") }
+            updateLoginType(currentState) { copy(folderName = "Folder 2".asText()) }
         }
 
         composeTestRule

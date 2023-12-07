@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+
 /**
  * A collection of handler functions specifically tailored for managing actions
  * within the context of adding login items to a vault.
@@ -81,7 +83,7 @@ class VaultAddLoginItemTypeHandlers(
                 },
                 onFolderTextChange = { newFolder ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.FolderChange(newFolder),
+                        VaultAddItemAction.ItemType.LoginType.FolderChange(newFolder.asText()),
                     )
                 },
                 onToggleFavorite = { isFavorite ->

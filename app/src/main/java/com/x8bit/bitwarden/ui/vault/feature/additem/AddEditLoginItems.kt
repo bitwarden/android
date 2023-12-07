@@ -167,8 +167,8 @@ fun LazyListScope.addEditLoginItems(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.folder),
-            options = state.availableFolders.toImmutableList(),
-            selectedOption = state.folder,
+            options = state.availableFolders.map { it.invoke() }.toImmutableList(),
+            selectedOption = state.folderName.invoke(),
             onOptionSelected = loginItemTypeHandlers.onFolderTextChange,
             modifier = Modifier.padding(horizontal = 16.dp),
         )

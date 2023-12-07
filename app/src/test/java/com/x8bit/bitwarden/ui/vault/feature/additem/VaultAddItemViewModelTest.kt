@@ -152,13 +152,13 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `FolderChange should update folder in LoginItem`() = runTest {
             val viewModel = createAddVaultItemViewModel()
-            val action = VaultAddItemAction.ItemType.LoginType.FolderChange("newFolder")
+            val action = VaultAddItemAction.ItemType.LoginType.FolderChange("newFolder".asText())
 
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
                 (initialState.selectedType as VaultAddItemState.ItemType.Login)
-                    .copy(folder = "newFolder")
+                    .copy(folderName = "newFolder".asText())
 
             val expectedState = initialState.copy(selectedType = expectedLoginItem)
 
@@ -500,7 +500,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         username: String = "",
         password: String = "",
         uri: String = "",
-        folder: String = "No Folder",
+        folder: Text = "No Folder".asText(),
         favorite: Boolean = false,
         masterPasswordReprompt: Boolean = false,
         notes: String = "",
@@ -512,7 +512,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 username = username,
                 password = password,
                 uri = uri,
-                folder = folder,
+                folderName = folder,
                 favorite = favorite,
                 masterPasswordReprompt = masterPasswordReprompt,
                 notes = notes,
