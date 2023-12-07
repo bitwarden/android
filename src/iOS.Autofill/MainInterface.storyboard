@@ -18,28 +18,18 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="1713">
-                                <rect key="frame" x="66" y="676" width="282" height="44"/>
+                                <rect key="frame" x="66" y="396" width="282" height="44"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Error" textAlignment="natural" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HVp-Yu-JIZ">
-                                <rect key="frame" x="5" y="187" width="404" height="26.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YG6-2d-qpF"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="1713" firstAttribute="centerY" secondItem="44" secondAttribute="centerY" constant="250" id="1763"/>
+                            <constraint firstItem="1713" firstAttribute="centerY" secondItem="44" secondAttribute="centerY" constant="-30" id="1763"/>
                             <constraint firstItem="1713" firstAttribute="centerX" secondItem="YG6-2d-qpF" secondAttribute="centerX" id="1764"/>
-                            <constraint firstItem="HVp-Yu-JIZ" firstAttribute="top" secondItem="YG6-2d-qpF" secondAttribute="top" constant="139" id="Ay0-v3-kTO"/>
-                            <constraint firstItem="HVp-Yu-JIZ" firstAttribute="trailing" secondItem="YG6-2d-qpF" secondAttribute="trailing" constant="-5" id="TdY-Cu-YFt"/>
-                            <constraint firstItem="YG6-2d-qpF" firstAttribute="leading" secondItem="HVp-Yu-JIZ" secondAttribute="leading" constant="-5" id="lfV-6C-INq"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="Logo" destination="1713" id="name-outlet-1713"/>
-                        <outlet property="_labelErr" destination="HVp-Yu-JIZ" id="PjY-be-dhX"/>
                         <segue destination="oCZ-GQ-aOK" kind="show" identifier="loginListSegue" id="1679"/>
                         <segue destination="6855" kind="presentation" identifier="lockPasswordSegue" id="9874"/>
                         <segue destination="10580" kind="presentation" identifier="setupSegue" modalTransitionStyle="coverVertical" id="11089"/>

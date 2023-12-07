@@ -9,6 +9,8 @@
       <ApplicationVersion>1</ApplicationVersion>
 
       <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+      
+      <DefineConstants>$(DefineConstants);ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND</DefineConstants>
 
       <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
       <RootNamespace>Bit.iOS.ShareExtension</RootNamespace>
@@ -62,6 +64,7 @@
     <Compile Include="ExtensionNavigationController.designer.cs">
       <DependentUpon>ExtensionNavigationController.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoadingViewController.TapGestureHack.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="..\iOS\Resources\logo_white%403x.png">

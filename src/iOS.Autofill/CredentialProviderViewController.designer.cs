@@ -13,9 +13,6 @@ namespace Bit.iOS.Autofill
 	partial class CredentialProviderViewController
 	{
 		[Outlet]
-		UIKit.UILabel _labelErr { get; set; }
-
-		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIImageView Logo { get; set; }
 		
@@ -24,11 +21,6 @@ namespace Bit.iOS.Autofill
 			if (Logo != null) {
 				Logo.Dispose ();
 				Logo = null;
-			}
-
-			if (_labelErr != null) {
-				_labelErr.Dispose ();
-				_labelErr = null;
 			}
 		}
 	}

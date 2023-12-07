@@ -137,6 +137,23 @@ namespace Bit.iOS.ShareExtension
             }
         }
 
+#if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
+
+        private void NavigateToPage(ContentPage page)
+        {
+            var navigationPage = new NavigationPage(page);
+
+            var window = new Window(navigationPage);
+            window.ToHandler(MauiContextSingleton.Instance.MauiContext);
+
+            _currentModalController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
+            _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            _presentingOnNavigationPage = true;
+            PresentViewController(_currentModalController, true, null);
+        }
+
+#endif
+
         public void DismissLockAndContinue()
         {
             Debug.WriteLine("BW Log, Dismissing lock controller.");
@@ -195,19 +212,6 @@ namespace Bit.iOS.ShareExtension
             SetupAppAndApplyResources(sendPage);
 
             NavigateToPage(sendPage);
-        }
-
-        private void NavigateToPage(ContentPage page)
-        {
-            var navigationPage = new NavigationPage(page);
-
-            var window = new Window(navigationPage);
-            window.ToHandler(MauiContextSingleton.Instance.MauiContext);
-
-            _currentModalController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            _presentingOnNavigationPage = true;
-            PresentViewController(_currentModalController, true, null);
         }
 
         private async Task<(string, byte[])> LoadDataBytesAsync()

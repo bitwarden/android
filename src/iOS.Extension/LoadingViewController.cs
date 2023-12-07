@@ -12,15 +12,12 @@ using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core;
-using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Models;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Bit.iOS.Extension.Models;
 using CoreNFC;
 using Foundation;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Platform;
 using MobileCoreServices;
 using UIKit;
 
@@ -31,6 +28,8 @@ namespace Bit.iOS.Extension
         private Context _context = new Context();
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
+
+        private bool _shouldInitialize = true;
 
         public LoadingViewController(IntPtr handle)
             : base(handle)
@@ -44,8 +43,14 @@ namespace Bit.iOS.Extension
                 base.ViewDidLoad();
                 Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
                 View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
+
+                if (!_shouldInitialize)
+                {
+                    return;
+                }
+
                 _context.ExtContext = ExtensionContext;
-                foreach (var item in ExtensionContext.InputItems)
+                foreach (var item in _context.ExtContext.InputItems)
                 {
                     var processed = false;
                     foreach (var itemProvider in item.Attachments)
@@ -77,6 +82,11 @@ namespace Bit.iOS.Extension
 
         public override async void ViewDidAppear(bool animated)
         {
+            if (!_shouldInitialize)
+            {
+                return;
+            }
+
             try
             {
                 base.ViewDidAppear(animated);
@@ -111,6 +121,7 @@ namespace Bit.iOS.Extension
             {
                 if (navController.TopViewController is LoginListViewController listLoginController)
                 {
+
                     listLoginController.Context = _context;
                     listLoginController.LoadingController = this;
                     segue.DestinationViewController.PresentationController.Delegate =
@@ -140,11 +151,22 @@ namespace Bit.iOS.Extension
             }
         }
 
+#if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
         public void DismissLockAndContinue()
         {
             Debug.WriteLine("BW Log, Dismissing lock controller.");
             DismissViewController(false, () => ContinueOn());
         }
+
+        private void NavigateToPage(ContentPage page)
+        {
+            var navigationPage = new NavigationPage(page);
+            var uiController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
+            uiController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+
+            PresentViewController(uiController, true, null);
+        }
+#endif
 
         private void ContinueOn()
         {
@@ -221,7 +243,7 @@ namespace Bit.iOS.Extension
                     await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
                 }
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteRequest(returningItems, null);
+                _context?.ExtContext?.CompleteRequest(returningItems, null);
             });
         }
 
@@ -413,6 +435,11 @@ namespace Bit.iOS.Extension
 
         private void InitApp()
         {
+            if (!_shouldInitialize)
+            {
+                return;
+            }
+
             // TODO: Change for iOSCoreHelpers.InitApp(...) when implementing IAccountsManager here
             iOSCoreHelpers.SetupMaui();
 
@@ -481,10 +508,7 @@ namespace Bit.iOS.Extension
                 vm.CloseAction = () => CompleteRequest(null, null);
             }
 
-            var navigationPage = new NavigationPage(homePage);
-            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(homePage);
 
             LogoutIfAuthed();
         }
@@ -501,10 +525,7 @@ namespace Bit.iOS.Extension
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(environmentPage);
-            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(environmentPage);
         }
 
         private void LaunchRegisterFlow()
@@ -519,10 +540,7 @@ namespace Bit.iOS.Extension
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(registerPage);
-            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(registerPage);
         }
 
         private void LaunchLoginFlow(string email = null)
@@ -542,10 +560,7 @@ namespace Bit.iOS.Extension
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -565,10 +580,7 @@ namespace Bit.iOS.Extension
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginWithDevicePage);
-            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginWithDevicePage);
 
             LogoutIfAuthed();
         }
@@ -589,10 +601,7 @@ namespace Bit.iOS.Extension
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -619,10 +628,7 @@ namespace Bit.iOS.Extension
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
             }
 
-            var navigationPage = new NavigationPage(twoFactorPage);
-            var twoFactorController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(twoFactorController, true, null);
+            NavigateToPage(twoFactorPage);
         }
 
         private void LaunchSetPasswordFlow()
@@ -638,10 +644,7 @@ namespace Bit.iOS.Extension
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(setPasswordPage);
-            var setPasswordController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            setPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(setPasswordController, true, null);
+            NavigateToPage(setPasswordPage);
         }
 
         private void LaunchUpdateTempPasswordFlow()
@@ -656,10 +659,7 @@ namespace Bit.iOS.Extension
                 vm.LogOutAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(updateTempPasswordPage);
-            var updateTempPasswordController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            updateTempPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(updateTempPasswordController, true, null);
+            NavigateToPage(updateTempPasswordPage);
         }
 
         private void LaunchDeviceApprovalOptionsFlow()
@@ -675,10 +675,7 @@ namespace Bit.iOS.Extension
                 vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, vm.Email, true));
             }
 
-            var navigationPage = new NavigationPage(loginApproveDevicePage);
-            var loginApproveDeviceController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            loginApproveDeviceController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginApproveDeviceController, true, null);
+            NavigateToPage(loginApproveDevicePage);
         }
     }
 }

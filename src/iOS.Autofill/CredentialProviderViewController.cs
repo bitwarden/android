@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
@@ -16,8 +17,7 @@ using Bit.iOS.Core.Views;
 using CoreFoundation;
 using CoreNFC;
 using Foundation;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Platform;
+using Microsoft.Maui.ApplicationModel;
 using UIKit;
 
 namespace Bit.iOS.Autofill
@@ -29,7 +29,7 @@ namespace Bit.iOS.Autofill
         private Core.NFCReaderDelegate _nfcDelegate = null;
         private IAccountsManager _accountsManager;
 
-        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
+        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -37,11 +37,13 @@ namespace Bit.iOS.Autofill
             ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
         }
 
+        private ASCredentialProviderExtensionContext ASExtensionContext => _context?.ExtContext as ASCredentialProviderExtensionContext;
+
         public override void ViewDidLoad()
         {
             try
             {
-                InitApp();
+                InitAppIfNeeded();
 
                 base.ViewDidLoad();
 
@@ -51,6 +53,7 @@ namespace Bit.iOS.Autofill
                 {
                     ExtContext = ExtensionContext
                 };
+
             }
             catch (Exception ex)
             {
@@ -171,7 +174,7 @@ namespace Bit.iOS.Autofill
             if ((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteExtensionConfigurationRequest();
+                ASExtensionContext?.CompleteExtensionConfigurationRequest();
                 return;
             }
 
@@ -180,7 +183,7 @@ namespace Bit.iOS.Autofill
                 ServiceContainer.Reset();
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
-                NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CancelRequest(err));
+                NSRunLoop.Main.BeginInvokeOnMainThread(() => ASExtensionContext?.CancelRequest(err));
                 return;
             }
 
@@ -198,7 +201,7 @@ namespace Bit.iOS.Autofill
                     await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
                 }
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteRequest(cred, null);
+                ASExtensionContext?.CompleteRequest(cred, null);
             });
         }
 
@@ -245,38 +248,53 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        public void DismissLockAndContinue()
+#if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
+        public async void DismissLockAndContinue()
         {
-            DismissViewController(false, async () =>
-            {
-                try
-                {
-                    if (_context.CredentialIdentity != null)
-                    {
-                        await ProvideCredentialAsync();
-                        return;
-                    }
-                    if (_context.Configuring)
-                    {
-                        PerformSegue("setupSegue", this);
-                        return;
-                    }
+            ClipLogger.Log("Dismiss lock and continue");
 
-                    if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
-                    {
-                        PerformSegue("loginSearchSegue", this);
-                    }
-                    else
-                    {
-                        PerformSegue("loginListSegue", this);
-                    }
-                }
-                catch (Exception ex)
+            DismissViewController(false, async () => await OnLockDismissedAsync());
+        }
+
+        private void NavigateToPage(ContentPage page)
+        {
+            var navigationPage = new NavigationPage(page);
+            var uiController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
+            uiController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+
+            PresentViewController(uiController, true, null);
+        }
+#endif
+
+        public async Task OnLockDismissedAsync()
+        {
+            try
+            {
+                if (_context.CredentialIdentity != null)
                 {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                    throw;
+                    await MainThread.InvokeOnMainThreadAsync(() => ProvideCredentialAsync());
+                    return;
                 }
-            });
+                if (_context.Configuring)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("setupSegue", this));
+                    return;
+                }
+
+                if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginSearchSegue", this));
+                }
+                else
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginListSegue", this));
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
+            }
         }
 
         private async Task ProvideCredentialAsync(bool userInteraction = true)
@@ -407,46 +425,25 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private void NavigateToPage(ContentPage page)
-        {
-            var navigationPage = new NavigationPage(page);
-
-            var window = new Window(navigationPage);
-            window.ToHandler(MauiContextSingleton.Instance.MauiContext);
-
-            var uiController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
-            uiController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-
-            PresentViewController(uiController, true, null);
-        }
-
         private void LaunchHomePage()
         {
-            try
+            var appOptions = new AppOptions { IosExtension = true };
+            var homePage = new HomePage(appOptions);
+            var app = new App.App(appOptions);
+            ThemeManager.SetTheme(app.Resources);
+            ThemeManager.ApplyResourcesTo(homePage);
+            if (homePage.BindingContext is HomeViewModel vm)
             {
-                var appOptions = new AppOptions { IosExtension = true };
-                var homePage = new HomePage(appOptions);
-                var app = new App.App(appOptions);
-                ThemeManager.SetTheme(app.Resources);
-                ThemeManager.ApplyResourcesTo(homePage);
-                if (homePage.BindingContext is HomeViewModel vm)
-                {
-                    vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
-                    vm.StartRegisterAction = () => DismissViewController(false, () => LaunchRegisterFlow());
-                    vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
-                    vm.StartEnvironmentAction = () => DismissViewController(false, () => LaunchEnvironmentFlow());
-                    vm.CloseAction = () => CompleteRequest();
-                }
-
-                NavigateToPage(homePage);
-
-                LogoutIfAuthed();
+                vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
+                vm.StartRegisterAction = () => DismissViewController(false, () => LaunchRegisterFlow());
+                vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
+                vm.StartEnvironmentAction = () => DismissViewController(false, () => LaunchEnvironmentFlow());
+                vm.CloseAction = () => CompleteRequest();
             }
-            catch (Exception ex)
-            {
-                UIPasteboard.General.String = ex.ToString();
-                _labelErr.Text = ex.ToString();
-            }
+
+            NavigateToPage(homePage);
+
+            LogoutIfAuthed();
         }
 
         private void LaunchEnvironmentFlow()
