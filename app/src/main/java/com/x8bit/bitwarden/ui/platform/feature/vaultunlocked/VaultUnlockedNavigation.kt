@@ -10,12 +10,12 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToNewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.newSendDestination
-import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddItem
-import com.x8bit.bitwarden.ui.vault.feature.additem.vaultAddItemDestination
-import com.x8bit.bitwarden.ui.vault.feature.edit.navigateToVaultEditItem
+import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddEditItem
+import com.x8bit.bitwarden.ui.vault.feature.additem.vaultAddEditItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.edit.vaultEditItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
 
@@ -37,17 +37,23 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         route = VAULT_UNLOCKED_GRAPH_ROUTE,
     ) {
         vaultUnlockedNavBarDestination(
-            onNavigateToVaultAddItem = { navController.navigateToVaultAddItem() },
+            onNavigateToVaultAddItem = {
+                navController.navigateToVaultAddEditItem(VaultAddEditType.AddItem)
+            },
             onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
-            onNavigateToVaultEditItem = { navController.navigateToVaultEditItem(it) },
+            onNavigateToVaultEditItem = {
+                navController.navigateToVaultAddEditItem(VaultAddEditType.EditItem(it))
+            },
             onNavigateToNewSend = { navController.navigateToNewSend() },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
-        vaultAddItemDestination(onNavigateBack = { navController.popBackStack() })
+        vaultAddEditItemDestination(onNavigateBack = { navController.popBackStack() })
         vaultItemDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultEditItem = { navController.navigateToVaultEditItem(it) },
+            onNavigateToVaultEditItem = {
+                navController.navigateToVaultAddEditItem(VaultAddEditType.EditItem(it))
+            },
         )
         vaultEditItemDestination(onNavigateBack = { navController.popBackStack() })
         newSendDestination(onNavigateBack = { navController.popBackStack() })

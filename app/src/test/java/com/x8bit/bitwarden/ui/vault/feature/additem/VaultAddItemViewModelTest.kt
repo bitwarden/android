@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -19,8 +20,24 @@ import org.junit.jupiter.api.Test
 class VaultAddItemViewModelTest : BaseViewModelTest() {
 
     private val initialState = createVaultAddLoginItemState()
-    private val initialSavedStateHandle = createSavedStateHandleWithState(initialState)
+    private val initialSavedStateHandle = createSavedStateHandleWithState(
+        state = initialState,
+        vaultAddEditType = VaultAddEditType.AddItem,
+    )
     private val vaultRepository: VaultRepository = mockk()
+
+    @Test
+    fun `initial state should be correct when state is null`() = runTest {
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = null,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ),
+        )
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+        }
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -381,7 +398,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         @BeforeEach
         fun setup() {
             initialState = createVaultAddSecureNotesItemState()
-            initialSavedStateHandle = createSavedStateHandleWithState(initialState)
+            initialSavedStateHandle = createSavedStateHandleWithState(
+                state = initialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            )
             viewModel = VaultAddItemViewModel(
                 savedStateHandle = initialSavedStateHandle,
                 vaultRepository = vaultRepository,
@@ -521,7 +541,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         username: String = "",
         password: String = "",
         uri: String = "",
-        folder: Text = "No Folder".asText(),
+        folder: Text = R.string.folder_none.asText(),
         favorite: Boolean = false,
         masterPasswordReprompt: Boolean = false,
         notes: String = "",
@@ -529,6 +549,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         dialogState: VaultAddItemState.DialogState? = null,
     ): VaultAddItemState =
         VaultAddItemState(
+            vaultAddEditType = VaultAddEditType.AddItem,
             selectedType = VaultAddItemState.ItemType.Login(
                 name = name,
                 username = username,
@@ -553,6 +574,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         ownership: String = "placeholder@email.com",
     ): VaultAddItemState =
         VaultAddItemState(
+            vaultAddEditType = VaultAddEditType.AddItem,
             selectedType = VaultAddItemState.ItemType.SecureNotes(
                 name = name,
                 folderName = folder,
@@ -564,14 +586,27 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             dialog = null,
         )
 
-    private fun createSavedStateHandleWithState(state: VaultAddItemState) =
-        SavedStateHandle().apply {
-            set("state", state)
-        }
+    private fun createSavedStateHandleWithState(
+        state: VaultAddItemState?,
+        vaultAddEditType: VaultAddEditType,
+    ) = SavedStateHandle().apply {
+        set("state", state)
+        set(
+            "vault_add_edit_type",
+            when (vaultAddEditType) {
+                VaultAddEditType.AddItem -> "add"
+                is VaultAddEditType.EditItem -> "edit"
+            },
+        )
+        set("vault_edit_id", (vaultAddEditType as? VaultAddEditType.EditItem)?.vaultItemId)
+    }
 
-    private fun createAddVaultItemViewModel(): VaultAddItemViewModel =
+    private fun createAddVaultItemViewModel(
+        savedStateHandle: SavedStateHandle = initialSavedStateHandle,
+        vaultRepo: VaultRepository = vaultRepository,
+    ): VaultAddItemViewModel =
         VaultAddItemViewModel(
-            savedStateHandle = initialSavedStateHandle,
-            vaultRepository = vaultRepository,
+            savedStateHandle = savedStateHandle,
+            vaultRepository = vaultRepo,
         )
 }

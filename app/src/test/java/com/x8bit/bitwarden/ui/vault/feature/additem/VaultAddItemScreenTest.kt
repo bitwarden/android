@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -960,11 +961,13 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     companion object {
         private val DEFAULT_STATE_LOGIN = VaultAddItemState(
+            vaultAddEditType = VaultAddEditType.AddItem,
             selectedType = VaultAddItemState.ItemType.Login(),
             dialog = null,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddItemState(
+            vaultAddEditType = VaultAddEditType.AddItem,
             selectedType = VaultAddItemState.ItemType.SecureNotes(),
             dialog = null,
         )
