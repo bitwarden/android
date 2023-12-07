@@ -112,7 +112,7 @@ class VaultDataExtensionsTest {
             username = "mockUsername-1",
             password = "mockPassword-1",
             uri = "mockUri-1",
-            folder = "mockFolder-1",
+            folderName = "mockFolder-1".asText(),
             favorite = false,
             masterPasswordReprompt = false,
             notes = "mockNotes-1",
