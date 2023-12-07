@@ -59,6 +59,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     name = "name",
                     email = "email",
                     avatarColorHex = "avatarColorHex",
+                    environment = Environment.Us,
                     isPremium = true,
                     isVaultUnlocked = true,
                 ),
@@ -160,6 +161,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             name = "name",
             email = rememberedEmail,
             avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
             isPremium = true,
             isVaultUnlocked = true,
         )

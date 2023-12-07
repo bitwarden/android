@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.ui.platform.base.util.toHexColorRepresentation
@@ -56,6 +57,10 @@ fun UserStateJson.toUserState(
                     email = accountJson.profile.email,
                     avatarColorHex = accountJson.profile.avatarColorHex
                         ?: accountJson.profile.userId.toHexColorRepresentation(),
+                    environment = accountJson
+                        .settings
+                        .environmentUrlData
+                        .toEnvironmentUrlsOrDefault(),
                     isPremium = accountJson.profile.hasPremium == true,
                     isVaultUnlocked = userId in vaultState.unlockedVaultUserIds,
                 )

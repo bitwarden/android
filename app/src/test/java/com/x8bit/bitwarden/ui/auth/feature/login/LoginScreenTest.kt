@@ -176,6 +176,7 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
     name = "Active User",
     email = "active@bitwarden.com",
     avatarColorHex = "#aa00aa",
+    environmentLabel = "bitwarden.com",
     status = AccountSummary.Status.ACTIVE,
 )
 

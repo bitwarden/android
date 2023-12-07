@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -15,6 +17,7 @@ class UserStateExtensionsTest {
                     name = "activeName",
                     email = "activeEmail",
                     avatarColorHex = "activeAvatarColorHex",
+                    environmentLabel = "bitwarden.com",
                     status = AccountSummary.Status.ACTIVE,
                 ),
                 AccountSummary(
@@ -22,6 +25,7 @@ class UserStateExtensionsTest {
                     name = "lockedName",
                     email = "lockedEmail",
                     avatarColorHex = "lockedAvatarColorHex",
+                    environmentLabel = "bitwarden.eu",
                     status = AccountSummary.Status.LOCKED,
                 ),
                 AccountSummary(
@@ -29,6 +33,7 @@ class UserStateExtensionsTest {
                     name = "unlockedName",
                     email = "unlockedEmail",
                     avatarColorHex = "unlockedAvatarColorHex",
+                    environmentLabel = "vault.qa.bitwarden.pw",
                     status = AccountSummary.Status.UNLOCKED,
                 ),
             ),
@@ -40,6 +45,7 @@ class UserStateExtensionsTest {
                         name = "activeName",
                         email = "activeEmail",
                         avatarColorHex = "activeAvatarColorHex",
+                        environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
                     ),
@@ -48,6 +54,7 @@ class UserStateExtensionsTest {
                         name = "lockedName",
                         email = "lockedEmail",
                         avatarColorHex = "lockedAvatarColorHex",
+                        environment = Environment.Eu,
                         isPremium = false,
                         isVaultUnlocked = false,
                     ),
@@ -56,6 +63,11 @@ class UserStateExtensionsTest {
                         name = "unlockedName",
                         email = "unlockedEmail",
                         avatarColorHex = "unlockedAvatarColorHex",
+                        environment = Environment.SelfHosted(
+                            environmentUrlData = EnvironmentUrlDataJson(
+                                base = "https://vault.qa.bitwarden.pw",
+                            ),
+                        ),
                         isPremium = true,
                         isVaultUnlocked = true,
                     ),
@@ -73,6 +85,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                environmentLabel = "bitwarden.com",
                 status = AccountSummary.Status.ACTIVE,
             ),
             UserState.Account(
@@ -80,6 +93,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                environment = Environment.Us,
                 isPremium = true,
                 isVaultUnlocked = true,
             )
@@ -95,6 +109,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                environmentLabel = "bitwarden.com",
                 status = AccountSummary.Status.LOCKED,
             ),
             UserState.Account(
@@ -102,6 +117,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                environment = Environment.Us,
                 isPremium = false,
                 isVaultUnlocked = false,
             )
@@ -117,6 +133,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                environmentLabel = "bitwarden.eu",
                 status = AccountSummary.Status.UNLOCKED,
             ),
             UserState.Account(
@@ -124,6 +141,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                environment = Environment.Eu,
                 isPremium = true,
                 isVaultUnlocked = true,
             )
@@ -140,6 +158,7 @@ class UserStateExtensionsTest {
                 name = "name",
                 email = "email",
                 avatarColorHex = "avatarColorHex",
+                environmentLabel = "bitwarden.com",
                 status = AccountSummary.Status.ACTIVE,
             ),
             UserState(
@@ -150,6 +169,7 @@ class UserStateExtensionsTest {
                         name = "name",
                         email = "email",
                         avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
                     ),

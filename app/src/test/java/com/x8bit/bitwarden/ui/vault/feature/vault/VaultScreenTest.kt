@@ -467,6 +467,7 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
     name = "Active User",
     email = "active@bitwarden.com",
     avatarColorHex = "#aa00aa",
+    environmentLabel = "bitwarden.com",
     status = AccountSummary.Status.ACTIVE,
 )
 
@@ -475,6 +476,7 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     name = "Locked User",
     email = "locked@bitwarden.com",
     avatarColorHex = "#00aaaa",
+    environmentLabel = "bitwarden.com",
     status = AccountSummary.Status.LOCKED,
 )
 

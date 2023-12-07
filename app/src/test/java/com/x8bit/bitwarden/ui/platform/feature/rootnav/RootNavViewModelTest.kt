@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.mockk
@@ -33,6 +34,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         name = "name",
                         email = "email",
                         avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
                     ),
@@ -54,6 +56,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         name = "name",
                         email = "email",
                         avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = false,
                     ),
