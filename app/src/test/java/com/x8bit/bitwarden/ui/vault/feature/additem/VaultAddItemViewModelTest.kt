@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -39,7 +40,27 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick createCipher success should emit NavigateBack`() = runTest {
+    fun `SaveClick should show dialog, and remove it once an item is saved`() = runTest {
+        val stateWithDialog = createVaultAddLoginItemState(
+            dialogState = VaultAddItemState.DialogState.Loading(
+                R.string.saving.asText(),
+            ),
+        )
+
+        val viewModel = createAddVaultItemViewModel()
+        coEvery {
+            vaultRepository.createCipher(any())
+        } returns CreateCipherResult.Success
+        viewModel.stateFlow.test {
+            viewModel.actionChannel.trySend(VaultAddItemAction.SaveClick)
+            assertEquals(initialState, awaitItem())
+            assertEquals(stateWithDialog, awaitItem())
+            assertEquals(initialState, awaitItem())
+        }
+    }
+
+    @Test
+    fun `SaveClick should update value to loading`() = runTest {
         val viewModel = createAddVaultItemViewModel()
         coEvery {
             vaultRepository.createCipher(any())
@@ -505,6 +526,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         masterPasswordReprompt: Boolean = false,
         notes: String = "",
         ownership: String = "placeholder@email.com",
+        dialogState: VaultAddItemState.DialogState? = null,
     ): VaultAddItemState =
         VaultAddItemState(
             selectedType = VaultAddItemState.ItemType.Login(
@@ -518,6 +540,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 notes = notes,
                 ownership = ownership,
             ),
+            dialog = dialogState,
         )
 
     @Suppress("LongParameterList")
@@ -538,6 +561,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 notes = notes,
                 ownership = ownership,
             ),
+            dialog = null,
         )
 
     private fun createSavedStateHandleWithState(state: VaultAddItemState) =

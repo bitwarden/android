@@ -5,6 +5,8 @@ import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
+import com.bitwarden.core.SecureNoteType
+import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -147,6 +149,52 @@ class VaultDataExtensionsTest {
                 identity = null,
                 card = null,
                 secureNote = null,
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = null,
+                passwordHistory = null,
+                creationDate = Instant.MIN,
+                deletedDate = null,
+                revisionDate = Instant.MIN,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should transform SecureNotes ItemType to CipherView`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MIN
+        val secureNotesItemType = VaultAddItemState.ItemType.SecureNotes(
+            name = "mockName-1",
+            folderName = "mockFolder-1".asText(),
+            favorite = false,
+            masterPasswordReprompt = false,
+            notes = "mockNotes-1",
+            ownership = "mockOwnership-1",
+        )
+
+        val result = secureNotesItemType.toCipherView()
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = null,
+                folderId = null,
+                collectionIds = emptyList(),
+                key = null,
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.SECURE_NOTE,
+                login = null,
+                identity = null,
+                card = null,
+                secureNote = SecureNoteView(SecureNoteType.GENERIC),
                 favorite = false,
                 reprompt = CipherRepromptType.NONE,
                 organizationUseTotp = false,
