@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -47,6 +48,7 @@ fun VaultScreen(
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
+    onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
@@ -65,40 +67,8 @@ fun VaultScreen(
 
             is VaultEvent.NavigateToEditVaultItem -> onNavigateToVaultEditItemScreen(event.itemId)
 
-            VaultEvent.NavigateToCardGroup -> {
-                Toast
-                    .makeText(context, "Navigate to card type screen.", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            is VaultEvent.NavigateToFolder -> {
-                Toast
-                    .makeText(context, "Navigate to folder screen.", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            VaultEvent.NavigateToIdentityGroup -> {
-                Toast
-                    .makeText(context, "Navigate to identity type screen.", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            VaultEvent.NavigateToLoginGroup -> {
-                Toast
-                    .makeText(context, "Navigate to login type screen.", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            VaultEvent.NavigateToSecureNotesGroup -> {
-                Toast
-                    .makeText(context, "Navigate to secure notes type screen.", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            VaultEvent.NavigateToTrash -> {
-                Toast
-                    .makeText(context, "Navigate to trash screen.", Toast.LENGTH_SHORT)
-                    .show()
+            is VaultEvent.NavigateToItemListing -> {
+                onNavigateToVaultItemListingScreen(event.itemListingType)
             }
 
             is VaultEvent.ShowToast -> {
