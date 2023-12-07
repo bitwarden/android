@@ -17,17 +17,14 @@ namespace Bit.iOS.Extension
 
         public void InitWithContext(Context context)
         {
-            ClipLogger.Log($"InitWithContext: {context?.UrlString}");
             _context = context;
             _shouldInitialize = false;
         }
 
         public void DismissLockAndContinue()
         {
-            ClipLogger.Log("DismissLockAndContinue");
             if (UIApplication.SharedApplication.KeyWindow is null)
             {
-                ClipLogger.Log("KeyWindow is null");
                 return;
             }
 
@@ -38,25 +35,14 @@ namespace Bit.iOS.Extension
                 var rootVC = navContr.ViewControllers.FirstOrDefault();
                 if (rootVC is LoadingViewController loadingVC)
                 {
-                    ClipLogger.Log("Re-initing");
                     loadingVC.InitWithContext(_context);
                     loadingVC.ContinueOn();
                 }
-                else
-                {
-                    ClipLogger.Log($"Not LVC: {rootVC?.GetType().FullName}");
-                }
             }
-            else
-            {
-                ClipLogger.Log($"DismissLockAndContinue RVC not correct: {UIApplication.SharedApplication.KeyWindow?.RootViewController?.GetType().FullName}");
-            }
-            ClipLogger.Log("DismissLockAndContinue Done");
         }
 
         private void NavigateToPage(ContentPage page)
         {
-            ClipLogger.Log($"NavigateToPage {page?.GetType().FullName}");
             var navigationPage = new NavigationPage(page);
 
             var window = new Window(navigationPage);

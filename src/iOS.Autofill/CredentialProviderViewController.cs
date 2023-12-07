@@ -251,8 +251,6 @@ namespace Bit.iOS.Autofill
 #if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
         public async void DismissLockAndContinue()
         {
-            ClipLogger.Log("Dismiss lock and continue");
-
             DismissViewController(false, async () => await OnLockDismissedAsync());
         }
 
