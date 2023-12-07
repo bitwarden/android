@@ -13,7 +13,6 @@ using AndroidX.Core.Content;
 using Bit.Core.Resources.Localization;
 using Bit.Core;
 using Bit.Core.Abstractions;
-using Plugin.CurrentActivity;
 using FileProvider = AndroidX.Core.Content.FileProvider;
 
 namespace Bit.Droid.Services
@@ -43,7 +42,7 @@ namespace Bit.Droid.Services
         {
             try
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
                 var intent = BuildOpenFileIntent(fileData, fileName);
                 if (intent == null)
                 {
@@ -60,7 +59,7 @@ namespace Bit.Droid.Services
         {
             try
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
                 var intent = BuildOpenFileIntent(new byte[0], string.Concat("opentest_", fileName));
                 if (intent == null)
                 {
@@ -87,7 +86,7 @@ namespace Bit.Droid.Services
                 return null;
             }
 
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             var cachePath = activity.CacheDir;
             var filePath = Path.Combine(cachePath.Path, fileName);
             File.WriteAllBytes(filePath, fileData);
@@ -114,7 +113,7 @@ namespace Bit.Droid.Services
         {
             try
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
 
                 if (contentUri != null)
                 {
@@ -162,7 +161,7 @@ namespace Bit.Droid.Services
         {
             try
             {
-                DeleteDir(CrossCurrentActivity.Current.Activity.CacheDir);
+                DeleteDir(Microsoft.Maui.ApplicationModel.Platform.CurrentActivity?.CacheDir);
                 await _stateService.SetLastFileCacheClearAsync(DateTime.UtcNow);
             }
             catch (Exception) { }
@@ -170,7 +169,7 @@ namespace Bit.Droid.Services
 
         public Task SelectFileAsync()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             var hasStorageWritePermission = !_cameraPermissionsDenied &&
                 HasPermission(Manifest.Permission.WriteExternalStorage);
             var additionalIntents = new List<IParcelable>();
@@ -249,20 +248,30 @@ namespace Bit.Droid.Services
 
         private bool HasPermission(string permission)
         {
-            return ContextCompat.CheckSelfPermission(
-                CrossCurrentActivity.Current.Activity, permission) == Permission.Granted;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            if (activity != null)
+            {
+                return ContextCompat.CheckSelfPermission(activity, permission) == Permission.Granted;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void AskPermission(string permission)
         {
-            ActivityCompat.RequestPermissions(CrossCurrentActivity.Current.Activity, new string[] { permission },
-                Core.Constants.SelectFilePermissionRequestCode);
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            if (activity != null)
+            {
+                ActivityCompat.RequestPermissions(activity, new string[] { permission }, Core.Constants.SelectFilePermissionRequestCode);
+            }
         }
 
         private List<IParcelable> GetCameraIntents(Android.Net.Uri outputUri)
         {
             var intents = new List<IParcelable>();
-            var pm = CrossCurrentActivity.Current.Activity.PackageManager;
+            var pm = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity?.PackageManager;
             var captureIntent = new Intent(MediaStore.ActionImageCapture);
             var listCam = pm.QueryIntentActivities(captureIntent, 0);
             foreach (var res in listCam)

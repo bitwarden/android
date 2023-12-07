@@ -12,7 +12,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Droid.Services;
-using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Xamarin.Android.Net;
 using System.Net.Http;
@@ -101,7 +100,6 @@ namespace Bit.Droid
         {
             base.OnCreate();
             Bootstrap();
-            CrossCurrentActivity.Current.Init(this);
         }
 
         public void OnProviderInstallFailed(int errorCode, Intent recoveryIntent)
@@ -136,7 +134,7 @@ namespace Bit.Droid
             //    });
             //    ZXing.Net.Mobile.Forms.Android.Platform.Init();
             //});
-            CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
+            CrossFingerprint.SetCurrentActivityResolver(() => Microsoft.Maui.ApplicationModel.Platform.CurrentActivity);
 
             var preferencesStorage = new PreferencesStorageService(null);
             var localAppDataFolderPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
