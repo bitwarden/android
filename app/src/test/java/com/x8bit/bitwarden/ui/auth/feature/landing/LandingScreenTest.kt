@@ -273,6 +273,80 @@ class LandingScreenTest : BaseComposeTest() {
             .performClick()
         verify { viewModel.trySendAction(LandingAction.DialogDismiss) }
     }
+
+    @Test
+    fun `account already added dialog should be shown or hidden according to the state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = LandingState.DialogState.AccountAlreadyAdded(
+                    accountSummary = mockk(),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Account already added")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Would you like to switch to it now?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `account already added dialog Cancel click should send DialogDismiss action`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = LandingState.DialogState.AccountAlreadyAdded(
+                    accountSummary = mockk(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(LandingAction.DialogDismiss) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account already added dialog Yes click should send ConfirmSwitchToMatchingAccountClick action`() {
+        val accountSummary = mockk<AccountSummary>()
+        mutableStateFlow.update {
+            it.copy(
+                dialog = LandingState.DialogState.AccountAlreadyAdded(
+                    accountSummary = accountSummary,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                LandingAction.ConfirmSwitchToMatchingAccountClick(account = accountSummary),
+            )
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
