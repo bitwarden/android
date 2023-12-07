@@ -15,7 +15,7 @@ fun NavGraphBuilder.vaultAddItemDestination(
     onNavigateBack: () -> Unit,
 ) {
     composable(
-        ADD_ITEM_ROUTE,
+        route = ADD_ITEM_ROUTE,
         enterTransition = TransitionProviders.Enter.slideUp,
         exitTransition = TransitionProviders.Exit.slideDown,
         popEnterTransition = TransitionProviders.Enter.slideUp,

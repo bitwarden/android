@@ -9,7 +9,6 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
@@ -22,6 +21,9 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
+import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
+import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -85,7 +87,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Type, Login")
+            .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
             .performClick()
 
         // Choose the option from the menu
@@ -109,13 +111,13 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Type, Login")
+            .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
             .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(selectedType = VaultAddItemState.ItemType.Card) }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Type, Card")
+            .onNodeWithContentDescriptionAfterScroll(label = "Type, Card")
             .assertIsDisplayed()
     }
 
@@ -126,7 +128,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Name")
             .performTextInput(text = "TestName")
 
         verify {
@@ -143,7 +145,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Name")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -151,7 +153,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Name")
             .assertTextContains("NewName")
     }
 
@@ -162,7 +164,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Username")
+            .onNodeWithTextAfterScroll(text = "Username")
             .performTextInput(text = "TestUsername")
 
         verify {
@@ -179,7 +181,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Username")
+            .onNodeWithTextAfterScroll(text = "Username")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -187,7 +189,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Username")
+            .onNodeWithTextAfterScroll(text = "Username")
             .assertTextContains("NewUsername")
     }
 
@@ -199,7 +201,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Generate username")
+            .onNodeWithContentDescriptionAfterScroll(label = "Generate username")
             .performClick()
 
         verify {
@@ -217,10 +219,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Password")
+            .onNodeWithTextAfterScroll(text = "Password")
             .onSiblings()
             .onFirst()
-            .performScrollTo()
             .performClick()
 
         verify {
@@ -236,10 +237,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Password")
+            .onNodeWithTextAfterScroll(text = "Password")
             .onSiblings()
             .onLast()
-            .performScrollTo()
             .performClick()
 
         verify {
@@ -256,7 +256,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Password")
+            .onNodeWithTextAfterScroll(text = "Password")
             .performTextInput(text = "TestPassword")
 
         verify {
@@ -273,7 +273,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Password")
+            .onNodeWithTextAfterScroll(text = "Password")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -281,7 +281,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Password")
+            .onNodeWithTextAfterScroll(text = "Password")
             .assertTextContains("•••••••••••")
     }
 
@@ -292,8 +292,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Set up TOTP")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll(text = "Set up TOTP")
             .performClick()
 
         verify {
@@ -310,8 +309,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("URI")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll("URI")
             .performTextInput("TestURI")
 
         verify {
@@ -328,7 +326,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "URI")
+            .onNodeWithTextAfterScroll("URI")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -336,7 +334,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "URI")
+            .onNodeWithTextAfterScroll(text = "URI")
             .assertTextContains("NewURI")
     }
 
@@ -348,10 +346,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "URI")
+            .onNodeWithTextAfterScroll(text = "URI")
             .onSiblings()
             .filterToOne(hasContentDescription(value = "Options"))
-            .performScrollTo()
             .performClick()
 
         verify {
@@ -368,8 +365,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "New URI")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll(text = "New URI")
             .performClick()
 
         verify {
@@ -387,8 +383,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Folder, No Folder")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
             .performClick()
 
         // Choose the option from the menu
@@ -412,8 +407,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Folder, No Folder")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -421,8 +415,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Folder, Folder 2")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Folder, Folder 2")
             .assertIsDisplayed()
     }
 
@@ -433,8 +426,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
         }
 
-        composeTestRule.onNodeWithText("Favorite")
-            .performScrollTo()
+        composeTestRule
+            .onNodeWithTextAfterScroll("Favorite")
             .performClick()
 
         verify {
@@ -453,7 +446,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Favorite")
+            .onNodeWithTextAfterScroll("Favorite")
             .assertIsOff()
 
         mutableStateFlow.update { currentState ->
@@ -461,7 +454,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Favorite")
+            .onNodeWithTextAfterScroll("Favorite")
             .assertIsOn()
     }
 
@@ -473,8 +466,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Master password re-prompt")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll("Master password re-prompt")
             .performTouchInput {
                 click(position = Offset(x = 1f, y = center.y))
             }
@@ -496,7 +488,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Master password re-prompt")
+            .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsOff()
 
         mutableStateFlow.update { currentState ->
@@ -504,7 +496,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Master password re-prompt")
+            .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsOn()
     }
 
@@ -515,8 +507,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
         }
 
-        composeTestRule.onNodeWithContentDescription(label = "Master password re-prompt help")
-            .performScrollTo()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
             .performClick()
 
         verify {
@@ -533,8 +525,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasSetTextAction() and hasText("Notes"))
-            .performScrollTo()
+            .onAllNodesWithTextAfterScroll("Notes")
+            .filterToOne(hasSetTextAction())
             .performTextInput("TestNotes")
 
         verify {
@@ -551,15 +543,17 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasSetTextAction() and hasText("Notes"))
-            .assertTextContains("")
+            .onAllNodesWithTextAfterScroll("Notes")
+            .filterToOne(hasSetTextAction())
+            .performTextInput("")
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(notes = "NewNote") }
         }
 
         composeTestRule
-            .onNode(hasSetTextAction() and hasText("Notes"))
+            .onAllNodesWithTextAfterScroll("Notes")
+            .filterToOne(hasSetTextAction())
             .assertTextContains("NewNote")
     }
 
@@ -571,8 +565,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "New custom field")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll(text = "New custom field")
             .performClick()
 
         verify {
@@ -588,8 +581,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Who owns this item?, placeholder@email.com")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Who owns this item?, placeholder@email.com",
+            )
             .performClick()
 
         // Choose the option from the menu
@@ -613,8 +607,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Who owns this item?, placeholder@email.com")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "Who owns this item?, placeholder@email.com",
+            )
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -622,8 +617,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Who owns this item?, Owner 2")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, Owner 2")
             .assertIsDisplayed()
     }
 
@@ -637,7 +631,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Name")
             .performTextInput(text = "TestName")
 
         verify {
@@ -657,7 +651,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Name")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -665,7 +659,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Name")
             .assertTextContains("NewName")
     }
 
@@ -680,8 +674,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Folder, No Folder")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
             .performClick()
 
         // Choose the option from the menu
@@ -709,8 +702,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Folder, No Folder")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -718,8 +710,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Folder, Folder 2")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Folder, Folder 2")
             .assertIsDisplayed()
     }
 
@@ -734,8 +725,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Favorite")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll("Favorite")
             .performClick()
 
         verify {
@@ -758,7 +748,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Favorite")
+            .onNodeWithTextAfterScroll("Favorite")
             .assertIsOff()
 
         mutableStateFlow.update { currentState ->
@@ -766,7 +756,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Favorite")
+            .onNodeWithTextAfterScroll("Favorite")
             .assertIsOn()
     }
 
@@ -781,8 +771,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Master password re-prompt")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll("Master password re-prompt")
             .performTouchInput {
                 click(position = Offset(x = 1f, y = center.y))
             }
@@ -807,7 +796,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Master password re-prompt")
+            .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsOff()
 
         mutableStateFlow.update { currentState ->
@@ -815,7 +804,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("Master password re-prompt")
+            .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsOn()
     }
 
@@ -830,8 +819,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Master password re-prompt help")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
             .performClick()
 
         verify {
@@ -851,8 +839,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasSetTextAction() and hasText("Notes"))
-            .performScrollTo()
+            .onAllNodesWithTextAfterScroll("Notes")
+            .filterToOne(hasSetTextAction())
             .performTextInput("TestNotes")
 
         verify {
@@ -873,7 +861,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasSetTextAction() and hasText("Notes"))
+            .onAllNodesWithTextAfterScroll("Notes")
+            .filterToOne(hasSetTextAction())
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -881,7 +870,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNode(hasSetTextAction() and hasText("Notes"))
+            .onAllNodesWithTextAfterScroll("Notes")
+            .filterToOne(hasSetTextAction())
             .assertTextContains("NewNote")
     }
 
@@ -896,8 +886,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "New custom field")
-            .performScrollTo()
+            .onNodeWithTextAfterScroll(text = "New custom field")
             .performClick()
 
         verify {
@@ -919,8 +908,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Who owns this item?, placeholder@email.com")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, placeholder@email.com")
             .performClick()
 
         // Choose the option from the menu
@@ -948,8 +936,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Who owns this item?, placeholder@email.com")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, placeholder@email.com")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -957,8 +944,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Who owns this item?, Owner 2")
-            .performScrollTo()
+            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, Owner 2")
             .assertIsDisplayed()
     }
 

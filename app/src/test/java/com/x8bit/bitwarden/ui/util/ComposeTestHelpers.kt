@@ -4,11 +4,15 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteractionCollection
+import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import org.junit.jupiter.api.assertThrows
@@ -45,10 +49,43 @@ fun ComposeContentTestRule.onNodeWithTextAfterScroll(text: String): SemanticsNod
 }
 
 /**
+ * A helper used to scroll to and get the matching node in a scrollable list. This is intended to
+ * be used with lazy lists that would otherwise fail when calling [performScrollToNode].
+ */
+fun ComposeContentTestRule.onNodeWithContentDescriptionAfterScroll(
+    label: String,
+): SemanticsNodeInteraction {
+    onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(label))
+    return onNodeWithContentDescription(label)
+}
+
+/**
  * A helper used to scroll to and get a thr first matching node in a scrollable list. This is
  * intended to be used with lazy lists that would otherwise fail when calling [performScrollToNode].
  */
-fun ComposeContentTestRule.onFirstNodeWithTextAfterScroll(text: String): SemanticsNodeInteraction {
+fun ComposeContentTestRule.onAllNodesWithTextAfterScroll(
+    text: String,
+): SemanticsNodeInteractionCollection {
     onNode(hasScrollToNodeAction()).performScrollToNode(hasText(text))
-    return onAllNodesWithText(text).onFirst()
+    return onAllNodesWithText(text)
 }
+
+/**
+ * A helper used to scroll to and get a thr first matching node in a scrollable list. This is
+ * intended to be used with lazy lists that would otherwise fail when calling [performScrollToNode].
+ */
+fun ComposeContentTestRule.onAllNodesWithContentDescriptionAfterScroll(
+    label: String,
+): SemanticsNodeInteractionCollection {
+    onNode(hasScrollToNodeAction()).performScrollToNode(hasContentDescription(label))
+    return onAllNodesWithContentDescription(label)
+}
+
+/**
+ * A helper used to scroll to and get all matching nodes in a scrollable list. This is intended
+ * to be used with lazy lists that would otherwise fail when calling [performScrollToNode].
+ */
+fun ComposeContentTestRule.onFirstNodeWithTextAfterScroll(
+    text: String,
+): SemanticsNodeInteraction =
+    onAllNodesWithTextAfterScroll(text).onFirst()
