@@ -210,12 +210,12 @@ class LandingScreenTest : BaseComposeTest() {
 
         // Clicking to open dialog
         composeTestRule
-            .onNodeWithText(Environment.Us.label.toString(resources))
+            .onNodeWithText(Environment.Us.label)
             .performClick()
 
         // Clicking item on dialog
         composeTestRule
-            .onNodeWithText(selectedEnvironment.label.toString(resources))
+            .onNodeWithText(selectedEnvironment.label)
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

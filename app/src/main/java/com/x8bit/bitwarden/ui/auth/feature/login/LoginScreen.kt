@@ -241,7 +241,7 @@ private fun LoginScreenContent(
                 text = stringResource(
                     id = R.string.logging_in_as_x_on_y,
                     state.emailAddress,
-                    state.environmentLabel(),
+                    state.environmentLabel,
                 ),
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.bodyMedium,

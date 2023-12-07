@@ -15,7 +15,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -186,7 +185,7 @@ private val DEFAULT_STATE =
         captchaToken = null,
         isLoginButtonEnabled = false,
         passwordInput = "",
-        environmentLabel = "".asText(),
+        environmentLabel = "",
         loadingDialogState = LoadingDialogState.Hidden,
         errorDialogState = BasicDialogState.Hidden,
         accountSummaries = emptyList(),

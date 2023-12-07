@@ -1,9 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository.model
 
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.data.platform.repository.util.labelOrBaseUrlHost
 
 /**
  * A higher-level wrapper around [EnvironmentUrlDataJson] that provides type-safety, enumerability,
@@ -21,9 +19,9 @@ sealed class Environment {
     abstract val environmentUrlData: EnvironmentUrlDataJson
 
     /**
-     * Helper for a returning a human-readable label from a [Type].
+     * A human-readable label for the environment based in some way on its base URL.
      */
-    val label: Text get() = type.label
+    abstract val label: String
 
     /**
      * The default US environment.
@@ -32,6 +30,8 @@ sealed class Environment {
         override val type: Type get() = Type.US
         override val environmentUrlData: EnvironmentUrlDataJson
             get() = EnvironmentUrlDataJson.DEFAULT_US
+        override val label: String
+            get() = "bitwarden.com"
     }
 
     /**
@@ -41,6 +41,8 @@ sealed class Environment {
         override val type: Type get() = Type.EU
         override val environmentUrlData: EnvironmentUrlDataJson
             get() = EnvironmentUrlDataJson.DEFAULT_EU
+        override val label: String
+            get() = "bitwarden.eu"
     }
 
     /**
@@ -50,15 +52,17 @@ sealed class Environment {
         override val environmentUrlData: EnvironmentUrlDataJson,
     ) : Environment() {
         override val type: Type get() = Type.SELF_HOSTED
+        override val label: String
+            get() = environmentUrlData.labelOrBaseUrlHost
     }
 
     /**
      * A summary of the various types that can be enumerated over and which contains a
      * human-readable [label].
      */
-    enum class Type(val label: Text) {
-        US(label = "bitwarden.com".asText()),
-        EU(label = "bitwarden.eu".asText()),
-        SELF_HOSTED(label = R.string.self_hosted.asText()),
+    enum class Type {
+        US,
+        EU,
+        SELF_HOSTED,
     }
 }

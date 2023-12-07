@@ -12,3 +12,10 @@ fun EnvironmentUrlDataJson.toEnvironmentUrls(): Environment =
         Environment.Eu.environmentUrlData -> Environment.Eu
         else -> Environment.SelfHosted(environmentUrlData = this)
     }
+
+/**
+ * Converts a nullable [EnvironmentUrlDataJson] to an [Environment], where `null` values default to
+ * the US environment.
+ */
+fun EnvironmentUrlDataJson?.toEnvironmentUrlsOrDefault(): Environment =
+    this?.toEnvironmentUrls() ?: Environment.Us

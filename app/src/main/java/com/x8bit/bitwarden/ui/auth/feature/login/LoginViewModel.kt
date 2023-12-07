@@ -13,12 +13,10 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.util.labelOrBaseUrlHost
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -44,7 +42,7 @@ class LoginViewModel @Inject constructor(
             emailAddress = LoginArgs(savedStateHandle).emailAddress,
             isLoginButtonEnabled = true,
             passwordInput = "",
-            environmentLabel = environmentRepository.environment.labelOrBaseUrlHost,
+            environmentLabel = environmentRepository.environment.label,
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = LoginArgs(savedStateHandle).captchaToken,
@@ -205,7 +203,7 @@ data class LoginState(
     val passwordInput: String,
     val emailAddress: String,
     val captchaToken: String?,
-    val environmentLabel: Text,
+    val environmentLabel: String,
     val isLoginButtonEnabled: Boolean,
     val loadingDialogState: LoadingDialogState,
     val errorDialogState: BasicDialogState,

@@ -1,11 +1,10 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
+import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -57,10 +56,3 @@ class EnvironmentRepositoryImpl(
             .launchIn(scope)
     }
 }
-
-/**
- * Converts a nullable [EnvironmentUrlDataJson] to an [Environment], where `null` values default to
- * the US environment.
- */
-private fun EnvironmentUrlDataJson?.toEnvironmentUrlsOrDefault(): Environment =
-    this?.toEnvironmentUrls() ?: Environment.Us

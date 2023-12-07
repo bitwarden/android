@@ -61,6 +61,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -363,7 +364,7 @@ private fun EnvironmentSelector(
                 modifier = Modifier.padding(end = 12.dp),
             )
             Text(
-                text = selectedOption.label(),
+                text = selectedOption.displayLabel(),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(end = 8.dp),
@@ -382,7 +383,7 @@ private fun EnvironmentSelector(
             ) {
                 options.forEach {
                     BitwardenSelectionRow(
-                        text = it.label,
+                        text = it.displayLabel,
                         onClick = {
                             onOptionSelected.invoke(it)
                             shouldShowDialog = false

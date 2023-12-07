@@ -75,7 +75,7 @@ class LoginViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(
-                    environmentLabel = "".asText(),
+                    environmentLabel = "",
                 ),
                 awaitItem(),
             )
@@ -94,7 +94,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.test {
                 assertEquals(
                     DEFAULT_STATE.copy(
-                        environmentLabel = "abc.com".asText(),
+                        environmentLabel = "abc.com",
                     ),
                     awaitItem(),
                 )
@@ -323,7 +323,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             emailAddress = "test@gmail.com",
             passwordInput = "",
             isLoginButtonEnabled = true,
-            environmentLabel = Environment.Us.type.label,
+            environmentLabel = Environment.Us.label,
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = null,
