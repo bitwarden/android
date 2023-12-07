@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -102,19 +103,25 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleCardClick() {
-        sendEvent(VaultEvent.NavigateToCardGroup)
+        sendEvent(
+            VaultEvent.NavigateToItemListing(VaultItemListingType.Card),
+        )
     }
 
     private fun handleFolderItemClick(action: VaultAction.FolderClick) {
-        sendEvent(VaultEvent.NavigateToFolder(action.folderItem.id))
+        sendEvent(
+            VaultEvent.NavigateToItemListing(
+                VaultItemListingType.Folder(action.folderItem.id),
+            ),
+        )
     }
 
     private fun handleIdentityClick() {
-        sendEvent(VaultEvent.NavigateToIdentityGroup)
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Identity))
     }
 
     private fun handleLoginClick() {
-        sendEvent(VaultEvent.NavigateToLoginGroup)
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Login))
     }
 
     private fun handleSearchIconClick() {
@@ -137,11 +144,11 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleTrashClick() {
-        sendEvent(VaultEvent.NavigateToTrash)
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
     }
 
     private fun handleSecureNoteClick() {
-        sendEvent(VaultEvent.NavigateToSecureNotesGroup)
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.SecureNote))
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
@@ -427,36 +434,11 @@ sealed class VaultEvent {
     ) : VaultEvent()
 
     /**
-     * Navigate to the card group screen.
+     * Navigate to the item listing screen.
      */
-    data object NavigateToCardGroup : VaultEvent()
-
-    /**
-     * Navigate to the folder screen.
-     */
-    data class NavigateToFolder(
-        val folderId: String?,
+    data class NavigateToItemListing(
+        val itemListingType: VaultItemListingType,
     ) : VaultEvent()
-
-    /**
-     * Navigate to the identity group screen.
-     */
-    data object NavigateToIdentityGroup : VaultEvent()
-
-    /**
-     * Navigate to the login group screen.
-     */
-    data object NavigateToLoginGroup : VaultEvent()
-
-    /**
-     * Navigate to the trash screen.
-     */
-    data object NavigateToTrash : VaultEvent()
-
-    /**
-     * Navigate to the secure notes group screen.
-     */
-    data object NavigateToSecureNotesGroup : VaultEvent()
 
     /**
      * Show a toast with the given [message].

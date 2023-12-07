@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
@@ -53,9 +54,9 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
 import com.x8bit.bitwarden.ui.tools.feature.send.SEND_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSend
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
-import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_ROUTE
-import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVault
-import com.x8bit.bitwarden.ui.vault.feature.vault.vaultDestination
+import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
+import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -76,7 +77,7 @@ fun VaultUnlockedNavBarScreen(
             val navOptions = vaultUnlockedNavBarScreenNavOptions()
             when (event) {
                 VaultUnlockedNavBarEvent.NavigateToVaultScreen -> {
-                    navigateToVault(navOptions)
+                    navigateToVaultGraph(navOptions)
                 }
 
                 VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
@@ -170,7 +171,7 @@ private fun VaultUnlockedNavBarScaffold(
         // - consume the IME insets.
         NavHost(
             navController = navController,
-            startDestination = VAULT_ROUTE,
+            startDestination = VAULT_GRAPH_ROUTE,
             modifier = Modifier
                 .consumeWindowInsets(WindowInsets.navigationBars)
                 .consumeWindowInsets(WindowInsets.ime)
@@ -180,10 +181,9 @@ private fun VaultUnlockedNavBarScaffold(
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,
             popExitTransition = RootTransitionProviders.Exit.fadeOut,
         ) {
-            vaultDestination(
-                onNavigateToVaultAddItemScreen = {
-                    navigateToVaultAddItem()
-                },
+            vaultGraph(
+                navController = navController,
+                onNavigateToVaultAddItemScreen = navigateToVaultAddItem,
                 onNavigateToVaultItemScreen = onNavigateToVaultItem,
                 onNavigateToVaultEditItemScreen = onNavigateToVaultEditItem,
                 onDimBottomNavBarRequest = { shouldDim ->
@@ -339,7 +339,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val iconRes get() = R.drawable.ic_vault
         override val labelRes get() = R.string.my_vault
         override val contentDescriptionRes get() = R.string.my_vault
-        override val route get() = VAULT_ROUTE
+        override val route get() = VAULT_GRAPH_ROUTE
     }
 
     /**
@@ -360,7 +360,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
  */
 private fun NavController.vaultUnlockedNavBarScreenNavOptions(): NavOptions =
     navOptions {
-        popUpTo(graph.startDestinationId) {
+        popUpTo(graph.findStartDestination().id) {
             saveState = true
         }
         launchSingleTop = true

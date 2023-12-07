@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performScrollToNode
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -31,6 +32,7 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemId: String? = null
     private var onNavigateToVaultEditItemId: String? = null
+    private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
 
     private val mutableEventFlow = MutableSharedFlow<VaultEvent>(
@@ -50,6 +52,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
                 onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
+                onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
             )
         }
@@ -132,6 +135,45 @@ class VaultScreenTest : BaseComposeTest() {
         val id = "id1234"
         mutableEventFlow.tryEmit(VaultEvent.NavigateToEditVaultItem(itemId = id))
         assertEquals(id, onNavigateToVaultEditItemId)
+    }
+
+    @Test
+    fun `NavigateNavigateToCardGroup event should call onNavigateToVaultItemListingType`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Card))
+        assertEquals(VaultItemListingType.Card, onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    fun `NavigateToIdentityGroup event should call onNavigateToVaultItemListingType`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Identity))
+        assertEquals(VaultItemListingType.Identity, onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    fun `NavigateToLoginGroup event should call onNavigateToVaultItemListingType`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Login))
+        assertEquals(VaultItemListingType.Login, onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    fun `NavigateToSecureNotesGroup event should call onNavigateToVaultItemListingType`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.SecureNote))
+        assertEquals(VaultItemListingType.SecureNote, onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    fun `NavigateToTrash event should call onNavigateToVaultItemListingType`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
+        assertEquals(VaultItemListingType.Trash, onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    fun `NavigateToFolder event should call onNavigateToVaultItemListingType`() {
+        val mockFolderId = "mockFolderId"
+        mutableEventFlow.tryEmit(
+            VaultEvent.NavigateToItemListing(VaultItemListingType.Folder(mockFolderId)),
+        )
+        assertEquals(VaultItemListingType.Folder(mockFolderId), onNavigateToVaultItemListingType)
     }
 
     @Test

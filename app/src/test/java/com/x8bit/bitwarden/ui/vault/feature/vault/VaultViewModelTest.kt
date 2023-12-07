@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -345,7 +346,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.CardGroupClick)
-            assertEquals(VaultEvent.NavigateToCardGroup, awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Card),
+                awaitItem(),
+            )
         }
     }
 
@@ -358,7 +362,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.FolderClick(folder))
-            assertEquals(VaultEvent.NavigateToFolder(folderId), awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Folder(folderId)),
+                awaitItem(),
+            )
         }
     }
 
@@ -367,7 +374,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.IdentityGroupClick)
-            assertEquals(VaultEvent.NavigateToIdentityGroup, awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Identity),
+                awaitItem(),
+            )
         }
     }
 
@@ -376,7 +386,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.LoginGroupClick)
-            assertEquals(VaultEvent.NavigateToLoginGroup, awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Login),
+                awaitItem(),
+            )
         }
     }
 
@@ -394,7 +407,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.SecureNoteGroupClick)
-            assertEquals(VaultEvent.NavigateToSecureNotesGroup, awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.SecureNote),
+                awaitItem(),
+            )
         }
     }
 
@@ -403,7 +419,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.TrashClick)
-            assertEquals(VaultEvent.NavigateToTrash, awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Trash),
+                awaitItem(),
+            )
         }
     }
 

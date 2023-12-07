@@ -64,11 +64,11 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToDeleteAccount = {},
                 )
             }
-            runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
+            runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
             vaultUnlockedNavBarEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
-                    route = "vault",
+                    route = "vault_graph",
                     navOptions = expectedNavOptions,
                 )
             }
@@ -115,7 +115,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToDeleteAccount = {},
                 )
             }
-            runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
+            runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
             vaultUnlockedNavBarEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
@@ -166,7 +166,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToDeleteAccount = {},
                 )
             }
-            runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
+            runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
             vaultUnlockedNavBarEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
@@ -217,7 +217,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToDeleteAccount = {},
                 )
             }
-            runOnIdle { fakeNavHostController.assertCurrentRoute("vault") }
+            runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
             vaultUnlockedNavBarEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
