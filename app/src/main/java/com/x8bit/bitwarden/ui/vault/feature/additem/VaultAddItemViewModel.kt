@@ -79,9 +79,19 @@ class VaultAddItemViewModel @Inject constructor(
     //region Top Level Handlers
 
     private fun handleSaveClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddItemState.DialogState.Loading(
+                    R.string.saving.asText(),
+                ),
+            )
+        }
+
         viewModelScope.launch {
             when (state.selectedType) {
-                is VaultAddItemState.ItemType.Login -> {
+                is VaultAddItemState.ItemType.Login,
+                is VaultAddItemState.ItemType.SecureNotes,
+                -> {
                     sendAction(
                         action = VaultAddItemAction.Internal.CreateCipherResultReceive(
                             createCipherResult = vaultRepository.createCipher(
@@ -91,16 +101,12 @@ class VaultAddItemViewModel @Inject constructor(
                     )
                 }
 
-                is VaultAddItemState.ItemType.SecureNotes -> {
-                    // TODO Add Saving of SecureNotes (BIT-509)
-                }
-
                 VaultAddItemState.ItemType.Card -> {
-                    // TODO Add Saving of SecureNotes (BIT-668)
+                    // TODO Add Saving of Card Type (BIT-668)
                 }
 
                 VaultAddItemState.ItemType.Identity -> {
-                    // TODO Add Saving of SecureNotes (BIT-508)
+                    // TODO Add Saving of Identity type (BIT-508)
                 }
             }
         }
@@ -502,6 +508,10 @@ class VaultAddItemViewModel @Inject constructor(
 
     @Suppress("MaxLineLength")
     private fun handleCreateCipherResultReceive(action: VaultAddItemAction.Internal.CreateCipherResultReceive) {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+
         when (action.createCipherResult) {
             is CreateCipherResult.Error -> {
                 // TODO Display error dialog BIT-501
@@ -559,6 +569,7 @@ class VaultAddItemViewModel @Inject constructor(
     companion object {
         val INITIAL_STATE: VaultAddItemState = VaultAddItemState(
             selectedType = VaultAddItemState.ItemType.Login(),
+            dialog = null,
         )
     }
 }
@@ -568,10 +579,12 @@ class VaultAddItemViewModel @Inject constructor(
  *
  * @property selectedType The type of the item (e.g., Card, Identity, SecureNotes)
  * that has been selected to be added to the vault.
+ * @property dialog the state for the dialogs that can be displayed
  */
 @Parcelize
 data class VaultAddItemState(
     val selectedType: ItemType,
+    val dialog: DialogState?,
 ) : Parcelable {
 
     /**
@@ -675,7 +688,14 @@ data class VaultAddItemState(
         /**
          * Represents the `SecureNotes` item type.
          *
-         * @property displayStringResId Resource ID for the display string of the secure notes type.
+         * @property name The name associated with the SecureNotes item.
+         * @property folder The folder used for the SecureNotes item
+         * @property favorite Indicates whether this SecureNotes item is marked as a favorite.
+         * @property masterPasswordReprompt Indicates if a master password reprompt is required.
+         * @property notes Notes or comments associated with the SecureNotes item.
+         * @property ownership The ownership email associated with the SecureNotes item.
+         * @property availableFolders A list  of available folders.
+         * @property availableOwners A list of available owners.
          */
         @Parcelize
         data class SecureNotes(
@@ -701,6 +721,18 @@ data class VaultAddItemState(
                 private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
             }
         }
+    }
+
+    /**
+     * Displays a dialog.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Displays a loading dialog to the user.
+         */
+        @Parcelize
+        data class Loading(val label: Text) : DialogState()
     }
 }
 

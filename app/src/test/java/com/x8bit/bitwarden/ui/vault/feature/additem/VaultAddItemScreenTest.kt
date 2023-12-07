@@ -34,11 +34,8 @@ import org.junit.Test
 
 @Suppress("LargeClass")
 class VaultAddItemScreenTest : BaseComposeTest() {
-    private val mutableStateFlow = MutableStateFlow(
-        VaultAddItemState(
-            selectedType = VaultAddItemState.ItemType.Login(),
-        ),
-    )
+
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
 
     private val viewModel = mockk<VaultAddItemViewModel>(relaxed = true) {
         every { eventFlow } returns emptyFlow()
@@ -623,8 +620,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_SecureNotes state changing Name text field should trigger NameTextChange`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -643,8 +639,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_SecureNotes the name control should display the text provided by the state`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -665,8 +660,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_SecureNotes state clicking a Folder Option should send FolderChange action`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -694,8 +688,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes the folder control should display the text provided by the state`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -717,8 +710,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes state, toggling the favorite toggle should send ToggleFavorite action`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -740,8 +732,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes the favorite toggle should be enabled or disabled according to state`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -763,8 +754,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes state, toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -788,8 +778,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes the master password re-prompt toggle should be enabled or disabled according to state`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -811,8 +800,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes state, toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -831,8 +819,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_SecureNotes state changing Notes text field should trigger NotesTextChange`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -853,8 +840,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes the Notes control should display the text provided by the state`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -878,8 +864,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes state clicking New Custom Field button should trigger AddNewCustomFieldClick`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -899,8 +884,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes state clicking a Ownership option should send OwnershipChange action`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -928,8 +912,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes the Ownership control should display the text provided by the state`() {
-        mutableStateFlow.value =
-            VaultAddItemState(selectedType = VaultAddItemState.ItemType.SecureNotes())
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -974,4 +957,16 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     }
 
     //endregion Helper functions
+
+    companion object {
+        private val DEFAULT_STATE_LOGIN = VaultAddItemState(
+            selectedType = VaultAddItemState.ItemType.Login(),
+            dialog = null,
+        )
+
+        private val DEFAULT_STATE_SECURE_NOTES = VaultAddItemState(
+            selectedType = VaultAddItemState.ItemType.SecureNotes(),
+            dialog = null,
+        )
+    }
 }
