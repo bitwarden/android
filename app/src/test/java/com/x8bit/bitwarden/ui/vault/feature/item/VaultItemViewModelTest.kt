@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -593,6 +594,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             name = "Bit",
             email = "bitwarden@gmail.com",
             avatarColorHex = "#ff00ff",
+            environment = Environment.Us,
             isPremium = true,
             isVaultUnlocked = true,
         ),

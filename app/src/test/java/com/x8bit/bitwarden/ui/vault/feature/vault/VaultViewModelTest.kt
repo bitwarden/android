@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -116,6 +117,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         name = "Other User",
                         email = "active@bitwarden.com",
                         avatarColorHex = "#00aaaa",
+                        environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
                     ),
@@ -132,6 +134,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         name = "Other User",
                         email = "active@bitwarden.com",
                         avatarColorHex = "#00aaaa",
+                        environmentLabel = "bitwarden.com",
                         status = AccountSummary.Status.ACTIVE,
                     ),
                 ),
@@ -457,6 +460,7 @@ private val DEFAULT_USER_STATE = UserState(
             name = "Active User",
             email = "active@bitwarden.com",
             avatarColorHex = "#aa00aa",
+            environment = Environment.Us,
             isPremium = true,
             isVaultUnlocked = true,
         ),
@@ -465,6 +469,7 @@ private val DEFAULT_USER_STATE = UserState(
             name = "Locked User",
             email = "locked@bitwarden.com",
             avatarColorHex = "#00aaaa",
+            environment = Environment.Us,
             isPremium = false,
             isVaultUnlocked = false,
         ),
@@ -481,6 +486,7 @@ private fun createMockVaultState(viewState: VaultState.ViewState): VaultState =
                 name = "Active User",
                 email = "active@bitwarden.com",
                 avatarColorHex = "#aa00aa",
+                environmentLabel = "bitwarden.com",
                 status = AccountSummary.Status.ACTIVE,
             ),
             AccountSummary(
@@ -488,6 +494,7 @@ private fun createMockVaultState(viewState: VaultState.ViewState): VaultState =
                 name = "Locked User",
                 email = "locked@bitwarden.com",
                 avatarColorHex = "#00aaaa",
+                environmentLabel = "bitwarden.com",
                 status = AccountSummary.Status.LOCKED,
             ),
         ),

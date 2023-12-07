@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import io.mockk.every
 import io.mockk.mockk
@@ -96,6 +98,7 @@ class UserStateJsonExtensionsTest {
                         name = "activeName",
                         email = "activeEmail",
                         avatarColorHex = "activeAvatarColorHex",
+                        environment = Environment.Eu,
                         isPremium = false,
                         isVaultUnlocked = true,
                     ),
@@ -113,7 +116,9 @@ class UserStateJsonExtensionsTest {
                             every { hasPremium } returns null
                         },
                         tokens = mockk(),
-                        settings = mockk(),
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
                     ),
                 ),
             )
@@ -138,6 +143,7 @@ class UserStateJsonExtensionsTest {
                         email = "activeEmail",
                         // This value is calculated from the userId
                         avatarColorHex = "#ffecbc49",
+                        environment = Environment.Eu,
                         isPremium = true,
                         isVaultUnlocked = false,
                     ),
@@ -156,7 +162,9 @@ class UserStateJsonExtensionsTest {
                             every { hasPremium } returns true
                         },
                         tokens = mockk(),
-                        settings = mockk(),
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
                     ),
                 ),
             )

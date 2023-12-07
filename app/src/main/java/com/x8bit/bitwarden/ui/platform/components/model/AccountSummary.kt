@@ -12,6 +12,8 @@ import kotlinx.parcelize.Parcelize
  * @property name The full name of the user (if applicable).
  * @property email The email of the user.
  * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
+ * @property environmentLabel Label for the environment associated with the user's account
+ * (ex: "bitwarden.com"). This is purely for display purposes.
  * @property status The current status of the user's account locally.
  */
 @Parcelize
@@ -20,6 +22,7 @@ data class AccountSummary(
     val name: String?,
     val email: String,
     val avatarColorHex: String,
+    val environmentLabel: String,
     val status: Status,
 ) : Parcelable {
 

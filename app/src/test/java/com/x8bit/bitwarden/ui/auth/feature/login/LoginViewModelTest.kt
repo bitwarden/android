@@ -111,6 +111,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     name = "name",
                     email = "email",
                     avatarColorHex = "avatarColorHex",
+                    environment = Environment.Us,
                     isPremium = true,
                     isVaultUnlocked = true,
                 ),
