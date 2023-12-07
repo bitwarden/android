@@ -60,10 +60,10 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         environmentRepository.environment = Environment.SelfHosted(
-            environmentUrlData = EnvironmentUrlDataJson(base = "https://vault.bitwarden.eu"),
+            environmentUrlData = EnvironmentUrlDataJson(base = "https://vault.qa.bitwarden.pw"),
         )
         assertEquals(
-            DEFAULT_STATE.copy(environmentUrl = "vault.bitwarden.eu".asText()),
+            DEFAULT_STATE.copy(environmentUrl = "vault.qa.bitwarden.pw"),
             viewModel.stateFlow.value,
         )
     }

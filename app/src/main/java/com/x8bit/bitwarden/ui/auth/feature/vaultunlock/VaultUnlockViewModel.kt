@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.util.labelOrBaseUrlHost
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
@@ -49,7 +48,7 @@ class VaultUnlockViewModel @Inject constructor(
             initials = activeAccountSummary.initials,
             email = activeAccountSummary.email,
             dialog = null,
-            environmentUrl = environmentRepo.environment.labelOrBaseUrlHost,
+            environmentUrl = environmentRepo.environment.label,
             passwordInput = "",
         )
     },
@@ -62,7 +61,7 @@ class VaultUnlockViewModel @Inject constructor(
             .environmentStateFlow
             .onEach { environment ->
                 mutableStateFlow.update {
-                    it.copy(environmentUrl = environment.labelOrBaseUrlHost)
+                    it.copy(environmentUrl = environment.label)
                 }
             }
             .launchIn(viewModelScope)
@@ -186,7 +185,7 @@ data class VaultUnlockState(
     private val avatarColorString: String,
     val initials: String,
     val email: String,
-    val environmentUrl: Text,
+    val environmentUrl: String,
     val dialog: VaultUnlockDialog?,
     val passwordInput: String,
 ) : Parcelable {

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.util
 
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -8,32 +8,26 @@ import org.junit.jupiter.api.Test
 
 class EnvironmentExtensionsTest {
     @Test
-    fun `labelOrBaseUrlHost should correctly convert US environment to the correct label`() {
-        val environment = Environment.Us
+    fun `displayLabel for US type should return the correct value`() {
         assertEquals(
-            environment.label,
-            environment.labelOrBaseUrlHost,
+            "bitwarden.com".asText(),
+            Environment.Type.US.displayLabel,
         )
     }
 
     @Test
-    fun `labelOrBaseUrlHost should correctly convert EU environment to the correct label`() {
-        val environment = Environment.Eu
+    fun `displayLabel for EU type should return the correct value`() {
         assertEquals(
-            environment.label,
-            environment.labelOrBaseUrlHost,
+            "bitwarden.eu".asText(),
+            Environment.Type.EU.displayLabel,
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `labelOrBaseUrlHost should correctly convert self hosted environment to the correct label`() {
-        val environment = Environment.SelfHosted(
-            environmentUrlData = EnvironmentUrlDataJson(base = "https://vault.bitwarden.com"),
-        )
+    fun `displayLabel for SELF_HOSTED type should return the correct value`() {
         assertEquals(
-            "vault.bitwarden.com".asText(),
-            environment.labelOrBaseUrlHost,
+            R.string.self_hosted.asText(),
+            Environment.Type.SELF_HOSTED.displayLabel,
         )
     }
 }

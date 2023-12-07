@@ -168,7 +168,7 @@ fun VaultUnlockScreen(
                     text = stringResource(
                         id = R.string.logged_in_as_on,
                         state.email,
-                        state.environmentUrl(),
+                        state.environmentUrl,
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

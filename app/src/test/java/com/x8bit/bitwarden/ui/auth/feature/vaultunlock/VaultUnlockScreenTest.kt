@@ -14,7 +14,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import io.mockk.every
 import io.mockk.mockk
@@ -154,7 +153,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         val textAfterUpdate = "Logged in as ${DEFAULT_STATE.email} on $newEnvironmentUrl."
         composeTestRule.onNodeWithText(textBeforeUpdate).assertExists()
         composeTestRule.onNodeWithText(textAfterUpdate).assertDoesNotExist()
-        mutableStateFlow.update { it.copy(environmentUrl = newEnvironmentUrl.asText()) }
+        mutableStateFlow.update { it.copy(environmentUrl = newEnvironmentUrl) }
         composeTestRule.onNodeWithText(textBeforeUpdate).assertDoesNotExist()
         composeTestRule.onNodeWithText(textAfterUpdate).assertExists()
     }
@@ -215,7 +214,7 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     avatarColorString = "0000FF",
     dialog = null,
     email = "bit@bitwarden.com",
-    environmentUrl = DEFAULT_ENVIRONMENT_URL.asText(),
+    environmentUrl = DEFAULT_ENVIRONMENT_URL,
     initials = "AU",
     passwordInput = "",
 )
