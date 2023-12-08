@@ -84,20 +84,20 @@ fun VaultData.toViewState(): VaultState.ViewState =
     }
 
 /**
- * Transforms a [VaultAddItemState.ItemType] into [CipherView].
+ * Transforms a [VaultAddItemState.ViewState.Content] into [CipherView].
  */
-fun VaultAddItemState.ItemType.toCipherView(): CipherView =
+fun VaultAddItemState.ViewState.Content.toCipherView(): CipherView =
     when (this) {
-        is VaultAddItemState.ItemType.Card -> toCardCipherView()
-        is VaultAddItemState.ItemType.Identity -> toIdentityCipherView()
-        is VaultAddItemState.ItemType.Login -> toLoginCipherView()
-        is VaultAddItemState.ItemType.SecureNotes -> toSecureNotesCipherView()
+        is VaultAddItemState.ViewState.Content.Card -> toCardCipherView()
+        is VaultAddItemState.ViewState.Content.Identity -> toIdentityCipherView()
+        is VaultAddItemState.ViewState.Content.Login -> toLoginCipherView()
+        is VaultAddItemState.ViewState.Content.SecureNotes -> toSecureNotesCipherView()
     }
 
 /**
- * Transforms [VaultAddItemState.ItemType.Login] into [CipherView].
+ * Transforms [VaultAddItemState.ViewState.Content.Login] into [CipherView].
  */
-private fun VaultAddItemState.ItemType.Login.toLoginCipherView(): CipherView =
+private fun VaultAddItemState.ViewState.Content.Login.toLoginCipherView(): CipherView =
     CipherView(
         id = null,
         // TODO use real organization id BIT-780
@@ -149,9 +149,9 @@ private fun VaultAddItemState.ItemType.Login.toLoginCipherView(): CipherView =
     )
 
 /**
- * Transforms [VaultAddItemState.ItemType.SecureNotes] into [CipherView].
+ * Transforms [VaultAddItemState.ViewState.Content.SecureNotes] into [CipherView].
  */
-private fun VaultAddItemState.ItemType.SecureNotes.toSecureNotesCipherView(): CipherView =
+private fun VaultAddItemState.ViewState.Content.SecureNotes.toSecureNotesCipherView(): CipherView =
     CipherView(
         id = null,
         // TODO use real organization id BIT-780
@@ -189,13 +189,13 @@ private fun VaultAddItemState.ItemType.SecureNotes.toSecureNotesCipherView(): Ci
     )
 
 /**
- * Transforms [VaultAddItemState.ItemType.Identity] into [CipherView].
+ * Transforms [VaultAddItemState.ViewState.Content.Identity] into [CipherView].
  */
-private fun VaultAddItemState.ItemType.Identity.toIdentityCipherView(): CipherView =
+private fun VaultAddItemState.ViewState.Content.Identity.toIdentityCipherView(): CipherView =
     TODO("create Identity CipherView BIT-508")
 
 /**
- * Transforms [VaultAddItemState.ItemType.Card] into [CipherView].
+ * Transforms [VaultAddItemState.ViewState.Content.Card] into [CipherView].
  */
-private fun VaultAddItemState.ItemType.Card.toCardCipherView(): CipherView =
+private fun VaultAddItemState.ViewState.Content.Card.toCardCipherView(): CipherView =
     TODO("create Card CipherView BIT-668")

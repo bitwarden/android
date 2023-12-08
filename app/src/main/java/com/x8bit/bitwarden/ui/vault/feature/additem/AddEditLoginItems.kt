@@ -31,7 +31,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Suppress("LongMethod")
 fun LazyListScope.addEditLoginItems(
-    state: VaultAddItemState.ItemType.Login,
+    state: VaultAddItemState.ViewState.Content.Login,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
 ) {
     item {

@@ -40,11 +40,29 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `initial state should be correct`() = runTest {
-        val viewModel = createAddVaultItemViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(initialState, awaitItem())
-        }
+    fun `initial add state should be correct`() = runTest {
+        val vaultAddEditType = VaultAddEditType.AddItem
+        val initState = createVaultAddLoginItemState(vaultAddEditType = vaultAddEditType)
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(initState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial edit state should be correct`() = runTest {
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val initState = createVaultAddLoginItemState(vaultAddEditType = vaultAddEditType)
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(initState, viewModel.stateFlow.value)
     }
 
     @Test
@@ -188,7 +206,9 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         viewModel.actionChannel.trySend(action)
 
-        val expectedState = initialState.copy(selectedType = VaultAddItemState.ItemType.Login())
+        val expectedState = initialState.copy(
+            viewState = VaultAddItemState.ViewState.Content.Login(),
+        )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -210,10 +230,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(name = "newName")
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -227,10 +247,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(username = "newUsername")
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -244,10 +264,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(password = "newPassword")
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -260,10 +280,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(uri = "newUri")
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -276,10 +296,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(folderName = "newFolder".asText())
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -292,10 +312,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(favorite = true)
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -312,10 +332,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel.actionChannel.trySend(action)
 
                 val expectedLoginItem =
-                    (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                    (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                         .copy(masterPasswordReprompt = true)
 
-                val expectedState = initialState.copy(selectedType = expectedLoginItem)
+                val expectedState = initialState.copy(viewState = expectedLoginItem)
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
@@ -328,10 +348,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(notes = "newNotes")
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -346,10 +366,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedLoginItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.Login)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.Login)
                     .copy(ownership = "newOwner")
 
-            val expectedState = initialState.copy(selectedType = expectedLoginItem)
+            val expectedState = initialState.copy(viewState = expectedLoginItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -496,10 +516,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedSecureNotesItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.SecureNotes)
                     .copy(name = "newName")
 
-            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+            val expectedState = initialState.copy(viewState = expectedSecureNotesItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -513,10 +533,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedSecureNotesItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.SecureNotes)
                     .copy(folderName = "newFolder".asText())
 
-            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+            val expectedState = initialState.copy(viewState = expectedSecureNotesItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -528,10 +548,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedSecureNotesItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.SecureNotes)
                     .copy(favorite = true)
 
-            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+            val expectedState = initialState.copy(viewState = expectedSecureNotesItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -548,10 +568,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel.actionChannel.trySend(action)
 
                 val expectedSecureNotesItem =
-                    (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                    (initialState.viewState as VaultAddItemState.ViewState.Content.SecureNotes)
                         .copy(masterPasswordReprompt = true)
 
-                val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+                val expectedState = initialState.copy(viewState = expectedSecureNotesItem)
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
@@ -565,10 +585,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedSecureNotesItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.SecureNotes)
                     .copy(notes = "newNotes")
 
-            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+            val expectedState = initialState.copy(viewState = expectedSecureNotesItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -582,10 +602,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedSecureNotesItem =
-                (initialState.selectedType as VaultAddItemState.ItemType.SecureNotes)
+                (initialState.viewState as VaultAddItemState.ViewState.Content.SecureNotes)
                     .copy(ownership = "newOwner")
 
-            val expectedState = initialState.copy(selectedType = expectedSecureNotesItem)
+            val expectedState = initialState.copy(viewState = expectedSecureNotesItem)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -618,6 +638,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
     @Suppress("LongParameterList")
     private fun createVaultAddLoginItemState(
+        vaultAddEditType: VaultAddEditType = VaultAddEditType.AddItem,
         name: String = "",
         username: String = "",
         password: String = "",
@@ -630,8 +651,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         dialogState: VaultAddItemState.DialogState? = null,
     ): VaultAddItemState =
         VaultAddItemState(
-            vaultAddEditType = VaultAddEditType.AddItem,
-            selectedType = VaultAddItemState.ItemType.Login(
+            vaultAddEditType = vaultAddEditType,
+            viewState = VaultAddItemState.ViewState.Content.Login(
                 name = name,
                 username = username,
                 password = password,
@@ -657,7 +678,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     ): VaultAddItemState =
         VaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            selectedType = VaultAddItemState.ItemType.SecureNotes(
+            viewState = VaultAddItemState.ViewState.Content.SecureNotes(
                 name = name,
                 folderName = folder,
                 favorite = favorite,
@@ -692,3 +713,5 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepo,
         )
 }
+
+private const val DEFAULT_EDIT_ITEM_ID: String = "edit_item_id"

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -37,11 +38,17 @@ class VaultAddItemViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultAddItemState, VaultAddItemEvent, VaultAddItemAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: VaultAddItemState(
-            vaultAddEditType = VaultAddEditItemArgs(savedStateHandle).vaultAddEditType,
-            selectedType = VaultAddItemState.ItemType.Login(),
-            dialog = null,
-        ),
+        ?: run {
+            val vaultAddEditType = VaultAddEditItemArgs(savedStateHandle).vaultAddEditType
+            VaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                viewState = when (vaultAddEditType) {
+                    VaultAddEditType.AddItem -> VaultAddItemState.ViewState.Content.Login()
+                    is VaultAddEditType.EditItem -> VaultAddItemState.ViewState.Loading
+                },
+                dialog = null,
+            )
+        },
 ) {
 
     //region Initialization and Overrides
@@ -86,8 +93,8 @@ class VaultAddItemViewModel @Inject constructor(
 
     //region Top Level Handlers
 
-    private fun handleSaveClick() {
-        if (state.selectedType.name.isBlank()) {
+    private fun handleSaveClick() = onContent { content ->
+        if (content.name.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
                     dialog = VaultAddItemState.DialogState.Error(
@@ -96,7 +103,7 @@ class VaultAddItemViewModel @Inject constructor(
                     ),
                 )
             }
-            return
+            return@onContent
         }
 
         mutableStateFlow.update {
@@ -111,7 +118,7 @@ class VaultAddItemViewModel @Inject constructor(
             sendAction(
                 action = VaultAddItemAction.Internal.CreateCipherResultReceive(
                     createCipherResult = vaultRepository.createCipher(
-                        cipherView = stateFlow.value.selectedType.toCipherView(),
+                        cipherView = content.toCipherView(),
                     ),
                 ),
             )
@@ -144,35 +151,19 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleSwitchToAddLoginItem() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = VaultAddItemState.ItemType.Login(),
-            )
-        }
+        updateContent { VaultAddItemState.ViewState.Content.Login() }
     }
 
     private fun handleSwitchToAddSecureNotesItem() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = VaultAddItemState.ItemType.SecureNotes(),
-            )
-        }
+        updateContent { VaultAddItemState.ViewState.Content.SecureNotes() }
     }
 
     private fun handleSwitchToAddCardItem() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = VaultAddItemState.ItemType.Card(),
-            )
-        }
+        updateContent { VaultAddItemState.ViewState.Content.Card() }
     }
 
     private fun handleSwitchToAddIdentityItem() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                selectedType = VaultAddItemState.ItemType.Identity(),
-            )
-        }
+        updateContent { VaultAddItemState.ViewState.Content.Identity() }
     }
 
     //endregion Type Option Handlers
@@ -257,7 +248,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginNameTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.NameTextChange,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(name = action.name)
         }
     }
@@ -265,7 +256,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginUsernameTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.UsernameTextChange,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(username = action.username)
         }
     }
@@ -273,7 +264,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginPasswordTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.PasswordTextChange,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(password = action.password)
         }
     }
@@ -281,7 +272,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginURITextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.UriTextChange,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(uri = action.uri)
         }
     }
@@ -289,7 +280,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginFolderTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.FolderChange,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(folderName = action.folder)
         }
     }
@@ -297,7 +288,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginToggleFavorite(
         action: VaultAddItemAction.ItemType.LoginType.ToggleFavorite,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(favorite = action.isFavorite)
         }
     }
@@ -305,7 +296,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginToggleMasterPasswordReprompt(
         action: VaultAddItemAction.ItemType.LoginType.ToggleMasterPasswordReprompt,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(masterPasswordReprompt = action.isMasterPasswordReprompt)
         }
     }
@@ -313,7 +304,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginNotesTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.NotesTextChange,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(notes = action.notes)
         }
     }
@@ -321,7 +312,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginOwnershipTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.OwnershipChange,
     ) {
-        updateLoginType { loginType ->
+        updateLoginContent { loginType ->
             loginType.copy(ownership = action.ownership)
         }
     }
@@ -451,7 +442,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSecureNoteNameTextInputChange(
         action: VaultAddItemAction.ItemType.SecureNotesType.NameTextChange,
     ) {
-        updateSecureNoteType { secureNoteType ->
+        updateSecureNoteContent { secureNoteType ->
             secureNoteType.copy(name = action.name)
         }
     }
@@ -459,7 +450,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSecureNoteFolderTextInputChange(
         action: VaultAddItemAction.ItemType.SecureNotesType.FolderChange,
     ) {
-        updateSecureNoteType { secureNoteType ->
+        updateSecureNoteContent { secureNoteType ->
             secureNoteType.copy(folderName = action.folderName)
         }
     }
@@ -467,7 +458,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSecureNoteToggleFavorite(
         action: VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite,
     ) {
-        updateSecureNoteType { secureNoteType ->
+        updateSecureNoteContent { secureNoteType ->
             secureNoteType.copy(favorite = action.isFavorite)
         }
     }
@@ -475,7 +466,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSecureNoteToggleMasterPasswordReprompt(
         action: VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt,
     ) {
-        updateSecureNoteType { secureNoteType ->
+        updateSecureNoteContent { secureNoteType ->
             secureNoteType.copy(masterPasswordReprompt = action.isMasterPasswordReprompt)
         }
     }
@@ -483,7 +474,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSecureNoteNotesTextInputChange(
         action: VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange,
     ) {
-        updateSecureNoteType { secureNoteType ->
+        updateSecureNoteContent { secureNoteType ->
             secureNoteType.copy(notes = action.note)
         }
     }
@@ -491,7 +482,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSecureNoteOwnershipTextInputChange(
         action: VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange,
     ) {
-        updateSecureNoteType { secureNoteType ->
+        updateSecureNoteContent { secureNoteType ->
             secureNoteType.copy(ownership = action.ownership)
         }
     }
@@ -546,34 +537,38 @@ class VaultAddItemViewModel @Inject constructor(
 
     //region Utility Functions
 
-    private inline fun updateLoginType(
-        crossinline block: (VaultAddItemState.ItemType.Login) -> VaultAddItemState.ItemType.Login,
+    private inline fun onContent(
+        crossinline block: (VaultAddItemState.ViewState.Content) -> Unit,
     ) {
-        mutableStateFlow.update { currentState ->
-            val currentSelectedType = currentState.selectedType
-            if (currentSelectedType !is VaultAddItemState.ItemType.Login) return@update currentState
-
-            val updatedLogin = block(currentSelectedType)
-
-            currentState.copy(selectedType = updatedLogin)
-        }
+        (state.viewState as? VaultAddItemState.ViewState.Content)?.let(block)
     }
 
-    private inline fun updateSecureNoteType(
+    private inline fun updateContent(
         crossinline block: (
-            VaultAddItemState.ItemType.SecureNotes,
-        ) -> VaultAddItemState.ItemType.SecureNotes,
+            VaultAddItemState.ViewState.Content,
+        ) -> VaultAddItemState.ViewState.Content?,
     ) {
-        mutableStateFlow.update { currentState ->
-            val currentSelectedType = currentState.selectedType
-            if (currentSelectedType !is VaultAddItemState.ItemType.SecureNotes) {
-                return@update currentState
-            }
+        val currentViewState = state.viewState
+        val updatedContent = (currentViewState as? VaultAddItemState.ViewState.Content)
+            ?.let(block)
+            ?: return
+        mutableStateFlow.update { it.copy(viewState = updatedContent) }
+    }
 
-            val updatedSecureNote = block(currentSelectedType)
+    private inline fun updateLoginContent(
+        crossinline block: (
+            VaultAddItemState.ViewState.Content.Login,
+        ) -> VaultAddItemState.ViewState.Content.Login,
+    ) {
+        updateContent { (it as? VaultAddItemState.ViewState.Content.Login)?.let(block) }
+    }
 
-            currentState.copy(selectedType = updatedSecureNote)
-        }
+    private inline fun updateSecureNoteContent(
+        crossinline block: (
+            VaultAddItemState.ViewState.Content.SecureNotes,
+        ) -> VaultAddItemState.ViewState.Content.SecureNotes,
+    ) {
+        updateContent { (it as? VaultAddItemState.ViewState.Content.SecureNotes)?.let(block) }
     }
 
     //endregion Utility Functions
@@ -582,14 +577,14 @@ class VaultAddItemViewModel @Inject constructor(
 /**
  * Represents the state for adding an item to the vault.
  *
- * @property selectedType The type of the item (e.g., Card, Identity, SecureNotes)
- * that has been selected to be added to the vault.
+ * @property vaultAddEditType Indicates whether the VM is in add or edit mode.
+ * @property viewState indicates what view state the screen is in.
  * @property dialog the state for the dialogs that can be displayed
  */
 @Parcelize
 data class VaultAddItemState(
     val vaultAddEditType: VaultAddEditType,
-    val selectedType: ItemType,
+    val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
 
@@ -626,125 +621,137 @@ data class VaultAddItemState(
     }
 
     /**
-     * A sealed class representing the item types that can be selected in the vault,
-     * encapsulating the different configurations and properties each item type has.
+     * Represents the specific view states for the [VaultAddItemScreen].
      */
-    @Parcelize
-    sealed class ItemType : Parcelable {
-
+    sealed class ViewState : Parcelable {
         /**
-         * Represents the resource ID for the display string. This is an abstract property
-         * that must be overridden by each subclass to provide the appropriate string resource ID
-         * for display purposes.
-         */
-        abstract val displayStringResId: Int
-
-        /**
-         * Represents the name for the item type. This is an abstract property
-         * that must be overridden to save the item
-         */
-        abstract val name: String
-
-        /**
-         * Represents the login item information.
-         *
-         * @property username The username required for the login item.
-         * @property password The password required for the login item.
-         * @property uri The URI associated with the login item.
-         * @property folderName The folder used for the login item
-         * @property favorite Indicates whether this login item is marked as a favorite.
-         * @property masterPasswordReprompt Indicates if a master password reprompt is required.
-         * @property notes Any additional notes or comments associated with the login item.
-         * @property ownership The ownership email associated with the login item.
-         * @property availableFolders Retrieves a list of available folders.
-         * @property availableOwners Retrieves a list of available owners.
+         * Represents an error state for the [VaultAddItemScreen].
          */
         @Parcelize
-        data class Login(
-            override val name: String = "",
-            val username: String = "",
-            val password: String = "",
-            val uri: String = "",
-            val folderName: Text = DEFAULT_FOLDER,
-            val favorite: Boolean = false,
-            val masterPasswordReprompt: Boolean = false,
-            val notes: String = "",
-            val ownership: String = DEFAULT_OWNERSHIP,
-            // TODO: Update this property to pull available owners from the data layer. (BIT-501)
-            val availableFolders: List<Text> = listOf(
-                "Folder 1".asText(),
-                "Folder 2".asText(),
-                "Folder 3".asText(),
-            ),
-            // TODO: Update this property to pull available owners from the data layer. (BIT-501)
-            val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
-        ) : ItemType() {
-            override val displayStringResId: Int
-                get() = ItemTypeOption.LOGIN.labelRes
+        data class Error(
+            val message: Text,
+        ) : ViewState()
 
-            companion object {
-                private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
-                private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
+        /**
+         * Loading state for the [VaultAddItemScreen], signifying that the content is being
+         * processed.
+         */
+        @Parcelize
+        data object Loading : ViewState()
+
+        /**
+         * Represents a loaded content state for the [VaultAddItemScreen].
+         */
+        @Parcelize
+        sealed class Content : ViewState() {
+            /**
+             * Represents the resource ID for the display string. This is an abstract property
+             * that must be overridden by each subclass to provide the appropriate string resource
+             * ID for display purposes.
+             */
+            @get:StringRes
+            abstract val displayStringResId: Int
+
+            /**
+             * Represents the name for the item type. This is an abstract property that must be
+             * overridden to save the item
+             */
+            abstract val name: String
+
+            /**
+             * Represents the login item information.
+             *
+             * @property username The username required for the login item.
+             * @property password The password required for the login item.
+             * @property uri The URI associated with the login item.
+             * @property folderName The folder used for the login item
+             * @property favorite Indicates whether this login item is marked as a favorite.
+             * @property masterPasswordReprompt Indicates if a master password reprompt is required.
+             * @property notes Any additional notes or comments associated with the login item.
+             * @property ownership The ownership email associated with the login item.
+             * @property availableFolders Retrieves a list of available folders.
+             * @property availableOwners Retrieves a list of available owners.
+             */
+            @Parcelize
+            data class Login(
+                override val name: String = "",
+                val username: String = "",
+                val password: String = "",
+                val uri: String = "",
+                val folderName: Text = DEFAULT_FOLDER,
+                val favorite: Boolean = false,
+                val masterPasswordReprompt: Boolean = false,
+                val notes: String = "",
+                val ownership: String = DEFAULT_OWNERSHIP,
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
+                val availableFolders: List<Text> = listOf(
+                    "Folder 1".asText(),
+                    "Folder 2".asText(),
+                    "Folder 3".asText(),
+                ),
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
+                val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+            ) : Content() {
+                override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
+
+                companion object {
+                    private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
+                    private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
+                }
             }
-        }
 
-        /**
-         * Represents the `Card` item type.
-         */
-        @Parcelize
-        data class Card(
-            // TODO create the Card Item (BIT-509)
-            override val name: String = "",
-        ) : ItemType() {
-            override val displayStringResId: Int
-                get() = ItemTypeOption.CARD.labelRes
-        }
+            /**
+             * Represents the `Card` item type.
+             */
+            @Parcelize
+            data class Card(
+                override val name: String = "",
+            ) : Content() {
+                override val displayStringResId: Int get() = ItemTypeOption.CARD.labelRes
+            }
 
-        /**
-         * Represents the `Identity` item type.
-         */
-        @Parcelize
-        data class Identity(
-            // TODO create the Identity Item (BIT-667)
-            override val name: String = "",
-        ) : ItemType() {
-            override val displayStringResId: Int
-                get() = ItemTypeOption.IDENTITY.labelRes
-        }
+            /**
+             * Represents the `Identity` item type.
+             */
+            @Parcelize
+            data class Identity(
+                override val name: String = "",
+            ) : Content() {
+                override val displayStringResId: Int get() = ItemTypeOption.IDENTITY.labelRes
+            }
 
-        /**
-         * Represents the `SecureNotes` item type.
-         *
-         * @property folder The folder used for the SecureNotes item
-         * @property favorite Indicates whether this SecureNotes item is marked as a favorite.
-         * @property masterPasswordReprompt Indicates if a master password reprompt is required.
-         * @property notes Notes or comments associated with the SecureNotes item.
-         * @property ownership The ownership email associated with the SecureNotes item.
-         * @property availableFolders A list  of available folders.
-         * @property availableOwners A list of available owners.
-         */
-        @Parcelize
-        data class SecureNotes(
-            override val name: String = "",
-            val folderName: Text = DEFAULT_FOLDER,
-            val favorite: Boolean = false,
-            val masterPasswordReprompt: Boolean = false,
-            val notes: String = "",
-            val ownership: String = DEFAULT_OWNERSHIP,
-            val availableFolders: List<Text> = listOf(
-                "Folder 1".asText(),
-                "Folder 2".asText(),
-                "Folder 3".asText(),
-            ),
-            val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
-        ) : ItemType() {
+            /**
+             * Represents the `SecureNotes` item type.
+             *
+             * @property folderName The folder used for the SecureNotes item
+             * @property favorite Indicates whether this SecureNotes item is marked as a favorite.
+             * @property masterPasswordReprompt Indicates if a master password reprompt is required.
+             * @property notes Notes or comments associated with the SecureNotes item.
+             * @property ownership The ownership email associated with the SecureNotes item.
+             * @property availableFolders A list  of available folders.
+             * @property availableOwners A list of available owners.
+             */
+            @Parcelize
+            data class SecureNotes(
+                override val name: String = "",
+                val folderName: Text = DEFAULT_FOLDER,
+                val favorite: Boolean = false,
+                val masterPasswordReprompt: Boolean = false,
+                val notes: String = "",
+                val ownership: String = DEFAULT_OWNERSHIP,
+                val availableFolders: List<Text> = listOf(
+                    "Folder 1".asText(),
+                    "Folder 2".asText(),
+                    "Folder 3".asText(),
+                ),
+                val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+            ) : Content() {
+                override val displayStringResId: Int get() = ItemTypeOption.SECURE_NOTES.labelRes
 
-            override val displayStringResId: Int
-                get() = ItemTypeOption.SECURE_NOTES.labelRes
-
-            companion object {
-                private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
-                private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
+                companion object {
+                    private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
+                    private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
+                }
             }
         }
     }

@@ -26,7 +26,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Suppress("LongMethod")
 fun LazyListScope.addEditSecureNotesItems(
-    state: VaultAddItemState.ItemType.SecureNotes,
+    state: VaultAddItemState.ViewState.Content.SecureNotes,
     secureNotesTypeHandlers: VaultAddSecureNotesItemTypeHandlers,
 ) {
     item {

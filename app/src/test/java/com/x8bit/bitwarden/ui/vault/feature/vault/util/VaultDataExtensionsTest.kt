@@ -109,7 +109,7 @@ class VaultDataExtensionsTest {
     fun `toCipherView should transform Login ItemType to CipherView`() {
         mockkStatic(Instant::class)
         every { Instant.now() } returns Instant.MIN
-        val loginItemType = VaultAddItemState.ItemType.Login(
+        val loginItemType = VaultAddItemState.ViewState.Content.Login(
             name = "mockName-1",
             username = "mockUsername-1",
             password = "mockPassword-1",
@@ -170,7 +170,7 @@ class VaultDataExtensionsTest {
     fun `toCipherView should transform SecureNotes ItemType to CipherView`() {
         mockkStatic(Instant::class)
         every { Instant.now() } returns Instant.MIN
-        val secureNotesItemType = VaultAddItemState.ItemType.SecureNotes(
+        val secureNotesItemType = VaultAddItemState.ViewState.Content.SecureNotes(
             name = "mockName-1",
             folderName = "mockFolder-1".asText(),
             favorite = false,
