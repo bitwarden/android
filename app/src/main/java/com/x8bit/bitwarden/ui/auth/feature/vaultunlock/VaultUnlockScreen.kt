@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
@@ -193,8 +194,16 @@ fun VaultUnlockScreen(
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onAccountSummaryClick = remember(viewModel) {
+                onSwitchAccountClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(it)) }
+                },
+                onLockAccountClick = {
+                    // TODO: Implement lock functionality (BIT-1207)
+                    showNotYetImplementedToast(context)
+                },
+                onLogoutAccountClick = {
+                    // TODO: Implement logout functionality (BIT-1207)
+                    showNotYetImplementedToast(context)
                 },
                 onAddAccountClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultUnlockAction.AddAccountClick) }

@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
@@ -213,10 +214,19 @@ private fun VaultScreenScaffold(
                 )
             }
 
+            val context = LocalContext.current
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onAccountSummaryClick = accountSwitchClickAction,
+                onSwitchAccountClick = accountSwitchClickAction,
+                onLockAccountClick = {
+                    // TODO: Implement lock functionality (BIT-1207)
+                    showNotYetImplementedToast(context)
+                },
+                onLogoutAccountClick = {
+                    // TODO: Implement logout functionality (BIT-1207)
+                    showNotYetImplementedToast(context)
+                },
                 onAddAccountClick = addAccountClickAction,
                 onDismissRequest = { updateAccountMenuVisibility(false) },
                 topAppBarScrollBehavior = scrollBehavior,
