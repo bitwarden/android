@@ -9,8 +9,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Card.displayStringResId
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState.ItemType.Identity.displayStringResId
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -62,6 +60,10 @@ class VaultAddItemViewModel @Inject constructor(
                 handleCloseClick()
             }
 
+            is VaultAddItemAction.DismissDialog -> {
+                handleDismissDialog()
+            }
+
             is VaultAddItemAction.TypeOptionSelect -> {
                 handleTypeOptionSelect(action)
             }
@@ -85,6 +87,18 @@ class VaultAddItemViewModel @Inject constructor(
     //region Top Level Handlers
 
     private fun handleSaveClick() {
+        if (state.selectedType.name.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddItemState.DialogState.Error(
+                        R.string.validation_field_required
+                            .asText(R.string.name.asText()),
+                    ),
+                )
+            }
+            return
+        }
+
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddItemState.DialogState.Loading(
@@ -94,27 +108,13 @@ class VaultAddItemViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            when (state.selectedType) {
-                is VaultAddItemState.ItemType.Login,
-                is VaultAddItemState.ItemType.SecureNotes,
-                -> {
-                    sendAction(
-                        action = VaultAddItemAction.Internal.CreateCipherResultReceive(
-                            createCipherResult = vaultRepository.createCipher(
-                                cipherView = stateFlow.value.selectedType.toCipherView(),
-                            ),
-                        ),
-                    )
-                }
-
-                VaultAddItemState.ItemType.Card -> {
-                    // TODO Add Saving of Card Type (BIT-668)
-                }
-
-                VaultAddItemState.ItemType.Identity -> {
-                    // TODO Add Saving of Identity type (BIT-508)
-                }
-            }
+            sendAction(
+                action = VaultAddItemAction.Internal.CreateCipherResultReceive(
+                    createCipherResult = vaultRepository.createCipher(
+                        cipherView = stateFlow.value.selectedType.toCipherView(),
+                    ),
+                ),
+            )
         }
     }
 
@@ -122,6 +122,12 @@ class VaultAddItemViewModel @Inject constructor(
         sendEvent(
             event = VaultAddItemEvent.NavigateBack,
         )
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
     }
 
     //endregion Top Level Handlers
@@ -156,7 +162,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSwitchToAddCardItem() {
         mutableStateFlow.update { currentState ->
             currentState.copy(
-                selectedType = VaultAddItemState.ItemType.Card,
+                selectedType = VaultAddItemState.ItemType.Card(),
             )
         }
     }
@@ -164,7 +170,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSwitchToAddIdentityItem() {
         mutableStateFlow.update { currentState ->
             currentState.copy(
-                selectedType = VaultAddItemState.ItemType.Identity,
+                selectedType = VaultAddItemState.ItemType.Identity(),
             )
         }
     }
@@ -634,9 +640,14 @@ data class VaultAddItemState(
         abstract val displayStringResId: Int
 
         /**
+         * Represents the name for the item type. This is an abstract property
+         * that must be overridden to save the item
+         */
+        abstract val name: String
+
+        /**
          * Represents the login item information.
          *
-         * @property name The name associated with the login item.
          * @property username The username required for the login item.
          * @property password The password required for the login item.
          * @property uri The URI associated with the login item.
@@ -650,7 +661,7 @@ data class VaultAddItemState(
          */
         @Parcelize
         data class Login(
-            val name: String = "",
+            override val name: String = "",
             val username: String = "",
             val password: String = "",
             val uri: String = "",
@@ -679,22 +690,24 @@ data class VaultAddItemState(
 
         /**
          * Represents the `Card` item type.
-         *
-         * @property displayStringResId Resource ID for the display string of the card type.
          */
         @Parcelize
-        data object Card : ItemType() {
+        data class Card(
+            // TODO create the Card Item (BIT-509)
+            override val name: String = "",
+        ) : ItemType() {
             override val displayStringResId: Int
                 get() = ItemTypeOption.CARD.labelRes
         }
 
         /**
          * Represents the `Identity` item type.
-         *
-         * @property displayStringResId Resource ID for the display string of the identity type.
          */
         @Parcelize
-        data object Identity : ItemType() {
+        data class Identity(
+            // TODO create the Identity Item (BIT-667)
+            override val name: String = "",
+        ) : ItemType() {
             override val displayStringResId: Int
                 get() = ItemTypeOption.IDENTITY.labelRes
         }
@@ -702,7 +715,6 @@ data class VaultAddItemState(
         /**
          * Represents the `SecureNotes` item type.
          *
-         * @property name The name associated with the SecureNotes item.
          * @property folder The folder used for the SecureNotes item
          * @property favorite Indicates whether this SecureNotes item is marked as a favorite.
          * @property masterPasswordReprompt Indicates if a master password reprompt is required.
@@ -713,7 +725,7 @@ data class VaultAddItemState(
          */
         @Parcelize
         data class SecureNotes(
-            val name: String = "",
+            override val name: String = "",
             val folderName: Text = DEFAULT_FOLDER,
             val favorite: Boolean = false,
             val masterPasswordReprompt: Boolean = false,
@@ -747,6 +759,12 @@ data class VaultAddItemState(
          */
         @Parcelize
         data class Loading(val label: Text) : DialogState()
+
+        /**
+         * Displays an error dialog to the user.
+         */
+        @Parcelize
+        data class Error(val message: Text) : DialogState()
     }
 }
 
@@ -781,6 +799,11 @@ sealed class VaultAddItemAction {
      * User clicked close.
      */
     data object CloseClick : VaultAddItemAction()
+
+    /**
+     * The user has clicked to dismiss the dialog.
+     */
+    data object DismissDialog : VaultAddItemAction()
 
     /**
      * Represents the action when a type option is selected.
