@@ -9,4 +9,13 @@ class CiphersServiceImpl constructor(
 ) : CiphersService {
     override suspend fun createCipher(body: CipherJsonRequest): Result<SyncResponseJson.Cipher> =
         ciphersApi.createCipher(body = body)
+
+    override suspend fun updateCipher(
+        cipherId: String,
+        body: CipherJsonRequest,
+    ): Result<SyncResponseJson.Cipher> =
+        ciphersApi.updateCipher(
+            cipherId = cipherId,
+            body = body,
+        )
 }

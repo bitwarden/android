@@ -11,4 +11,12 @@ interface CiphersService {
      * Attempt to create a cipher.
      */
     suspend fun createCipher(body: CipherJsonRequest): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to update a cipher.
+     */
+    suspend fun updateCipher(
+        cipherId: String,
+        body: CipherJsonRequest,
+    ): Result<SyncResponseJson.Cipher>
 }

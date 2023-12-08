@@ -19,8 +19,21 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `createCipher should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_CIPHER_SUCCESS_JSON))
+        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.createCipher(
+            body = createMockCipherJsonRequest(number = 1),
+        )
+        assertEquals(
+            createMockCipher(number = 1),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `updateCipher should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        val result = ciphersService.updateCipher(
+            cipherId = "cipher-id-1",
             body = createMockCipherJsonRequest(number = 1),
         )
         assertEquals(
@@ -30,7 +43,7 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 }
 
-private const val CREATE_CIPHER_SUCCESS_JSON = """
+private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
 {
   "notes": "mockNotes-1",
   "attachments": [
