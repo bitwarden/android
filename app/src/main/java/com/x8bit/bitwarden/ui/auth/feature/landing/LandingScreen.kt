@@ -34,6 +34,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -48,6 +49,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
@@ -178,11 +180,20 @@ fun LandingScreen(
                 .fillMaxSize(),
         )
 
+        val context = LocalContext.current
         BitwardenAccountSwitcher(
             isVisible = isAccountMenuVisible,
             accountSummaries = state.accountSummaries.toImmutableList(),
-            onAccountSummaryClick = remember(viewModel) {
+            onSwitchAccountClick = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.SwitchAccountClick(it)) }
+            },
+            onLockAccountClick = {
+                // TODO: Implement lock functionality (BIT-1207)
+                showNotYetImplementedToast(context)
+            },
+            onLogoutAccountClick = {
+                // TODO: Implement logout functionality (BIT-1207)
+                showNotYetImplementedToast(context)
             },
             onAddAccountClick = {
                 // Not available
