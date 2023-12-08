@@ -31,27 +31,44 @@ import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 @Suppress("LargeClass")
 class VaultAddItemScreenTest : BaseComposeTest() {
 
+    private var onNavigateBackCalled = false
+
+    private val mutableEventFlow = MutableSharedFlow<VaultAddItemEvent>(Int.MAX_VALUE)
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
 
     private val viewModel = mockk<VaultAddItemViewModel>(relaxed = true) {
-        every { eventFlow } returns emptyFlow()
+        every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
+    }
+
+    @Before
+    fun setup() {
+        composeTestRule.setContent {
+            VaultAddItemScreen(
+                viewModel = viewModel,
+                onNavigateBack = { onNavigateBackCalled = true },
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateBack event should invoke onNavigateBack`() {
+        mutableEventFlow.tryEmit(VaultAddItemEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
     }
 
     @Test
     fun `clicking close button should send CloseClick action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
             .performClick()
@@ -65,10 +82,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking save button should send SaveClick action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithText(text = "Save")
             .performClick()
@@ -83,10 +96,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `clicking dismiss dialog button should send DismissDialog action`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         composeTestRule
             .onAllNodesWithText("Ok")
@@ -104,10 +113,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `dialog should display when state is updated to do so`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onAllNodesWithText("Ok")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -123,10 +128,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking a Type Option should send TypeOptionSelect action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
@@ -148,10 +149,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `the Type Option field should display the text of the selected item type`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
             .assertIsDisplayed()
@@ -165,10 +162,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state changing Name text field should trigger NameTextChange`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Name")
             .performTextInput(text = "TestName")
@@ -182,10 +175,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the name control should display the text provided by the state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Name")
             .assertTextContains("")
@@ -201,10 +190,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state changing Username text field should trigger UsernameTextChange`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Username")
             .performTextInput(text = "TestUsername")
@@ -218,10 +203,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the Username control should display the text provided by the state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Username")
             .assertTextContains("")
@@ -238,10 +219,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state clicking Username generator action should trigger OpenUsernameGeneratorClick`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Generate username")
             .performClick()
@@ -256,10 +233,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state clicking Password checker action should trigger PasswordCheckerClick`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
             .onSiblings()
@@ -274,10 +247,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state click Password text field generator action should trigger OpenPasswordGeneratorClick`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
             .onSiblings()
@@ -293,10 +262,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state changing Password text field should trigger PasswordTextChange`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
             .performTextInput(text = "TestPassword")
@@ -310,10 +275,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the Password control should display the text provided by the state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
             .assertTextContains("")
@@ -329,10 +290,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state clicking Set up TOTP button should trigger SetupTotpClick`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Set up TOTP")
             .performClick()
@@ -346,10 +303,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state changing URI text field should trigger UriTextChange`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("URI")
             .performTextInput("TestURI")
@@ -363,10 +316,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the URI control should display the text provided by the state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("URI")
             .assertTextContains("")
@@ -383,10 +332,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state clicking the URI settings action should trigger UriSettingsClick`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "URI")
             .onSiblings()
@@ -402,10 +347,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state clicking the New URI button should trigger AddNewUriClick`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New URI")
             .performClick()
@@ -419,10 +360,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state clicking a Folder Option should send FolderChange action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
@@ -444,10 +381,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the folder control should display the text provided by the state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
             .assertIsDisplayed()
@@ -464,10 +397,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state, toggling the favorite toggle should send ToggleFavorite action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("Favorite")
             .performClick()
@@ -483,10 +412,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the favorite toggle should be enabled or disabled according to state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("Favorite")
             .assertIsOff()
@@ -503,10 +428,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state, toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
             .performTouchInput {
@@ -525,10 +446,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login the master password re-prompt toggle should be enabled or disabled according to state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsOff()
@@ -545,10 +462,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state, toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
             .performClick()
@@ -562,10 +475,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state changing Notes text field should trigger NotesTextChange`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onAllNodesWithTextAfterScroll("Notes")
             .filterToOne(hasSetTextAction())
@@ -580,10 +489,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the Notes control should display the text provided by the state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onAllNodesWithTextAfterScroll("Notes")
             .filterToOne(hasSetTextAction())
@@ -602,10 +507,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state clicking New Custom Field button should trigger AddNewCustomFieldClick`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New custom field")
             .performClick()
@@ -617,10 +518,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state clicking a Ownership option should send OwnershipChange action`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
@@ -644,10 +541,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login the Ownership control should display the text provided by the state`() {
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
                 label = "Who owns this item?, placeholder@email.com",
@@ -667,10 +560,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `in ItemType_SecureNotes state changing Name text field should trigger NameTextChange`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Name")
             .performTextInput(text = "TestName")
@@ -685,10 +574,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes the name control should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Name")
@@ -706,10 +591,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes state clicking a Folder Option should send FolderChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         // Opens the menu
         composeTestRule
@@ -735,10 +616,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `in ItemType_SecureNotes the folder control should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
             .assertIsDisplayed()
@@ -756,10 +633,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes state, toggling the favorite toggle should send ToggleFavorite action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         composeTestRule
             .onNodeWithTextAfterScroll("Favorite")
@@ -779,10 +652,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `in ItemType_SecureNotes the favorite toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("Favorite")
             .assertIsOff()
@@ -800,10 +669,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes state, toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
@@ -825,10 +690,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `in ItemType_SecureNotes the master password re-prompt toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsOff()
@@ -847,10 +708,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `in ItemType_SecureNotes state, toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
             .performClick()
@@ -865,10 +722,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes state changing Notes text field should trigger NotesTextChange`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         composeTestRule
             .onAllNodesWithTextAfterScroll("Notes")
@@ -886,10 +739,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes the Notes control should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         composeTestRule
             .onAllNodesWithTextAfterScroll("Notes")
@@ -911,10 +760,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `in ItemType_SecureNotes state clicking New Custom Field button should trigger AddNewCustomFieldClick`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
-
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New custom field")
             .performClick()
@@ -930,10 +775,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes state clicking a Ownership option should send OwnershipChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         // Opens the menu
         composeTestRule
@@ -958,10 +799,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_SecureNotes the Ownership control should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule.setContent {
-            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
-        }
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, placeholder@email.com")
