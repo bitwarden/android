@@ -2,13 +2,16 @@ package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
@@ -78,6 +81,47 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `clicking dismiss dialog button should send DismissDialog action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.DismissDialog,
+            )
+        }
+    }
+
+    @Test
+    fun `dialog should display when state is updated to do so`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+
+        composeTestRule.setContent {
+            VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsNotDisplayed()
+
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `clicking a Type Option should send TypeOptionSelect action`() {
         composeTestRule.setContent {
             VaultAddItemScreen(viewModel = viewModel, onNavigateBack = {})
@@ -112,7 +156,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
             .assertIsDisplayed()
 
-        mutableStateFlow.update { it.copy(selectedType = VaultAddItemState.ItemType.Card) }
+        mutableStateFlow.update { it.copy(selectedType = VaultAddItemState.ItemType.Card()) }
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Card")
@@ -960,6 +1004,12 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     //endregion Helper functions
 
     companion object {
+        private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddItemState(
+            selectedType = VaultAddItemState.ItemType.Login(),
+            dialog = VaultAddItemState.DialogState.Error("test".asText()),
+            vaultAddEditType = VaultAddEditType.AddItem,
+        )
+
         private val DEFAULT_STATE_LOGIN = VaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
             selectedType = VaultAddItemState.ItemType.Login(),

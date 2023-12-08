@@ -59,26 +59,47 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     @Test
     fun `SaveClick should show dialog, and remove it once an item is saved`() = runTest {
         val stateWithDialog = createVaultAddLoginItemState(
+            name = "tester",
             dialogState = VaultAddItemState.DialogState.Loading(
                 R.string.saving.asText(),
             ),
         )
 
-        val viewModel = createAddVaultItemViewModel()
+        val stateWithName = createVaultAddLoginItemState(
+            name = "tester",
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = stateWithName,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ),
+        )
+
         coEvery {
             vaultRepository.createCipher(any())
         } returns CreateCipherResult.Success
         viewModel.stateFlow.test {
             viewModel.actionChannel.trySend(VaultAddItemAction.SaveClick)
-            assertEquals(initialState, awaitItem())
+            assertEquals(stateWithName, awaitItem())
             assertEquals(stateWithDialog, awaitItem())
-            assertEquals(initialState, awaitItem())
+            assertEquals(stateWithName, awaitItem())
         }
     }
 
     @Test
     fun `SaveClick should update value to loading`() = runTest {
-        val viewModel = createAddVaultItemViewModel()
+        val stateWithName = createVaultAddLoginItemState(
+            name = "tester",
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = stateWithName,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ),
+        )
+
         coEvery {
             vaultRepository.createCipher(any())
         } returns CreateCipherResult.Success
@@ -90,13 +111,73 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SaveClick createCipher error should emit ShowToast`() = runTest {
-        val viewModel = createAddVaultItemViewModel()
+        val stateWithName = createVaultAddLoginItemState(
+            name = "tester",
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = stateWithName,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ),
+        )
+
         coEvery {
             vaultRepository.createCipher(any())
         } returns CreateCipherResult.Error
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultAddItemAction.SaveClick)
             assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure"), awaitItem())
+        }
+    }
+
+    @Test
+    fun `Saving item with an empty name field will cause a dialog to show up`() = runTest {
+        val stateWithNoName = createVaultAddSecureNotesItemState(name = "")
+
+        val stateWithNoNameAndDialog = createVaultAddSecureNotesItemState(
+            name = "",
+            dialogState = VaultAddItemState.DialogState.Error(
+                R.string.validation_field_required
+                    .asText(R.string.name.asText()),
+            ),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = stateWithNoName,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ),
+        )
+        coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
+        viewModel.stateFlow.test {
+            viewModel.actionChannel.trySend(VaultAddItemAction.SaveClick)
+            assertEquals(stateWithNoName, awaitItem())
+            assertEquals(stateWithNoNameAndDialog, awaitItem())
+        }
+    }
+
+    @Test
+    fun `HandleDialogDismiss will remove the current dialog`() = runTest {
+        val errorState = createVaultAddLoginItemState(
+            dialogState = VaultAddItemState.DialogState.Error(
+                R.string.validation_field_required
+                    .asText(R.string.name.asText()),
+            ),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = errorState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ),
+        )
+
+        coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
+        viewModel.stateFlow.test {
+            viewModel.actionChannel.trySend(VaultAddItemAction.DismissDialog)
+            assertEquals(errorState, awaitItem())
+            assertEquals(null, awaitItem().dialog)
         }
     }
 
@@ -572,6 +653,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         masterPasswordReprompt: Boolean = false,
         notes: String = "",
         ownership: String = "placeholder@email.com",
+        dialogState: VaultAddItemState.DialogState? = null,
     ): VaultAddItemState =
         VaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
@@ -583,7 +665,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 notes = notes,
                 ownership = ownership,
             ),
-            dialog = null,
+            dialog = dialogState,
         )
 
     private fun createSavedStateHandleWithState(

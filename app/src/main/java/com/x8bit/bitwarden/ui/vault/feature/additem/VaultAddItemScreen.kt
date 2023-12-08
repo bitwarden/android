@@ -25,6 +25,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
@@ -71,6 +74,16 @@ fun VaultAddItemScreen(
                 visibilityState = LoadingDialogState.Shown(dialogState.label),
             )
         }
+
+        is VaultAddItemState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = dialogState.message,
+            ),
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(VaultAddItemAction.DismissDialog) }
+            },
+        )
 
         null -> Unit
     }
@@ -139,11 +152,11 @@ fun VaultAddItemScreen(
                     )
                 }
 
-                VaultAddItemState.ItemType.Card -> {
+                is VaultAddItemState.ItemType.Card -> {
                     // TODO(BIT-507): Create UI for card-type item creation
                 }
 
-                VaultAddItemState.ItemType.Identity -> {
+                is VaultAddItemState.ItemType.Identity -> {
                     // TODO(BIT-667): Create UI for identity-type item creation
                 }
 
