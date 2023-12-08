@@ -24,6 +24,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
@@ -127,6 +128,43 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `error text and retry should be displayed according to state`() {
+        val message = "error_message"
+        mutableStateFlow.update {
+            it.copy(viewState = VaultAddItemState.ViewState.Loading)
+        }
+        composeTestRule.onNodeWithText(message).assertIsNotDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = VaultAddItemState.ViewState.Content.Login())
+        }
+        composeTestRule.onNodeWithText(message).assertIsNotDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = VaultAddItemState.ViewState.Error(message.asText()))
+        }
+        composeTestRule.onNodeWithText(message).assertIsDisplayed()
+    }
+
+    @Test
+    fun `progressbar should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = VaultAddItemState.ViewState.Loading)
+        }
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = VaultAddItemState.ViewState.Error("Fail".asText()))
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = VaultAddItemState.ViewState.Content.Login())
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+    }
+
+    @Test
     fun `clicking a Type Option should send TypeOptionSelect action`() {
         // Opens the menu
         composeTestRule
@@ -153,7 +191,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
             .assertIsDisplayed()
 
-        mutableStateFlow.update { it.copy(selectedType = VaultAddItemState.ItemType.Card()) }
+        mutableStateFlow.update { it.copy(viewState = VaultAddItemState.ViewState.Content.Card()) }
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Card")
@@ -815,47 +853,48 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     //region Helper functions
 
+    @Suppress("MaxLineLength")
     private fun updateLoginType(
         currentState: VaultAddItemState,
-        transform: VaultAddItemState.ItemType.Login.() -> VaultAddItemState.ItemType.Login,
+        transform: VaultAddItemState.ViewState.Content.Login.() -> VaultAddItemState.ViewState.Content.Login,
     ): VaultAddItemState {
-        val updatedType = when (val currentType = currentState.selectedType) {
-            is VaultAddItemState.ItemType.Login -> currentType.transform()
-            else -> currentType
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddItemState.ViewState.Content.Login -> viewState.transform()
+            else -> viewState
         }
-        return currentState.copy(selectedType = updatedType)
+        return currentState.copy(viewState = updatedType)
     }
 
     @Suppress("MaxLineLength")
     private fun updateSecureNotesType(
         currentState: VaultAddItemState,
-        transform: VaultAddItemState.ItemType.SecureNotes.() -> VaultAddItemState.ItemType.SecureNotes,
+        transform: VaultAddItemState.ViewState.Content.SecureNotes.() -> VaultAddItemState.ViewState.Content.SecureNotes,
     ): VaultAddItemState {
-        val updatedType = when (val currentType = currentState.selectedType) {
-            is VaultAddItemState.ItemType.SecureNotes -> currentType.transform()
-            else -> currentType
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddItemState.ViewState.Content.SecureNotes -> viewState.transform()
+            else -> viewState
         }
-        return currentState.copy(selectedType = updatedType)
+        return currentState.copy(viewState = updatedType)
     }
 
     //endregion Helper functions
 
     companion object {
         private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddItemState(
-            selectedType = VaultAddItemState.ItemType.Login(),
+            viewState = VaultAddItemState.ViewState.Content.Login(),
             dialog = VaultAddItemState.DialogState.Error("test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            selectedType = VaultAddItemState.ItemType.Login(),
+            viewState = VaultAddItemState.ViewState.Content.Login(),
             dialog = null,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            selectedType = VaultAddItemState.ItemType.SecureNotes(),
+            viewState = VaultAddItemState.ViewState.Content.SecureNotes(),
             dialog = null,
         )
     }
