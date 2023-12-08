@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.Core.Resources.Localization;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -42,7 +36,7 @@ namespace Bit.App.Pages
             if (ciphers?.Any() ?? false)
             {
                 groupedItems.Add(
-                    new GroupingsPageListGroup(ciphers.Select(c => new GroupingsPageListItem { Cipher = c }).ToList(),
+                    new GroupingsPageListGroup(ciphers.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)).ToList(),
                         AppResources.MatchingItems,
                         ciphers.Count,
                         false,
@@ -54,7 +48,7 @@ namespace Bit.App.Pages
 
         protected override async Task SelectCipherAsync(IGroupingsPageListItem item)
         {
-            if (!(item is GroupingsPageListItem listItem) || listItem.Cipher is null)
+            if (!(item is CipherItemViewModel listItem) || listItem.Cipher is null)
             {
                 return;
             }

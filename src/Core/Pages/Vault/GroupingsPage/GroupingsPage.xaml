@@ -32,8 +32,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <controls:CipherViewToCipherViewCellViewModelConverter x:Key="cipherViewToCipherViewCellViewModel" />
-
             <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
                          Clicked="Sync_Clicked" Order="Secondary" />
             <ToolbarItem x:Name="_lockItem" x:Key="lockItem" Text="{u:I18n Lock}"
@@ -45,19 +43,14 @@
                          SemanticProperties.Description="{u:I18n AddItem}" />
 
             <DataTemplate x:Key="cipherTemplate"
-                          x:DataType="pages:GroupingsPageListItem">
+                          x:DataType="pages:CipherItemViewModel">
                 <controls:CipherViewCell
-                    BindingContext="{Binding Cipher, Converter={StaticResource cipherViewToCipherViewCellViewModel}}"
-                    ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
-                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
+                    ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
             </DataTemplate>
 
             <DataTemplate x:Key="authenticatorTemplate"
                           x:DataType="pages:GroupingsPageTOTPListItem">
-                <controls:AuthenticatorViewCell 
-                    Cipher="{Binding Cipher}"
-                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
-                    TotpSec="{Binding TotpSec}" />
+                <controls:AuthenticatorViewCell />
             </DataTemplate>
 
             <DataTemplate x:Key="groupTemplate"
@@ -124,7 +117,7 @@
                     IsVisible="{Binding ShowVaultFilter}"
                     Orientation="Horizontal"
                     HorizontalOptions="FillAndExpand"
-                    Margin="0,5,0,0">
+                    Margin="{OnPlatform Android='0,5,0,0', iOS='0,15'}">
                     <Label
                         Text="{Binding VaultFilterDescription}"
                         LineBreakMode="TailTruncation"

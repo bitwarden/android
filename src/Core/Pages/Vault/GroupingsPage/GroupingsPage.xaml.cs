@@ -215,13 +215,21 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if (e.CurrentSelection?.FirstOrDefault() is GroupingsPageTOTPListItem totpItem)
+                var selection = e.CurrentSelection?.FirstOrDefault();
+
+                if (selection is GroupingsPageTOTPListItem totpItem)
                 {
                     await _vm.SelectCipherAsync(totpItem.Cipher);
                     return;
                 }
 
-                if (!(e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item))
+                if (selection is CipherItemViewModel cipherItemVM)
+                {
+                    await _vm.SelectCipherAsync(cipherItemVM.Cipher);
+                    return;
+                }
+
+                if (!(selection is GroupingsPageListItem item))
                 {
                     return;
                 }
@@ -233,10 +241,6 @@ namespace Bit.App.Pages
                 else if (item.IsTotpCode)
                 {
                     await _vm.SelectTotpCodesAsync();
-                }
-                else if (item.Cipher != null)
-                {
-                    await _vm.SelectCipherAsync(item.Cipher);
                 }
                 else if (item.Folder != null)
                 {

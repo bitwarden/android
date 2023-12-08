@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-
-namespace Bit.App.Pages
+﻿namespace Bit.App.Pages
 {
     public class GroupingsPageListItemSelector : DataTemplateSelector
     {
@@ -12,19 +9,24 @@ namespace Bit.App.Pages
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (item is GroupingsPageHeaderListItem)
-            {
-                return HeaderTemplate;
-            }
-
             if (item is GroupingsPageTOTPListItem)
             {
                 return AuthenticatorTemplate;
             }
 
-            if (item is GroupingsPageListItem listItem)
+            if (item is CipherItemViewModel)
             {
-                return listItem.Cipher != null ? CipherTemplate : GroupTemplate;
+                return CipherTemplate;
+            }
+
+            if (item is GroupingsPageHeaderListItem)
+            {
+                return HeaderTemplate;
+            }
+
+            if (item is GroupingsPageListItem)
+            {
+                return GroupTemplate;
             }
 
             return null;

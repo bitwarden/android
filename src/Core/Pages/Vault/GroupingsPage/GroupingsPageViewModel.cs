@@ -25,7 +25,6 @@ namespace Bit.App.Pages
         private bool _websiteIconsEnabled;
         private bool _syncRefreshing;
         private bool _showTotpFilter;
-        private bool _totpFilterEnable;
         private string _noDataText;
         private List<CipherView> _allCiphers;
         private Dictionary<string, int> _folderCounts = new Dictionary<string, int>();
@@ -150,11 +149,6 @@ namespace Bit.App.Pages
             get => _showList;
             set => SetProperty(ref _showList, value);
         }
-        public bool WebsiteIconsEnabled
-        {
-            get => _websiteIconsEnabled;
-            set => SetProperty(ref _websiteIconsEnabled, value);
-        }
         public bool ShowTotp
         {
             get => _showTotpFilter;
@@ -206,7 +200,7 @@ namespace Bit.App.Pages
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
 
-            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
+            _websiteIconsEnabled = await _stateService.GetDisableFaviconAsync() != true;
             try
             {
                 await LoadDataAsync();
@@ -225,7 +219,7 @@ namespace Bit.App.Pages
                 var hasFavorites = FavoriteCiphers?.Any() ?? false;
                 if (hasFavorites)
                 {
-                    var favListItems = FavoriteCiphers.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+                    var favListItems = FavoriteCiphers.Select(c => new CipherItemViewModel(c, _websiteIconsEnabled)).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites,
                         favListItems.Count, uppercaseGroupNames, true));
                 }
@@ -282,7 +276,7 @@ namespace Bit.App.Pages
                 if (ShowNoFolderCipherGroup)
                 {
                     var noFolderCiphersListItems = NoFolderCiphers.Select(
-                        c => new GroupingsPageListItem { Cipher = c }).ToList();
+                        c => new CipherItemViewModel(c, _websiteIconsEnabled)).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(noFolderCiphersListItems, AppResources.FolderNone,
                         noFolderCiphersListItems.Count, uppercaseGroupNames, false));
                 }
@@ -399,7 +393,7 @@ namespace Bit.App.Pages
             _totpTickCts?.Cancel();
             if (ShowTotp)
             {
-                var ciphersListItems = TOTPCiphers.Select(c => new GroupingsPageTOTPListItem(c, true)).ToList();
+                var ciphersListItems = TOTPCiphers.Select(c => new GroupingsPageTOTPListItem(c, _websiteIconsEnabled)).ToList();
                 groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
                     ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
 
@@ -408,7 +402,7 @@ namespace Bit.App.Pages
             else
             {
                 var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted)
-                    .Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+                    .Select(c => new CipherItemViewModel(c, _websiteIconsEnabled)).ToList();
                 groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
                     ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
             }

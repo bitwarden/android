@@ -42,7 +42,7 @@ namespace Bit.App.Pages
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
-            Ciphers = new ExtendedObservableCollection<CipherView>();
+            Ciphers = new ExtendedObservableCollection<CipherItemViewModel>();
             CipherOptionsCommand = CreateDefaultAsyncRelayCommand<CipherView>(cipher => Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
@@ -53,7 +53,7 @@ namespace Bit.App.Pages
 
         public ICommand CipherOptionsCommand { get; }
         public ICommand AddCipherCommand { get; }
-        public ExtendedObservableCollection<CipherView> Ciphers { get; set; }
+        public ExtendedObservableCollection<CipherItemViewModel> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
         public bool Deleted { get; set; }
@@ -87,12 +87,6 @@ namespace Bit.App.Pages
 
         public bool ShowAddCipher => ShowNoData && _appOptions?.OtpData != null;
 
-        public bool WebsiteIconsEnabled
-        {
-            get => _websiteIconsEnabled;
-            set => SetProperty(ref _websiteIconsEnabled, value);
-        }
-
         internal void Prepare(Func<CipherView, bool> filter, bool deleted, AppOptions appOptions)
         {
             Filter = filter;
@@ -105,7 +99,7 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             await InitVaultFilterAsync(true);
-            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
+            _websiteIconsEnabled = await _stateService.GetDisableFaviconAsync() != true;
             PerformSearchIfPopulated();
         }
 
@@ -157,7 +151,7 @@ namespace Bit.App.Pages
                 }
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    Ciphers.ResetWithRange(ciphers);
+                    Ciphers.ResetWithRange(ciphers.Select(c => new CipherItemViewModel(c, _websiteIconsEnabled)).ToList());
                     ShowNoData = !shouldShowAllWhenEmpty && searchable && Ciphers.Count == 0;
                     ShowList = (searchable || shouldShowAllWhenEmpty) && !ShowNoData;
                 });

@@ -1,8 +1,8 @@
 ﻿using Bit.App.Controls;
 using Bit.App.Models;
-using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
@@ -120,9 +120,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (e.CurrentSelection?.FirstOrDefault() is CipherView cipher)
+            if (e.CurrentSelection?.FirstOrDefault() is CipherItemViewModel cipherIteemVM)
             {
-                await _vm.SelectCipherAsync(cipher);
+                await _vm.SelectCipherAsync(cipherIteemVM.Cipher);
             }
         }
 

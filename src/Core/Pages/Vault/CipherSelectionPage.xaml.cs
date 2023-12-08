@@ -1,14 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -37,12 +33,10 @@ namespace Bit.App.Pages
 
             InitializeComponent();
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                ToolbarItems.Add(_closeItem);
-                ToolbarItems.Add(_addItem);
-            }
+#if IOS
+            ToolbarItems.Add(_closeItem);
+            ToolbarItems.Add(_addItem);
+#endif
 
             SetActivityIndicator(_mainContent);
             _vm = BindingContext as CipherSelectionPageViewModel;
@@ -88,12 +82,12 @@ namespace Bit.App.Pages
                 {
                     if (message.Command == "syncStarted")
                     {
-                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                        MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
                     }
                     else if (message.Command == "syncCompleted")
                     {
                         await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             IsBusy = false;
                             if (_vm.LoadedOnce)
@@ -130,11 +124,10 @@ namespace Bit.App.Pages
                 _accountListOverlay.HideAsync().FireAndForget();
                 return true;
             }
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                _appOptions.Uri = null;
-            }
+
+#if ANDROID
+            _appOptions.Uri = null;
+#endif
             return base.OnBackButtonPressed();
         }
 

@@ -1,16 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Models;
-using Bit.Core.Resources.Localization;
+﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -48,7 +43,7 @@ namespace Bit.App.Pages
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
 
-            var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+            var matching = ciphers.Item1?.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)).ToList();
             var hasMatching = matching?.Any() ?? false;
             if (matching?.Any() ?? false)
             {
@@ -57,7 +52,7 @@ namespace Bit.App.Pages
             }
 
             var fuzzy = ciphers.Item2?.Select(c =>
-                new GroupingsPageListItem { Cipher = c, FuzzyAutofill = true }).ToList();
+                new CipherItemViewModel(c, WebsiteIconsEnabled, true)).ToList();
             if (fuzzy?.Any() ?? false)
             {
                 groupedItems.Add(
@@ -70,7 +65,7 @@ namespace Bit.App.Pages
 
         protected override async Task SelectCipherAsync(IGroupingsPageListItem item)
         {
-            if (!(item is GroupingsPageListItem listItem) || listItem.Cipher is null)
+            if (!(item is CipherItemViewModel listItem) || listItem.Cipher is null)
             {
                 return;
             }

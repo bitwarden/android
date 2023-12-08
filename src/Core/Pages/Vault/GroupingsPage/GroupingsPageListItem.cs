@@ -1,8 +1,8 @@
-﻿using Bit.Core.Resources.Localization;
-using Bit.App.Utilities.Automation;
+﻿using Bit.App.Utilities.Automation;
 using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using CollectionView = Bit.Core.Models.View.CollectionView;
 
 namespace Bit.App.Pages
@@ -14,10 +14,8 @@ namespace Bit.App.Pages
 
         public FolderView Folder { get; set; }
         public CollectionView Collection { get; set; }
-        public CipherView Cipher { get; set; }
         public CipherType? Type { get; set; }
         public string ItemCount { get; set; }
-        public bool FuzzyAutofill { get; set; }
         public bool IsTrash { get; set; }
         public bool IsTotpCode { get; set; }
 
