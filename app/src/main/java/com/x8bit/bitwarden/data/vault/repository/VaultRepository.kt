@@ -6,6 +6,7 @@ import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -86,4 +87,12 @@ interface VaultRepository {
      * Attempt to create a cipher.
      */
     suspend fun createCipher(cipherView: CipherView): CreateCipherResult
+
+    /**
+     * Attempt to update a cipher.
+     */
+    suspend fun updateCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UpdateCipherResult
 }

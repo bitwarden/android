@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -253,6 +254,26 @@ class VaultRepositoryImpl constructor(
                 onSuccess = {
                     sync()
                     CreateCipherResult.Success
+                },
+            )
+
+    override suspend fun updateCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UpdateCipherResult =
+        vaultSdkSource
+            .encryptCipher(cipherView = cipherView)
+            .flatMap { cipher ->
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = cipher.toEncryptedNetworkCipher(),
+                )
+            }
+            .fold(
+                onFailure = { UpdateCipherResult.Error },
+                onSuccess = {
+                    sync()
+                    UpdateCipherResult.Success
                 },
             )
 
