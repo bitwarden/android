@@ -67,6 +67,10 @@ class GeneratorViewModel @Inject constructor(
     @Suppress("MaxLineLength")
     override fun handleAction(action: GeneratorAction) {
         when (action) {
+            is GeneratorAction.PasswordHistoryClick -> {
+                handlePasswordHistoryClick()
+            }
+
             is GeneratorAction.RegenerateClick -> {
                 handleRegenerationClick()
             }
@@ -118,6 +122,14 @@ class GeneratorViewModel @Inject constructor(
     }
 
     //endregion Initialization and Overrides
+
+    //region Top Level Handlers
+
+    private fun handlePasswordHistoryClick() {
+        sendEvent(GeneratorEvent.NavigateToPasswordHistory)
+    }
+
+    //endregion Top Level Handlers
 
     //region Generation Handlers
 
@@ -1106,6 +1118,11 @@ data class GeneratorState(
 sealed class GeneratorAction {
 
     /**
+     * Indicates that the overflow option for password history has been clicked.
+     */
+    data object PasswordHistoryClick : GeneratorAction()
+
+    /**
      * Represents the action to regenerate a new passcode or username.
      */
     data object RegenerateClick : GeneratorAction()
@@ -1374,6 +1391,11 @@ sealed class GeneratorAction {
  * the generator screen.
  */
 sealed class GeneratorEvent {
+
+    /**
+     * Navigates to the Password History screen.
+     */
+    data object NavigateToPasswordHistory : GeneratorEvent()
 
     /**
      * Copies text to the clipboard.

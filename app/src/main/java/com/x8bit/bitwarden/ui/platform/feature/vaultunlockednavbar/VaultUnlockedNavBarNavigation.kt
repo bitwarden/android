@@ -21,12 +21,14 @@ fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) 
 /**
  * Add vault unlocked destination to the root nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToVaultAddItem: () -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToNewSend: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
+    onNavigateToPasswordHistory: () -> Unit,
 ) {
     composable(
         route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
@@ -41,6 +43,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToVaultEditItem = onNavigateToVaultEditItem,
             onNavigateToNewSend = onNavigateToNewSend,
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
+            onNavigateToPasswordHistory = onNavigateToPasswordHistory,
         )
     }
 }

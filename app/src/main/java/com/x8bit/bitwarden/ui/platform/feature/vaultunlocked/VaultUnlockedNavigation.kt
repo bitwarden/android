@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteac
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.navigateToDeleteAccount
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
+import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
+import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToNewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.newSendDestination
 import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddEditItem
@@ -46,6 +48,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToNewSend = { navController.navigateToNewSend() },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
+            onNavigateToPasswordHistory = { navController.navigateToPasswordHistory() },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
         vaultAddEditItemDestination(onNavigateBack = { navController.popBackStack() })
@@ -57,5 +60,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         vaultEditItemDestination(onNavigateBack = { navController.popBackStack() })
         newSendDestination(onNavigateBack = { navController.popBackStack() })
+        passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
     }
 }
