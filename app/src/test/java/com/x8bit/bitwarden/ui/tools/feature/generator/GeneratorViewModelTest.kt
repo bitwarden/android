@@ -649,6 +649,108 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 assertEquals(expectedState, viewModel.stateFlow.value)
             }
+
+        @Test
+        fun `Turning off all toggles should automatically turn on useLowercase`() = runTest {
+            val updatedGeneratedPassword = "updatedPassword"
+            fakeGeneratorRepository.setMockGeneratePasswordResult(
+                GeneratedPasswordResult.Success(updatedGeneratedPassword),
+            )
+
+            // Initially turn on all toggles
+            viewModel.actionChannel.trySend(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
+                    useCapitals = true,
+                ),
+            )
+            viewModel.actionChannel.trySend(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleLowercaseLettersChange(
+                        useLowercase = true,
+                    ),
+            )
+            viewModel.actionChannel.trySend(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
+                    useNumbers = true,
+                ),
+            )
+            viewModel.actionChannel.trySend(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleSpecialCharactersChange(
+                        useSpecialChars = true,
+                    ),
+            )
+
+            // Attempt to turn off all toggles
+            viewModel.actionChannel.trySend(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
+                    useCapitals = false,
+                ),
+            )
+            viewModel.actionChannel.trySend(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleLowercaseLettersChange(
+                        useLowercase = false,
+                    ),
+            )
+            viewModel.actionChannel.trySend(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
+                    useNumbers = false,
+                ),
+            )
+
+            // Check the state with only one toggle (useSpecialChars) left on
+            val intermediatePasswordState = GeneratorState.MainType.Passcode.PasscodeType.Password(
+                useCapitals = false,
+                useLowercase = false,
+                useNumbers = false,
+                useSpecialChars = true,
+            )
+
+            val intermediateState = defaultPasswordState.copy(
+                generatedText = updatedGeneratedPassword,
+                selectedType = GeneratorState.MainType.Passcode(
+                    selectedType = intermediatePasswordState,
+                ),
+            )
+
+            assertEquals(intermediateState, viewModel.stateFlow.value)
+
+            viewModel.actionChannel.trySend(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleSpecialCharactersChange(
+                        useSpecialChars = false,
+                    ),
+            )
+
+            // Check if useLowercase is turned on automatically
+            val expectedState = intermediateState.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    selectedType = intermediatePasswordState.copy(
+                        useLowercase = true,
+                        useSpecialChars = false,
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
     }
 
     @Nested
