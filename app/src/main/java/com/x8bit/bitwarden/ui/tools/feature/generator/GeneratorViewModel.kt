@@ -666,7 +666,12 @@ class GeneratorViewModel @Inject constructor(
             if (currentPasswordType !is Password) {
                 return@updateGeneratorMainTypePasscode currentSelectedType
             }
-            currentSelectedType.copy(selectedType = block(currentPasswordType))
+
+            val updatedPasswordType = currentPasswordType
+                .let(block)
+                .enforceAtLeastOneToggleOn()
+
+            currentSelectedType.copy(selectedType = updatedPasswordType)
         }
     }
 
@@ -1409,3 +1414,16 @@ sealed class GeneratorEvent {
         val message: Text,
     ) : GeneratorEvent()
 }
+
+@Suppress("ComplexCondition")
+private fun Password.enforceAtLeastOneToggleOn(): Password =
+    // If all toggles are off, turn on useLowercase
+    if (!this.useCapitals &&
+        !this.useLowercase &&
+        !this.useNumbers &&
+        !this.useSpecialChars
+    ) {
+        this.copy(useLowercase = true)
+    } else {
+        this
+    }
