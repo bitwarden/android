@@ -37,6 +37,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             onNodeWithText("My vault").performClick()
@@ -62,6 +63,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
@@ -88,6 +90,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             onNodeWithText("Send").performClick()
@@ -113,6 +116,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
@@ -139,6 +143,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             onNodeWithText("Generator").performClick()
@@ -164,6 +169,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }
@@ -190,6 +196,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             onNodeWithText("Settings").performClick()
@@ -215,6 +222,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToVaultEditItem = {},
                     onNavigateToNewSend = {},
                     onNavigateToDeleteAccount = {},
+                    onNavigateToPasswordHistory = {},
                 )
             }
             runOnIdle { fakeNavHostController.assertCurrentRoute("vault_graph") }

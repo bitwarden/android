@@ -20,8 +20,12 @@ fun NavController.navigateToGenerator(navOptions: NavOptions? = null) {
 /**
  * Add generator destination to the root nav graph.
  */
-fun NavGraphBuilder.generatorDestination() {
+fun NavGraphBuilder.generatorDestination(
+    onNavigateToPasswordHistory: () -> Unit,
+) {
     composable(GENERATOR_ROUTE) {
-        GeneratorScreen()
+        GeneratorScreen(
+            onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+        )
     }
 }

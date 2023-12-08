@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
@@ -70,6 +71,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MAX
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MIN
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -80,6 +82,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun GeneratorScreen(
     viewModel: GeneratorViewModel = hiltViewModel(),
+    onNavigateToPasswordHistory: () -> Unit,
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -89,6 +92,8 @@ fun GeneratorScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            GeneratorEvent.NavigateToPasswordHistory -> onNavigateToPasswordHistory()
+
             GeneratorEvent.CopyTextToClipboard -> {
                 clipboardManager.setText(AnnotatedString(state.generatedText))
             }
@@ -165,7 +170,20 @@ fun GeneratorScreen(
                 title = stringResource(id = R.string.generator),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    BitwardenOverflowActionItem()
+                    BitwardenOverflowActionItem(
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.password_history),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            GeneratorAction.PasswordHistoryClick,
+                                        )
+                                    }
+                                },
+                            ),
+                        ),
+                    )
                 },
             )
         },
@@ -904,7 +922,9 @@ private fun RandomWordIncludeNumberToggleItem(
 @Composable
 private fun GeneratorPreview() {
     BitwardenTheme {
-        GeneratorScreen()
+        GeneratorScreen(
+            onNavigateToPasswordHistory = {},
+        )
     }
 }
 

@@ -31,10 +31,14 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertTrue
 
 @Suppress("LargeClass")
 class GeneratorScreenTest : BaseComposeTest() {
+    private var onNavigateToPasswordHistoryScreenCalled = false
+
     private val mutableStateFlow = MutableStateFlow(
         GeneratorState(
             generatedText = "Placeholder",
@@ -59,12 +63,24 @@ class GeneratorScreenTest : BaseComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
 
+    @Before
+    fun setup() {
+        composeTestRule.setContent {
+            GeneratorScreen(
+                viewModel = viewModel,
+                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
+            )
+        }
+    }
+
+    @Test
+    fun `NavigateToPasswordHistory event should call onNavigateToPasswordHistoryScreen`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.NavigateToPasswordHistory)
+        assertTrue(onNavigateToPasswordHistoryScreenCalled)
+    }
+
     @Test
     fun `Snackbar should be displayed with correct message on ShowSnackbar event`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         mutableEventFlow.tryEmit(GeneratorEvent.ShowSnackbar("Test Snackbar Message".asText()))
 
         composeTestRule
@@ -74,10 +90,6 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking the Regenerate button should send RegenerateClick action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule
             .onNodeWithContentDescription(label = "Generate password")
             .performClick()
@@ -89,10 +101,6 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking the Copy button should send CopyClick action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule
             .onNodeWithContentDescription(label = "Copy")
             .performClick()
@@ -104,10 +112,6 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking a MainStateOption should send MainTypeOptionSelect action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescription(label = "What would you like to generate?, Password")
@@ -135,10 +139,6 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking a PasscodeOption should send PasscodeTypeOption action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescription(label = "Password type, Password")
@@ -178,10 +178,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescription(label = "Username type, Plus addressed email")
@@ -212,10 +208,6 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `in Passcode_Password state, the ViewModel state should update the UI correctly`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule
             .onNodeWithContentDescription(label = "What would you like to generate?, Password")
             .assertIsDisplayed()
@@ -275,10 +267,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, adjusting the slider should send SliderLengthChange action with length not equal to default`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule
             .onNodeWithText("Length")
             .onSiblings()
@@ -308,10 +296,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the capital letters toggle should send ToggleCapitalLettersChange action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithText("A—Z")
             .performScrollTo()
             .performClick()
@@ -328,10 +312,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use lowercase toggle should send ToggleLowercaseLettersChange action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithText("a—z")
             .performScrollTo()
             .performClick()
@@ -353,10 +333,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use numbers toggle should send ToggleNumbersChange action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithText("0-9")
             .performScrollTo()
             .performClick()
@@ -373,10 +349,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use special characters toggle should send ToggleSpecialCharactersChange action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithText("!@#$%^&*")
             .performScrollTo()
             .performClick()
@@ -414,10 +386,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
             .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
@@ -451,10 +419,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                     ),
             ),
         )
-
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
 
         composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
             .onChildren()
@@ -490,10 +454,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithContentDescription("Minimum numbers, $initialMinNumbers")
             .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
@@ -522,10 +482,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithContentDescription("Minimum numbers, $initialMinNumbers")
             .onChildren()
             .filterToOne(hasContentDescription("+"))
@@ -553,10 +509,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                     ),
             ),
         )
-
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
 
         composeTestRule.onNodeWithContentDescription("Minimum special, 1")
             .onChildren()
@@ -592,10 +544,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithContentDescription("Minimum special, 1")
             .onChildren()
             .filterToOne(hasContentDescription("+"))
@@ -630,10 +578,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithContentDescription("Minimum special, $initialSpecialChars")
             .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
@@ -662,10 +606,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithContentDescription("Minimum special, $initialSpecialChars")
             .onChildren()
             .filterToOne(hasContentDescription("+"))
@@ -678,10 +618,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in Passcode_Password state, toggling the use avoid ambiguous characters toggle should send ToggleSpecialCharactersChange action`() {
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithText("Avoid ambiguous characters")
             .performScrollTo()
             .performClick()
@@ -723,10 +659,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         // Unicode for "minus" used for content description
         composeTestRule
             .onNodeWithContentDescription("Number of words, $initialNumWords")
@@ -762,10 +694,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         // Unicode for "minus" used for content description
         composeTestRule
             .onNodeWithContentDescription("Number of words, $initialNumWords")
@@ -793,10 +721,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                     ),
             ),
         )
-
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
 
         // Unicode for "minus" used for content description
         composeTestRule
@@ -826,10 +750,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                     ),
             ),
         )
-
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
 
         composeTestRule
             .onNodeWithContentDescription("Number of words, 3")
@@ -865,10 +785,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule
             .onNodeWithText("Capitalize")
             .performScrollTo()
@@ -901,10 +817,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithText("Include number")
             .performScrollTo()
             .performClick()
@@ -935,10 +847,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                     ),
             ),
         )
-
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
 
         composeTestRule
             .onNodeWithText("Word separator")
@@ -971,10 +879,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             ),
         )
-
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
 
         val newEmail = "test@example.com"
 
@@ -1011,10 +915,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         val newDomain = "test.com"
 
         // Find the text field for Catch-All Email and input text
@@ -1048,10 +948,6 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
-
         composeTestRule.onNodeWithText("Capitalize")
             .performScrollTo()
             .performClick()
@@ -1076,10 +972,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             ),
         )
-
-        composeTestRule.setContent {
-            GeneratorScreen(viewModel = viewModel)
-        }
 
         composeTestRule.onNodeWithText("Include number")
             .performScrollTo()
