@@ -199,7 +199,7 @@ namespace Bit.App.Pages
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
 
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            App.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
 }

@@ -192,7 +192,7 @@ namespace Bit.App.Pages
 
         private void TwoFactorAuthSuccessWithSSOLocked()
         {
-            Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+            App.MainPage = new NavigationPage(new LockPage(_appOptions));
         }
 
         private async Task TwoFactorAuthSuccessToMainAsync()
@@ -202,7 +202,7 @@ namespace Bit.App.Pages
                 return;
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            App.MainPage = new TabsPage(_appOptions, previousPage);
         }
 
         private void Token_TextChanged(object sender, TextChangedEventArgs e)

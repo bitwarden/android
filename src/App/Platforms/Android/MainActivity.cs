@@ -74,6 +74,10 @@ namespace Bit.Droid
             // this needs to be called here before base.OnCreate(...)
             Intent?.Validate();
 
+            //We need to get and set the Options before calling OnCreate as that will "trigger" CreateWindow on App.xaml.cs
+            _appOptions = GetOptions();
+            ((Bit.App.App)Microsoft.Maui.Controls.Application.Current).SetOptions(_appOptions);
+
             base.OnCreate(savedInstanceState);
 
             _deviceActionService.SetScreenCaptureAllowedAsync().FireAndForget(_ =>
@@ -89,7 +93,6 @@ namespace Bit.Droid
                 toplayout.FilterTouchesWhenObscured = true;
             }
 
-            _appOptions = GetOptions();
             CreateNotificationChannel();
             DisableAndroidFontScale();
 

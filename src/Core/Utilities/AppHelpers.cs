@@ -430,19 +430,19 @@ namespace Bit.App.Utilities
             {
                 if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
                 {
-                    Application.Current.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
+                    App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
                 if (appOptions.Uri != null
                     ||
                     appOptions.OtpData != null)
                 {
-                    Application.Current.MainPage = new NavigationPage(new CipherSelectionPage(appOptions));
+                    App.MainPage = new NavigationPage(new CipherSelectionPage(appOptions));
                     return true;
                 }
                 if (appOptions.CreateSend != null)
                 {
-                    Application.Current.MainPage = new NavigationPage(new SendAddEditPage(appOptions));
+                    App.MainPage = new NavigationPage(new SendAddEditPage(appOptions));
                     return true;
                 }
             }

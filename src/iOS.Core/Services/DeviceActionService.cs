@@ -252,7 +252,7 @@ namespace Bit.iOS.Core.Services
         {
             if (Application.Current is App.App app && app.Options != null && !app.Options.IosExtension)
             {
-                return app.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
+                return Bit.App.App.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
             }
             var vc = GetPresentedViewController();
             if (vc is null)

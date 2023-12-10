@@ -120,11 +120,11 @@ namespace Bit.App.Pages
 
             if (await _vaultTimeoutService.IsLockedAsync())
             {
-                Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+                App.MainPage = new NavigationPage(new LockPage(_appOptions));
             }
             else
             {
-                Application.Current.MainPage = new TabsPage(_appOptions, null);
+                App.MainPage = new TabsPage(_appOptions, null);
             }
         }
     }

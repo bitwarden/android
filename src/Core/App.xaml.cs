@@ -44,6 +44,85 @@ namespace Bit.App
         // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
         private readonly Queue<Action> _onResumeActions = new Queue<Action>();
 
+#if ANDROID
+
+        /*
+         *  ** Workaround for our Android crashes when trying to use Autofill **
+         *
+         * This workaround works by managing the "Window Creation" ourselves. When we get an Autofill initialization we should create a new window instead of reusing the "Main/Current Window".
+         * While this workaround works, it's hard to execute the "workflow" that devices where we should navigate to. Below are some of the things we tried:
+         *  1 - Tried creating "new Window(new NavigationPage)" and invoking the code for handling the Navigations afterward. Issue with this is that the code that handles the navigations doesn't know which "Window" to use and calls the default "Window.Page"
+         *  2 - Tried using CustomWindow implementations to track the "WindowCreated" event and to be able to distinguish the different Window types (Default Window or Window for Autofill for example).
+         *      This solution had a bit of overhear work and still required the app to set something line "new Window(new NavigationPage)" before actually knowing where we wanted to navigate to.
+         *
+         * Ideally we could figure out the Navigation we want to do before CreateWindow (on MainActivity.OnCreate) for example. But this needs to be done in async anyway we can't do async in both CreateWindow and MainActivity.OnCreate
+         */
+
+        public new static Page MainPage
+        {
+            get
+            {
+                return CurrentWindow?.Page;
+            }
+            set
+            {
+                if (CurrentWindow != null)
+                {
+                    CurrentWindow.Page = value;
+                }
+            }
+        }   
+
+        public static Window CurrentWindow { get; private set; }
+
+        public void SetOptions(AppOptions appOptions)
+        {
+            Options = appOptions;
+        }
+        
+        protected override Window CreateWindow(IActivationState activationState)
+        {
+            if (activationState != null 
+                && activationState.State.TryGetValue("autofillFramework", out string autofillFramework)
+                && autofillFramework == "true") //TODO: There are likely better ways to filter this. Maybe using Options.
+            {
+                if (activationState.State.ContainsKey("autofillFrameworkCipherId")) //TODO: There are likely better ways to filter this. Maybe using Options.
+                {
+                    return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
+                }
+                else
+                {
+                    //TODO: IMPORTANT Question: this works if we want to show the CipherSelection, but we are skipping all our ASYNC Navigation workflows where we (for example) check if the user is logged in and/or needs to enter auth again.
+                    var autofillWindow = new Window(new NavigationPage(new CipherSelectionPage(Options)));
+                    return autofillWindow;
+                }
+            }
+            else if(CurrentWindow != null)
+            {
+                //TODO: This likely crashes if we try to have two apps side-by-side on Android
+                //TODO: Question: In these scenarios should a new Window be created or can the same one be reused?
+                return CurrentWindow;
+            }
+            else
+            {
+                CurrentWindow = new Window(new NavigationPage(new HomePage(Options)));
+                return CurrentWindow;
+            }
+        }
+#elif IOS
+        public new static Page MainPage
+        {
+            get
+            {
+                return Application.Current.MainPage;
+            }
+            set
+            {
+                Application.Current.MainPage = value;
+            }
+        }   
+#endif
+
         public App() : this(null)
         {
         }
@@ -432,11 +511,11 @@ namespace Bit.App
                         Options.Uri = null;
                         if (isLocked)
                         {
-                            MainPage = new NavigationPage(new LockPage());
+                            App.MainPage = new NavigationPage(new LockPage());
                         }
                         else
                         {
-                            MainPage = new TabsPage();
+                            App.MainPage = new TabsPage();
                         }
                     });
                 });
@@ -463,7 +542,6 @@ namespace Bit.App
             {
                 UpdateThemeAsync();
             };
-            MainPage = new NavigationPage(new HomePage(Options));
             _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
         }
@@ -535,36 +613,36 @@ namespace Bit.App
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    MainPage = new NavigationPage(new HomePage(Options));
+                    App.MainPage = new NavigationPage(new HomePage(Options));
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)
                     {
-                        MainPage = new NavigationPage(new LoginPage(loginParams.Email, Options));
+                        App.MainPage = new NavigationPage(new LoginPage(loginParams.Email, Options));
                     }
                     break;
                 case NavigationTarget.Lock:
                     if (navParams is LockNavigationParams lockParams)
                     {
-                        MainPage = new NavigationPage(new LockPage(Options, lockParams.AutoPromptBiometric));
+                        App.MainPage = new NavigationPage(new LockPage(Options, lockParams.AutoPromptBiometric));
                     }
                     else
                     {
-                        MainPage = new NavigationPage(new LockPage(Options));
+                        App.MainPage = new NavigationPage(new LockPage(Options));
                     }
                     break;
                 case NavigationTarget.Home:
-                    MainPage = new TabsPage(Options);
+                    App.MainPage = new TabsPage(Options);
                     break;
                 case NavigationTarget.AddEditCipher:
-                    MainPage = new NavigationPage(new CipherAddEditPage(appOptions: Options));
+                    App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: Options));
                     break;
                 case NavigationTarget.AutofillCiphers:
                 case NavigationTarget.OtpCipherSelection:
-                    MainPage = new NavigationPage(new CipherSelectionPage(Options));
+                    App.MainPage = new NavigationPage(new CipherSelectionPage(Options));
                     break;
                 case NavigationTarget.SendAddEdit:
-                    MainPage = new NavigationPage(new SendAddEditPage(Options));
+                    App.MainPage = new NavigationPage(new SendAddEditPage(Options));
                     break;
             }
         }

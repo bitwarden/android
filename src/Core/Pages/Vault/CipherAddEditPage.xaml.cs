@@ -184,7 +184,7 @@ namespace Bit.App.Pages
         {
             if (FromAutofillFramework)
             {
-                Microsoft.Maui.Controls.Application.Current.MainPage = new TabsPage();
+                App.MainPage = new TabsPage();
                 return true;
             }
             return base.OnBackButtonPressed();

@@ -36,7 +36,7 @@ namespace Bit.App.Pages
                 return;
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            App.MainPage = new TabsPage(_appOptions, previousPage);
         }
 
         private async Task StartLogInWithMasterPasswordAsync()
