@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -35,6 +36,7 @@ private const val KEY_STATE = "state"
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
+    private val vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -68,6 +70,8 @@ class LoginViewModel @Inject constructor(
 
     override fun handleAction(action: LoginAction) {
         when (action) {
+            is LoginAction.LockAccountClick -> handleLockAccountClicked(action)
+            is LoginAction.LogoutAccountClick -> handleLogoutAccountClicked(action)
             is LoginAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
             is LoginAction.CloseButtonClick -> handleCloseButtonClicked()
             LoginAction.LoginButtonClick -> handleLoginButtonClicked()
@@ -84,6 +88,14 @@ class LoginViewModel @Inject constructor(
                 handleReceiveLoginResult(action = action)
             }
         }
+    }
+
+    private fun handleLockAccountClicked(action: LoginAction.LockAccountClick) {
+        vaultRepository.lockVaultIfNecessary(userId = action.accountSummary.userId)
+    }
+
+    private fun handleLogoutAccountClicked(action: LoginAction.LogoutAccountClick) {
+        authRepository.logout(userId = action.accountSummary.userId)
     }
 
     private fun handleSwitchAccountClicked(action: LoginAction.SwitchAccountClick) {
@@ -234,6 +246,23 @@ sealed class LoginEvent {
  * Models actions for the login screen.
  */
 sealed class LoginAction {
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to lock
+     * the associated account's vault.
+     */
+    data class LockAccountClick(
+        val accountSummary: AccountSummary,
+    ) : LoginAction()
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to log out
+     * of that account.
+     */
+    data class LogoutAccountClick(
+        val accountSummary: AccountSummary,
+    ) : LoginAction()
+
     /**
      * Indicates the user has clicked on the given [accountSummary] information in order to switch
      * to it.

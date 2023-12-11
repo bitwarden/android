@@ -36,9 +36,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { specialCircumstance } returns null
         every { specialCircumstance = any() } just runs
         every { logout() } just runs
+        every { logout(any()) } just runs
         every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
     }
-    private val vaultRepository = mockk<VaultRepository>()
+    private val vaultRepository: VaultRepository = mockk(relaxed = true) {
+        every { lockVaultIfNecessary(any()) } just runs
+    }
 
     @Test
     fun `initial state should be correct when not set`() {
@@ -165,6 +168,32 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(passwordInput = password),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `on LockAccountClick should call lockVaultIfNecessary for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultUnlockAction.LockAccountClick(accountSummary))
+
+        verify { vaultRepository.lockVaultIfNecessary(userId = accountUserId) }
+    }
+
+    @Test
+    fun `on LogoutAccountClick should call logout for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(accountSummary))
+
+        verify { authRepository.logout(userId = accountUserId) }
     }
 
     @Test

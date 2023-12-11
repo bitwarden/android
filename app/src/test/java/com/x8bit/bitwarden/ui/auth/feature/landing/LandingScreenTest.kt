@@ -22,10 +22,15 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
-import com.x8bit.bitwarden.ui.util.performAccountIconClick
 import com.x8bit.bitwarden.ui.util.performAccountClick
+import com.x8bit.bitwarden.ui.util.performAccountIconClick
+import com.x8bit.bitwarden.ui.util.performAccountLongClick
+import com.x8bit.bitwarden.ui.util.performLockAccountClick
+import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -112,6 +117,60 @@ class LandingScreenTest : BaseComposeTest() {
         composeTestRule.assertSwitcherIsNotDisplayed(
             accountSummaries = accountSummaries,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account long click in the account switcher should show the lock-or-logout dialog and close the switcher`() {
+        // Show the account switcher
+        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        mutableStateFlow.update {
+            it.copy(accountSummaries = accountSummaries)
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule.performAccountLongClick(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+
+        composeTestRule.assertLockOrLogoutDialogIsDisplayed(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `lock button click in the lock-or-logout dialog should send LockAccountClick action and close the dialog`() {
+        // Show the lock-or-logout dialog
+        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        mutableStateFlow.update {
+            it.copy(accountSummaries = accountSummaries)
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+
+        composeTestRule.performLockAccountClick()
+
+        verify { viewModel.trySendAction(LandingAction.LockAccountClick(ACTIVE_ACCOUNT_SUMMARY)) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `logout button click in the lock-or-logout dialog should send LogoutAccountClick action and close the dialog`() {
+        // Show the lock-or-logout dialog
+        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        mutableStateFlow.update {
+            it.copy(accountSummaries = accountSummaries)
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+
+        composeTestRule.performLogoutAccountClick()
+
+        verify { viewModel.trySendAction(LandingAction.LogoutAccountClick(ACTIVE_ACCOUNT_SUMMARY)) }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test

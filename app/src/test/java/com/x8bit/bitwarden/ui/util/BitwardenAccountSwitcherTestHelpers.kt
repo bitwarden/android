@@ -1,10 +1,16 @@
 package com.x8bit.bitwarden.ui.util
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 
 private const val ACCOUNT = "Account"
@@ -44,12 +50,72 @@ fun ComposeContentTestRule.assertSwitcherIsNotDisplayed(
 }
 
 /**
+ * Asserts the "lock or logout" dialog is currently displayed with information from the given
+ * [accountSummary].
+ */
+fun ComposeContentTestRule.assertLockOrLogoutDialogIsDisplayed(
+    accountSummary: AccountSummary,
+) {
+    this.waitForIdle()
+    this
+        .onNode(isDialog())
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText("Lock")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText("Log out")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(accountSummary.email, substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(accountSummary.environmentLabel, substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+}
+
+/**
  * Clicks on the given [accountSummary] in the account switcher.
  */
 fun ComposeContentTestRule.performAccountClick(
     accountSummary: AccountSummary,
 ) {
     this.onNodeWithText(accountSummary.email).performClick()
+}
+
+/**
+ * Long clicks on the given [accountSummary] in the account switcher.
+ */
+fun ComposeContentTestRule.performAccountLongClick(
+    accountSummary: AccountSummary,
+) {
+    this.onNodeWithText(accountSummary.email).performTouchInput {
+        this.longClick()
+    }
+}
+
+/**
+ * Clicks the "Lock" button in the "lock or logout" dialog.
+ */
+fun ComposeContentTestRule.performLockAccountClick() {
+    this
+        .onAllNodesWithText("Lock")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .performClick()
+}
+
+/**
+ * Clicks the "Lock" button in the "lock or logout" dialog.
+ */
+fun ComposeContentTestRule.performLogoutAccountClick() {
+    this
+        .onAllNodesWithText("Log out")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .performClick()
 }
 
 /**

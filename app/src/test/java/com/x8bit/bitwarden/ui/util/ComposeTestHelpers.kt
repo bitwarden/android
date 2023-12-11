@@ -8,6 +8,7 @@ import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
@@ -27,6 +28,15 @@ val isProgressBar: SemanticsMatcher
             ?.let { true }
             ?: false
     }
+
+/**
+ * Asserts that no dialog currently exists.
+ */
+fun ComposeContentTestRule.assertNoDialogExists() {
+    this
+        .onNode(isDialog())
+        .assertDoesNotExist()
+}
 
 /**
  * A helper that asserts that the node does not exist in the scrollable list.

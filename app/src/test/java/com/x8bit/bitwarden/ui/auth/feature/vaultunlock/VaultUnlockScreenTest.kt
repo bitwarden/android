@@ -15,11 +15,16 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
 import com.x8bit.bitwarden.ui.util.performAccountClick
 import com.x8bit.bitwarden.ui.util.performAccountIconClick
+import com.x8bit.bitwarden.ui.util.performAccountLongClick
 import com.x8bit.bitwarden.ui.util.performAddAccountClick
+import com.x8bit.bitwarden.ui.util.performLockAccountClick
+import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -90,6 +95,52 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         composeTestRule.assertSwitcherIsNotDisplayed(
             accountSummaries = ACCOUNT_SUMMARIES,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account long click in the account switcher should show the lock-or-logout dialog and close the switcher`() {
+        // Show the account switcher
+        composeTestRule.performAccountIconClick()
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule.performAccountLongClick(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+
+        composeTestRule.assertLockOrLogoutDialogIsDisplayed(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `lock button click in the lock-or-logout dialog should send LockAccountClick action and close the dialog`() {
+        // Show the lock-or-logout dialog
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+
+        composeTestRule.performLockAccountClick()
+
+        verify {
+            viewModel.trySendAction(VaultUnlockAction.LockAccountClick(ACTIVE_ACCOUNT_SUMMARY))
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `logout button click in the lock-or-logout dialog should send LogoutAccountClick action and close the dialog`() {
+        // Show the lock-or-logout dialog
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+
+        composeTestRule.performLogoutAccountClick()
+
+        verify {
+            viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(ACTIVE_ACCOUNT_SUMMARY))
+        }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test

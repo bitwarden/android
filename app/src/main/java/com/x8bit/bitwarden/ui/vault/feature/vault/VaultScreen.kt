@@ -28,7 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
@@ -87,6 +86,12 @@ fun VaultScreen(
         searchIconClickAction = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.SearchIconClick) }
         },
+        accountLockClickAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.LockAccountClick(it)) }
+        },
+        accountLogoutClickAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.LogoutAccountClick(it)) }
+        },
         accountSwitchClickAction = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.SwitchAccountClick(it)) }
         },
@@ -128,6 +133,8 @@ private fun VaultScreenScaffold(
     state: VaultState,
     addItemClickAction: () -> Unit,
     searchIconClickAction: () -> Unit,
+    accountLockClickAction: (AccountSummary) -> Unit,
+    accountLogoutClickAction: (AccountSummary) -> Unit,
     accountSwitchClickAction: (AccountSummary) -> Unit,
     addAccountClickAction: () -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
@@ -219,14 +226,8 @@ private fun VaultScreenScaffold(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
                 onSwitchAccountClick = accountSwitchClickAction,
-                onLockAccountClick = {
-                    // TODO: Implement lock functionality (BIT-1207)
-                    showNotYetImplementedToast(context)
-                },
-                onLogoutAccountClick = {
-                    // TODO: Implement logout functionality (BIT-1207)
-                    showNotYetImplementedToast(context)
-                },
+                onLockAccountClick = accountLockClickAction,
+                onLogoutAccountClick = accountLogoutClickAction,
                 onAddAccountClick = addAccountClickAction,
                 onDismissRequest = { updateAccountMenuVisibility(false) },
                 topAppBarScrollBehavior = scrollBehavior,
