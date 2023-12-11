@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -21,7 +20,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultNoItems
  */
 @Composable
 fun VaultItemListingEmpty(
-    paddingValues: PaddingValues,
     itemListingType: VaultItemListingState.ItemListingType,
     addItemClickAction: () -> Unit,
     modifier: Modifier = Modifier,
@@ -43,7 +41,7 @@ fun VaultItemListingEmpty(
 
         else -> {
             VaultNoItems(
-                paddingValues = paddingValues,
+                modifier = modifier,
                 addItemClickAction = addItemClickAction,
             )
         }
