@@ -87,7 +87,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.IdentityGroupClick -> handleIdentityClick()
             is VaultAction.LoginGroupClick -> handleLoginClick()
             is VaultAction.SearchIconClick -> handleSearchIconClick()
-            is VaultAction.AccountSwitchClick -> handleAccountSwitchClick(action)
+            is VaultAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             is VaultAction.AddAccountClick -> handleAddAccountClick()
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.TrashClick -> handleTrashClick()
@@ -128,7 +128,7 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToVaultSearchScreen)
     }
 
-    private fun handleAccountSwitchClick(action: VaultAction.AccountSwitchClick) {
+    private fun handleSwitchAccountClick(action: VaultAction.SwitchAccountClick) {
         val isSwitchingAccounts =
             when (authRepository.switchAccount(userId = action.accountSummary.userId)) {
                 SwitchAccountResult.AccountSwitched -> true
@@ -464,7 +464,7 @@ sealed class VaultAction {
     /**
      * User clicked an account in the account switcher.
      */
-    data class AccountSwitchClick(
+    data class SwitchAccountClick(
         val accountSummary: AccountSummary,
     ) : VaultAction()
 

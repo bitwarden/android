@@ -341,7 +341,7 @@ class LandingScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                LandingAction.ConfirmSwitchToMatchingAccountClick(account = accountSummary),
+                LandingAction.ConfirmSwitchToMatchingAccountClick(accountSummary = accountSummary),
             )
         }
     }

@@ -93,13 +93,13 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleSwitchAccountClicked(action: LandingAction.SwitchAccountClick) {
-        authRepository.switchAccount(userId = action.account.userId)
+        authRepository.switchAccount(userId = action.accountSummary.userId)
     }
 
     private fun handleConfirmSwitchToMatchingAccountClicked(
         action: LandingAction.ConfirmSwitchToMatchingAccountClick,
     ) {
-        authRepository.switchAccount(userId = action.account.userId)
+        authRepository.switchAccount(userId = action.accountSummary.userId)
     }
 
     private fun handleEmailInputUpdated(action: LandingAction.EmailInputChanged) {
@@ -248,17 +248,18 @@ sealed class LandingEvent {
  */
 sealed class LandingAction {
     /**
-     * Indicates the user has clicked on the given [account] information in order to switch to it.
+     * Indicates the user has clicked on the given [accountSummary] information in order to switch
+     * to it.
      */
     data class SwitchAccountClick(
-        val account: AccountSummary,
+        val accountSummary: AccountSummary,
     ) : LandingAction()
 
     /**
-     * Indicates the user has confirmed they would like to switch to the existing [account].
+     * Indicates the user has confirmed they would like to switch to the existing [accountSummary].
      */
     data class ConfirmSwitchToMatchingAccountClick(
-        val account: AccountSummary,
+        val accountSummary: AccountSummary,
     ) : LandingAction()
 
     /**

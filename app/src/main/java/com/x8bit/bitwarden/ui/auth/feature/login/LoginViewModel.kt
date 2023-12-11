@@ -87,7 +87,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleSwitchAccountClicked(action: LoginAction.SwitchAccountClick) {
-        authRepository.switchAccount(userId = action.account.userId)
+        authRepository.switchAccount(userId = action.accountSummary.userId)
     }
 
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
@@ -235,10 +235,11 @@ sealed class LoginEvent {
  */
 sealed class LoginAction {
     /**
-     * Indicates the user has clicked on the given [account] information in order to switch to it.
+     * Indicates the user has clicked on the given [accountSummary] information in order to switch
+     * to it.
      */
     data class SwitchAccountClick(
-        val account: AccountSummary,
+        val accountSummary: AccountSummary,
     ) : LoginAction()
 
     /**
