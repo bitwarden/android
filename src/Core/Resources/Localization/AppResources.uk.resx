@@ -1176,17 +1176,17 @@
     <value>Відкрити налаштування автозаповнення</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Розпізнавання обличчя</value>
+    <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Використовувати розпізнавання обличчя для підтвердження.</value>
+    <value>Використовувати Face ID для підтвердження.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
     <value>Розблокування з Face ID</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Підтвердження розпізнавання обличчя</value>
+    <value>Підтвердження Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
@@ -2354,7 +2354,7 @@
     <value>Схвалювати запити на вхід</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Використовувати цей пристрій для схвалення запитів на вхід, виконаних з інших пристроїв</value>
+    <value>Схвалювати запити на вхід, виконані з інших пристроїв</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Дозволити сповіщення</value>

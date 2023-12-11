@@ -32,3 +32,6 @@ src/App/Resources/AppResources.resx
 src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization/en.lproj
 store/apple/en
 store/google/en
+
+## Utils ##
+store/google/Publisher
