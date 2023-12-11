@@ -95,7 +95,7 @@ fun VaultAddItemScreen(
             is VaultAddItemState.ViewState.Content -> {
                 AddEditItemContent(
                     viewState = viewState,
-                    shouldShowTypeSelector = state.shouldShowTypeSelector,
+                    isAddItemMode = state.isAddItemMode,
                     onTypeOptionClicked = remember(viewModel) {
                         { viewModel.trySendAction(VaultAddItemAction.TypeOptionSelect(it)) }
                     },

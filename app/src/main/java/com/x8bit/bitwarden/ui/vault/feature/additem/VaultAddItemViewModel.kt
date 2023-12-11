@@ -188,7 +188,7 @@ class VaultAddItemViewModel @Inject constructor(
             }
 
             is VaultAddItemAction.ItemType.LoginType.UriTextChange -> {
-                handleLoginURITextInputChange(action)
+                handleLoginUriTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.FolderChange -> {
@@ -269,7 +269,7 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleLoginURITextInputChange(
+    private fun handleLoginUriTextInputChange(
         action: VaultAddItemAction.ItemType.LoginType.UriTextChange,
     ) {
         updateLoginContent { loginType ->
@@ -598,15 +598,9 @@ data class VaultAddItemState(
         }
 
     /**
-     * Helper to determine if the UI should display the type selector.
+     * Helper to determine if the UI should display the content in add item mode.
      */
-    val shouldShowTypeSelector: Boolean get() = vaultAddEditType == VaultAddEditType.AddItem
-
-    /**
-     * Provides a list of available item types for the vault.
-     */
-    val typeOptions: List<ItemTypeOption>
-        get() = ItemTypeOption.entries.toList()
+    val isAddItemMode: Boolean get() = vaultAddEditType == VaultAddEditType.AddItem
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
@@ -659,6 +653,21 @@ data class VaultAddItemState(
             abstract val name: String
 
             /**
+             * Indicates if a master password reprompt is required.
+             */
+            abstract val masterPasswordReprompt: Boolean
+
+            /**
+             * The ownership email associated with the login item.
+             */
+            abstract val ownership: String
+
+            /**
+             * A list of available owners.
+             */
+            abstract val availableOwners: List<String>
+
+            /**
              * Represents the login item information.
              *
              * @property username The username required for the login item.
@@ -666,11 +675,8 @@ data class VaultAddItemState(
              * @property uri The URI associated with the login item.
              * @property folderName The folder used for the login item
              * @property favorite Indicates whether this login item is marked as a favorite.
-             * @property masterPasswordReprompt Indicates if a master password reprompt is required.
              * @property notes Any additional notes or comments associated with the login item.
-             * @property ownership The ownership email associated with the login item.
              * @property availableFolders Retrieves a list of available folders.
-             * @property availableOwners Retrieves a list of available owners.
              */
             @Parcelize
             data class Login(
@@ -680,9 +686,8 @@ data class VaultAddItemState(
                 val uri: String = "",
                 val folderName: Text = DEFAULT_FOLDER,
                 val favorite: Boolean = false,
-                val masterPasswordReprompt: Boolean = false,
+                override val masterPasswordReprompt: Boolean = false,
                 val notes: String = "",
-                val ownership: String = DEFAULT_OWNERSHIP,
                 // TODO: Update this property to get available owners from the data layer (BIT-501)
                 val availableFolders: List<Text> = listOf(
                     "Folder 1".asText(),
@@ -690,14 +695,10 @@ data class VaultAddItemState(
                     "Folder 3".asText(),
                 ),
                 // TODO: Update this property to get available owners from the data layer (BIT-501)
-                val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+                override val ownership: String = DEFAULT_OWNERSHIP,
+                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
                 override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
-
-                companion object {
-                    private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
-                    private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
-                }
             }
 
             /**
@@ -706,6 +707,9 @@ data class VaultAddItemState(
             @Parcelize
             data class Card(
                 override val name: String = "",
+                override val masterPasswordReprompt: Boolean = false,
+                override val ownership: String = DEFAULT_OWNERSHIP,
+                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
                 override val displayStringResId: Int get() = ItemTypeOption.CARD.labelRes
             }
@@ -716,6 +720,9 @@ data class VaultAddItemState(
             @Parcelize
             data class Identity(
                 override val name: String = "",
+                override val masterPasswordReprompt: Boolean = false,
+                override val ownership: String = DEFAULT_OWNERSHIP,
+                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
                 override val displayStringResId: Int get() = ItemTypeOption.IDENTITY.labelRes
             }
@@ -725,33 +732,30 @@ data class VaultAddItemState(
              *
              * @property folderName The folder used for the SecureNotes item
              * @property favorite Indicates whether this SecureNotes item is marked as a favorite.
-             * @property masterPasswordReprompt Indicates if a master password reprompt is required.
              * @property notes Notes or comments associated with the SecureNotes item.
-             * @property ownership The ownership email associated with the SecureNotes item.
              * @property availableFolders A list  of available folders.
-             * @property availableOwners A list of available owners.
              */
             @Parcelize
             data class SecureNotes(
                 override val name: String = "",
                 val folderName: Text = DEFAULT_FOLDER,
                 val favorite: Boolean = false,
-                val masterPasswordReprompt: Boolean = false,
+                override val masterPasswordReprompt: Boolean = false,
                 val notes: String = "",
-                val ownership: String = DEFAULT_OWNERSHIP,
                 val availableFolders: List<Text> = listOf(
                     "Folder 1".asText(),
                     "Folder 2".asText(),
                     "Folder 3".asText(),
                 ),
-                val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+                override val ownership: String = DEFAULT_OWNERSHIP,
+                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
                 override val displayStringResId: Int get() = ItemTypeOption.SECURE_NOTES.labelRes
+            }
 
-                companion object {
-                    private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
-                    private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
-                }
+            companion object {
+                private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
+                private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
             }
         }
     }

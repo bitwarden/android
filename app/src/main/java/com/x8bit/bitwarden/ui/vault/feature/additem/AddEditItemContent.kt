@@ -21,7 +21,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun AddEditItemContent(
     viewState: VaultAddItemState.ViewState.Content,
-    shouldShowTypeSelector: Boolean,
+    isAddItemMode: Boolean,
     onTypeOptionClicked: (VaultAddItemState.ItemTypeOption) -> Unit,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
     secureNotesTypeHandlers: VaultAddSecureNotesItemTypeHandlers,
@@ -38,7 +38,7 @@ fun AddEditItemContent(
                     .padding(horizontal = 16.dp),
             )
         }
-        if (shouldShowTypeSelector) {
+        if (isAddItemMode) {
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 TypeOptionsItem(
@@ -53,6 +53,7 @@ fun AddEditItemContent(
             is VaultAddItemState.ViewState.Content.Login -> {
                 addEditLoginItems(
                     state = viewState,
+                    isAddItemMode = isAddItemMode,
                     loginItemTypeHandlers = loginItemTypeHandlers,
                 )
             }
@@ -68,6 +69,7 @@ fun AddEditItemContent(
             is VaultAddItemState.ViewState.Content.SecureNotes -> {
                 addEditSecureNotesItems(
                     state = viewState,
+                    isAddItemMode = isAddItemMode,
                     secureNotesTypeHandlers = secureNotesTypeHandlers,
                 )
             }

@@ -27,6 +27,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod")
 fun LazyListScope.addEditSecureNotesItems(
     state: VaultAddItemState.ViewState.Content.SecureNotes,
+    isAddItemMode: Boolean,
     secureNotesTypeHandlers: VaultAddSecureNotesItemTypeHandlers,
 ) {
     item {
@@ -142,26 +143,29 @@ fun LazyListScope.addEditSecureNotesItems(
         )
     }
 
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.ownership),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
+    if (isAddItemMode) {
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = R.string.ownership),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
 
-    item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.who_owns_this_item),
-            options = state.availableOwners.toImmutableList(),
-            selectedOption = state.ownership,
-            onOptionSelected = secureNotesTypeHandlers.onOwnershipTextChange,
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-        )
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenMultiSelectButton(
+                label = stringResource(id = R.string.who_owns_this_item),
+                options = state.availableOwners.toImmutableList(),
+                selectedOption = state.ownership,
+                onOptionSelected = secureNotesTypeHandlers.onOwnershipTextChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
     }
 
     item {
