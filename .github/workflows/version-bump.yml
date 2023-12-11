@@ -102,7 +102,7 @@ jobs:
         env:
           PR_BRANCH: "version_bump_${{ github.event.inputs.version_number }}"
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          BASE_BRANCH: master
+          BASE_BRANCH: main
           TITLE: "Bump version to ${{ github.event.inputs.version_number }}"
         run: |
           gh pr create --title "$TITLE" \
