@@ -15,10 +15,14 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
+import com.x8bit.bitwarden.ui.util.performAccountClick
+import com.x8bit.bitwarden.ui.util.performAccountIconClick
+import com.x8bit.bitwarden.ui.util.performAddAccountClick
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -47,39 +51,45 @@ class VaultUnlockScreenTest : BaseComposeTest() {
 
     @Test
     fun `account icon click should show the account switcher`() {
-        composeTestRule.onNodeWithText("active@bitwarden.com").assertDoesNotExist()
-        composeTestRule.onNodeWithText("locked@bitwarden.com").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Add account").assertDoesNotExist()
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
 
-        composeTestRule.onNodeWithText("AU").performClick()
+        composeTestRule.performAccountIconClick()
 
-        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
-        composeTestRule.onNodeWithText("locked@bitwarden.com").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Add account").assertIsDisplayed()
+        composeTestRule.assertSwitcherIsDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `account click in the account switcher should send AccountSwitchClick and close switcher`() {
         // Open the Account Switcher
-        composeTestRule.onNodeWithText("AU").performClick()
+        composeTestRule.performAccountIconClick()
 
-        composeTestRule.onNodeWithText("locked@bitwarden.com").performClick()
+        composeTestRule.performAccountClick(accountSummary = LOCKED_ACCOUNT_SUMMARY)
+
         verify {
             viewModel.trySendAction(VaultUnlockAction.SwitchAccountClick(LOCKED_ACCOUNT_SUMMARY))
         }
-        composeTestRule.onNodeWithText("locked@bitwarden.com").assertDoesNotExist()
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `add account click in the account switcher should send AddAccountClick and close switcher`() {
         // Open the Account Switcher
-        composeTestRule.onNodeWithText("AU").performClick()
+        composeTestRule.performAccountIconClick()
 
-        composeTestRule.onNodeWithText("Add account").performClick()
+        composeTestRule.performAddAccountClick()
+
         verify { viewModel.trySendAction(VaultUnlockAction.AddAccountClick) }
-        composeTestRule.onNodeWithText("Add account").assertDoesNotExist()
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
     }
 
     @Test
@@ -208,11 +218,13 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     status = AccountSummary.Status.LOCKED,
 )
 
+private val ACCOUNT_SUMMARIES = listOf(
+    ACTIVE_ACCOUNT_SUMMARY,
+    LOCKED_ACCOUNT_SUMMARY,
+)
+
 private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
-    accountSummaries = persistentListOf(
-        ACTIVE_ACCOUNT_SUMMARY,
-        LOCKED_ACCOUNT_SUMMARY,
-    ),
+    accountSummaries = ACCOUNT_SUMMARIES,
     avatarColorString = "0000FF",
     dialog = null,
     email = "bit@bitwarden.com",
