@@ -151,6 +151,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val accountUserId = "userId"
         val accountSummary = mockk<AccountSummary> {
             every { userId } returns accountUserId
+            every { isActive } returns false
         }
         val viewModel = createViewModel()
 
@@ -159,16 +160,45 @@ class VaultViewModelTest : BaseViewModelTest() {
         verify { vaultRepository.lockVaultIfNecessary(userId = accountUserId) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on LogoutAccountClick should call logout for the given account`() {
+    fun `on LogoutAccountClick for an active account should call logout for the given account and set isSwitchingAccounts to true`() {
         val accountUserId = "userId"
         val accountSummary = mockk<AccountSummary> {
             every { userId } returns accountUserId
+            every { isActive } returns true
         }
         val viewModel = createViewModel()
 
         viewModel.trySendAction(VaultAction.LogoutAccountClick(accountSummary))
 
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isSwitchingAccounts = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify { authRepository.logout(userId = accountUserId) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on LogoutAccountClick for an inactive account should call logout for the given account and set isSwitchingAccounts to false`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+            every { isActive } returns false
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.LogoutAccountClick(accountSummary))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isSwitchingAccounts = false,
+            ),
+            viewModel.stateFlow.value,
+        )
         verify { authRepository.logout(userId = accountUserId) }
     }
 

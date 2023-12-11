@@ -136,6 +136,9 @@ class VaultViewModel @Inject constructor(
 
     private fun handleLogoutAccountClick(action: VaultAction.LogoutAccountClick) {
         authRepository.logout(userId = action.accountSummary.userId)
+        mutableStateFlow.update {
+            it.copy(isSwitchingAccounts = action.accountSummary.isActive)
+        }
     }
 
     private fun handleSwitchAccountClick(action: VaultAction.SwitchAccountClick) {

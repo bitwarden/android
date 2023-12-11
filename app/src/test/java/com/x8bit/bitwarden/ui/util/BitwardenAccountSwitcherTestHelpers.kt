@@ -79,6 +79,35 @@ fun ComposeContentTestRule.assertLockOrLogoutDialogIsDisplayed(
 }
 
 /**
+ * Asserts the logoung confirmation dialog is currently displayed with information from the given
+ * [accountSummary].
+ */
+fun ComposeContentTestRule.assertLogoutConfirmationDialogIsDisplayed(
+    accountSummary: AccountSummary,
+) {
+    this.waitForIdle()
+    this
+        .onNode(isDialog())
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText("Log out")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText("Are you sure you want to log out?", substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(accountSummary.email, substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(accountSummary.environmentLabel, substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+}
+
+/**
  * Clicks on the given [accountSummary] in the account switcher.
  */
 fun ComposeContentTestRule.performAccountClick(
@@ -114,6 +143,16 @@ fun ComposeContentTestRule.performLockAccountClick() {
 fun ComposeContentTestRule.performLogoutAccountClick() {
     this
         .onAllNodesWithText("Log out")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .performClick()
+}
+
+/**
+ * Clicks the "Yes" button in the logout confirmation dialog to confirm the logout.
+ */
+fun ComposeContentTestRule.performLogoutAccountConfirmationClick() {
+    this
+        .onAllNodesWithText("Yes")
         .filterToOne(hasAnyAncestor(isDialog()))
         .performClick()
 }
