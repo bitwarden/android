@@ -200,6 +200,9 @@ private fun VaultScreenScaffold(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
+        val modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
         Box {
             when (val viewState = state.viewState) {
                 is VaultState.ViewState.Content -> VaultContent(
@@ -211,12 +214,12 @@ private fun VaultScreenScaffold(
                     identityGroupClick = identityGroupClick,
                     secureNoteGroupClick = secureNoteGroupClick,
                     trashClick = trashClick,
-                    paddingValues = paddingValues,
+                    modifier = modifier,
                 )
 
-                is VaultState.ViewState.Loading -> VaultLoading(paddingValues = paddingValues)
+                is VaultState.ViewState.Loading -> VaultLoading(modifier = modifier)
                 is VaultState.ViewState.NoItems -> VaultNoItems(
-                    paddingValues = paddingValues,
+                    modifier = modifier,
                     addItemClickAction = addItemClickAction,
                 )
             }
@@ -231,9 +234,7 @@ private fun VaultScreenScaffold(
                 onAddAccountClick = addAccountClickAction,
                 onDismissRequest = { updateAccountMenuVisibility(false) },
                 topAppBarScrollBehavior = scrollBehavior,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
+                modifier = modifier,
             )
         }
     }
