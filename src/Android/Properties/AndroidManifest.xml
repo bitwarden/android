@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="1" android:versionName="2024.1.0" android:installLocation="internalOnly" package="com.x8bit.bitwarden">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="1" android:versionName="2023.12.1" android:installLocation="internalOnly" package="com.x8bit.bitwarden">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.NFC" />
