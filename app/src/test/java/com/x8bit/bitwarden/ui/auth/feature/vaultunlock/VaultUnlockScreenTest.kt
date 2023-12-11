@@ -16,6 +16,7 @@ import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
@@ -25,6 +26,7 @@ import com.x8bit.bitwarden.ui.util.performAccountLongClick
 import com.x8bit.bitwarden.ui.util.performAddAccountClick
 import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
+import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -130,12 +132,27 @@ class VaultUnlockScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `logout button click in the lock-or-logout dialog should send LogoutAccountClick action and close the dialog`() {
+    fun `logout button click in the lock-or-logout dialog should show the logout confirmation dialog and hide the lock-or-logout dialog`() {
         // Show the lock-or-logout dialog
         composeTestRule.performAccountIconClick()
         composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
 
         composeTestRule.performLogoutAccountClick()
+
+        composeTestRule.assertLogoutConfirmationDialogIsDisplayed(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `logout button click in the logout confirmation dialog should send LogoutAccountClick action and close the dialog`() {
+        // Show the logout confirmation dialog
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+        composeTestRule.performLogoutAccountClick()
+
+        composeTestRule.performLogoutAccountConfirmationClick()
 
         verify {
             viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(ACTIVE_ACCOUNT_SUMMARY))

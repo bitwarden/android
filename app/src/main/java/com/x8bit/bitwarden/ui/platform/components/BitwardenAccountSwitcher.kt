@@ -86,6 +86,7 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
  * sync with the associated app bar.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun BitwardenAccountSwitcher(
     isVisible: Boolean,
@@ -104,19 +105,37 @@ fun BitwardenAccountSwitcher(
     var isVisibleActual by remember { mutableStateOf(isVisible) }
 
     var lockOrLogoutAccount by remember { mutableStateOf<AccountSummary?>(null) }
-    if (lockOrLogoutAccount != null && !isVisibleActual) {
-        LockOrLogoutDialog(
-            accountSummary = requireNotNull(lockOrLogoutAccount),
-            onDismissRequest = { lockOrLogoutAccount = null },
-            onLockAccountClick = {
-                onLockAccountClick(it)
-                lockOrLogoutAccount = null
-            },
-            onLogoutAccountClick = {
-                onLogoutAccountClick(it)
-                lockOrLogoutAccount = null
-            },
-        )
+    var logoutConfirmationAccount by remember { mutableStateOf<AccountSummary?>(null) }
+    when {
+        isVisibleActual -> {
+            // Can not show dialogs when the switcher itself is visible
+        }
+
+        lockOrLogoutAccount != null -> {
+            LockOrLogoutDialog(
+                accountSummary = requireNotNull(lockOrLogoutAccount),
+                onDismissRequest = { lockOrLogoutAccount = null },
+                onLockAccountClick = {
+                    onLockAccountClick(it)
+                    lockOrLogoutAccount = null
+                },
+                onLogoutAccountClick = {
+                    lockOrLogoutAccount = null
+                    logoutConfirmationAccount = it
+                },
+            )
+        }
+
+        logoutConfirmationAccount != null -> {
+            BitwardenLogoutConfirmationDialog(
+                accountSummary = requireNotNull(logoutConfirmationAccount),
+                onDismissRequest = { logoutConfirmationAccount = null },
+                onConfirmClick = {
+                    onLogoutAccountClick(requireNotNull(logoutConfirmationAccount))
+                    logoutConfirmationAccount = null
+                },
+            )
+        }
     }
 
     Box(modifier = modifier) {
