@@ -481,7 +481,8 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
     email = "active@bitwarden.com",
     avatarColorHex = "#aa00aa",
     environmentLabel = "bitwarden.com",
-    status = AccountSummary.Status.ACTIVE,
+    isActive = true,
+    isVaultUnlocked = true,
 )
 
 private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
@@ -490,7 +491,8 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     email = "locked@bitwarden.com",
     avatarColorHex = "#00aaaa",
     environmentLabel = "bitwarden.com",
-    status = AccountSummary.Status.LOCKED,
+    isActive = false,
+    isVaultUnlocked = false,
 )
 
 private val DEFAULT_STATE: VaultState = VaultState(
