@@ -7,13 +7,16 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -22,7 +25,12 @@ import org.junit.jupiter.api.Test
 
 class LandingViewModelTest : BaseViewModelTest() {
 
-    private val authRepository: AuthRepository = mockk(relaxed = true)
+    private val authRepository: AuthRepository = mockk(relaxed = true) {
+        every { logout(any()) } just runs
+    }
+    private val vaultRepository: VaultRepository = mockk(relaxed = true) {
+        every { lockVaultIfNecessary(any()) } just runs
+    }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @Test
@@ -86,6 +94,32 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
+    }
+
+    @Test
+    fun `LockAccountClick should call lockVaultIfNecessary for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(LandingAction.LockAccountClick(accountSummary))
+
+        verify { vaultRepository.lockVaultIfNecessary(userId = accountUserId) }
+    }
+
+    @Test
+    fun `LogoutAccountClick should call logout for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(LandingAction.LogoutAccountClick(accountSummary))
+
+        verify { authRepository.logout(userId = accountUserId) }
     }
 
     @Test
@@ -314,6 +348,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             every { rememberedEmailAddress } returns rememberedEmail
             every { userStateFlow } returns MutableStateFlow(userState)
         },
+        vaultRepository = vaultRepository,
         environmentRepository = fakeEnvironmentRepository,
         savedStateHandle = savedStateHandle,
     )

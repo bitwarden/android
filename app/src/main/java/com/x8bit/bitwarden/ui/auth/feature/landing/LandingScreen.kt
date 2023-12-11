@@ -49,7 +49,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
@@ -187,13 +186,11 @@ fun LandingScreen(
             onSwitchAccountClick = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.SwitchAccountClick(it)) }
             },
-            onLockAccountClick = {
-                // TODO: Implement lock functionality (BIT-1207)
-                showNotYetImplementedToast(context)
+            onLockAccountClick = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.LockAccountClick(it)) }
             },
-            onLogoutAccountClick = {
-                // TODO: Implement logout functionality (BIT-1207)
-                showNotYetImplementedToast(context)
+            onLogoutAccountClick = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.LogoutAccountClick(it)) }
             },
             onAddAccountClick = {
                 // Not available

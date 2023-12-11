@@ -40,6 +40,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { userStateFlow } returns mutableUserStateFlow
             every { specialCircumstance } returns null
             every { specialCircumstance = any() } just runs
+            every { logout(any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
         }
 
@@ -47,6 +48,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         mockk {
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
             every { sync() } returns Unit
+            every { lockVaultIfNecessary(any()) } just runs
         }
 
     @Test
@@ -142,6 +144,32 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `on LockAccountClick should call lockVaultIfNecessary for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.LockAccountClick(accountSummary))
+
+        verify { vaultRepository.lockVaultIfNecessary(userId = accountUserId) }
+    }
+
+    @Test
+    fun `on LogoutAccountClick should call logout for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.LogoutAccountClick(accountSummary))
+
+        verify { authRepository.logout(userId = accountUserId) }
     }
 
     @Suppress("MaxLineLength")

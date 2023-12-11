@@ -31,6 +31,7 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the initial vault unlock screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultUnlockViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -79,6 +80,8 @@ class VaultUnlockViewModel @Inject constructor(
             VaultUnlockAction.DismissDialog -> handleDismissDialog()
             VaultUnlockAction.ConfirmLogoutClick -> handleConfirmLogoutClick()
             is VaultUnlockAction.PasswordInputChanged -> handlePasswordInputChanged(action)
+            is VaultUnlockAction.LockAccountClick -> handleLockAccountClick(action)
+            is VaultUnlockAction.LogoutAccountClick -> handleLogoutAccountClick(action)
             is VaultUnlockAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             VaultUnlockAction.UnlockClick -> handleUnlockClick()
             is VaultUnlockAction.Internal.ReceiveVaultUnlockResult -> {
@@ -107,6 +110,14 @@ class VaultUnlockViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(passwordInput = action.passwordInput)
         }
+    }
+
+    private fun handleLockAccountClick(action: VaultUnlockAction.LockAccountClick) {
+        vaultRepo.lockVaultIfNecessary(userId = action.accountSummary.userId)
+    }
+
+    private fun handleLogoutAccountClick(action: VaultUnlockAction.LogoutAccountClick) {
+        authRepository.logout(userId = action.accountSummary.userId)
     }
 
     private fun handleSwitchAccountClick(action: VaultUnlockAction.SwitchAccountClick) {
@@ -251,6 +262,22 @@ sealed class VaultUnlockAction {
      */
     data class PasswordInputChanged(
         val passwordInput: String,
+    ) : VaultUnlockAction()
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to lock
+     * the associated account's vault.
+     */
+    data class LockAccountClick(
+        val accountSummary: AccountSummary,
+    ) : VaultUnlockAction()
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to log out
+     * of that account.
+     */
+    data class LogoutAccountClick(
+        val accountSummary: AccountSummary,
     ) : VaultUnlockAction()
 
     /**

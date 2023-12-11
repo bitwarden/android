@@ -108,8 +108,14 @@ fun BitwardenAccountSwitcher(
         LockOrLogoutDialog(
             accountSummary = requireNotNull(lockOrLogoutAccount),
             onDismissRequest = { lockOrLogoutAccount = null },
-            onLockAccountClick = onLockAccountClick,
-            onLogoutAccountClick = onLogoutAccountClick,
+            onLockAccountClick = {
+                onLockAccountClick(it)
+                lockOrLogoutAccount = null
+            },
+            onLogoutAccountClick = {
+                onLogoutAccountClick(it)
+                lockOrLogoutAccount = null
+            },
         )
     }
 
@@ -306,12 +312,14 @@ private fun LockOrLogoutDialog(
         title = "${accountSummary.email}\n${accountSummary.environmentLabel}",
         onDismissRequest = onDismissRequest,
         selectionItems = {
-            BitwardenBasicDialogRow(
-                text = stringResource(id = R.string.lock),
-                onClick = {
-                    onLockAccountClick(accountSummary)
-                },
-            )
+            if (accountSummary.isVaultUnlocked) {
+                BitwardenBasicDialogRow(
+                    text = stringResource(id = R.string.lock),
+                    onClick = {
+                        onLockAccountClick(accountSummary)
+                    },
+                )
+            }
             BitwardenBasicDialogRow(
                 text = stringResource(id = R.string.log_out),
                 onClick = {

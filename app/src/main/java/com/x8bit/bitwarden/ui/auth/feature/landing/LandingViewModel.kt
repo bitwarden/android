@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -25,9 +26,11 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the initial landing screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class LandingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
@@ -75,6 +78,8 @@ class LandingViewModel @Inject constructor(
 
     override fun handleAction(action: LandingAction) {
         when (action) {
+            is LandingAction.LockAccountClick -> handleLockAccountClicked(action)
+            is LandingAction.LogoutAccountClick -> handleLogoutAccountClicked(action)
             is LandingAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
             is LandingAction.ConfirmSwitchToMatchingAccountClick -> {
                 handleConfirmSwitchToMatchingAccountClicked(action)
@@ -90,6 +95,14 @@ class LandingViewModel @Inject constructor(
                 handleUpdatedEnvironmentReceive(action)
             }
         }
+    }
+
+    private fun handleLockAccountClicked(action: LandingAction.LockAccountClick) {
+        vaultRepository.lockVaultIfNecessary(userId = action.accountSummary.userId)
+    }
+
+    private fun handleLogoutAccountClicked(action: LandingAction.LogoutAccountClick) {
+        authRepository.logout(userId = action.accountSummary.userId)
     }
 
     private fun handleSwitchAccountClicked(action: LandingAction.SwitchAccountClick) {
@@ -247,6 +260,23 @@ sealed class LandingEvent {
  * Models actions for the landing screen.
  */
 sealed class LandingAction {
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to lock
+     * the associated account's vault.
+     */
+    data class LockAccountClick(
+        val accountSummary: AccountSummary,
+    ) : LandingAction()
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to log out
+     * of that account.
+     */
+    data class LogoutAccountClick(
+        val accountSummary: AccountSummary,
+    ) : LandingAction()
+
     /**
      * Indicates the user has clicked on the given [accountSummary] information in order to switch
      * to it.

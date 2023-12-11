@@ -38,7 +38,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    vaultRepository: VaultRepository,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -87,6 +87,8 @@ class VaultViewModel @Inject constructor(
             is VaultAction.IdentityGroupClick -> handleIdentityClick()
             is VaultAction.LoginGroupClick -> handleLoginClick()
             is VaultAction.SearchIconClick -> handleSearchIconClick()
+            is VaultAction.LockAccountClick -> handleLockAccountClick(action)
+            is VaultAction.LogoutAccountClick -> handleLogoutAccountClick(action)
             is VaultAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             is VaultAction.AddAccountClick -> handleAddAccountClick()
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
@@ -126,6 +128,14 @@ class VaultViewModel @Inject constructor(
 
     private fun handleSearchIconClick() {
         sendEvent(VaultEvent.NavigateToVaultSearchScreen)
+    }
+
+    private fun handleLockAccountClick(action: VaultAction.LockAccountClick) {
+        vaultRepository.lockVaultIfNecessary(userId = action.accountSummary.userId)
+    }
+
+    private fun handleLogoutAccountClick(action: VaultAction.LogoutAccountClick) {
+        authRepository.logout(userId = action.accountSummary.userId)
     }
 
     private fun handleSwitchAccountClick(action: VaultAction.SwitchAccountClick) {
@@ -460,6 +470,22 @@ sealed class VaultAction {
      * Click the search icon.
      */
     data object SearchIconClick : VaultAction()
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to lock
+     * the associated account's vault.
+     */
+    data class LockAccountClick(
+        val accountSummary: AccountSummary,
+    ) : VaultAction()
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to log out
+     * of that account.
+     */
+    data class LogoutAccountClick(
+        val accountSummary: AccountSummary,
+    ) : VaultAction()
 
     /**
      * User clicked an account in the account switcher.
