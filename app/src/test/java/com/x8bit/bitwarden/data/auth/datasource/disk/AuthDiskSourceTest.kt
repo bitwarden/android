@@ -118,12 +118,13 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getUserKey should pull from SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:masterKeyEncryptedUserKey"
         val mockUserId = "mockUserId"
         val mockUserKey = "mockUserKey"
         fakeSharedPreferences
             .edit()
             .putString(
-                "masterKeyEncryptedUserKey_$mockUserId",
+                "${userKeyBaseKey}_$mockUserId",
                 mockUserKey,
             )
             .apply()
@@ -136,6 +137,7 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storeUserKey should update SharedPreferences`() {
+        val userKeyBaseKey = "bwPreferencesStorage:masterKeyEncryptedUserKey"
         val mockUserId = "mockUserId"
         val mockUserKey = "mockUserKey"
         authDiskSource.storeUserKey(
@@ -144,7 +146,7 @@ class AuthDiskSourceTest {
         )
         val actual = fakeSharedPreferences
             .getString(
-                "masterKeyEncryptedUserKey_$mockUserId",
+                "${userKeyBaseKey}_$mockUserId",
                 null,
             )
         assertEquals(
@@ -155,12 +157,13 @@ class AuthDiskSourceTest {
 
     @Test
     fun `getPrivateKey should pull from SharedPreferences`() {
+        val privateKeyBaseKey = "bwPreferencesStorage:encPrivateKey"
         val mockUserId = "mockUserId"
         val mockPrivateKey = "mockPrivateKey"
         fakeSharedPreferences
             .edit()
             .putString(
-                "encPrivateKey_$mockUserId",
+                "${privateKeyBaseKey}_$mockUserId",
                 mockPrivateKey,
             )
             .apply()
@@ -173,6 +176,7 @@ class AuthDiskSourceTest {
 
     @Test
     fun `storePrivateKey should update SharedPreferences`() {
+        val privateKeyBaseKey = "bwPreferencesStorage:encPrivateKey"
         val mockUserId = "mockUserId"
         val mockPrivateKey = "mockPrivateKey"
         authDiskSource.storePrivateKey(
@@ -180,7 +184,7 @@ class AuthDiskSourceTest {
             privateKey = mockPrivateKey,
         )
         val actual = fakeSharedPreferences.getString(
-            "encPrivateKey_$mockUserId",
+            "${privateKeyBaseKey}_$mockUserId",
             null,
         )
         assertEquals(
