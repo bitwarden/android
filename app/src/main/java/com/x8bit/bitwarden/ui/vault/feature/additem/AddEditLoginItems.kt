@@ -32,6 +32,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod")
 fun LazyListScope.addEditLoginItems(
     state: VaultAddItemState.ViewState.Content.Login,
+    isAddItemMode: Boolean,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
 ) {
     item {
@@ -255,25 +256,29 @@ fun LazyListScope.addEditLoginItems(
         )
     }
 
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.ownership),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
+    if (isAddItemMode) {
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = R.string.ownership),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
 
-    item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.who_owns_this_item),
-            options = state.availableOwners.toImmutableList(),
-            selectedOption = state.ownership,
-            onOptionSelected = loginItemTypeHandlers.onOwnershipTextChange,
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenMultiSelectButton(
+                label = stringResource(id = R.string.who_owns_this_item),
+                options = state.availableOwners.toImmutableList(),
+                selectedOption = state.ownership,
+                onOptionSelected = loginItemTypeHandlers.onOwnershipTextChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
     }
 
     item {

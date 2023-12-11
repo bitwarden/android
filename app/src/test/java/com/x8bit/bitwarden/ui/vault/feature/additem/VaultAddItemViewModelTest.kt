@@ -356,7 +356,6 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `OwnershipChange should update ownership in LoginItem`() = runTest {
             val viewModel = createAddVaultItemViewModel()
@@ -593,7 +592,6 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `OwnershipChange should update ownership in SecureNotesItem`() = runTest {
             val action =
