@@ -22,6 +22,10 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
+import com.x8bit.bitwarden.ui.util.performAccountIconClick
+import com.x8bit.bitwarden.ui.util.performAccountClick
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -77,43 +81,37 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `account menu icon click should show the account switcher`() {
+        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
+            it.copy(accountSummaries = accountSummaries)
         }
 
-        composeTestRule.onNodeWithContentDescription("Account").performClick()
+        composeTestRule.performAccountIconClick()
 
-        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
+        composeTestRule.assertSwitcherIsDisplayed(
+            accountSummaries = accountSummaries,
+            isAddAccountButtonVisible = false,
+        )
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `account click in the account switcher should send SwitchAccountClick and close switcher`() {
         // Show the account switcher
+        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
         mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
+            it.copy(accountSummaries = accountSummaries)
         }
-        composeTestRule.onNodeWithContentDescription("Account").performClick()
-        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
+        composeTestRule.performAccountIconClick()
 
-        composeTestRule.onNodeWithText("active@bitwarden.com").performClick()
+        composeTestRule.performAccountClick(accountSummary = ACTIVE_ACCOUNT_SUMMARY)
 
         verify {
             viewModel.trySendAction(LandingAction.SwitchAccountClick(ACTIVE_ACCOUNT_SUMMARY))
         }
-        composeTestRule.onNodeWithText("active@bitwarden.com").assertDoesNotExist()
-    }
-
-    @Test
-    fun `add account button in the account switcher does not exist`() {
-        // Show the account switcher
-        mutableStateFlow.update {
-            it.copy(accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY))
-        }
-        composeTestRule.onNodeWithContentDescription("Account").performClick()
-        composeTestRule.onNodeWithText("active@bitwarden.com").assertIsDisplayed()
-
-        composeTestRule.onNodeWithText("Add account").assertDoesNotExist()
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = accountSummaries,
+        )
     }
 
     @Test
