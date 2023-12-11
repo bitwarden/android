@@ -64,8 +64,6 @@ jobs:
               and namespace-uri()="http://schemas.android.com/apk/res/android"])
             ' src/Android/Properties/AndroidManifest.xml)
 
-          echo "CURRENT_VERSION: ${CURRENT_VERSION}"
-
           # Error if version has not changed.
           if [[ "$NEW_VERSION" == "$CURRENT_VERSION" ]]; then
             echo "Version has not changed."
