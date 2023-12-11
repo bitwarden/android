@@ -14,7 +14,8 @@ import kotlinx.parcelize.Parcelize
  * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
  * @property environmentLabel Label for the environment associated with the user's account
  * (ex: "bitwarden.com"). This is purely for display purposes.
- * @property status The current status of the user's account locally.
+ * @property isActive Whether or not the account is currently the active one.
+ * @property isVaultUnlocked Whether or not the account's vault is currently unlocked.
  */
 @Parcelize
 data class AccountSummary(
@@ -23,7 +24,8 @@ data class AccountSummary(
     val email: String,
     val avatarColorHex: String,
     val environmentLabel: String,
-    val status: Status,
+    val isActive: Boolean,
+    val isVaultUnlocked: Boolean,
 ) : Parcelable {
 
     /**
@@ -31,6 +33,16 @@ data class AccountSummary(
      */
     val avatarColor: Color
         get() = avatarColorHex.hexToColor()
+
+    /**
+     *  The current status of the user's account locally.
+     */
+    val status: Status
+        get() = when {
+            isActive -> Status.ACTIVE
+            isVaultUnlocked -> Status.UNLOCKED
+            else -> Status.LOCKED
+        }
 
     /**
      * Describes the status of the given account.

@@ -36,9 +36,6 @@ fun UserState.Account.toAccountSummary(
         email = this.email,
         avatarColorHex = this.avatarColorHex,
         environmentLabel = this.environment.label,
-        status = when {
-            isActive -> AccountSummary.Status.ACTIVE
-            this.isVaultUnlocked -> AccountSummary.Status.UNLOCKED
-            else -> AccountSummary.Status.LOCKED
-        },
+        isActive = isActive,
+        isVaultUnlocked = this.isVaultUnlocked,
     )

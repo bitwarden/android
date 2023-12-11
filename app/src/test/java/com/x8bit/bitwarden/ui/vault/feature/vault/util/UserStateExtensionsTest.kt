@@ -18,7 +18,8 @@ class UserStateExtensionsTest {
                     email = "activeEmail",
                     avatarColorHex = "activeAvatarColorHex",
                     environmentLabel = "bitwarden.com",
-                    status = AccountSummary.Status.ACTIVE,
+                    isActive = true,
+                    isVaultUnlocked = true,
                 ),
                 AccountSummary(
                     userId = "lockedUserId",
@@ -26,7 +27,8 @@ class UserStateExtensionsTest {
                     email = "lockedEmail",
                     avatarColorHex = "lockedAvatarColorHex",
                     environmentLabel = "bitwarden.eu",
-                    status = AccountSummary.Status.LOCKED,
+                    isActive = false,
+                    isVaultUnlocked = false,
                 ),
                 AccountSummary(
                     userId = "unlockedUserId",
@@ -34,7 +36,8 @@ class UserStateExtensionsTest {
                     email = "unlockedEmail",
                     avatarColorHex = "unlockedAvatarColorHex",
                     environmentLabel = "vault.qa.bitwarden.pw",
-                    status = AccountSummary.Status.UNLOCKED,
+                    isActive = false,
+                    isVaultUnlocked = true,
                 ),
             ),
             UserState(
@@ -86,7 +89,8 @@ class UserStateExtensionsTest {
                 email = "email",
                 avatarColorHex = "avatarColorHex",
                 environmentLabel = "bitwarden.com",
-                status = AccountSummary.Status.ACTIVE,
+                isActive = true,
+                isVaultUnlocked = true,
             ),
             UserState.Account(
                 userId = "userId",
@@ -102,7 +106,7 @@ class UserStateExtensionsTest {
     }
 
     @Test
-    fun `toAccountSummary for an locked account should return a locked AccountSummary`() {
+    fun `toAccountSummary for an inactive account should return an inactive AccountSummary`() {
         assertEquals(
             AccountSummary(
                 userId = "userId",
@@ -110,7 +114,8 @@ class UserStateExtensionsTest {
                 email = "email",
                 avatarColorHex = "avatarColorHex",
                 environmentLabel = "bitwarden.com",
-                status = AccountSummary.Status.LOCKED,
+                isActive = false,
+                isVaultUnlocked = false,
             ),
             UserState.Account(
                 userId = "userId",
@@ -120,30 +125,6 @@ class UserStateExtensionsTest {
                 environment = Environment.Us,
                 isPremium = false,
                 isVaultUnlocked = false,
-            )
-                .toAccountSummary(isActive = false),
-        )
-    }
-
-    @Test
-    fun `toAccountSummary for a unlocked account should return a locked AccountSummary`() {
-        assertEquals(
-            AccountSummary(
-                userId = "userId",
-                name = "name",
-                email = "email",
-                avatarColorHex = "avatarColorHex",
-                environmentLabel = "bitwarden.eu",
-                status = AccountSummary.Status.UNLOCKED,
-            ),
-            UserState.Account(
-                userId = "userId",
-                name = "name",
-                email = "email",
-                avatarColorHex = "avatarColorHex",
-                environment = Environment.Eu,
-                isPremium = true,
-                isVaultUnlocked = true,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -159,7 +140,8 @@ class UserStateExtensionsTest {
                 email = "email",
                 avatarColorHex = "avatarColorHex",
                 environmentLabel = "bitwarden.com",
-                status = AccountSummary.Status.ACTIVE,
+                isActive = true,
+                isVaultUnlocked = true,
             ),
             UserState(
                 activeUserId = "activeUserId",
