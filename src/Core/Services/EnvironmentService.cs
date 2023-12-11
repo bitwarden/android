@@ -75,7 +75,7 @@ namespace Bit.Core.Services
                 var urls = await _stateService.GetEnvironmentUrlsAsync();
                 urls ??= await _stateService.GetPreAuthEnvironmentUrlsAsync();
 
-                if (urls == null || urls.IsEmpty)
+                if (urls == null || urls.IsEmpty || region is null)
                 {
                     await SetRegionAsync(Region.US);
                     _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
