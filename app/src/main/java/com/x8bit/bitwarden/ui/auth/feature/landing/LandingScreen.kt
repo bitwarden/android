@@ -103,7 +103,7 @@ fun LandingScreen(
                     {
                         viewModel.trySendAction(
                             LandingAction.ConfirmSwitchToMatchingAccountClick(
-                                account = dialog.accountSummary,
+                                accountSummary = dialog.accountSummary,
                             ),
                         )
                     }

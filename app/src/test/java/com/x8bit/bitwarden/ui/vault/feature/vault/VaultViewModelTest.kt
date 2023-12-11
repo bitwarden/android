@@ -81,7 +81,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         switchAccountResult = SwitchAccountResult.AccountSwitched
         val updatedUserId = "lockedUserId"
         viewModel.trySendAction(
-            VaultAction.AccountSwitchClick(
+            VaultAction.SwitchAccountClick(
                 accountSummary = mockk() {
                     every { userId } returns updatedUserId
                 },
@@ -146,13 +146,13 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on AccountSwitchClick when result is NoChange should try to switch to the given account and set isSwitchingAccounts to false`() =
+    fun `on SwitchAccountClick when result is NoChange should try to switch to the given account and set isSwitchingAccounts to false`() =
         runTest {
             val viewModel = createViewModel()
             switchAccountResult = SwitchAccountResult.NoChange
             val updatedUserId = "lockedUserId"
             viewModel.trySendAction(
-                VaultAction.AccountSwitchClick(
+                VaultAction.SwitchAccountClick(
                     accountSummary = mockk {
                         every { userId } returns updatedUserId
                     },
@@ -167,13 +167,13 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on AccountSwitchClick when result is AccountSwitched should switch to the given account and set isSwitchingAccounts to true`() =
+    fun `on SwitchAccountClick when result is AccountSwitched should switch to the given account and set isSwitchingAccounts to true`() =
         runTest {
             val viewModel = createViewModel()
             switchAccountResult = SwitchAccountResult.AccountSwitched
             val updatedUserId = "lockedUserId"
             viewModel.trySendAction(
-                VaultAction.AccountSwitchClick(
+                VaultAction.SwitchAccountClick(
                     accountSummary = mockk {
                         every { userId } returns updatedUserId
                     },
@@ -312,7 +312,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         switchAccountResult = SwitchAccountResult.AccountSwitched
         val updatedUserId = "lockedUserId"
         viewModel.trySendAction(
-            VaultAction.AccountSwitchClick(
+            VaultAction.SwitchAccountClick(
                 accountSummary = mockk() {
                     every { userId } returns updatedUserId
                 },

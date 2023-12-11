@@ -81,14 +81,14 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `account click in the account switcher should send AccountSwitchClick and close switcher`() {
+    fun `account click in the account switcher should send SwitchAccountClick and close switcher`() {
         // Open the Account Switcher
         val accountSummaries = DEFAULT_STATE.accountSummaries
         composeTestRule.performAccountIconClick()
 
         composeTestRule.performAccountClick(accountSummary = LOCKED_ACCOUNT_SUMMARY)
 
-        verify { viewModel.trySendAction(VaultAction.AccountSwitchClick(LOCKED_ACCOUNT_SUMMARY)) }
+        verify { viewModel.trySendAction(VaultAction.SwitchAccountClick(LOCKED_ACCOUNT_SUMMARY)) }
         composeTestRule.assertSwitcherIsNotDisplayed(
             accountSummaries = accountSummaries,
         )

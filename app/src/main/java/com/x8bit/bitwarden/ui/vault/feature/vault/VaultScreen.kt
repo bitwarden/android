@@ -88,7 +88,7 @@ fun VaultScreen(
             { viewModel.trySendAction(VaultAction.SearchIconClick) }
         },
         accountSwitchClickAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.AccountSwitchClick(it)) }
+            { viewModel.trySendAction(VaultAction.SwitchAccountClick(it)) }
         },
         addAccountClickAction = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.AddAccountClick) }
