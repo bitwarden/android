@@ -20,12 +20,6 @@ jobs:
     name: "Bump Version to v${{ inputs.version_number }}"
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout Branch
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
-        with:
-          repository: bitwarden/mobile
-          ref: master
-
       - name: Login to Azure - CI Subscription
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
         with:
@@ -39,6 +33,13 @@ jobs:
           secrets: "github-gpg-private-key,
             github-gpg-private-key-passphrase,
             github-pat-bitwarden-devops-bot-repo-scope"
+
+      - name: Checkout Branch
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        with:
+          repository: bitwarden/mobile
+          ref: master
+          token: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@d6f3f49f3345e29369fe57596a3ca8f94c4d2ca7 # v5.4.0
@@ -142,7 +143,6 @@ jobs:
         id: create-pr
         env:
           PR_BRANCH: ${{ steps.create-branch.outputs.name }}
-          GH_TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
           TITLE: "Bump version to ${{ inputs.version_number }}"
         run: |
           PR_URL=$(gh pr create --title "$TITLE" \
