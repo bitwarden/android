@@ -64,5 +64,6 @@ namespace Bit.Core.Abstractions
         Task<MasterKey> GetOrDeriveMasterKeyAsync(string password, string userId = null);
         Task UpdateMasterKeyAndUserKeyAsync(MasterKey masterKey);
         Task<string> HashAsync(string value, CryptoHashAlgorithm hashAlgorithm);
+        Task<bool> ValidateUriChecksumAsync(EncString remoteUriChecksum, string rawUri, string orgId, SymmetricCryptoKey key);
     }
 }

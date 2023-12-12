@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
-using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.Domain
 {
@@ -12,7 +11,8 @@ namespace Bit.Core.Models.Domain
     {
         private HashSet<string> _map = new HashSet<string>
         {
-            "Uri"
+            nameof(Uri),
+            nameof(UriChecksum)
         };
 
         public LoginUri() { }
@@ -20,12 +20,6 @@ namespace Bit.Core.Models.Domain
         public LoginUri(LoginUriData obj, bool alreadyEncrypted = false)
         {
             Match = obj.Match;
-
-            if (obj.UriChecksum != null)
-            {
-                UriChecksum = new EncString(obj.UriChecksum);
-            }
-
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
@@ -35,7 +29,7 @@ namespace Bit.Core.Models.Domain
 
         public Task<LoginUriView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return DecryptObjAsync(new LoginUriView(this), this, _map, orgId, key);
+            return DecryptObjAsync(new LoginUriView(this), this, _map.Where(m => m != nameof(UriChecksum)).ToHashSet<string>(), orgId, key);
         }
 
         public LoginUriData ToLoginUriData()
@@ -43,22 +37,6 @@ namespace Bit.Core.Models.Domain
             var u = new LoginUriData();
             BuildDataModel(this, u, _map, new HashSet<string> { "Match" });
             return u;
-        }
-
-        public async Task<bool> ValidateChecksum(string clearTextUri, string orgId, SymmetricCryptoKey key)
-        {
-            if (this.UriChecksum == null)
-            {
-                return false;
-            }
-
-            // HACK: I don't like resolving this here but I can't see a better way without
-            // refactoring a lot of things.
-            var cryptoService = ServiceContainer.Resolve<ICryptoService>();
-            var localChecksum = await cryptoService.HashAsync(clearTextUri, CryptoHashAlgorithm.Sha256);
-
-            var remoteChecksum = await this.UriChecksum.DecryptAsync(orgId, key);
-            return remoteChecksum == localChecksum;
         }
     }
 }

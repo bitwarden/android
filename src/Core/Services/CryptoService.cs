@@ -736,6 +736,20 @@ namespace Bit.Core.Services
             return Convert.ToBase64String(hashArray);
         }
 
+        public async Task<bool> ValidateUriChecksumAsync(EncString remoteUriChecksum, string rawUri, string orgId, SymmetricCryptoKey key)
+        {
+            if (remoteUriChecksum == null)
+            {
+                return false;
+            }
+
+            //var cryptoService = ServiceContainer.Resolve<ICryptoService>();
+            var localChecksum = await HashAsync(rawUri, CryptoHashAlgorithm.Sha256);
+
+            var remoteChecksum = await remoteUriChecksum.DecryptAsync(orgId, key);
+            return remoteChecksum == localChecksum;
+        }
+
         // --HELPER METHODS--
 
         private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)

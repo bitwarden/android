@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.Domain
 {
@@ -41,11 +43,12 @@ namespace Bit.Core.Models.Domain
             }, orgId, key);
             if (Uris != null)
             {
+                var cryptoService = ServiceContainer.Resolve<ICryptoService>();
                 view.Uris = new List<LoginUriView>();
                 foreach (var uri in Uris)
                 {
                     var loginUriView = await uri.DecryptAsync(orgId, key);
-                    if (bypassValidation || (await uri.ValidateChecksum(loginUriView.Uri, orgId, key)))
+                    if (bypassValidation || await cryptoService.ValidateUriChecksumAsync(uri.UriChecksum, loginUriView.Uri, orgId, key))
                     {
                         view.Uris.Add(loginUriView);
                     }

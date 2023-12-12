@@ -17,10 +17,12 @@ namespace Bit.Core.Models.Export
         {
             Match = obj.Match;
             Uri = obj.Uri?.EncryptedString;
+            UriChecksum = obj.UriChecksum?.EncryptedString;
         }
 
         public UriMatchType? Match { get; set; }
         public string Uri { get; set; }
+        public string UriChecksum { get; set; }
 
         public static LoginUriView ToView(LoginUri req, LoginUriView view = null)
         {
