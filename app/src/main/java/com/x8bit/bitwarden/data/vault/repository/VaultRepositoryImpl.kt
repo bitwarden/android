@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Kdf
@@ -12,11 +13,13 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionE
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.map
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -107,6 +110,7 @@ class VaultRepositoryImpl constructor(
                                 syncResponse = syncResponse,
                             )
 
+                        unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                         storeKeys(syncResponse = syncResponse)
                         decryptSyncResponseAndUpdateVaultDataState(syncResponse = syncResponse)
                         decryptSendsAndUpdateSendDataState(sendList = syncResponse.sends)
@@ -177,6 +181,8 @@ class VaultRepositoryImpl constructor(
             ?: return VaultUnlockResult.InvalidStateError
         val privateKey = authDiskSource.getPrivateKey(userId = userState.activeUserId)
             ?: return VaultUnlockResult.InvalidStateError
+        val organizationKeys = authDiskSource
+            .getOrganizationKeys(userId = userState.activeUserId)
         return unlockVault(
             userId = userState.activeUserId,
             masterPassword = masterPassword,
@@ -184,8 +190,7 @@ class VaultRepositoryImpl constructor(
             kdf = userState.activeAccount.profile.toSdkParams(),
             userKey = userKey,
             privateKey = privateKey,
-            // TODO use actual organization keys BIT-1091
-            organizationalKeys = emptyMap(),
+            organizationKeys = organizationKeys,
         )
             .also {
                 if (it is VaultUnlockResult.Success) {
@@ -201,7 +206,7 @@ class VaultRepositoryImpl constructor(
         kdf: Kdf,
         userKey: String,
         privateKey: String,
-        organizationalKeys: Map<String, String>,
+        organizationKeys: Map<String, String>?,
     ): VaultUnlockResult =
         flow {
             willSyncAfterUnlock = true
@@ -218,6 +223,20 @@ class VaultRepositoryImpl constructor(
                             ),
                         ),
                     )
+                    .flatMap { result ->
+                        // Initialize the SDK for organizations if necessary
+                        if (organizationKeys != null &&
+                            result is InitializeCryptoResult.Success
+                        ) {
+                            vaultSdkSource.initializeOrganizationCrypto(
+                                request = InitOrgCryptoRequest(
+                                    organizationKeys = organizationKeys,
+                                ),
+                            )
+                        } else {
+                            result.asSuccess()
+                        }
+                    }
                     .fold(
                         onFailure = { VaultUnlockResult.GenericError },
                         onSuccess = { initializeCryptoResult ->
@@ -318,6 +337,27 @@ class VaultRepositoryImpl constructor(
                     .associate { it.id to requireNotNull(it.key) },
             )
         }
+    }
+
+    private suspend fun unlockVaultForOrganizationsIfNecessary(
+        syncResponse: SyncResponseJson,
+    ) {
+        val profile = syncResponse.profile ?: return
+        val organizationKeys = profile.organizations
+            .orEmpty()
+            .filter { it.key != null }
+            .associate { it.id to requireNotNull(it.key) }
+            .takeUnless { it.isEmpty() }
+            ?: return
+
+        // There shouldn't be issues when unlocking directly from the syncResponse so we can ignore
+        // the return type here.
+        vaultSdkSource
+            .initializeOrganizationCrypto(
+                request = InitOrgCryptoRequest(
+                    organizationKeys = organizationKeys,
+                ),
+            )
     }
 
     private suspend fun decryptSendsAndUpdateSendDataState(sendList: List<SyncResponseJson.Send>?) {

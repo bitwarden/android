@@ -7,6 +7,7 @@ import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
@@ -19,10 +20,20 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 interface VaultSdkSource {
 
     /**
-     * Attempts to initialize cryptography functionality for the Bitwarden SDK
-     * with a given [InitCryptoRequest].
+     * Attempts to initialize cryptography functionality for an individual user for the
+     * Bitwarden SDK with a given [InitUserCryptoRequest].
      */
     suspend fun initializeCrypto(request: InitUserCryptoRequest): Result<InitializeCryptoResult>
+
+    /**
+     * Attempts to initialize cryptography functionality for organization data associated with
+     * the current user for the Bitwarden SDK with a given [InitOrgCryptoRequest].
+     *
+     * This should only be called after a successful call to [initializeCrypto].
+     */
+    suspend fun initializeOrganizationCrypto(
+        request: InitOrgCryptoRequest,
+    ): Result<InitializeCryptoResult>
 
     /**
      * Encrypts a [CipherView] returning a [Cipher] wrapped in a [Result].

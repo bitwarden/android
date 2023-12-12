@@ -11,7 +11,7 @@ sealed class InitializeCryptoResult {
     data object Success : InitializeCryptoResult()
 
     /**
-     * Incorrect password provided.
+     * Incorrect password or key(s) provided.
      */
     data object AuthenticationError : InitializeCryptoResult()
 }

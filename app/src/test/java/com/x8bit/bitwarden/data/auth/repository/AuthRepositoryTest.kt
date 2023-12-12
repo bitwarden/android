@@ -429,7 +429,7 @@ class AuthRepositoryTest {
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
                     privateKey = successResponse.privateKey,
-                    organizationalKeys = emptyMap(),
+                    organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
@@ -465,7 +465,7 @@ class AuthRepositoryTest {
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
                     privateKey = successResponse.privateKey,
-                    organizationalKeys = emptyMap(),
+                    organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
                 vaultRepository.sync()
@@ -508,7 +508,7 @@ class AuthRepositoryTest {
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
                     privateKey = successResponse.privateKey,
-                    organizationalKeys = emptyMap(),
+                    organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
@@ -546,7 +546,7 @@ class AuthRepositoryTest {
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
                     privateKey = successResponse.privateKey,
-                    organizationalKeys = emptyMap(),
+                    organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
                 vaultRepository.sync()
@@ -946,7 +946,7 @@ class AuthRepositoryTest {
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 userKey = successResponse.key,
                 privateKey = successResponse.privateKey,
-                organizationalKeys = emptyMap(),
+                organizationKeys = null,
                 masterPassword = PASSWORD,
             )
         } returns VaultUnlockResult.Success
@@ -1028,7 +1028,7 @@ class AuthRepositoryTest {
                     kdf = ACCOUNT_1.profile.toSdkParams(),
                     userKey = successResponse.key,
                     privateKey = successResponse.privateKey,
-                    organizationalKeys = emptyMap(),
+                    organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
