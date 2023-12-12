@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.Collection
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitUserCryptoRequest
@@ -17,6 +19,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a
  * [ClientVault].
  */
+@Suppress("TooManyFunctions")
 class VaultSdkSourceImpl(
     private val clientVault: ClientVault,
     private val clientCrypto: ClientCrypto,
@@ -47,6 +50,18 @@ class VaultSdkSourceImpl(
 
     override suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherView>> =
         runCatching { cipherList.map { clientVault.ciphers().decrypt(it) } }
+
+    override suspend fun decryptCollection(collection: Collection): Result<CollectionView> =
+        runCatching {
+            clientVault.collections().decrypt(collection)
+        }
+
+    override suspend fun decryptCollectionList(
+        collectionList: List<Collection>,
+    ): Result<List<CollectionView>> =
+        runCatching {
+            clientVault.collections().decryptList(collectionList)
+        }
 
     override suspend fun decryptSend(send: Send): Result<SendView> =
         runCatching { clientVault.sends().decrypt(send) }

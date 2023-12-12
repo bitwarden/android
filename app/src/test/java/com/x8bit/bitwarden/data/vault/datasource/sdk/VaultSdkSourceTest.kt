@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.Collection
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitUserCryptoRequest
@@ -191,6 +193,53 @@ class VaultSdkSourceTest {
             )
         }
     }
+
+    @Test
+    fun `decryptCollection should call SDK and return correct data wrapped in a Result`() =
+        runBlocking {
+            val mockCollection = mockk<Collection>()
+            val expectedResult = mockk<CollectionView>()
+            coEvery {
+                clientVault.collections().decrypt(
+                    collection = mockCollection,
+                )
+            } returns expectedResult
+            val result = vaultSdkSource.decryptCollection(
+                collection = mockCollection,
+            )
+            assertEquals(
+                expectedResult.asSuccess(), result,
+            )
+            coVerify {
+                clientVault.collections().decrypt(
+                    collection = mockCollection,
+                )
+            }
+        }
+
+    @Test
+    fun `decryptCollectionList should call SDK and return correct data wrapped in a Result`() =
+        runBlocking {
+            val mockCollectionsList = mockk<List<Collection>>()
+            val expectedResult = mockk<List<CollectionView>>()
+            coEvery {
+                clientVault.collections().decryptList(
+                    collections = mockCollectionsList,
+                )
+            } returns expectedResult
+            val result = vaultSdkSource.decryptCollectionList(
+                collectionList = mockCollectionsList,
+            )
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientVault.collections().decryptList(
+                    collections = mockCollectionsList,
+                )
+            }
+        }
 
     @Test
     fun `decryptSendList should call SDK and return correct data wrapped in a Result`() =

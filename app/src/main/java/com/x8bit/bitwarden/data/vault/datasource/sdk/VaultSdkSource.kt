@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.Collection
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitUserCryptoRequest
@@ -13,6 +15,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 /**
  * Source of vault information and functionality from the Bitwarden SDK.
  */
+@Suppress("TooManyFunctions")
 interface VaultSdkSource {
 
     /**
@@ -40,6 +43,18 @@ interface VaultSdkSource {
      * Decrypts a list of [Cipher]s returning a list of [CipherView] wrapped in a [Result].
      */
     suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherView>>
+
+    /**
+     * Decrypts a [Collection] returning a [CollectionView] wrapped in a [Result].
+     */
+    suspend fun decryptCollection(collection: Collection): Result<CollectionView>
+
+    /**
+     * Decrypts a list of [Collection]s returning a list of [CollectionView] wrapped in a [Result].
+     */
+    suspend fun decryptCollectionList(
+        collectionList: List<Collection>,
+    ): Result<List<CollectionView>>
 
     /**
      * Decrypts a [Send] returning a [SendView] wrapped in a [Result].
