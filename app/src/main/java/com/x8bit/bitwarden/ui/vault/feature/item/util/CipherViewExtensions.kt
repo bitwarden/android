@@ -14,9 +14,10 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
-private val dateTimeFormatter = DateTimeFormatter
-    .ofPattern("M/d/yy hh:mm a")
-    .withZone(TimeZone.getDefault().toZoneId())
+private val dateTimeFormatter
+    get() = DateTimeFormatter
+        .ofPattern("M/d/yy hh:mm a")
+        .withZone(TimeZone.getDefault().toZoneId())
 
 /**
  * Transforms [VaultData] into [VaultState.ViewState].
