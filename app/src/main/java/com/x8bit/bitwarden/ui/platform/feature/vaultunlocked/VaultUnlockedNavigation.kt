@@ -14,7 +14,6 @@ import com.x8bit.bitwarden.ui.tools.feature.send.navigateToNewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.newSendDestination
 import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddEditItem
 import com.x8bit.bitwarden.ui.vault.feature.additem.vaultAddEditItemDestination
-import com.x8bit.bitwarden.ui.vault.feature.edit.vaultEditItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -58,7 +57,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToVaultAddEditItem(VaultAddEditType.EditItem(it))
             },
         )
-        vaultEditItemDestination(onNavigateBack = { navController.popBackStack() })
         newSendDestination(onNavigateBack = { navController.popBackStack() })
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
     }
