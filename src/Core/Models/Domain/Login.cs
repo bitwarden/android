@@ -33,7 +33,7 @@ namespace Bit.Core.Models.Domain
         public EncString Totp { get; set; }
         public List<Fido2Credential> Fido2Credentials { get; set; }
 
-        public async Task<LoginView> DecryptAsync(string orgId, bool bypassValidation, SymmetricCryptoKey key = null)
+        public async Task<LoginView> DecryptAsync(string orgId, bool bypassUriChecksumValidation, SymmetricCryptoKey key = null)
         {
             var view = await DecryptObjAsync(new LoginView(this), this, new HashSet<string>
             {
@@ -48,7 +48,7 @@ namespace Bit.Core.Models.Domain
                 foreach (var uri in Uris)
                 {
                     var loginUriView = await uri.DecryptAsync(orgId, key);
-                    if (bypassValidation || await cryptoService.ValidateUriChecksumAsync(uri.UriChecksum, loginUriView.Uri, orgId, key))
+                    if (bypassUriChecksumValidation || await cryptoService.ValidateUriChecksumAsync(uri.UriChecksum, loginUriView.Uri, orgId, key))
                     {
                         view.Uris.Add(loginUriView);
                     }
