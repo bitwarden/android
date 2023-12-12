@@ -230,8 +230,12 @@ class AuthRepositoryImpl constructor(
         val updatedAccounts = currentUserState
             .accounts
             .filterKeys { it != userId }
-        authDiskSource.storeUserKey(userId = userId, userKey = null)
-        authDiskSource.storePrivateKey(userId = userId, privateKey = null)
+        authDiskSource.apply {
+            storeUserKey(userId = userId, userKey = null)
+            storePrivateKey(userId = userId, privateKey = null)
+            storeOrganizationKeys(userId = userId, organizationKeys = null)
+        }
+
         // Check if there is a new active user
         if (updatedAccounts.isNotEmpty()) {
             // If we logged out a non-active user, we want to leave the active user unchanged.

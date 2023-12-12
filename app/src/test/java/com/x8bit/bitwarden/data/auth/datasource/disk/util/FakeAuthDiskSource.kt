@@ -8,9 +8,20 @@ import kotlinx.coroutines.flow.onSubscription
 import org.junit.Assert.assertEquals
 
 class FakeAuthDiskSource : AuthDiskSource {
+
     override val uniqueAppId: String = "testUniqueAppId"
 
     override var rememberedEmailAddress: String? = null
+
+    private val mutableUserStateFlow =
+        MutableSharedFlow<UserStateJson?>(
+            replay = 1,
+            extraBufferCapacity = Int.MAX_VALUE,
+        )
+
+    private val storedUserKeys = mutableMapOf<String, String?>()
+    private val storedPrivateKeys = mutableMapOf<String, String?>()
+    private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -33,15 +44,16 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPrivateKeys[userId] = privateKey
     }
 
-    private val mutableUserStateFlow =
-        MutableSharedFlow<UserStateJson?>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
+    override fun getOrganizationKeys(
+        userId: String,
+    ): Map<String, String>? = storedOrganizationKeys[userId]
 
-    private val storedUserKeys = mutableMapOf<String, String?>()
-
-    private val storedPrivateKeys = mutableMapOf<String, String?>()
+    override fun storeOrganizationKeys(
+        userId: String,
+        organizationKeys: Map<String, String>?,
+    ) {
+        storedOrganizationKeys[userId] = organizationKeys
+    }
 
     /**
      * Assert that the given [userState] matches the currently tracked value.
@@ -62,5 +74,12 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertPrivateKey(userId: String, privateKey: String?) {
         assertEquals(privateKey, storedPrivateKeys[userId])
+    }
+
+    /**
+     * Assert the the [organizationKeys] was stored successfully using the [userId].
+     */
+    fun assertOrganizationKeys(userId: String, organizationKeys: Map<String, String>?) {
+        assertEquals(organizationKeys, storedOrganizationKeys[userId])
     }
 }

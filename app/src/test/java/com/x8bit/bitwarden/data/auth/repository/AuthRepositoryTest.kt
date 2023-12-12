@@ -957,6 +957,20 @@ class AuthRepositoryTest {
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
             )
         } returns SINGLE_USER_STATE_1
+        fakeAuthDiskSource.apply {
+            storeUserKey(
+                userId = USER_ID_1,
+                userKey = PUBLIC_KEY,
+            )
+            storePrivateKey(
+                userId = USER_ID_1,
+                privateKey = PRIVATE_KEY,
+            )
+            storeOrganizationKeys(
+                userId = USER_ID_1,
+                organizationKeys = ORGANIZATION_KEYS,
+            )
+        }
 
         repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
 
@@ -978,6 +992,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
                 userKey = null,
+            )
+            fakeAuthDiskSource.assertOrganizationKeys(
+                userId = USER_ID_1,
+                organizationKeys = null,
             )
             verify { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
@@ -1021,6 +1039,20 @@ class AuthRepositoryTest {
                     environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
                 )
             } returns MULTI_USER_STATE
+            fakeAuthDiskSource.apply {
+                storeUserKey(
+                    userId = USER_ID_2,
+                    userKey = PUBLIC_KEY,
+                )
+                storePrivateKey(
+                    userId = USER_ID_2,
+                    privateKey = PRIVATE_KEY,
+                )
+                storeOrganizationKeys(
+                    userId = USER_ID_2,
+                    organizationKeys = ORGANIZATION_KEYS,
+                )
+            }
 
             repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
 
@@ -1043,6 +1075,10 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     userKey = null,
                 )
+                fakeAuthDiskSource.assertOrganizationKeys(
+                    userId = USER_ID_1,
+                    organizationKeys = null,
+                )
                 verify { vaultRepository.clearUnlockedData() }
                 verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
             }
@@ -1056,6 +1092,20 @@ class AuthRepositoryTest {
             accounts = initialUserState.accounts.filter { it.key != USER_ID_2 },
         )
         fakeAuthDiskSource.userState = initialUserState
+        fakeAuthDiskSource.apply {
+            storeUserKey(
+                userId = USER_ID_2,
+                userKey = PUBLIC_KEY,
+            )
+            storePrivateKey(
+                userId = USER_ID_2,
+                privateKey = PRIVATE_KEY,
+            )
+            storeOrganizationKeys(
+                userId = USER_ID_2,
+                organizationKeys = ORGANIZATION_KEYS,
+            )
+        }
 
         assertEquals(initialUserState, fakeAuthDiskSource.userState)
 
@@ -1074,6 +1124,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_2,
                 userKey = null,
+            )
+            fakeAuthDiskSource.assertOrganizationKeys(
+                userId = USER_ID_2,
+                organizationKeys = null,
             )
             verify(exactly = 0) { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
@@ -1295,6 +1349,7 @@ class AuthRepositoryTest {
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private const val USER_ID_3 = "3816ef34-0747-4133-9b7a-ba35d3768a68"
+        private val ORGANIZATION_KEYS = mapOf("organizationId1" to "organizationKey1")
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
         )
