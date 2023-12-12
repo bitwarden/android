@@ -743,7 +743,6 @@ namespace Bit.Core.Services
                 return false;
             }
 
-            //var cryptoService = ServiceContainer.Resolve<ICryptoService>();
             var localChecksum = await HashAsync(rawUri, CryptoHashAlgorithm.Sha256);
 
             var remoteChecksum = await remoteUriChecksum.DecryptAsync(orgId, key);
