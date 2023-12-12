@@ -38,6 +38,7 @@ class VaultItemViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
+    // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
         vaultItemId = VaultItemArgs(savedStateHandle).vaultItemId,
         viewState = VaultItemState.ViewState.Loading,
@@ -46,8 +47,6 @@ class VaultItemViewModel @Inject constructor(
 ) {
 
     init {
-        stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
-
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
