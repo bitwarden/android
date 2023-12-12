@@ -1,25 +1,30 @@
 ---
 name: Version Bump
+run-name: Version Bump - v${{ inputs.version_number }}
 
 on:
-  workflow_dispatch:
-    inputs:
-      version_number:
-        description: "New Version"
-        required: true
   workflow_call:
     inputs:
       version_number:
+        description: "New version (example: '2024.1.0')"
         required: true
         type: string
+  workflow_dispatch:
+    inputs:
+      version_number:
+        description: "New version (example: '2024.1.0')"
+        required: true
 
 jobs:
   bump_version:
-    name: "Create version_bump_${{ github.event.inputs.version_number }} branch"
-    runs-on: ubuntu-20.04
+    name: "Bump Version to v${{ inputs.version_number }}"
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout Branch
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
+        with:
+          repository: bitwarden/mobile
+          ref: main
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.7
@@ -31,7 +36,9 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: "bitwarden-ci"
-          secrets: "github-gpg-private-key, github-gpg-private-key-passphrase"
+          secrets: "github-gpg-private-key,
+            github-gpg-private-key-passphrase,
+            github-pat-bitwarden-devops-bot-repo-scope"
 
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@d6f3f49f3345e29369fe57596a3ca8f94c4d2ca7 # v5.4.0
@@ -42,37 +49,68 @@ jobs:
           git_commit_gpgsign: true
 
       - name: Create Version Branch
-        run: git switch -c version_bump_${{ github.event.inputs.version_number }}
+        id: create-branch
+        run: |
+          NAME=version_bump_${{ github.ref_name }}_${{ inputs.version_number }}
+          git switch -c $NAME
+          echo "name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: Install xmllint
+        run: sudo apt install -y libxml2-utils
+
+      - name: Verify input version
+        env:
+          NEW_VERSION: ${{ inputs.version_number }}
+        run: |
+          CURRENT_VERSION=$(xmllint --xpath '
+            string(/manifest/@*[local-name()="versionName" 
+              and namespace-uri()="http://schemas.android.com/apk/res/android"])
+            ' src/Android/Properties/AndroidManifest.xml)
+
+          # Error if version has not changed.
+          if [[ "$NEW_VERSION" == "$CURRENT_VERSION" ]]; then
+            echo "Version has not changed."
+            exit 1
+          fi
+
+          # Check if version is newer.
+          printf '%s\n' "${CURRENT_VERSION}" "${NEW_VERSION}" | sort -C -V
+          if [ $? -eq 0 ]; then
+            echo "Version check successful."
+          else
+            echo "Version check failed."
+            exit 1
+          fi
 
       - name: Bump Version - Android XML
         uses: bitwarden/gh-actions/version-bump@main
         with:
-          version: ${{ github.event.inputs.version_number }}
-          file_path: "./src/Android/Properties/AndroidManifest.xml"
+          version: ${{ inputs.version_number }}
+          file_path: "src/Android/Properties/AndroidManifest.xml"
 
       - name: Bump Version - iOS.Autofill
         uses: bitwarden/gh-actions/version-bump@main
         with:
-          version: ${{ github.event.inputs.version_number }}
-          file_path: "./src/iOS.Autofill/Info.plist"
+          version: ${{ inputs.version_number }}
+          file_path: "src/iOS.Autofill/Info.plist"
 
       - name: Bump Version - iOS.Extension
         uses: bitwarden/gh-actions/version-bump@main
         with:
-          version: ${{ github.event.inputs.version_number }}
-          file_path: "./src/iOS.Extension/Info.plist"
+          version: ${{ inputs.version_number }}
+          file_path: "src/iOS.Extension/Info.plist"
 
       - name: Bump Version - iOS.ShareExtension
         uses: bitwarden/gh-actions/version-bump@main
         with:
-          version: ${{ github.event.inputs.version_number }}
-          file_path: "./src/iOS.ShareExtension/Info.plist"
+          version: ${{ inputs.version_number }}
+          file_path: "src/iOS.ShareExtension/Info.plist"
 
       - name: Bump Version - iOS
         uses: bitwarden/gh-actions/version-bump@main
         with:
-          version: ${{ github.event.inputs.version_number }}
-          file_path: "./src/iOS/Info.plist"
+          version: ${{ inputs.version_number }}
+          file_path: "src/iOS/Info.plist"
 
       - name: Setup git
         run: |
@@ -91,22 +129,24 @@ jobs:
 
       - name: Commit files
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-        run: git commit -m "Bumped version to ${{ github.event.inputs.version_number }}" -a
+        run: git commit -m "Bumped version to ${{ inputs.version_number }}" -a
 
       - name: Push changes
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-        run: git push -u origin version_bump_${{ github.event.inputs.version_number }}
+        env:
+          PR_BRANCH: ${{ steps.create-branch.outputs.name }}
+        run: git push -u origin $PR_BRANCH
 
       - name: Create Version PR
         if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
+        id: create-pr
         env:
-          PR_BRANCH: "version_bump_${{ github.event.inputs.version_number }}"
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          BASE_BRANCH: main
-          TITLE: "Bump version to ${{ github.event.inputs.version_number }}"
+          PR_BRANCH: ${{ steps.create-branch.outputs.name }}
+          GH_TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
+          TITLE: "Bump version to ${{ inputs.version_number }}"
         run: |
-          gh pr create --title "$TITLE" \
-            --base "$BASE" \
+          PR_URL=$(gh pr create --title "$TITLE" \
+            --base "main" \
             --head "$PR_BRANCH" \
             --label "version update" \
             --label "automated pr" \
@@ -119,4 +159,17 @@ jobs:
               - [X] Other
 
               ## Objective
-              Automated version bump to ${{ github.event.inputs.version_number }}"
+              Automated version bump to ${{ inputs.version_number }}")
+          echo "pr_number=${PR_URL##*/}" >> $GITHUB_OUTPUT
+
+      - name: Approve PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ steps.create-pr.outputs.pr_number }}
+        run: gh pr review $PR_NUMBER --approve
+
+      - name: Merge PR
+        env:
+          GH_TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
+          PR_NUMBER: ${{ steps.create-pr.outputs.pr_number }}
+        run: gh pr merge $PR_NUMBER --squash --auto --delete-branch
