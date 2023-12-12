@@ -2185,7 +2185,7 @@
     <value>无效的验证码</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>请求一次性密码</value>
+    <value>要求一次性密码</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>发送验证码</value>
@@ -2780,7 +2780,7 @@
     <value>会话超时动作</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>账户的指纹短语</value>
+    <value>账户指纹短语</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">

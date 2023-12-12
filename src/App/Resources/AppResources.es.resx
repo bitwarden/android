@@ -2870,6 +2870,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Tu organización requiere que establezcas una contraseña maestra.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
-    <value>Set up an unlock option to change your vault timeout action.</value>
+    <value>Configura una opción de desbloqueo para cambiar tu acción de tiempo de espera de tu caja fuerte.</value>
   </data>
 </root>
