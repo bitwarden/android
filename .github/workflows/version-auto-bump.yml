@@ -37,3 +37,4 @@ jobs:
     uses: ./.github/workflows/version-bump.yml
     with:
       version_number: ${{ needs.setup.outputs.version_number }}
+    secrets: inherit
