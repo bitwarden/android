@@ -7,6 +7,7 @@ import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
@@ -32,7 +33,20 @@ class VaultSdkSourceImpl(
                 clientCrypto.initializeUserCrypto(req = request)
                 InitializeCryptoResult.Success
             } catch (exception: BitwardenException) {
-                // The only truly expected error from the SDK is an incorrect password.
+                // The only truly expected error from the SDK is an incorrect key/password.
+                InitializeCryptoResult.AuthenticationError
+            }
+        }
+
+    override suspend fun initializeOrganizationCrypto(
+        request: InitOrgCryptoRequest,
+    ): Result<InitializeCryptoResult> =
+        runCatching {
+            try {
+                clientCrypto.initializeOrgCrypto(req = request)
+                InitializeCryptoResult.Success
+            } catch (exception: BitwardenException) {
+                // The only truly expected error from the SDK is for incorrect keys.
                 InitializeCryptoResult.AuthenticationError
             }
         }

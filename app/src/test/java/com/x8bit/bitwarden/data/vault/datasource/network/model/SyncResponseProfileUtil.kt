@@ -78,6 +78,13 @@ fun createMockOrganization(number: Int): SyncResponseJson.Profile.Organization =
     )
 
 /**
+ * Create a mock set of organization keys with the given [number].
+ */
+fun createMockOrganizationKeys(number: Int): Map<String, String> =
+    createMockOrganization(number = number)
+        .let { mapOf(it.id to requireNotNull(it.key)) }
+
+/**
  * Create a mock [SyncResponseJson.Profile.Permissions].
  */
 fun createMockPermissions(): SyncResponseJson.Profile.Permissions =

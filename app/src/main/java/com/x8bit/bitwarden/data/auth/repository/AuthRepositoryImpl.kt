@@ -179,9 +179,10 @@ class AuthRepositoryImpl constructor(
                             kdf = userStateJson.activeAccount.profile.toSdkParams(),
                             userKey = loginResponse.key,
                             privateKey = loginResponse.privateKey,
-                            // TODO use actual organization keys BIT-1091
-                            organizationalKeys = emptyMap(),
                             masterPassword = password,
+                            // We can separately unlock the vault for organization data after
+                            // receiving the sync response.
+                            organizationKeys = null,
                         )
                         authDiskSource.userState = userStateJson
                         authDiskSource.storeUserKey(

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.repository
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Kdf
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
@@ -65,12 +67,20 @@ class VaultRepositoryTest {
         dispatcherManager = dispatcherManager,
     )
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `sync with syncService Success should update AuthDiskSource and DataStateFlows`() =
+    fun `sync with syncService Success should unlock the vault for orgs if necessary and update AuthDiskSource and DataStateFlows`() =
         runTest {
             coEvery {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -127,6 +137,13 @@ class VaultRepositoryTest {
                 ),
                 vaultRepository.sendDataStateFlow.value,
             )
+            coVerify {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            }
         }
 
     @Test
@@ -135,6 +152,13 @@ class VaultRepositoryTest {
             coEvery {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -190,6 +214,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
@@ -242,6 +273,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns mockException.asFailure()
             coEvery {
@@ -268,6 +306,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
@@ -293,6 +338,13 @@ class VaultRepositoryTest {
             coEvery {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -370,6 +422,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
@@ -429,6 +488,13 @@ class VaultRepositoryTest {
                 Result.success(createMockSyncResponse(number = 1)),
                 UnknownHostException().asFailure(),
             )
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -530,6 +596,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
@@ -545,6 +618,10 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.storeUserKey(
                 userId = "mockId-1",
                 userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.storeOrganizationKeys(
+                userId = "mockId-1",
+                organizationKeys = createMockOrganizationKeys(number = 1),
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
@@ -590,6 +667,13 @@ class VaultRepositoryTest {
             coEvery {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -681,8 +765,9 @@ class VaultRepositoryTest {
             coVerify(exactly = 0) { syncService.sync() }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultAndSyncForCurrentUser with unlockVault failure should return GenericError`() =
+    fun `unlockVaultAndSyncForCurrentUser with unlockVault failure for users should return GenericError`() =
         runTest {
             coEvery {
                 syncService.sync()
@@ -740,7 +825,77 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultAndSyncForCurrentUser with unlockVault AuthenticationError should return AuthenticationError`() =
+    fun `unlockVaultAndSyncForCurrentUser with unlockVault failure for orgs should return GenericError`() =
+        runTest {
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns mockk()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns mockk()
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockId-1",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockId-1",
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.storeOrganizationKeys(
+                userId = "mockId-1",
+                organizationKeys = createMockOrganizationKeys(number = 1),
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
+                        email = "email",
+                        privateKey = "mockPrivateKey-1",
+                        method = InitUserCryptoMethod.Password(
+                            password = "mockPassword-1",
+                            userKey = "mockKey-1",
+                        ),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns IllegalStateException().asFailure()
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(
+                masterPassword = "mockPassword-1",
+            )
+
+            assertEquals(
+                VaultUnlockResult.GenericError,
+                result,
+            )
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultAndSyncForCurrentUser with unlockVault AuthenticationError for users should return AuthenticationError`() =
         runTest {
             coEvery { syncService.sync() } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
@@ -771,6 +926,70 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns Result.success(InitializeCryptoResult.AuthenticationError)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "")
+            assertEquals(
+                VaultUnlockResult.AuthenticationError,
+                result,
+            )
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultAndSyncForCurrentUser with unlockVault AuthenticationError for orgs should return AuthenticationError`() =
+        runTest {
+            coEvery { syncService.sync() } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns mockk()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns mockk()
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockId-1",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockId-1",
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.storeOrganizationKeys(
+                userId = "mockId-1",
+                organizationKeys = createMockOrganizationKeys(number = 1),
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
+                        email = "email",
+                        privateKey = "mockPrivateKey-1",
+                        method = InitUserCryptoMethod.Password(
+                            password = "",
+                            userKey = "mockKey-1",
+                        ),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
@@ -890,7 +1109,7 @@ class VaultRepositoryTest {
         val masterPassword = "drowssap"
         val userKey = "12345"
         val privateKey = "54321"
-        val organizationalKeys = emptyMap<String, String>()
+        val organizationKeys = mapOf("orgId1" to "orgKey1")
         coEvery {
             vaultSdkSource.initializeCrypto(
                 request = InitUserCryptoRequest(
@@ -902,6 +1121,11 @@ class VaultRepositoryTest {
                         userKey = userKey,
                     ),
                 ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(
+                request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
         assertEquals(
@@ -918,7 +1142,7 @@ class VaultRepositoryTest {
             email = email,
             userKey = userKey,
             privateKey = privateKey,
-            organizationalKeys = organizationalKeys,
+            organizationKeys = organizationKeys,
         )
 
         assertEquals(VaultUnlockResult.Success, result)
@@ -941,11 +1165,16 @@ class VaultRepositoryTest {
                 ),
             )
         }
+        coVerify(exactly = 1) {
+            vaultSdkSource.initializeOrganizationCrypto(
+                request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto authentication failure should return AuthenticationError`() =
+    fun `unlockVault with initializeCrypto authentication failure for users should return AuthenticationError`() =
         runTest {
             val userId = "userId"
             val kdf = MOCK_PROFILE.toSdkParams()
@@ -953,7 +1182,7 @@ class VaultRepositoryTest {
             val masterPassword = "drowssap"
             val userKey = "12345"
             val privateKey = "54321"
-            val organizationalKeys = emptyMap<String, String>()
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     request = InitUserCryptoRequest(
@@ -967,6 +1196,7 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.AuthenticationError.asSuccess()
+
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
@@ -981,7 +1211,7 @@ class VaultRepositoryTest {
                 email = email,
                 userKey = userKey,
                 privateKey = privateKey,
-                organizationalKeys = organizationalKeys,
+                organizationKeys = organizationKeys,
             )
 
             assertEquals(VaultUnlockResult.AuthenticationError, result)
@@ -1006,66 +1236,213 @@ class VaultRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto failure should return GenericError`() = runTest {
-        val userId = "userId"
-        val kdf = MOCK_PROFILE.toSdkParams()
-        val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
-        val userKey = "12345"
-        val privateKey = "54321"
-        val organizationalKeys = emptyMap<String, String>()
-        coEvery {
-            vaultSdkSource.initializeCrypto(
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
+    fun `unlockVault with initializeCrypto authentication failure for orgs should return AuthenticationError`() =
+        runTest {
+            val userId = "userId"
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "drowssap"
+            val userKey = "12345"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
                     ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
                 ),
+                vaultRepository.vaultStateFlow.value,
             )
-        } returns Throwable("Fail").asFailure()
-        assertEquals(
-            VaultState(
-                unlockedVaultUserIds = emptySet(),
-            ),
-            vaultRepository.vaultStateFlow.value,
-        )
 
-        val result = vaultRepository.unlockVault(
-            userId = userId,
-            masterPassword = masterPassword,
-            kdf = kdf,
-            email = email,
-            userKey = userKey,
-            privateKey = privateKey,
-            organizationalKeys = organizationalKeys,
-        )
+            val result = vaultRepository.unlockVault(
+                userId = userId,
+                masterPassword = masterPassword,
+                kdf = kdf,
+                email = email,
+                userKey = userKey,
+                privateKey = privateKey,
+                organizationKeys = organizationKeys,
+            )
 
-        assertEquals(VaultUnlockResult.GenericError, result)
-        assertEquals(
-            VaultState(
-                unlockedVaultUserIds = emptySet(),
-            ),
-            vaultRepository.vaultStateFlow.value,
-        )
-        coVerify(exactly = 1) {
-            vaultSdkSource.initializeCrypto(
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
+            assertEquals(VaultUnlockResult.AuthenticationError, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
                     ),
-                ),
-            )
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            }
         }
-    }
+
+    @Test
+    fun `unlockVault with initializeCrypto failure for users should return GenericError`() =
+        runTest {
+            val userId = "userId"
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "drowssap"
+            val userKey = "12345"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            } returns Throwable("Fail").asFailure()
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVault(
+                userId = userId,
+                masterPassword = masterPassword,
+                kdf = kdf,
+                email = email,
+                userKey = userKey,
+                privateKey = privateKey,
+                organizationKeys = organizationKeys,
+            )
+
+            assertEquals(VaultUnlockResult.GenericError, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            }
+        }
+
+    @Test
+    fun `unlockVault with initializeCrypto failure for orgs should return GenericError`() =
+        runTest {
+            val userId = "userId"
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "drowssap"
+            val userKey = "12345"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns Throwable("Fail").asFailure()
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVault(
+                userId = userId,
+                masterPassword = masterPassword,
+                kdf = kdf,
+                email = email,
+                userKey = userKey,
+                privateKey = privateKey,
+                organizationKeys = organizationKeys,
+            )
+
+            assertEquals(VaultUnlockResult.GenericError, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            }
+        }
 
     @Test
     fun `unlockVault with initializeCrypto awaiting should block calls to sync`() = runTest {
@@ -1075,7 +1452,7 @@ class VaultRepositoryTest {
         val masterPassword = "drowssap"
         val userKey = "12345"
         val privateKey = "54321"
-        val organizationalKeys = emptyMap<String, String>()
+        val organizationKeys = null
         coEvery {
             vaultSdkSource.initializeCrypto(
                 request = InitUserCryptoRequest(
@@ -1099,7 +1476,7 @@ class VaultRepositoryTest {
                 email = email,
                 userKey = userKey,
                 privateKey = privateKey,
-                organizationalKeys = organizationalKeys,
+                organizationKeys = organizationKeys,
             )
         }
         // Does nothing because we are blocking
@@ -1128,6 +1505,13 @@ class VaultRepositoryTest {
             coEvery {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -1171,6 +1555,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(number = 1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
@@ -1213,6 +1604,13 @@ class VaultRepositoryTest {
         coEvery {
             syncService.sync()
         } returns Result.success(createMockSyncResponse(itemId))
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(
+                request = InitOrgCryptoRequest(
+                    organizationKeys = createMockOrganizationKeys(itemId),
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
         coEvery {
             vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(itemId)))
         } returns listOf(item).asSuccess()
@@ -1288,6 +1686,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(1)).asSuccess()
             coEvery {
@@ -1319,6 +1724,13 @@ class VaultRepositoryTest {
         coEvery {
             syncService.sync()
         } returns Result.success(createMockSyncResponse(folderId))
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(
+                request = InitOrgCryptoRequest(
+                    organizationKeys = createMockOrganizationKeys(folderId),
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
         coEvery {
             vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(folderId)))
         } returns listOf(createMockCipherView(folderId)).asSuccess()
@@ -1393,6 +1805,13 @@ class VaultRepositoryTest {
             coEvery {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(1))
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(1)).asSuccess()
@@ -1472,6 +1891,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(1)).asSuccess()
             coEvery {
@@ -1549,6 +1975,13 @@ class VaultRepositoryTest {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(1))
             coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(1)).asSuccess()
             coEvery {
@@ -1577,7 +2010,7 @@ class VaultRepositoryTest {
         val masterPassword = "drowssap"
         val userKey = "12345"
         val privateKey = "54321"
-        val organizationalKeys = emptyMap<String, String>()
+        val organizationKeys = null
         coEvery {
             vaultSdkSource.initializeCrypto(
                 request = InitUserCryptoRequest(
@@ -1599,7 +2032,7 @@ class VaultRepositoryTest {
             email = email,
             userKey = userKey,
             privateKey = privateKey,
-            organizationalKeys = organizationalKeys,
+            organizationKeys = organizationKeys,
         )
 
         assertEquals(VaultUnlockResult.Success, result)

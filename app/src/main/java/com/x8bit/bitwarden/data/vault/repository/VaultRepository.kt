@@ -71,6 +71,9 @@ interface VaultRepository {
 
     /**
      * Attempt to unlock the vault with the specified user information.
+     *
+     * Note that when [organizationKeys] is absent, no attempt will be made to unlock the vault
+     * for organization data.
      */
     @Suppress("LongParameterList")
     suspend fun unlockVault(
@@ -80,7 +83,7 @@ interface VaultRepository {
         kdf: Kdf,
         userKey: String,
         privateKey: String,
-        organizationalKeys: Map<String, String>,
+        organizationKeys: Map<String, String>?,
     ): VaultUnlockResult
 
     /**
