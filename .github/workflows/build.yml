@@ -271,7 +271,7 @@ jobs:
           if-no-files-found: error
 
       - name: Deploy to Play Store
-        if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/master'
+        if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/main'
           && needs.setup.outputs.rc_branch_exists == 0
           && needs.setup.outputs.hotfix_branch_exists == 0)
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
@@ -694,7 +694,7 @@ jobs:
 
       - name: Install AppCenter CLI
         if: |
-          (github.ref == 'refs/heads/master'
+          (github.ref == 'refs/heads/main'
             && needs.setup.outputs.rc_branch_exists == 0
             && needs.setup.outputs.hotfix_branch_exists == 0)
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
@@ -703,7 +703,7 @@ jobs:
 
       - name: Upload dSYMs to App Center
         if: |
-          (github.ref == 'refs/heads/master'
+          (github.ref == 'refs/heads/main'
             && needs.setup.outputs.rc_branch_exists == 0
             && needs.setup.outputs.hotfix_branch_exists == 0)
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
@@ -714,7 +714,7 @@ jobs:
 
       - name: Upload Watch dSYMs to Firebase Crashlytics
         if: |
-          (github.ref == 'refs/heads/master'
+          (github.ref == 'refs/heads/main'
             && needs.setup.outputs.rc_branch_exists == 0
             && needs.setup.outputs.hotfix_branch_exists == 0)
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
@@ -728,7 +728,7 @@ jobs:
 
       - name: Deploy to App Store
         if: |
-          (github.ref == 'refs/heads/master'
+          (github.ref == 'refs/heads/main'
             && needs.setup.outputs.rc_branch_exists == 0
             && needs.setup.outputs.hotfix_branch_exists == 0)
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
@@ -743,7 +743,7 @@ jobs:
 
   crowdin-push:
     name: Crowdin Push
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     needs:
       - android
       - f-droid
@@ -774,7 +774,7 @@ jobs:
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
         with:
           config: crowdin.yml
-          crowdin_branch_name: master
+          crowdin_branch_name: main 
           upload_sources: true
           upload_translations: false
 
@@ -792,7 +792,7 @@ jobs:
     steps:
       - name: Check if any job failed
         if: |
-          (github.ref == 'refs/heads/master')
+          (github.ref == 'refs/heads/main')
           || (github.ref == 'refs/heads/rc')
           || (github.ref == 'refs/heads/hotfix-rc')
         env:
