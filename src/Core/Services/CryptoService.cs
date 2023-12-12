@@ -19,6 +19,7 @@ namespace Bit.Core.Services
 
         private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
+        private readonly ILogger _logger;
 
         private SymmetricCryptoKey _legacyEtmKey;
         private string _masterKeyHash;
@@ -29,10 +30,12 @@ namespace Bit.Core.Services
 
         public CryptoService(
             IStateService stateService,
-            ICryptoFunctionService cryptoFunctionService)
+            ICryptoFunctionService cryptoFunctionService,
+            ILogger logger)
         {
             _stateService = stateService;
             _cryptoFunctionService = cryptoFunctionService;
+            _logger = logger;
         }
 
         public void ClearCache()
@@ -738,15 +741,23 @@ namespace Bit.Core.Services
 
         public async Task<bool> ValidateUriChecksumAsync(EncString remoteUriChecksum, string rawUri, string orgId, SymmetricCryptoKey key)
         {
-            if (remoteUriChecksum == null)
+            try
             {
+                if (remoteUriChecksum == null)
+                {
+                    return false;
+                }
+
+                var localChecksum = await HashAsync(rawUri, CryptoHashAlgorithm.Sha256);
+
+                var remoteChecksum = await remoteUriChecksum.DecryptAsync(orgId, key);
+                return remoteChecksum == localChecksum;
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
                 return false;
             }
-
-            var localChecksum = await HashAsync(rawUri, CryptoHashAlgorithm.Sha256);
-
-            var remoteChecksum = await remoteUriChecksum.DecryptAsync(orgId, key);
-            return remoteChecksum == localChecksum;
         }
 
         // --HELPER METHODS--
