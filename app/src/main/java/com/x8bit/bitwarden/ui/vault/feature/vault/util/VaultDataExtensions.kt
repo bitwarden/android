@@ -99,53 +99,53 @@ fun VaultAddItemState.ViewState.Content.toCipherView(): CipherView =
  */
 private fun VaultAddItemState.ViewState.Content.Login.toLoginCipherView(): CipherView =
     CipherView(
-        id = null,
-        // TODO use real organization id BIT-780
-        organizationId = null,
-        // TODO use real folder id BIT-528
-        folderId = null,
-        collectionIds = emptyList(),
-        key = null,
-        name = name,
-        notes = notes,
+        // Pulled from original cipher when editing, otherwise uses defaults
+        id = this.originalCipher?.id,
+        collectionIds = this.originalCipher?.collectionIds.orEmpty(),
+        key = this.originalCipher?.key,
+        edit = this.originalCipher?.edit ?: true,
+        viewPassword = this.originalCipher?.viewPassword ?: true,
+        localData = this.originalCipher?.localData,
+        attachments = this.originalCipher?.attachments,
+        organizationUseTotp = this.originalCipher?.organizationUseTotp ?: false,
+        passwordHistory = this.originalCipher?.passwordHistory,
+        creationDate = this.originalCipher?.creationDate ?: Instant.now(),
+        deletedDate = this.originalCipher?.deletedDate,
+        revisionDate = this.originalCipher?.revisionDate ?: Instant.now(),
+
+        // Type specific section
         type = CipherType.LOGIN,
         login = LoginView(
-            username = username,
-            password = password,
-            passwordRevisionDate = null,
+            username = this.username,
+            password = this.password,
+            passwordRevisionDate = this.originalCipher?.login?.passwordRevisionDate,
             uris = listOf(
+                // TODO Implement URI list (BIT-1094)
                 LoginUriView(
-                    uri = uri,
-                    // TODO implement uri settings in BIT-1094
+                    uri = this.uri,
+                    // TODO Implement URI settings in (BIT-1094)
                     match = UriMatchType.DOMAIN,
                 ),
             ),
             // TODO implement totp in BIT-1066
-            totp = null,
-            autofillOnPageLoad = false,
+            totp = this.originalCipher?.login?.totp,
+            autofillOnPageLoad = this.originalCipher?.login?.autofillOnPageLoad,
         ),
         identity = null,
         card = null,
         secureNote = null,
-        favorite = favorite,
-        reprompt = if (masterPasswordReprompt) {
-            CipherRepromptType.PASSWORD
-        } else {
-            CipherRepromptType.NONE
-        },
-        organizationUseTotp = false,
-        edit = true,
-        viewPassword = true,
-        localData = null,
-        attachments = null,
-        // TODO implement custom fields BIT-529
+
+        // Fields we always grab from the UI
+        name = this.name,
+        notes = this.notes,
+        favorite = this.favorite,
+        // TODO Use real folder ID (BIT-528)
+        folderId = this.originalCipher?.folderId,
+        // TODO Use real organization ID (BIT-780)
+        organizationId = this.originalCipher?.organizationId,
+        reprompt = this.toCipherRepromptType(),
+        // TODO Implement custom fields (BIT-529)
         fields = null,
-        passwordHistory = null,
-        creationDate = Instant.now(),
-        deletedDate = null,
-        // This is a throw away value.
-        // The SDK will eventually remove revisionDate via encryption.
-        revisionDate = Instant.now(),
     )
 
 /**
@@ -153,39 +153,38 @@ private fun VaultAddItemState.ViewState.Content.Login.toLoginCipherView(): Ciphe
  */
 private fun VaultAddItemState.ViewState.Content.SecureNotes.toSecureNotesCipherView(): CipherView =
     CipherView(
-        id = null,
-        // TODO use real organization id BIT-780
-        organizationId = null,
-        // TODO use real folder id BIT-528
-        folderId = null,
-        collectionIds = emptyList(),
-        key = null,
-        name = name,
-        notes = notes,
+        // Pulled from original cipher when editing, otherwise uses defaults
+        id = this.originalCipher?.id,
+        collectionIds = this.originalCipher?.collectionIds.orEmpty(),
+        key = this.originalCipher?.key,
+        edit = this.originalCipher?.edit ?: true,
+        viewPassword = this.originalCipher?.viewPassword ?: true,
+        localData = this.originalCipher?.localData,
+        attachments = this.originalCipher?.attachments,
+        organizationUseTotp = this.originalCipher?.organizationUseTotp ?: false,
+        passwordHistory = this.originalCipher?.passwordHistory,
+        creationDate = this.originalCipher?.creationDate ?: Instant.now(),
+        deletedDate = this.originalCipher?.deletedDate,
+        revisionDate = this.originalCipher?.revisionDate ?: Instant.now(),
+
+        // Type specific section
         type = CipherType.SECURE_NOTE,
-        secureNote = SecureNoteView(SecureNoteType.GENERIC),
+        secureNote = SecureNoteView(type = SecureNoteType.GENERIC),
         login = null,
         identity = null,
         card = null,
-        favorite = favorite,
-        reprompt = if (masterPasswordReprompt) {
-            CipherRepromptType.PASSWORD
-        } else {
-            CipherRepromptType.NONE
-        },
-        organizationUseTotp = false,
-        edit = true,
-        viewPassword = true,
-        localData = null,
-        attachments = null,
-        // TODO implement custom fields BIT-529
+
+        // Fields we always grab from the UI
+        name = this.name,
+        notes = this.notes,
+        favorite = this.favorite,
+        // TODO Use real folder ID (BIT-528)
+        folderId = this.originalCipher?.folderId,
+        // TODO Use real organization ID (BIT-780)
+        organizationId = this.originalCipher?.organizationId,
+        reprompt = this.toCipherRepromptType(),
+        // TODO Implement custom fields (BIT-529)
         fields = null,
-        passwordHistory = null,
-        creationDate = Instant.now(),
-        deletedDate = null,
-        // This is a throw away value.
-        // The SDK will eventually remove revisionDate via encryption.
-        revisionDate = Instant.now(),
     )
 
 /**
@@ -199,3 +198,10 @@ private fun VaultAddItemState.ViewState.Content.Identity.toIdentityCipherView():
  */
 private fun VaultAddItemState.ViewState.Content.Card.toCardCipherView(): CipherView =
     TODO("create Card CipherView BIT-668")
+
+private fun VaultAddItemState.ViewState.Content.toCipherRepromptType(): CipherRepromptType =
+    if (this.masterPasswordReprompt) {
+        CipherRepromptType.PASSWORD
+    } else {
+        CipherRepromptType.NONE
+    }

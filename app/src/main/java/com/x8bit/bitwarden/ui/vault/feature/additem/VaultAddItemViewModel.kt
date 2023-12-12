@@ -4,19 +4,27 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -55,6 +63,19 @@ class VaultAddItemViewModel @Inject constructor(
 
     init {
         stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
+
+        when (val vaultAddEditType = state.vaultAddEditType) {
+            VaultAddEditType.AddItem -> Unit
+            is VaultAddEditType.EditItem -> {
+                vaultRepository
+                    .getVaultItemStateFlow(vaultAddEditType.vaultItemId)
+                    // We'll stop getting updates as soon as we get some loaded data.
+                    .takeUntilLoaded()
+                    .map { VaultAddItemAction.Internal.VaultDataReceive(it) }
+                    .onEach(::sendAction)
+                    .launchIn(viewModelScope)
+            }
+        }
     }
 
     override fun handleAction(action: VaultAddItemAction) {
@@ -83,9 +104,21 @@ class VaultAddItemViewModel @Inject constructor(
                 handleAddSecureNoteTypeAction(action)
             }
 
+            is VaultAddItemAction.Internal -> handleInternalActions(action)
+        }
+    }
+
+    private fun handleInternalActions(action: VaultAddItemAction.Internal) {
+        when (action) {
             is VaultAddItemAction.Internal.CreateCipherResultReceive -> {
                 handleCreateCipherResultReceive(action)
             }
+
+            is VaultAddItemAction.Internal.UpdateCipherResultReceive -> {
+                handleUpdateCipherResultReceive(action)
+            }
+
+            is VaultAddItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
     }
 
@@ -115,13 +148,20 @@ class VaultAddItemViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            sendAction(
-                action = VaultAddItemAction.Internal.CreateCipherResultReceive(
-                    createCipherResult = vaultRepository.createCipher(
+            when (val vaultAddEditType = state.vaultAddEditType) {
+                VaultAddEditType.AddItem -> {
+                    val result = vaultRepository.createCipher(cipherView = content.toCipherView())
+                    sendAction(VaultAddItemAction.Internal.CreateCipherResultReceive(result))
+                }
+
+                is VaultAddEditType.EditItem -> {
+                    val result = vaultRepository.updateCipher(
+                        cipherId = vaultAddEditType.vaultItemId,
                         cipherView = content.toCipherView(),
-                    ),
-                ),
-            )
+                    )
+                    sendAction(VaultAddItemAction.Internal.UpdateCipherResultReceive(result))
+                }
+            }
         }
     }
 
@@ -533,6 +573,80 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleUpdateCipherResultReceive(
+        action: VaultAddItemAction.Internal.UpdateCipherResultReceive,
+    ) {
+        mutableStateFlow.update { it.copy(dialog = null) }
+        when (action.updateCipherResult) {
+            is UpdateCipherResult.Error -> {
+                // TODO Display error dialog BIT-501
+                sendEvent(VaultAddItemEvent.ShowToast(message = "Save Item Failure"))
+            }
+
+            is UpdateCipherResult.Success -> {
+                sendEvent(VaultAddItemEvent.NavigateBack)
+            }
+        }
+    }
+
+    private fun handleVaultDataReceive(action: VaultAddItemAction.Internal.VaultDataReceive) {
+        when (val vaultDataState = action.vaultDataState) {
+            is DataState.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = VaultAddItemState.ViewState.Error(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is DataState.Loaded -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = vaultDataState
+                            .data
+                            ?.toViewState()
+                            ?: VaultAddItemState.ViewState.Error(
+                                message = R.string.generic_error_message.asText(),
+                            ),
+                    )
+                }
+            }
+
+            DataState.Loading -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = VaultAddItemState.ViewState.Loading)
+                }
+            }
+
+            is DataState.NoNetwork -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = VaultAddItemState.ViewState.Error(
+                            message = R.string.internet_connection_required_title
+                                .asText()
+                                .concat(R.string.internet_connection_required_message.asText()),
+                        ),
+                    )
+                }
+            }
+
+            is DataState.Pending -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = vaultDataState
+                            .data
+                            ?.toViewState()
+                            ?: VaultAddItemState.ViewState.Error(
+                                message = R.string.generic_error_message.asText(),
+                            ),
+                    )
+                }
+            }
+        }
+    }
+
     //endregion Internal Type Handlers
 
     //region Utility Functions
@@ -639,6 +753,14 @@ data class VaultAddItemState(
         @Parcelize
         sealed class Content : ViewState() {
             /**
+             * The original cipher from the vault that the user is editing.
+             *
+             * This is only present when editing a pre-existing cipher.
+             */
+            @IgnoredOnParcel
+            abstract val originalCipher: CipherView?
+
+            /**
              * Represents the resource ID for the display string. This is an abstract property
              * that must be overridden by each subclass to provide the appropriate string resource
              * ID for display purposes.
@@ -680,6 +802,8 @@ data class VaultAddItemState(
              */
             @Parcelize
             data class Login(
+                @IgnoredOnParcel
+                override val originalCipher: CipherView? = null,
                 override val name: String = "",
                 val username: String = "",
                 val password: String = "",
@@ -706,6 +830,8 @@ data class VaultAddItemState(
              */
             @Parcelize
             data class Card(
+                @IgnoredOnParcel
+                override val originalCipher: CipherView? = null,
                 override val name: String = "",
                 override val masterPasswordReprompt: Boolean = false,
                 override val ownership: String = DEFAULT_OWNERSHIP,
@@ -719,6 +845,8 @@ data class VaultAddItemState(
              */
             @Parcelize
             data class Identity(
+                @IgnoredOnParcel
+                override val originalCipher: CipherView? = null,
                 override val name: String = "",
                 override val masterPasswordReprompt: Boolean = false,
                 override val ownership: String = DEFAULT_OWNERSHIP,
@@ -737,6 +865,8 @@ data class VaultAddItemState(
              */
             @Parcelize
             data class SecureNotes(
+                @IgnoredOnParcel
+                override val originalCipher: CipherView? = null,
                 override val name: String = "",
                 val folderName: Text = DEFAULT_FOLDER,
                 val favorite: Boolean = false,
@@ -1006,12 +1136,25 @@ sealed class VaultAddItemAction {
      * Models actions that the [VaultAddItemViewModel] itself might send.
      */
     sealed class Internal : VaultAddItemAction() {
+        /**
+         * Indicates that the vault item data has been received.
+         */
+        data class VaultDataReceive(
+            val vaultDataState: DataState<CipherView?>,
+        ) : Internal()
 
         /**
          * Indicates a result for creating a cipher has been received.
          */
         data class CreateCipherResultReceive(
             val createCipherResult: CreateCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates a result for updating a cipher has been received.
+         */
+        data class UpdateCipherResultReceive(
+            val updateCipherResult: UpdateCipherResult,
         ) : Internal()
     }
 }
