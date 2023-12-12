@@ -542,18 +542,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertTextContains("NewNote")
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state clicking New Custom Field button should trigger AddNewCustomFieldClick`() {
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick)
-        }
-    }
-
     @Test
     fun `in ItemType_Login state clicking a Ownership option should send OwnershipChange action`() {
         // Opens the menu
@@ -791,22 +779,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .onAllNodesWithTextAfterScroll("Notes")
             .filterToOne(hasSetTextAction())
             .assertTextContains("NewNote")
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_SecureNotes state clicking New Custom Field button should trigger AddNewCustomFieldClick`() {
-        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick,
-            )
-        }
     }
 
     @Suppress("MaxLineLength")

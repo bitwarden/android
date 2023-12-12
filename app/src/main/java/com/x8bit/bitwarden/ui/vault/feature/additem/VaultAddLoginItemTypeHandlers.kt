@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 
 /**
  * A collection of handler functions specifically tailored for managing actions
@@ -28,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
  * @property onTooltipClick Handles the action when the tooltip button is clicked.
  * @property onAddNewCustomFieldClick Handles the action when the add new custom field
  * button is clicked.
+ * @property onCustomFieldValueChange Handles the action when the field's value changes
  */
 @Suppress("LongParameterList")
 class VaultAddLoginItemTypeHandlers(
@@ -47,7 +49,8 @@ class VaultAddLoginItemTypeHandlers(
     val onUriSettingsClick: () -> Unit,
     val onAddNewUriClick: () -> Unit,
     val onTooltipClick: () -> Unit,
-    val onAddNewCustomFieldClick: () -> Unit,
+    val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
+    val onCustomFieldValueChange: (VaultAddItemState.Custom) -> Unit,
 ) {
     companion object {
 
@@ -135,9 +138,19 @@ class VaultAddLoginItemTypeHandlers(
                 onTooltipClick = {
                     viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.TooltipClick)
                 },
-                onAddNewCustomFieldClick = {
+                onAddNewCustomFieldClick = { customFieldType, name ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick,
+                        VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
+                            customFieldType = customFieldType,
+                            name = name,
+                        ),
+                    )
+                },
+                onCustomFieldValueChange = { customField ->
+                    viewModel.trySendAction(
+                        VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange(
+                            customField = customField,
+                        ),
                     )
                 },
             )

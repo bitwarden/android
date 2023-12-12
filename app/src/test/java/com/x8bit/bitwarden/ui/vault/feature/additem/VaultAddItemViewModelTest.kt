@@ -587,21 +587,6 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 assertEquals(VaultAddItemEvent.ShowToast("Tooltip"), awaitItem())
             }
         }
-
-        @Test
-        fun `AddNewCustomFieldClick should emit ShowToast with 'Add New Custom Field' message`() =
-            runTest {
-                val viewModel = createAddVaultItemViewModel()
-
-                viewModel.eventFlow.test {
-                    viewModel
-                        .actionChannel
-                        .trySend(
-                            VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick,
-                        )
-                    assertEquals(VaultAddItemEvent.ShowToast("Add New Custom Field"), awaitItem())
-                }
-            }
     }
 
     @Nested
@@ -734,19 +719,6 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 assertEquals(VaultAddItemEvent.ShowToast("Not yet implemented"), awaitItem())
             }
         }
-
-        @Test
-        fun `AddNewCustomFieldClick should emit ShowToast with 'Add New Custom Field' message`() =
-            runTest {
-                viewModel.eventFlow.test {
-                    viewModel
-                        .actionChannel
-                        .trySend(
-                            VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick,
-                        )
-                    assertEquals(VaultAddItemEvent.ShowToast("Not yet implemented"), awaitItem())
-                }
-            }
     }
 
     @Suppress("LongParameterList")

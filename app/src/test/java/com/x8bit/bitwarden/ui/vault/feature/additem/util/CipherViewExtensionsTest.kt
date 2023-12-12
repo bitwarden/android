@@ -4,8 +4,6 @@ import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.FieldView
 import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
@@ -65,6 +63,7 @@ class CipherViewExtensionsTest {
                 ownership = "",
                 availableFolders = emptyList(),
                 availableOwners = emptyList(),
+                customFieldData = emptyList(),
             ),
             result,
         )
@@ -87,6 +86,7 @@ class CipherViewExtensionsTest {
                 ownership = "",
                 availableFolders = emptyList(),
                 availableOwners = emptyList(),
+                customFieldData = emptyList(),
             ),
             result,
         )
@@ -113,38 +113,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     viewPassword = false,
     localData = null,
     attachments = null,
-    fields = listOf(
-        FieldView(
-            name = "text",
-            value = "value",
-            type = FieldType.TEXT,
-            linkedId = null,
-        ),
-        FieldView(
-            name = "hidden",
-            value = "value",
-            type = FieldType.HIDDEN,
-            linkedId = null,
-        ),
-        FieldView(
-            name = "boolean",
-            value = "true",
-            type = FieldType.BOOLEAN,
-            linkedId = null,
-        ),
-        FieldView(
-            name = "linked username",
-            value = null,
-            type = FieldType.LINKED,
-            linkedId = 100U,
-        ),
-        FieldView(
-            name = "linked password",
-            value = null,
-            type = FieldType.LINKED,
-            linkedId = 101U,
-        ),
-    ),
+    fields = emptyList(),
     passwordHistory = listOf(
         PasswordHistoryView(
             password = "old_password",

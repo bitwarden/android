@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onFirstNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -712,11 +713,11 @@ private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content.Login =
             ),
             VaultItemState.ViewState.Content.Custom.LinkedField(
                 name = "linked username",
-                id = 100U,
+                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
             ),
             VaultItemState.ViewState.Content.Custom.LinkedField(
                 name = "linked password",
-                id = 101U,
+                vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
             ),
         ),
         requiresReprompt = true,

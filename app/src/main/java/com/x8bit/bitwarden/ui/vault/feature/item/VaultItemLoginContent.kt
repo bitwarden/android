@@ -257,7 +257,7 @@ private fun CustomField(
         is VaultItemState.ViewState.Content.Custom.LinkedField -> {
             BitwardenTextField(
                 label = customField.name,
-                value = customField.type.label(),
+                value = customField.vaultLinkedFieldType.label.invoke(),
                 leadingIconResource = IconResource(
                     iconPainter = painterResource(id = R.drawable.ic_linked),
                     contentDescription = stringResource(id = R.string.field_type_linked),

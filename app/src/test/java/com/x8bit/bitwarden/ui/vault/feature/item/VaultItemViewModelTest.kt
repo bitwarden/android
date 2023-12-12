@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.item.util.DEFAULT_EMPTY_LOGIN_VIEW_STATE
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -626,11 +627,11 @@ private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content.Login =
             ),
             VaultItemState.ViewState.Content.Custom.LinkedField(
                 name = "linked username",
-                id = 100U,
+                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
             ),
             VaultItemState.ViewState.Content.Custom.LinkedField(
                 name = "linked password",
-                id = 101U,
+                vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
             ),
         ),
         requiresReprompt = true,

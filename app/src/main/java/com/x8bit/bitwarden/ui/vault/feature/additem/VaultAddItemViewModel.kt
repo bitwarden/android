@@ -16,8 +16,11 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction.ItemType.SecureNotesType.TooltipClick.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -26,6 +29,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -279,7 +283,11 @@ class VaultAddItemViewModel @Inject constructor(
             }
 
             is VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick -> {
-                handleLoginAddNewCustomFieldClick()
+                handleLoginAddNewCustomFieldClick(action)
+            }
+
+            is VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange -> {
+                handleLoginCustomFieldValueChange(action)
             }
         }
     }
@@ -426,12 +434,29 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleLoginAddNewCustomFieldClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = VaultAddItemEvent.ShowToast(
-                    message = "Add New Custom Field",
-                ),
+    private fun handleLoginAddNewCustomFieldClick(
+        action: VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick,
+    ) {
+        val newCustomData: VaultAddItemState.Custom =
+            action.customFieldType.toCustomField(action.name)
+
+        updateLoginContent { loginType ->
+            loginType.copy(customFieldData = loginType.customFieldData + newCustomData)
+        }
+    }
+
+    private fun handleLoginCustomFieldValueChange(
+        action: VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange,
+    ) {
+        updateLoginContent { login ->
+            login.copy(
+                customFieldData = login.customFieldData.map { customField ->
+                    if (customField.itemId == action.customField.itemId) {
+                        action.customField
+                    } else {
+                        customField
+                    }
+                },
             )
         }
     }
@@ -473,7 +498,11 @@ class VaultAddItemViewModel @Inject constructor(
             }
 
             is VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick -> {
-                handleSecureNoteAddNewCustomFieldClick()
+                handleSecureNoteAddNewCustomFieldClick(action)
+            }
+
+            is VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange -> {
+                handleSecureNoteCustomFieldValueChange(action)
             }
         }
     }
@@ -535,13 +564,31 @@ class VaultAddItemViewModel @Inject constructor(
         )
     }
 
-    private fun handleSecureNoteAddNewCustomFieldClick() {
-        // TODO Implement custom text fields (BIT-529)
-        sendEvent(
-            event = VaultAddItemEvent.ShowToast(
-                message = "Not yet implemented",
-            ),
-        )
+    private fun handleSecureNoteAddNewCustomFieldClick(
+        action: VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick,
+    ) {
+        val newCustomData: VaultAddItemState.Custom =
+            action.customFieldType.toCustomField(action.name)
+
+        updateSecureNoteContent { secureNotesType ->
+            secureNotesType.copy(customFieldData = secureNotesType.customFieldData + newCustomData)
+        }
+    }
+
+    private fun handleSecureNoteCustomFieldValueChange(
+        action: VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange,
+    ) {
+        updateSecureNoteContent { secureNote ->
+            secureNote.copy(
+                customFieldData = secureNote.customFieldData.map { customField ->
+                    if (customField.itemId == action.customField.itemId) {
+                        action.customField
+                    } else {
+                        customField
+                    }
+                },
+            )
+        }
     }
 
     //endregion Secure Notes Item Type Handlers
@@ -810,6 +857,7 @@ data class VaultAddItemState(
                 val folderName: Text = DEFAULT_FOLDER,
                 val favorite: Boolean = false,
                 override val masterPasswordReprompt: Boolean = false,
+                val customFieldData: List<Custom> = emptyList(),
                 val notes: String = "",
                 // TODO: Update this property to get available owners from the data layer (BIT-501)
                 val availableFolders: List<Text> = listOf(
@@ -876,6 +924,7 @@ data class VaultAddItemState(
                     "Folder 2".asText(),
                     "Folder 3".asText(),
                 ),
+                val customFieldData: List<Custom> = emptyList(),
                 override val ownership: String = DEFAULT_OWNERSHIP,
                 override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
@@ -887,6 +936,58 @@ data class VaultAddItemState(
                 private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
             }
         }
+    }
+
+    /**
+     * This Models the Custom field type chosen by the user.
+     */
+    @Parcelize
+    sealed class Custom : Parcelable {
+
+        /**
+         * The itemId that is used to identify the Custom item on updates.
+         */
+        abstract val itemId: String
+
+        /**
+         * Represents the data for displaying a custom text field.
+         */
+        @Parcelize
+        data class TextField(
+            override val itemId: String,
+            val name: String,
+            val value: String,
+        ) : Custom()
+
+        /**
+         * Represents the data for displaying a custom hidden text field.
+         */
+        @Parcelize
+        data class HiddenField(
+            override val itemId: String,
+            val name: String,
+            val value: String,
+        ) : Custom()
+
+        /**
+         * Represents the data for displaying a custom boolean property field.
+         */
+        @Parcelize
+        data class BooleanField(
+            override val itemId: String,
+            val name: String,
+            val value: Boolean,
+        ) : Custom()
+
+        /**
+         * Represents the data for displaying a custom linked field.
+         */
+        @Parcelize
+        data class LinkedField(
+            override val itemId: String,
+            val name: String,
+            val vaultLinkedFieldType: VaultLinkedFieldType,
+        ) : Custom()
     }
 
     /**
@@ -1030,6 +1131,21 @@ sealed class VaultAddItemAction {
             data class OwnershipChange(val ownership: String) : LoginType()
 
             /**
+             * Represents the action to add a new custom field.
+             */
+            data class AddNewCustomFieldClick(
+                val customFieldType: CustomFieldType,
+                val name: String,
+            ) : LoginType()
+
+            /**
+             *  Fired when the custom field data is changed.
+             */
+            data class CustomFieldValueChange(
+                val customField: VaultAddItemState.Custom,
+            ) : LoginType()
+
+            /**
              * Represents the action to open the username generator.
              */
             data object OpenUsernameGeneratorClick : LoginType()
@@ -1063,11 +1179,6 @@ sealed class VaultAddItemAction {
              * Represents the action to open tooltip
              */
             data object TooltipClick : LoginType()
-
-            /**
-             * Represents the action to add a new custom field.
-             */
-            data object AddNewCustomFieldClick : LoginType()
         }
 
         /**
@@ -1127,7 +1238,17 @@ sealed class VaultAddItemAction {
             /**
              * Represents the action to add a new custom field.
              */
-            data object AddNewCustomFieldClick : SecureNotesType()
+            data class AddNewCustomFieldClick(
+                val customFieldType: CustomFieldType,
+                val name: String,
+            ) : SecureNotesType()
+
+            /**
+             *  Fired when the custom field data is changed.
+             */
+            data class CustomFieldValueChange(
+                val customField: VaultAddItemState.Custom,
+            ) : SecureNotesType()
         }
     }
 
@@ -1155,5 +1276,44 @@ sealed class VaultAddItemAction {
         data class UpdateCipherResultReceive(
             val updateCipherResult: UpdateCipherResult,
         ) : Internal()
+    }
+
+    /**
+     * An extension function for adding custom field types.
+     */
+    fun CustomFieldType.toCustomField(name: String): VaultAddItemState.Custom {
+        return when (this) {
+            CustomFieldType.BOOLEAN -> {
+                VaultAddItemState.Custom.BooleanField(
+                    itemId = UUID.randomUUID().toString(),
+                    name = name,
+                    value = false,
+                )
+            }
+
+            CustomFieldType.LINKED -> {
+                VaultAddItemState.Custom.LinkedField(
+                    itemId = UUID.randomUUID().toString(),
+                    name = name,
+                    vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
+                )
+            }
+
+            CustomFieldType.HIDDEN -> {
+                VaultAddItemState.Custom.HiddenField(
+                    itemId = UUID.randomUUID().toString(),
+                    name = name,
+                    value = "",
+                )
+            }
+
+            CustomFieldType.TEXT -> {
+                VaultAddItemState.Custom.TextField(
+                    itemId = UUID.randomUUID().toString(),
+                    name = name,
+                    value = "",
+                )
+            }
+        }
     }
 }
