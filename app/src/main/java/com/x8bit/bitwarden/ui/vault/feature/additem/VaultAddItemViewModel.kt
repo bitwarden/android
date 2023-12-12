@@ -35,16 +35,17 @@ private const val KEY_STATE = "state"
  *
  * This ViewModel processes UI actions, manages the state of the generator screen,
  * and provides data for the UI to render. It extends a `BaseViewModel` and works
- * with a `SavedStateHandle` for state restoration.
+ * with a `SavedStateHandle` for retrieving navigation arguments.
  *
- * @property savedStateHandle Handles the saved state of this ViewModel.
+ * @param savedStateHandle Handles the navigation arguments of this ViewModel.
  */
 @HiltViewModel
 @Suppress("TooManyFunctions")
 class VaultAddItemViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultAddItemState, VaultAddItemEvent, VaultAddItemAction>(
+    // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val vaultAddEditType = VaultAddEditItemArgs(savedStateHandle).vaultAddEditType
@@ -62,8 +63,6 @@ class VaultAddItemViewModel @Inject constructor(
     //region Initialization and Overrides
 
     init {
-        stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
-
         when (val vaultAddEditType = state.vaultAddEditType) {
             VaultAddEditType.AddItem -> Unit
             is VaultAddEditType.EditItem -> {
