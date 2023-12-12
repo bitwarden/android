@@ -3,8 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.FieldView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.PasswordHistoryView
@@ -159,7 +157,7 @@ class VaultDataExtensionsTest {
                 viewPassword = true,
                 localData = null,
                 attachments = null,
-                fields = null,
+                fields = emptyList(),
                 passwordHistory = null,
                 creationDate = Instant.MIN,
                 deletedDate = null,
@@ -183,6 +181,7 @@ class VaultDataExtensionsTest {
             masterPasswordReprompt = false,
             notes = "mockNotes-1",
             ownership = "mockOwnership-1",
+            customFieldData = emptyList(),
         )
 
         val result = loginItemType.toCipherView()
@@ -208,7 +207,7 @@ class VaultDataExtensionsTest {
                 ),
                 favorite = true,
                 reprompt = CipherRepromptType.NONE,
-                fields = null,
+                fields = emptyList(),
                 passwordHistory = listOf(
                     PasswordHistoryView(
                         password = "old_password",
@@ -256,7 +255,7 @@ class VaultDataExtensionsTest {
                 viewPassword = true,
                 localData = null,
                 attachments = null,
-                fields = null,
+                fields = emptyList(),
                 passwordHistory = null,
                 creationDate = Instant.MIN,
                 deletedDate = null,
@@ -277,6 +276,7 @@ class VaultDataExtensionsTest {
             masterPasswordReprompt = true,
             notes = "mockNotes-1",
             ownership = "mockOwnership-1",
+            customFieldData = emptyList(),
         )
 
         val result = secureNotesItemType.toCipherView()
@@ -288,7 +288,7 @@ class VaultDataExtensionsTest {
                 type = CipherType.SECURE_NOTE,
                 secureNote = SecureNoteView(SecureNoteType.GENERIC),
                 reprompt = CipherRepromptType.PASSWORD,
-                fields = null,
+                fields = emptyList(),
             ),
             result,
         )
@@ -315,38 +315,7 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     viewPassword = false,
     localData = null,
     attachments = null,
-    fields = listOf(
-        FieldView(
-            name = "text",
-            value = "value",
-            type = FieldType.TEXT,
-            linkedId = null,
-        ),
-        FieldView(
-            name = "hidden",
-            value = "value",
-            type = FieldType.HIDDEN,
-            linkedId = null,
-        ),
-        FieldView(
-            name = "boolean",
-            value = "true",
-            type = FieldType.BOOLEAN,
-            linkedId = null,
-        ),
-        FieldView(
-            name = "linked username",
-            value = null,
-            type = FieldType.LINKED,
-            linkedId = 100U,
-        ),
-        FieldView(
-            name = "linked password",
-            value = null,
-            type = FieldType.LINKED,
-            linkedId = 101U,
-        ),
-    ),
+    fields = emptyList(),
     passwordHistory = listOf(
         PasswordHistoryView(
             password = "old_password",

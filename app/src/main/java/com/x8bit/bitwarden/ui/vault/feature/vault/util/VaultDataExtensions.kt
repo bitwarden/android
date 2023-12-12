@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.FieldType
+import com.bitwarden.core.FieldView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.SecureNoteType
@@ -144,8 +146,7 @@ private fun VaultAddItemState.ViewState.Content.Login.toLoginCipherView(): Ciphe
         // TODO Use real organization ID (BIT-780)
         organizationId = this.originalCipher?.organizationId,
         reprompt = this.toCipherRepromptType(),
-        // TODO Implement custom fields (BIT-529)
-        fields = null,
+        fields = this.customFieldData.map { it.toFieldView() },
     )
 
 /**
@@ -183,8 +184,7 @@ private fun VaultAddItemState.ViewState.Content.SecureNotes.toSecureNotesCipherV
         // TODO Use real organization ID (BIT-780)
         organizationId = this.originalCipher?.organizationId,
         reprompt = this.toCipherRepromptType(),
-        // TODO Implement custom fields (BIT-529)
-        fields = null,
+        fields = this.customFieldData.map { it.toFieldView() },
     )
 
 /**
@@ -204,4 +204,46 @@ private fun VaultAddItemState.ViewState.Content.toCipherRepromptType(): CipherRe
         CipherRepromptType.PASSWORD
     } else {
         CipherRepromptType.NONE
+    }
+
+/**
+ * Transforms [VaultAddItemState.Custom into [FieldView].
+ */
+private fun VaultAddItemState.Custom.toFieldView(): FieldView =
+    when (val item = this) {
+        is VaultAddItemState.Custom.BooleanField -> {
+            FieldView(
+                name = item.name,
+                value = item.value.toString(),
+                type = FieldType.BOOLEAN,
+                linkedId = null,
+            )
+        }
+
+        is VaultAddItemState.Custom.HiddenField -> {
+            FieldView(
+                name = item.name,
+                value = item.value,
+                type = FieldType.HIDDEN,
+                linkedId = null,
+            )
+        }
+
+        is VaultAddItemState.Custom.LinkedField -> {
+            FieldView(
+                name = item.name,
+                value = null,
+                type = FieldType.LINKED,
+                linkedId = item.vaultLinkedFieldType.id,
+            )
+        }
+
+        is VaultAddItemState.Custom.TextField -> {
+            FieldView(
+                name = item.name,
+                value = item.value,
+                type = FieldType.TEXT,
+                linkedId = null,
+            )
+        }
     }

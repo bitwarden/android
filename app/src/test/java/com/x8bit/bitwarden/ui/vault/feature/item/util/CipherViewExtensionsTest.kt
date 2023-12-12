@@ -9,6 +9,7 @@ import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -192,11 +193,11 @@ val DEFAULT_FULL_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content.Login =
             ),
             VaultItemState.ViewState.Content.Custom.LinkedField(
                 name = "linked username",
-                id = 100U,
+                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
             ),
             VaultItemState.ViewState.Content.Custom.LinkedField(
                 name = "linked password",
-                id = 101U,
+                vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
             ),
         ),
         requiresReprompt = true,

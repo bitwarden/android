@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -13,12 +14,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -132,11 +134,25 @@ fun LazyListScope.addEditSecureNotesItems(
         )
     }
 
+    items(state.customFieldData) { customItem ->
+        AddEditCustomField(
+            customItem,
+            onCustomFieldValueChange = secureNotesTypeHandlers.onCustomFieldValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        )
+    }
+
     item {
         Spacer(modifier = Modifier.height(16.dp))
-        BitwardenFilledTonalButton(
-            label = stringResource(id = R.string.new_custom_field),
-            onClick = secureNotesTypeHandlers.onAddNewCustomFieldClick,
+        AddEditCustomFieldsButton(
+            onFinishNamingClick = secureNotesTypeHandlers.onAddNewCustomFieldClick,
+            options = persistentListOf(
+                CustomFieldType.TEXT,
+                CustomFieldType.HIDDEN,
+                CustomFieldType.BOOLEAN,
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 
 /**
  * A collection of handler functions specifically tailored for managing actions
@@ -16,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
  * @property onTooltipClick Handles the action when the tooltip button is clicked.
  * @property onAddNewCustomFieldClick Handles the action when the add new custom field
  * button is clicked.
+ * @property onCustomFieldValueChange Handles the action when the field's value changes
  */
 @Suppress("LongParameterList")
 class VaultAddSecureNotesItemTypeHandlers(
@@ -26,7 +28,8 @@ class VaultAddSecureNotesItemTypeHandlers(
     val onNotesTextChange: (String) -> Unit,
     val onOwnershipTextChange: (String) -> Unit,
     val onTooltipClick: () -> Unit,
-    val onAddNewCustomFieldClick: () -> Unit,
+    val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
+    val onCustomFieldValueChange: (VaultAddItemState.Custom) -> Unit,
 ) {
     companion object {
 
@@ -76,9 +79,19 @@ class VaultAddSecureNotesItemTypeHandlers(
                         VaultAddItemAction.ItemType.SecureNotesType.TooltipClick,
                     )
                 },
-                onAddNewCustomFieldClick = {
+                onAddNewCustomFieldClick = { newCustomFieldType, name ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick,
+                        VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                            newCustomFieldType,
+                            name,
+                        ),
+                    )
+                },
+                onCustomFieldValueChange = { newValue ->
+                    viewModel.trySendAction(
+                        VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                            newValue,
+                        ),
                     )
                 },
             )

@@ -9,6 +9,7 @@ import com.bitwarden.core.LoginUriView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import java.time.format.DateTimeFormatter
@@ -82,7 +83,7 @@ private fun FieldView.toCustomField(): VaultItemState.ViewState.Content.Custom =
         )
 
         FieldType.LINKED -> VaultItemState.ViewState.Content.Custom.LinkedField(
-            id = requireNotNull(linkedId),
+            vaultLinkedFieldType = VaultLinkedFieldType.fromId(requireNotNull(linkedId)),
             name = name.orEmpty(),
         )
     }

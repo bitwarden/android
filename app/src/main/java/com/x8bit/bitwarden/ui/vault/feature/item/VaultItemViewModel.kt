@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -550,22 +551,9 @@ data class VaultItemState(
                  */
                 @Parcelize
                 data class LinkedField(
-                    private val id: UInt,
+                    val vaultLinkedFieldType: VaultLinkedFieldType,
                     val name: String,
-                ) : Custom() {
-                    val type: Type get() = Type.values().first { it.id == id }
-
-                    /**
-                     * Represents the types linked fields.
-                     */
-                    enum class Type(
-                        val id: UInt,
-                        val label: Text,
-                    ) {
-                        USERNAME(id = 100.toUInt(), label = R.string.username.asText()),
-                        PASSWORD(id = 101.toUInt(), label = R.string.password.asText()),
-                    }
-                }
+                ) : Custom()
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -245,11 +248,24 @@ fun LazyListScope.addEditLoginItems(
         )
     }
 
+    items(state.customFieldData) { customItem ->
+        AddEditCustomField(
+            customItem,
+            onCustomFieldValueChange = loginItemTypeHandlers.onCustomFieldValueChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            supportedLinkedTypes = persistentListOf(
+                VaultLinkedFieldType.PASSWORD,
+                VaultLinkedFieldType.USERNAME,
+            ),
+        )
+    }
+
     item {
         Spacer(modifier = Modifier.height(16.dp))
-        BitwardenFilledTonalButton(
-            label = stringResource(id = R.string.new_custom_field),
-            onClick = loginItemTypeHandlers.onAddNewCustomFieldClick,
+        AddEditCustomFieldsButton(
+            onFinishNamingClick = loginItemTypeHandlers.onAddNewCustomFieldClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
