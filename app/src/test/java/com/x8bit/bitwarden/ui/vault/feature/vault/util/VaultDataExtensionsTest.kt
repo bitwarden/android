@@ -3,8 +3,11 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.FieldType
+import com.bitwarden.core.FieldView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
+import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
@@ -144,7 +147,7 @@ class VaultDataExtensionsTest {
                         ),
                     ),
                     totp = null,
-                    autofillOnPageLoad = false,
+                    autofillOnPageLoad = null,
                 ),
                 identity = null,
                 card = null,
@@ -161,6 +164,57 @@ class VaultDataExtensionsTest {
                 creationDate = Instant.MIN,
                 deletedDate = null,
                 revisionDate = Instant.MIN,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should transform Login ItemType to CipherView with original cipher`() {
+        val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
+        val loginItemType = VaultAddItemState.ViewState.Content.Login(
+            originalCipher = cipherView,
+            name = "mockName-1",
+            username = "mockUsername-1",
+            password = "mockPassword-1",
+            uri = "mockUri-1",
+            folderName = "mockFolder-1".asText(),
+            favorite = true,
+            masterPasswordReprompt = false,
+            notes = "mockNotes-1",
+            ownership = "mockOwnership-1",
+        )
+
+        val result = loginItemType.toCipherView()
+
+        assertEquals(
+            @Suppress("MaxLineLength")
+            cipherView.copy(
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.LOGIN,
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    passwordRevisionDate = Instant.ofEpochSecond(1_000L),
+                    uris = listOf(
+                        LoginUriView(
+                            uri = "mockUri-1",
+                            match = UriMatchType.DOMAIN,
+                        ),
+                    ),
+                    totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+                    autofillOnPageLoad = false,
+                ),
+                favorite = true,
+                reprompt = CipherRepromptType.NONE,
+                fields = null,
+                passwordHistory = listOf(
+                    PasswordHistoryView(
+                        password = "old_password",
+                        lastUsedDate = Instant.ofEpochSecond(1_000L),
+                    ),
+                ),
             ),
             result,
         )
@@ -211,4 +265,117 @@ class VaultDataExtensionsTest {
             result,
         )
     }
+
+    @Test
+    fun `toCipherView should transform SecureNotes ItemType to CipherView with original cipher`() {
+        val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW
+        val secureNotesItemType = VaultAddItemState.ViewState.Content.SecureNotes(
+            originalCipher = cipherView,
+            name = "mockName-1",
+            folderName = "mockFolder-1".asText(),
+            favorite = false,
+            masterPasswordReprompt = true,
+            notes = "mockNotes-1",
+            ownership = "mockOwnership-1",
+        )
+
+        val result = secureNotesItemType.toCipherView()
+
+        assertEquals(
+            cipherView.copy(
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.SECURE_NOTE,
+                secureNote = SecureNoteView(SecureNoteType.GENERIC),
+                reprompt = CipherRepromptType.PASSWORD,
+                fields = null,
+            ),
+            result,
+        )
+    }
 }
+
+private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
+    id = "id1234",
+    organizationId = null,
+    folderId = null,
+    collectionIds = emptyList(),
+    key = null,
+    name = "cipher",
+    notes = "Lots of notes",
+    type = CipherType.LOGIN,
+    login = null,
+    identity = null,
+    card = null,
+    secureNote = null,
+    favorite = false,
+    reprompt = CipherRepromptType.PASSWORD,
+    organizationUseTotp = false,
+    edit = false,
+    viewPassword = false,
+    localData = null,
+    attachments = null,
+    fields = listOf(
+        FieldView(
+            name = "text",
+            value = "value",
+            type = FieldType.TEXT,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "hidden",
+            value = "value",
+            type = FieldType.HIDDEN,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "boolean",
+            value = "true",
+            type = FieldType.BOOLEAN,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "linked username",
+            value = null,
+            type = FieldType.LINKED,
+            linkedId = 100U,
+        ),
+        FieldView(
+            name = "linked password",
+            value = null,
+            type = FieldType.LINKED,
+            linkedId = 101U,
+        ),
+    ),
+    passwordHistory = listOf(
+        PasswordHistoryView(
+            password = "old_password",
+            lastUsedDate = Instant.ofEpochSecond(1_000L),
+        ),
+    ),
+    creationDate = Instant.ofEpochSecond(1_000L),
+    deletedDate = null,
+    revisionDate = Instant.ofEpochSecond(1_000L),
+)
+
+private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+    type = CipherType.LOGIN,
+    login = LoginView(
+        username = "username",
+        password = "password",
+        passwordRevisionDate = Instant.ofEpochSecond(1_000L),
+        uris = listOf(
+            LoginUriView(
+                uri = "www.example.com",
+                match = null,
+            ),
+        ),
+        totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+        autofillOnPageLoad = false,
+    ),
+)
+
+private val DEFAULT_SECURE_NOTES_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+    type = CipherType.SECURE_NOTE,
+    secureNote = SecureNoteView(type = SecureNoteType.GENERIC),
+)
