@@ -1,6 +1,6 @@
-"ThereAreNoItemsToList" = "There are no items to list";
-"ToViewVerificationCodesUpgradeToPremium" = "To view verification codes, upgrade to premium";
-"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Add 2 factor authentication to an item to view the verification codes";
+"ThereAreNoItemsToList" = "No hay elementos para listar";
+"ToViewVerificationCodesUpgradeToPremium" = "Para ver los códigos de verificación, mejora a prémium";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Añade autenticación de 2 pasos a un elemento para ver los códigos de verificación";
 "LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Log in to Bitwarden on your iPhone to view verification codes";
 "SyncingItemsContainingVerificationCodes" = "Syncing items containing verification codes";
 "UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Unlock Bitwarden on your iPhone to view verification codes";
