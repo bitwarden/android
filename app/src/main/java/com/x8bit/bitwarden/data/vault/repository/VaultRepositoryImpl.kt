@@ -107,10 +107,7 @@ class VaultRepositoryImpl constructor(
                                 syncResponse = syncResponse,
                             )
 
-                        storeUserKeyAndPrivateKey(
-                            userKey = syncResponse.profile?.key,
-                            privateKey = syncResponse.profile?.privateKey,
-                        )
+                        storeKeys(syncResponse = syncResponse)
                         decryptSyncResponseAndUpdateVaultDataState(syncResponse = syncResponse)
                         decryptSendsAndUpdateSendDataState(sendList = syncResponse.sends)
                     },
@@ -297,12 +294,13 @@ class VaultRepositoryImpl constructor(
         }
     }
 
-    private fun storeUserKeyAndPrivateKey(
-        userKey: String?,
-        privateKey: String?,
+    private fun storeKeys(
+        syncResponse: SyncResponseJson,
     ) {
-        val userId = authDiskSource.userState?.activeUserId ?: return
-        if (userKey == null || privateKey == null) return
+        val profile = syncResponse.profile ?: return
+        val userId = profile.id
+        val userKey = profile.key
+        val privateKey = profile.privateKey
         authDiskSource.apply {
             storeUserKey(
                 userId = userId,
@@ -311,6 +309,13 @@ class VaultRepositoryImpl constructor(
             storePrivateKey(
                 userId = userId,
                 privateKey = privateKey,
+            )
+            storeOrganizationKeys(
+                userId = profile.id,
+                organizationKeys = profile.organizations
+                    .orEmpty()
+                    .filter { it.key != null }
+                    .associate { it.id to requireNotNull(it.key) },
             )
         }
     }

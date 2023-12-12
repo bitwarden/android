@@ -106,6 +106,10 @@ class VaultRepositoryTest {
                 userId = "mockId-1",
                 privateKey = "mockPrivateKey-1",
             )
+            fakeAuthDiskSource.assertOrganizationKeys(
+                userId = "mockId-1",
+                organizationKeys = mapOf("mockId-1" to "mockKey-1"),
+            )
             assertEquals(
                 DataState.Loaded(
                     data = VaultData(

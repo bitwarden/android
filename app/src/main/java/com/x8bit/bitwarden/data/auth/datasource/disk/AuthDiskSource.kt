@@ -48,4 +48,19 @@ interface AuthDiskSource {
      * Stores a private key using a [userId].
      */
     fun storePrivateKey(userId: String, privateKey: String?)
+
+    /**
+     * Gets the organization keys for the given [userId] in the form of a mapping from organization
+     * ID to encrypted organization key.
+     */
+    fun getOrganizationKeys(userId: String): Map<String, String>?
+
+    /**
+     * Stores the organization keys for the given [userId] in the form of a mapping from
+     * organization ID to encrypted organization key.
+     */
+    fun storeOrganizationKeys(
+        userId: String,
+        organizationKeys: Map<String, String>?,
+    )
 }

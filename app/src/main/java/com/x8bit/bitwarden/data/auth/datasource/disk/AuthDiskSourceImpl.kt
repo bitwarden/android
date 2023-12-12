@@ -16,6 +16,7 @@ private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "$BASE_KEY:masterKeyEncryptedUserKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "$BASE_KEY:encPrivateKey"
+private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -73,6 +74,20 @@ class AuthDiskSourceImpl(
         putString(
             key = "${MASTER_KEY_ENCRYPTION_PRIVATE_KEY}_$userId",
             value = privateKey,
+        )
+    }
+
+    override fun getOrganizationKeys(userId: String): Map<String, String>? =
+        getString(key = "${ORGANIZATION_KEYS_KEY}_$userId")
+            ?.let { json.decodeFromString(it) }
+
+    override fun storeOrganizationKeys(
+        userId: String,
+        organizationKeys: Map<String, String>?,
+    ) {
+        putString(
+            key = "${ORGANIZATION_KEYS_KEY}_$userId",
+            value = organizationKeys?.let { json.encodeToString(it) },
         )
     }
 

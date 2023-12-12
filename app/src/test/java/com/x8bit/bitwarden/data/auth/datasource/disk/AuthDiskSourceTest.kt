@@ -192,6 +192,64 @@ class AuthDiskSourceTest {
             actual,
         )
     }
+
+    @Test
+    fun `getOrganizationKeys should pull from SharedPreferences`() {
+        val organizationKeysBaseKey = "bwPreferencesStorage:encOrgKeys"
+        val mockUserId = "mockUserId"
+        val mockOrganizationKeys = mapOf(
+            "organizationId1" to "organizationKey1",
+            "organizationId2" to "organizationKey2",
+        )
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                "${organizationKeysBaseKey}_$mockUserId",
+                """
+                {
+                  "organizationId1": "organizationKey1",
+                  "organizationId2": "organizationKey2"
+                }
+                """
+                    .trimIndent(),
+            )
+            .apply()
+        val actual = authDiskSource.getOrganizationKeys(userId = mockUserId)
+        assertEquals(
+            mockOrganizationKeys,
+            actual,
+        )
+    }
+
+    @Test
+    fun `putOrganizationKeys should update SharedPreferences`() {
+        val organizationKeysBaseKey = "bwPreferencesStorage:encOrgKeys"
+        val mockUserId = "mockUserId"
+        val mockOrganizationKeys = mapOf(
+            "organizationId1" to "organizationKey1",
+            "organizationId2" to "organizationKey2",
+        )
+        authDiskSource.storeOrganizationKeys(
+            userId = mockUserId,
+            organizationKeys = mockOrganizationKeys,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "${organizationKeysBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.parseToJsonElement(
+                """
+                {
+                  "organizationId1": "organizationKey1",
+                  "organizationId2": "organizationKey2"
+                }
+                """
+                    .trimIndent(),
+            ),
+            json.parseToJsonElement(requireNotNull(actual)),
+        )
+    }
 }
 
 private const val USER_STATE_JSON = """
