@@ -82,6 +82,18 @@ fun VaultData.toViewState(): VaultState.ViewState =
             noFolderItems = cipherViewList
                 .filter { it.folderId.isNullOrBlank() }
                 .mapNotNull { it.toVaultItemOrNull() },
+            collectionItems = collectionViewList
+                .map { collectionView ->
+                    VaultState.ViewState.CollectionItem(
+                        id = collectionView.id,
+                        name = collectionView.name,
+                        itemCount = cipherViewList
+                            .count {
+                                !it.id.isNullOrBlank() &&
+                                    collectionView.id in it.collectionIds
+                            },
+                    )
+                },
             // TODO need to populate trash item count in BIT-969
             trashItemsCount = 0,
         )

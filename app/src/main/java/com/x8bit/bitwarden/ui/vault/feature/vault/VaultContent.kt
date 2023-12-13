@@ -25,6 +25,7 @@ fun VaultContent(
     state: VaultState.ViewState.Content,
     vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     folderClick: (VaultState.ViewState.FolderItem) -> Unit,
+    collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
     loginGroupClick: () -> Unit,
     cardGroupClick: () -> Unit,
     identityGroupClick: () -> Unit,
@@ -201,6 +202,40 @@ fun VaultContent(
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultItemClick(noFolderItem) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+        }
+
+        if (state.collectionItems.isNotEmpty()) {
+            item {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
+                )
+            }
+
+            item {
+                BitwardenListHeaderTextWithSupportLabel(
+                    label = stringResource(id = R.string.collections),
+                    supportingLabel = state.collectionItems.count().toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+
+            items(state.collectionItems) { collection ->
+                VaultGroupListItem(
+                    startIcon = painterResource(id = R.drawable.ic_collection),
+                    label = collection.name,
+                    supportingLabel = collection.itemCount.toString(),
+                    onClick = { collectionClick(collection) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),

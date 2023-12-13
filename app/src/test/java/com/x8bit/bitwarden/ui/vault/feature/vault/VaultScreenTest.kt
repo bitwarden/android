@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasClickAction
@@ -15,8 +16,10 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
+import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.performAccountClick
 import com.x8bit.bitwarden.ui.util.performAccountIconClick
 import com.x8bit.bitwarden.ui.util.performAccountLongClick
@@ -320,6 +323,66 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `collection data should update according to the state`() {
+        val collectionsHeader = "Collections"
+        val collectionsCount = 1
+        val collectionName = "Test Collection"
+        val collectionCount = 3
+        val collectionItem = VaultState.ViewState.CollectionItem(
+            id = "12345",
+            name = collectionName,
+            itemCount = collectionCount,
+        )
+
+        composeTestRule.assertScrollableNodeDoesNotExist(collectionsHeader, substring = true)
+        composeTestRule.assertScrollableNodeDoesNotExist(collectionName, substring = true)
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    collectionItems = listOf(collectionItem),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(collectionsHeader, substring = true)
+            .assertTextEquals(collectionsHeader, collectionsCount.toString())
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(collectionName)
+            .assertTextEquals(collectionName, collectionCount.toString())
+    }
+
+    @Test
+    fun `clicking a collection item should send CollectionClick with the correct item`() {
+        val collectionName = "Test Collection"
+        val collectionCount = 3
+        val collectionItem = VaultState.ViewState.CollectionItem(
+            id = "12345",
+            name = collectionName,
+            itemCount = collectionCount,
+        )
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    collectionItems = listOf(collectionItem),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(collectionName))
+        composeTestRule
+            .onNodeWithText(collectionName)
+            .assertTextEquals(collectionName, collectionCount.toString())
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.CollectionClick(collectionItem))
+        }
+    }
+
+    @Test
     fun `clicking a no folder item should send VaultItemClick with the correct item`() {
         val itemText = "Test Item"
         val userName = "BitWarden"
@@ -583,5 +646,6 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     favoriteItems = emptyList(),
     folderItems = emptyList(),
     noFolderItems = emptyList(),
+    collectionItems = emptyList(),
     trashItemsCount = 0,
 )
