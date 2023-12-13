@@ -26,8 +26,10 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCollection
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
@@ -88,6 +90,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -124,6 +129,7 @@ class VaultRepositoryTest {
                 DataState.Loaded(
                     data = VaultData(
                         cipherViewList = listOf(createMockCipherView(number = 1)),
+                        collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                     ),
                 ),
@@ -166,6 +172,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -180,6 +189,7 @@ class VaultRepositoryTest {
                     DataState.Loaded(
                         data = VaultData(
                             cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = listOf(createMockCollectionView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -190,6 +200,7 @@ class VaultRepositoryTest {
                     DataState.Pending(
                         data = VaultData(
                             cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = listOf(createMockCollectionView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -199,6 +210,7 @@ class VaultRepositoryTest {
                     DataState.Loaded(
                         data = VaultData(
                             cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = listOf(createMockCollectionView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -226,6 +238,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
@@ -286,6 +301,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -317,6 +335,45 @@ class VaultRepositoryTest {
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns mockException.asFailure()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
+            } returns listOf(createMockSendView(number = 1)).asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            vaultRepository.sync()
+
+            assertEquals(
+                DataState.Error<VaultData>(error = mockException),
+                vaultRepository.vaultDataStateFlow.value,
+            )
+        }
+
+    @Test
+    fun `sync with decryptCollectionList Failure should update vaultDataStateFlow with Error`() =
+        runTest {
+            val mockException = IllegalStateException()
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(number = 1))
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
+            } returns listOf(createMockCipherView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
+            } returns listOf(createMockFolderView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
             } returns mockException.asFailure()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
@@ -351,6 +408,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns mockException.asFailure()
@@ -435,6 +495,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -449,6 +512,7 @@ class VaultRepositoryTest {
                     DataState.Loaded(
                         data = VaultData(
                             cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = listOf(createMockCollectionView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -462,6 +526,7 @@ class VaultRepositoryTest {
                     DataState.Pending(
                         data = VaultData(
                             cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = listOf(createMockCollectionView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -471,6 +536,7 @@ class VaultRepositoryTest {
                     DataState.NoNetwork(
                         data = VaultData(
                             cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = listOf(createMockCollectionView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -501,6 +567,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
@@ -609,6 +678,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
             fakeAuthDiskSource.storePrivateKey(
@@ -680,6 +752,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
@@ -1519,6 +1594,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -1533,6 +1611,7 @@ class VaultRepositoryTest {
                     DataState.Loaded(
                         data = VaultData(
                             cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = listOf(createMockCollectionView(number = 1)),
                             folderViewList = listOf(createMockFolderView(number = 1)),
                         ),
                     ),
@@ -1567,6 +1646,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(number = 1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
@@ -1617,6 +1699,9 @@ class VaultRepositoryTest {
         coEvery {
             vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(itemId)))
         } returns listOf(createMockFolderView(1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(itemId)))
+        } returns listOf(createMockCollectionView(itemId)).asSuccess()
         coEvery {
             vaultSdkSource.decryptSendList(listOf(createMockSdkSend(itemId)))
         } returns listOf(createMockSendView(itemId)).asSuccess()
@@ -1699,6 +1784,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
             } returns listOf(createMockSendView(1)).asSuccess()
 
@@ -1737,6 +1825,9 @@ class VaultRepositoryTest {
         coEvery {
             vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(folderId)))
         } returns listOf(createMockFolderView(folderId)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(folderId)))
+        } returns listOf(createMockCollectionView(folderId)).asSuccess()
         coEvery {
             vaultSdkSource.decryptSendList(listOf(createMockSdkSend(folderId)))
         } returns listOf(createMockSendView(folderId)).asSuccess()
@@ -1818,6 +1909,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
             } returns listOf(createMockSendView(1)).asSuccess()
@@ -1904,6 +1998,9 @@ class VaultRepositoryTest {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(1)).asSuccess()
             coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+            coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
             } returns listOf(createMockSendView(1)).asSuccess()
 
@@ -1987,6 +2084,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptFolderList(listOf(createMockSdkFolder(1)))
             } returns listOf(createMockFolderView(1)).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCollectionList(listOf(createMockSdkCollection(1)))
+            } returns listOf(createMockCollectionView(number = 1)).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(1)))
             } returns listOf(createMockSendView(1)).asSuccess()

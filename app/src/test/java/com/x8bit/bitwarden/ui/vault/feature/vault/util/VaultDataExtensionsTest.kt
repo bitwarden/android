@@ -10,6 +10,7 @@ import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -35,6 +36,7 @@ class VaultDataExtensionsTest {
     fun `toViewState should transform full VaultData into ViewState Content`() {
         val vaultData = VaultData(
             cipherViewList = listOf(createMockCipherView(number = 1)),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
         )
 
@@ -65,6 +67,7 @@ class VaultDataExtensionsTest {
     fun `toViewState should transform empty VaultData into ViewState NoItems`() {
         val vaultData = VaultData(
             cipherViewList = emptyList(),
+            collectionViewList = emptyList(),
             folderViewList = emptyList(),
         )
 
@@ -80,6 +83,7 @@ class VaultDataExtensionsTest {
     fun `toViewState should not transform ciphers with no ID into ViewState items`() {
         val vaultData = VaultData(
             cipherViewList = listOf(createMockCipherView(number = 1).copy(id = null)),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
         )
 

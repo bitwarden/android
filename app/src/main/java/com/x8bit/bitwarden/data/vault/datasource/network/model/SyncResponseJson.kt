@@ -951,7 +951,7 @@ data class SyncResponseJson(
      *
      * @property organizationId The organization ID of the collection.
      * @property shouldHidePasswords If the collection should hide passwords.
-     * @property name The name of the collection (nullable).
+     * @property name The name of the collection.
      * @property externalId The external ID of the collection (nullable).
      * @property isReadOnly If the collection is marked as read only.
      * @property id The ID of the collection.
@@ -965,7 +965,7 @@ data class SyncResponseJson(
         val shouldHidePasswords: Boolean,
 
         @SerialName("name")
-        val name: String?,
+        val name: String,
 
         @SerialName("externalId")
         val externalId: String?,

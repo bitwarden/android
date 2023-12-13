@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumsta
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -260,6 +261,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = listOf(createMockCipherView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                 ),
             ),
@@ -296,6 +298,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = emptyList(),
+                    collectionViewList = emptyList(),
                     folderViewList = emptyList(),
                 ),
             ),
@@ -384,6 +387,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
                 cipherViewList = emptyList(),
+                collectionViewList = emptyList(),
                 folderViewList = emptyList(),
             ),
         )

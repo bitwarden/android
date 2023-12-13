@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
@@ -399,9 +400,19 @@ class VaultRepositoryImpl constructor(
                             .toEncryptedSdkFolderList(),
                     )
             },
-        ) { decryptedCipherList, decryptedFolderList ->
+            {
+                vaultSdkSource
+                    .decryptCollectionList(
+                        collectionList = syncResponse
+                            .collections
+                            .orEmpty()
+                            .toEncryptedSdkCollectionList(),
+                    )
+            },
+        ) { decryptedCipherList, decryptedFolderList, decryptedCollectionList ->
             VaultData(
                 cipherViewList = decryptedCipherList,
+                collectionViewList = decryptedCollectionList,
                 folderViewList = decryptedFolderList,
             )
         }
