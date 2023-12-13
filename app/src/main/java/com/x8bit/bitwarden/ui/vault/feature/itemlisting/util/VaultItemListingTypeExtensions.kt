@@ -13,7 +13,7 @@ fun VaultItemListingType.toItemListingType(): VaultItemListingState.ItemListingT
             VaultItemListingState.ItemListingType.Folder(folderId = folderId)
         }
 
-        is VaultItemListingType.Identity -> VaultItemListingState.ItemListingType.Card
+        is VaultItemListingType.Identity -> VaultItemListingState.ItemListingType.Identity
         is VaultItemListingType.Login -> VaultItemListingState.ItemListingType.Login
         is VaultItemListingType.SecureNote -> VaultItemListingState.ItemListingType.SecureNote
         is VaultItemListingType.Trash -> VaultItemListingState.ItemListingType.Trash
