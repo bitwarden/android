@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
+import com.x8bit.bitwarden.data.platform.util.zip
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
@@ -44,6 +45,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Default implementation of [VaultRepository].
@@ -54,7 +56,7 @@ class VaultRepositoryImpl constructor(
     private val ciphersService: CiphersService,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
-    dispatcherManager: DispatcherManager,
+    private val dispatcherManager: DispatcherManager,
 ) : VaultRepository {
 
     private val scope = CoroutineScope(dispatcherManager.io)
@@ -374,15 +376,21 @@ class VaultRepositoryImpl constructor(
         sendDataMutableStateFlow.update { newState }
     }
 
-    private suspend fun decryptSyncResponseAndUpdateVaultDataState(syncResponse: SyncResponseJson) {
-        val newState = vaultSdkSource
-            .decryptCipherList(
-                cipherList = syncResponse
-                    .ciphers
-                    .orEmpty()
-                    .toEncryptedSdkCipherList(),
-            )
-            .flatMap { decryptedCipherList ->
+    private suspend fun decryptSyncResponseAndUpdateVaultDataState(
+        syncResponse: SyncResponseJson,
+    ) = withContext(dispatcherManager.default) {
+        // Allow decryption of various types in parallel.
+        val newState = zip(
+            {
+                vaultSdkSource
+                    .decryptCipherList(
+                        cipherList = syncResponse
+                            .ciphers
+                            .orEmpty()
+                            .toEncryptedSdkCipherList(),
+                    )
+            },
+            {
                 vaultSdkSource
                     .decryptFolderList(
                         folderList = syncResponse
@@ -390,19 +398,15 @@ class VaultRepositoryImpl constructor(
                             .orEmpty()
                             .toEncryptedSdkFolderList(),
                     )
-                    .map { decryptedFolderList ->
-                        decryptedCipherList to decryptedFolderList
-                    }
-            }
+            },
+        ) { decryptedCipherList, decryptedFolderList ->
+            VaultData(
+                cipherViewList = decryptedCipherList,
+                folderViewList = decryptedFolderList,
+            )
+        }
             .fold(
-                onSuccess = { (decryptedCipherList, decryptedFolderList) ->
-                    DataState.Loaded(
-                        data = VaultData(
-                            cipherViewList = decryptedCipherList,
-                            folderViewList = decryptedFolderList,
-                        ),
-                    )
-                },
+                onSuccess = { DataState.Loaded(data = it) },
                 onFailure = { DataState.Error(error = it) },
             )
         vaultDataMutableStateFlow.update { newState }
