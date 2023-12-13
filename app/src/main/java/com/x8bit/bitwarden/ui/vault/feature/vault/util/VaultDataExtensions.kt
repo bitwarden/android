@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
+import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.SecureNoteType
@@ -89,17 +91,6 @@ fun VaultData.toViewState(): VaultState.ViewState =
  * Transforms a [VaultAddItemState.ViewState.Content] into [CipherView].
  */
 fun VaultAddItemState.ViewState.Content.toCipherView(): CipherView =
-    when (this) {
-        is VaultAddItemState.ViewState.Content.Card -> toCardCipherView()
-        is VaultAddItemState.ViewState.Content.Identity -> toIdentityCipherView()
-        is VaultAddItemState.ViewState.Content.Login -> toLoginCipherView()
-        is VaultAddItemState.ViewState.Content.SecureNotes -> toSecureNotesCipherView()
-    }
-
-/**
- * Transforms [VaultAddItemState.ViewState.Content.Login] into [CipherView].
- */
-private fun VaultAddItemState.ViewState.Content.Login.toLoginCipherView(): CipherView =
     CipherView(
         // Pulled from original cipher when editing, otherwise uses defaults
         id = this.originalCipher?.id,
@@ -116,88 +107,94 @@ private fun VaultAddItemState.ViewState.Content.Login.toLoginCipherView(): Ciphe
         revisionDate = this.originalCipher?.revisionDate ?: Instant.now(),
 
         // Type specific section
-        type = CipherType.LOGIN,
-        login = LoginView(
-            username = this.username,
-            password = this.password,
-            passwordRevisionDate = this.originalCipher?.login?.passwordRevisionDate,
+        type = this.toCipherType(),
+        identity = this.toIdentityView(),
+        secureNote = this.toSecureNotesView(),
+        login = this.toLoginView(),
+        card = this.toCardView(),
+
+        // Fields we always grab from the UI
+        name = this.name,
+        notes = this.notes,
+        favorite = this.favorite,
+        // TODO Use real folder ID (BIT-528)
+        folderId = this.originalCipher?.folderId,
+        // TODO Use real organization ID (BIT-780)
+        organizationId = this.originalCipher?.organizationId,
+        reprompt = this.toCipherRepromptType(),
+        fields = this.customFieldData.map { it.toFieldView() },
+    )
+
+private fun VaultAddItemState.ViewState.Content.toCipherType(): CipherType =
+    when (this) {
+        is VaultAddItemState.ViewState.Content.Card -> CipherType.CARD
+        is VaultAddItemState.ViewState.Content.Identity -> CipherType.IDENTITY
+        is VaultAddItemState.ViewState.Content.Login -> CipherType.LOGIN
+        is VaultAddItemState.ViewState.Content.SecureNotes -> CipherType.SECURE_NOTE
+    }
+
+private fun VaultAddItemState.ViewState.Content.toCardView(): CardView? =
+    (this as? VaultAddItemState.ViewState.Content.Card)?.let {
+        // TODO Create real CardView from Content (BIT-668)
+        CardView(
+            cardholderName = null,
+            expMonth = null,
+            expYear = null,
+            code = null,
+            brand = null,
+            number = null,
+        )
+    }
+
+private fun VaultAddItemState.ViewState.Content.toIdentityView(): IdentityView? =
+    (this as? VaultAddItemState.ViewState.Content.Identity)?.let {
+        // TODO Create real IdentityView from Content (BIT-508)
+        IdentityView(
+            title = null,
+            firstName = null,
+            lastName = null,
+            middleName = null,
+            address1 = null,
+            address2 = null,
+            address3 = null,
+            city = null,
+            state = null,
+            postalCode = null,
+            country = null,
+            company = null,
+            email = null,
+            phone = null,
+            ssn = null,
+            username = null,
+            passportNumber = null,
+            licenseNumber = null,
+        )
+    }
+
+private fun VaultAddItemState.ViewState.Content.toLoginView(): LoginView? =
+    (this as? VaultAddItemState.ViewState.Content.Login)?.let {
+        LoginView(
+            username = it.username,
+            password = it.password,
+            passwordRevisionDate = it.originalCipher?.login?.passwordRevisionDate,
             uris = listOf(
                 // TODO Implement URI list (BIT-1094)
                 LoginUriView(
-                    uri = this.uri,
+                    uri = it.uri,
                     // TODO Implement URI settings in (BIT-1094)
                     match = UriMatchType.DOMAIN,
                 ),
             ),
-            // TODO implement totp in BIT-1066
-            totp = this.originalCipher?.login?.totp,
-            autofillOnPageLoad = this.originalCipher?.login?.autofillOnPageLoad,
-        ),
-        identity = null,
-        card = null,
-        secureNote = null,
+            // TODO Implement TOTP (BIT-1066)
+            totp = it.originalCipher?.login?.totp,
+            autofillOnPageLoad = it.originalCipher?.login?.autofillOnPageLoad,
+        )
+    }
 
-        // Fields we always grab from the UI
-        name = this.name,
-        notes = this.notes,
-        favorite = this.favorite,
-        // TODO Use real folder ID (BIT-528)
-        folderId = this.originalCipher?.folderId,
-        // TODO Use real organization ID (BIT-780)
-        organizationId = this.originalCipher?.organizationId,
-        reprompt = this.toCipherRepromptType(),
-        fields = this.customFieldData.map { it.toFieldView() },
-    )
-
-/**
- * Transforms [VaultAddItemState.ViewState.Content.SecureNotes] into [CipherView].
- */
-private fun VaultAddItemState.ViewState.Content.SecureNotes.toSecureNotesCipherView(): CipherView =
-    CipherView(
-        // Pulled from original cipher when editing, otherwise uses defaults
-        id = this.originalCipher?.id,
-        collectionIds = this.originalCipher?.collectionIds.orEmpty(),
-        key = this.originalCipher?.key,
-        edit = this.originalCipher?.edit ?: true,
-        viewPassword = this.originalCipher?.viewPassword ?: true,
-        localData = this.originalCipher?.localData,
-        attachments = this.originalCipher?.attachments,
-        organizationUseTotp = this.originalCipher?.organizationUseTotp ?: false,
-        passwordHistory = this.originalCipher?.passwordHistory,
-        creationDate = this.originalCipher?.creationDate ?: Instant.now(),
-        deletedDate = this.originalCipher?.deletedDate,
-        revisionDate = this.originalCipher?.revisionDate ?: Instant.now(),
-
-        // Type specific section
-        type = CipherType.SECURE_NOTE,
-        secureNote = SecureNoteView(type = SecureNoteType.GENERIC),
-        login = null,
-        identity = null,
-        card = null,
-
-        // Fields we always grab from the UI
-        name = this.name,
-        notes = this.notes,
-        favorite = this.favorite,
-        // TODO Use real folder ID (BIT-528)
-        folderId = this.originalCipher?.folderId,
-        // TODO Use real organization ID (BIT-780)
-        organizationId = this.originalCipher?.organizationId,
-        reprompt = this.toCipherRepromptType(),
-        fields = this.customFieldData.map { it.toFieldView() },
-    )
-
-/**
- * Transforms [VaultAddItemState.ViewState.Content.Identity] into [CipherView].
- */
-private fun VaultAddItemState.ViewState.Content.Identity.toIdentityCipherView(): CipherView =
-    TODO("create Identity CipherView BIT-508")
-
-/**
- * Transforms [VaultAddItemState.ViewState.Content.Card] into [CipherView].
- */
-private fun VaultAddItemState.ViewState.Content.Card.toCardCipherView(): CipherView =
-    TODO("create Card CipherView BIT-668")
+private fun VaultAddItemState.ViewState.Content.toSecureNotesView(): SecureNoteView? =
+    (this as? VaultAddItemState.ViewState.Content.SecureNotes)?.let {
+        SecureNoteView(type = SecureNoteType.GENERIC)
+    }
 
 private fun VaultAddItemState.ViewState.Content.toCipherRepromptType(): CipherRepromptType =
     if (this.masterPasswordReprompt) {

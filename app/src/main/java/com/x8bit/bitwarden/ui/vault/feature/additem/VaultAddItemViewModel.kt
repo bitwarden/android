@@ -15,9 +15,9 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction.ItemType.SecureNotesType.TooltipClick.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -826,7 +826,32 @@ data class VaultAddItemState(
             abstract val masterPasswordReprompt: Boolean
 
             /**
-             * The ownership email associated with the login item.
+             * Indicates whether this item is marked as a favorite.
+             */
+            abstract val favorite: Boolean
+
+            /**
+             * Additional custom fields associated with the item.
+             */
+            abstract val customFieldData: List<Custom>
+
+            /**
+             * Any additional notes or comments associated with the item.
+             */
+            abstract val notes: String
+
+            /**
+             * The folder that this item belongs too.
+             */
+            abstract val folderName: Text
+
+            /**
+             * The list of folders that this item could be added too.
+             */
+            abstract val availableFolders: List<Text>
+
+            /**
+             * The ownership email associated with the item.
              */
             abstract val ownership: String
 
@@ -841,33 +866,29 @@ data class VaultAddItemState(
              * @property username The username required for the login item.
              * @property password The password required for the login item.
              * @property uri The URI associated with the login item.
-             * @property folderName The folder used for the login item
-             * @property favorite Indicates whether this login item is marked as a favorite.
-             * @property notes Any additional notes or comments associated with the login item.
-             * @property availableFolders Retrieves a list of available folders.
              */
             @Parcelize
             data class Login(
                 @IgnoredOnParcel
                 override val originalCipher: CipherView? = null,
                 override val name: String = "",
-                val username: String = "",
-                val password: String = "",
-                val uri: String = "",
-                val folderName: Text = DEFAULT_FOLDER,
-                val favorite: Boolean = false,
-                override val masterPasswordReprompt: Boolean = false,
-                val customFieldData: List<Custom> = emptyList(),
-                val notes: String = "",
+                override val folderName: Text = DEFAULT_FOLDER,
                 // TODO: Update this property to get available owners from the data layer (BIT-501)
-                val availableFolders: List<Text> = listOf(
+                override val availableFolders: List<Text> = listOf(
                     "Folder 1".asText(),
                     "Folder 2".asText(),
                     "Folder 3".asText(),
                 ),
+                override val favorite: Boolean = false,
+                override val masterPasswordReprompt: Boolean = false,
+                override val customFieldData: List<Custom> = emptyList(),
+                override val notes: String = "",
                 // TODO: Update this property to get available owners from the data layer (BIT-501)
                 override val ownership: String = DEFAULT_OWNERSHIP,
                 override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+                val username: String = "",
+                val password: String = "",
+                val uri: String = "",
             ) : Content() {
                 override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
             }
@@ -880,7 +901,18 @@ data class VaultAddItemState(
                 @IgnoredOnParcel
                 override val originalCipher: CipherView? = null,
                 override val name: String = "",
+                override val folderName: Text = DEFAULT_FOLDER,
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
+                override val availableFolders: List<Text> = listOf(
+                    "Folder 1".asText(),
+                    "Folder 2".asText(),
+                    "Folder 3".asText(),
+                ),
+                override val favorite: Boolean = false,
                 override val masterPasswordReprompt: Boolean = false,
+                override val customFieldData: List<Custom> = emptyList(),
+                override val notes: String = "",
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
                 override val ownership: String = DEFAULT_OWNERSHIP,
                 override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
@@ -895,7 +927,18 @@ data class VaultAddItemState(
                 @IgnoredOnParcel
                 override val originalCipher: CipherView? = null,
                 override val name: String = "",
+                override val folderName: Text = DEFAULT_FOLDER,
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
+                override val availableFolders: List<Text> = listOf(
+                    "Folder 1".asText(),
+                    "Folder 2".asText(),
+                    "Folder 3".asText(),
+                ),
+                override val favorite: Boolean = false,
                 override val masterPasswordReprompt: Boolean = false,
+                override val customFieldData: List<Custom> = emptyList(),
+                override val notes: String = "",
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
                 override val ownership: String = DEFAULT_OWNERSHIP,
                 override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
@@ -906,8 +949,6 @@ data class VaultAddItemState(
              * Represents the `SecureNotes` item type.
              *
              * @property folderName The folder used for the SecureNotes item
-             * @property favorite Indicates whether this SecureNotes item is marked as a favorite.
-             * @property notes Notes or comments associated with the SecureNotes item.
              * @property availableFolders A list  of available folders.
              */
             @Parcelize
@@ -915,16 +956,18 @@ data class VaultAddItemState(
                 @IgnoredOnParcel
                 override val originalCipher: CipherView? = null,
                 override val name: String = "",
-                val folderName: Text = DEFAULT_FOLDER,
-                val favorite: Boolean = false,
-                override val masterPasswordReprompt: Boolean = false,
-                val notes: String = "",
-                val availableFolders: List<Text> = listOf(
+                override val folderName: Text = DEFAULT_FOLDER,
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
+                override val availableFolders: List<Text> = listOf(
                     "Folder 1".asText(),
                     "Folder 2".asText(),
                     "Folder 3".asText(),
                 ),
-                val customFieldData: List<Custom> = emptyList(),
+                override val favorite: Boolean = false,
+                override val masterPasswordReprompt: Boolean = false,
+                override val customFieldData: List<Custom> = emptyList(),
+                override val notes: String = "",
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
                 override val ownership: String = DEFAULT_OWNERSHIP,
                 override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
             ) : Content() {
