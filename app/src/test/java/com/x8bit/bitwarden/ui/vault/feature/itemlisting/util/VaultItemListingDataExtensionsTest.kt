@@ -1,0 +1,327 @@
+package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
+
+import com.bitwarden.core.CipherType
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+class VaultItemListingDataExtensionsTest {
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for non trash Login cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.LOGIN,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to true,
+            VaultItemListingState.ItemListingType.Card to false,
+            VaultItemListingState.ItemListingType.SecureNote to false,
+            VaultItemListingState.ItemListingType.Identity to false,
+            VaultItemListingState.ItemListingType.Trash to false,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for trash Login cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = true,
+            cipherType = CipherType.LOGIN,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to false,
+            VaultItemListingState.ItemListingType.Card to false,
+            VaultItemListingState.ItemListingType.SecureNote to false,
+            VaultItemListingState.ItemListingType.Identity to false,
+            VaultItemListingState.ItemListingType.Trash to true,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for non trash Card cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.CARD,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to false,
+            VaultItemListingState.ItemListingType.Card to true,
+            VaultItemListingState.ItemListingType.SecureNote to false,
+            VaultItemListingState.ItemListingType.Identity to false,
+            VaultItemListingState.ItemListingType.Trash to false,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for trash Card cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = true,
+            cipherType = CipherType.CARD,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to false,
+            VaultItemListingState.ItemListingType.Card to false,
+            VaultItemListingState.ItemListingType.SecureNote to false,
+            VaultItemListingState.ItemListingType.Identity to false,
+            VaultItemListingState.ItemListingType.Trash to true,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for non trash Identity cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.IDENTITY,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to false,
+            VaultItemListingState.ItemListingType.Card to false,
+            VaultItemListingState.ItemListingType.SecureNote to false,
+            VaultItemListingState.ItemListingType.Identity to true,
+            VaultItemListingState.ItemListingType.Trash to false,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for trash Identity cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = true,
+            cipherType = CipherType.IDENTITY,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to false,
+            VaultItemListingState.ItemListingType.Card to false,
+            VaultItemListingState.ItemListingType.SecureNote to false,
+            VaultItemListingState.ItemListingType.Identity to false,
+            VaultItemListingState.ItemListingType.Trash to true,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for non trash SecureNote cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.SECURE_NOTE,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to false,
+            VaultItemListingState.ItemListingType.Card to false,
+            VaultItemListingState.ItemListingType.SecureNote to true,
+            VaultItemListingState.ItemListingType.Identity to false,
+            VaultItemListingState.ItemListingType.Trash to false,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for trash SecureNote cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = true,
+            cipherType = CipherType.SECURE_NOTE,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Login to false,
+            VaultItemListingState.ItemListingType.Card to false,
+            VaultItemListingState.ItemListingType.SecureNote to false,
+            VaultItemListingState.ItemListingType.Identity to false,
+            VaultItemListingState.ItemListingType.Trash to true,
+            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    fun `toViewState should transform a list of CipherViews into a ViewState`() {
+        val cipherViewList = listOf(
+            createMockCipherView(
+                number = 1,
+                isDeleted = false,
+                cipherType = CipherType.LOGIN,
+            ),
+            createMockCipherView(
+                number = 2,
+                isDeleted = false,
+                cipherType = CipherType.CARD,
+            ),
+            createMockCipherView(
+                number = 3,
+                isDeleted = false,
+                cipherType = CipherType.SECURE_NOTE,
+            ),
+            createMockCipherView(
+                number = 4,
+                isDeleted = false,
+                cipherType = CipherType.IDENTITY,
+            ),
+        )
+
+        val result = cipherViewList.toViewState()
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(
+                    createMockItemListingDisplayItem(
+                        number = 1,
+                        cipherType = CipherType.LOGIN,
+                    ),
+                    createMockItemListingDisplayItem(
+                        number = 2,
+                        cipherType = CipherType.CARD,
+                    ),
+                    createMockItemListingDisplayItem(
+                        number = 3,
+                        cipherType = CipherType.SECURE_NOTE,
+                    ),
+                    createMockItemListingDisplayItem(
+                        number = 4,
+                        cipherType = CipherType.IDENTITY,
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `updateWithAdditionalDataIfNecessary should update a folder itemListingType`() {
+        val folderViewList = listOf(
+            createMockFolderView(number = 1),
+            createMockFolderView(number = 2),
+            createMockFolderView(number = 3),
+        )
+
+        val result = VaultItemListingState.ItemListingType.Folder(
+            folderId = "mockId-1",
+            folderName = "wrong name",
+        )
+            .updateWithAdditionalDataIfNecessary(folderList = folderViewList)
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Folder(
+                folderId = "mockId-1",
+                folderName = "mockName-1",
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `updateWithAdditionalDataIfNecessary should not change a non folder itemListingType`() {
+        val folderViewList = listOf(
+            createMockFolderView(number = 1),
+            createMockFolderView(number = 2),
+            createMockFolderView(number = 3),
+        )
+
+        val result = VaultItemListingState.ItemListingType.Login
+            .updateWithAdditionalDataIfNecessary(folderList = folderViewList)
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Login,
+            result,
+        )
+    }
+}
