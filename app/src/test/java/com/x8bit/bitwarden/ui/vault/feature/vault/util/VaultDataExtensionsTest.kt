@@ -56,6 +56,13 @@ class VaultDataExtensionsTest {
                         itemCount = 1,
                     ),
                 ),
+                collectionItems = listOf(
+                    VaultState.ViewState.CollectionItem(
+                        id = "mockId-1",
+                        name = "mockName-1",
+                        itemCount = 1,
+                    ),
+                ),
                 noFolderItems = listOf(),
                 trashItemsCount = 0,
             ),
@@ -100,6 +107,13 @@ class VaultDataExtensionsTest {
                     VaultState.ViewState.FolderItem(
                         id = "mockId-1",
                         name = "mockName-1".asText(),
+                        itemCount = 0,
+                    ),
+                ),
+                collectionItems = listOf(
+                    VaultState.ViewState.CollectionItem(
+                        id = "mockId-1",
+                        name = "mockName-1",
                         itemCount = 0,
                     ),
                 ),

@@ -41,11 +41,14 @@ fun ComposeContentTestRule.assertNoDialogExists() {
 /**
  * A helper that asserts that the node does not exist in the scrollable list.
  */
-fun ComposeContentTestRule.assertScrollableNodeDoesNotExist(text: String) {
+fun ComposeContentTestRule.assertScrollableNodeDoesNotExist(
+    text: String,
+    substring: Boolean = false,
+) {
     val scrollableNodeInteraction = onNode(hasScrollToNodeAction())
     assertThrows<AssertionError> {
         // throws since it cannot find the node.
-        scrollableNodeInteraction.performScrollToNode(hasText(text))
+        scrollableNodeInteraction.performScrollToNode(hasText(text, substring))
     }
 }
 
@@ -53,9 +56,12 @@ fun ComposeContentTestRule.assertScrollableNodeDoesNotExist(text: String) {
  * A helper used to scroll to and get the matching node in a scrollable list. This is intended to
  * be used with lazy lists that would otherwise fail when calling [performScrollToNode].
  */
-fun ComposeContentTestRule.onNodeWithTextAfterScroll(text: String): SemanticsNodeInteraction {
-    onNode(hasScrollToNodeAction()).performScrollToNode(hasText(text))
-    return onNodeWithText(text)
+fun ComposeContentTestRule.onNodeWithTextAfterScroll(
+    text: String,
+    substring: Boolean = false,
+): SemanticsNodeInteraction {
+    onNode(hasScrollToNodeAction()).performScrollToNode(hasText(text, substring))
+    return onNodeWithText(text, substring)
 }
 
 /**

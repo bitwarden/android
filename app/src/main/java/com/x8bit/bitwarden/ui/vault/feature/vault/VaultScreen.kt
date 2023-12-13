@@ -105,6 +105,11 @@ fun VaultScreen(
         folderClick = remember(viewModel) {
             { folderItem -> viewModel.trySendAction(VaultAction.FolderClick(folderItem)) }
         },
+        collectionClick = remember(viewModel) {
+            { collectionItem ->
+                viewModel.trySendAction(VaultAction.CollectionClick(collectionItem))
+            }
+        },
         loginGroupClick = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.LoginGroupClick) }
         },
@@ -140,6 +145,7 @@ private fun VaultScreenScaffold(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     folderClick: (VaultState.ViewState.FolderItem) -> Unit,
+    collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
     loginGroupClick: () -> Unit,
     cardGroupClick: () -> Unit,
     identityGroupClick: () -> Unit,
@@ -209,6 +215,7 @@ private fun VaultScreenScaffold(
                     state = viewState,
                     vaultItemClick = vaultItemClick,
                     folderClick = folderClick,
+                    collectionClick = collectionClick,
                     loginGroupClick = loginGroupClick,
                     cardGroupClick = cardGroupClick,
                     identityGroupClick = identityGroupClick,

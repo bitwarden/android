@@ -84,6 +84,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.AddItemClick -> handleAddItemClick()
             is VaultAction.CardGroupClick -> handleCardClick()
             is VaultAction.FolderClick -> handleFolderItemClick(action)
+            is VaultAction.CollectionClick -> handleCollectionItemClick(action)
             is VaultAction.IdentityGroupClick -> handleIdentityClick()
             is VaultAction.LoginGroupClick -> handleLoginClick()
             is VaultAction.SearchIconClick -> handleSearchIconClick()
@@ -115,6 +116,13 @@ class VaultViewModel @Inject constructor(
             VaultEvent.NavigateToItemListing(
                 VaultItemListingType.Folder(action.folderItem.id),
             ),
+        )
+    }
+
+    private fun handleCollectionItemClick(action: VaultAction.CollectionClick) {
+        // TODO: Navigate to the listing screen for collections (BIT-406).
+        sendEvent(
+            VaultEvent.ShowToast(message = "Not yet implemented."),
         )
     }
 
@@ -282,6 +290,7 @@ data class VaultState(
          * @property favoriteItems The list of favorites to be displayed.
          * @property folderItems The list of folders to be displayed.
          * @property noFolderItems The list of non-folders to be displayed.
+         * @property collectionItems The list of collections to be displayed.
          * @property trashItemsCount The number of items present in the trash.
          */
         @Parcelize
@@ -293,6 +302,7 @@ data class VaultState(
             val favoriteItems: List<VaultItem>,
             val folderItems: List<FolderItem>,
             val noFolderItems: List<VaultItem>,
+            val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
         ) : ViewState()
 
@@ -308,6 +318,20 @@ data class VaultState(
         data class FolderItem(
             val id: String?,
             val name: Text,
+            val itemCount: Int,
+        ) : Parcelable
+
+        /**
+         * Represents a collection.
+         *
+         * @property id The unique identifier for this collection.
+         * @property name The display name of the collection.
+         * @property itemCount The number of items this collection contains.
+         */
+        @Parcelize
+        data class CollectionItem(
+            val id: String,
+            val name: String,
             val itemCount: Int,
         ) : Parcelable
 
@@ -514,6 +538,13 @@ sealed class VaultAction {
      */
     data class FolderClick(
         val folderItem: VaultState.ViewState.FolderItem,
+    ) : VaultAction()
+
+    /**
+     * Action to trigger when a specific collection item is clicked.
+     */
+    data class CollectionClick(
+        val collectionItem: VaultState.ViewState.CollectionItem,
     ) : VaultAction()
 
     /**
