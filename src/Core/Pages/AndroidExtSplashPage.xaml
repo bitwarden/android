@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bit.Core.Pages.AndroidExtSplashPage"
+             Title="AndroidExtSplashPage"
+             Loaded="AndroidExtSplashPage_OnLoaded">
+    <Grid>
+        <ActivityIndicator VerticalOptions="Center" HorizontalOptions="Center" IsRunning="True" />
+    </Grid>
+</ContentPage>

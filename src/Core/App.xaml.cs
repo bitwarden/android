@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Response;
+using Bit.Core.Pages;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 
@@ -74,6 +75,8 @@ namespace Bit.App
         }   
 
         public static Window CurrentWindow { get; private set; }
+        public static Window AutofillWindow { get; private set; }
+        public static Window MainWindow { get; private set; }
 
         public void SetOptions(AppOptions appOptions)
         {
@@ -84,28 +87,28 @@ namespace Bit.App
         {
             if (activationState != null 
                 && activationState.State.TryGetValue("autofillFramework", out string autofillFramework)
-                && autofillFramework == "true") //TODO: There are likely better ways to filter this. Maybe using Options.
+                && autofillFramework == "true"
+                && activationState.State.ContainsKey("autofillFrameworkCipherId")) //AutofillExternalActivity
             {
-                if (activationState.State.ContainsKey("autofillFrameworkCipherId")) //TODO: There are likely better ways to filter this. Maybe using Options.
-                {
-                    return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
-                }
-                else
-                {
-                    //TODO: IMPORTANT Question: this works if we want to show the CipherSelection, but we are skipping all our ASYNC Navigation workflows where we (for example) check if the user is logged in and/or needs to enter auth again.
-                    var autofillWindow = new Window(new NavigationPage(new CipherSelectionPage(Options)));
-                    return autofillWindow;
-                }
+                return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
+            }
+            else if (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null) //"Internal" Autofill and Uri/Otp/CreateSend
+            {
+                AutofillWindow = new Window(new NavigationPage(new AndroidExtSplashPage(Options)));
+                CurrentWindow = AutofillWindow;
+                return CurrentWindow;
             }
             else if(CurrentWindow != null)
             {
                 //TODO: This likely crashes if we try to have two apps side-by-side on Android
                 //TODO: Question: In these scenarios should a new Window be created or can the same one be reused?
+                CurrentWindow = MainWindow;
                 return CurrentWindow;
             }
             else
             {
-                CurrentWindow = new Window(new NavigationPage(new HomePage(Options)));
+                MainWindow = new Window(new NavigationPage(new HomePage(Options)));
+                CurrentWindow = MainWindow;
                 return CurrentWindow;
             }
         }

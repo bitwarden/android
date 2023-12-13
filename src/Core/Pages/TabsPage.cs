@@ -144,7 +144,17 @@ namespace Bit.App.Pages
 
         private void OnUnloaded(object sender, EventArgs e)
         {
-            Handler?.DisconnectHandler();
+            try
+            {
+                Handler?.DisconnectHandler();
+            }
+            catch (Exception ex)
+            {
+                //Workaround: Currently the Disconnect Handler needs to be manually called from the App: https://github.com/dotnet/maui/issues/3604
+                // In some specific edges cases the MauiContext can be gone when we call this. (for example filling a field using Accessibility)
+                // In those scenarios the app should just be "closing" anyway, so we just want to avoid the exception.
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
         }
 
         public void ResetToVaultPage()

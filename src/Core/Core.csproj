@@ -64,7 +64,6 @@
     <Folder Include="Resources\Fonts\" />
     <Folder Include="Effects\" />
     <Folder Include="Resources\Raw\" />
-    <Folder Include="Pages\" />
     <Folder Include="Behaviors\" />
     <Folder Include="Controls\" />
     <Folder Include="Lists\" />
@@ -91,5 +90,10 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiXaml Update="Pages\AndroidExtSplashPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 </Project>
