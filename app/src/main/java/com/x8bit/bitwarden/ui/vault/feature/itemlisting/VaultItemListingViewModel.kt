@@ -4,14 +4,21 @@ import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPredicate
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -19,9 +26,10 @@ import javax.inject.Inject
  * and launches [VaultItemListingEvent] for the [VaultItemListingScreen].
  */
 @HiltViewModel
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "TooManyFunctions")
 class VaultItemListingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = VaultItemListingState(
         itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
@@ -32,15 +40,10 @@ class VaultItemListingViewModel @Inject constructor(
 ) {
 
     init {
-        // TODO fetch real listing data in BIT-1057
-        viewModelScope.launch {
-            delay(2000)
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = VaultItemListingState.ViewState.NoItems,
-                )
-            }
-        }
+        vaultRepository
+            .vaultDataStateFlow
+            .onEach { sendAction(VaultItemListingsAction.Internal.VaultDataReceive(it)) }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultItemListingsAction) {
@@ -50,17 +53,13 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.ItemClick -> handleItemClick(action)
             is VaultItemListingsAction.AddVaultItemClick -> handleAddVaultItemClick()
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
+            is VaultItemListingsAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
     }
 
     //region VaultItemListing Handlers
     private fun handleRefreshClick() {
-        // TODO implement refresh in BIT-1057
-        sendEvent(
-            event = VaultItemListingEvent.ShowToast(
-                text = "Not yet implemented".asText(),
-            ),
-        )
+        vaultRepository.sync()
     }
 
     private fun handleAddVaultItemClick() {
@@ -88,7 +87,80 @@ class VaultItemListingViewModel @Inject constructor(
             event = VaultItemListingEvent.NavigateToVaultSearchScreen,
         )
     }
+
+    private fun handleVaultDataReceive(
+        action: VaultItemListingsAction.Internal.VaultDataReceive,
+    ) {
+        when (val vaultData = action.vaultData) {
+            is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
+            is DataState.Loaded -> vaultLoadedReceive(vaultData = vaultData)
+            is DataState.Loading -> vaultLoadingReceive()
+            is DataState.NoNetwork -> vaultNoNetworkReceive(vaultData = vaultData)
+            is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
+        }
+    }
     //endregion VaultItemListing Handlers
+
+    private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
+        if (vaultData.data != null) {
+            updateStateWithVaultData(vaultData = vaultData.data)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = VaultItemListingState.ViewState.Error(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
+        updateStateWithVaultData(vaultData = vaultData.data)
+    }
+
+    private fun vaultLoadingReceive() {
+        mutableStateFlow.update { it.copy(viewState = VaultItemListingState.ViewState.Loading) }
+    }
+
+    private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
+        if (vaultData.data != null) {
+            updateStateWithVaultData(vaultData = vaultData.data)
+        } else {
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = VaultItemListingState.ViewState.Error(
+                        message = R.string.internet_connection_required_title
+                            .asText()
+                            .concat(R.string.internet_connection_required_message.asText()),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
+        updateStateWithVaultData(vaultData = vaultData.data)
+    }
+
+    private fun updateStateWithVaultData(vaultData: VaultData) {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                itemListingType = currentState
+                    .itemListingType
+                    .updateWithAdditionalDataIfNecessary(
+                        folderList = vaultData
+                            .folderViewList,
+                    ),
+                viewState = vaultData
+                    .cipherViewList
+                    .filter { cipherView ->
+                        cipherView.determineListingPredicate(currentState.itemListingType)
+                    }
+                    .toViewState(),
+            )
+        }
+    }
 }
 
 /**
@@ -139,14 +211,14 @@ data class VaultItemListingState(
      *
      * @property id the id of the item.
      * @property title title of the item.
-     * @property subtitle subtitle of the item.
+     * @property subtitle subtitle of the item (nullable).
      * @property uri uri for the icon to be displayed (nullable).
      * @property iconRes the icon to be displayed.
      */
     data class DisplayItem(
         val id: String,
         val title: String,
-        val subtitle: String,
+        val subtitle: String?,
         val uri: String?,
         @DrawableRes
         val iconRes: Int,
@@ -302,4 +374,17 @@ sealed class VaultItemListingsAction {
      * @property id the id of the item that has been clicked.
      */
     data class ItemClick(val id: String) : VaultItemListingsAction()
+
+    /**
+     * Models actions that the [VaultItemListingViewModel] itself might send.
+     */
+    sealed class Internal : VaultItemListingsAction() {
+
+        /**
+         * Indicates vault data was received.
+         */
+        data class VaultDataReceive(
+            val vaultData: DataState<VaultData>,
+        ) : Internal()
+    }
 }

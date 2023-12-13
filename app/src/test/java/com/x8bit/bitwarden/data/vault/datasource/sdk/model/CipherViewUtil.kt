@@ -18,9 +18,17 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 /**
- * Create a mock [CipherView] with a given [number].
+ * Create a mock [CipherView].
+ *
+ * @param number the number to create the cipher with.
+ * @param isDeleted whether or not the cipher has been deleted.
+ * @param cipherType the type of cipher to create.
  */
-fun createMockCipherView(number: Int): CipherView =
+fun createMockCipherView(
+    number: Int,
+    isDeleted: Boolean = true,
+    cipherType: CipherType = CipherType.LOGIN,
+): CipherView =
     CipherView(
         id = "mockId-$number",
         organizationId = "mockOrganizationId-$number",
@@ -29,14 +37,18 @@ fun createMockCipherView(number: Int): CipherView =
         key = "mockKey-$number",
         name = "mockName-$number",
         notes = "mockNotes-$number",
-        type = CipherType.LOGIN,
+        type = cipherType,
         login = createMockLoginView(number = number),
         creationDate = LocalDateTime
             .parse("2023-10-27T12:00:00")
             .toInstant(ZoneOffset.UTC),
-        deletedDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        deletedDate = if (isDeleted) {
+            LocalDateTime
+                .parse("2023-10-27T12:00:00")
+                .toInstant(ZoneOffset.UTC)
+        } else {
+            null
+        },
         revisionDate = LocalDateTime
             .parse("2023-10-27T12:00:00")
             .toInstant(ZoneOffset.UTC),
