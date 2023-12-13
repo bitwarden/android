@@ -14,9 +14,9 @@ androidxBrowser = "1.6.0"
 androidxComposeBom = "2023.10.01"
 # TODO: Once the Material3 color scheme changes are no longer in alpha, we should remove this
 #   individual dependency version and use the Compose BOM version (BIT-702).
-androidxComposeMaterial3 = "1.2.0-alpha10"
+androidxComposeMaterial3 = "1.2.0-alpha12"
 androidxCore = "1.12.0"
-androidxHiltNavigationCompose = "1.0.0"
+androidxHiltNavigationCompose = "1.1.0"
 androidxLifecycle = "2.6.2"
 androidxNavigation = "2.7.4"
 androidxRoom = "2.6.0"
