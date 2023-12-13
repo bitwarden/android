@@ -7,7 +7,7 @@
     <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_round</item>
   </style>
 
-  <style name="BaseTheme" parent="Theme.AppCompat">
+  <style name="BaseTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="colorPrimaryDark">@color/dark_notificationBar</item>
@@ -18,10 +18,6 @@
     <item name="android:colorActivatedHighlight">@android:color/transparent</item>
     <item name="android:textCursorDrawable">@null</item>
     <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
-    <item name="buttonStyle">@style/ButtonStyle</item>
-  </style>
-
-  <style name="ButtonStyle" parent="Widget.AppCompat.Button">
     <item name="android:textAllCaps">false</item>
   </style>
 </resources>
