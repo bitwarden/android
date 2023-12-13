@@ -215,37 +215,43 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateNavigateToCardGroup event should call onNavigateToVaultItemListingType`() {
+    @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for Card type should call onNavigateToVaultItemListingType with Card type`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Card))
         assertEquals(VaultItemListingType.Card, onNavigateToVaultItemListingType)
     }
 
     @Test
-    fun `NavigateToIdentityGroup event should call onNavigateToVaultItemListingType`() {
+    @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for Identity type should call onNavigateToVaultItemListingType with Identity type`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Identity))
         assertEquals(VaultItemListingType.Identity, onNavigateToVaultItemListingType)
     }
 
     @Test
-    fun `NavigateToLoginGroup event should call onNavigateToVaultItemListingType`() {
+    @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for Login type should call onNavigateToVaultItemListingType with Login type`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Login))
         assertEquals(VaultItemListingType.Login, onNavigateToVaultItemListingType)
     }
 
     @Test
-    fun `NavigateToSecureNotesGroup event should call onNavigateToVaultItemListingType`() {
+    @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for SecureNote type should call onNavigateToVaultItemListingType with SecureNote type`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.SecureNote))
         assertEquals(VaultItemListingType.SecureNote, onNavigateToVaultItemListingType)
     }
 
     @Test
-    fun `NavigateToTrash event should call onNavigateToVaultItemListingType`() {
+    @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for Trash type should call onNavigateToVaultItemListingType with Trash type`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
         assertEquals(VaultItemListingType.Trash, onNavigateToVaultItemListingType)
     }
 
     @Test
-    fun `NavigateToFolder event should call onNavigateToVaultItemListingType`() {
+    @Suppress("MaxLineLength")
+    fun `NavigateToItemListing event for Folder type should call onNavigateToVaultItemListingType with Folder type`() {
         val mockFolderId = "mockFolderId"
         mutableEventFlow.tryEmit(
             VaultEvent.NavigateToItemListing(VaultItemListingType.Folder(mockFolderId)),

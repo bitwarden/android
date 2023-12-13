@@ -408,7 +408,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CardGroupClick should emit NavigateToCardGroup`() = runTest {
+    fun `CardGroupClick should emit NavigateToItemListing event with Card type`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.CardGroupClick)
@@ -420,35 +420,38 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `FolderClick should emit NavigateToFolder with correct folder ID`() = runTest {
-        val viewModel = createViewModel()
-        val folderId = "12345"
-        val folder = mockk<VaultState.ViewState.FolderItem> {
-            every { id } returns folderId
+    @Suppress("MaxLineLength")
+    fun `FolderClick should emit NavigateToItemListing event for Folder type with correct folder ID`() =
+        runTest {
+            val viewModel = createViewModel()
+            val folderId = "12345"
+            val folder = mockk<VaultState.ViewState.FolderItem> {
+                every { id } returns folderId
+            }
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.FolderClick(folder))
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Folder(folderId)),
+                    awaitItem(),
+                )
+            }
         }
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.FolderClick(folder))
-            assertEquals(
-                VaultEvent.NavigateToItemListing(VaultItemListingType.Folder(folderId)),
-                awaitItem(),
-            )
-        }
-    }
 
     @Test
-    fun `IdentityGroupClick should emit NavigateToIdentityGroup`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.IdentityGroupClick)
-            assertEquals(
-                VaultEvent.NavigateToItemListing(VaultItemListingType.Identity),
-                awaitItem(),
-            )
+    fun `IdentityGroupClick should emit NavigateToItemListing event with Identity type`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.IdentityGroupClick)
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Identity),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
-    fun `LoginGroupClick should emit NavigateToLoginGroup`() = runTest {
+    fun `LoginGroupClick should emit NavigateToItemListing event with Login type`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.LoginGroupClick)
@@ -469,19 +472,20 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SecureNoteGroupClick should emit NavigateToSecureNotesGroup`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.SecureNoteGroupClick)
-            assertEquals(
-                VaultEvent.NavigateToItemListing(VaultItemListingType.SecureNote),
-                awaitItem(),
-            )
+    fun `SecureNoteGroupClick should emit NavigateToItemListing event with SecureNote type`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.SecureNoteGroupClick)
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.SecureNote),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
-    fun `TrashClick should emit NavigateToTrash`() = runTest {
+    fun `TrashClick should emit NavigateToItemListing event with Trash type`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.TrashClick)
