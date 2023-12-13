@@ -88,10 +88,6 @@ private fun TypeOptionsItem(
     modifier: Modifier,
 ) {
     val possibleMainStates = VaultAddItemState.ItemTypeOption.entries.toList()
-        // TODO: Add support for Card Type items (BIT-668)
-        .filterNot { it == VaultAddItemState.ItemTypeOption.CARD }
-        // TODO: Add support for Identity Type items (BIT-667)
-        .filterNot { it == VaultAddItemState.ItemTypeOption.IDENTITY }
     val optionsWithStrings = possibleMainStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
