@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -223,9 +224,11 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
-        // TODO update state to error state BIT-1157
-        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        sendEvent(VaultEvent.ShowToast(message = "Vault error state not yet implemented"))
+        mutableStateFlow.updateToErrorStateOrDialog(
+            vaultData = vaultData.data,
+            errorTitle = R.string.an_error_has_occurred.asText(),
+            errorMessage = R.string.generic_error_message.asText(),
+        )
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
@@ -237,27 +240,11 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
-        val title = R.string.internet_connection_required_title.asText()
-        val message = R.string.internet_connection_required_message.asText()
-        if (vaultData.data != null) {
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = vaultData.data.toViewState(),
-                    dialog = VaultState.DialogState.Error(
-                        title = title,
-                        message = message,
-                    ),
-                )
-            }
-        } else {
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = VaultState.ViewState.Error(
-                        message = message,
-                    ),
-                )
-            }
-        }
+        mutableStateFlow.updateToErrorStateOrDialog(
+            vaultData = vaultData.data,
+            errorTitle = R.string.internet_connection_required_title.asText(),
+            errorMessage = R.string.internet_connection_required_message.asText(),
+        )
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
@@ -265,6 +252,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(viewState = vaultData.data.toViewState()) }
         sendEvent(VaultEvent.ShowToast(message = "Refreshing"))
     }
+
     //endregion VaultAction Handlers
 }
 
@@ -656,5 +644,29 @@ sealed class VaultAction {
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
         ) : Internal()
+    }
+}
+
+private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
+    vaultData: VaultData?,
+    errorTitle: Text,
+    errorMessage: Text,
+) {
+    this.update {
+        if (vaultData != null) {
+            it.copy(
+                viewState = vaultData.toViewState(),
+                dialog = VaultState.DialogState.Error(
+                    title = errorTitle,
+                    message = errorMessage,
+                ),
+            )
+        } else {
+            it.copy(
+                viewState = VaultState.ViewState.Error(
+                    message = errorMessage,
+                ),
+            )
+        }
     }
 }
