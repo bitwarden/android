@@ -27,6 +27,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class VaultViewModelTest : BaseViewModelTest() {
 
     private val mutableUserStateFlow =
@@ -331,26 +332,100 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `vaultDataStateFlow Error should show toast and update state to NoItems`() = runTest {
+    fun `vaultDataStateFlow Error without data should update state to Error`() = runTest {
         mutableVaultDataStateFlow.tryEmit(
-            value = DataState.Error(
-                error = IllegalStateException(),
-            ),
+            value = DataState.Error(error = IllegalStateException()),
         )
 
         val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            assertEquals(
-                VaultEvent.ShowToast("Vault error state not yet implemented"),
-                awaitItem(),
-            )
-        }
         assertEquals(
-            createMockVaultState(viewState = VaultState.ViewState.NoItems),
+            createMockVaultState(
+                viewState = VaultState.ViewState.Error(
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Error with items should update state to Content and show an error dialog`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Error(
+                    error = IllegalStateException(),
+                    data = VaultData(
+                        cipherViewList = listOf(createMockCipherView(number = 1)),
+                        collectionViewList = listOf(createMockCollectionView(number = 1)),
+                        folderViewList = listOf(createMockFolderView(number = 1)),
+                    ),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 1,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(
+                            VaultState.ViewState.FolderItem(
+                                id = "mockId-1",
+                                name = "mockName-1".asText(),
+                                itemCount = 1,
+                            ),
+                        ),
+                        collectionItems = listOf(
+                            VaultState.ViewState.CollectionItem(
+                                id = "mockId-1",
+                                name = "mockName-1",
+                                itemCount = 1,
+                            ),
+                        ),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                    ),
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Error with empty items should update state to NoItems and show an error dialog`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Error(
+                    error = IllegalStateException(),
+                    data = VaultData(
+                        cipherViewList = emptyList(),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                    ),
+                ),
+            )
+            val viewModel = createViewModel()
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.NoItems,
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `vaultDataStateFlow NoNetwork without data should update state to Error`() = runTest {
