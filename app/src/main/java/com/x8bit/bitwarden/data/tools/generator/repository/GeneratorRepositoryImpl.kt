@@ -4,7 +4,9 @@ import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
+import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistory
@@ -15,89 +17,60 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswo
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Singleton
 
 /**
  * Default implementation of [GeneratorRepository].
  */
-@OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
-class GeneratorRepositoryImpl constructor(
+class GeneratorRepositoryImpl(
     private val generatorSdkSource: GeneratorSdkSource,
     private val generatorDiskSource: GeneratorDiskSource,
     private val authDiskSource: AuthDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
+    dispatcherManager: DispatcherManager,
 ) : GeneratorRepository {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
+    private val scope = CoroutineScope(dispatcherManager.io)
     private val mutablePasswordHistoryStateFlow =
         MutableStateFlow<LocalDataState<List<PasswordHistoryView>>>(LocalDataState.Loading)
 
     override val passwordHistoryStateFlow: StateFlow<LocalDataState<List<PasswordHistoryView>>>
         get() = mutablePasswordHistoryStateFlow.asStateFlow()
 
-    private var passwordHistoryJob: Job? = null
-
     init {
         mutablePasswordHistoryStateFlow
-            .subscriptionCount
-            .flatMapLatest { subscriberCount ->
-                if (subscriberCount > 0) {
-                    authDiskSource
-                        .userStateFlow
-                        .map { it?.activeUserId }
-                        .distinctUntilChanged()
-                } else {
-                    flow { awaitCancellation() }
-                }
-            }
-            .onEach { activeUserId ->
+            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
                 observePasswordHistoryForUser(activeUserId)
             }
             .launchIn(scope)
     }
 
-    private fun observePasswordHistoryForUser(userId: String?) {
-        passwordHistoryJob?.cancel()
-        userId ?: return
-
-        mutablePasswordHistoryStateFlow.value = LocalDataState.Loading
-
-        passwordHistoryJob = passwordHistoryDiskSource
+    private fun observePasswordHistoryForUser(
+        userId: String,
+    ): Flow<Result<List<PasswordHistoryView>>> =
+        passwordHistoryDiskSource
             .getPasswordHistoriesForUser(userId)
+            .onStart { mutablePasswordHistoryStateFlow.value = LocalDataState.Loading }
             .map { encryptedPasswordHistoryList ->
-                val passwordHistories =
-                    encryptedPasswordHistoryList.map { it.toPasswordHistory() }
-                vaultSdkSource
-                    .decryptPasswordHistoryList(passwordHistories)
+                val passwordHistories = encryptedPasswordHistoryList.map { it.toPasswordHistory() }
+                vaultSdkSource.decryptPasswordHistoryList(passwordHistories)
             }
             .onEach { encryptedPasswordHistoryListResult ->
-                encryptedPasswordHistoryListResult
-                    .fold(
-                        onSuccess = {
-                            mutablePasswordHistoryStateFlow.value = LocalDataState.Loaded(it)
-                        },
-                        onFailure = {
-                            mutablePasswordHistoryStateFlow.value = LocalDataState.Error(it)
-                        },
-                    )
+                mutablePasswordHistoryStateFlow.value = encryptedPasswordHistoryListResult.fold(
+                    onSuccess = { LocalDataState.Loaded(it) },
+                    onFailure = { LocalDataState.Error(it) },
+                )
             }
-            .launchIn(scope)
-    }
 
     override suspend fun generatePassword(
         passwordGeneratorRequest: PasswordGeneratorRequest,

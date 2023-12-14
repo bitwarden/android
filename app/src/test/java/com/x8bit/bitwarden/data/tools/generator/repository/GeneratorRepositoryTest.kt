@@ -14,10 +14,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
-import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
@@ -27,9 +28,11 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -41,11 +44,16 @@ import java.time.Instant
 
 class GeneratorRepositoryTest {
 
+    private val mutableUserStateFlow = MutableStateFlow<UserStateJson?>(null)
+
     private val generatorSdkSource: GeneratorSdkSource = mockk()
     private val generatorDiskSource: GeneratorDiskSource = mockk()
-    private val authDiskSource: AuthDiskSource = mockk()
+    private val authDiskSource: AuthDiskSource = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
+    private val dispatcherManager = FakeDispatcherManager()
 
     private val repository = GeneratorRepositoryImpl(
         generatorSdkSource = generatorSdkSource,
@@ -53,6 +61,7 @@ class GeneratorRepositoryTest {
         authDiskSource = authDiskSource,
         passwordHistoryDiskSource = passwordHistoryDiskSource,
         vaultSdkSource = vaultSdkSource,
+        dispatcherManager = dispatcherManager,
     )
 
     @BeforeEach
@@ -290,8 +299,6 @@ class GeneratorRepositoryTest {
                 ),
             )
 
-            coEvery { authDiskSource.userStateFlow } returns flowOf(USER_STATE)
-
             coEvery {
                 passwordHistoryDiskSource.getPasswordHistoriesForUser(USER_STATE.activeUserId)
             } returns flowOf(encryptedPasswordHistoryEntities)
@@ -304,6 +311,7 @@ class GeneratorRepositoryTest {
 
             historyFlow.test {
                 assertEquals(LocalDataState.Loading, awaitItem())
+                mutableUserStateFlow.value = USER_STATE
                 assertEquals(LocalDataState.Loaded(decryptedPasswordHistoryList), awaitItem())
                 cancelAndIgnoreRemainingEvents()
             }
