@@ -53,10 +53,10 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
 	  <CodesignProvision>Automatic</CodesignProvision>
-    <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignKey>iPhone Developer</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
-	  <MtouchInterpreter>all</MtouchInterpreter>
-		<!--TODO: add argon2id load when library is built with the corresponding architecture for iOS Simulator-->
+	  <UseInterpreter>true</UseInterpreter>
+	  <!--TODO: add argon2id load when library is built with the corresponding architecture for iOS Simulator-->
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|ios-arm64'">
 		<MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
@@ -66,9 +66,13 @@
       <CodesignProvision>Automatic:AppStore</CodesignProvision>
       <CodesignKey>iPhone Distribution</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
-	  <MtouchInterpreter>all</MtouchInterpreter>
+	  <UseInterpreter>true</UseInterpreter>
 	  <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
 	</PropertyGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+		<!--This is needed for PCLCrypto to work correctly-->
+		<TrimmerRootAssembly Include="System.Security.Cryptography" />
+	</ItemGroup>
 	<ItemGroup>
 	  <AndroidNativeLibrary Include="Platforms\Android\lib\arm64-v8a\libargon2.so" />
 	  <AndroidNativeLibrary Include="Platforms\Android\lib\armeabi-v7a\libargon2.so" />
@@ -90,7 +94,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
-		<PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
+		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
 		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
@@ -216,8 +220,8 @@
     <WatchAppBuildPath Condition=" '$(Configuration)' == 'Debug' ">$(Home)/Library/Developer/Xcode/DerivedData/bitwarden-acgkbpwvmebfiofokotvoerzkqcl/Build/Products</WatchAppBuildPath>
     <WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))/watchOS/bitwarden.xcarchive/Products/Applications/bitwarden.app/Watch</WatchAppBuildPath>
     <WatchAppBundle>Bitwarden.app</WatchAppBundle>
-		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'!='ios-arm64'"> >watchsimulator</WatchAppConfiguration>
-		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'=='ios-arm64'"> >watchos</WatchAppConfiguration>
+		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'!='ios-arm64'">watchsimulator</WatchAppConfiguration>
+		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'=='ios-arm64'">watchos</WatchAppConfiguration>
     <WatchAppBundleFullPath Condition=" '$(Configuration)' == 'Debug' ">$(WatchAppBuildPath)/$(Configuration)-$(WatchAppConfiguration)/$(WatchAppBundle)</WatchAppBundleFullPath>
     <WatchAppBundleFullPath Condition=" '$(Configuration)' != 'Debug' ">$(WatchAppBuildPath)/$(WatchAppBundle)</WatchAppBundleFullPath>
   </PropertyGroup>

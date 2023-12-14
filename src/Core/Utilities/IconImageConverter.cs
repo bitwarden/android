@@ -40,7 +40,7 @@ namespace Bit.App.Utilities
             string image = null;
             if (cipher.Login.HasUris)
             {
-                foreach (var uri in cipher.Login.Uris)
+                foreach (var uri in cipher.Login.Uris.Where(u => u.Uri != null))
                 {
                     var hostnameUri = uri.Uri;
                     var isWebsite = false;
