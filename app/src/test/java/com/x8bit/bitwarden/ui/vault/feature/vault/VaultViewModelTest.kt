@@ -594,21 +594,23 @@ class VaultViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `CollectionClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        val collectionId = "12345"
-        val collection = mockk<VaultState.ViewState.CollectionItem> {
-            every { id } returns collectionId
+    fun `CollectionClick should emit NavigateToItemListing event with Collection type with the correct collection ID`() =
+        runTest {
+            val viewModel = createViewModel()
+            val collectionId = "12345"
+            val collection = mockk<VaultState.ViewState.CollectionItem> {
+                every { id } returns collectionId
+            }
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultAction.CollectionClick(collection))
+                assertEquals(
+                    VaultEvent.NavigateToItemListing(VaultItemListingType.Collection(collectionId)),
+                    awaitItem(),
+                )
+            }
         }
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.CollectionClick(collection))
-            assertEquals(
-                VaultEvent.ShowToast(message = "Not yet implemented."),
-                awaitItem(),
-            )
-        }
-    }
 
     @Test
     fun `IdentityGroupClick should emit NavigateToItemListing event with Identity type`() =

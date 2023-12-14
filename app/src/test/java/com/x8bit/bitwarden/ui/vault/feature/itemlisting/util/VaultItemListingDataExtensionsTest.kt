@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import com.bitwarden.core.CipherType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import org.junit.Assert.assertEquals
@@ -25,6 +26,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to false,
             VaultItemListingState.ItemListingType.Trash to false,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -53,6 +55,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to false,
             VaultItemListingState.ItemListingType.Trash to true,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -81,6 +84,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to false,
             VaultItemListingState.ItemListingType.Trash to false,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -109,6 +113,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to false,
             VaultItemListingState.ItemListingType.Trash to true,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -137,6 +142,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to true,
             VaultItemListingState.ItemListingType.Trash to false,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -165,6 +171,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to false,
             VaultItemListingState.ItemListingType.Trash to true,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -193,6 +200,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to false,
             VaultItemListingState.ItemListingType.Trash to false,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -221,6 +229,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Identity to false,
             VaultItemListingState.ItemListingType.Trash to true,
             VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -292,12 +301,20 @@ class VaultItemListingDataExtensionsTest {
             createMockFolderView(number = 2),
             createMockFolderView(number = 3),
         )
+        val collectionViewList = listOf(
+            createMockCollectionView(number = 1),
+            createMockCollectionView(number = 2),
+            createMockCollectionView(number = 3),
+        )
 
         val result = VaultItemListingState.ItemListingType.Folder(
             folderId = "mockId-1",
             folderName = "wrong name",
         )
-            .updateWithAdditionalDataIfNecessary(folderList = folderViewList)
+            .updateWithAdditionalDataIfNecessary(
+                folderList = folderViewList,
+                collectionList = collectionViewList,
+            )
 
         assertEquals(
             VaultItemListingState.ItemListingType.Folder(
@@ -309,15 +326,55 @@ class VaultItemListingDataExtensionsTest {
     }
 
     @Test
-    fun `updateWithAdditionalDataIfNecessary should not change a non folder itemListingType`() {
+    fun `updateWithAdditionalDataIfNecessary should update a collection itemListingType`() {
         val folderViewList = listOf(
             createMockFolderView(number = 1),
             createMockFolderView(number = 2),
             createMockFolderView(number = 3),
         )
+        val collectionViewList = listOf(
+            createMockCollectionView(number = 1),
+            createMockCollectionView(number = 2),
+            createMockCollectionView(number = 3),
+        )
+
+        val result = VaultItemListingState.ItemListingType.Collection(
+            collectionId = "mockId-1",
+            collectionName = "wrong name",
+        )
+            .updateWithAdditionalDataIfNecessary(
+                folderList = folderViewList,
+                collectionList = collectionViewList,
+            )
+
+        assertEquals(
+            VaultItemListingState.ItemListingType.Collection(
+                collectionId = "mockId-1",
+                collectionName = "mockName-1",
+            ),
+            result,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `updateWithAdditionalDataIfNecessary should not change a non-folder or non-collection itemListingType`() {
+        val folderViewList = listOf(
+            createMockFolderView(number = 1),
+            createMockFolderView(number = 2),
+            createMockFolderView(number = 3),
+        )
+        val collectionViewList = listOf(
+            createMockCollectionView(number = 1),
+            createMockCollectionView(number = 2),
+            createMockCollectionView(number = 3),
+        )
 
         val result = VaultItemListingState.ItemListingType.Login
-            .updateWithAdditionalDataIfNecessary(folderList = folderViewList)
+            .updateWithAdditionalDataIfNecessary(
+                folderList = folderViewList,
+                collectionList = collectionViewList,
+            )
 
         assertEquals(
             VaultItemListingState.ItemListingType.Login,

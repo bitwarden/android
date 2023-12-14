@@ -13,6 +13,7 @@ class VaultItemListingTypeExtensionsTest {
         val itemListingTypeList = listOf(
             VaultItemListingType.Folder(folderId = "mock"),
             VaultItemListingType.Trash,
+            VaultItemListingType.Collection(collectionId = "collectionId"),
         )
 
         val result = itemListingTypeList.map { it.toItemListingType() }
@@ -21,6 +22,7 @@ class VaultItemListingTypeExtensionsTest {
             listOf(
                 VaultItemListingState.ItemListingType.Folder(folderId = "mock"),
                 VaultItemListingState.ItemListingType.Trash,
+                VaultItemListingState.ItemListingType.Collection(collectionId = "collectionId"),
             ),
             result,
         )

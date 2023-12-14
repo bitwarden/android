@@ -421,6 +421,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(
         vaultItemListingType: VaultItemListingType,
     ) = SavedStateHandle().apply {
@@ -428,6 +429,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             "vault_item_listing_type",
             when (vaultItemListingType) {
                 is VaultItemListingType.Card -> "card"
+                is VaultItemListingType.Collection -> "collection"
                 is VaultItemListingType.Folder -> "folder"
                 is VaultItemListingType.Identity -> "identity"
                 is VaultItemListingType.Login -> "login"
@@ -439,6 +441,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             "id",
             when (vaultItemListingType) {
                 is VaultItemListingType.Card -> null
+                is VaultItemListingType.Collection -> vaultItemListingType.collectionId
                 is VaultItemListingType.Folder -> vaultItemListingType.folderId
                 is VaultItemListingType.Identity -> null
                 is VaultItemListingType.Login -> null

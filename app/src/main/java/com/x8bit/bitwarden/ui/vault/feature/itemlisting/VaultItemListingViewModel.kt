@@ -151,6 +151,8 @@ class VaultItemListingViewModel @Inject constructor(
                     .updateWithAdditionalDataIfNecessary(
                         folderList = vaultData
                             .folderViewList,
+                        collectionList = vaultData
+                            .collectionViewList,
                     ),
                 viewState = vaultData
                     .cipherViewList
@@ -302,6 +304,23 @@ data class VaultItemListingState(
         ) : ItemListingType() {
             override val titleText: Text
                 get() = folderName.asText()
+            override val hasFab: Boolean
+                get() = false
+        }
+
+        /**
+         * A Collection item listing.
+         *
+         * @property collectionId the ID of the collection.
+         * @property collectionName the name of the collection.
+         */
+        data class Collection(
+            val collectionId: String,
+            // The collectionName will always initially be an empty string
+            val collectionName: String = "",
+        ) : ItemListingType() {
+            override val titleText: Text
+                get() = collectionName.asText()
             override val hasFab: Boolean
                 get() = false
         }
