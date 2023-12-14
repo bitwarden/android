@@ -57,7 +57,10 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
     when (this) {
         is VaultItemListingState.ItemListingType.Card -> this
         is VaultItemListingState.ItemListingType.Folder -> copy(
-            folderName = folderList.first { it.id == folderId }.name,
+            folderName = folderList
+                .find { it.id == folderId }
+                ?.name
+                .orEmpty(),
         )
 
         is VaultItemListingState.ItemListingType.Identity -> this
