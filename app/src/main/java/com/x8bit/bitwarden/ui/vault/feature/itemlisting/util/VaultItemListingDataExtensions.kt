@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 import androidx.annotation.DrawableRes
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
@@ -17,6 +18,10 @@ fun CipherView.determineListingPredicate(
     when (itemListingType) {
         is VaultItemListingState.ItemListingType.Card -> {
             type == CipherType.CARD && deletedDate == null
+        }
+
+        is VaultItemListingState.ItemListingType.Collection -> {
+            itemListingType.collectionId in this.collectionIds && deletedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Folder -> {
@@ -53,9 +58,17 @@ fun List<CipherView>.toViewState(): VaultItemListingState.ViewState =
 /** * Updates a [VaultItemListingState.ItemListingType] with the given data if necessary. */
 fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
     folderList: List<FolderView>,
+    collectionList: List<CollectionView>,
 ): VaultItemListingState.ItemListingType =
     when (this) {
         is VaultItemListingState.ItemListingType.Card -> this
+        is VaultItemListingState.ItemListingType.Collection -> copy(
+            collectionName = collectionList
+                .find { it.id == collectionId }
+                ?.name
+                .orEmpty(),
+        )
+
         is VaultItemListingState.ItemListingType.Folder -> copy(
             folderName = folderList
                 .find { it.id == folderId }

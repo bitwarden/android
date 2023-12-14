@@ -123,9 +123,10 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleCollectionItemClick(action: VaultAction.CollectionClick) {
-        // TODO: Navigate to the listing screen for collections (BIT-406).
         sendEvent(
-            VaultEvent.ShowToast(message = "Not yet implemented."),
+            VaultEvent.NavigateToItemListing(
+                VaultItemListingType.Collection(action.collectionItem.id),
+            ),
         )
     }
 

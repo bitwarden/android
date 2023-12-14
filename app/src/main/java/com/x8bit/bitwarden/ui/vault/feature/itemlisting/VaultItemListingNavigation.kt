@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
 private const val CARD: String = "card"
+private const val COLLECTION: String = "collection"
 private const val FOLDER: String = "folder"
 private const val IDENTITY: String = "identity"
 private const val LOGIN: String = "login"
@@ -92,6 +93,7 @@ fun NavController.navigateToVaultItemListing(
 private fun VaultItemListingType.toTypeString(): String {
     return when (this) {
         is VaultItemListingType.Card -> CARD
+        is VaultItemListingType.Collection -> COLLECTION
         is VaultItemListingType.Folder -> FOLDER
         is VaultItemListingType.Identity -> IDENTITY
         is VaultItemListingType.Login -> LOGIN
@@ -102,6 +104,7 @@ private fun VaultItemListingType.toTypeString(): String {
 
 private fun VaultItemListingType.toIdOrNull(): String? =
     when (this) {
+        is VaultItemListingType.Collection -> collectionId
         is VaultItemListingType.Folder -> folderId
         is VaultItemListingType.Card -> null
         is VaultItemListingType.Identity -> null
@@ -121,6 +124,7 @@ private fun determineVaultItemListingType(
         SECURE_NOTE -> VaultItemListingType.SecureNote
         TRASH -> VaultItemListingType.Trash
         FOLDER -> VaultItemListingType.Folder(folderId = id)
+        COLLECTION -> VaultItemListingType.Collection(collectionId = requireNotNull(id))
         // This should never occur, vaultItemListingTypeString must match
         else -> throw IllegalStateException()
     }
