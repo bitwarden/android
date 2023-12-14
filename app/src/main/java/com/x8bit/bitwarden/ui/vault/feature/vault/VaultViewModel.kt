@@ -95,6 +95,8 @@ class VaultViewModel @Inject constructor(
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
+            is VaultAction.TryAgainClick -> handleTryAgainClick()
+            is VaultAction.DialogDismiss -> handleDialogDismiss()
             is VaultAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
             is VaultAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
@@ -176,6 +178,16 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateToVaultItem(action.vaultItem.id))
     }
 
+    private fun handleTryAgainClick() {
+        vaultRepository.sync()
+    }
+
+    private fun handleDialogDismiss() {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+    }
+
     private fun handleUserStateUpdateReceive(action: VaultAction.Internal.UserStateUpdateReceive) {
         // Leave the current data alone if there is no UserState; we are in the process of logging
         // out.
@@ -225,9 +237,27 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
-        // TODO update state to no network state BIT-1158
-        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        sendEvent(VaultEvent.ShowToast(message = "Vault no network state not yet implemented"))
+        val title = R.string.internet_connection_required_title.asText()
+        val message = R.string.internet_connection_required_message.asText()
+        if (vaultData.data != null) {
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = vaultData.data.toViewState(),
+                    dialog = VaultState.DialogState.Error(
+                        title = title,
+                        message = message,
+                    ),
+                )
+            }
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = VaultState.ViewState.Error(
+                        message = message,
+                    ),
+                )
+            }
+        }
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
@@ -245,6 +275,7 @@ class VaultViewModel @Inject constructor(
  * @property initials The initials to be displayed on the avatar.
  * @property accountSummaries List of all the current accounts.
  * @property viewState The specific view state representing loading, no items, or content state.
+ * @property dialog Information about any dialogs that may need to be displayed.
  * @property isSwitchingAccounts Whether or not we are actively switching accounts.
  */
 @Parcelize
@@ -253,6 +284,7 @@ data class VaultState(
     val initials: String,
     val accountSummaries: List<AccountSummary>,
     val viewState: ViewState,
+    val dialog: DialogState? = null,
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
 ) : Parcelable {
@@ -279,6 +311,15 @@ data class VaultState(
          */
         @Parcelize
         data object NoItems : ViewState()
+
+        /**
+         * Represents a state where the [VaultScreen] is unable to display data due to an error
+         * retrieving it. The given [message] should be displayed.
+         */
+        @Parcelize
+        data class Error(
+            val message: Text,
+        ) : ViewState()
 
         /**
          * Content state for the [VaultScreen] showing the actual content or items.
@@ -433,6 +474,21 @@ data class VaultState(
         }
     }
 
+    /**
+     * Information about a dialog to display.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Represents an error dialog with the given [title] and [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text,
+            val message: Text,
+        ) : DialogState()
+    }
+
     companion object {
         /**
          * The maximum number of no folder items that can be displayed before the UI creates a
@@ -571,6 +627,16 @@ sealed class VaultAction {
      * User clicked the trash button.
      */
     data object TrashClick : VaultAction()
+
+    /**
+     * The user has requested that any visible dialogs are dismissed.
+     */
+    data object DialogDismiss : VaultAction()
+
+    /**
+     * User clicked the Try Again button when there is an error displayed.
+     */
+    data object TryAgainClick : VaultAction()
 
     /**
      * Models actions that the [VaultViewModel] itself might send.
