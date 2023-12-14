@@ -83,7 +83,7 @@ complexity:
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
-    ignoreAnnotated: [ 'Composable' ]
+    ignoreAnnotated: [ 'Composable', 'dagger.Provides' ]
   MethodOverloading:
     active: false
     threshold: 6
