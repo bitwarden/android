@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionE
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.map
+import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.platform.util.zip
@@ -91,16 +92,8 @@ class VaultRepositoryImpl constructor(
 
     override fun sync() {
         if (!syncJob.isCompleted || willSyncAfterUnlock) return
-        vaultDataMutableStateFlow.value.data?.let { data ->
-            vaultDataMutableStateFlow.update {
-                DataState.Pending(data = data)
-            }
-        }
-        sendDataMutableStateFlow.value.data?.let { data ->
-            sendDataMutableStateFlow.update {
-                DataState.Pending(data = data)
-            }
-        }
+        vaultDataMutableStateFlow.updateToPendingOrLoading()
+        sendDataMutableStateFlow.updateToPendingOrLoading()
         syncJob = scope.launch {
             syncService
                 .sync()

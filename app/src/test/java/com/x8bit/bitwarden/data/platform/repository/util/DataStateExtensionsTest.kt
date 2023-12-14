@@ -23,4 +23,22 @@ class DataStateExtensionsTest {
                 awaitComplete()
             }
     }
+
+    @Test
+    fun `updateToPendingOrLoading should change the DataState to Pending when data is present`() {
+        val mutableStateFlow = MutableStateFlow<DataState<Unit>>(DataState.Loaded(Unit))
+
+        mutableStateFlow.updateToPendingOrLoading()
+
+        assertEquals(DataState.Pending(Unit), mutableStateFlow.value)
+    }
+
+    @Test
+    fun `updateToPendingOrLoading should change the DataState to Loading when data is absent`() {
+        val mutableStateFlow = MutableStateFlow<DataState<Unit>>(DataState.Error(Throwable("Fail")))
+
+        mutableStateFlow.updateToPendingOrLoading()
+
+        assertEquals(DataState.Loading, mutableStateFlow.value)
+    }
 }
