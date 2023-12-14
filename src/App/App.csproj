@@ -94,7 +94,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
-		<PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
+		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
 		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
@@ -220,8 +220,8 @@
     <WatchAppBuildPath Condition=" '$(Configuration)' == 'Debug' ">$(Home)/Library/Developer/Xcode/DerivedData/bitwarden-acgkbpwvmebfiofokotvoerzkqcl/Build/Products</WatchAppBuildPath>
     <WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))/watchOS/bitwarden.xcarchive/Products/Applications/bitwarden.app/Watch</WatchAppBuildPath>
     <WatchAppBundle>Bitwarden.app</WatchAppBundle>
-		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'!='ios-arm64'"> >watchsimulator</WatchAppConfiguration>
-		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'=='ios-arm64'"> >watchos</WatchAppConfiguration>
+		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'!='ios-arm64'">watchsimulator</WatchAppConfiguration>
+		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'=='ios-arm64'">watchos</WatchAppConfiguration>
     <WatchAppBundleFullPath Condition=" '$(Configuration)' == 'Debug' ">$(WatchAppBuildPath)/$(Configuration)-$(WatchAppConfiguration)/$(WatchAppBundle)</WatchAppBundleFullPath>
     <WatchAppBundleFullPath Condition=" '$(Configuration)' != 'Debug' ">$(WatchAppBuildPath)/$(WatchAppBundle)</WatchAppBundleFullPath>
   </PropertyGroup>
