@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -352,24 +353,98 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `vaultDataStateFlow NoNetwork should show toast and update state to NoItems`() = runTest {
+    fun `vaultDataStateFlow NoNetwork without data should update state to Error`() = runTest {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.NoNetwork(),
         )
 
         val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            assertEquals(
-                VaultEvent.ShowToast("Vault no network state not yet implemented"),
-                awaitItem(),
-            )
-        }
         assertEquals(
-            createMockVaultState(viewState = VaultState.ViewState.NoItems),
+            createMockVaultState(
+                viewState = VaultState.ViewState.Error(
+                    message = R.string.internet_connection_required_message.asText(),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow NoNetwork with items should update state to Content and show an error dialog`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.NoNetwork(
+                    data = VaultData(
+                        cipherViewList = listOf(createMockCipherView(number = 1)),
+                        collectionViewList = listOf(createMockCollectionView(number = 1)),
+                        folderViewList = listOf(createMockFolderView(number = 1)),
+                    ),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.Content(
+                        loginItemsCount = 1,
+                        cardItemsCount = 0,
+                        identityItemsCount = 0,
+                        secureNoteItemsCount = 0,
+                        favoriteItems = listOf(),
+                        folderItems = listOf(
+                            VaultState.ViewState.FolderItem(
+                                id = "mockId-1",
+                                name = "mockName-1".asText(),
+                                itemCount = 1,
+                            ),
+                        ),
+                        collectionItems = listOf(
+                            VaultState.ViewState.CollectionItem(
+                                id = "mockId-1",
+                                name = "mockName-1",
+                                itemCount = 1,
+                            ),
+                        ),
+                        noFolderItems = listOf(),
+                        trashItemsCount = 0,
+                    ),
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow NoNetwork with empty items should update state to NoItems and show an error dialog`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.NoNetwork(
+                    data = VaultData(
+                        cipherViewList = emptyList(),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                    ),
+                ),
+            )
+            val viewModel = createViewModel()
+            assertEquals(
+                createMockVaultState(
+                    viewState = VaultState.ViewState.NoItems,
+                    dialog = VaultState.DialogState.Error(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `vaultDataStateFlow updates should do nothing when switching accounts`() {
@@ -532,6 +607,46 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `TryAgainClick should sync the vault data`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.TryAgainClick)
+
+        verify { vaultRepository.sync() }
+    }
+
+    @Test
+    fun `DialogDismiss should clear the active dialog`() {
+        // Show the No Network error dialog
+        val viewModel = createViewModel()
+        mutableVaultDataStateFlow.value = DataState.NoNetwork(
+            data = VaultData(
+                cipherViewList = emptyList(),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+            ),
+        )
+        val initialState = DEFAULT_STATE.copy(
+            viewState = VaultState.ViewState.NoItems,
+            dialog = VaultState.DialogState.Error(
+                title = R.string.internet_connection_required_title.asText(),
+                message = R.string.internet_connection_required_message.asText(),
+            ),
+        )
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        viewModel.trySendAction(VaultAction.DialogDismiss)
+
+        assertEquals(
+            initialState.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -566,7 +681,10 @@ private val DEFAULT_USER_STATE = UserState(
     ),
 )
 
-private fun createMockVaultState(viewState: VaultState.ViewState): VaultState =
+private fun createMockVaultState(
+    viewState: VaultState.ViewState,
+    dialog: VaultState.DialogState? = null,
+): VaultState =
     VaultState(
         avatarColorString = "#aa00aa",
         initials = "AU",
@@ -591,5 +709,6 @@ private fun createMockVaultState(viewState: VaultState.ViewState): VaultState =
             ),
         ),
         viewState = viewState,
+        dialog = dialog,
         isSwitchingAccounts = false,
     )

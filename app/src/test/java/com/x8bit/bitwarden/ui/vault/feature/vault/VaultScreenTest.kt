@@ -3,9 +3,12 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -174,6 +177,104 @@ class VaultScreenTest : BaseComposeTest() {
 
         verify { viewModel.trySendAction(VaultAction.LogoutAccountClick(ACTIVE_ACCOUNT_SUMMARY)) }
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `error dialog should be shown or hidden according to the state`() {
+        val errorTitle = "Error title"
+        val errorMessage = "Error message"
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText(errorTitle)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(errorTitle)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(errorMessage)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `OK button click in error dialog should send DialogDismiss`() {
+        val errorTitle = "Error title"
+        val errorMessage = "Error message"
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.Error(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.DialogDismiss) }
+    }
+
+    @Test
+    fun `Error screen should be shown according to the state`() {
+        val errorMessage = "Error message"
+        val tryAgainButtonText = "Try again"
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(tryAgainButtonText)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.Error(
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(tryAgainButtonText)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `try again button click on the Error screen should send TryAgainClick`() {
+        val errorMessage = "Error message"
+        val tryAgainButtonText = "Try again"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultState.ViewState.Error(
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(tryAgainButtonText)
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.TryAgainClick) }
     }
 
     @Test

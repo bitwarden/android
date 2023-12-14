@@ -25,11 +25,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
@@ -125,6 +129,12 @@ fun VaultScreen(
         trashClick = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.TrashClick) }
         },
+        tryAgainClick = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.TryAgainClick) }
+        },
+        dialogDismiss = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.DialogDismiss) }
+        },
     )
 }
 
@@ -151,6 +161,8 @@ private fun VaultScreenScaffold(
     identityGroupClick: () -> Unit,
     secureNoteGroupClick: () -> Unit,
     trashClick: () -> Unit,
+    tryAgainClick: () -> Unit,
+    dialogDismiss: () -> Unit,
 ) {
     var accountMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -164,6 +176,20 @@ private fun VaultScreenScaffold(
             state = rememberTopAppBarState(),
             canScroll = { !accountMenuVisible },
         )
+
+    when (val dialog = state.dialog) {
+        is VaultState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = dialog.title,
+                    message = dialog.message,
+                ),
+                onDismissRequest = dialogDismiss,
+            )
+        }
+
+        null -> Unit
+    }
 
     BitwardenScaffold(
         topBar = {
@@ -229,9 +255,15 @@ private fun VaultScreenScaffold(
                     modifier = modifier,
                     addItemClickAction = addItemClickAction,
                 )
+
+                is VaultState.ViewState.Error -> BitwardenErrorContent(
+                    message = viewState.message(),
+                    onTryAgainClick = tryAgainClick,
+                    modifier = modifier
+                        .padding(horizontal = 16.dp),
+                )
             }
 
-            val context = LocalContext.current
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
