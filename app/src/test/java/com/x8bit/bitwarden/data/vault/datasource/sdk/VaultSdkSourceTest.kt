@@ -9,10 +9,13 @@ import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.PasswordHistory
+import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.ClientCrypto
+import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientVault
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -27,9 +30,11 @@ import org.junit.jupiter.api.Test
 class VaultSdkSourceTest {
     private val clientVault = mockk<ClientVault>()
     private val clientCrypto = mockk<ClientCrypto>()
+    private val clientPasswordHistory = mockk<ClientPasswordHistory>()
     private val vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
         clientVault = clientVault,
         clientCrypto = clientCrypto,
+        clientPasswordHistory = clientPasswordHistory,
     )
 
     @Test
@@ -404,4 +409,50 @@ class VaultSdkSourceTest {
             )
         }
     }
+
+    @Test
+    fun `encryptPasswordHistory should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val mockPasswordHistoryView = mockk<PasswordHistoryView>()
+            val expectedResult = mockk<PasswordHistory>()
+            coEvery {
+                clientPasswordHistory.encrypt(
+                    passwordHistory = mockPasswordHistoryView,
+                )
+            } returns expectedResult
+
+            val result = vaultSdkSource.encryptPasswordHistory(
+                passwordHistory = mockPasswordHistoryView,
+            )
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify {
+                clientPasswordHistory.encrypt(
+                    passwordHistory = mockPasswordHistoryView,
+                )
+            }
+        }
+
+    @Test
+    fun `decryptPasswordHistoryList should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val mockPasswordHistoryList = mockk<List<PasswordHistory>>()
+            val expectedResult = mockk<List<PasswordHistoryView>>()
+            coEvery {
+                clientPasswordHistory.decryptList(
+                    list = mockPasswordHistoryList,
+                )
+            } returns expectedResult
+
+            val result = vaultSdkSource.decryptPasswordHistoryList(
+                passwordHistoryList = mockPasswordHistoryList,
+            )
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify {
+                clientPasswordHistory.decryptList(
+                    list = mockPasswordHistoryList,
+                )
+            }
+        }
 }

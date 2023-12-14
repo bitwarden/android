@@ -1,7 +1,10 @@
 package com.x8bit.bitwarden.data.tools.generator.repository
 
+import app.cash.turbine.test
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
+import com.bitwarden.core.PasswordHistory
+import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -11,34 +14,45 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
-import io.mockk.Runs
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 class GeneratorRepositoryTest {
 
     private val generatorSdkSource: GeneratorSdkSource = mockk()
     private val generatorDiskSource: GeneratorDiskSource = mockk()
     private val authDiskSource: AuthDiskSource = mockk()
+    private val passwordHistoryDiskSource: PasswordHistoryDiskSource = mockk()
+    private val vaultSdkSource: VaultSdkSource = mockk()
 
     private val repository = GeneratorRepositoryImpl(
         generatorSdkSource = generatorSdkSource,
         generatorDiskSource = generatorDiskSource,
         authDiskSource = authDiskSource,
+        passwordHistoryDiskSource = passwordHistoryDiskSource,
+        vaultSdkSource = vaultSdkSource,
     )
 
     @BeforeEach
@@ -213,11 +227,103 @@ class GeneratorRepositoryTest {
 
         coEvery {
             generatorDiskSource.storePasscodeGenerationOptions(userId, optionsToSave)
-        } just Runs
+        } just runs
 
         repository.savePasscodeGenerationOptions(optionsToSave)
 
         coVerify { generatorDiskSource.storePasscodeGenerationOptions(userId, optionsToSave) }
+    }
+
+    @Test
+    fun `storePasswordHistory should call encrypt and insert functions`() = runTest {
+        val testUserId = "testUserId"
+        val passwordHistoryView = PasswordHistoryView(
+            password = "decryptedPassword",
+            lastUsedDate = Instant.parse("2021-01-01T00:00:00Z"),
+        )
+        val encryptedPasswordHistory = PasswordHistory(
+            password = "encryptedPassword",
+            lastUsedDate = Instant.parse("2021-01-01T00:00:00Z"),
+        )
+        val expectedPasswordHistoryEntity = encryptedPasswordHistory
+            .toPasswordHistoryEntity(testUserId)
+
+        coEvery { authDiskSource.userState?.activeUserId } returns testUserId
+
+        coEvery { vaultSdkSource.encryptPasswordHistory(passwordHistoryView) } returns
+            Result.success(encryptedPasswordHistory)
+
+        coEvery {
+            passwordHistoryDiskSource.insertPasswordHistory(expectedPasswordHistoryEntity)
+        } just runs
+
+        repository.storePasswordHistory(passwordHistoryView)
+
+        coVerify { vaultSdkSource.encryptPasswordHistory(passwordHistoryView) }
+        coVerify { passwordHistoryDiskSource.insertPasswordHistory(expectedPasswordHistoryEntity) }
+    }
+
+    @Test
+    fun `passwordHistoryStateFlow should emit correct states based on password history updates`() =
+        runTest {
+            val encryptedPasswordHistoryEntities = listOf(
+                PasswordHistoryEntity(
+                    userId = USER_STATE.activeUserId,
+                    encryptedPassword = "encryptedPassword1",
+                    generatedDateTimeMs = Instant.parse("2021-01-01T00:00:00Z").toEpochMilli(),
+                ),
+                PasswordHistoryEntity(
+                    userId = USER_STATE.activeUserId,
+                    encryptedPassword = "encryptedPassword2",
+                    generatedDateTimeMs = Instant.parse("2021-01-02T00:00:00Z").toEpochMilli(),
+                ),
+            )
+
+            val decryptedPasswordHistoryList = listOf(
+                PasswordHistoryView(
+                    password = "password1",
+                    lastUsedDate = Instant.parse("2021-01-01T00:00:00Z"),
+                ),
+                PasswordHistoryView(
+                    password = "password2",
+                    lastUsedDate = Instant.parse("2021-01-02T00:00:00Z"),
+                ),
+            )
+
+            coEvery { authDiskSource.userStateFlow } returns flowOf(USER_STATE)
+
+            coEvery {
+                passwordHistoryDiskSource.getPasswordHistoriesForUser(USER_STATE.activeUserId)
+            } returns flowOf(encryptedPasswordHistoryEntities)
+
+            coEvery {
+                vaultSdkSource.decryptPasswordHistoryList(any())
+            } returns Result.success(decryptedPasswordHistoryList)
+
+            val historyFlow = repository.passwordHistoryStateFlow
+
+            historyFlow.test {
+                assertEquals(LocalDataState.Loading, awaitItem())
+                assertEquals(LocalDataState.Loaded(decryptedPasswordHistoryList), awaitItem())
+                cancelAndIgnoreRemainingEvents()
+            }
+
+            coVerify {
+                passwordHistoryDiskSource.getPasswordHistoriesForUser(USER_STATE.activeUserId)
+            }
+
+            coVerify { vaultSdkSource.decryptPasswordHistoryList(any()) }
+        }
+
+    @Test
+    fun `clearPasswordHistory should call clearAllPasswords function`() = runTest {
+        val testUserId = "testUserId"
+        coEvery { authDiskSource.userState?.activeUserId } returns testUserId
+        coEvery { passwordHistoryDiskSource.clearPasswordHistories(testUserId) } just runs
+
+        repository.clearPasswordHistory()
+
+        coVerify { passwordHistoryDiskSource.clearPasswordHistories(testUserId) }
     }
 
     @Test
