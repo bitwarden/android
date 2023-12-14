@@ -75,8 +75,9 @@ namespace Bit.App
         }   
 
         public static Window CurrentWindow { get; private set; }
-        public static Window AutofillWindow { get; private set; }
-        public static Window MainWindow { get; private set; }
+
+        private Window _autofillWindow;
+        private Window _mainWindow;
 
         public void SetOptions(AppOptions appOptions)
         {
@@ -94,21 +95,21 @@ namespace Bit.App
             }
             else if (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null) //"Internal" Autofill and Uri/Otp/CreateSend
             {
-                AutofillWindow = new Window(new NavigationPage(new AndroidExtSplashPage(Options)));
-                CurrentWindow = AutofillWindow;
+                _autofillWindow = new Window(new NavigationPage(new AndroidExtSplashPage(Options)));
+                CurrentWindow = _autofillWindow;
                 return CurrentWindow;
             }
             else if(CurrentWindow != null)
             {
                 //TODO: This likely crashes if we try to have two apps side-by-side on Android
                 //TODO: Question: In these scenarios should a new Window be created or can the same one be reused?
-                CurrentWindow = MainWindow;
+                CurrentWindow = _mainWindow;
                 return CurrentWindow;
             }
             else
             {
-                MainWindow = new Window(new NavigationPage(new HomePage(Options)));
-                CurrentWindow = MainWindow;
+                _mainWindow = new Window(new NavigationPage(new HomePage(Options)));
+                CurrentWindow = _mainWindow;
                 return CurrentWindow;
             }
         }
