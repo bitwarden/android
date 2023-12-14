@@ -21,7 +21,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object GeneratorRepositoryModule {
 
-    @Suppress("LongParameterList")
     @Provides
     @Singleton
     fun provideGeneratorRepository(

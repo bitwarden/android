@@ -26,7 +26,6 @@ object PlatformManagerModule {
     @Singleton
     fun provideBitwardenDispatchers(): DispatcherManager = DispatcherManagerImpl()
 
-    @Suppress("LongParameterList")
     @Provides
     @Singleton
     fun provideNetworkConfigManager(
