@@ -9,10 +9,13 @@ import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.PasswordHistory
+import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.ClientCrypto
+import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientVault
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 
@@ -24,6 +27,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 class VaultSdkSourceImpl(
     private val clientVault: ClientVault,
     private val clientCrypto: ClientCrypto,
+    private val clientPasswordHistory: ClientPasswordHistory,
 ) : VaultSdkSource {
     override suspend fun initializeCrypto(
         request: InitUserCryptoRequest,
@@ -88,4 +92,16 @@ class VaultSdkSourceImpl(
 
     override suspend fun decryptFolderList(folderList: List<Folder>): Result<List<FolderView>> =
         runCatching { clientVault.folders().decryptList(folderList) }
+
+    override suspend fun encryptPasswordHistory(
+        passwordHistory: PasswordHistoryView,
+    ): Result<PasswordHistory> = runCatching {
+        clientPasswordHistory.encrypt(passwordHistory)
+    }
+
+    override suspend fun decryptPasswordHistoryList(
+        passwordHistoryList: List<PasswordHistory>,
+    ): Result<List<PasswordHistoryView>> = runCatching {
+        clientPasswordHistory.decryptList(passwordHistoryList)
+    }
 }

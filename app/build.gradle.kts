@@ -160,6 +160,8 @@ koverReport {
                 "com.x8bit.bitwarden.MainActivity*",
                 // Empty Composables
                 "com.x8bit.bitwarden.ui.platform.feature.splash.SplashScreenKt",
+                // Databases
+                "*.database.*Database",
             )
             packages(
                 // Dependency injection

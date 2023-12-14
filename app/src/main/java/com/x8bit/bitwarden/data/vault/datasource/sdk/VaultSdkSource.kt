@@ -9,6 +9,8 @@ import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.PasswordHistory
+import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -86,4 +88,18 @@ interface VaultSdkSource {
      * Decrypts a list of [Folder]s returning a list of [FolderView] wrapped in a [Result].
      */
     suspend fun decryptFolderList(folderList: List<Folder>): Result<List<FolderView>>
+
+    /**
+     * Encrypts a given password history item.
+     */
+    suspend fun encryptPasswordHistory(
+        passwordHistory: PasswordHistoryView,
+    ): Result<PasswordHistory>
+
+    /**
+     * Decrypts a list of password history items.
+     */
+    suspend fun decryptPasswordHistoryList(
+        passwordHistoryList: List<PasswordHistory>,
+    ): Result<List<PasswordHistoryView>>
 }

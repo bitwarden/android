@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.data.tools.generator.repository.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepositoryImpl
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,9 +26,13 @@ object GeneratorRepositoryModule {
         generatorSdkSource: GeneratorSdkSource,
         generatorDiskSource: GeneratorDiskSource,
         authDiskSource: AuthDiskSource,
+        vaultSdkSource: VaultSdkSource,
+        passwordHistoryDiskSource: PasswordHistoryDiskSource,
     ): GeneratorRepository = GeneratorRepositoryImpl(
         generatorSdkSource = generatorSdkSource,
         generatorDiskSource = generatorDiskSource,
         authDiskSource = authDiskSource,
+        vaultSdkSource = vaultSdkSource,
+        passwordHistoryDiskSource = passwordHistoryDiskSource,
     )
 }

@@ -24,5 +24,6 @@ object VaultSdkModule {
         VaultSdkSourceImpl(
             clientVault = client.vault(),
             clientCrypto = client.crypto(),
+            clientPasswordHistory = client.vault().passwordHistory(),
         )
 }
