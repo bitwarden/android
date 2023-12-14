@@ -25,7 +25,7 @@
 	  <CodesignProvision>Automatic</CodesignProvision>
 	  <CodesignKey>iPhone Developer</CodesignKey>
 	  <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-	  <MtouchInterpreter>all</MtouchInterpreter>
+	  <UseInterpreter>true</UseInterpreter>
     <!--
     Note: The linkskip needs 2 dashes in front but if we put it in the comment then the project can't load so leaving it with 1 for now
     <MtouchExtraArgs>-linkskip=LiteDB -gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>-->
@@ -37,11 +37,15 @@
 	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
     <CreatePackage>false</CreatePackage>
+	  <UseInterpreter>true</UseInterpreter>
     <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignProvision>Automatic:AppStore</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
+	<ItemGroup>
+		<TrimmerRootAssembly Include="System.Security.Cryptography" />
+	</ItemGroup>
   <ItemGroup>
     <Compile Include="CredentialProviderViewController.cs" />
     <Compile Include="CredentialProviderViewController.designer.cs">
