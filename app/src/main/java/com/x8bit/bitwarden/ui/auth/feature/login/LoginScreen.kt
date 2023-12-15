@@ -152,11 +152,10 @@ fun LoginScreen(
             onLogoutAccountClick = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.LogoutAccountClick(it)) }
             },
-            onAddAccountClick = {
-                // Not available
+            onAddAccountClick = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.AddAccountClick) }
             },
             onDismissRequest = { isAccountMenuVisible = false },
-            isAddAccountAvailable = false,
             topAppBarScrollBehavior = scrollBehavior,
             modifier = Modifier
                 .padding(innerPadding)

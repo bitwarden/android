@@ -70,6 +70,7 @@ class LoginViewModel @Inject constructor(
 
     override fun handleAction(action: LoginAction) {
         when (action) {
+            LoginAction.AddAccountClick -> handleAddAccountClicked()
             is LoginAction.LockAccountClick -> handleLockAccountClicked(action)
             is LoginAction.LogoutAccountClick -> handleLogoutAccountClicked(action)
             is LoginAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
@@ -88,6 +89,11 @@ class LoginViewModel @Inject constructor(
                 handleReceiveLoginResult(action = action)
             }
         }
+    }
+
+    private fun handleAddAccountClicked() {
+        // Since we are already in the login flow we can just go back to the Landing Screen
+        sendEvent(LoginEvent.NavigateBack)
     }
 
     private fun handleLockAccountClicked(action: LoginAction.LockAccountClick) {
@@ -246,6 +252,11 @@ sealed class LoginEvent {
  * Models actions for the login screen.
  */
 sealed class LoginAction {
+
+    /**
+     * The user has clicked the add account button.
+     */
+    data object AddAccountClick : LoginAction()
 
     /**
      * Indicates the user has clicked on the given [accountSummary] information in order to lock

@@ -149,6 +149,16 @@ class LoginViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on AddAccountClick should send NavigateBack`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LoginAction.AddAccountClick)
+            assertEquals(LoginEvent.NavigateBack, awaitItem())
+        }
+    }
+
     @Test
     fun `LockAccountClick should call lockVaultIfNecessary for the given account`() {
         val accountUserId = "userId"
