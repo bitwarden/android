@@ -8,6 +8,10 @@ on:
       version_number:
         description: "New version (example: '2024.1.0')"
         required: true
+      cut_rc_branch:
+        description: "Cut RC branch?"
+        default: true
+        type: boolean
 
 jobs:
   bump_version:
