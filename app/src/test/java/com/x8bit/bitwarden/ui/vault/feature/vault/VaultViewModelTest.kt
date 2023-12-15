@@ -51,6 +51,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         mockk {
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
             every { sync() } returns Unit
+            every { lockVaultForCurrentUser() } just runs
             every { lockVaultIfNecessary(any()) } just runs
         }
 
@@ -254,6 +255,33 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.AddAccountClick)
         verify {
             authRepository.specialCircumstance = SpecialCircumstance.PendingAccountAddition
+        }
+    }
+
+    @Test
+    fun `on SyncClick should call sync on the VaultRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.SyncClick)
+        verify {
+            vaultRepository.sync()
+        }
+    }
+
+    @Test
+    fun `on LockClick should call lockVaultForCurrentUser on the VaultRepository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.LockClick)
+        verify {
+            vaultRepository.lockVaultForCurrentUser()
+        }
+    }
+
+    @Test
+    fun `on ExitConfirmationClick should emit NavigateOutOfApp`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.ExitConfirmationClick)
+            assertEquals(VaultEvent.NavigateOutOfApp, awaitItem())
         }
     }
 

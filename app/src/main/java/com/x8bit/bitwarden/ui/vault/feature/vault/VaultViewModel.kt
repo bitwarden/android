@@ -93,6 +93,9 @@ class VaultViewModel @Inject constructor(
             is VaultAction.LogoutAccountClick -> handleLogoutAccountClick(action)
             is VaultAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             is VaultAction.AddAccountClick -> handleAddAccountClick()
+            is VaultAction.SyncClick -> handleSyncClick()
+            is VaultAction.LockClick -> handleLockClick()
+            is VaultAction.ExitConfirmationClick -> handleExitConfirmationClick()
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -166,6 +169,18 @@ class VaultViewModel @Inject constructor(
 
     private fun handleAddAccountClick() {
         authRepository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+    }
+
+    private fun handleSyncClick() {
+        vaultRepository.sync()
+    }
+
+    private fun handleLockClick() {
+        vaultRepository.lockVaultForCurrentUser()
+    }
+
+    private fun handleExitConfirmationClick() {
+        sendEvent(VaultEvent.NavigateOutOfApp)
     }
 
     private fun handleTrashClick() {
@@ -523,6 +538,11 @@ sealed class VaultEvent {
     ) : VaultEvent()
 
     /**
+     * Navigate out of the app.
+     */
+    data object NavigateOutOfApp : VaultEvent()
+
+    /**
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: String) : VaultEvent()
@@ -570,6 +590,22 @@ sealed class VaultAction {
      * User clicked on Add Account in the account switcher.
      */
     data object AddAccountClick : VaultAction()
+
+    /**
+     * User clicked the Sync option in the overflow menu.
+     */
+    data object SyncClick : VaultAction()
+
+    /**
+     * User clicked the Lock option in the overflow menu.
+     */
+    data object LockClick : VaultAction()
+
+    /**
+     * User confirmed that they want to exit the app after clicking the Sync option in the overflow
+     * menu.
+     */
+    data object ExitConfirmationClick : VaultAction()
 
     /**
      * Action to trigger when a specific vault item is clicked.

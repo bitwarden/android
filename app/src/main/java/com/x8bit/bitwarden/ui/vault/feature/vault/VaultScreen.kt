@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
@@ -38,8 +39,11 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -54,6 +58,7 @@ fun VaultScreen(
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
+    intentHandler: IntentHandler = IntentHandler(LocalContext.current),
 ) {
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
@@ -75,6 +80,7 @@ fun VaultScreen(
                 onNavigateToVaultItemListingScreen(event.itemListingType)
             }
 
+            VaultEvent.NavigateOutOfApp -> intentHandler.exitApplication()
             is VaultEvent.ShowToast -> {
                 Toast
                     .makeText(context, event.message, Toast.LENGTH_SHORT)
@@ -101,6 +107,15 @@ fun VaultScreen(
         },
         addAccountClickAction = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.AddAccountClick) }
+        },
+        syncAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.SyncClick) }
+        },
+        lockAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.LockClick) }
+        },
+        exitConfirmationAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.ExitConfirmationClick) }
         },
         onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         vaultItemClick = remember(viewModel) {
@@ -152,6 +167,9 @@ private fun VaultScreenScaffold(
     accountLogoutClickAction: (AccountSummary) -> Unit,
     accountSwitchClickAction: (AccountSummary) -> Unit,
     addAccountClickAction: () -> Unit,
+    syncAction: () -> Unit,
+    lockAction: () -> Unit,
+    exitConfirmationAction: () -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     folderClick: (VaultState.ViewState.FolderItem) -> Unit,
@@ -171,12 +189,14 @@ private fun VaultScreenScaffold(
         accountMenuVisible = shouldShowMenu
         onDimBottomNavBarRequest(shouldShowMenu)
     }
+    var shouldShowExitConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
             state = rememberTopAppBarState(),
             canScroll = { !accountMenuVisible },
         )
 
+    // Dynamic dialogs
     when (val dialog = state.dialog) {
         is VaultState.DialogState.Error -> {
             BitwardenBasicDialog(
@@ -189,6 +209,22 @@ private fun VaultScreenScaffold(
         }
 
         null -> Unit
+    }
+
+    // Static dialogs
+    if (shouldShowExitConfirmationDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.exit),
+            message = stringResource(id = R.string.exit_confirmation),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                shouldShowExitConfirmationDialog = false
+                exitConfirmationAction()
+            },
+            onDismissClick = { shouldShowExitConfirmationDialog = false },
+            onDismissRequest = { shouldShowExitConfirmationDialog = false },
+        )
     }
 
     BitwardenScaffold(
@@ -208,7 +244,22 @@ private fun VaultScreenScaffold(
                         contentDescription = stringResource(id = R.string.search_vault),
                         onClick = searchIconClickAction,
                     )
-                    BitwardenOverflowActionItem()
+                    BitwardenOverflowActionItem(
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.sync),
+                                onClick = syncAction,
+                            ),
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.lock),
+                                onClick = lockAction,
+                            ),
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.exit),
+                                onClick = { shouldShowExitConfirmationDialog = true },
+                            ),
+                        ),
+                    )
                 },
             )
         },

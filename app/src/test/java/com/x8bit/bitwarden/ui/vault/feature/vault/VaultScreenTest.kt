@@ -8,12 +8,14 @@ import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
@@ -44,6 +46,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class VaultScreenTest : BaseComposeTest() {
 
     private var onNavigateToVaultAddItemScreenCalled = false
@@ -51,6 +54,7 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToVaultEditItemId: String? = null
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
+    private val intentHandler = mockk<IntentHandler>(relaxed = true)
 
     private val mutableEventFlow = MutableSharedFlow<VaultEvent>(
         extraBufferCapacity = Int.MAX_VALUE,
@@ -71,6 +75,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
+                intentHandler = intentHandler,
             )
         }
     }
@@ -177,6 +182,105 @@ class VaultScreenTest : BaseComposeTest() {
 
         verify { viewModel.trySendAction(VaultAction.LogoutAccountClick(ACTIVE_ACCOUNT_SUMMARY)) }
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `overflow button click should show the overflow menu`() {
+        composeTestRule.onNode(isPopup()).assertDoesNotExist()
+        composeTestRule.onNodeWithText("Sync").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Lock").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Exit").assertDoesNotExist()
+
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+
+        composeTestRule.onNode(isPopup()).assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Sync")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Lock")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Exit")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `sync click in the overflow menu should send SyncClick`() {
+        // Expand the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Sync")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.SyncClick) }
+    }
+
+    @Test
+    fun `lock click in the overflow menu should send LockClick`() {
+        // Expand the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Lock")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.LockClick) }
+    }
+
+    @Test
+    fun `exit click in the overflow menu should show a confirmation dialog`() {
+        // Expand the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Exit")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Exit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Are you sure you want to exit Bitwarden?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `yes click in exit confirmation dialog should send ExitConfirmationClick`() {
+        // Expand the overflow menu and show the exit confirmation dialog
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule
+            .onAllNodesWithText("Exit")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+        verify { viewModel.trySendAction(VaultAction.ExitConfirmationClick) }
     }
 
     @Test
@@ -361,6 +465,12 @@ class VaultScreenTest : BaseComposeTest() {
             VaultEvent.NavigateToItemListing(VaultItemListingType.Folder(mockFolderId)),
         )
         assertEquals(VaultItemListingType.Folder(mockFolderId), onNavigateToVaultItemListingType)
+    }
+
+    @Test
+    fun `NavigateOutOfApp event should call exitApplication on the IntentHandler`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateOutOfApp)
+        verify { intentHandler.exitApplication() }
     }
 
     @Test
