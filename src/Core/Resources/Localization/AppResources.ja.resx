@@ -425,7 +425,7 @@
     <value>あいまいな文字を避ける</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden App Extension</value>
+    <value>Bitwarden アプリ拡張機能</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>ログイン情報を保管庫に追加する一番簡単な方法はApp Extensionを使うことです。詳しくは「設定」画面に進んでください。</value>
