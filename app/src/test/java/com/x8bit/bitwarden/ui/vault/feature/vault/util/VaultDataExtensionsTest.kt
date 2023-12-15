@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.FieldType
+import com.bitwarden.core.FieldView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.PasswordHistoryView
@@ -16,6 +18,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
@@ -197,9 +200,18 @@ class VaultDataExtensionsTest {
             folderName = "mockFolder-1".asText(),
             favorite = true,
             masterPasswordReprompt = false,
+            customFieldData = listOf(
+                VaultAddItemState.Custom.BooleanField("testId", "TestBoolean", false),
+                VaultAddItemState.Custom.TextField("testId", "TestText", "TestText"),
+                VaultAddItemState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
+                VaultAddItemState.Custom.LinkedField(
+                    "testId",
+                    "TestLinked",
+                    VaultLinkedFieldType.USERNAME,
+                ),
+            ),
             notes = "mockNotes-1",
             ownership = "mockOwnership-1",
-            customFieldData = emptyList(),
         )
 
         val result = loginItemType.toCipherView()
@@ -225,7 +237,32 @@ class VaultDataExtensionsTest {
                 ),
                 favorite = true,
                 reprompt = CipherRepromptType.NONE,
-                fields = emptyList(),
+                fields = listOf(
+                    FieldView(
+                        name = "TestBoolean",
+                        value = "false",
+                        type = FieldType.BOOLEAN,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestText",
+                        value = "TestText",
+                        type = FieldType.TEXT,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestHidden",
+                        value = "TestHidden",
+                        type = FieldType.HIDDEN,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestLinked",
+                        value = null,
+                        type = FieldType.LINKED,
+                        linkedId = VaultLinkedFieldType.USERNAME.id,
+                    ),
+                ),
                 passwordHistory = listOf(
                     PasswordHistoryView(
                         password = "old_password",
@@ -248,6 +285,11 @@ class VaultDataExtensionsTest {
             masterPasswordReprompt = false,
             notes = "mockNotes-1",
             ownership = "mockOwnership-1",
+            customFieldData = listOf(
+                VaultAddItemState.Custom.BooleanField("testId", "TestBoolean", false),
+                VaultAddItemState.Custom.TextField("testId", "TestText", "TestText"),
+                VaultAddItemState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
+            ),
         )
 
         val result = secureNotesItemType.toCipherView()
@@ -273,7 +315,26 @@ class VaultDataExtensionsTest {
                 viewPassword = true,
                 localData = null,
                 attachments = null,
-                fields = emptyList(),
+                fields = listOf(
+                    FieldView(
+                        name = "TestBoolean",
+                        value = "false",
+                        type = FieldType.BOOLEAN,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestText",
+                        value = "TestText",
+                        type = FieldType.TEXT,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestHidden",
+                        value = "TestHidden",
+                        type = FieldType.HIDDEN,
+                        linkedId = null,
+                    ),
+                ),
                 passwordHistory = null,
                 creationDate = Instant.MIN,
                 deletedDate = null,
@@ -333,7 +394,38 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     viewPassword = false,
     localData = null,
     attachments = null,
-    fields = emptyList(),
+    fields = listOf(
+        FieldView(
+            name = "text",
+            value = "value",
+            type = FieldType.TEXT,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "hidden",
+            value = "value",
+            type = FieldType.HIDDEN,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "boolean",
+            value = "true",
+            type = FieldType.BOOLEAN,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "linked username",
+            value = null,
+            type = FieldType.LINKED,
+            linkedId = 100U,
+        ),
+        FieldView(
+            name = "linked password",
+            value = null,
+            type = FieldType.LINKED,
+            linkedId = 101U,
+        ),
+    ),
     passwordHistory = listOf(
         PasswordHistoryView(
             password = "old_password",
@@ -364,5 +456,25 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
 
 private val DEFAULT_SECURE_NOTES_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
     type = CipherType.SECURE_NOTE,
+    fields = listOf(
+        FieldView(
+            name = "text",
+            value = "value",
+            type = FieldType.TEXT,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "hidden",
+            value = "value",
+            type = FieldType.HIDDEN,
+            linkedId = null,
+        ),
+        FieldView(
+            name = "boolean",
+            value = "true",
+            type = FieldType.BOOLEAN,
+            linkedId = null,
+        ),
+    ),
     secureNote = SecureNoteView(type = SecureNoteType.GENERIC),
 )

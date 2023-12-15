@@ -20,6 +20,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -28,7 +29,9 @@ import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -542,6 +545,204 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertTextContains("NewNote")
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Text type`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Text")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("TestText")
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
+                    customFieldType = CustomFieldType.TEXT,
+                    name = "TestText",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Linked type`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Linked")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("TestLinked")
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
+                    customFieldType = CustomFieldType.LINKED,
+                    name = "TestLinked",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Boolean type`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Boolean")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("TestBoolean")
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
+                    customFieldType = CustomFieldType.BOOLEAN,
+                    name = "TestBoolean",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Hidden type`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Hidden")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("TestHidden")
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
+                    customFieldType = CustomFieldType.HIDDEN,
+                    name = "TestHidden",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking and changing the custom text field will send a CustomFieldValueChange event`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_CUSTOM_FIELDS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TestText")
+            .performTextClearance()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange(
+                    VaultAddItemState.Custom.TextField("Test ID", "TestText", ""),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_CUSTOM_FIELDS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TestHidden")
+            .performTextClearance()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange(
+                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", ""),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking and changing the custom boolean field will send a CustomFieldValueChange event`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_CUSTOM_FIELDS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TestBoolean")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange(
+                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", true),
+                ),
+            )
+        }
+    }
+
     @Test
     fun `in ItemType_Login state clicking a Ownership option should send OwnershipChange action`() {
         // Opens the menu
@@ -823,6 +1024,188 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking New Custom Field button should allow creation of Text type`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Text")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("TestText")
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                    customFieldType = CustomFieldType.TEXT,
+                    name = "TestText",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking New Custom Field button should not display linked type`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Linked")
+            .assertIsNotDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking New Custom Field button should allow creation of Boolean type`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Boolean")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("TestBoolean")
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                    customFieldType = CustomFieldType.BOOLEAN,
+                    name = "TestBoolean",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking New Custom Field button should allow creation of Hidden type`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "New custom field")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Hidden")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("TestHidden")
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                    customFieldType = CustomFieldType.HIDDEN,
+                    name = "TestHidden",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking and changing the custom text field will send a CustomFieldValueChange event`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TestText")
+            .performTextClearance()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                    VaultAddItemState.Custom.TextField("Test ID", "TestText", ""),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TestHidden")
+            .performTextClearance()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", ""),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_SecureNotes state clicking and changing the custom boolean field will send a CustomFieldValueChange event`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TestBoolean")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", true),
+                ),
+            )
+        }
+    }
+
     //region Helper functions
 
     @Suppress("MaxLineLength")
@@ -852,6 +1235,23 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     //endregion Helper functions
 
     companion object {
+        private val DEFAULT_STATE_LOGIN_CUSTOM_FIELDS = VaultAddItemState(
+            viewState = VaultAddItemState.ViewState.Content.Login(
+                customFieldData = listOf(
+                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", false),
+                    VaultAddItemState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
+                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", "TestHiddenVal"),
+                    VaultAddItemState.Custom.LinkedField(
+                        "LinkedID",
+                        "TestLinked",
+                        VaultLinkedFieldType.USERNAME,
+                    ),
+                ),
+            ),
+            dialog = null,
+            vaultAddEditType = VaultAddEditType.AddItem,
+        )
+
         private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddItemState(
             viewState = VaultAddItemState.ViewState.Content.Login(),
             dialog = VaultAddItemState.DialogState.Error("test".asText()),
@@ -862,6 +1262,18 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             vaultAddEditType = VaultAddEditType.AddItem,
             viewState = VaultAddItemState.ViewState.Content.Login(),
             dialog = null,
+        )
+
+        private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddItemState(
+            viewState = VaultAddItemState.ViewState.Content.SecureNotes(
+                customFieldData = listOf(
+                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", false),
+                    VaultAddItemState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
+                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", "TestHiddenVal"),
+                ),
+            ),
+            dialog = null,
+            vaultAddEditType = VaultAddEditType.AddItem,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddItemState(
