@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.Folder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import java.time.ZoneOffset
 
 /**
  * Converts a list of [SyncResponseJson.Folder] objects to a list of corresponding
@@ -19,5 +18,5 @@ fun SyncResponseJson.Folder.toEncryptedSdkFolder(): Folder =
     Folder(
         id = id,
         name = name.orEmpty(),
-        revisionDate = revisionDate.toInstant(ZoneOffset.UTC),
+        revisionDate = revisionDate.toInstant(),
     )

@@ -1,25 +1,23 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.serializer
 
+import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.modules.SerializersModule
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
-class LocalDateTimeSerializerTest {
-    private val json = Json {
-        serializersModule = SerializersModule {
-            contextual(LocalDateTime::class, LocalDateTimeSerializer())
-        }
-    }
+class ZonedDateTimeSerializerTest {
+    private val json = PlatformNetworkModule.providesJson()
 
     @Test
-    fun `properly deserializes raw JSON to LocalDate`() {
+    fun `properly deserializes raw JSON to ZonedDateTime`() {
         assertEquals(
-            LocalDateTimeData(
-                dataAsLocalDateTime = LocalDateTime.of(
+            ZonedDateTimeData(
+                dataAsZonedDateTime = ZonedDateTime.of(
                     2023,
                     10,
                     6,
@@ -27,12 +25,13 @@ class LocalDateTimeSerializerTest {
                     22,
                     28,
                     440000000,
+                    ZoneOffset.UTC,
                 ),
             ),
-            json.decodeFromString<LocalDateTimeData>(
+            json.decodeFromString<ZonedDateTimeData>(
                 """
                 {
-                 "dataAsLocalDateTime": "2023-10-06T17:22:28.44Z"
+                 "dataAsZonedDateTime": "2023-10-06T17:22:28.44Z"
                 }
                 """,
             ),
@@ -40,10 +39,10 @@ class LocalDateTimeSerializerTest {
     }
 
     @Test
-    fun `properly deserializes raw JSON with nano seconds to LocalDate`() {
+    fun `properly deserializes raw JSON with nano seconds to ZonedDateTime`() {
         assertEquals(
-            LocalDateTimeData(
-                dataAsLocalDateTime = LocalDateTime.of(
+            ZonedDateTimeData(
+                dataAsZonedDateTime = ZonedDateTime.of(
                     2023,
                     8,
                     1,
@@ -51,12 +50,13 @@ class LocalDateTimeSerializerTest {
                     13,
                     3,
                     502391000,
+                    ZoneOffset.UTC,
                 ),
             ),
-            json.decodeFromString<LocalDateTimeData>(
+            json.decodeFromString<ZonedDateTimeData>(
                 """
                 {
-                 "dataAsLocalDateTime": "2023-08-01T16:13:03.502391Z"
+                 "dataAsZonedDateTime": "2023-08-01T16:13:03.502391Z"
                 }
                 """,
             ),
@@ -69,13 +69,13 @@ class LocalDateTimeSerializerTest {
             json.parseToJsonElement(
                 """
                 {
-                  "dataAsLocalDateTime": "2023-10-06T17:22:28.440Z"
+                  "dataAsZonedDateTime": "2023-10-06T17:22:28.440Z"
                 }
                 """,
             ),
             json.encodeToJsonElement(
-                LocalDateTimeData(
-                    dataAsLocalDateTime = LocalDateTime.of(
+                ZonedDateTimeData(
+                    dataAsZonedDateTime = ZonedDateTime.of(
                         2023,
                         10,
                         6,
@@ -83,6 +83,7 @@ class LocalDateTimeSerializerTest {
                         22,
                         28,
                         440000000,
+                        ZoneId.of("UTC"),
                     ),
                 ),
             ),
@@ -91,7 +92,8 @@ class LocalDateTimeSerializerTest {
 }
 
 @Serializable
-private data class LocalDateTimeData(
-    @Serializable(LocalDateTimeSerializer::class)
-    val dataAsLocalDateTime: LocalDateTime,
+private data class ZonedDateTimeData(
+    @Serializable(ZonedDateTimeSerializer::class)
+    @SerialName("dataAsZonedDateTime")
+    val dataAsZonedDateTime: ZonedDateTime,
 )

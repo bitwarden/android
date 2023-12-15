@@ -14,8 +14,7 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 /**
  * Create a mock [CipherView].
@@ -39,19 +38,19 @@ fun createMockCipherView(
         notes = "mockNotes-$number",
         type = cipherType,
         login = createMockLoginView(number = number),
-        creationDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        creationDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
         deletedDate = if (isDeleted) {
-            LocalDateTime
-                .parse("2023-10-27T12:00:00")
-                .toInstant(ZoneOffset.UTC)
+            ZonedDateTime
+                .parse("2023-10-27T12:00:00Z")
+                .toInstant()
         } else {
             null
         },
-        revisionDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        revisionDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
         attachments = listOf(createMockAttachmentView(number = number)),
         card = createMockCardView(number = number),
         fields = listOf(createMockFieldView(number = number)),
@@ -73,9 +72,9 @@ fun createMockLoginView(number: Int): LoginView =
     LoginView(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
-        passwordRevisionDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        passwordRevisionDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
         autofillOnPageLoad = false,
         uris = listOf(createMockUriView(number = number)),
         totp = "mockTotp-$number",
@@ -158,9 +157,9 @@ fun createMockIdentityView(number: Int): IdentityView =
 fun createMockPasswordHistoryView(number: Int): PasswordHistoryView =
     PasswordHistoryView(
         password = "mockPassword-$number",
-        lastUsedDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        lastUsedDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
     )
 
 /**

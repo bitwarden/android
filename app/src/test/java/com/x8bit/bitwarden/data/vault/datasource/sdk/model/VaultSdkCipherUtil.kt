@@ -14,8 +14,7 @@ import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.SecureNote
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.UriMatchType
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 /**
  * Create a mock [Cipher] with a given [number].
@@ -31,15 +30,15 @@ fun createMockSdkCipher(number: Int): Cipher =
         notes = "mockNotes-$number",
         type = CipherType.LOGIN,
         login = createMockSdkLogin(number = number),
-        creationDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
-        deletedDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
-        revisionDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        creationDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
+        deletedDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
+        revisionDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
         attachments = listOf(createMockSdkAttachment(number = number)),
         card = createMockSdkCard(number = number),
         fields = listOf(createMockSdkField(number = number)),
@@ -68,9 +67,9 @@ fun createMockSdkSecureNote(): SecureNote =
 fun createMockSdkPasswordHistory(number: Int): PasswordHistory =
     PasswordHistory(
         password = "mockPassword-$number",
-        lastUsedDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        lastUsedDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
     )
 
 /**
@@ -142,9 +141,9 @@ fun createMockSdkLogin(number: Int): Login =
     Login(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
-        passwordRevisionDate = LocalDateTime
-            .parse("2023-10-27T12:00:00")
-            .toInstant(ZoneOffset.UTC),
+        passwordRevisionDate = ZonedDateTime
+            .parse("2023-10-27T12:00:00Z")
+            .toInstant(),
         autofillOnPageLoad = false,
         uris = listOf(createMockSdkUri(number = number)),
         totp = "mockTotp-$number",

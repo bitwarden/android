@@ -6,7 +6,6 @@ import com.bitwarden.core.SendText
 import com.bitwarden.core.SendType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import java.time.ZoneOffset
 
 /**
  * Converts a list of [SyncResponseJson.Send] objects to a list of corresponding
@@ -34,9 +33,9 @@ fun SyncResponseJson.Send.toEncryptedSdkSend(): Send =
         accessCount = accessCount.toUInt(),
         disabled = isDisabled,
         hideEmail = shouldHideEmail,
-        revisionDate = revisionDate.toInstant(ZoneOffset.UTC),
-        deletionDate = deletionDate.toInstant(ZoneOffset.UTC),
-        expirationDate = expirationDate?.toInstant(ZoneOffset.UTC),
+        revisionDate = revisionDate.toInstant(),
+        deletionDate = deletionDate.toInstant(),
+        expirationDate = expirationDate?.toInstant(),
     )
 
 /**

@@ -1,25 +1,25 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 fun createMockSend(number: Int): SyncResponseJson.Send =
     SyncResponseJson.Send(
         accessCount = 1,
         notes = "mockNotes-$number",
-        revisionDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         maxAccessCount = 1,
         shouldHideEmail = false,
         type = SendTypeJson.FILE,
         accessId = "mockAccessId-$number",
         password = "mockPassword-$number",
         file = createMockFile(number = number),
-        deletionDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         name = "mockName-$number",
         isDisabled = false,
         id = "mockId-$number",
         text = createMockText(number = number),
         key = "mockKey-$number",
-        expirationDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     )
 
 fun createMockFile(number: Int): SyncResponseJson.Send.File =
