@@ -312,7 +312,7 @@ class VaultRepositoryImpl constructor(
     private fun storeKeys(
         syncResponse: SyncResponseJson,
     ) {
-        val profile = syncResponse.profile ?: return
+        val profile = syncResponse.profile
         val userId = profile.id
         val userKey = profile.key
         val privateKey = profile.privateKey
@@ -338,7 +338,7 @@ class VaultRepositoryImpl constructor(
     private suspend fun unlockVaultForOrganizationsIfNecessary(
         syncResponse: SyncResponseJson,
     ) {
-        val profile = syncResponse.profile ?: return
+        val profile = syncResponse.profile
         val organizationKeys = profile.organizations
             .orEmpty()
             .filter { it.key != null }
