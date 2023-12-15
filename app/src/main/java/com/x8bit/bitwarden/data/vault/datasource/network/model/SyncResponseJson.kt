@@ -10,7 +10,7 @@ import java.time.LocalDateTime
  *
  * @property folders A list of folders associated with the vault data (nullable).
  * @property collections A list of collections associated with the vault data (nullable).
- * @property profile The profile associated with the vault data (nullable).
+ * @property profile The profile associated with the vault data.
  * @property ciphers A list of ciphers associated with the vault data (nullable).
  * @property policies A list of policies associated with the vault data (nullable).
  * @property domains A domains object associated with the vault data.
@@ -25,7 +25,7 @@ data class SyncResponseJson(
     val collections: List<Collection>?,
 
     @SerialName("profile")
-    val profile: Profile?,
+    val profile: Profile,
 
     @SerialName("ciphers")
     val ciphers: List<Cipher>?,
