@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
 import com.x8bit.bitwarden.ui.util.performAccountClick
 import com.x8bit.bitwarden.ui.util.performAccountIconClick
 import com.x8bit.bitwarden.ui.util.performAccountLongClick
+import com.x8bit.bitwarden.ui.util.performAddAccountClick
 import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
@@ -86,7 +87,6 @@ class LoginScreenTest : BaseComposeTest() {
 
         composeTestRule.assertSwitcherIsDisplayed(
             accountSummaries = accountSummaries,
-            isAddAccountButtonVisible = false,
         )
     }
 
@@ -105,6 +105,24 @@ class LoginScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(LoginAction.SwitchAccountClick(ACTIVE_ACCOUNT_SUMMARY))
         }
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = accountSummaries,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `add account click in the account switcher should send AddAccountClick and close switcher`() {
+        // Open the Account Switcher
+        val accountSummaries = listOf(ACTIVE_ACCOUNT_SUMMARY)
+        mutableStateFlow.update {
+            it.copy(accountSummaries = accountSummaries)
+        }
+        composeTestRule.performAccountIconClick()
+
+        composeTestRule.performAddAccountClick()
+
+        verify { viewModel.trySendAction(LoginAction.AddAccountClick) }
         composeTestRule.assertSwitcherIsNotDisplayed(
             accountSummaries = accountSummaries,
         )
