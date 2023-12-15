@@ -81,7 +81,7 @@ namespace Bit.App
 
         public void SetOptions(AppOptions appOptions)
         {
-            Options = appOptions;
+            Options = appOptions ?? new AppOptions();
         }
         
         protected override Window CreateWindow(IActivationState activationState)
@@ -93,25 +93,25 @@ namespace Bit.App
             {
                 return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
             }
-            else if (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null) //"Internal" Autofill and Uri/Otp/CreateSend
+
+            if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null)) //"Internal" Autofill and Uri/Otp/CreateSend
             {
                 _autofillWindow = new Window(new NavigationPage(new AndroidExtSplashPage(Options)));
                 CurrentWindow = _autofillWindow;
                 return CurrentWindow;
             }
-            else if(CurrentWindow != null)
+
+            if(CurrentWindow != null)
             {
                 //TODO: This likely crashes if we try to have two apps side-by-side on Android
                 //TODO: Question: In these scenarios should a new Window be created or can the same one be reused?
                 CurrentWindow = _mainWindow;
                 return CurrentWindow;
             }
-            else
-            {
-                _mainWindow = new Window(new NavigationPage(new HomePage(Options)));
-                CurrentWindow = _mainWindow;
-                return CurrentWindow;
-            }
+
+            _mainWindow = new Window(new NavigationPage(new HomePage(Options)));
+            CurrentWindow = _mainWindow;
+            return CurrentWindow;
         }
 #elif IOS
         public new static Page MainPage

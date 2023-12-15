@@ -16,7 +16,7 @@ public partial class AndroidExtSplashPage : ContentPage
 	public AndroidExtSplashPage(AppOptions appOptions)
 	{
 		InitializeComponent();
-        _appOptions = appOptions;
+        _appOptions = appOptions ?? new AppOptions();
         _conditionedAwaiterManager = ServiceContainer.Resolve<IConditionedAwaiterManager>();
         _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
         _stateService = ServiceContainer.Resolve<IStateService>();
