@@ -15,9 +15,9 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction.ItemType.SecureNotesType.TooltipClick.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.additem.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import java.util.UUID
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -1319,44 +1318,5 @@ sealed class VaultAddItemAction {
         data class UpdateCipherResultReceive(
             val updateCipherResult: UpdateCipherResult,
         ) : Internal()
-    }
-
-    /**
-     * An extension function for adding custom field types.
-     */
-    fun CustomFieldType.toCustomField(name: String): VaultAddItemState.Custom {
-        return when (this) {
-            CustomFieldType.BOOLEAN -> {
-                VaultAddItemState.Custom.BooleanField(
-                    itemId = UUID.randomUUID().toString(),
-                    name = name,
-                    value = false,
-                )
-            }
-
-            CustomFieldType.LINKED -> {
-                VaultAddItemState.Custom.LinkedField(
-                    itemId = UUID.randomUUID().toString(),
-                    name = name,
-                    vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
-                )
-            }
-
-            CustomFieldType.HIDDEN -> {
-                VaultAddItemState.Custom.HiddenField(
-                    itemId = UUID.randomUUID().toString(),
-                    name = name,
-                    value = "",
-                )
-            }
-
-            CustomFieldType.TEXT -> {
-                VaultAddItemState.Custom.TextField(
-                    itemId = UUID.randomUUID().toString(),
-                    name = name,
-                    value = "",
-                )
-            }
-        }
     }
 }
