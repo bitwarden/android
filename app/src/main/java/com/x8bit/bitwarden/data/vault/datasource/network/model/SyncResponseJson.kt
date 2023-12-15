@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 /**
  * Represents the response model for vault data fetched from the server.
@@ -85,7 +85,7 @@ data class SyncResponseJson(
     data class Folder(
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: LocalDateTime,
+        val revisionDate: ZonedDateTime,
 
         @SerialName("name")
         val name: String?,
@@ -361,7 +361,7 @@ data class SyncResponseJson(
 
             @SerialName("familySponsorshipLastSyncDate")
             @Contextual
-            val familySponsorshipLastSyncDate: LocalDateTime?,
+            val familySponsorshipLastSyncDate: ZonedDateTime?,
 
             @SerialName("useScim")
             val shouldUseScim: Boolean,
@@ -377,7 +377,7 @@ data class SyncResponseJson(
 
             @SerialName("familySponsorshipValidUntil")
             @Contextual
-            val familySponsorshipValidUntil: LocalDateTime?,
+            val familySponsorshipValidUntil: ZonedDateTime?,
 
             @SerialName("status")
             val status: Int,
@@ -539,7 +539,7 @@ data class SyncResponseJson(
 
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: LocalDateTime,
+        val revisionDate: ZonedDateTime,
 
         @SerialName("type")
         val type: CipherTypeJson,
@@ -549,7 +549,7 @@ data class SyncResponseJson(
 
         @SerialName("creationDate")
         @Contextual
-        val creationDate: LocalDateTime,
+        val creationDate: ZonedDateTime,
 
         @SerialName("secureNote")
         val secureNote: SecureNote?,
@@ -562,7 +562,7 @@ data class SyncResponseJson(
 
         @SerialName("deletedDate")
         @Contextual
-        val deletedDate: LocalDateTime?,
+        val deletedDate: ZonedDateTime?,
 
         @SerialName("identity")
         val identity: Identity?,
@@ -779,7 +779,7 @@ data class SyncResponseJson(
 
             @SerialName("passwordRevisionDate")
             @Contextual
-            val passwordRevisionDate: LocalDateTime?,
+            val passwordRevisionDate: ZonedDateTime?,
 
             @SerialName("autofillOnPageLoad")
             val shouldAutofillOnPageLoad: Boolean?,
@@ -819,7 +819,7 @@ data class SyncResponseJson(
 
             @SerialName("lastUsedDate")
             @Contextual
-            val lastUsedDate: LocalDateTime,
+            val lastUsedDate: ZonedDateTime,
         )
 
         /**
@@ -864,7 +864,7 @@ data class SyncResponseJson(
 
         @SerialName("revisionDate")
         @Contextual
-        val revisionDate: LocalDateTime,
+        val revisionDate: ZonedDateTime,
 
         @SerialName("maxAccessCount")
         val maxAccessCount: Int?,
@@ -886,7 +886,7 @@ data class SyncResponseJson(
 
         @SerialName("deletionDate")
         @Contextual
-        val deletionDate: LocalDateTime,
+        val deletionDate: ZonedDateTime,
 
         @SerialName("name")
         val name: String?,
@@ -905,7 +905,7 @@ data class SyncResponseJson(
 
         @SerialName("expirationDate")
         @Contextual
-        val expirationDate: LocalDateTime?,
+        val expirationDate: ZonedDateTime?,
     ) {
         /**
          * Represents a file in the vault response.

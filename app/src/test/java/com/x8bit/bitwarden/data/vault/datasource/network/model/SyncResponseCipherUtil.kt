@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 /**
  * Create a mock [SyncResponseJson.Cipher] with a given [number].
@@ -15,9 +15,9 @@ fun createMockCipher(number: Int): SyncResponseJson.Cipher =
         notes = "mockNotes-$number",
         type = CipherTypeJson.LOGIN,
         login = createMockLogin(number = number),
-        creationDate = LocalDateTime.parse("2023-10-27T12:00:00"),
-        deletedDate = LocalDateTime.parse("2023-10-27T12:00:00"),
-        revisionDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        creationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+        deletedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+        revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         attachments = listOf(createMockAttachment(number = number)),
         card = createMockCard(number = number),
         fields = listOf(createMockField(number = number)),
@@ -89,7 +89,7 @@ fun createMockCard(number: Int): SyncResponseJson.Cipher.Card =
 fun createMockPasswordHistory(number: Int): SyncResponseJson.Cipher.PasswordHistory =
     SyncResponseJson.Cipher.PasswordHistory(
         password = "mockPassword-$number",
-        lastUsedDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        lastUsedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     )
 
 /**
@@ -118,7 +118,7 @@ fun createMockLogin(number: Int): SyncResponseJson.Cipher.Login =
     SyncResponseJson.Cipher.Login(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
-        passwordRevisionDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        passwordRevisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         shouldAutofillOnPageLoad = false,
         uri = "mockUri-$number",
         uris = listOf(createMockUri(number = number)),

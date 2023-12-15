@@ -4,8 +4,7 @@ import com.bitwarden.core.SendFileView
 import com.bitwarden.core.SendTextView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 /**
  * Create a mock [SendView] with a given [number].
@@ -25,9 +24,9 @@ fun createMockSendView(number: Int): SendView =
         accessCount = 1u,
         disabled = false,
         hideEmail = false,
-        revisionDate = LocalDateTime.parse("2023-10-27T12:00:00").toInstant(ZoneOffset.UTC),
-        deletionDate = LocalDateTime.parse("2023-10-27T12:00:00").toInstant(ZoneOffset.UTC),
-        expirationDate = LocalDateTime.parse("2023-10-27T12:00:00").toInstant(ZoneOffset.UTC),
+        revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
+        deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
+        expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z").toInstant(),
     )
 
 /**

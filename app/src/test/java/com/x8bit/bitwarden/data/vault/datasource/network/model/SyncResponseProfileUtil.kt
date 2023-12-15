@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 /**
  * Create a mock [SyncResponseJson.Profile] with a given [number].
@@ -68,12 +68,12 @@ fun createMockOrganization(number: Int): SyncResponseJson.Profile.Organization =
         familySponsorshipFriendlyName = "mockFamilySponsorshipFriendlyName-$number",
         isKeyConnectorEnabled = false,
         shouldUseTotp = false,
-        familySponsorshipLastSyncDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        familySponsorshipLastSyncDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         shouldUseScim = false,
         name = "mockName-$number",
         shouldUseApi = false,
         isSsoBound = false,
-        familySponsorshipValidUntil = LocalDateTime.parse("2023-10-27T12:00:00"),
+        familySponsorshipValidUntil = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         status = 1,
     )
 

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 /**
  * Create a mock [CipherJsonRequest] with a given [number].
@@ -20,5 +20,5 @@ fun createMockCipherJsonRequest(number: Int): CipherJsonRequest =
         passwordHistory = listOf(createMockPasswordHistory(number = number)),
         reprompt = CipherRepromptTypeJson.NONE,
         secureNote = createMockSecureNote(),
-        lastKnownRevisionDate = LocalDateTime.parse("2023-10-27T12:00:00"),
+        lastKnownRevisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     )
