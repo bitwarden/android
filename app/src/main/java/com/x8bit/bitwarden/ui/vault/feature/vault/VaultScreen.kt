@@ -265,7 +265,7 @@ private fun VaultScreenScaffold(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = !accountMenuVisible,
+                visible = state.viewState.hasFab && !accountMenuVisible,
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {
