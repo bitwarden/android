@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.room.Room
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSourceImpl
+import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FoldersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.database.VaultDatabase
 import dagger.Module
 import dagger.Provides
@@ -29,6 +31,7 @@ class VaultDiskModule {
                 klass = VaultDatabase::class.java,
                 name = "vault_database",
             )
+            .addTypeConverter(ZonedDateTimeTypeConverter)
             .build()
 
     @Provides
@@ -37,11 +40,17 @@ class VaultDiskModule {
 
     @Provides
     @Singleton
+    fun provideFolderDao(database: VaultDatabase): FoldersDao = database.folderDao()
+
+    @Provides
+    @Singleton
     fun provideVaultDiskSource(
         ciphersDao: CiphersDao,
+        foldersDao: FoldersDao,
         json: Json,
     ): VaultDiskSource = VaultDiskSourceImpl(
         ciphersDao = ciphersDao,
+        foldersDao = foldersDao,
         json = json,
     )
 }
