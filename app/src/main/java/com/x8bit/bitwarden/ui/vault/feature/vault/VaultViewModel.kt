@@ -305,16 +305,26 @@ data class VaultState(
     sealed class ViewState : Parcelable {
 
         /**
+         * Determines whether or not the Floating Action Button (FAB) should be shown for the
+         * given state.
+         */
+        abstract val hasFab: Boolean
+
+        /**
          * Loading state for the [VaultScreen], signifying that the content is being processed.
          */
         @Parcelize
-        data object Loading : ViewState()
+        data object Loading : ViewState() {
+            override val hasFab: Boolean get() = false
+        }
 
         /**
          * Represents a state where the [VaultScreen] has no items to display.
          */
         @Parcelize
-        data object NoItems : ViewState()
+        data object NoItems : ViewState() {
+            override val hasFab: Boolean get() = true
+        }
 
         /**
          * Represents a state where the [VaultScreen] is unable to display data due to an error
@@ -323,7 +333,9 @@ data class VaultState(
         @Parcelize
         data class Error(
             val message: Text,
-        ) : ViewState()
+        ) : ViewState() {
+            override val hasFab: Boolean get() = false
+        }
 
         /**
          * Content state for the [VaultScreen] showing the actual content or items.
@@ -349,7 +361,9 @@ data class VaultState(
             val noFolderItems: List<VaultItem>,
             val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
-        ) : ViewState()
+        ) : ViewState() {
+            override val hasFab: Boolean get() = true
+        }
 
         /**
          * Represents a folder item with a name and item count.

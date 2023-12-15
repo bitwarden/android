@@ -284,6 +284,25 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `floating action button should be shown or hidden according to the state`() {
+        val fabDescription = "Add item"
+
+        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
+        composeTestRule.onNodeWithContentDescription(fabDescription).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = VaultState.ViewState.Error("Error".asText()))
+        }
+        composeTestRule.onNodeWithContentDescription(fabDescription).assertDoesNotExist()
+
+        mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
+        composeTestRule.onNodeWithContentDescription(fabDescription).assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE) }
+        composeTestRule.onNodeWithContentDescription(fabDescription).assertIsDisplayed()
+    }
+
+    @Test
     fun `error dialog should be shown or hidden according to the state`() {
         val errorTitle = "Error title"
         val errorMessage = "Error message"
