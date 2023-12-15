@@ -162,6 +162,7 @@ koverReport {
                 "com.x8bit.bitwarden.ui.platform.feature.splash.SplashScreenKt",
                 // Databases
                 "*.database.*Database",
+                "*.dao.*Dao",
             )
             packages(
                 // Dependency injection
