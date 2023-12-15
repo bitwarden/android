@@ -463,6 +463,7 @@ namespace Bit.App
             {
                 UpdateThemeAsync();
             };
+            _isResumed = true;
             MainPage = new NavigationPage(new HomePage(Options));
             _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
