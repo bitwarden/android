@@ -2110,7 +2110,7 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn compatible security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>За да продължите, пригответе своето устройство за удостоверяване съвместимо с FIDO2 WebAuthn, натиснете „Идентификация WebAuthn“ на следващия екран и следвайте инструкциите.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>Идентификация чрез FIDO2 WebAuthn – можете да се идентифицирате чрез външен ключ за сигурност.</value>
@@ -2293,8 +2293,8 @@
     <value>Настройка на TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
+    <value>След като ключът бъде въведен успешно,
+изберете „Добавяне на код за потвърждаване“, за да запазите ключа</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ако изберете „Никога“ като настройка за заключването, трезорът Ви ще бъде достъпен за всеки, който има досег с устройството. Ако използвате тази настройка, трябва да се уверите, че устройството Ви е удачно защитено.</value>
