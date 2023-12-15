@@ -546,6 +546,7 @@ namespace Bit.App
             {
                 UpdateThemeAsync();
             };
+            _isResumed = true;
             _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
         }
