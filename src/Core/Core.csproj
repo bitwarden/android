@@ -85,6 +85,9 @@
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+		<Compile Update="Pages\AndroidNavigationRedirectPage.xaml.cs">
+		  <DependentUpon>AndroidNavigationRedirectPage.xaml</DependentUpon>
+		</Compile>
     <Compile Update="Resources\Localization\AppResources.Designer.cs">
       <DependentUpon>AppResources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -92,7 +95,7 @@
     </Compile>
 	</ItemGroup>
 	<ItemGroup>
-	  <MauiXaml Update="Pages\AndroidExtSplashPage.xaml">
+	  <MauiXaml Update="Pages\AndroidNavigationRedirectPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -96,8 +96,9 @@ namespace Bit.App
 
             if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null)) //"Internal" Autofill and Uri/Otp/CreateSend
             {
-                _autofillWindow = new Window(new NavigationPage(new AndroidExtSplashPage(Options)));
+                _autofillWindow = new Window(new NavigationPage(new AndroidNavigationRedirectPage()));
                 CurrentWindow = _autofillWindow;
+                _isResumed = true;
                 return CurrentWindow;
             }
 
