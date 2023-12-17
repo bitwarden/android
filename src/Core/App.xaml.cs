@@ -50,13 +50,10 @@ namespace Bit.App
         /*
          *  ** Workaround for our Android crashes when trying to use Autofill **
          *
-         * This workaround works by managing the "Window Creation" ourselves. When we get an Autofill initialization we should create a new window instead of reusing the "Main/Current Window".
-         * While this workaround works, it's hard to execute the "workflow" that devices where we should navigate to. Below are some of the things we tried:
-         *  1 - Tried creating "new Window(new NavigationPage)" and invoking the code for handling the Navigations afterward. Issue with this is that the code that handles the navigations doesn't know which "Window" to use and calls the default "Window.Page"
-         *  2 - Tried using CustomWindow implementations to track the "WindowCreated" event and to be able to distinguish the different Window types (Default Window or Window for Autofill for example).
-         *      This solution had a bit of overhear work and still required the app to set something line "new Window(new NavigationPage)" before actually knowing where we wanted to navigate to.
-         *
-         * Ideally we could figure out the Navigation we want to do before CreateWindow (on MainActivity.OnCreate) for example. But this needs to be done in async anyway we can't do async in both CreateWindow and MainActivity.OnCreate
+         * This workaround works by managing the "Window Creation" ourselves.
+         * - If we get an AutofillExternalActivity we just create a "dummy" window/navigation page so that the activity can run without crashing. (no visible UI is needed)
+         * - If we get an FromAutofillFramework/Uri/Otp/CreateSend special Option request we create an Autofill Window
+         * - For everything else we use the default "mainWindow"
          */
 
         public new static Page MainPage
@@ -86,6 +83,8 @@ namespace Bit.App
         
         protected override Window CreateWindow(IActivationState activationState)
         {
+            //When executing from AutofillExternalActivity we don't have "Options" so we need to filter "manually"
+            //In the AutofillExternalActivity we don't need to show any Page, so we just create a "dummy" Window with a NavigationPage to avoid crashing.
             if (activationState != null 
                 && activationState.State.TryGetValue("autofillFramework", out string autofillFramework)
                 && autofillFramework == "true"
@@ -97,22 +96,51 @@ namespace Bit.App
             if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null)) //"Internal" Autofill and Uri/Otp/CreateSend
             {
                 _autofillWindow = new Window(new NavigationPage(new AndroidNavigationRedirectPage()));
-                CurrentWindow = _autofillWindow;
+                _autofillWindow.Created += (sender, args) =>
+                {
+                    CurrentWindow = _autofillWindow;
+                };
+                _autofillWindow.Activated += (sender, args) =>
+                {
+                    CurrentWindow = _autofillWindow;
+                };
+                _autofillWindow.Stopped += (sender, args) =>
+                {
+                    CurrentWindow = null;
+                };
                 _isResumed = true;
-                return CurrentWindow;
+                return _autofillWindow;
             }
 
-            if(CurrentWindow != null)
+            //If we run CreateWindow for a normal "mainWindow" we want to get rid of any existing _autofillWindow.
+            //Mostly to avoid edge cases scenarios. 
+            if (_autofillWindow != null)
             {
-                //TODO: This likely crashes if we try to have two apps side-by-side on Android
-                //TODO: Question: In these scenarios should a new Window be created or can the same one be reused?
-                CurrentWindow = _mainWindow;
-                return CurrentWindow;
+                CloseWindow(_autofillWindow);
+                _autofillWindow = null;
             }
 
+            //If we already have a MainWindow we can try to reuse it.
+            if(_mainWindow != null)
+            {
+                return _mainWindow;
+            }
+
+            //Default scenario where we create a MainWindow
             _mainWindow = new Window(new NavigationPage(new HomePage(Options)));
-            CurrentWindow = _mainWindow;
-            return CurrentWindow;
+            _mainWindow.Created += (sender, args) =>
+            {
+                CurrentWindow = _mainWindow;
+            };
+            _mainWindow.Activated += (sender, args) =>
+            {
+                CurrentWindow = _mainWindow;
+            };
+            _mainWindow.Stopped += (sender, args) =>
+            {
+                CurrentWindow = null;
+            };
+            return _mainWindow;
         }
 #elif IOS
         public new static Page MainPage
