@@ -35,14 +35,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
+import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -185,8 +184,6 @@ private fun AnimatedAccountSwitcher(
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     currentAnimationState: (isVisible: Boolean) -> Unit,
 ) {
-    val expandedColor = MaterialTheme.colorScheme.surface
-    val collapsedColor = MaterialTheme.colorScheme.surfaceContainer
     val transition = updateTransition(
         targetState = isVisible,
         label = "AnimatedAccountSwitcher",
@@ -203,20 +200,7 @@ private fun AnimatedAccountSwitcher(
                 // bottom padding.
                 .padding(bottom = 24.dp)
                 // Match the color of the switcher the different states of the app bar.
-                .drawBehind {
-                    val progressFraction = if (topAppBarScrollBehavior.isPinned) {
-                        topAppBarScrollBehavior.state.overlappedFraction
-                    } else {
-                        topAppBarScrollBehavior.state.collapsedFraction
-                    }
-                    val contentBackgroundColor =
-                        lerp(
-                            start = expandedColor,
-                            stop = collapsedColor,
-                            fraction = progressFraction,
-                        )
-                    drawRect(contentBackgroundColor)
-                },
+                .scrolledContainerBackground(topAppBarScrollBehavior),
         ) {
             items(accountSummaries) { accountSummary ->
                 AccountSummaryItem(
