@@ -94,55 +94,64 @@ namespace Bit.App
                 return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
             }
 
+            //If there's already an existing autofill window we try to get rid of it, mostly to avoid edge cases scenarios. 
+            if (_autofillWindow != null)
+            {
+                CloseWindow(_autofillWindow);
+            }
+
             //"Internal" Autofill and Uri/Otp/CreateSend. This is where we create the autofill specific Window
             if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null))
             {
                 _autofillWindow = new Window(new NavigationPage(new AndroidNavigationRedirectPage()));
-                _autofillWindow.Created += (sender, args) =>
-                {
-                    CurrentWindow = _autofillWindow;
-                };
-                _autofillWindow.Activated += (sender, args) =>
-                {
-                    CurrentWindow = _autofillWindow;
-                };
-                _autofillWindow.Stopped += (sender, args) =>
-                {
-                    CurrentWindow = null;
-                };
+                _autofillWindow.Created += WindowOnCreatedOrActivated;
+                _autofillWindow.Activated += WindowOnCreatedOrActivated;
+                _autofillWindow.Stopped += WindowOnStopped;
+                _autofillWindow.Destroying += AutofillWindowOnDestroying;
                 _isResumed = true;
                 return _autofillWindow;
             }
 
-            //If we run CreateWindow for a normal "mainWindow" we want to get rid of any existing _autofillWindow.
-            //Mostly to avoid edge cases scenarios. 
-            if (_autofillWindow != null)
+            //If we don't have an existing main window we create it, otherwise we just reuse the one we had.
+            if(_mainWindow == null)
             {
-                CloseWindow(_autofillWindow);
-                _autofillWindow = null;
+                _mainWindow = new Window(new NavigationPage(new HomePage(Options)));
+                _mainWindow.Created += WindowOnCreatedOrActivated;
+                _mainWindow.Activated += WindowOnCreatedOrActivated;
+                _mainWindow.Stopped += WindowOnStopped;
+                _mainWindow.Destroying += MainWindowOnDestroying;
             }
 
-            //If we already have a MainWindow we can try to reuse it.
-            if(_mainWindow != null)
-            {
-                return _mainWindow;
-            }
-
-            //Default scenario where we create a MainWindow
-            _mainWindow = new Window(new NavigationPage(new HomePage(Options)));
-            _mainWindow.Created += (sender, args) =>
-            {
-                CurrentWindow = _mainWindow;
-            };
-            _mainWindow.Activated += (sender, args) =>
-            {
-                CurrentWindow = _mainWindow;
-            };
-            _mainWindow.Stopped += (sender, args) =>
-            {
-                CurrentWindow = null;
-            };
             return _mainWindow;
+        }
+
+        private void MainWindowOnDestroying(object sender, EventArgs e)
+        {
+            _mainWindow.Created -= WindowOnCreatedOrActivated;
+            _mainWindow.Activated -= WindowOnCreatedOrActivated;
+            _mainWindow.Stopped -= WindowOnStopped;
+            _mainWindow.Destroying -= AutofillWindowOnDestroying;
+        }
+
+        private void AutofillWindowOnDestroying(object sender, EventArgs e)
+        {
+            _autofillWindow.Created -= WindowOnCreatedOrActivated;
+            _autofillWindow.Activated -= WindowOnCreatedOrActivated;
+            _autofillWindow.Stopped -= WindowOnStopped;
+            _autofillWindow.Destroying -= AutofillWindowOnDestroying;
+        }
+
+        private void WindowOnStopped(object sender, EventArgs e)
+        {
+            CurrentWindow = null;
+        }
+
+        private void WindowOnCreatedOrActivated(object sender, EventArgs e)
+        {
+            if (sender is Window window)
+            {
+                CurrentWindow = window;
+            }
         }
 #elif IOS
         //iOS doesn't use the CreateWindow override used in Android so we just set the Application.Current.MainPage directly
