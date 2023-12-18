@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
  * A [TypeConverter] to convert a [ZonedDateTime] to and from a [Long].
  */
 @ProvidedTypeConverter
-object ZonedDateTimeTypeConverter {
+class ZonedDateTimeTypeConverter {
     /**
      * A [TypeConverter] to convert a [Long] to a [ZonedDateTime].
      */

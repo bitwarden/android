@@ -32,7 +32,7 @@ class VaultDiskModule {
                 klass = VaultDatabase::class.java,
                 name = "vault_database",
             )
-            .addTypeConverter(ZonedDateTimeTypeConverter)
+            .addTypeConverter(ZonedDateTimeTypeConverter())
             .build()
 
     @Provides
