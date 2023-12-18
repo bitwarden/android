@@ -5,8 +5,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FoldersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
+import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
 
 /**
@@ -15,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
 @Database(
     entities = [
         CipherEntity::class,
+        CollectionEntity::class,
         FolderEntity::class,
     ],
     version = 1,
@@ -26,6 +29,11 @@ abstract class VaultDatabase : RoomDatabase() {
      * Provides the DAO for accessing cipher data.
      */
     abstract fun cipherDao(): CiphersDao
+
+    /**
+     * Provides the DAO for accessing collection data.
+     */
+    abstract fun collectionDao(): CollectionsDao
 
     /**
      * Provides the DAO for accessing folder data.
