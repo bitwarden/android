@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -62,7 +63,13 @@ class AuthRepositoryImpl constructor(
 ) : AuthRepository {
     private val mutableSpecialCircumstanceStateFlow =
         MutableStateFlow<UserState.SpecialCircumstance?>(null)
-    private val scope = CoroutineScope(dispatcherManager.io)
+
+    /**
+     * A scope intended for use when simply collecting multiple flows in order to combine them. The
+     * use of [Dispatchers.Unconfined] allows for this to happen synchronously whenever any of
+     * these flows changes.
+     */
+    private val collectionScope = CoroutineScope(dispatcherManager.unconfined)
 
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -81,7 +88,7 @@ class AuthRepositoryImpl constructor(
                 ?: AuthState.Unauthenticated
         }
         .stateIn(
-            scope = scope,
+            scope = collectionScope,
             started = SharingStarted.Eagerly,
             initialValue = AuthState.Uninitialized,
         )
@@ -98,7 +105,7 @@ class AuthRepositoryImpl constructor(
             )
     }
         .stateIn(
-            scope = scope,
+            scope = collectionScope,
             started = SharingStarted.Eagerly,
             initialValue = authDiskSource
                 .userState
