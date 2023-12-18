@@ -76,6 +76,7 @@ namespace Bit.App
         private Window _autofillWindow;
         private Window _mainWindow;
 
+        //Allows setting Options from MainActivity before base.OnCreate
         public void SetOptions(AppOptions appOptions)
         {
             Options = appOptions ?? new AppOptions();
@@ -88,12 +89,13 @@ namespace Bit.App
             if (activationState != null 
                 && activationState.State.TryGetValue("autofillFramework", out string autofillFramework)
                 && autofillFramework == "true"
-                && activationState.State.ContainsKey("autofillFrameworkCipherId")) //AutofillExternalActivity
+                && activationState.State.ContainsKey("autofillFrameworkCipherId"))
             {
                 return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
             }
 
-            if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null)) //"Internal" Autofill and Uri/Otp/CreateSend
+            //"Internal" Autofill and Uri/Otp/CreateSend. This is where we create the autofill specific Window
+            if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null))
             {
                 _autofillWindow = new Window(new NavigationPage(new AndroidNavigationRedirectPage()));
                 _autofillWindow.Created += (sender, args) =>
@@ -143,6 +145,7 @@ namespace Bit.App
             return _mainWindow;
         }
 #elif IOS
+        //iOS doesn't use the CreateWindow override used in Android so we just set the Application.Current.MainPage directly
         public new static Page MainPage
         {
             get
@@ -576,6 +579,10 @@ namespace Bit.App
                 UpdateThemeAsync();
             };
             _isResumed = true;
+#if IOS
+            //We only set the MainPage here for iOS as Android is using the CreateWindow override for the initial page.
+            App.MainPage = new NavigationPage(new HomePage(Options));
+#endif
             _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
         }
