@@ -7,11 +7,13 @@ import java.time.ZonedDateTime
 
 class ZonedDateTimeTypeConverterTest {
 
+    private val typeConverter = ZonedDateTimeTypeConverter()
+
     @Test
     fun `fromTimestamp should return null when value is null`() {
         val value: Long? = null
 
-        val result = ZonedDateTimeTypeConverter.fromTimestamp(value)
+        val result = typeConverter.fromTimestamp(value)
 
         assertNull(result)
     }
@@ -21,7 +23,7 @@ class ZonedDateTimeTypeConverterTest {
         val expected = ZonedDateTime.parse("2023-12-15T20:38:06Z")
         val value = expected.toEpochSecond()
 
-        val result = ZonedDateTimeTypeConverter.fromTimestamp(value)
+        val result = typeConverter.fromTimestamp(value)
 
         assertEquals(expected, result)
     }
@@ -30,7 +32,7 @@ class ZonedDateTimeTypeConverterTest {
     fun `toTimestamp should return null when value is null`() {
         val value: ZonedDateTime? = null
 
-        val result = ZonedDateTimeTypeConverter.toTimestamp(value)
+        val result = typeConverter.toTimestamp(value)
 
         assertNull(result)
     }
@@ -40,7 +42,7 @@ class ZonedDateTimeTypeConverterTest {
         val value = ZonedDateTime.parse("2023-12-15T20:38:06Z")
         val expected = value.toEpochSecond()
 
-        val result = ZonedDateTimeTypeConverter.toTimestamp(value)
+        val result = typeConverter.toTimestamp(value)
 
         assertEquals(expected, result)
     }
