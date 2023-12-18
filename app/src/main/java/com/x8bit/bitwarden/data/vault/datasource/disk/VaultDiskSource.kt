@@ -14,6 +14,11 @@ interface VaultDiskSource {
     fun getCiphers(userId: String): Flow<List<SyncResponseJson.Cipher>>
 
     /**
+     * Retrieves all collections from the data source for a given [userId].
+     */
+    fun getCollections(userId: String): Flow<List<SyncResponseJson.Collection>>
+
+    /**
      * Retrieves all folders from the data source for a given [userId].
      */
     fun getFolders(userId: String): Flow<List<SyncResponseJson.Folder>>

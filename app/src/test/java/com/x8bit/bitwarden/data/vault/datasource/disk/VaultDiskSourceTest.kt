@@ -4,11 +4,14 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeFoldersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
+import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import io.mockk.every
 import io.mockk.mockk
@@ -24,6 +27,7 @@ class VaultDiskSourceTest {
 
     private val json = PlatformNetworkModule.providesJson()
     private lateinit var ciphersDao: FakeCiphersDao
+    private lateinit var collectionsDao: FakeCollectionsDao
     private lateinit var foldersDao: FakeFoldersDao
 
     private lateinit var vaultDiskSource: VaultDiskSource
@@ -31,9 +35,11 @@ class VaultDiskSourceTest {
     @BeforeEach
     fun setup() {
         ciphersDao = FakeCiphersDao()
+        collectionsDao = FakeCollectionsDao()
         foldersDao = FakeFoldersDao()
         vaultDiskSource = VaultDiskSourceImpl(
             ciphersDao = ciphersDao,
+            collectionsDao = collectionsDao,
             foldersDao = foldersDao,
             json = json,
         )
@@ -54,6 +60,20 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `getCollections should emit all CollectionsDao updates`() = runTest {
+        val collectionEntities = listOf(COLLECTION_ENTITY)
+        val collection = listOf(COLLECTION_1)
+
+        vaultDiskSource
+            .getCollections(USER_ID)
+            .test {
+                assertEquals(emptyList<SyncResponseJson.Collection>(), awaitItem())
+                collectionsDao.insertCollections(collectionEntities)
+                assertEquals(collection, awaitItem())
+            }
+    }
+
+    @Test
     fun `getFolders should emit all FoldersDao updates`() = runTest {
         val folderEntities = listOf(FOLDER_ENTITY)
         val folders = listOf(FOLDER_1)
@@ -70,6 +90,7 @@ class VaultDiskSourceTest {
     @Test
     fun `replaceVaultData should clear the daos and insert the new vault data`() = runTest {
         assertEquals(ciphersDao.storedCiphers, emptyList<CipherEntity>())
+        assertEquals(collectionsDao.storedCollections, emptyList<CollectionEntity>())
         assertEquals(foldersDao.storedFolders, emptyList<FolderEntity>())
 
         vaultDiskSource.replaceVaultData(USER_ID, VAULT_DATA)
@@ -84,6 +105,9 @@ class VaultDiskSourceTest {
         assertEquals(CIPHER_ENTITY.copy(cipherJson = ""), storedCipherEntity.copy(cipherJson = ""))
         assertJsonEquals(CIPHER_ENTITY.cipherJson, storedCipherEntity.cipherJson)
 
+        // Verify the collections dao is updated
+        assertEquals(listOf(COLLECTION_ENTITY), collectionsDao.storedCollections)
+
         // Verify the folders dao is updated
         assertEquals(listOf(FOLDER_ENTITY), foldersDao.storedFolders)
     }
@@ -91,9 +115,11 @@ class VaultDiskSourceTest {
     @Test
     fun `deleteVaultData should remove all vault data matching the user ID`() = runTest {
         assertFalse(ciphersDao.deleteCiphersCalled)
+        assertFalse(collectionsDao.deleteCollectionsCalled)
         assertFalse(foldersDao.deleteFoldersCalled)
         vaultDiskSource.deleteVaultData(USER_ID)
         assertTrue(ciphersDao.deleteCiphersCalled)
+        assertTrue(collectionsDao.deleteCollectionsCalled)
         assertTrue(foldersDao.deleteFoldersCalled)
     }
 }
@@ -101,11 +127,12 @@ class VaultDiskSourceTest {
 private const val USER_ID: String = "test_user_id"
 
 private val CIPHER_1: SyncResponseJson.Cipher = createMockCipher(1)
+private val COLLECTION_1: SyncResponseJson.Collection = createMockCollection(3)
 private val FOLDER_1: SyncResponseJson.Folder = createMockFolder(2)
 
 private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
     folders = listOf(FOLDER_1),
-    collections = null,
+    collections = listOf(COLLECTION_1),
     profile = mockk<SyncResponseJson.Profile> {
         every { id } returns USER_ID
     },
@@ -215,6 +242,16 @@ private val CIPHER_ENTITY = CipherEntity(
     userId = USER_ID,
     cipherType = "1",
     cipherJson = CIPHER_JSON,
+)
+
+private val COLLECTION_ENTITY = CollectionEntity(
+    id = "mockId-3",
+    userId = USER_ID,
+    organizationId = "mockOrganizationId-3",
+    shouldHidePasswords = false,
+    name = "mockName-3",
+    externalId = "mockExternalId-3",
+    isReadOnly = false,
 )
 
 private val FOLDER_ENTITY = FolderEntity(
