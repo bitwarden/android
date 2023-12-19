@@ -34,10 +34,11 @@ interface CollectionsDao {
     fun getAllCollections(userId: String): Flow<List<CollectionEntity>>
 
     /**
-     * Deletes all the stored collections associated with the given [userId].
+     * Deletes all the stored collections associated with the given [userId]. This will return the
+     * number of rows deleted by this query.
      */
     @Query("DELETE FROM collections WHERE user_id = :userId")
-    suspend fun deleteAllCollections(userId: String)
+    suspend fun deleteAllCollections(userId: String): Int
 
     /**
      * Deletes the stored collection associated with the given [userId] that matches the
@@ -48,11 +49,18 @@ interface CollectionsDao {
 
     /**
      * Deletes all the stored [collections] associated with the given [userId] and then add all new
-     * `collections` to the database.
+     * `collections` to the database. This will return `true` if any changes were made to the
+     * database and `false` otherwise.
+     *
+     * @return `true` if any changes were made to the database.
      */
     @Transaction
-    suspend fun replaceAllCollections(userId: String, collections: List<CollectionEntity>) {
-        deleteAllCollections(userId)
+    suspend fun replaceAllCollections(
+        userId: String,
+        collections: List<CollectionEntity>,
+    ): Boolean {
+        val deletedCollectionsCount = deleteAllCollections(userId)
         insertCollections(collections)
+        return deletedCollectionsCount > 0 || collections.isNotEmpty()
     }
 }

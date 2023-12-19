@@ -30,18 +30,21 @@ interface CiphersDao {
     ): Flow<List<CipherEntity>>
 
     /**
-     * Deletes all the stored ciphers associated with the given [userId].
+     * Deletes all the stored ciphers associated with the given [userId]. This will return the
+     * number of rows deleted by this query.
      */
     @Query("DELETE FROM ciphers WHERE user_id = :userId")
-    suspend fun deleteAllCiphers(userId: String)
+    suspend fun deleteAllCiphers(userId: String): Int
 
     /**
      * Deletes all the stored ciphers associated with the given [userId] and then add all new
-     * [ciphers] to the database.
+     * [ciphers] to the database. This will return `true` if any changes were made to the database
+     * and `false` otherwise.
      */
     @Transaction
-    suspend fun replaceAllCiphers(userId: String, ciphers: List<CipherEntity>) {
-        deleteAllCiphers(userId)
+    suspend fun replaceAllCiphers(userId: String, ciphers: List<CipherEntity>): Boolean {
+        val deletedCiphersCount = deleteAllCiphers(userId)
         insertCiphers(ciphers)
+        return deletedCiphersCount > 0 || ciphers.isNotEmpty()
     }
 }

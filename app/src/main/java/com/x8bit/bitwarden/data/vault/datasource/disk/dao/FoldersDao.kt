@@ -36,10 +36,11 @@ interface FoldersDao {
     ): Flow<List<FolderEntity>>
 
     /**
-     * Deletes all the stored folders associated with the given [userId].
+     * Deletes all the stored folders associated with the given [userId]. This will return the
+     * number of rows deleted by this query.
      */
     @Query("DELETE FROM folders WHERE user_id = :userId")
-    suspend fun deleteAllFolders(userId: String)
+    suspend fun deleteAllFolders(userId: String): Int
 
     /**
      * Deletes the stored folder associated with the given [userId] that matches the [folderId].
@@ -49,11 +50,13 @@ interface FoldersDao {
 
     /**
      * Deletes all the stored [folders] associated with the given [userId] and then add all new
-     * `folders` to the database.
+     * `folders` to the database. This will return `true` if any changes were made to the database
+     * and `false` otherwise.
      */
     @Transaction
-    suspend fun replaceAllFolders(userId: String, folders: List<FolderEntity>) {
-        deleteAllFolders(userId)
+    suspend fun replaceAllFolders(userId: String, folders: List<FolderEntity>): Boolean {
+        val deletedFoldersCount = deleteAllFolders(userId)
         insertFolders(folders)
+        return deletedFoldersCount > 0 || folders.isNotEmpty()
     }
 }
