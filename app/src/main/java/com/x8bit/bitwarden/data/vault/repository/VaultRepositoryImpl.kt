@@ -143,6 +143,12 @@ class VaultRepositoryImpl(
         sendDataMutableStateFlow.update { DataState.Loading }
     }
 
+    override fun deleteVaultData(userId: String) {
+        scope.launch {
+            vaultDiskSource.deleteVaultData(userId)
+        }
+    }
+
     override fun sync() {
         if (!syncJob.isCompleted || willSyncAfterUnlock) return
         val userId = activeUserId ?: return

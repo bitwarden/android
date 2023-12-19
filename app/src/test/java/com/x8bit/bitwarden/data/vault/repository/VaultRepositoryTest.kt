@@ -243,6 +243,18 @@ class VaultRepositoryTest {
             }
     }
 
+    @Test
+    fun `deleteVaultData should call deleteVaultData on VaultDiskSource`() {
+        val userId = "userId-1234"
+        coEvery { vaultDiskSource.deleteVaultData(userId) } just runs
+
+        vaultRepository.deleteVaultData(userId = userId)
+
+        coVerify(exactly = 1) {
+            vaultDiskSource.deleteVaultData(userId)
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `sync with syncService Success should unlock the vault for orgs if necessary and update AuthDiskSource and DataStateFlows`() =

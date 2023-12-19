@@ -74,8 +74,9 @@ class AuthRepositoryTest {
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
     private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
-    private val vaultRepository: VaultRepository = mockk() {
+    private val vaultRepository: VaultRepository = mockk {
         every { vaultStateFlow } returns mutableVaultStateFlow
+        every { deleteVaultData(any()) } just runs
         every { lockVaultIfNecessary(any()) } just runs
         every { clearUnlockedData() } just runs
     }
@@ -999,6 +1000,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 organizationKeys = null,
             )
+            verify { vaultRepository.deleteVaultData(userId = USER_ID_1) }
             verify { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
         }
@@ -1081,6 +1083,7 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     organizationKeys = null,
                 )
+                verify { vaultRepository.deleteVaultData(userId = USER_ID_1) }
                 verify { vaultRepository.clearUnlockedData() }
                 verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
             }
@@ -1131,6 +1134,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_2,
                 organizationKeys = null,
             )
+            verify { vaultRepository.deleteVaultData(userId = USER_ID_2) }
             verify(exactly = 0) { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
         }
