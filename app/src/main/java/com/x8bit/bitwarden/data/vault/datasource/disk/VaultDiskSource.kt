@@ -25,6 +25,9 @@ interface VaultDiskSource {
 
     /**
      * Replaces all [vault] data for a given [userId] with the new `vault`.
+     *
+     * This will always cause the [getCiphers], [getCollections], and [getFolders] functions to
+     * re-emit even if the underlying data has not changed.
      */
     suspend fun replaceVaultData(userId: String, vault: SyncResponseJson)
 
