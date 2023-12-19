@@ -1,9 +1,22 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
 import android.os.Parcelable
+import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.PasswordHistoryView
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.PasswordHistoryState.GeneratedPassword
+import com.x8bit.bitwarden.ui.tools.feature.generator.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -12,16 +25,61 @@ import javax.inject.Inject
  */
 @HiltViewModel
 @Suppress("TooManyFunctions")
-class PasswordHistoryViewModel @Inject constructor() :
-    BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
-        initialState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading),
-    ) {
+class PasswordHistoryViewModel @Inject constructor(
+    private val generatorRepository: GeneratorRepository,
+) : BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
+    initialState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading),
+) {
+
+    init {
+        generatorRepository
+            .passwordHistoryStateFlow
+            .map { PasswordHistoryAction.Internal.UpdatePasswordHistoryReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+    }
 
     override fun handleAction(action: PasswordHistoryAction) {
         when (action) {
             PasswordHistoryAction.CloseClick -> handleCloseClick()
             is PasswordHistoryAction.PasswordCopyClick -> handleCopyClick(action.password)
             PasswordHistoryAction.PasswordClearClick -> handlePasswordHistoryClearClick()
+            is PasswordHistoryAction.Internal.UpdatePasswordHistoryReceive -> {
+                handleUpdatePasswordHistoryReceive(action)
+            }
+        }
+    }
+
+    private fun handleUpdatePasswordHistoryReceive(
+        action: PasswordHistoryAction.Internal.UpdatePasswordHistoryReceive,
+    ) {
+        val newState = when (val state = action.state) {
+            is LocalDataState.Loading -> PasswordHistoryState.ViewState.Loading
+
+            is LocalDataState.Error -> {
+                PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
+            }
+
+            is LocalDataState.Loaded -> {
+                val passwords = state.data.map { passwordHistoryView ->
+                    GeneratedPassword(
+                        password = passwordHistoryView.password,
+                        date = passwordHistoryView.lastUsedDate.toFormattedPattern(
+                            pattern = "MM/dd/yy h:mm a",
+                        ),
+                    )
+                }
+
+                if (passwords.isEmpty()) {
+                    PasswordHistoryState.ViewState.Empty
+                } else {
+                    PasswordHistoryState.ViewState.Content(passwords)
+                }
+            }
+        }
+
+        mutableStateFlow.update {
+            it.copy(viewState = newState)
         }
     }
 
@@ -32,19 +90,13 @@ class PasswordHistoryViewModel @Inject constructor() :
     }
 
     private fun handlePasswordHistoryClearClick() {
-        sendEvent(
-            event = PasswordHistoryEvent.ShowToast(
-                message = "Not yet implemented.",
-            ),
-        )
+        viewModelScope.launch {
+            generatorRepository.clearPasswordHistory()
+        }
     }
 
     private fun handleCopyClick(password: GeneratedPassword) {
-        sendEvent(
-            event = PasswordHistoryEvent.ShowToast(
-                message = "Not yet implemented.",
-            ),
-        )
+        sendEvent(PasswordHistoryEvent.CopyTextToClipboard(password.password))
     }
 }
 
@@ -76,7 +128,7 @@ data class PasswordHistoryState(
          * @property message The error message to be displayed.
          */
         @Parcelize
-        data class Error(val message: String) : ViewState()
+        data class Error(val message: Text) : ViewState()
 
         /**
          * Empty state for the password history screen.
@@ -122,6 +174,11 @@ sealed class PasswordHistoryEvent {
      * Event to navigate back to the previous screen.
      */
     data object NavigateBack : PasswordHistoryEvent()
+
+    /**
+     * Copies text to the clipboard.
+     */
+    data class CopyTextToClipboard(val text: String) : PasswordHistoryEvent()
 }
 
 /**
@@ -145,4 +202,17 @@ sealed class PasswordHistoryAction {
      * Action when the close button is clicked.
      */
     data object CloseClick : PasswordHistoryAction()
+
+    /**
+     * Models actions that the [PasswordHistoryViewModel] itself might send.
+     */
+    sealed class Internal : PasswordHistoryAction() {
+
+        /**
+         * Indicates a password history update is received.
+         */
+        data class UpdatePasswordHistoryReceive(
+            val state: LocalDataState<List<PasswordHistoryView>>,
+        ) : Internal()
+    }
 }
