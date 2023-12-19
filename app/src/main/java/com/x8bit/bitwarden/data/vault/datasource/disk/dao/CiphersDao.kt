@@ -24,7 +24,7 @@ interface CiphersDao {
     /**
      * Retrieves all ciphers from the database for a given [userId].
      */
-    @Query("SELECT * FROM ciphers WHERE user_id IS :userId")
+    @Query("SELECT * FROM ciphers WHERE user_id = :userId")
     fun getAllCiphers(
         userId: String,
     ): Flow<List<CipherEntity>>
