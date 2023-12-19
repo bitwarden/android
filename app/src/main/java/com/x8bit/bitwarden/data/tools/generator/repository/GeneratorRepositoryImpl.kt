@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import java.time.Instant
 import javax.inject.Singleton
 
 /**
@@ -67,7 +68,11 @@ class GeneratorRepositoryImpl(
             }
             .onEach { encryptedPasswordHistoryListResult ->
                 mutablePasswordHistoryStateFlow.value = encryptedPasswordHistoryListResult.fold(
-                    onSuccess = { LocalDataState.Loaded(it) },
+                    onSuccess = {
+                        LocalDataState.Loaded(
+                            it.sortedByDescending { history -> history.lastUsedDate },
+                        )
+                    },
                     onFailure = { LocalDataState.Error(it) },
                 )
             }
@@ -78,7 +83,14 @@ class GeneratorRepositoryImpl(
         generatorSdkSource
             .generatePassword(passwordGeneratorRequest)
             .fold(
-                onSuccess = { GeneratedPasswordResult.Success(it) },
+                onSuccess = { generatedPassword ->
+                    val passwordHistoryView = PasswordHistoryView(
+                        password = generatedPassword,
+                        lastUsedDate = Instant.now(),
+                    )
+                    storePasswordHistory(passwordHistoryView)
+                    GeneratedPasswordResult.Success(generatedPassword)
+                },
                 onFailure = { GeneratedPasswordResult.InvalidRequest },
             )
 
@@ -88,7 +100,14 @@ class GeneratorRepositoryImpl(
         generatorSdkSource
             .generatePassphrase(passphraseGeneratorRequest)
             .fold(
-                onSuccess = { GeneratedPassphraseResult.Success(it) },
+                onSuccess = { generatedPassphrase ->
+                    val passwordHistoryView = PasswordHistoryView(
+                        password = generatedPassphrase,
+                        lastUsedDate = Instant.now(),
+                    )
+                    storePasswordHistory(passwordHistoryView)
+                    GeneratedPassphraseResult.Success(generatedPassphrase)
+                },
                 onFailure = { GeneratedPassphraseResult.InvalidRequest },
             )
 

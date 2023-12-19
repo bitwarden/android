@@ -28,11 +28,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
@@ -48,6 +51,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun PasswordHistoryScreen(
     onNavigateBack: () -> Unit,
     viewModel: PasswordHistoryViewModel = hiltViewModel(),
+    clipboardManager: ClipboardManager = LocalClipboardManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -56,6 +60,11 @@ fun PasswordHistoryScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             PasswordHistoryEvent.NavigateBack -> onNavigateBack.invoke()
+
+            is PasswordHistoryEvent.CopyTextToClipboard -> {
+                clipboardManager.setText(event.text.toAnnotatedString())
+            }
+
             is PasswordHistoryEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
@@ -189,7 +198,7 @@ private fun PasswordHistoryError(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = state.message,
+            text = state.message.invoke(),
             style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())

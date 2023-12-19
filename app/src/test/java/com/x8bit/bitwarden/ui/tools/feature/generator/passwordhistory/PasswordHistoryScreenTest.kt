@@ -5,6 +5,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -49,7 +50,9 @@ class PasswordHistoryScreenTest : BaseComposeTest() {
     @Test
     fun `Error state should display error message`() {
         val errorMessage = "Error occurred"
-        updateState(PasswordHistoryState(PasswordHistoryState.ViewState.Error(errorMessage)))
+        updateState(
+            PasswordHistoryState(PasswordHistoryState.ViewState.Error(errorMessage.asText())),
+        )
         composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
     }
 

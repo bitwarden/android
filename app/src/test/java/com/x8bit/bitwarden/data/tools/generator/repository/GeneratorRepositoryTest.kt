@@ -25,20 +25,21 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassph
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -50,6 +51,7 @@ class GeneratorRepositoryTest {
     private val generatorDiskSource: GeneratorDiskSource = mockk()
     private val authDiskSource: AuthDiskSource = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+        every { userState } returns null
     }
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
@@ -64,13 +66,19 @@ class GeneratorRepositoryTest {
         dispatcherManager = dispatcherManager,
     )
 
-    @BeforeEach
-    fun setUp() {
-        clearMocks(generatorSdkSource)
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Instant::class)
     }
 
     @Test
-    fun `generatePassword should emit Success result with the generated password`() = runTest {
+    fun `generatePassword should emit Success result and store the generated password`() = runTest {
+        val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
+
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns fixedInstant
+
+        val userId = "testUserId"
         val request = PasswordGeneratorRequest(
             lowercase = true,
             uppercase = true,
@@ -83,15 +91,30 @@ class GeneratorRepositoryTest {
             minNumber = null,
             minSpecial = null,
         )
-        val expectedResult = "GeneratedPassword123!"
-        coEvery {
-            generatorSdkSource.generatePassword(request)
-        } returns Result.success(expectedResult)
+        val generatedPassword = "GeneratedPassword123!"
+        val encryptedPasswordHistory =
+            PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
+
+        coEvery { authDiskSource.userState?.activeUserId } returns userId
+
+        coEvery { generatorSdkSource.generatePassword(request) } returns
+            Result.success(generatedPassword)
+
+        coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+            Result.success(encryptedPasswordHistory)
+
+        coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
 
         val result = repository.generatePassword(request)
 
-        assertEquals(expectedResult, (result as GeneratedPasswordResult.Success).generatedString)
+        assertEquals(generatedPassword, (result as GeneratedPasswordResult.Success).generatedString)
         coVerify { generatorSdkSource.generatePassword(request) }
+
+        coVerify {
+            passwordHistoryDiskSource.insertPasswordHistory(
+                encryptedPasswordHistory.toPasswordHistoryEntity(userId),
+            )
+        }
     }
 
     @Test
@@ -118,23 +141,47 @@ class GeneratorRepositoryTest {
     }
 
     @Test
-    fun `generatePassphrase should emit Success result with the generated passphrase`() = runTest {
-        val request = PassphraseGeneratorRequest(
-            numWords = 5.toUByte(),
-            capitalize = true,
-            includeNumber = true,
-            wordSeparator = '-'.toString(),
-        )
-        val expectedResult = "Generated-Passphrase-123!"
-        coEvery {
-            generatorSdkSource.generatePassphrase(request)
-        } returns Result.success(expectedResult)
+    fun `generatePassphrase should emit Success result and store the generated passphrase`() =
+        runTest {
+            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
+            mockkStatic(Instant::class)
+            every { Instant.now() } returns fixedInstant
 
-        val result = repository.generatePassphrase(request)
+            val userId = "testUserId"
+            val request = PassphraseGeneratorRequest(
+                numWords = 5.toUByte(),
+                capitalize = true,
+                includeNumber = true,
+                wordSeparator = "-",
+            )
+            val generatedPassphrase = "Generated-Passphrase-123"
+            val encryptedPasswordHistory =
+                PasswordHistory(password = generatedPassphrase, lastUsedDate = Instant.now())
 
-        assertEquals(expectedResult, (result as GeneratedPassphraseResult.Success).generatedString)
-        coVerify { generatorSdkSource.generatePassphrase(request) }
-    }
+            coEvery { authDiskSource.userState?.activeUserId } returns userId
+
+            coEvery { generatorSdkSource.generatePassphrase(request) } returns
+                Result.success(generatedPassphrase)
+
+            coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+                Result.success(encryptedPasswordHistory)
+
+            coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
+
+            val result = repository.generatePassphrase(request)
+
+            assertEquals(
+                generatedPassphrase,
+                (result as GeneratedPassphraseResult.Success).generatedString,
+            )
+            coVerify { generatorSdkSource.generatePassphrase(request) }
+            coVerify { vaultSdkSource.encryptPasswordHistory(any()) }
+            coVerify {
+                passwordHistoryDiskSource.insertPasswordHistory(
+                    encryptedPasswordHistory.toPasswordHistoryEntity(userId),
+                )
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -278,24 +325,24 @@ class GeneratorRepositoryTest {
             val encryptedPasswordHistoryEntities = listOf(
                 PasswordHistoryEntity(
                     userId = USER_STATE.activeUserId,
-                    encryptedPassword = "encryptedPassword1",
-                    generatedDateTimeMs = Instant.parse("2021-01-01T00:00:00Z").toEpochMilli(),
+                    encryptedPassword = "encryptedPassword2",
+                    generatedDateTimeMs = Instant.parse("2021-01-02T00:00:00Z").toEpochMilli(),
                 ),
                 PasswordHistoryEntity(
                     userId = USER_STATE.activeUserId,
-                    encryptedPassword = "encryptedPassword2",
-                    generatedDateTimeMs = Instant.parse("2021-01-02T00:00:00Z").toEpochMilli(),
+                    encryptedPassword = "encryptedPassword1",
+                    generatedDateTimeMs = Instant.parse("2021-01-01T00:00:00Z").toEpochMilli(),
                 ),
             )
 
             val decryptedPasswordHistoryList = listOf(
                 PasswordHistoryView(
-                    password = "password1",
-                    lastUsedDate = Instant.parse("2021-01-01T00:00:00Z"),
-                ),
-                PasswordHistoryView(
                     password = "password2",
                     lastUsedDate = Instant.parse("2021-01-02T00:00:00Z"),
+                ),
+                PasswordHistoryView(
+                    password = "password1",
+                    lastUsedDate = Instant.parse("2021-01-01T00:00:00Z"),
                 ),
             )
 

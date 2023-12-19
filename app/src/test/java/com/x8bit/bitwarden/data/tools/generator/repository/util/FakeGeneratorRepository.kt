@@ -74,4 +74,19 @@ class FakeGeneratorRepository : GeneratorRepository {
     fun setMockGeneratePassphraseResult(result: GeneratedPassphraseResult) {
         generatePassphraseResult = result
     }
+
+    /**
+     * Checks if a specific password is in the history.
+     */
+    fun isPasswordStoredInHistory(password: String): Boolean {
+        val passwordHistoryList = mutablePasswordHistoryStateFlow.value.data.orEmpty()
+        return passwordHistoryList.any { it.password == password }
+    }
+
+    /**
+     * Emits specified state to the passwordHistoryStateFlow.
+     */
+    fun emitPasswordHistoryState(state: LocalDataState<List<PasswordHistoryView>>) {
+        mutablePasswordHistoryStateFlow.value = state
+    }
 }
