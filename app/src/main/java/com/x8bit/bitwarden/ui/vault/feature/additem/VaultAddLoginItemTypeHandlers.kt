@@ -26,7 +26,7 @@ class VaultAddLoginItemTypeHandlers(
     val onOpenUsernameGeneratorClick: () -> Unit,
     val onPasswordCheckerClick: () -> Unit,
     val onOpenPasswordGeneratorClick: () -> Unit,
-    val onSetupTotpClick: () -> Unit,
+    val onSetupTotpClick: (Boolean) -> Unit,
     val onUriSettingsClick: () -> Unit,
     val onAddNewUriClick: () -> Unit,
 ) {
@@ -72,8 +72,10 @@ class VaultAddLoginItemTypeHandlers(
                         VaultAddItemAction.ItemType.LoginType.OpenPasswordGeneratorClick,
                     )
                 },
-                onSetupTotpClick = {
-                    viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.SetupTotpClick)
+                onSetupTotpClick = { isGranted ->
+                    viewModel.trySendAction(
+                        VaultAddItemAction.ItemType.LoginType.SetupTotpClick(isGranted),
+                    )
                 },
                 onUriSettingsClick = {
                     viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.UriSettingsClick)

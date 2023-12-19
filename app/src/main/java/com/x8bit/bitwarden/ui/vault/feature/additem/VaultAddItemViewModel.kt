@@ -15,8 +15,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
-import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -332,7 +332,7 @@ class VaultAddItemViewModel @Inject constructor(
             }
 
             is VaultAddItemAction.ItemType.LoginType.SetupTotpClick -> {
-                handleLoginSetupTotpClick()
+                handleLoginSetupTotpClick(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.UriSettingsClick -> {
@@ -399,11 +399,18 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleLoginSetupTotpClick() {
+    private fun handleLoginSetupTotpClick(
+        action: VaultAddItemAction.ItemType.LoginType.SetupTotpClick,
+    ) {
         viewModelScope.launch {
+            val message = if (action.isGranted) {
+                "Permission Granted, QR Code Scanner Not Implemented"
+            } else {
+                "Permission Not Granted, Manual QR Code Entry Not Implemented"
+            }
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
-                    message = "Setup TOTP",
+                    message = message,
                 ),
             )
         }
@@ -973,6 +980,13 @@ sealed class VaultAddItemAction {
             data class UriTextChange(val uri: String) : LoginType()
 
             /**
+             * Represents the action to set up TOTP.
+             *
+             * @property isGranted the status of the camera permission
+             */
+            data class SetupTotpClick(val isGranted: Boolean) : LoginType()
+
+            /**
              * Represents the action to open the username generator.
              */
             data object OpenUsernameGeneratorClick : LoginType()
@@ -986,11 +1000,6 @@ sealed class VaultAddItemAction {
              * Represents the action to open the password generator.
              */
             data object OpenPasswordGeneratorClick : LoginType()
-
-            /**
-             * Represents the action to set up TOTP.
-             */
-            data object SetupTotpClick : LoginType()
 
             /**
              * Represents the action of clicking TOTP settings

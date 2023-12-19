@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -27,6 +28,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManagerImpl
 
 /**
  * Top level composable for the vault add item screen.
@@ -37,6 +40,8 @@ import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 fun VaultAddItemScreen(
     onNavigateBack: () -> Unit,
     viewModel: VaultAddItemViewModel = hiltViewModel(),
+    permissionsManager: PermissionsManager =
+        PermissionsManagerImpl(LocalContext.current as Activity),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -101,6 +106,7 @@ fun VaultAddItemScreen(
                     },
                     loginItemTypeHandlers = loginItemTypeHandlers,
                     commonTypeHandlers = commonTypeHandlers,
+                    permissionsManager = permissionsManager,
                     modifier = Modifier
                         .imePadding()
                         .padding(innerPadding)
