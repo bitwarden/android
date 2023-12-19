@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.bitwarden.core.HashPurpose
 import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
@@ -133,6 +134,7 @@ class AuthRepositoryImpl constructor(
                 email = profile.email,
                 password = password,
                 kdf = profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
             .flatMap { hashedPassword -> accountsService.deleteAccount(hashedPassword) }
             .onSuccess { logout() }
@@ -154,6 +156,7 @@ class AuthRepositoryImpl constructor(
                 email = email,
                 password = password,
                 kdf = it.kdfParams.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
         }
         .flatMap { passwordHash ->

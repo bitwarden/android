@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.core.HashPurpose
 import com.bitwarden.core.Kdf
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
@@ -20,11 +21,13 @@ class AuthSdkSourceImpl(
         email: String,
         password: String,
         kdf: Kdf,
+        purpose: HashPurpose,
     ): Result<String> = runCatching {
         clientAuth.hashPassword(
             email = email,
             password = password,
             kdfParams = kdf,
+            purpose = purpose,
         )
     }
 

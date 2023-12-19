@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.core.HashPurpose
 import com.bitwarden.core.Kdf
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
@@ -26,12 +27,14 @@ class AuthSdkSourceTest {
         val email = "email"
         val password = "password"
         val kdf = mockk<Kdf>()
+        val purpose = mockk<HashPurpose>()
         val expectedResult = "hashedPassword"
         coEvery {
             clientAuth.hashPassword(
                 email = email,
                 password = password,
                 kdfParams = kdf,
+                purpose = purpose,
             )
         } returns expectedResult
 
@@ -39,6 +42,7 @@ class AuthSdkSourceTest {
             email = email,
             password = password,
             kdf = kdf,
+            purpose = purpose,
         )
         assertEquals(
             expectedResult.asSuccess(),
@@ -49,6 +53,7 @@ class AuthSdkSourceTest {
                 email = email,
                 password = password,
                 kdfParams = kdf,
+                purpose = purpose,
             )
         }
     }
