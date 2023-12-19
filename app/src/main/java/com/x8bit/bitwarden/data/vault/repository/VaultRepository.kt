@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -21,6 +22,21 @@ interface VaultRepository {
      * Flow that represents the current vault data.
      */
     val vaultDataStateFlow: StateFlow<DataState<VaultData>>
+
+    /**
+     * Flow that represents all ciphers for the active user.
+     */
+    val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
+
+    /**
+     * Flow that represents all collections for the active user.
+     */
+    val collectionsStateFlow: StateFlow<DataState<List<CollectionView>>>
+
+    /**
+     * Flow that represents all folders for the active user.
+     */
+    val foldersStateFlow: StateFlow<DataState<List<FolderView>>>
 
     /**
      * Flow that represents the current vault state.
