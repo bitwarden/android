@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
+import com.x8bit.bitwarden.ui.platform.base.util.FakePermissionManager
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.mockk
@@ -49,6 +50,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     private val mutableEventFlow = MutableSharedFlow<VaultAddItemEvent>(Int.MAX_VALUE)
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
 
+    private val fakePermissionManager: FakePermissionManager = FakePermissionManager()
+
     private val viewModel = mockk<VaultAddItemViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
@@ -60,6 +63,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             VaultAddItemScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                permissionsManager = fakePermissionManager,
             )
         }
     }
@@ -315,15 +319,52 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertTextContains("•••••••••••")
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state clicking Set up TOTP button should trigger SetupTotpClick`() {
+    fun `in ItemType_Login state clicking SetupTOTP button with a positive result should send true if permission check returns true`() {
+        fakePermissionManager.checkPermissionResult = true
+
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Set up TOTP")
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.SetupTotpClick,
+                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(true),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking SetupTOTP button with a positive result should send true`() {
+        fakePermissionManager.checkPermissionResult = false
+        fakePermissionManager.getPermissionsResult = true
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(true),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking Set up TOTP button with a negative result should send false`() {
+        fakePermissionManager.checkPermissionResult = false
+        fakePermissionManager.getPermissionsResult = false
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(false),
             )
         }
     }

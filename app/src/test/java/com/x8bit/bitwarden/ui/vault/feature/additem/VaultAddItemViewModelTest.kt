@@ -474,12 +474,37 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `SetupTotpClick should emit ShowToast with 'Setup TOTP' message`() = runTest {
+        fun `SetupTotpClick should emit ShowToast with permission granted when isGranted is true`() = runTest {
             val viewModel = createAddVaultItemViewModel()
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(VaultAddItemAction.ItemType.LoginType.SetupTotpClick)
-                assertEquals(VaultAddItemEvent.ShowToast("Setup TOTP"), awaitItem())
+                viewModel.actionChannel.trySend(
+                    VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                        true,
+                    ),
+                )
+                assertEquals(
+                    VaultAddItemEvent.ShowToast("Permission Granted, QR Code Scanner Not Implemented"),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `SetupTotpClick should emit ShowToast with permission not granted when isGranted is false`() = runTest {
+            val viewModel = createAddVaultItemViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(
+                    VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                        false,
+                    ),
+                )
+                assertEquals(
+                    VaultAddItemEvent.ShowToast("Permission Not Granted, Manual QR Code Entry Not Implemented"),
+                    awaitItem(),
+                )
             }
         }
 

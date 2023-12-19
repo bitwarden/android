@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
+import android.Manifest
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import kotlinx.collections.immutable.toImmutableList
@@ -19,6 +21,7 @@ import kotlinx.collections.immutable.toImmutableList
  * The top level content UI state for the [VaultAddItemScreen].
  */
 @Composable
+@Suppress("LongMethod")
 fun AddEditItemContent(
     state: VaultAddItemState.ViewState.Content,
     isAddItemMode: Boolean,
@@ -26,7 +29,23 @@ fun AddEditItemContent(
     commonTypeHandlers: VaultAddItemCommonTypeHandlers,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
     modifier: Modifier = Modifier,
+    permissionsManager: PermissionsManager,
 ) {
+    val launcher = permissionsManager.getLauncher(
+        onResult = { isGranted ->
+            when (state.type) {
+                is VaultAddItemState.ViewState.Content.ItemType.SecureNotes -> Unit
+                // TODO: Create UI for card-type item creation BIT-507
+                is VaultAddItemState.ViewState.Content.ItemType.Card -> Unit
+                // TODO: Create UI for identity-type item creation BIT-667
+                is VaultAddItemState.ViewState.Content.ItemType.Identity -> Unit
+                is VaultAddItemState.ViewState.Content.ItemType.Login -> {
+                    loginItemTypeHandlers.onSetupTotpClick(isGranted)
+                }
+            }
+        },
+    )
+
     LazyColumn(
         modifier = modifier,
     ) {
@@ -57,6 +76,13 @@ fun AddEditItemContent(
                     isAddItemMode = isAddItemMode,
                     commonActionHandler = commonTypeHandlers,
                     loginItemTypeHandlers = loginItemTypeHandlers,
+                    onTotpSetupClick = {
+                        if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                            loginItemTypeHandlers.onSetupTotpClick(true)
+                        } else {
+                            launcher.launch(Manifest.permission.CAMERA)
+                        }
+                    },
                 )
             }
 

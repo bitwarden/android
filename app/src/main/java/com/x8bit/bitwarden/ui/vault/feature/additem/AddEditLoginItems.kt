@@ -32,13 +32,14 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * The UI for adding and editing a login cipher.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 fun LazyListScope.addEditLoginItems(
     commonState: VaultAddItemState.ViewState.Content.Common,
     loginState: VaultAddItemState.ViewState.Content.ItemType.Login,
     isAddItemMode: Boolean,
     commonActionHandler: VaultAddItemCommonTypeHandlers,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
+    onTotpSetupClick: () -> Unit,
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))
@@ -112,7 +113,7 @@ fun LazyListScope.addEditLoginItems(
         BitwardenFilledTonalButtonWithIcon(
             label = stringResource(id = R.string.setup_totp),
             icon = painterResource(id = R.drawable.ic_light_bulb),
-            onClick = loginItemTypeHandlers.onSetupTotpClick,
+            onClick = onTotpSetupClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
