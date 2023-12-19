@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.HashPurpose
 import com.bitwarden.core.Kdf
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RsaKeyPair
@@ -90,6 +91,7 @@ class AuthRepositoryTest {
                 email = EMAIL,
                 password = PASSWORD,
                 kdf = PRE_LOGIN_SUCCESS.kdfParams.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
         } returns Result.success(PASSWORD_HASH)
         coEvery {
@@ -229,14 +231,14 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns Throwable("Fail").asFailure()
 
         val result = repository.deleteAccount(password = masterPassword)
 
         assertEquals(DeleteAccountResult.Error, result)
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         }
     }
 
@@ -247,7 +249,7 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns hashedMasterPassword.asSuccess()
         coEvery {
             accountsService.deleteAccount(hashedMasterPassword)
@@ -257,7 +259,7 @@ class AuthRepositoryTest {
 
         assertEquals(DeleteAccountResult.Error, result)
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(hashedMasterPassword)
         }
     }
@@ -269,7 +271,7 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns hashedMasterPassword.asSuccess()
         coEvery {
             accountsService.deleteAccount(hashedMasterPassword)
@@ -279,7 +281,7 @@ class AuthRepositoryTest {
 
         assertEquals(DeleteAccountResult.Success, result)
         coVerify {
-            authSdkSource.hashPassword(EMAIL, masterPassword, kdf)
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(hashedMasterPassword)
         }
     }

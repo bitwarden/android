@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.core.HashPurpose
 import com.bitwarden.core.Kdf
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
@@ -10,13 +11,13 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
  */
 interface AuthSdkSource {
     /**
-     * Creates a hashed password provided the given [email], [password], and [kdf].
-     * [kdf].
+     * Creates a hashed password provided the given [email], [password], [kdf], and [purpose].
      */
     suspend fun hashPassword(
         email: String,
         password: String,
         kdf: Kdf,
+        purpose: HashPurpose,
     ): Result<String>
 
     /**
