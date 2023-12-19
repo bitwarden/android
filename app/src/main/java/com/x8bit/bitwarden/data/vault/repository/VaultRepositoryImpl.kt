@@ -78,17 +78,25 @@ class VaultRepositoryImpl(
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    private val vaultDataMutableStateFlow =
+    private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
-    private val vaultMutableStateFlow =
+    private val mutableVaultStateStateFlow =
         MutableStateFlow(VaultState(unlockedVaultUserIds = emptySet()))
 
-    private val sendDataMutableStateFlow =
-        MutableStateFlow<DataState<SendData>>(DataState.Loading)
+    private val mutableSendDataStateFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
+
+    private val mutableCiphersStateFlow =
+        MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
+
+    private val mutableFoldersStateFlow =
+        MutableStateFlow<DataState<List<FolderView>>>(DataState.Loading)
+
+    private val mutableCollectionsStateFlow =
+        MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>>
-        get() = vaultDataMutableStateFlow.asStateFlow()
+        get() = mutableVaultDataStateFlow.asStateFlow()
 
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
@@ -100,19 +108,10 @@ class VaultRepositoryImpl(
         get() = mutableCollectionsStateFlow.asStateFlow()
 
     override val vaultStateFlow: StateFlow<VaultState>
-        get() = vaultMutableStateFlow.asStateFlow()
+        get() = mutableVaultStateStateFlow.asStateFlow()
 
     override val sendDataStateFlow: StateFlow<DataState<SendData>>
-        get() = sendDataMutableStateFlow.asStateFlow()
-
-    private val mutableCiphersStateFlow =
-        MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
-
-    private val mutableFoldersStateFlow =
-        MutableStateFlow<DataState<List<FolderView>>>(DataState.Loading)
-
-    private val mutableCollectionsStateFlow =
-        MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
+        get() = mutableSendDataStateFlow.asStateFlow()
 
     init {
         // Setup ciphers MutableStateFlow
@@ -139,8 +138,8 @@ class VaultRepositoryImpl(
         mutableCiphersStateFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }
         mutableCollectionsStateFlow.update { DataState.Loading }
-        vaultDataMutableStateFlow.update { DataState.Loading }
-        sendDataMutableStateFlow.update { DataState.Loading }
+        mutableVaultDataStateFlow.update { DataState.Loading }
+        mutableSendDataStateFlow.update { DataState.Loading }
     }
 
     override fun deleteVaultData(userId: String) {
@@ -155,8 +154,8 @@ class VaultRepositoryImpl(
         mutableCiphersStateFlow.updateToPendingOrLoading()
         mutableFoldersStateFlow.updateToPendingOrLoading()
         mutableCollectionsStateFlow.updateToPendingOrLoading()
-        vaultDataMutableStateFlow.updateToPendingOrLoading()
-        sendDataMutableStateFlow.updateToPendingOrLoading()
+        mutableVaultDataStateFlow.updateToPendingOrLoading()
+        mutableSendDataStateFlow.updateToPendingOrLoading()
         syncJob = scope.launch {
             syncService
                 .sync()
@@ -193,12 +192,12 @@ class VaultRepositoryImpl(
                                 data = currentState.data,
                             )
                         }
-                        vaultDataMutableStateFlow.update { currentState ->
+                        mutableVaultDataStateFlow.update { currentState ->
                             throwable.toNetworkOrErrorState(
                                 data = currentState.data,
                             )
                         }
-                        sendDataMutableStateFlow.update { currentState ->
+                        mutableSendDataStateFlow.update { currentState ->
                             throwable.toNetworkOrErrorState(
                                 data = currentState.data,
                             )
@@ -373,7 +372,7 @@ class VaultRepositoryImpl(
     // TODO: This is temporary. Eventually this needs to be based on the presence of various
     //  user keys but this will likely require SDK updates to support this (BIT-1190).
     private fun setVaultToUnlocked(userId: String) {
-        vaultMutableStateFlow.update {
+        mutableVaultStateStateFlow.update {
             it.copy(
                 unlockedVaultUserIds = it.unlockedVaultUserIds + userId,
             )
@@ -383,7 +382,7 @@ class VaultRepositoryImpl(
     // TODO: This is temporary. Eventually this needs to be based on the presence of various
     //  user keys but this will likely require SDK updates to support this (BIT-1190).
     private fun setVaultToLocked(userId: String) {
-        vaultMutableStateFlow.update {
+        mutableVaultStateStateFlow.update {
             it.copy(
                 unlockedVaultUserIds = it.unlockedVaultUserIds - userId,
             )
@@ -448,7 +447,7 @@ class VaultRepositoryImpl(
                 onSuccess = { DataState.Loaded(data = SendData(sendViewList = it)) },
                 onFailure = { DataState.Error(error = it) },
             )
-        sendDataMutableStateFlow.update { newState }
+        mutableSendDataStateFlow.update { newState }
     }
 
     private suspend fun decryptSyncResponseAndUpdateVaultDataState(
@@ -499,7 +498,7 @@ class VaultRepositoryImpl(
                 onSuccess = { DataState.Loaded(data = it) },
                 onFailure = { DataState.Error(error = it) },
             )
-        vaultDataMutableStateFlow.update { newState }
+        mutableVaultDataStateFlow.update { newState }
         deferred.await()
     }
 
