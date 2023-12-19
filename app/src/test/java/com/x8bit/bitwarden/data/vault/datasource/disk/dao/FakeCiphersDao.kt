@@ -20,10 +20,12 @@ class FakeCiphersDao : CiphersDao {
         ciphersFlow.tryEmit(emptyList())
     }
 
-    override suspend fun deleteAllCiphers(userId: String) {
+    override suspend fun deleteAllCiphers(userId: String): Int {
         deleteCiphersCalled = true
+        val count = storedCiphers.count { it.userId == userId }
         storedCiphers.removeAll { it.userId == userId }
         ciphersFlow.tryEmit(storedCiphers.toList())
+        return count
     }
 
     override fun getAllCiphers(userId: String): Flow<List<CipherEntity>> =
@@ -34,9 +36,10 @@ class FakeCiphersDao : CiphersDao {
         ciphersFlow.tryEmit(ciphers.toList())
     }
 
-    override suspend fun replaceAllCiphers(userId: String, ciphers: List<CipherEntity>) {
-        storedCiphers.removeAll { it.userId == userId }
+    override suspend fun replaceAllCiphers(userId: String, ciphers: List<CipherEntity>): Boolean {
+        val removed = storedCiphers.removeAll { it.userId == userId }
         storedCiphers.addAll(ciphers)
         ciphersFlow.tryEmit(ciphers.toList())
+        return removed || ciphers.isNotEmpty()
     }
 }

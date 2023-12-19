@@ -21,10 +21,12 @@ class FakeCollectionsDao : CollectionsDao {
         collectionsFlow.tryEmit(emptyList())
     }
 
-    override suspend fun deleteAllCollections(userId: String) {
+    override suspend fun deleteAllCollections(userId: String): Int {
         deleteCollectionsCalled = true
+        val count = storedCollections.count { it.userId == userId }
         storedCollections.removeAll { it.userId == userId }
         collectionsFlow.tryEmit(storedCollections.toList())
+        return count
     }
 
     override suspend fun deleteCollection(userId: String, collectionId: String) {
@@ -49,9 +51,10 @@ class FakeCollectionsDao : CollectionsDao {
     override suspend fun replaceAllCollections(
         userId: String,
         collections: List<CollectionEntity>,
-    ) {
-        storedCollections.removeAll { it.userId == userId }
+    ): Boolean {
+        val removed = storedCollections.removeAll { it.userId == userId }
         storedCollections.addAll(collections)
         collectionsFlow.tryEmit(storedCollections.toList())
+        return removed || collections.isNotEmpty()
     }
 }
