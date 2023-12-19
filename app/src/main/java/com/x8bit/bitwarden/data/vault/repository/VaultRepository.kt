@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * Responsible for managing vault data inside the network layer.
  */
+@Suppress("TooManyFunctions")
 interface VaultRepository {
 
     /**
@@ -52,6 +53,11 @@ interface VaultRepository {
      * Clear any previously unlocked, in-memory data (vault, send, etc).
      */
     fun clearUnlockedData()
+
+    /**
+     * Completely remove any persisted data from the vault.
+     */
+    fun deleteVaultData(userId: String)
 
     /**
      * Attempt to sync the vault data.

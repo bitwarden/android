@@ -267,6 +267,9 @@ class AuthRepositoryImpl constructor(
             authDiskSource.userState = null
         }
 
+        // Delete all the vault data
+        vaultRepository.deleteVaultData(userId)
+
         // Lock the vault for the logged out user
         vaultRepository.lockVaultIfNecessary(userId)
 
