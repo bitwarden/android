@@ -31,7 +31,6 @@ import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
-import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -79,7 +78,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.CloseClick,
+                VaultAddItemAction.Common.CloseClick,
             )
         }
     }
@@ -92,7 +91,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.SaveClick,
+                VaultAddItemAction.Common.SaveClick,
             )
         }
     }
@@ -108,7 +107,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.DismissDialog,
+                VaultAddItemAction.Common.DismissDialog,
             )
         }
     }
@@ -139,7 +138,12 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText(message).assertIsNotDisplayed()
 
         mutableStateFlow.update {
-            it.copy(viewState = VaultAddItemState.ViewState.Content.Login())
+            it.copy(
+                viewState = VaultAddItemState.ViewState.Content(
+                    common = VaultAddItemState.ViewState.Content.Common(),
+                    type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+                ),
+            )
         }
         composeTestRule.onNodeWithText(message).assertIsNotDisplayed()
 
@@ -162,7 +166,12 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(viewState = VaultAddItemState.ViewState.Content.Login())
+            it.copy(
+                viewState = VaultAddItemState.ViewState.Content(
+                    common = VaultAddItemState.ViewState.Content.Common(),
+                    type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+                ),
+            )
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
@@ -183,7 +192,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.TypeOptionSelect(VaultAddItemState.ItemTypeOption.LOGIN),
+                VaultAddItemAction.Common.TypeOptionSelect(VaultAddItemState.ItemTypeOption.LOGIN),
             )
         }
     }
@@ -194,39 +203,16 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
             .assertIsDisplayed()
 
-        mutableStateFlow.update { it.copy(viewState = VaultAddItemState.ViewState.Content.Card()) }
+        mutableStateFlow.update { it.copy(
+            viewState = VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(),
+                type = VaultAddItemState.ViewState.Content.ItemType.Card,
+            ),
+        ) }
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Card")
             .assertIsDisplayed()
-    }
-
-    @Test
-    fun `in ItemType_Login state changing Name text field should trigger NameTextChange`() {
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
-            .performTextInput(text = "TestName")
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.NameTextChange(name = "TestName"),
-            )
-        }
-    }
-
-    @Test
-    fun `in ItemType_Login the name control should display the text provided by the state`() {
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
-            .assertTextContains("")
-
-        mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(name = "NewName") }
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
-            .assertTextContains("NewName")
     }
 
     @Test
@@ -399,191 +385,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
     }
 
-    @Test
-    fun `in ItemType_Login state clicking a Folder Option should send FolderChange action`() {
-        // Opens the menu
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "Folder 1")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.FolderChange("Folder 1".asText()),
-            )
-        }
-    }
-
-    @Test
-    fun `in ItemType_Login the folder control should display the text provided by the state`() {
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
-            .assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(folderName = "Folder 2".asText()) }
-        }
-
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Folder, Folder 2")
-            .assertIsDisplayed()
-    }
-
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state, toggling the favorite toggle should send ToggleFavorite action`() {
-        composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.ToggleFavorite(
-                    isFavorite = true,
-                ),
-            )
-        }
-    }
-
-    @Test
-    fun `in ItemType_Login the favorite toggle should be enabled or disabled according to state`() {
-        composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
-            .assertIsOff()
-
-        mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(favorite = true) }
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
-            .assertIsOn()
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state, toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
-        composeTestRule
-            .onNodeWithTextAfterScroll("Master password re-prompt")
-            .performTouchInput {
-                click(position = Offset(x = 1f, y = center.y))
-            }
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.ToggleMasterPasswordReprompt(
-                    isMasterPasswordReprompt = true,
-                ),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login the master password re-prompt toggle should be enabled or disabled according to state`() {
-        composeTestRule
-            .onNodeWithTextAfterScroll("Master password re-prompt")
-            .assertIsOff()
-
-        mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(masterPasswordReprompt = true) }
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll("Master password re-prompt")
-            .assertIsOn()
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state, toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.TooltipClick,
-            )
-        }
-    }
-
-    @Test
-    fun `in ItemType_Login state changing Notes text field should trigger NotesTextChange`() {
-        composeTestRule
-            .onAllNodesWithTextAfterScroll("Notes")
-            .filterToOne(hasSetTextAction())
-            .performTextInput("TestNotes")
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.NotesTextChange("TestNotes"),
-            )
-        }
-    }
-
-    @Test
-    fun `in ItemType_Login the Notes control should display the text provided by the state`() {
-        composeTestRule
-            .onAllNodesWithTextAfterScroll("Notes")
-            .filterToOne(hasSetTextAction())
-            .performTextInput("")
-
-        mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(notes = "NewNote") }
-        }
-
-        composeTestRule
-            .onAllNodesWithTextAfterScroll("Notes")
-            .filterToOne(hasSetTextAction())
-            .assertTextContains("NewNote")
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Text type`() {
-        mutableStateFlow.value = DEFAULT_STATE_LOGIN
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText(text = "Text")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Name")
-            .performTextInput("TestText")
-
-        composeTestRule
-            .onNodeWithText("Ok")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
-                    customFieldType = CustomFieldType.TEXT,
-                    name = "TestText",
-                ),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Linked type`() {
+    fun `clicking New Custom Field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
         composeTestRule
@@ -609,7 +413,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
+                VaultAddItemAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.LINKED,
                     name = "TestLinked",
                 ),
@@ -617,134 +421,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Boolean type`() {
-        mutableStateFlow.value = DEFAULT_STATE_LOGIN
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText(text = "Boolean")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Name")
-            .performTextInput("TestBoolean")
-
-        composeTestRule
-            .onNodeWithText("Ok")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
-                    customFieldType = CustomFieldType.BOOLEAN,
-                    name = "TestBoolean",
-                ),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state clicking New Custom Field button should allow creation of Hidden type`() {
-        mutableStateFlow.value = DEFAULT_STATE_LOGIN
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText(text = "Hidden")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Name")
-            .performTextInput("TestHidden")
-
-        composeTestRule
-            .onNodeWithText("Ok")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick(
-                    customFieldType = CustomFieldType.HIDDEN,
-                    name = "TestHidden",
-                ),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state clicking and changing the custom text field will send a CustomFieldValueChange event`() {
-        mutableStateFlow.value = DEFAULT_STATE_LOGIN_CUSTOM_FIELDS
-
-        composeTestRule
-            .onNodeWithTextAfterScroll("TestText")
-            .performTextClearance()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange(
-                    VaultAddItemState.Custom.TextField("Test ID", "TestText", ""),
-                ),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
-        mutableStateFlow.value = DEFAULT_STATE_LOGIN_CUSTOM_FIELDS
-
-        composeTestRule
-            .onNodeWithTextAfterScroll("TestHidden")
-            .performTextClearance()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange(
-                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", ""),
-                ),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in ItemType_Login state clicking and changing the custom boolean field will send a CustomFieldValueChange event`() {
-        mutableStateFlow.value = DEFAULT_STATE_LOGIN_CUSTOM_FIELDS
-
-        composeTestRule
-            .onNodeWithTextAfterScroll("TestBoolean")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange(
-                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", true),
-                ),
-            )
-        }
-    }
-
-    @Test
-    fun `in ItemType_Login state clicking a Ownership option should send OwnershipChange action`() {
+    fun `clicking a Ownership option should send OwnershipChange action`() {
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
@@ -761,13 +439,13 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.OwnershipChange("a@b.com"),
+                VaultAddItemAction.Common.OwnershipChange("a@b.com"),
             )
         }
     }
 
     @Test
-    fun `in ItemType_Login the Ownership control should display the text provided by the state`() {
+    fun `the Ownership control should display the text provided by the state`() {
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
                 label = "Who owns this item?, placeholder@email.com",
@@ -775,7 +453,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(ownership = "Owner 2") }
+            updateCommonContent(currentState) { copy(ownership = "Owner 2") }
         }
 
         composeTestRule
@@ -784,7 +462,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in ItemType_SecureNotes state changing Name text field should trigger NameTextChange`() {
+    fun `changing Name text field should trigger NameTextChange`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -793,13 +471,13 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.NameTextChange(name = "TestName"),
+                VaultAddItemAction.Common.NameTextChange(name = "TestName"),
             )
         }
     }
 
     @Test
-    fun `in ItemType_SecureNotes the name control should display the text provided by the state`() {
+    fun `the name control should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -807,7 +485,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
-            updateSecureNotesType(currentState) { copy(name = "NewName") }
+            updateCommonContent(currentState) { copy(name = "NewName") }
         }
 
         composeTestRule
@@ -816,7 +494,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in ItemType_SecureNotes state clicking a Folder Option should send FolderChange action`() {
+    fun `clicking a Folder Option should send FolderChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         // Opens the menu
@@ -833,14 +511,14 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.FolderChange("Folder 1".asText()),
+                VaultAddItemAction.Common.FolderChange("Folder 1".asText()),
             )
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes the folder control should display the text provided by the state`() {
+    fun `the folder control should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -848,7 +526,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
-            updateSecureNotesType(currentState) { copy(folderName = "Folder 2".asText()) }
+            updateCommonContent(currentState) { copy(folderName = "Folder 2".asText()) }
         }
 
         composeTestRule
@@ -858,7 +536,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state, toggling the favorite toggle should send ToggleFavorite action`() {
+    fun `toggling the favorite toggle should send ToggleFavorite action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -867,16 +545,15 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite(
+                VaultAddItemAction.Common.ToggleFavorite(
                     isFavorite = true,
                 ),
             )
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes the favorite toggle should be enabled or disabled according to state`() {
+    fun `the favorite toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -884,7 +561,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsOff()
 
         mutableStateFlow.update { currentState ->
-            updateSecureNotesType(currentState) { copy(favorite = true) }
+            updateCommonContent(currentState) { copy(favorite = true) }
         }
 
         composeTestRule
@@ -894,7 +571,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state, toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
+    fun `toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -905,7 +582,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt(
+                VaultAddItemAction.Common.ToggleMasterPasswordReprompt(
                     isMasterPasswordReprompt = true,
                 ),
             )
@@ -914,7 +591,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes the master password re-prompt toggle should be enabled or disabled according to state`() {
+    fun `the master password re-prompt toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -922,7 +599,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsOff()
 
         mutableStateFlow.update { currentState ->
-            updateSecureNotesType(currentState) { copy(masterPasswordReprompt = true) }
+            updateCommonContent(currentState) { copy(masterPasswordReprompt = true) }
         }
 
         composeTestRule
@@ -930,9 +607,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsOn()
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state, toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
+    fun `toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -941,13 +617,13 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.TooltipClick,
+                VaultAddItemAction.Common.TooltipClick,
             )
         }
     }
 
     @Test
-    fun `in ItemType_SecureNotes state changing Notes text field should trigger NotesTextChange`() {
+    fun `changing Notes text field should trigger NotesTextChange`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -957,14 +633,13 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange("TestNotes"),
+                VaultAddItemAction.Common.NotesTextChange("TestNotes"),
             )
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes the Notes control should display the text provided by the state`() {
+    fun `the Notes control should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -973,7 +648,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
-            updateSecureNotesType(currentState) { copy(notes = "NewNote") }
+            updateCommonContent(currentState) { copy(notes = "NewNote") }
         }
 
         composeTestRule
@@ -984,7 +659,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking a Ownership option should send OwnershipChange action`() {
+    fun `Ownership option should send OwnershipChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         // Opens the menu
@@ -1001,7 +676,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange("a@b.com"),
+                VaultAddItemAction.Common.OwnershipChange("a@b.com"),
             )
         }
     }
@@ -1016,7 +691,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
-            updateSecureNotesType(currentState) { copy(ownership = "Owner 2") }
+            updateCommonContent(currentState) { copy(ownership = "Owner 2") }
         }
 
         composeTestRule
@@ -1026,7 +701,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking New Custom Field button should allow creation of Text type`() {
+    fun `clicking New Custom Field button should allow creation of Text type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -1052,7 +727,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                VaultAddItemAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.TEXT,
                     name = "TestText",
                 ),
@@ -1062,7 +737,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking New Custom Field button should not display linked type`() {
+    fun `clicking New Custom Field button should not display linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -1081,7 +756,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking New Custom Field button should allow creation of Boolean type`() {
+    fun `clicking New Custom Field button should allow creation of Boolean type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -1107,7 +782,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                VaultAddItemAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.BOOLEAN,
                     name = "TestBoolean",
                 ),
@@ -1115,9 +790,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking New Custom Field button should allow creation of Hidden type`() {
+    fun `clicking New Custom Field button should allow creation of Hidden type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
@@ -1144,7 +818,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                VaultAddItemAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.HIDDEN,
                     name = "TestHidden",
                 ),
@@ -1154,7 +828,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking and changing the custom text field will send a CustomFieldValueChange event`() {
+    fun `clicking and changing the custom text field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
         composeTestRule
@@ -1163,7 +837,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                VaultAddItemAction.Common.CustomFieldValueChange(
                     VaultAddItemState.Custom.TextField("Test ID", "TestText", ""),
                 ),
             )
@@ -1172,7 +846,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
+    fun `clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
         composeTestRule
@@ -1181,7 +855,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                VaultAddItemAction.Common.CustomFieldValueChange(
                     VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", ""),
                 ),
             )
@@ -1190,7 +864,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_SecureNotes state clicking and changing the custom boolean field will send a CustomFieldValueChange event`() {
+    fun `clicking and changing the custom boolean field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
         composeTestRule
@@ -1199,7 +873,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                VaultAddItemAction.Common.CustomFieldValueChange(
                     VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", true),
                 ),
             )
@@ -1211,22 +885,34 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     private fun updateLoginType(
         currentState: VaultAddItemState,
-        transform: VaultAddItemState.ViewState.Content.Login.() -> VaultAddItemState.ViewState.Content.Login,
+        transform: VaultAddItemState.ViewState.Content.ItemType.Login.() ->
+    VaultAddItemState.ViewState.Content.ItemType.Login,
     ): VaultAddItemState {
         val updatedType = when (val viewState = currentState.viewState) {
-            is VaultAddItemState.ViewState.Content.Login -> viewState.transform()
+            is VaultAddItemState.ViewState.Content -> {
+                when (val type = viewState.type) {
+                    is VaultAddItemState.ViewState.Content.ItemType.Login -> {
+                        viewState.copy(
+                            type = type.transform(),
+                        )
+                    }
+                    else -> viewState
+                }
+            }
             else -> viewState
         }
         return currentState.copy(viewState = updatedType)
     }
 
     @Suppress("MaxLineLength")
-    private fun updateSecureNotesType(
+    private fun updateCommonContent(
         currentState: VaultAddItemState,
-        transform: VaultAddItemState.ViewState.Content.SecureNotes.() -> VaultAddItemState.ViewState.Content.SecureNotes,
+        transform: VaultAddItemState.ViewState.Content.Common.()
+        -> VaultAddItemState.ViewState.Content.Common,
     ): VaultAddItemState {
         val updatedType = when (val viewState = currentState.viewState) {
-            is VaultAddItemState.ViewState.Content.SecureNotes -> viewState.transform()
+            is VaultAddItemState.ViewState.Content ->
+                viewState.copy(common = viewState.common.transform())
             else -> viewState
         }
         return currentState.copy(viewState = updatedType)
@@ -1235,42 +921,35 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     //endregion Helper functions
 
     companion object {
-        private val DEFAULT_STATE_LOGIN_CUSTOM_FIELDS = VaultAddItemState(
-            viewState = VaultAddItemState.ViewState.Content.Login(
-                customFieldData = listOf(
-                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", false),
-                    VaultAddItemState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
-                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", "TestHiddenVal"),
-                    VaultAddItemState.Custom.LinkedField(
-                        "LinkedID",
-                        "TestLinked",
-                        VaultLinkedFieldType.USERNAME,
-                    ),
-                ),
-            ),
-            dialog = null,
-            vaultAddEditType = VaultAddEditType.AddItem,
-        )
-
         private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddItemState(
-            viewState = VaultAddItemState.ViewState.Content.Login(),
+            viewState = VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(),
+                type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+            ),
             dialog = VaultAddItemState.DialogState.Error("test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            viewState = VaultAddItemState.ViewState.Content.Login(),
+            viewState = VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(),
+                type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+            ),
             dialog = null,
         )
 
+        @Suppress("MaxLineLength")
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddItemState(
-            viewState = VaultAddItemState.ViewState.Content.SecureNotes(
-                customFieldData = listOf(
-                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", false),
-                    VaultAddItemState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
-                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", "TestHiddenVal"),
+            viewState = VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", false),
+                        VaultAddItemState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
+                        VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", "TestHiddenVal"),
+                    ),
                 ),
+                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
             ),
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem,
@@ -1278,7 +957,10 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            viewState = VaultAddItemState.ViewState.Content.SecureNotes(),
+            viewState = VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(),
+                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+            ),
             dialog = null,
         )
     }

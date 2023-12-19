@@ -34,16 +34,18 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Suppress("LongMethod")
 fun LazyListScope.addEditLoginItems(
-    state: VaultAddItemState.ViewState.Content.Login,
+    commonState: VaultAddItemState.ViewState.Content.Common,
+    loginState: VaultAddItemState.ViewState.Content.ItemType.Login,
     isAddItemMode: Boolean,
+    commonActionHandler: VaultAddItemCommonTypeHandlers,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.name),
-            value = state.name,
-            onValueChange = loginItemTypeHandlers.onNameTextChange,
+            value = commonState.name,
+            onValueChange = commonActionHandler.onNameTextChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -54,7 +56,7 @@ fun LazyListScope.addEditLoginItems(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextFieldWithActions(
             label = stringResource(id = R.string.username),
-            value = state.username,
+            value = loginState.username,
             onValueChange = loginItemTypeHandlers.onUsernameTextChange,
             actions = {
                 BitwardenIconButtonWithResource(
@@ -73,7 +75,7 @@ fun LazyListScope.addEditLoginItems(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenPasswordFieldWithActions(
             label = stringResource(id = R.string.password),
-            value = state.password,
+            value = loginState.password,
             onValueChange = loginItemTypeHandlers.onPasswordTextChange,
             modifier = Modifier
                 .padding(horizontal = 16.dp),
@@ -131,7 +133,7 @@ fun LazyListScope.addEditLoginItems(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextFieldWithActions(
             label = stringResource(id = R.string.uri),
-            value = state.uri,
+            value = loginState.uri,
             onValueChange = loginItemTypeHandlers.onUriTextChange,
             actions = {
                 BitwardenIconButtonWithResource(
@@ -171,9 +173,9 @@ fun LazyListScope.addEditLoginItems(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.folder),
-            options = state.availableFolders.map { it.invoke() }.toImmutableList(),
-            selectedOption = state.folderName.invoke(),
-            onOptionSelected = loginItemTypeHandlers.onFolderTextChange,
+            options = commonState.availableFolders.map { it.invoke() }.toImmutableList(),
+            selectedOption = commonState.folderName.invoke(),
+            onOptionSelected = commonActionHandler.onFolderTextChange,
             modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
@@ -184,8 +186,8 @@ fun LazyListScope.addEditLoginItems(
             label = stringResource(
                 id = R.string.favorite,
             ),
-            isChecked = state.favorite,
-            onCheckedChange = loginItemTypeHandlers.onToggleFavorite,
+            isChecked = commonState.favorite,
+            onCheckedChange = commonActionHandler.onToggleFavorite,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -196,13 +198,13 @@ fun LazyListScope.addEditLoginItems(
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenSwitchWithActions(
             label = stringResource(id = R.string.password_prompt),
-            isChecked = state.masterPasswordReprompt,
-            onCheckedChange = loginItemTypeHandlers.onToggleMasterPasswordReprompt,
+            isChecked = commonState.masterPasswordReprompt,
+            onCheckedChange = commonActionHandler.onToggleMasterPasswordReprompt,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             actions = {
-                IconButton(onClick = loginItemTypeHandlers.onTooltipClick) {
+                IconButton(onClick = commonActionHandler.onTooltipClick) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_tooltip),
                         tint = MaterialTheme.colorScheme.onSurface,
@@ -230,8 +232,8 @@ fun LazyListScope.addEditLoginItems(
         BitwardenTextField(
             singleLine = false,
             label = stringResource(id = R.string.notes),
-            value = state.notes,
-            onValueChange = loginItemTypeHandlers.onNotesTextChange,
+            value = commonState.notes,
+            onValueChange = commonActionHandler.onNotesTextChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -248,10 +250,10 @@ fun LazyListScope.addEditLoginItems(
         )
     }
 
-    items(state.customFieldData) { customItem ->
+    items(commonState.customFieldData) { customItem ->
         AddEditCustomField(
             customItem,
-            onCustomFieldValueChange = loginItemTypeHandlers.onCustomFieldValueChange,
+            onCustomFieldValueChange = commonActionHandler.onCustomFieldValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -265,7 +267,7 @@ fun LazyListScope.addEditLoginItems(
     item {
         Spacer(modifier = Modifier.height(16.dp))
         AddEditCustomFieldsButton(
-            onFinishNamingClick = loginItemTypeHandlers.onAddNewCustomFieldClick,
+            onFinishNamingClick = commonActionHandler.onAddNewCustomFieldClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -287,9 +289,9 @@ fun LazyListScope.addEditLoginItems(
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenMultiSelectButton(
                 label = stringResource(id = R.string.who_owns_this_item),
-                options = state.availableOwners.toImmutableList(),
-                selectedOption = state.ownership,
-                onOptionSelected = loginItemTypeHandlers.onOwnershipTextChange,
+                options = commonState.availableOwners.toImmutableList(),
+                selectedOption = commonState.ownership,
+                onOptionSelected = commonActionHandler.onOwnershipTextChange,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),

@@ -55,14 +55,14 @@ fun VaultAddItemScreen(
         VaultAddLoginItemTypeHandlers.create(viewModel = viewModel)
     }
 
-    val secureNotesTypeHandlers = remember(viewModel) {
-        VaultAddSecureNotesItemTypeHandlers.create(viewModel = viewModel)
+    val commonTypeHandlers = remember(viewModel) {
+        VaultAddItemCommonTypeHandlers.create(viewModel = viewModel)
     }
 
     VaultAddEditItemDialogs(
         dialogState = state.dialog,
         onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(VaultAddItemAction.DismissDialog) }
+            { viewModel.trySendAction(VaultAddItemAction.Common.DismissDialog) }
         },
     )
 
@@ -77,14 +77,14 @@ fun VaultAddItemScreen(
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultAddItemAction.CloseClick) }
+                    { viewModel.trySendAction(VaultAddItemAction.Common.CloseClick) }
                 },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = R.string.save),
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(VaultAddItemAction.SaveClick) }
+                            { viewModel.trySendAction(VaultAddItemAction.Common.SaveClick) }
                         },
                     )
                 },
@@ -94,13 +94,13 @@ fun VaultAddItemScreen(
         when (val viewState = state.viewState) {
             is VaultAddItemState.ViewState.Content -> {
                 AddEditItemContent(
-                    viewState = viewState,
+                    state = viewState,
                     isAddItemMode = state.isAddItemMode,
                     onTypeOptionClicked = remember(viewModel) {
-                        { viewModel.trySendAction(VaultAddItemAction.TypeOptionSelect(it)) }
+                        { viewModel.trySendAction(VaultAddItemAction.Common.TypeOptionSelect(it)) }
                     },
                     loginItemTypeHandlers = loginItemTypeHandlers,
-                    secureNotesTypeHandlers = secureNotesTypeHandlers,
+                    commonTypeHandlers = commonTypeHandlers,
                     modifier = Modifier
                         .imePadding()
                         .padding(innerPadding)
