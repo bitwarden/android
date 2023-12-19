@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -17,8 +18,12 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
@@ -39,14 +44,20 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -60,22 +71,185 @@ class VaultRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val syncService: SyncService = mockk()
     private val ciphersService: CiphersService = mockk()
+    private val vaultDiskSource: VaultDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val vaultRepository = VaultRepositoryImpl(
         syncService = syncService,
         ciphersService = ciphersService,
+        vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
         dispatcherManager = dispatcherManager,
     )
 
+    @Test
+    fun `ciphersStateFlow should emit decrypted list of ciphers when decryptCipherList succeeds`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockCipherList = listOf(createMockCipher(number = 1))
+            val mockEncryptedCipherList = mockCipherList.toEncryptedSdkCipherList()
+            val mockCipherViewList = listOf(createMockCipherView(number = 1))
+            val mutableCiphersStateFlow = MutableSharedFlow<List<SyncResponseJson.Cipher>>(
+                replay = 1,
+                extraBufferCapacity = Int.MAX_VALUE,
+            )
+            every {
+                vaultDiskSource.getCiphers(userId = MOCK_USER_STATE.activeUserId)
+            } returns mutableCiphersStateFlow
+            coEvery {
+                vaultSdkSource.decryptCipherList(mockEncryptedCipherList)
+            } returns mockCipherViewList.asSuccess()
+
+            vaultRepository
+                .ciphersStateFlow
+                .test {
+                    assertEquals(DataState.Loading, awaitItem())
+                    mutableCiphersStateFlow.tryEmit(mockCipherList)
+                    assertEquals(DataState.Loaded(mockCipherViewList), awaitItem())
+                }
+        }
+
+    @Test
+    fun `ciphersStateFlow should emit an error when decryptCipherList fails`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val throwable = Throwable("Fail")
+        val mockCipherList = listOf(createMockCipher(number = 1))
+        val mockEncryptedCipherList = mockCipherList.toEncryptedSdkCipherList()
+        val mutableCiphersStateFlow = MutableSharedFlow<List<SyncResponseJson.Cipher>>(
+            replay = 1,
+            extraBufferCapacity = Int.MAX_VALUE,
+        )
+        every {
+            vaultDiskSource.getCiphers(userId = MOCK_USER_STATE.activeUserId)
+        } returns mutableCiphersStateFlow
+        coEvery {
+            vaultSdkSource.decryptCipherList(mockEncryptedCipherList)
+        } returns throwable.asFailure()
+
+        vaultRepository
+            .ciphersStateFlow
+            .test {
+                assertEquals(DataState.Loading, awaitItem())
+                mutableCiphersStateFlow.tryEmit(mockCipherList)
+                assertEquals(DataState.Error<List<CipherView>>(throwable), awaitItem())
+            }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `collectionsStateFlow should emit decrypted list of collections when decryptCollectionList succeeds`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockCollectionList = listOf(createMockCollection(number = 1))
+            val mockEncryptedCollectionList = mockCollectionList.toEncryptedSdkCollectionList()
+            val mockCollectionViewList = listOf(createMockCollectionView(number = 1))
+            val mutableCollectionsStateFlow = MutableSharedFlow<List<SyncResponseJson.Collection>>(
+                replay = 1,
+                extraBufferCapacity = Int.MAX_VALUE,
+            )
+            every {
+                vaultDiskSource.getCollections(userId = MOCK_USER_STATE.activeUserId)
+            } returns mutableCollectionsStateFlow
+            coEvery {
+                vaultSdkSource.decryptCollectionList(mockEncryptedCollectionList)
+            } returns mockCollectionViewList.asSuccess()
+
+            vaultRepository
+                .collectionsStateFlow
+                .test {
+                    assertEquals(DataState.Loading, awaitItem())
+                    mutableCollectionsStateFlow.tryEmit(mockCollectionList)
+                    assertEquals(DataState.Loaded(mockCollectionViewList), awaitItem())
+                }
+        }
+
+    @Test
+    fun `collectionsStateFlow should emit an error when decryptCollectionList fails`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val throwable = Throwable("Fail")
+        val mockCollectionList = listOf(createMockCollection(number = 1))
+        val mockEncryptedCollectionList = mockCollectionList.toEncryptedSdkCollectionList()
+        val mutableCollectionStateFlow = MutableSharedFlow<List<SyncResponseJson.Collection>>(
+            replay = 1,
+            extraBufferCapacity = Int.MAX_VALUE,
+        )
+        every {
+            vaultDiskSource.getCollections(userId = MOCK_USER_STATE.activeUserId)
+        } returns mutableCollectionStateFlow
+        coEvery {
+            vaultSdkSource.decryptCollectionList(mockEncryptedCollectionList)
+        } returns throwable.asFailure()
+
+        vaultRepository
+            .collectionsStateFlow
+            .test {
+                assertEquals(DataState.Loading, awaitItem())
+                mutableCollectionStateFlow.tryEmit(mockCollectionList)
+                assertEquals(DataState.Error<List<CollectionView>>(throwable), awaitItem())
+            }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `foldersStateFlow should emit decrypted list of folders when decryptFolderList succeeds`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockFolderList = listOf(createMockFolder(number = 1))
+            val mockEncryptedFolderList = mockFolderList.toEncryptedSdkFolderList()
+            val mockFolderViewList = listOf(createMockFolderView(number = 1))
+            val mutableFoldersStateFlow = MutableSharedFlow<List<SyncResponseJson.Folder>>(
+                replay = 1,
+                extraBufferCapacity = Int.MAX_VALUE,
+            )
+            every {
+                vaultDiskSource.getFolders(userId = MOCK_USER_STATE.activeUserId)
+            } returns mutableFoldersStateFlow
+            coEvery {
+                vaultSdkSource.decryptFolderList(mockEncryptedFolderList)
+            } returns mockFolderViewList.asSuccess()
+
+            vaultRepository
+                .foldersStateFlow
+                .test {
+                    assertEquals(DataState.Loading, awaitItem())
+                    mutableFoldersStateFlow.tryEmit(mockFolderList)
+                    assertEquals(DataState.Loaded(mockFolderViewList), awaitItem())
+                }
+        }
+
+    @Test
+    fun `foldersStateFlow should emit an error when decryptFolderList fails`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val throwable = Throwable("Fail")
+        val mockFolderList = listOf(createMockFolder(number = 1))
+        val mockEncryptedFolderList = mockFolderList.toEncryptedSdkFolderList()
+        val mutableFoldersStateFlow = MutableSharedFlow<List<SyncResponseJson.Folder>>(
+            replay = 1,
+            extraBufferCapacity = Int.MAX_VALUE,
+        )
+        every {
+            vaultDiskSource.getFolders(userId = MOCK_USER_STATE.activeUserId)
+        } returns mutableFoldersStateFlow
+        coEvery {
+            vaultSdkSource.decryptFolderList(mockEncryptedFolderList)
+        } returns throwable.asFailure()
+
+        vaultRepository
+            .foldersStateFlow
+            .test {
+                assertEquals(DataState.Loading, awaitItem())
+                mutableFoldersStateFlow.tryEmit(mockFolderList)
+                assertEquals(DataState.Error<List<FolderView>>(throwable), awaitItem())
+            }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `sync with syncService Success should unlock the vault for orgs if necessary and update AuthDiskSource and DataStateFlows`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -83,6 +257,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -155,9 +335,9 @@ class VaultRepositoryTest {
     @Test
     fun `sync with data should update vaultDataStateFlow to Pending before service sync`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -165,6 +345,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -177,7 +363,6 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             vaultRepository.vaultDataStateFlow.test {
                 assertEquals(
@@ -222,9 +407,8 @@ class VaultRepositoryTest {
     @Test
     fun `sync with data should update sendDataStateFlow to Pending before service sync`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -232,6 +416,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -283,10 +473,10 @@ class VaultRepositoryTest {
     @Test
     fun `sync with decryptCipherList Failure should update vaultDataStateFlow with Error`() =
         runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val mockException = IllegalStateException()
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -294,6 +484,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns mockException.asFailure()
@@ -320,9 +516,9 @@ class VaultRepositoryTest {
     fun `sync with decryptFolderList Failure should update vaultDataStateFlow with Error`() =
         runTest {
             val mockException = IllegalStateException()
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -330,6 +526,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -356,9 +558,9 @@ class VaultRepositoryTest {
     fun `sync with decryptCollectionList Failure should update vaultDataStateFlow with Error`() =
         runTest {
             val mockException = IllegalStateException()
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -366,6 +568,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -378,7 +586,6 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             vaultRepository.sync()
 
@@ -392,9 +599,9 @@ class VaultRepositoryTest {
     fun `sync with decryptSendList Failure should update sendDataStateFlow with Error`() =
         runTest {
             val mockException = IllegalStateException()
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -402,6 +609,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -427,6 +640,7 @@ class VaultRepositoryTest {
     @Test
     fun `sync with syncService Failure should update vault and send DataStateFlow with an Error`() =
         runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val mockException = IllegalStateException(
                 "sad",
             )
@@ -453,34 +667,32 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `sync with NoNetwork should update vault and send DataStateFlow to NoNetwork`() =
-        runTest {
-            coEvery {
-                syncService.sync()
-            } returns UnknownHostException().asFailure()
+    fun `sync with NoNetwork should update vault and send DataStateFlow to NoNetwork`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } returns UnknownHostException().asFailure()
 
-            vaultRepository.sync()
+        vaultRepository.sync()
 
-            assertEquals(
-                DataState.NoNetwork(
-                    data = null,
-                ),
-                vaultRepository.vaultDataStateFlow.value,
-            )
-            assertEquals(
-                DataState.NoNetwork(
-                    data = null,
-                ),
-                vaultRepository.sendDataStateFlow.value,
-            )
-        }
+        assertEquals(
+            DataState.NoNetwork(
+                data = null,
+            ),
+            vaultRepository.vaultDataStateFlow.value,
+        )
+        assertEquals(
+            DataState.NoNetwork(
+                data = null,
+            ),
+            vaultRepository.sendDataStateFlow.value,
+        )
+    }
 
     @Test
     fun `sync with NoNetwork data should update vaultDataStateFlow to NoNetwork with data`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -488,6 +700,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -500,7 +718,6 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             vaultRepository.vaultDataStateFlow.test {
                 assertEquals(
@@ -548,10 +765,12 @@ class VaultRepositoryTest {
     @Test
     fun `sync with NoNetwork data should update sendDataStateFlow to NoNetwork with data`() =
         runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockSyncResponse = createMockSyncResponse(number = 1)
             coEvery {
                 syncService.sync()
             } returnsMany listOf(
-                Result.success(createMockSyncResponse(number = 1)),
+                mockSyncResponse.asSuccess(),
                 UnknownHostException().asFailure(),
             )
             coEvery {
@@ -561,6 +780,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -573,7 +798,6 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptSendList(listOf(createMockSdkSend(number = 1)))
             } returns listOf(createMockSendView(number = 1)).asSuccess()
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
 
             vaultRepository.sendDataStateFlow.test {
                 assertEquals(
@@ -661,9 +885,8 @@ class VaultRepositoryTest {
     @Test
     fun `unlockVaultAndSyncForCurrentUser with unlockVault Success should sync and return Success`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -671,6 +894,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -736,9 +965,8 @@ class VaultRepositoryTest {
     @Test
     fun `sync should be able to be called after unlockVaultAndSyncForCurrentUser is canceled`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -746,6 +974,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -1577,9 +1811,9 @@ class VaultRepositoryTest {
     @Test
     fun `clearUnlockedData should update the vaultDataStateFlow to Loading`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -1587,6 +1821,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -1630,9 +1870,8 @@ class VaultRepositoryTest {
     @Test
     fun `clearUnlockedData should update the sendDataStateFlow to Loading`() =
         runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -1640,6 +1879,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(number = 1)).asSuccess()
@@ -1683,9 +1928,9 @@ class VaultRepositoryTest {
         val itemId = 1234
         val itemIdString = "mockId-$itemId"
         val item = createMockCipherView(itemId)
-        coEvery {
-            syncService.sync()
-        } returns Result.success(createMockSyncResponse(itemId))
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val mockSyncResponse = createMockSyncResponse(number = itemId)
+        coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
         coEvery {
             vaultSdkSource.initializeOrganizationCrypto(
                 request = InitOrgCryptoRequest(
@@ -1693,6 +1938,12 @@ class VaultRepositoryTest {
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultDiskSource.replaceVaultData(
+                userId = MOCK_USER_STATE.activeUserId,
+                vault = mockSyncResponse,
+            )
+        } just runs
         coEvery {
             vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(itemId)))
         } returns listOf(item).asSuccess()
@@ -1728,6 +1979,7 @@ class VaultRepositoryTest {
         val folderId = 1234
         val folderIdString = "mockId-$folderId"
         val throwable = Throwable("Fail")
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery {
             syncService.sync()
         } returns throwable.asFailure()
@@ -1748,6 +2000,7 @@ class VaultRepositoryTest {
         runTest {
             val itemId = 1234
             val itemIdString = "mockId-$itemId"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 syncService.sync()
             } returns UnknownHostException().asFailure()
@@ -1766,10 +2019,10 @@ class VaultRepositoryTest {
     @Test
     fun `getVaultItemStateFlow should update to Loaded with null when a item cannot be found`() =
         runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val itemIdString = "mockId-1234"
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(1))
+            val mockSyncResponse = createMockSyncResponse(1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -1777,6 +2030,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(1)).asSuccess()
@@ -1806,12 +2065,12 @@ class VaultRepositoryTest {
 
     @Test
     fun `getVaultFolderStateFlow should receive updates whenever a sync is called`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         val folderId = 1234
         val folderIdString = "mockId-$folderId"
         val folder = createMockFolderView(folderId)
-        coEvery {
-            syncService.sync()
-        } returns Result.success(createMockSyncResponse(folderId))
+        val mockSyncResponse = createMockSyncResponse(folderId)
+        coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
         coEvery {
             vaultSdkSource.initializeOrganizationCrypto(
                 request = InitOrgCryptoRequest(
@@ -1819,6 +2078,12 @@ class VaultRepositoryTest {
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultDiskSource.replaceVaultData(
+                userId = MOCK_USER_STATE.activeUserId,
+                vault = mockSyncResponse,
+            )
+        } just runs
         coEvery {
             vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(folderId)))
         } returns listOf(createMockCipherView(folderId)).asSuccess()
@@ -1854,6 +2119,7 @@ class VaultRepositoryTest {
         runTest {
             val folderId = 1234
             val folderIdString = "mockId-$folderId"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 syncService.sync()
             } returns UnknownHostException().asFailure()
@@ -1874,6 +2140,7 @@ class VaultRepositoryTest {
         val folderId = 1234
         val folderIdString = "mockId-$folderId"
         val throwable = Throwable("Fail")
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery {
             syncService.sync()
         } returns throwable.asFailure()
@@ -1892,10 +2159,10 @@ class VaultRepositoryTest {
     @Test
     fun `getVaultFolderStateFlow should update to Loaded with null when a item cannot be found`() =
         runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val folderIdString = "mockId-1234"
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(1))
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     request = InitOrgCryptoRequest(
@@ -1903,6 +2170,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptCipherList(listOf(createMockSdkCipher(1)))
             } returns listOf(createMockCipherView(1)).asSuccess()

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -13,10 +14,12 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionE
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.map
+import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.platform.util.zip
+import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
@@ -36,14 +39,19 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -53,9 +61,10 @@ import kotlinx.coroutines.withContext
  * Default implementation of [VaultRepository].
  */
 @Suppress("TooManyFunctions")
-class VaultRepositoryImpl constructor(
+class VaultRepositoryImpl(
     private val syncService: SyncService,
     private val ciphersService: CiphersService,
+    private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val dispatcherManager: DispatcherManager,
@@ -66,6 +75,8 @@ class VaultRepositoryImpl constructor(
     private var syncJob: Job = Job().apply { complete() }
 
     private var willSyncAfterUnlock = false
+
+    private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val vaultDataMutableStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
@@ -79,19 +90,65 @@ class VaultRepositoryImpl constructor(
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>>
         get() = vaultDataMutableStateFlow.asStateFlow()
 
+    override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
+        get() = mutableCiphersStateFlow.asStateFlow()
+
+    override val foldersStateFlow: StateFlow<DataState<List<FolderView>>>
+        get() = mutableFoldersStateFlow.asStateFlow()
+
+    override val collectionsStateFlow: StateFlow<DataState<List<CollectionView>>>
+        get() = mutableCollectionsStateFlow.asStateFlow()
+
     override val vaultStateFlow: StateFlow<VaultState>
         get() = vaultMutableStateFlow.asStateFlow()
 
     override val sendDataStateFlow: StateFlow<DataState<SendData>>
         get() = sendDataMutableStateFlow.asStateFlow()
 
+    private val mutableCiphersStateFlow =
+        MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
+
+    private val mutableFoldersStateFlow =
+        MutableStateFlow<DataState<List<FolderView>>>(DataState.Loading)
+
+    private val mutableCollectionsStateFlow =
+        MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
+
+    init {
+        // Setup ciphers MutableStateFlow
+        mutableCiphersStateFlow
+            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+                observeVaultDiskCiphers(activeUserId)
+            }
+            .launchIn(scope)
+        // Setup folders MutableStateFlow
+        mutableFoldersStateFlow
+            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+                observeVaultDiskFolders(activeUserId)
+            }
+            .launchIn(scope)
+        // Setup collections MutableStateFlow
+        mutableCollectionsStateFlow
+            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+                observeVaultDiskCollections(activeUserId)
+            }
+            .launchIn(scope)
+    }
+
     override fun clearUnlockedData() {
+        mutableCiphersStateFlow.update { DataState.Loading }
+        mutableFoldersStateFlow.update { DataState.Loading }
+        mutableCollectionsStateFlow.update { DataState.Loading }
         vaultDataMutableStateFlow.update { DataState.Loading }
         sendDataMutableStateFlow.update { DataState.Loading }
     }
 
     override fun sync() {
         if (!syncJob.isCompleted || willSyncAfterUnlock) return
+        val userId = activeUserId ?: return
+        mutableCiphersStateFlow.updateToPendingOrLoading()
+        mutableFoldersStateFlow.updateToPendingOrLoading()
+        mutableCollectionsStateFlow.updateToPendingOrLoading()
         vaultDataMutableStateFlow.updateToPendingOrLoading()
         sendDataMutableStateFlow.updateToPendingOrLoading()
         syncJob = scope.launch {
@@ -108,10 +165,28 @@ class VaultRepositoryImpl constructor(
 
                         unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                         storeKeys(syncResponse = syncResponse)
-                        decryptSyncResponseAndUpdateVaultDataState(syncResponse = syncResponse)
+                        decryptSyncResponseAndUpdateVaultDataState(
+                            userId = userId,
+                            syncResponse = syncResponse,
+                        )
                         decryptSendsAndUpdateSendDataState(sendList = syncResponse.sends)
                     },
                     onFailure = { throwable ->
+                        mutableCiphersStateFlow.update { currentState ->
+                            throwable.toNetworkOrErrorState(
+                                data = currentState.data,
+                            )
+                        }
+                        mutableFoldersStateFlow.update { currentState ->
+                            throwable.toNetworkOrErrorState(
+                                data = currentState.data,
+                            )
+                        }
+                        mutableCollectionsStateFlow.update { currentState ->
+                            throwable.toNetworkOrErrorState(
+                                data = currentState.data,
+                            )
+                        }
                         vaultDataMutableStateFlow.update { currentState ->
                             throwable.toNetworkOrErrorState(
                                 data = currentState.data,
@@ -371,8 +446,13 @@ class VaultRepositoryImpl constructor(
     }
 
     private suspend fun decryptSyncResponseAndUpdateVaultDataState(
+        userId: String,
         syncResponse: SyncResponseJson,
     ) = withContext(dispatcherManager.default) {
+        val deferred = async {
+            vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
+        }
+
         // Allow decryption of various types in parallel.
         val newState = zip(
             {
@@ -414,7 +494,56 @@ class VaultRepositoryImpl constructor(
                 onFailure = { DataState.Error(error = it) },
             )
         vaultDataMutableStateFlow.update { newState }
+        deferred.await()
     }
+
+    private fun observeVaultDiskCiphers(
+        userId: String,
+    ): Flow<DataState<List<CipherView>>> =
+        vaultDiskSource
+            .getCiphers(userId = userId)
+            .onStart { mutableCiphersStateFlow.value = DataState.Loading }
+            .map {
+                vaultSdkSource
+                    .decryptCipherList(cipherList = it.toEncryptedSdkCipherList())
+                    .fold(
+                        onSuccess = { ciphers -> DataState.Loaded(ciphers) },
+                        onFailure = { throwable -> DataState.Error(throwable) },
+                    )
+            }
+            .onEach { mutableCiphersStateFlow.value = it }
+
+    private fun observeVaultDiskFolders(
+        userId: String,
+    ): Flow<DataState<List<FolderView>>> =
+        vaultDiskSource
+            .getFolders(userId = userId)
+            .onStart { mutableFoldersStateFlow.value = DataState.Loading }
+            .map {
+                vaultSdkSource
+                    .decryptFolderList(folderList = it.toEncryptedSdkFolderList())
+                    .fold(
+                        onSuccess = { folders -> DataState.Loaded(folders) },
+                        onFailure = { throwable -> DataState.Error(throwable) },
+                    )
+            }
+            .onEach { mutableFoldersStateFlow.value = it }
+
+    private fun observeVaultDiskCollections(
+        userId: String,
+    ): Flow<DataState<List<CollectionView>>> =
+        vaultDiskSource
+            .getCollections(userId = userId)
+            .onStart { mutableCollectionsStateFlow.value = DataState.Loading }
+            .map {
+                vaultSdkSource
+                    .decryptCollectionList(collectionList = it.toEncryptedSdkCollectionList())
+                    .fold(
+                        onSuccess = { collections -> DataState.Loaded(collections) },
+                        onFailure = { throwable -> DataState.Error(throwable) },
+                    )
+            }
+            .onEach { mutableCollectionsStateFlow.value = it }
 }
 
 private fun <T> Throwable.toNetworkOrErrorState(data: T?): DataState<T> =
