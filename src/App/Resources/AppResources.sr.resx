@@ -2670,7 +2670,7 @@
     <value>Помоћ поновно тражење главне лозинке</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Откључавање можда неће успети због недовољне меморије. Умањите подешавање KDF меморије или подесите биометрију за решење.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Неисправан API кључ</value>
@@ -2749,7 +2749,7 @@
     <value>Пријавите се са уређајем</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>Пријављено на</value>
   </data>
   <data name="Vault" xml:space="preserve">
     <value>Сеф</value>

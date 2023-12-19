@@ -167,7 +167,7 @@ Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimi
     <value>Suojaa holvisi sormenjäljellä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Täytä kirjautumistiedot automaattisesti ja nopeasti selaimessasi sekä muissa sovelluksissa</value>
+    <value>Automaattitäytä kirjautumistiedot ja nopeasti selaimessasi sekä muissa sovelluksissa</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synkronoi ja hallitse holviasi useilla laitteilla
