@@ -21,10 +21,12 @@ class FakeFoldersDao : FoldersDao {
         foldersFlow.tryEmit(emptyList())
     }
 
-    override suspend fun deleteAllFolders(userId: String) {
+    override suspend fun deleteAllFolders(userId: String): Int {
         deleteFoldersCalled = true
+        val count = storedFolders.count { it.userId == userId }
         storedFolders.removeAll { it.userId == userId }
         foldersFlow.tryEmit(storedFolders.toList())
+        return count
     }
 
     override suspend fun deleteFolder(userId: String, folderId: String) {
@@ -46,9 +48,10 @@ class FakeFoldersDao : FoldersDao {
         foldersFlow.tryEmit(storedFolders.toList())
     }
 
-    override suspend fun replaceAllFolders(userId: String, folders: List<FolderEntity>) {
-        storedFolders.removeAll { it.userId == userId }
+    override suspend fun replaceAllFolders(userId: String, folders: List<FolderEntity>): Boolean {
+        val removed = storedFolders.removeAll { it.userId == userId }
         storedFolders.addAll(folders)
         foldersFlow.tryEmit(storedFolders.toList())
+        return removed || folders.isNotEmpty()
     }
 }
