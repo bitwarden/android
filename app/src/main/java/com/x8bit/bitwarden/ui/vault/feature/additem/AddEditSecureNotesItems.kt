@@ -28,16 +28,16 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Suppress("LongMethod")
 fun LazyListScope.addEditSecureNotesItems(
-    state: VaultAddItemState.ViewState.Content.SecureNotes,
+    commonState: VaultAddItemState.ViewState.Content.Common,
     isAddItemMode: Boolean,
-    secureNotesTypeHandlers: VaultAddSecureNotesItemTypeHandlers,
+    commonTypeHandlers: VaultAddItemCommonTypeHandlers,
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.name),
-            value = state.name,
-            onValueChange = secureNotesTypeHandlers.onNameTextChange,
+            value = commonState.name,
+            onValueChange = commonTypeHandlers.onNameTextChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -58,9 +58,9 @@ fun LazyListScope.addEditSecureNotesItems(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.folder),
-            options = state.availableFolders.map { it.invoke() }.toImmutableList(),
-            selectedOption = state.folderName.invoke(),
-            onOptionSelected = secureNotesTypeHandlers.onFolderTextChange,
+            options = commonState.availableFolders.map { it.invoke() }.toImmutableList(),
+            selectedOption = commonState.folderName.invoke(),
+            onOptionSelected = commonTypeHandlers.onFolderTextChange,
             modifier = Modifier
                 .padding(horizontal = 16.dp),
         )
@@ -70,8 +70,8 @@ fun LazyListScope.addEditSecureNotesItems(
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenSwitch(
             label = stringResource(id = R.string.favorite),
-            isChecked = state.favorite,
-            onCheckedChange = secureNotesTypeHandlers.onToggleFavorite,
+            isChecked = commonState.favorite,
+            onCheckedChange = commonTypeHandlers.onToggleFavorite,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -82,13 +82,13 @@ fun LazyListScope.addEditSecureNotesItems(
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenSwitchWithActions(
             label = stringResource(id = R.string.password_prompt),
-            isChecked = state.masterPasswordReprompt,
-            onCheckedChange = secureNotesTypeHandlers.onToggleMasterPasswordReprompt,
+            isChecked = commonState.masterPasswordReprompt,
+            onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             actions = {
-                IconButton(onClick = secureNotesTypeHandlers.onTooltipClick) {
+                IconButton(onClick = commonTypeHandlers.onTooltipClick) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_tooltip),
                         tint = MaterialTheme.colorScheme.onSurface,
@@ -116,8 +116,8 @@ fun LazyListScope.addEditSecureNotesItems(
         BitwardenTextField(
             singleLine = false,
             label = stringResource(id = R.string.notes),
-            value = state.notes,
-            onValueChange = secureNotesTypeHandlers.onNotesTextChange,
+            value = commonState.notes,
+            onValueChange = commonTypeHandlers.onNotesTextChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -133,11 +133,10 @@ fun LazyListScope.addEditSecureNotesItems(
                 .padding(horizontal = 16.dp),
         )
     }
-
-    items(state.customFieldData) { customItem ->
+    items(commonState.customFieldData) { customItem ->
         AddEditCustomField(
             customItem,
-            onCustomFieldValueChange = secureNotesTypeHandlers.onCustomFieldValueChange,
+            onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -147,7 +146,7 @@ fun LazyListScope.addEditSecureNotesItems(
     item {
         Spacer(modifier = Modifier.height(16.dp))
         AddEditCustomFieldsButton(
-            onFinishNamingClick = secureNotesTypeHandlers.onAddNewCustomFieldClick,
+            onFinishNamingClick = commonTypeHandlers.onAddNewCustomFieldClick,
             options = persistentListOf(
                 CustomFieldType.TEXT,
                 CustomFieldType.HIDDEN,
@@ -174,9 +173,9 @@ fun LazyListScope.addEditSecureNotesItems(
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenMultiSelectButton(
                 label = stringResource(id = R.string.who_owns_this_item),
-                options = state.availableOwners.toImmutableList(),
-                selectedOption = state.ownership,
-                onOptionSelected = secureNotesTypeHandlers.onOwnershipTextChange,
+                options = commonState.availableOwners.toImmutableList(),
+                selectedOption = commonState.ownership,
+                onOptionSelected = commonTypeHandlers.onOwnershipTextChange,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),

@@ -20,11 +20,11 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Composable
 fun AddEditItemContent(
-    viewState: VaultAddItemState.ViewState.Content,
+    state: VaultAddItemState.ViewState.Content,
     isAddItemMode: Boolean,
     onTypeOptionClicked: (VaultAddItemState.ItemTypeOption) -> Unit,
+    commonTypeHandlers: VaultAddItemCommonTypeHandlers,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
-    secureNotesTypeHandlers: VaultAddSecureNotesItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -42,35 +42,37 @@ fun AddEditItemContent(
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 TypeOptionsItem(
-                    content = viewState,
+                    itemType = state.type,
                     onTypeOptionClicked = onTypeOptionClicked,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
         }
 
-        when (viewState) {
-            is VaultAddItemState.ViewState.Content.Login -> {
+        when (state.type) {
+            is VaultAddItemState.ViewState.Content.ItemType.Login -> {
                 addEditLoginItems(
-                    state = viewState,
+                    commonState = state.common,
+                    loginState = state.type,
                     isAddItemMode = isAddItemMode,
+                    commonActionHandler = commonTypeHandlers,
                     loginItemTypeHandlers = loginItemTypeHandlers,
                 )
             }
 
-            is VaultAddItemState.ViewState.Content.Card -> {
+            is VaultAddItemState.ViewState.Content.ItemType.Card -> {
                 // TODO(BIT-507): Create UI for card-type item creation
             }
 
-            is VaultAddItemState.ViewState.Content.Identity -> {
+            is VaultAddItemState.ViewState.Content.ItemType.Identity -> {
                 // TODO(BIT-667): Create UI for identity-type item creation
             }
 
-            is VaultAddItemState.ViewState.Content.SecureNotes -> {
+            is VaultAddItemState.ViewState.Content.ItemType.SecureNotes -> {
                 addEditSecureNotesItems(
-                    state = viewState,
+                    commonState = state.common,
                     isAddItemMode = isAddItemMode,
-                    secureNotesTypeHandlers = secureNotesTypeHandlers,
+                    commonTypeHandlers = commonTypeHandlers,
                 )
             }
         }
@@ -83,7 +85,7 @@ fun AddEditItemContent(
 
 @Composable
 private fun TypeOptionsItem(
-    content: VaultAddItemState.ViewState.Content,
+    itemType: VaultAddItemState.ViewState.Content.ItemType,
     onTypeOptionClicked: (VaultAddItemState.ItemTypeOption) -> Unit,
     modifier: Modifier,
 ) {
@@ -93,7 +95,7 @@ private fun TypeOptionsItem(
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.type),
         options = optionsWithStrings.values.toImmutableList(),
-        selectedOption = stringResource(id = content.displayStringResId),
+        selectedOption = stringResource(id = itemType.displayStringResId),
         onOptionSelected = { selectedOption ->
             val selectedOptionId = optionsWithStrings
                 .entries

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import android.os.Parcelable
-import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
@@ -55,7 +54,11 @@ class VaultAddItemViewModel @Inject constructor(
             VaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
                 viewState = when (vaultAddEditType) {
-                    VaultAddEditType.AddItem -> VaultAddItemState.ViewState.Content.Login()
+                    VaultAddEditType.AddItem -> VaultAddItemState.ViewState.Content(
+                        common = VaultAddItemState.ViewState.Content.Common(),
+                        type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+                    )
+
                     is VaultAddEditType.EditItem -> VaultAddItemState.ViewState.Loading
                 },
                 dialog = null,
@@ -82,54 +85,86 @@ class VaultAddItemViewModel @Inject constructor(
 
     override fun handleAction(action: VaultAddItemAction) {
         when (action) {
-            is VaultAddItemAction.SaveClick -> {
-                handleSaveClick()
-            }
-
-            is VaultAddItemAction.CloseClick -> {
-                handleCloseClick()
-            }
-
-            is VaultAddItemAction.DismissDialog -> {
-                handleDismissDialog()
-            }
-
-            is VaultAddItemAction.TypeOptionSelect -> {
-                handleTypeOptionSelect(action)
-            }
-
-            is VaultAddItemAction.ItemType.LoginType -> {
-                handleAddLoginTypeAction(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType -> {
-                handleAddSecureNoteTypeAction(action)
-            }
-
+            is VaultAddItemAction.Common -> handleCommonActions(action)
+            is VaultAddItemAction.ItemType.LoginType -> handleAddLoginTypeAction(action)
             is VaultAddItemAction.Internal -> handleInternalActions(action)
-        }
-    }
-
-    private fun handleInternalActions(action: VaultAddItemAction.Internal) {
-        when (action) {
-            is VaultAddItemAction.Internal.CreateCipherResultReceive -> {
-                handleCreateCipherResultReceive(action)
-            }
-
-            is VaultAddItemAction.Internal.UpdateCipherResultReceive -> {
-                handleUpdateCipherResultReceive(action)
-            }
-
-            is VaultAddItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
     }
 
     //endregion Initialization and Overrides
 
-    //region Top Level Handlers
+    //region Common Handlers
+
+    private fun handleCommonActions(action: VaultAddItemAction.Common) {
+        when (action) {
+            is VaultAddItemAction.Common.CustomFieldValueChange -> handleCustomFieldValueChange(
+                action,
+            )
+
+            is VaultAddItemAction.Common.FolderChange -> handleFolderTextInputChange(action)
+            is VaultAddItemAction.Common.NameTextChange -> handleNameTextInputChange(action)
+            is VaultAddItemAction.Common.NotesTextChange -> handleNotesTextInputChange(action)
+            is VaultAddItemAction.Common.OwnershipChange -> handleOwnershipTextInputChange(action)
+            is VaultAddItemAction.Common.ToggleFavorite -> handleToggleFavorite(action)
+            is VaultAddItemAction.Common.ToggleMasterPasswordReprompt -> {
+                handleToggleMasterPasswordReprompt(action)
+            }
+
+            is VaultAddItemAction.Common.CloseClick -> handleCloseClick()
+            is VaultAddItemAction.Common.DismissDialog -> handleDismissDialog()
+            is VaultAddItemAction.Common.SaveClick -> handleSaveClick()
+            is VaultAddItemAction.Common.TypeOptionSelect -> handleTypeOptionSelect(action)
+            is VaultAddItemAction.Common.AddNewCustomFieldClick -> handleAddNewCustomFieldClick(
+                action,
+            )
+
+            is VaultAddItemAction.Common.TooltipClick -> handleTooltipClick()
+        }
+    }
+
+    private fun handleTypeOptionSelect(action: VaultAddItemAction.Common.TypeOptionSelect) {
+        when (action.typeOption) {
+            VaultAddItemState.ItemTypeOption.LOGIN -> handleSwitchToAddLoginItem()
+            VaultAddItemState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
+            VaultAddItemState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
+            VaultAddItemState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
+        }
+    }
+
+    private fun handleSwitchToAddLoginItem() {
+        updateContent { currentContent ->
+            currentContent.copy(
+                type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+            )
+        }
+    }
+
+    private fun handleSwitchToAddSecureNotesItem() {
+        updateContent { currentContent ->
+            currentContent.copy(
+                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+            )
+        }
+    }
+
+    private fun handleSwitchToAddCardItem() {
+        updateContent { currentContent ->
+            currentContent.copy(
+                type = VaultAddItemState.ViewState.Content.ItemType.Card,
+            )
+        }
+    }
+
+    private fun handleSwitchToAddIdentityItem() {
+        updateContent { currentContent ->
+            currentContent.copy(
+                type = VaultAddItemState.ViewState.Content.ItemType.Identity,
+            )
+        }
+    }
 
     private fun handleSaveClick() = onContent { content ->
-        if (content.name.isBlank()) {
+        if (content.common.name.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
                     dialog = VaultAddItemState.DialogState.Error(
@@ -179,36 +214,91 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    //endregion Top Level Handlers
+    private fun handleAddNewCustomFieldClick(
+        action: VaultAddItemAction.Common.AddNewCustomFieldClick,
+    ) {
+        val newCustomData: VaultAddItemState.Custom =
+            action.customFieldType.toCustomField(action.name)
 
-    //region Type Option Handlers
-
-    private fun handleTypeOptionSelect(action: VaultAddItemAction.TypeOptionSelect) {
-        when (action.typeOption) {
-            VaultAddItemState.ItemTypeOption.LOGIN -> handleSwitchToAddLoginItem()
-            VaultAddItemState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
-            VaultAddItemState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
-            VaultAddItemState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
+        updateCommonContent { loginType ->
+            loginType.copy(customFieldData = loginType.customFieldData + newCustomData)
         }
     }
 
-    private fun handleSwitchToAddLoginItem() {
-        updateContent { VaultAddItemState.ViewState.Content.Login() }
+    private fun handleCustomFieldValueChange(
+        action: VaultAddItemAction.Common.CustomFieldValueChange,
+    ) {
+        updateCommonContent { commonContent ->
+            commonContent.copy(
+                customFieldData = commonContent.customFieldData.map { customField ->
+                    if (customField.itemId == action.customField.itemId) {
+                        action.customField
+                    } else {
+                        customField
+                    }
+                },
+            )
+        }
     }
 
-    private fun handleSwitchToAddSecureNotesItem() {
-        updateContent { VaultAddItemState.ViewState.Content.SecureNotes() }
+    private fun handleFolderTextInputChange(
+        action: VaultAddItemAction.Common.FolderChange,
+    ) {
+        updateCommonContent { commonContent ->
+            commonContent.copy(folderName = action.folder)
+        }
     }
 
-    private fun handleSwitchToAddCardItem() {
-        updateContent { VaultAddItemState.ViewState.Content.Card() }
+    private fun handleToggleFavorite(
+        action: VaultAddItemAction.Common.ToggleFavorite,
+    ) {
+        updateCommonContent { commonContent ->
+            commonContent.copy(favorite = action.isFavorite)
+        }
     }
 
-    private fun handleSwitchToAddIdentityItem() {
-        updateContent { VaultAddItemState.ViewState.Content.Identity() }
+    private fun handleToggleMasterPasswordReprompt(
+        action: VaultAddItemAction.Common.ToggleMasterPasswordReprompt,
+    ) {
+        updateCommonContent { commonContent ->
+            commonContent.copy(masterPasswordReprompt = action.isMasterPasswordReprompt)
+        }
     }
 
-    //endregion Type Option Handlers
+    private fun handleNotesTextInputChange(
+        action: VaultAddItemAction.Common.NotesTextChange,
+    ) {
+        updateCommonContent { commonContent ->
+            commonContent.copy(notes = action.notes)
+        }
+    }
+
+    private fun handleOwnershipTextInputChange(
+        action: VaultAddItemAction.Common.OwnershipChange,
+    ) {
+        updateCommonContent { commonContent ->
+            commonContent.copy(ownership = action.ownership)
+        }
+    }
+
+    private fun handleNameTextInputChange(
+        action: VaultAddItemAction.Common.NameTextChange,
+    ) {
+        updateCommonContent { commonContent ->
+            commonContent.copy(name = action.name)
+        }
+    }
+
+    private fun handleTooltipClick() {
+        // TODO Add the text for the prompt (BIT-1079)
+        sendEvent(
+            event = VaultAddItemEvent.ShowToast(
+                message = "Not yet implemented",
+            ),
+        )
+    }
+
+    //endregion Common Handlers
 
     //region Add Login Item Type Handlers
 
@@ -217,10 +307,6 @@ class VaultAddItemViewModel @Inject constructor(
         action: VaultAddItemAction.ItemType.LoginType,
     ) {
         when (action) {
-            is VaultAddItemAction.ItemType.LoginType.NameTextChange -> {
-                handleLoginNameTextInputChange(action)
-            }
-
             is VaultAddItemAction.ItemType.LoginType.UsernameTextChange -> {
                 handleLoginUsernameTextInputChange(action)
             }
@@ -231,26 +317,6 @@ class VaultAddItemViewModel @Inject constructor(
 
             is VaultAddItemAction.ItemType.LoginType.UriTextChange -> {
                 handleLoginUriTextInputChange(action)
-            }
-
-            is VaultAddItemAction.ItemType.LoginType.FolderChange -> {
-                handleLoginFolderTextInputChange(action)
-            }
-
-            is VaultAddItemAction.ItemType.LoginType.ToggleFavorite -> {
-                handleLoginToggleFavorite(action)
-            }
-
-            is VaultAddItemAction.ItemType.LoginType.ToggleMasterPasswordReprompt -> {
-                handleLoginToggleMasterPasswordReprompt(action)
-            }
-
-            is VaultAddItemAction.ItemType.LoginType.NotesTextChange -> {
-                handleLoginNotesTextInputChange(action)
-            }
-
-            is VaultAddItemAction.ItemType.LoginType.OwnershipChange -> {
-                handleLoginOwnershipTextInputChange(action)
             }
 
             is VaultAddItemAction.ItemType.LoginType.OpenUsernameGeneratorClick -> {
@@ -276,26 +342,6 @@ class VaultAddItemViewModel @Inject constructor(
             is VaultAddItemAction.ItemType.LoginType.AddNewUriClick -> {
                 handleLoginAddNewUriClick()
             }
-
-            is VaultAddItemAction.ItemType.LoginType.TooltipClick -> {
-                handleLoginTooltipClick()
-            }
-
-            is VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick -> {
-                handleLoginAddNewCustomFieldClick(action)
-            }
-
-            is VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange -> {
-                handleLoginCustomFieldValueChange(action)
-            }
-        }
-    }
-
-    private fun handleLoginNameTextInputChange(
-        action: VaultAddItemAction.ItemType.LoginType.NameTextChange,
-    ) {
-        updateLoginContent { loginType ->
-            loginType.copy(name = action.name)
         }
     }
 
@@ -320,46 +366,6 @@ class VaultAddItemViewModel @Inject constructor(
     ) {
         updateLoginContent { loginType ->
             loginType.copy(uri = action.uri)
-        }
-    }
-
-    private fun handleLoginFolderTextInputChange(
-        action: VaultAddItemAction.ItemType.LoginType.FolderChange,
-    ) {
-        updateLoginContent { loginType ->
-            loginType.copy(folderName = action.folder)
-        }
-    }
-
-    private fun handleLoginToggleFavorite(
-        action: VaultAddItemAction.ItemType.LoginType.ToggleFavorite,
-    ) {
-        updateLoginContent { loginType ->
-            loginType.copy(favorite = action.isFavorite)
-        }
-    }
-
-    private fun handleLoginToggleMasterPasswordReprompt(
-        action: VaultAddItemAction.ItemType.LoginType.ToggleMasterPasswordReprompt,
-    ) {
-        updateLoginContent { loginType ->
-            loginType.copy(masterPasswordReprompt = action.isMasterPasswordReprompt)
-        }
-    }
-
-    private fun handleLoginNotesTextInputChange(
-        action: VaultAddItemAction.ItemType.LoginType.NotesTextChange,
-    ) {
-        updateLoginContent { loginType ->
-            loginType.copy(notes = action.notes)
-        }
-    }
-
-    private fun handleLoginOwnershipTextInputChange(
-        action: VaultAddItemAction.ItemType.LoginType.OwnershipChange,
-    ) {
-        updateLoginContent { loginType ->
-            loginType.copy(ownership = action.ownership)
         }
     }
 
@@ -423,179 +429,27 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleLoginTooltipClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = VaultAddItemEvent.ShowToast(
-                    message = "Tooltip",
-                ),
-            )
-        }
-    }
-
-    private fun handleLoginAddNewCustomFieldClick(
-        action: VaultAddItemAction.ItemType.LoginType.AddNewCustomFieldClick,
-    ) {
-        val newCustomData: VaultAddItemState.Custom =
-            action.customFieldType.toCustomField(action.name)
-
-        updateLoginContent { loginType ->
-            loginType.copy(customFieldData = loginType.customFieldData + newCustomData)
-        }
-    }
-
-    private fun handleLoginCustomFieldValueChange(
-        action: VaultAddItemAction.ItemType.LoginType.CustomFieldValueChange,
-    ) {
-        updateLoginContent { login ->
-            login.copy(
-                customFieldData = login.customFieldData.map { customField ->
-                    if (customField.itemId == action.customField.itemId) {
-                        action.customField
-                    } else {
-                        customField
-                    }
-                },
-            )
-        }
-    }
-
     //endregion Add Login Item Type Handlers
-
-    //region Secure Note Item Type Handlers
-
-    private fun handleAddSecureNoteTypeAction(
-        action: VaultAddItemAction.ItemType.SecureNotesType,
-    ) {
-        when (action) {
-            is VaultAddItemAction.ItemType.SecureNotesType.NameTextChange -> {
-                handleSecureNoteNameTextInputChange(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.FolderChange -> {
-                handleSecureNoteFolderTextInputChange(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite -> {
-                handleSecureNoteToggleFavorite(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt -> {
-                handleSecureNoteToggleMasterPasswordReprompt(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange -> {
-                handleSecureNoteNotesTextInputChange(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange -> {
-                handleSecureNoteOwnershipTextInputChange(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.TooltipClick -> {
-                handleSecureNoteTooltipClick()
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick -> {
-                handleSecureNoteAddNewCustomFieldClick(action)
-            }
-
-            is VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange -> {
-                handleSecureNoteCustomFieldValueChange(action)
-            }
-        }
-    }
-
-    private fun handleSecureNoteNameTextInputChange(
-        action: VaultAddItemAction.ItemType.SecureNotesType.NameTextChange,
-    ) {
-        updateSecureNoteContent { secureNoteType ->
-            secureNoteType.copy(name = action.name)
-        }
-    }
-
-    private fun handleSecureNoteFolderTextInputChange(
-        action: VaultAddItemAction.ItemType.SecureNotesType.FolderChange,
-    ) {
-        updateSecureNoteContent { secureNoteType ->
-            secureNoteType.copy(folderName = action.folderName)
-        }
-    }
-
-    private fun handleSecureNoteToggleFavorite(
-        action: VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite,
-    ) {
-        updateSecureNoteContent { secureNoteType ->
-            secureNoteType.copy(favorite = action.isFavorite)
-        }
-    }
-
-    private fun handleSecureNoteToggleMasterPasswordReprompt(
-        action: VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt,
-    ) {
-        updateSecureNoteContent { secureNoteType ->
-            secureNoteType.copy(masterPasswordReprompt = action.isMasterPasswordReprompt)
-        }
-    }
-
-    private fun handleSecureNoteNotesTextInputChange(
-        action: VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange,
-    ) {
-        updateSecureNoteContent { secureNoteType ->
-            secureNoteType.copy(notes = action.note)
-        }
-    }
-
-    private fun handleSecureNoteOwnershipTextInputChange(
-        action: VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange,
-    ) {
-        updateSecureNoteContent { secureNoteType ->
-            secureNoteType.copy(ownership = action.ownership)
-        }
-    }
-
-    private fun handleSecureNoteTooltipClick() {
-        // TODO Add the text for the prompt (BIT-1079)
-        sendEvent(
-            event = VaultAddItemEvent.ShowToast(
-                message = "Not yet implemented",
-            ),
-        )
-    }
-
-    private fun handleSecureNoteAddNewCustomFieldClick(
-        action: VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick,
-    ) {
-        val newCustomData: VaultAddItemState.Custom =
-            action.customFieldType.toCustomField(action.name)
-
-        updateSecureNoteContent { secureNotesType ->
-            secureNotesType.copy(customFieldData = secureNotesType.customFieldData + newCustomData)
-        }
-    }
-
-    private fun handleSecureNoteCustomFieldValueChange(
-        action: VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange,
-    ) {
-        updateSecureNoteContent { secureNote ->
-            secureNote.copy(
-                customFieldData = secureNote.customFieldData.map { customField ->
-                    if (customField.itemId == action.customField.itemId) {
-                        action.customField
-                    } else {
-                        customField
-                    }
-                },
-            )
-        }
-    }
-
-    //endregion Secure Notes Item Type Handlers
 
     //region Internal Type Handlers
 
-    @Suppress("MaxLineLength")
-    private fun handleCreateCipherResultReceive(action: VaultAddItemAction.Internal.CreateCipherResultReceive) {
+    private fun handleInternalActions(action: VaultAddItemAction.Internal) {
+        when (action) {
+            is VaultAddItemAction.Internal.CreateCipherResultReceive -> {
+                handleCreateCipherResultReceive(action)
+            }
+
+            is VaultAddItemAction.Internal.UpdateCipherResultReceive -> {
+                handleUpdateCipherResultReceive(action)
+            }
+
+            is VaultAddItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+        }
+    }
+
+    private fun handleCreateCipherResultReceive(
+        action: VaultAddItemAction.Internal.CreateCipherResultReceive,
+    ) {
         mutableStateFlow.update {
             it.copy(dialog = null)
         }
@@ -714,20 +568,23 @@ class VaultAddItemViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(viewState = updatedContent) }
     }
 
-    private inline fun updateLoginContent(
-        crossinline block: (
-            VaultAddItemState.ViewState.Content.Login,
-        ) -> VaultAddItemState.ViewState.Content.Login,
+    private inline fun updateCommonContent(
+        crossinline block: (VaultAddItemState.ViewState.Content.Common) ->
+        VaultAddItemState.ViewState.Content.Common,
     ) {
-        updateContent { (it as? VaultAddItemState.ViewState.Content.Login)?.let(block) }
+        updateContent { currentContent ->
+            currentContent.copy(common = block(currentContent.common))
+        }
     }
 
-    private inline fun updateSecureNoteContent(
-        crossinline block: (
-            VaultAddItemState.ViewState.Content.SecureNotes,
-        ) -> VaultAddItemState.ViewState.Content.SecureNotes,
+    private inline fun updateLoginContent(
+        crossinline block: (VaultAddItemState.ViewState.Content.ItemType.Login) ->
+        VaultAddItemState.ViewState.Content.ItemType.Login,
     ) {
-        updateContent { (it as? VaultAddItemState.ViewState.Content.SecureNotes)?.let(block) }
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddItemState.ViewState.Content.ItemType.Login)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
     }
 
     //endregion Utility Functions
@@ -796,186 +653,106 @@ data class VaultAddItemState(
          * Represents a loaded content state for the [VaultAddItemScreen].
          */
         @Parcelize
-        sealed class Content : ViewState() {
+        data class Content(
+            val common: Common,
+            val type: ItemType,
+        ) : ViewState() {
+
             /**
-             * The original cipher from the vault that the user is editing.
+             * Content data that is common for all item types.
              *
+             * @property originalCipher The original cipher from the vault that the user is editing.
              * This is only present when editing a pre-existing cipher.
-             */
-            @IgnoredOnParcel
-            abstract val originalCipher: CipherView?
-
-            /**
-             * Represents the resource ID for the display string. This is an abstract property
-             * that must be overridden by each subclass to provide the appropriate string resource
-             * ID for display purposes.
-             */
-            @get:StringRes
-            abstract val displayStringResId: Int
-
-            /**
-             * Represents the name for the item type. This is an abstract property that must be
-             * overridden to save the item
-             */
-            abstract val name: String
-
-            /**
-             * Indicates if a master password reprompt is required.
-             */
-            abstract val masterPasswordReprompt: Boolean
-
-            /**
-             * Indicates whether this item is marked as a favorite.
-             */
-            abstract val favorite: Boolean
-
-            /**
-             * Additional custom fields associated with the item.
-             */
-            abstract val customFieldData: List<Custom>
-
-            /**
-             * Any additional notes or comments associated with the item.
-             */
-            abstract val notes: String
-
-            /**
-             * The folder that this item belongs too.
-             */
-            abstract val folderName: Text
-
-            /**
-             * The list of folders that this item could be added too.
-             */
-            abstract val availableFolders: List<Text>
-
-            /**
-             * The ownership email associated with the item.
-             */
-            abstract val ownership: String
-
-            /**
-             * A list of available owners.
-             */
-            abstract val availableOwners: List<String>
-
-            /**
-             * Represents the login item information.
-             *
-             * @property username The username required for the login item.
-             * @property password The password required for the login item.
-             * @property uri The URI associated with the login item.
+             * @property name Represents the name for the item type. This is an abstract property
+             * that must be overridden to save the item.
+             * @property masterPasswordReprompt Indicates if a master password reprompt is required.
+             * @property favorite Indicates whether this item is marked as a favorite.
+             * @property customFieldData Additional custom fields associated with the item.
+             * @property notes Any additional notes or comments associated with the item.
+             * @property folderName The folder that this item belongs to.
+             * @property availableFolders The list of folders that this item could be added too.
+             * @property ownership The ownership email associated with the item.
+             * @property availableOwners A list of available owners.
              */
             @Parcelize
-            data class Login(
+            data class Common(
                 @IgnoredOnParcel
-                override val originalCipher: CipherView? = null,
-                override val name: String = "",
-                override val folderName: Text = DEFAULT_FOLDER,
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val availableFolders: List<Text> = listOf(
+                val originalCipher: CipherView? = null,
+                val name: String = "",
+                val masterPasswordReprompt: Boolean = false,
+                val favorite: Boolean = false,
+                val customFieldData: List<Custom> = emptyList(),
+                val notes: String = "",
+                val folderName: Text = DEFAULT_FOLDER,
+                val availableFolders: List<Text> = listOf(
                     "Folder 1".asText(),
                     "Folder 2".asText(),
                     "Folder 3".asText(),
                 ),
-                override val favorite: Boolean = false,
-                override val masterPasswordReprompt: Boolean = false,
-                override val customFieldData: List<Custom> = emptyList(),
-                override val notes: String = "",
                 // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val ownership: String = DEFAULT_OWNERSHIP,
-                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
-                val username: String = "",
-                val password: String = "",
-                val uri: String = "",
-            ) : Content() {
-                override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
+                val ownership: String = DEFAULT_OWNERSHIP,
+                // TODO: Update this property to get available owners from the data layer (BIT-501)
+                val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+            ) : Parcelable {
+                companion object {
+                    private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
+                    private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
+                }
             }
 
             /**
-             * Represents the `Card` item type.
+             * Content data specific to an item type.
              */
             @Parcelize
-            data class Card(
-                @IgnoredOnParcel
-                override val originalCipher: CipherView? = null,
-                override val name: String = "",
-                override val folderName: Text = DEFAULT_FOLDER,
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val availableFolders: List<Text> = listOf(
-                    "Folder 1".asText(),
-                    "Folder 2".asText(),
-                    "Folder 3".asText(),
-                ),
-                override val favorite: Boolean = false,
-                override val masterPasswordReprompt: Boolean = false,
-                override val customFieldData: List<Custom> = emptyList(),
-                override val notes: String = "",
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val ownership: String = DEFAULT_OWNERSHIP,
-                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
-            ) : Content() {
-                override val displayStringResId: Int get() = ItemTypeOption.CARD.labelRes
-            }
+            sealed class ItemType : Parcelable {
 
-            /**
-             * Represents the `Identity` item type.
-             */
-            @Parcelize
-            data class Identity(
-                @IgnoredOnParcel
-                override val originalCipher: CipherView? = null,
-                override val name: String = "",
-                override val folderName: Text = DEFAULT_FOLDER,
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val availableFolders: List<Text> = listOf(
-                    "Folder 1".asText(),
-                    "Folder 2".asText(),
-                    "Folder 3".asText(),
-                ),
-                override val favorite: Boolean = false,
-                override val masterPasswordReprompt: Boolean = false,
-                override val customFieldData: List<Custom> = emptyList(),
-                override val notes: String = "",
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val ownership: String = DEFAULT_OWNERSHIP,
-                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
-            ) : Content() {
-                override val displayStringResId: Int get() = ItemTypeOption.IDENTITY.labelRes
-            }
+                /**
+                 * Represents the resource ID for the display string. This is an abstract property
+                 * that must be overridden by each subclass to provide the appropriate string
+                 * resource for display purposes.
+                 */
+                abstract val displayStringResId: Int
 
-            /**
-             * Represents the `SecureNotes` item type.
-             *
-             * @property folderName The folder used for the SecureNotes item
-             * @property availableFolders A list  of available folders.
-             */
-            @Parcelize
-            data class SecureNotes(
-                @IgnoredOnParcel
-                override val originalCipher: CipherView? = null,
-                override val name: String = "",
-                override val folderName: Text = DEFAULT_FOLDER,
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val availableFolders: List<Text> = listOf(
-                    "Folder 1".asText(),
-                    "Folder 2".asText(),
-                    "Folder 3".asText(),
-                ),
-                override val favorite: Boolean = false,
-                override val masterPasswordReprompt: Boolean = false,
-                override val customFieldData: List<Custom> = emptyList(),
-                override val notes: String = "",
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                override val ownership: String = DEFAULT_OWNERSHIP,
-                override val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
-            ) : Content() {
-                override val displayStringResId: Int get() = ItemTypeOption.SECURE_NOTES.labelRes
-            }
+                /**
+                 * Represents the login item information.
+                 *
+                 * @property username The username required for the login item.
+                 * @property password The password required for the login item.
+                 * @property uri The URI associated with the login item.
+                 */
+                @Parcelize
+                data class Login(
+                    val username: String = "",
+                    val password: String = "",
+                    val uri: String = "",
+                ) : ItemType() {
+                    override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
+                }
 
-            companion object {
-                private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
-                private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
+                /**
+                 * Represents the `Card` item type.
+                 */
+                @Parcelize
+                data object Card : ItemType() {
+                    override val displayStringResId: Int get() = ItemTypeOption.CARD.labelRes
+                }
+
+                /**
+                 * Represents the `Identity` item type.
+                 */
+                @Parcelize
+                data object Identity : ItemType() {
+                    override val displayStringResId: Int get() = ItemTypeOption.IDENTITY.labelRes
+                }
+
+                /**
+                 * Represents the `SecureNotes` item type.
+                 */
+                @Parcelize
+                data object SecureNotes : ItemType() {
+                    override val displayStringResId: Int
+                        get() = ItemTypeOption.SECURE_NOTES.labelRes
+                }
             }
         }
     }
@@ -1074,31 +851,98 @@ sealed class VaultAddItemEvent {
 sealed class VaultAddItemAction {
 
     /**
-     * Represents the action when the save button is clicked.
+     * Represents actions common across all item types.
      */
-    data object SaveClick : VaultAddItemAction()
+    sealed class Common : VaultAddItemAction() {
+
+        /**
+         * Represents the action when the save button is clicked.
+         */
+        data object SaveClick : Common()
+
+        /**
+         * User clicked close.
+         */
+        data object CloseClick : Common()
+
+        /**
+         * The user has clicked to dismiss the dialog.
+         */
+        data object DismissDialog : Common()
+
+        /**
+         * Represents the action when a type option is selected.
+         *
+         * @property typeOption The selected type option.
+         */
+        data class TypeOptionSelect(
+            val typeOption: VaultAddItemState.ItemTypeOption,
+        ) : Common()
+
+        /**
+         * Fired when the name text input is changed.
+         *
+         * @property name The new name text.
+         */
+        data class NameTextChange(val name: String) : Common()
+
+        /**
+         * Fired when the folder text input is changed.
+         *
+         * @property folder The new folder text.
+         */
+        data class FolderChange(val folder: Text) : Common()
+
+        /**
+         * Fired when the Favorite toggle is changed.
+         *
+         * @property isFavorite The new state of the Favorite toggle.
+         */
+        data class ToggleFavorite(val isFavorite: Boolean) : Common()
+
+        /**
+         * Fired when the Master Password Reprompt toggle is changed.
+         *
+         * @property isMasterPasswordReprompt The new state of the Master
+         * Password Re-prompt toggle.
+         */
+        data class ToggleMasterPasswordReprompt(val isMasterPasswordReprompt: Boolean) : Common()
+
+        /**
+         * Fired when the notes text input is changed.
+         *
+         * @property notes The new notes text.
+         */
+        data class NotesTextChange(val notes: String) : Common()
+
+        /**
+         * Fired when the ownership text input is changed.
+         *
+         * @property ownership The new ownership text.
+         */
+        data class OwnershipChange(val ownership: String) : Common()
+
+        /**
+         * Represents the action to add a new custom field.
+         */
+        data class AddNewCustomFieldClick(
+            val customFieldType: CustomFieldType,
+            val name: String,
+        ) : Common()
+
+        /**
+         *  Fired when the custom field data is changed.
+         */
+        data class CustomFieldValueChange(val customField: VaultAddItemState.Custom) : Common()
+
+        /**
+         * Represents the action to open tooltip
+         */
+        data object TooltipClick : Common()
+    }
 
     /**
-     * User clicked close.
-     */
-    data object CloseClick : VaultAddItemAction()
-
-    /**
-     * The user has clicked to dismiss the dialog.
-     */
-    data object DismissDialog : VaultAddItemAction()
-
-    /**
-     * Represents the action when a type option is selected.
-     *
-     * @property typeOption The selected type option.
-     */
-    data class TypeOptionSelect(
-        val typeOption: VaultAddItemState.ItemTypeOption,
-    ) : VaultAddItemAction()
-
-    /**
-     * Represents actions specific to the item types.
+     * Represents actions specific to an item type.
      */
     sealed class ItemType : VaultAddItemAction() {
 
@@ -1106,12 +950,6 @@ sealed class VaultAddItemAction {
          * Represents actions specific to the Login type.
          */
         sealed class LoginType : ItemType() {
-            /**
-             * Fired when the name text input is changed.
-             *
-             * @property name The new name text.
-             */
-            data class NameTextChange(val name: String) : LoginType()
 
             /**
              * Fired when the username text input is changed.
@@ -1133,59 +971,6 @@ sealed class VaultAddItemAction {
              * @property uri The new URI text.
              */
             data class UriTextChange(val uri: String) : LoginType()
-
-            /**
-             * Fired when the folder text input is changed.
-             *
-             * @property folder The new folder text.
-             */
-            data class FolderChange(val folder: Text) : LoginType()
-
-            /**
-             * Fired when the Favorite toggle is changed.
-             *
-             * @property isFavorite The new state of the Favorite toggle.
-             */
-            data class ToggleFavorite(val isFavorite: Boolean) : LoginType()
-
-            /**
-             * Fired when the Master Password Reprompt toggle is changed.
-             *
-             * @property isMasterPasswordReprompt The new state of the Master
-             * Password Re-prompt toggle.
-             */
-            data class ToggleMasterPasswordReprompt(
-                val isMasterPasswordReprompt: Boolean,
-            ) : LoginType()
-
-            /**
-             * Fired when the notes text input is changed.
-             *
-             * @property notes The new notes text.
-             */
-            data class NotesTextChange(val notes: String) : LoginType()
-
-            /**
-             * Fired when the ownership text input is changed.
-             *
-             * @property ownership The new ownership text.
-             */
-            data class OwnershipChange(val ownership: String) : LoginType()
-
-            /**
-             * Represents the action to add a new custom field.
-             */
-            data class AddNewCustomFieldClick(
-                val customFieldType: CustomFieldType,
-                val name: String,
-            ) : LoginType()
-
-            /**
-             *  Fired when the custom field data is changed.
-             */
-            data class CustomFieldValueChange(
-                val customField: VaultAddItemState.Custom,
-            ) : LoginType()
 
             /**
              * Represents the action to open the username generator.
@@ -1216,81 +1001,6 @@ sealed class VaultAddItemAction {
              * Represents the action to add a new URI field.
              */
             data object AddNewUriClick : LoginType()
-
-            /**
-             * Represents the action to open tooltip
-             */
-            data object TooltipClick : LoginType()
-        }
-
-        /**
-         * Represents actions specific to the SecureNotes type.
-         */
-        sealed class SecureNotesType : ItemType() {
-            /**
-             * Fired when the name text input is changed.
-             *
-             * @property name The new name text.
-             */
-            data class NameTextChange(val name: String) : SecureNotesType()
-
-            /**
-             * Fired when the folder text input is changed.
-             *
-             * @property folderName The new folder text.
-             */
-            data class FolderChange(val folderName: Text) : SecureNotesType()
-
-            /**
-             * Fired when the Favorite toggle is changed.
-             *
-             * @property isFavorite The new state of the Favorite toggle.
-             */
-            data class ToggleFavorite(val isFavorite: Boolean) : SecureNotesType()
-
-            /**
-             * Fired when the Master Password Reprompt toggle is changed.
-             *
-             * @property isMasterPasswordReprompt The new state of the Master
-             * Password Re-prompt toggle.
-             */
-            data class ToggleMasterPasswordReprompt(
-                val isMasterPasswordReprompt: Boolean,
-            ) : SecureNotesType()
-
-            /**
-             * Fired when the note text input is changed.
-             *
-             * @property note The new note text.
-             */
-            data class NotesTextChange(val note: String) : SecureNotesType()
-
-            /**
-             * Fired when the ownership text input is changed.
-             *
-             * @property ownership The new ownership text.
-             */
-            data class OwnershipChange(val ownership: String) : SecureNotesType()
-
-            /**
-             * Represents the action to open tooltip
-             */
-            data object TooltipClick : SecureNotesType()
-
-            /**
-             * Represents the action to add a new custom field.
-             */
-            data class AddNewCustomFieldClick(
-                val customFieldType: CustomFieldType,
-                val name: String,
-            ) : SecureNotesType()
-
-            /**
-             *  Fired when the custom field data is changed.
-             */
-            data class CustomFieldValueChange(
-                val customField: VaultAddItemState.Custom,
-            ) : SecureNotesType()
         }
     }
 

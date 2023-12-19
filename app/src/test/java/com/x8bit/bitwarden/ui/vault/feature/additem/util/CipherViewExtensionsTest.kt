@@ -46,7 +46,30 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Error(message = "Not yet implemented.".asText()),
+            VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    folderName = R.string.folder_none.asText(),
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    ownership = "",
+                    customFieldData = listOf(
+                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddItemState.Custom.LinkedField(
+                            TEST_ID,
+                            "TestLinked",
+                            VaultLinkedFieldType.USERNAME,
+                        ),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                ),
+                type = VaultAddItemState.ViewState.Content.ItemType.Card,
+            ),
             result,
         )
     }
@@ -58,7 +81,30 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Error(message = "Not yet implemented.".asText()),
+            VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    folderName = R.string.folder_none.asText(),
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    ownership = "",
+                    customFieldData = listOf(
+                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddItemState.Custom.LinkedField(
+                            TEST_ID,
+                            "TestLinked",
+                            VaultLinkedFieldType.USERNAME,
+                        ),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                ),
+                type = VaultAddItemState.ViewState.Content.ItemType.Identity,
+            ),
             result,
         )
     }
@@ -70,28 +116,32 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Content.Login(
-                originalCipher = cipherView,
-                name = "cipher",
-                username = "username",
-                password = "password",
-                uri = "www.example.com",
-                folderName = R.string.folder_none.asText(),
-                favorite = false,
-                masterPasswordReprompt = true,
-                notes = "Lots of notes",
-                ownership = "",
-                availableFolders = emptyList(),
-                availableOwners = emptyList(),
-                customFieldData = listOf(
-                    VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
-                    VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
-                    VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
-                    VaultAddItemState.Custom.LinkedField(
-                        TEST_ID,
-                        "TestLinked",
-                        VaultLinkedFieldType.USERNAME,
+            VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    folderName = R.string.folder_none.asText(),
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    ownership = "",
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                    customFieldData = listOf(
+                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddItemState.Custom.LinkedField(
+                            TEST_ID,
+                            "TestLinked",
+                            VaultLinkedFieldType.USERNAME,
+                        ),
                     ),
+                ),
+                type = VaultAddItemState.ViewState.Content.ItemType.Login(
+                    username = "username",
+                    password = "password",
+                    uri = "www.example.com",
                 ),
             ),
             result,
@@ -105,21 +155,24 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Content.SecureNotes(
-                originalCipher = cipherView,
-                name = "cipher",
-                folderName = R.string.folder_none.asText(),
-                favorite = false,
-                masterPasswordReprompt = true,
-                notes = "Lots of notes",
-                ownership = "",
-                customFieldData = listOf(
-                    VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
-                    VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
-                    VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+            VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher",
+                    folderName = R.string.folder_none.asText(),
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    ownership = "",
+                    customFieldData = listOf(
+                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
                 ),
-                availableFolders = emptyList(),
-                availableOwners = emptyList(),
+                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
             ),
             result,
         )

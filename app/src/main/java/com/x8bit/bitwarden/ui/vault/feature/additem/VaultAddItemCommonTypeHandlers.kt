@@ -4,8 +4,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 
 /**
- * A collection of handler functions specifically tailored for managing actions
- * within the context of adding secure note items to a vault.
+ * A collection of handler functions for managing actions common
+ * within the context of adding items to a vault.
  *
  * @property onNameTextChange Handles the action when the name text is changed.
  * @property onFolderTextChange Handles the action when the folder text is changed.
@@ -20,7 +20,7 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
  * @property onCustomFieldValueChange Handles the action when the field's value changes
  */
 @Suppress("LongParameterList")
-class VaultAddSecureNotesItemTypeHandlers(
+class VaultAddItemCommonTypeHandlers(
     val onNameTextChange: (String) -> Unit,
     val onFolderTextChange: (String) -> Unit,
     val onToggleFavorite: (Boolean) -> Unit,
@@ -34,54 +34,54 @@ class VaultAddSecureNotesItemTypeHandlers(
     companion object {
 
         /**
-         * Creates an instance of [VaultAddSecureNotesItemTypeHandlers] by binding actions
+         * Creates an instance of [VaultAddItemCommonTypeHandlers] by binding actions
          * to the provided [VaultAddItemViewModel].
          */
         @Suppress("LongMethod")
-        fun create(viewModel: VaultAddItemViewModel): VaultAddSecureNotesItemTypeHandlers {
-            return VaultAddSecureNotesItemTypeHandlers(
+        fun create(viewModel: VaultAddItemViewModel): VaultAddItemCommonTypeHandlers {
+            return VaultAddItemCommonTypeHandlers(
                 onNameTextChange = { newName ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.NameTextChange(newName),
+                        VaultAddItemAction.Common.NameTextChange(newName),
                     )
                 },
                 onFolderTextChange = { newFolder ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.FolderChange(
+                        VaultAddItemAction.Common.FolderChange(
                             newFolder.asText(),
                         ),
                     )
                 },
                 onToggleFavorite = { isFavorite ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.ToggleFavorite(isFavorite),
+                        VaultAddItemAction.Common.ToggleFavorite(isFavorite),
                     )
                 },
                 onToggleMasterPasswordReprompt = { isMasterPasswordReprompt ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.ToggleMasterPasswordReprompt(
+                        VaultAddItemAction.Common.ToggleMasterPasswordReprompt(
                             isMasterPasswordReprompt,
                         ),
                     )
                 },
                 onNotesTextChange = { newNotes ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.NotesTextChange(newNotes),
+                        VaultAddItemAction.Common.NotesTextChange(newNotes),
                     )
                 },
                 onOwnershipTextChange = { newOwnership ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.OwnershipChange(newOwnership),
+                        VaultAddItemAction.Common.OwnershipChange(newOwnership),
                     )
                 },
                 onTooltipClick = {
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.TooltipClick,
+                        VaultAddItemAction.Common.TooltipClick,
                     )
                 },
                 onAddNewCustomFieldClick = { newCustomFieldType, name ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.AddNewCustomFieldClick(
+                        VaultAddItemAction.Common.AddNewCustomFieldClick(
                             newCustomFieldType,
                             name,
                         ),
@@ -89,7 +89,7 @@ class VaultAddSecureNotesItemTypeHandlers(
                 },
                 onCustomFieldValueChange = { newValue ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.SecureNotesType.CustomFieldValueChange(
+                        VaultAddItemAction.Common.CustomFieldValueChange(
                             newValue,
                         ),
                     )

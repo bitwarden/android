@@ -15,55 +15,36 @@ import java.util.UUID
  * Transforms [CipherView] into [VaultAddItemState.ViewState].
  */
 fun CipherView.toViewState(): VaultAddItemState.ViewState =
-    when (type) {
-        CipherType.LOGIN -> {
-            val loginView = requireNotNull(this.login)
-            VaultAddItemState.ViewState.Content.Login(
-                originalCipher = this,
-                name = this.name,
-                username = loginView.username.orEmpty(),
-                password = loginView.password.orEmpty(),
-                uri = loginView.uris?.firstOrNull()?.uri.orEmpty(),
-                favorite = this.favorite,
-                masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
-                notes = this.notes.orEmpty(),
-                // TODO: Update these properties to pull folder from data layer (BIT-501)
-                folderName = this.folderId?.asText() ?: R.string.folder_none.asText(),
-                availableFolders = emptyList(),
-                // TODO: Update this property to pull owner from data layer (BIT-501)
-                ownership = "",
-                // TODO: Update this property to pull available owners from data layer (BIT-501)
-                availableOwners = emptyList(),
-                customFieldData = this.fields.orEmpty().map { it.toCustomField() },
-            )
-        }
+    VaultAddItemState.ViewState.Content(
+        type = when (type) {
+            CipherType.LOGIN -> {
+                VaultAddItemState.ViewState.Content.ItemType.Login(
+                    username = login?.username.orEmpty(),
+                    password = login?.password.orEmpty(),
+                    uri = login?.uris?.firstOrNull()?.uri.orEmpty(),
+                )
+            }
 
-        CipherType.SECURE_NOTE -> {
-            VaultAddItemState.ViewState.Content.SecureNotes(
-                originalCipher = this,
-                name = this.name,
-                favorite = this.favorite,
-                masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
-                notes = this.notes.orEmpty(),
-                // TODO: Update these properties to pull folder from data layer (BIT-501)
-                folderName = this.folderId?.asText() ?: R.string.folder_none.asText(),
-                availableFolders = emptyList(),
-                // TODO: Update this property to pull owner from data layer (BIT-501)
-                ownership = "",
-                // TODO: Update this property to pull available owners from data layer (BIT-501)
-                availableOwners = emptyList(),
-                customFieldData = this.fields.orEmpty().map { it.toCustomField() },
-            )
-        }
-
-        CipherType.CARD -> VaultAddItemState.ViewState.Error(
-            message = "Not yet implemented.".asText(),
-        )
-
-        CipherType.IDENTITY -> VaultAddItemState.ViewState.Error(
-            message = "Not yet implemented.".asText(),
-        )
-    }
+            CipherType.SECURE_NOTE -> VaultAddItemState.ViewState.Content.ItemType.SecureNotes
+            CipherType.CARD -> VaultAddItemState.ViewState.Content.ItemType.Card
+            CipherType.IDENTITY -> VaultAddItemState.ViewState.Content.ItemType.Identity
+        },
+        common = VaultAddItemState.ViewState.Content.Common(
+            originalCipher = this,
+            name = this.name,
+            favorite = this.favorite,
+            masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
+            notes = this.notes.orEmpty(),
+            // TODO: Update these properties to pull folder from data layer (BIT-501)
+            folderName = this.folderId?.asText() ?: R.string.folder_none.asText(),
+            availableFolders = emptyList(),
+            // TODO: Update this property to pull owner from data layer (BIT-501)
+            ownership = "",
+            // TODO: Update this property to pull available owners from data layer (BIT-501)
+            availableOwners = emptyList(),
+            customFieldData = this.fields.orEmpty().map { it.toCustomField() },
+        ),
+    )
 
 private fun FieldView.toCustomField() =
     when (this.type) {
