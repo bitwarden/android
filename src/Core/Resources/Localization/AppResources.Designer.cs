@@ -167,6 +167,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Credential Provider service
+        /// </summary>
+        public static string CredentialProviderService {
+            get {
+                return ResourceManager.GetString("CredentialProviderService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bitwarden needs attention - See &quot;Auto-fill Accessibility Service&quot; from Bitwarden settings.
         /// </summary>
         public static string AccessibilityOverlayPermissionAlert {
@@ -7668,6 +7677,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.
+        /// </summary>
+        public static string BitwardenCredentialProviderGoToSettings {
+            get {
+                return ResourceManager.GetString("BitwardenCredentialProviderGoToSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Word separator.
         /// </summary>
         public static string WordSeparator {
@@ -7682,6 +7700,15 @@ namespace Bit.Core.Resources.Localization {
         public static string XHours {
             get {
                 return ResourceManager.GetString("XHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Android Credential Provider is used for managing passkeys for use with websites and other apps on your device.
+        /// </summary>
+        public static string CredentialProviderServiceExplanationLong {
+            get {
+                return ResourceManager.GetString("CredentialProviderServiceExplanationLong", resourceCulture);
             }
         }
         

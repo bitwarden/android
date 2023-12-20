@@ -1191,6 +1191,9 @@ Scanning will happen automatically.</value>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
+  <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+  </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
@@ -1815,6 +1818,9 @@ Scanning will happen automatically.</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - Turn on "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+  </data>
+  <data name="CredentialProviderService" xml:space="preserve">
+    <value>Credential Provider service</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Auto-fill services</value>
@@ -2798,6 +2804,9 @@ Do you want to switch to this account?</value>
   </data>
   <data name="XHours" xml:space="preserve">
     <value>{0} hours</value>
+  </data>
+  <data name="CredentialProviderServiceExplanationLong" xml:space="preserve">
+    <value>The Android Credential Provider is used for managing passkeys for use with websites and other apps on your device.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>

@@ -37,6 +37,23 @@ namespace Bit.Droid.Services
             _eventService = eventService;
         }
 
+        public bool CredentialProviderServiceEnabled()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.UpsideDownCake)
+            {
+                return false;
+            }
+            try
+            {
+                // TODO - find a way to programmatically check if the credential provider service is enabled
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public bool AutofillServiceEnabled()
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.O)
@@ -163,7 +180,14 @@ namespace Bit.Droid.Services
             return Accessibility.AccessibilityHelpers.OverlayPermitted();
         }
 
-        
+        public void DisableCredentialProviderService()
+        {
+            try
+            {
+                // TODO - find a way to programmatically disable the provider service, or take the user to the settings page where they can do it
+            }
+            catch { }
+        }
 
         public void DisableAutofillService()
         {

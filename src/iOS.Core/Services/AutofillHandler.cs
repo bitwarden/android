@@ -11,9 +11,11 @@ namespace Bit.iOS.Core.Services
     {
         public bool SupportsAutofillService() => false;
         public bool AutofillServiceEnabled() => false;
+        public void DisableCredentialProviderService() => throw new NotImplementedException();
         public void Autofill(CipherView cipher) => throw new NotImplementedException();
         public bool AutofillAccessibilityOverlayPermitted() => false;
         public bool AutofillAccessibilityServiceRunning() => false;
+        public bool CredentialProviderServiceEnabled() => throw new NotImplementedException();
         public bool AutofillServicesEnabled() => false;
         public void CloseAutofill() => throw new NotImplementedException();
         public void DisableAutofillService() => throw new NotImplementedException();
