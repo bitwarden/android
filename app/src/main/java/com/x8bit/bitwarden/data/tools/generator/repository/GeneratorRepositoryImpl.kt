@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Singleton
 
@@ -79,6 +80,7 @@ class GeneratorRepositoryImpl(
 
     override suspend fun generatePassword(
         passwordGeneratorRequest: PasswordGeneratorRequest,
+        shouldSave: Boolean,
     ): GeneratedPasswordResult =
         generatorSdkSource
             .generatePassword(passwordGeneratorRequest)
@@ -88,7 +90,12 @@ class GeneratorRepositoryImpl(
                         password = generatedPassword,
                         lastUsedDate = Instant.now(),
                     )
-                    storePasswordHistory(passwordHistoryView)
+
+                    if (shouldSave) {
+                        scope.launch {
+                            storePasswordHistory(passwordHistoryView)
+                        }
+                    }
                     GeneratedPasswordResult.Success(generatedPassword)
                 },
                 onFailure = { GeneratedPasswordResult.InvalidRequest },
@@ -105,7 +112,9 @@ class GeneratorRepositoryImpl(
                         password = generatedPassphrase,
                         lastUsedDate = Instant.now(),
                     )
-                    storePasswordHistory(passwordHistoryView)
+                    scope.launch {
+                        storePasswordHistory(passwordHistoryView)
+                    }
                     GeneratedPassphraseResult.Success(generatedPassphrase)
                 },
                 onFailure = { GeneratedPassphraseResult.InvalidRequest },

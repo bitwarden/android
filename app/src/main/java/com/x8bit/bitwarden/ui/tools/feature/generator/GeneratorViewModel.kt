@@ -236,8 +236,9 @@ class GeneratorViewModel @Inject constructor(
             minNumber = null,
             minSpecial = null,
         )
+        val shouldSave = !password.isUserInteracting
 
-        val result = generatorRepository.generatePassword(request)
+        val result = generatorRepository.generatePassword(request, shouldSave)
         sendAction(GeneratorAction.Internal.UpdateGeneratedPasswordResult(result))
     }
 
@@ -386,7 +387,10 @@ class GeneratorViewModel @Inject constructor(
         val adjustedLength = action.length
 
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(length = adjustedLength)
+            currentPasswordType.copy(
+                length = adjustedLength,
+                isUserInteracting = action.isUserInteracting,
+            )
         }
     }
 
@@ -839,6 +843,9 @@ data class GeneratorState(
                  * @property minNumbers The minimum number of numeric characters.
                  * @property minSpecial The minimum number of special characters.
                  * @property avoidAmbiguousChars Whether to avoid characters that look similar.
+                 * @property isUserInteracting Indicates whether the user is currently interacting
+                 * with a control. This flag can be used to prevent unnecessary updates or
+                 * processing during continuous interaction.
                  */
                 @Parcelize
                 data class Password(
@@ -850,6 +857,7 @@ data class GeneratorState(
                     val minNumbers: Int = MIN_NUMBERS,
                     val minSpecial: Int = MIN_SPECIAL,
                     val avoidAmbiguousChars: Boolean = false,
+                    val isUserInteracting: Boolean = false,
                 ) : PasscodeType(), Parcelable {
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSWORD.labelRes
@@ -1182,6 +1190,7 @@ sealed class GeneratorAction {
                      */
                     data class SliderLengthChange(
                         val length: Int,
+                        val isUserInteracting: Boolean,
                     ) : Password()
 
                     /**

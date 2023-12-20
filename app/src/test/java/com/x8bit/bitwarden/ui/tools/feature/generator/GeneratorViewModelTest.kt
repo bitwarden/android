@@ -409,6 +409,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 viewModel.actionChannel.trySend(
                     GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
                         length = newLength,
+                        isUserInteracting = false,
                     ),
                 )
 

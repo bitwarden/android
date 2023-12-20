@@ -288,6 +288,16 @@ class GeneratorScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
                     length = 128,
+                    isUserInteracting = true,
+                ),
+            )
+        }
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
+                    length = 128,
+                    isUserInteracting = false,
                 ),
             )
         }
