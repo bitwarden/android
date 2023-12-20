@@ -23,7 +23,7 @@ class NetworkConfigManagerImpl(
     dispatcherManager: DispatcherManager,
 ) : NetworkConfigManager {
 
-    private val scope = CoroutineScope(dispatcherManager.io)
+    private val collectionScope = CoroutineScope(dispatcherManager.unconfined)
 
     init {
         authRepository
@@ -35,14 +35,14 @@ class NetworkConfigManagerImpl(
                     is AuthState.Uninitialized -> null
                 }
             }
-            .launchIn(scope)
+            .launchIn(collectionScope)
 
         environmentRepository
             .environmentStateFlow
             .onEach { environment ->
                 baseUrlInterceptors.environment = environment
             }
-            .launchIn(scope)
+            .launchIn(collectionScope)
 
         refreshAuthenticator.authenticatorProvider = authRepository
     }
