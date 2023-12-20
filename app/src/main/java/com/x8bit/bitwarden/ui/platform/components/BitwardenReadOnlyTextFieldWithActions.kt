@@ -14,6 +14,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ import com.x8bit.bitwarden.R
  * @param modifier [Modifier] applied to this layout composable.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
+ * @param textStyle An optional style that may be used to override the default used.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
@@ -42,6 +44,7 @@ fun BitwardenReadOnlyTextFieldWithActions(
     value: String,
     modifier: Modifier = Modifier,
     singleLine: Boolean = true,
+    textStyle: TextStyle? = null,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -63,6 +66,7 @@ fun BitwardenReadOnlyTextFieldWithActions(
             label = label,
             value = value,
             onValueChange = {},
+            textStyle = textStyle,
             visualTransformation = visualTransformation,
         )
         BitwardenRowOfActions(actions)
