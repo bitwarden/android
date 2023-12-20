@@ -11,6 +11,7 @@ using Android.Text.Method;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using AndroidX.Credentials;
 using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
@@ -490,6 +491,27 @@ namespace Bit.Droid.Services
             }
         }
 
+        public void OpenCredentialProviderSettings()
+        {
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            try
+            {
+                var pendingIntent = CredentialManager.Create(activity).CreateSettingsPendingIntent();
+                pendingIntent.Send();
+            }
+            catch (ActivityNotFoundException)
+            {
+                var alertBuilder = new AlertDialog.Builder(activity);
+                alertBuilder.SetMessage(AppResources.BitwardenCredentialProviderGoToSettings);
+                alertBuilder.SetCancelable(true);
+                alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
+                {
+                    (sender as AlertDialog)?.Cancel();
+                });
+                alertBuilder.Create().Show();
+            }
+        }
+
         public void OpenAccessibilitySettings()
         {
             try
@@ -547,6 +569,8 @@ namespace Bit.Droid.Services
         {
             return true;
         }
+
+        public bool SupportsCredentialProviderService() => Build.VERSION.SdkInt >= BuildVersionCodes.UpsideDownCake;
 
         public bool SupportsAutofillServices() => Build.VERSION.SdkInt >= BuildVersionCodes.O;
 
