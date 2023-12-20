@@ -59,7 +59,7 @@
                 StyleClass="btn-danger"
                 HorizontalOptions="Start"
                 VerticalOptions="Start"
-                Margin="0,20,0,0"
+                Margin="0,20,6,0"
                 Padding="16,0"
                 CornerRadius="2"
                 TextTransform="Uppercase"
