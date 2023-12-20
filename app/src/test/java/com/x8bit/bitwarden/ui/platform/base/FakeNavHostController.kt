@@ -10,9 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.NavigatorProvider
+import androidx.navigation.NavigatorState
 import androidx.navigation.compose.ComposeNavigator
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertEquals
 
 /**
@@ -40,6 +42,13 @@ class FakeNavHostController : NavHostController(context = mockk()) {
     init {
         navigatorProvider = TestNavigatorProvider()
         navigatorProvider.addNavigator(ComposeNavigator())
+
+        val state = mockk<NavigatorState>(relaxed = true) {
+            every { backStack } returns MutableStateFlow(emptyList())
+        }
+        navigatorProvider.navigators.forEach { (_, navigator) ->
+            navigator.onAttach(state)
+        }
     }
 
     /**
