@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
+import androidx.annotation.Keep
 import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseEnumeratedIntSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -178,5 +179,6 @@ enum class LinkedIdTypeJson(val value: UInt) {
     // endregion IDENTITY
 }
 
+@Keep
 private class LinkedIdTypeSerializer :
     BaseEnumeratedIntSerializer<LinkedIdTypeJson>(LinkedIdTypeJson.values())

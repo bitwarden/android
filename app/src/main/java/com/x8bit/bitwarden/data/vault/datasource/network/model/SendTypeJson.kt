@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
+import androidx.annotation.Keep
 import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseEnumeratedIntSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,5 +23,6 @@ enum class SendTypeJson {
     FILE,
 }
 
+@Keep
 private class SendTypeSerializer :
     BaseEnumeratedIntSerializer<SendTypeJson>(SendTypeJson.values())
