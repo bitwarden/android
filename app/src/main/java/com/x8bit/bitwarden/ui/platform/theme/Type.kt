@@ -194,9 +194,21 @@ val Typography: Typography = Typography(
 )
 
 val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
-    fingerprint = TextStyle(
+    sensitiveInfoSmall = TextStyle(
         fontSize = 14.sp,
         lineHeight = 20.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular_mono)),
+        fontWeight = FontWeight.W400,
+        letterSpacing = 0.5.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    ),
+    sensitiveInfoMedium = TextStyle(
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
         fontFamily = FontFamily(Font(R.font.roboto_regular_mono)),
         fontWeight = FontWeight.W400,
         letterSpacing = 0.5.sp,
@@ -224,6 +236,7 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
  * Models typography that live outside of the Material Theme spec.
  */
 data class NonMaterialTypography(
-    val fingerprint: TextStyle,
     val labelMediumProminent: TextStyle,
+    val sensitiveInfoSmall: TextStyle,
+    val sensitiveInfoMedium: TextStyle,
 )

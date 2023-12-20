@@ -326,7 +326,7 @@ private fun FingerPrintPhraseDialog(
                 Text(
                     text = fingerprintPhrase(),
                     color = LocalNonMaterialColors.current.fingerprint,
-                    style = LocalNonMaterialTypography.current.fingerprint,
+                    style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
