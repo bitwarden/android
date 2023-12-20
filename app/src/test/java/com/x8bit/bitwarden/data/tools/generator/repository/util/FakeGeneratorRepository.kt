@@ -33,6 +33,7 @@ class FakeGeneratorRepository : GeneratorRepository {
 
     override suspend fun generatePassword(
         passwordGeneratorRequest: PasswordGeneratorRequest,
+        shouldSave: Boolean,
     ): GeneratedPasswordResult {
         return generatePasswordResult
     }

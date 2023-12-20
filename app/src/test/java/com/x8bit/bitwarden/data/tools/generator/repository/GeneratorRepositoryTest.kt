@@ -71,8 +71,9 @@ class GeneratorRepositoryTest {
         unmockkStatic(Instant::class)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `generatePassword should emit Success result and store the generated password`() = runTest {
+    fun `generatePassword should emit Success result and store the generated password when shouldSave is true`() = runTest {
         val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
 
         mockkStatic(Instant::class)
@@ -105,7 +106,7 @@ class GeneratorRepositoryTest {
 
         coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
 
-        val result = repository.generatePassword(request)
+        val result = repository.generatePassword(request, true)
 
         assertEquals(generatedPassword, (result as GeneratedPasswordResult.Success).generatedString)
         coVerify { generatorSdkSource.generatePassword(request) }
@@ -114,6 +115,51 @@ class GeneratorRepositoryTest {
             passwordHistoryDiskSource.insertPasswordHistory(
                 encryptedPasswordHistory.toPasswordHistoryEntity(userId),
             )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generatePassword should emit Success result but not store the generated password when shouldSave is false`() = runTest {
+        val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
+
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns fixedInstant
+
+        val userId = "testUserId"
+        val request = PasswordGeneratorRequest(
+            lowercase = true,
+            uppercase = true,
+            numbers = true,
+            special = true,
+            length = 12.toUByte(),
+            avoidAmbiguous = false,
+            minLowercase = null,
+            minUppercase = null,
+            minNumber = null,
+            minSpecial = null,
+        )
+        val generatedPassword = "GeneratedPassword123!"
+        val encryptedPasswordHistory =
+            PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
+
+        coEvery { authDiskSource.userState?.activeUserId } returns userId
+
+        coEvery { generatorSdkSource.generatePassword(request) } returns
+            Result.success(generatedPassword)
+
+        coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+            Result.success(encryptedPasswordHistory)
+
+        coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
+
+        val result = repository.generatePassword(request, false)
+
+        assertEquals(generatedPassword, (result as GeneratedPasswordResult.Success).generatedString)
+        coVerify { generatorSdkSource.generatePassword(request) }
+
+        coVerify(exactly = 0) {
+            passwordHistoryDiskSource.insertPasswordHistory(any())
         }
     }
 
@@ -134,7 +180,7 @@ class GeneratorRepositoryTest {
         val exception = RuntimeException("An error occurred")
         coEvery { generatorSdkSource.generatePassword(request) } returns Result.failure(exception)
 
-        val result = repository.generatePassword(request)
+        val result = repository.generatePassword(request, true)
 
         assertTrue(result is GeneratedPasswordResult.InvalidRequest)
         coVerify { generatorSdkSource.generatePassword(request) }

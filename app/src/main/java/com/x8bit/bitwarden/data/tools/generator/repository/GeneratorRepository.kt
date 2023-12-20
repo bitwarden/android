@@ -20,10 +20,13 @@ interface GeneratorRepository {
     val passwordHistoryStateFlow: StateFlow<LocalDataState<List<PasswordHistoryView>>>
 
     /**
-     * Attempt to generate a password.
+     * Attempt to generate a password based on specifications in [passwordGeneratorRequest].
+     * The [shouldSave] flag determines if the password is saved for future reference
+     * or generated for temporary use.
      */
     suspend fun generatePassword(
         passwordGeneratorRequest: PasswordGeneratorRequest,
+        shouldSave: Boolean,
     ): GeneratedPasswordResult
 
     /**

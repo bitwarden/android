@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
@@ -404,8 +405,7 @@ private fun ColumnScope.PasswordTypeContent(
 
     PasswordLengthSliderItem(
         length = passwordTypeState.length,
-        onPasswordSliderLengthChange =
-        passwordHandlers.onPasswordSliderLengthChange,
+        onPasswordSliderLengthChange = passwordHandlers.onPasswordSliderLengthChange,
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -464,8 +464,9 @@ private fun ColumnScope.PasswordTypeContent(
 @Composable
 private fun PasswordLengthSliderItem(
     length: Int,
-    onPasswordSliderLengthChange: (Int) -> Unit,
+    onPasswordSliderLengthChange: (value: Int, isUserInteracting: Boolean) -> Unit,
 ) {
+    var sliderValue by remember { mutableStateOf(length) }
     var labelTextWidth by remember { mutableStateOf(Dp.Unspecified) }
 
     val density = LocalDensity.current
@@ -479,11 +480,7 @@ private fun PasswordLengthSliderItem(
         OutlinedTextField(
             value = length.toString(),
             readOnly = true,
-            onValueChange = { newText ->
-                newText.toIntOrNull()?.let { newValue ->
-                    onPasswordSliderLengthChange(newValue)
-                }
-            },
+            onValueChange = { },
             label = {
                 Text(
                     text = stringResource(id = R.string.length),
@@ -502,9 +499,13 @@ private fun PasswordLengthSliderItem(
         )
 
         Slider(
-            value = length.toFloat(),
+            value = sliderValue.toFloat(),
             onValueChange = { newValue ->
-                onPasswordSliderLengthChange(newValue.toInt())
+                sliderValue = newValue.toInt()
+                onPasswordSliderLengthChange(sliderValue, true)
+            },
+            onValueChangeFinished = {
+                onPasswordSliderLengthChange(sliderValue, false)
             },
             valueRange =
             PASSWORD_LENGTH_SLIDER_MIN.toFloat()..PASSWORD_LENGTH_SLIDER_MAX.toFloat(),
@@ -938,7 +939,7 @@ private fun GeneratorPreview() {
  */
 @Suppress("LongParameterList")
 private class PasswordHandlers(
-    val onPasswordSliderLengthChange: (Int) -> Unit,
+    val onPasswordSliderLengthChange: (Int, Boolean) -> Unit,
     val onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
     val onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
     val onPasswordToggleNumbersChange: (Boolean) -> Unit,
@@ -951,11 +952,12 @@ private class PasswordHandlers(
         @Suppress("LongMethod")
         fun create(viewModel: GeneratorViewModel): PasswordHandlers {
             return PasswordHandlers(
-                onPasswordSliderLengthChange = { newLength ->
+                onPasswordSliderLengthChange = { newLength, isUserInteracting ->
                     viewModel.trySendAction(
                         GeneratorAction.MainType.Passcode.PasscodeType.Password
                             .SliderLengthChange(
                                 length = newLength,
+                                isUserInteracting = isUserInteracting,
                             ),
                     )
                 },
