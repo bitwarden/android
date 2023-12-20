@@ -4,7 +4,6 @@ namespace Bit.Core.Abstractions
 {
     public interface IAutofillHandler
     {
-        bool CredentialProviderServiceEnabled();
         bool AutofillServicesEnabled();
         bool SupportsAutofillService();
         void Autofill(CipherView cipher);
@@ -12,7 +11,6 @@ namespace Bit.Core.Abstractions
         bool AutofillAccessibilityServiceRunning();
         bool AutofillAccessibilityOverlayPermitted();
         bool AutofillServiceEnabled();
-        void DisableCredentialProviderService();
         void DisableAutofillService();
     }
 }

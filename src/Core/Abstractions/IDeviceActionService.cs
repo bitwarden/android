@@ -28,7 +28,6 @@ namespace Bit.App.Abstractions
         bool SupportsNfc();
         bool SupportsCamera();
         bool SupportsFido2();
-        bool SupportsCredentialProviderService();
         bool SupportsAutofillServices();
         bool SupportsInlineAutofill();
         bool SupportsDrawOver();
@@ -37,7 +36,6 @@ namespace Bit.App.Abstractions
         void RateApp();
         void OpenAccessibilitySettings();
         void OpenAccessibilityOverlayPermissionSettings();
-        void OpenCredentialProviderSettings();
         void OpenAutofillSettings();
         long GetActiveTime();
         void CloseMainApp();

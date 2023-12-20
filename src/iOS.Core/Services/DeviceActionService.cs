@@ -301,8 +301,6 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
-        public void OpenCredentialProviderSettings() => throw new NotImplementedException();
-
         public void OpenAutofillSettings()
         {
             throw new NotImplementedException();
@@ -340,8 +338,6 @@ namespace Bit.iOS.Core.Services
             }
             return false;
         }
-
-        public bool SupportsCredentialProviderService() => throw new NotImplementedException();
 
         public bool SupportsAutofillServices() => UIDevice.CurrentDevice.CheckSystemVersion(12, 0);
         public bool SupportsInlineAutofill() => false;
