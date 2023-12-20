@@ -10,16 +10,23 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
 /**
  * A composable function for displaying a password history list item.
@@ -44,12 +51,21 @@ fun PasswordHistoryListItem(
     ) {
 
         Column(modifier = Modifier.weight(1f)) {
+            var widthPx by remember(label) { mutableStateOf(0) }
+            val textStyle = LocalNonMaterialTypography.current.sensitiveInfoMedium
+            val formattedText = label.withLineBreaksAtWidth(
+                widthPx = widthPx.toFloat(),
+                monospacedTextStyle = textStyle,
+            )
             Text(
-                text = label.withVisualTransformation(
+                text = formattedText.withVisualTransformation(
                     visualTransformation = nonLetterColorVisualTransformation(),
                 ),
-                style = MaterialTheme.typography.bodyLarge,
+                style = textStyle,
                 color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { widthPx = it.size.width },
             )
 
             Text(

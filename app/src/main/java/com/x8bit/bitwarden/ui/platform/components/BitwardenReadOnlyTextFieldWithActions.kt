@@ -33,6 +33,8 @@ import com.x8bit.bitwarden.R
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param textStyle An optional style that may be used to override the default used.
+ * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
+ * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
@@ -45,6 +47,7 @@ fun BitwardenReadOnlyTextFieldWithActions(
     modifier: Modifier = Modifier,
     singleLine: Boolean = true,
     textStyle: TextStyle? = null,
+    shouldAddCustomLineBreaks: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -67,6 +70,7 @@ fun BitwardenReadOnlyTextFieldWithActions(
             value = value,
             onValueChange = {},
             textStyle = textStyle,
+            shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
             visualTransformation = visualTransformation,
         )
         BitwardenRowOfActions(actions)

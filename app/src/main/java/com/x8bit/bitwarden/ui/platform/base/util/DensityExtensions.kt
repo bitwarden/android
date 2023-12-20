@@ -32,6 +32,12 @@ fun IntSize.toDpSize(density: Density): DpSize = with(density) {
 }
 
 /**
+ * A function for converting [Dp] to pixels within a composable function.
+ */
+@Composable
+fun Dp.toPx(): Float = with(LocalDensity.current) { this@toPx.toPx() }
+
+/**
  * Converts a [Dp] value to [TextUnit] with [TextUnitType.Sp] as its type.
  *
  * This allows for easier conversion between density-independent pixels (dp) and

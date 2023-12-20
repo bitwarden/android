@@ -309,6 +309,7 @@ private fun GeneratedStringItem(
             )
         },
         textStyle = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+        shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),
         modifier = Modifier.padding(horizontal = 16.dp),
     )
