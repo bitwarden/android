@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.util
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -15,11 +16,16 @@ import androidx.compose.ui.text.withStyle
  * applying different colors to the digits and special characters, letters will remain unaffected.
  */
 @Composable
-fun nonLetterColorVisualTransformation(): VisualTransformation =
-    NonLetterColorVisualTransformation(
-        digitColor = MaterialTheme.colorScheme.primary,
-        specialCharacterColor = MaterialTheme.colorScheme.error,
-    )
+fun nonLetterColorVisualTransformation(): VisualTransformation {
+    val digitColor = MaterialTheme.colorScheme.primary
+    val specialCharacterColor = MaterialTheme.colorScheme.error
+    return remember(digitColor, specialCharacterColor) {
+        NonLetterColorVisualTransformation(
+            digitColor = digitColor,
+            specialCharacterColor = specialCharacterColor,
+        )
+    }
+}
 
 /**
  * Alters the visual output of the text in an input field.

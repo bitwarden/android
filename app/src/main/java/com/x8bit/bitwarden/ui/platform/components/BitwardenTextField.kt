@@ -7,11 +7,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.base.util.toPx
+import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 
 /**
@@ -30,6 +38,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param enabled Whether or not the text field is enabled.
  * @param textStyle An optional style that may be used to override the default used.
+ * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
+ * an entire line before breaking. `false` by default.
  * @param visualTransformation Transforms the visual representation of the input [value].
  * @param keyboardType the preferred type of keyboard input.
  */
@@ -46,14 +56,29 @@ fun BitwardenTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     textStyle: TextStyle? = null,
+    shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
+    var widthPx by remember { mutableStateOf(0) }
+
+    val currentTextStyle = textStyle ?: LocalTextStyle.current
+    val formattedText = if (shouldAddCustomLineBreaks) {
+        value.withLineBreaksAtWidth(
+            // Adjust for built in padding
+            widthPx = widthPx - 16.dp.toPx(),
+            monospacedTextStyle = currentTextStyle,
+        )
+    } else {
+        value
+    }
+
     OutlinedTextField(
-        modifier = modifier,
+        modifier = modifier
+            .onGloballyPositioned { widthPx = it.size.width },
         enabled = enabled,
         label = { Text(text = label) },
-        value = value,
+        value = formattedText,
         leadingIcon = leadingIconResource?.let { iconResource ->
             {
                 Icon(
@@ -77,7 +102,7 @@ fun BitwardenTextField(
         onValueChange = onValueChange,
         singleLine = singleLine,
         readOnly = readOnly,
-        textStyle = textStyle ?: LocalTextStyle.current,
+        textStyle = currentTextStyle,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
         visualTransformation = visualTransformation,
     )
