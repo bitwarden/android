@@ -1,6 +1,9 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.additem.handlers
 
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemViewModel
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 
 /**
@@ -20,7 +23,7 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
  * @property onCustomFieldValueChange Handles the action when the field's value changes
  */
 @Suppress("LongParameterList")
-class VaultAddItemCommonTypeHandlers(
+class VaultAddItemCommonHandlers(
     val onNameTextChange: (String) -> Unit,
     val onFolderTextChange: (String) -> Unit,
     val onToggleFavorite: (Boolean) -> Unit,
@@ -34,12 +37,12 @@ class VaultAddItemCommonTypeHandlers(
     companion object {
 
         /**
-         * Creates an instance of [VaultAddItemCommonTypeHandlers] by binding actions
+         * Creates an instance of [VaultAddItemCommonHandlers] by binding actions
          * to the provided [VaultAddItemViewModel].
          */
         @Suppress("LongMethod")
-        fun create(viewModel: VaultAddItemViewModel): VaultAddItemCommonTypeHandlers {
-            return VaultAddItemCommonTypeHandlers(
+        fun create(viewModel: VaultAddItemViewModel): VaultAddItemCommonHandlers {
+            return VaultAddItemCommonHandlers(
                 onNameTextChange = { newName ->
                     viewModel.trySendAction(
                         VaultAddItemAction.Common.NameTextChange(newName),

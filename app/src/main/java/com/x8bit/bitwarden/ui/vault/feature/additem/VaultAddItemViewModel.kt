@@ -42,7 +42,7 @@ private const val KEY_STATE = "state"
  * @param savedStateHandle Handles the navigation arguments of this ViewModel.
  */
 @HiltViewModel
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LargeClass")
 class VaultAddItemViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
@@ -87,6 +87,7 @@ class VaultAddItemViewModel @Inject constructor(
         when (action) {
             is VaultAddItemAction.Common -> handleCommonActions(action)
             is VaultAddItemAction.ItemType.LoginType -> handleAddLoginTypeAction(action)
+            is VaultAddItemAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
             is VaultAddItemAction.Internal -> handleInternalActions(action)
         }
     }
@@ -158,7 +159,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSwitchToAddIdentityItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                type = VaultAddItemState.ViewState.Content.ItemType.Identity,
+                type = VaultAddItemState.ViewState.Content.ItemType.Identity(),
             )
         }
     }
@@ -438,6 +439,182 @@ class VaultAddItemViewModel @Inject constructor(
 
     //endregion Add Login Item Type Handlers
 
+    //region Identity Type Handlers
+    private fun handleIdentityTypeActions(action: VaultAddItemAction.ItemType.IdentityType) {
+        when (action) {
+            is VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange -> {
+                handleIdentityFirstNameTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.Address1TextChange -> {
+                handleIdentityAddress1TextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.Address2TextChange -> {
+                handleIdentityAddress2TextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.Address3TextChange -> {
+                handleIdentityAddress3TextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.CityTextChange -> {
+                handleIdentityCityTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.CompanyTextChange -> {
+                handleIdentityCompanyTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.CountryTextChange -> {
+                handleIdentityCountryTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.EmailTextChange -> {
+                handleIdentityEmailTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.LastNameTextChange -> {
+                handleIdentityLastNameTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange -> {
+                handleIdentityLicenseNumberTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange -> {
+                handleIdentityMiddleNameTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange -> {
+                handleIdentityPassportNumberTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.PhoneTextChange -> {
+                handleIdentityPhoneTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.ZipTextChange -> {
+                handleIdentityZipTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.SsnTextChange -> {
+                handleIdentitySsnTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.UsernameTextChange -> {
+                handleIdentityUsernameTextChange(action)
+            }
+
+            is VaultAddItemAction.ItemType.IdentityType.TitleSelected -> {
+                handleIdentityTitleSelected(action)
+            }
+        }
+    }
+
+    private fun handleIdentityAddress1TextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.Address1TextChange,
+    ) {
+        updateIdentityContent { it.copy(address1 = action.address1) }
+    }
+
+    private fun handleIdentityAddress2TextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.Address2TextChange,
+    ) {
+        updateIdentityContent { it.copy(address2 = action.address2) }
+    }
+
+    private fun handleIdentityAddress3TextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.Address3TextChange,
+    ) {
+        updateIdentityContent { it.copy(address3 = action.address3) }
+    }
+
+    private fun handleIdentityCityTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.CityTextChange,
+    ) {
+        updateIdentityContent { it.copy(city = action.city) }
+    }
+
+    private fun handleIdentityCompanyTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.CompanyTextChange,
+    ) {
+        updateIdentityContent { it.copy(company = action.company) }
+    }
+
+    private fun handleIdentityCountryTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.CountryTextChange,
+    ) {
+        updateIdentityContent { it.copy(country = action.country) }
+    }
+
+    private fun handleIdentityEmailTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.EmailTextChange,
+    ) {
+        updateIdentityContent { it.copy(email = action.email) }
+    }
+
+    private fun handleIdentityLastNameTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.LastNameTextChange,
+    ) {
+        updateIdentityContent { it.copy(lastName = action.lastName) }
+    }
+
+    private fun handleIdentityLicenseNumberTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange,
+    ) {
+        updateIdentityContent { it.copy(licenseNumber = action.licenseNumber) }
+    }
+
+    private fun handleIdentityMiddleNameTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange,
+    ) {
+        updateIdentityContent { it.copy(middleName = action.middleName) }
+    }
+
+    private fun handleIdentityPassportNumberTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange,
+    ) {
+        updateIdentityContent { it.copy(passportNumber = action.passportNumber) }
+    }
+
+    private fun handleIdentityPhoneTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.PhoneTextChange,
+    ) {
+        updateIdentityContent { it.copy(phone = action.phone) }
+    }
+
+    private fun handleIdentityZipTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.ZipTextChange,
+    ) {
+        updateIdentityContent { it.copy(zip = action.zip) }
+    }
+
+    private fun handleIdentitySsnTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.SsnTextChange,
+    ) {
+        updateIdentityContent { it.copy(ssn = action.ssn) }
+    }
+
+    private fun handleIdentityUsernameTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.UsernameTextChange,
+    ) {
+        updateIdentityContent { it.copy(username = action.username) }
+    }
+
+    private fun handleIdentityFirstNameTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange,
+    ) {
+        updateIdentityContent { it.copy(firstName = action.firstName) }
+    }
+
+    private fun handleIdentityTitleSelected(
+        action: VaultAddItemAction.ItemType.IdentityType.TitleSelected,
+    ) {
+        updateIdentityContent { it.copy(selectedTitle = action.title) }
+    }
+    //endregion Identity Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalActions(action: VaultAddItemAction.Internal) {
@@ -594,6 +771,16 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateIdentityContent(
+        crossinline block: (VaultAddItemState.ViewState.Content.ItemType.Identity) ->
+        VaultAddItemState.ViewState.Content.ItemType.Identity,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddItemState.ViewState.Content.ItemType.Identity)
+                ?.let { currentContent.copy(type = block(it)) }
+        }
+    }
+
     //endregion Utility Functions
 }
 
@@ -746,9 +933,57 @@ data class VaultAddItemState(
 
                 /**
                  * Represents the `Identity` item type.
+                 *
+                 * @property selectedTitle The selected title for the identity item.
+                 * @property firstName The first name for the identity item.
+                 * @property middleName The middle name for the identity item.
+                 * @property lastName The last name for the identity item.
+                 * @property username The username for the identity item.
+                 * @property company The company for the identity item.
+                 * @property ssn The SSN for the identity item.
+                 * @property passportNumber The passport number for the identity item.
+                 * @property licenseNumber The license number for the identity item.
+                 * @property email The email for the identity item.
+                 * @property phone The phone for the identity item.
+                 * @property address1 The address1 for the identity item.
+                 * @property address2 The address2 for the identity item.
+                 * @property address3 The address3 for the identity item.
+                 * @property city The city for the identity item.
+                 * @property zip The zip for the identity item.
+                 * @property country The country for the identity item.
                  */
                 @Parcelize
-                data object Identity : ItemType() {
+                data class Identity(
+                    val selectedTitle: Title = Title.MR,
+                    val firstName: String = "",
+                    val middleName: String = "",
+                    val lastName: String = "",
+                    val username: String = "",
+                    val company: String = "",
+                    val ssn: String = "",
+                    val passportNumber: String = "",
+                    val licenseNumber: String = "",
+                    val email: String = "",
+                    val phone: String = "",
+                    val address1: String = "",
+                    val address2: String = "",
+                    val address3: String = "",
+                    val city: String = "",
+                    val zip: String = "",
+                    val country: String = "",
+                ) : ItemType() {
+
+                    /**
+                     * Defines all available title options for identities.
+                     */
+                    enum class Title(val value: Text) {
+                        MR(value = R.string.mr.asText()),
+                        MRS(value = R.string.mrs.asText()),
+                        MS(value = R.string.ms.asText()),
+                        MX(value = R.string.mx.asText()),
+                        DR(value = R.string.dr.asText()),
+                    }
+
                     override val displayStringResId: Int get() = ItemTypeOption.IDENTITY.labelRes
                 }
 
@@ -1010,6 +1245,133 @@ sealed class VaultAddItemAction {
              * Represents the action to add a new URI field.
              */
             data object AddNewUriClick : LoginType()
+        }
+
+        /**
+         * Represents actions specific to the Identity type.
+         */
+        sealed class IdentityType : ItemType() {
+
+            /**
+             * Fired when the first name text input is changed.
+             *
+             * @property firstName The new first name text.
+             */
+            data class FirstNameTextChange(val firstName: String) : IdentityType()
+
+            /**
+             * Fired when the middle name text input is changed.
+             *
+             * @property middleName The new middle name text.
+             */
+            data class MiddleNameTextChange(val middleName: String) : IdentityType()
+
+            /**
+             * Fired when the last name text input is changed.
+             *
+             * @property lastName The new last name text.
+             */
+            data class LastNameTextChange(val lastName: String) : IdentityType()
+
+            /**
+             * Fired when the username text input is changed.
+             *
+             * @property username The new username text.
+             */
+            data class UsernameTextChange(val username: String) : IdentityType()
+
+            /**
+             * Fired when the company text input is changed.
+             *
+             * @property company The new company text.
+             */
+            data class CompanyTextChange(val company: String) : IdentityType()
+
+            /**
+             * Fired when the SSN text input is changed.
+             *
+             * @property ssn The new SSN text.
+             */
+            data class SsnTextChange(val ssn: String) : IdentityType()
+
+            /**
+             * Fired when the passport number text input is changed.
+             *
+             * @property passportNumber The new passport number text.
+             */
+            data class PassportNumberTextChange(val passportNumber: String) : IdentityType()
+
+            /**
+             * Fired when the license number text input is changed.
+             *
+             * @property licenseNumber The new license number text.
+             */
+            data class LicenseNumberTextChange(val licenseNumber: String) : IdentityType()
+
+            /**
+             * Fired when the email text input is changed.
+             *
+             * @property email The new email text.
+             */
+            data class EmailTextChange(val email: String) : IdentityType()
+
+            /**
+             * Fired when the phone text input is changed.
+             *
+             * @property phone The new phone text.
+             */
+            data class PhoneTextChange(val phone: String) : IdentityType()
+
+            /**
+             * Fired when the address1 text input is changed.
+             *
+             * @property address1 The new address1 text.
+             */
+            data class Address1TextChange(val address1: String) : IdentityType()
+
+            /**
+             * Fired when the address2 text input is changed.
+             *
+             * @property address2 The new address2 text.
+             */
+            data class Address2TextChange(val address2: String) : IdentityType()
+
+            /**
+             * Fired when the address3 text input is changed.
+             *
+             * @property address3 The new address3 text.
+             */
+            data class Address3TextChange(val address3: String) : IdentityType()
+
+            /**
+             * Fired when the city text input is changed.
+             *
+             * @property city The new city text.
+             */
+            data class CityTextChange(val city: String) : IdentityType()
+
+            /**
+             * Fired when the zip text input is changed.
+             *
+             * @property zip The new postal text.
+             */
+            data class ZipTextChange(val zip: String) : IdentityType()
+
+            /**
+             * Fired when the country text input is changed.
+             *
+             * @property country The new country text.
+             */
+            data class CountryTextChange(val country: String) : IdentityType()
+
+            /**
+             * Fired when the title input is selected.
+             *
+             * @property title The selected title.
+             */
+            data class TitleSelected(
+                val title: VaultAddItemState.ViewState.Content.ItemType.Identity.Title,
+            ) : IdentityType()
         }
     }
 

@@ -15,6 +15,9 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddIdentityItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTypeHandlers
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -26,8 +29,9 @@ fun AddEditItemContent(
     state: VaultAddItemState.ViewState.Content,
     isAddItemMode: Boolean,
     onTypeOptionClicked: (VaultAddItemState.ItemTypeOption) -> Unit,
-    commonTypeHandlers: VaultAddItemCommonTypeHandlers,
+    commonTypeHandlers: VaultAddItemCommonHandlers,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
+    identityItemTypeHandlers: VaultAddIdentityItemTypeHandlers,
     modifier: Modifier = Modifier,
     permissionsManager: PermissionsManager,
 ) {
@@ -91,7 +95,13 @@ fun AddEditItemContent(
             }
 
             is VaultAddItemState.ViewState.Content.ItemType.Identity -> {
-                // TODO(BIT-667): Create UI for identity-type item creation
+                addEditIdentityItems(
+                    commonState = state.common,
+                    identityState = state.type,
+                    isAddItemMode = isAddItemMode,
+                    commonTypeHandlers = commonTypeHandlers,
+                    identityItemTypeHandlers = identityItemTypeHandlers,
+                )
             }
 
             is VaultAddItemState.ViewState.Content.ItemType.SecureNotes -> {
