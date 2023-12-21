@@ -21,21 +21,33 @@ interface VaultRepository {
 
     /**
      * Flow that represents the current vault data.
+     *
+     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
+     * must be collected in order to trigger state changes.
      */
     val vaultDataStateFlow: StateFlow<DataState<VaultData>>
 
     /**
      * Flow that represents all ciphers for the active user.
+     *
+     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
+     * must be collected in order to trigger state changes.
      */
     val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
 
     /**
      * Flow that represents all collections for the active user.
+     *
+     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
+     * must be collected in order to trigger state changes.
      */
     val collectionsStateFlow: StateFlow<DataState<List<CollectionView>>>
 
     /**
      * Flow that represents all folders for the active user.
+     *
+     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
+     * must be collected in order to trigger state changes.
      */
     val foldersStateFlow: StateFlow<DataState<List<FolderView>>>
 
