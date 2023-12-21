@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
@@ -309,6 +310,10 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = "mockId-1",
                 organizationKeys = mapOf("mockId-1" to "mockKey-1"),
+            )
+            fakeAuthDiskSource.assertOrganizations(
+                userId = "mockId-1",
+                organizations = listOf(createMockOrganization(number = 1)),
             )
             assertEquals(
                 DataState.Loaded(

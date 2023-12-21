@@ -10,9 +10,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -20,11 +22,7 @@ import org.junit.jupiter.api.Test
 class AuthDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
 
-    @OptIn(ExperimentalSerializationApi::class)
-    private val json = Json {
-        ignoreUnknownKeys = true
-        explicitNulls = false
-    }
+    private val json = PlatformNetworkModule.providesJson()
 
     private val authDiskSource = AuthDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
@@ -247,6 +245,71 @@ class AuthDiskSourceTest {
                 """
                     .trimIndent(),
             ),
+            json.parseToJsonElement(requireNotNull(actual)),
+        )
+    }
+
+    @Test
+    fun `getOrganizations should pull from SharedPreferences`() {
+        val organizationsBaseKey = "bwPreferencesStorage:organizations"
+        val mockUserId = "mockUserId"
+        val mockOrganizations = listOf(
+            createMockOrganization(0),
+            createMockOrganization(1),
+        )
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                "${organizationsBaseKey}_$mockUserId",
+                json.encodeToString(mockOrganizations),
+            )
+            .apply()
+        val actual = authDiskSource.getOrganizations(userId = mockUserId)
+        assertEquals(
+            mockOrganizations,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getOrganizationsFlow should react to changes in getOrganizations`() = runTest {
+        val mockUserId = "mockUserId"
+        val mockOrganizations = listOf(
+            createMockOrganization(0),
+            createMockOrganization(1),
+        )
+        authDiskSource.getOrganizationsFlow(userId = mockUserId).test {
+            // The initial values of the Flow and the property are in sync
+            assertNull(authDiskSource.getOrganizations(userId = mockUserId))
+            assertNull(awaitItem())
+
+            // Updating the repository updates shared preferences
+            authDiskSource.storeOrganizations(
+                userId = mockUserId,
+                organizations = mockOrganizations,
+            )
+            assertEquals(mockOrganizations, awaitItem())
+        }
+    }
+
+    @Test
+    fun `storeOrganizations should update SharedPreferences`() {
+        val organizationsBaseKey = "bwPreferencesStorage:organizations"
+        val mockUserId = "mockUserId"
+        val mockOrganizations = listOf(
+            createMockOrganization(0),
+            createMockOrganization(1),
+        )
+        authDiskSource.storeOrganizations(
+            userId = mockUserId,
+            organizations = mockOrganizations,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "${organizationsBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToJsonElement(mockOrganizations),
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }

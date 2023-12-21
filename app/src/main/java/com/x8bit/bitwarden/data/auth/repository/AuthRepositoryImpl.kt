@@ -245,6 +245,7 @@ class AuthRepositoryImpl constructor(
             storeUserKey(userId = userId, userKey = null)
             storePrivateKey(userId = userId, privateKey = null)
             storeOrganizationKeys(userId = userId, organizationKeys = null)
+            storeOrganizations(userId = userId, organizations = null)
         }
 
         // Check if there is a new active user

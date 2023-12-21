@@ -191,7 +191,7 @@ class VaultRepositoryImpl(
                             )
 
                         unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
-                        storeKeys(syncResponse = syncResponse)
+                        storeProfileData(syncResponse = syncResponse)
                         vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                         decryptSendsAndUpdateSendDataState(sendList = syncResponse.sends)
                     },
@@ -403,7 +403,7 @@ class VaultRepositoryImpl(
         }
     }
 
-    private fun storeKeys(
+    private fun storeProfileData(
         syncResponse: SyncResponseJson,
     ) {
         val profile = syncResponse.profile
@@ -425,6 +425,10 @@ class VaultRepositoryImpl(
                     .orEmpty()
                     .filter { it.key != null }
                     .associate { it.id to requireNotNull(it.key) },
+            )
+            storeOrganizations(
+                userId = profile.id,
+                organizations = syncResponse.profile.organizations,
             )
         }
     }

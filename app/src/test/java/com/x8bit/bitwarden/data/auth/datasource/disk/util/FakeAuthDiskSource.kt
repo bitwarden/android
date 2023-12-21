@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
@@ -13,6 +14,8 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override var rememberedEmailAddress: String? = null
 
+    private val mutableOrganizationsFlowMap =
+        mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutableUserStateFlow =
         MutableSharedFlow<UserStateJson?>(
             replay = 1,
@@ -21,6 +24,8 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
+    private val storedOrganizations =
+        mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
 
     override var userState: UserStateJson? = null
@@ -55,6 +60,23 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedOrganizationKeys[userId] = organizationKeys
     }
 
+    override fun getOrganizations(
+        userId: String,
+    ): List<SyncResponseJson.Profile.Organization>? = storedOrganizations[userId]
+
+    override fun getOrganizationsFlow(
+        userId: String,
+    ): Flow<List<SyncResponseJson.Profile.Organization>?> =
+        getMutableOrganizationsFlow(userId).onSubscription { emit(getOrganizations(userId)) }
+
+    override fun storeOrganizations(
+        userId: String,
+        organizations: List<SyncResponseJson.Profile.Organization>?,
+    ) {
+        storedOrganizations[userId] = organizations
+        getMutableOrganizationsFlow(userId = userId).tryEmit(organizations)
+    }
+
     /**
      * Assert that the given [userState] matches the currently tracked value.
      */
@@ -82,4 +104,28 @@ class FakeAuthDiskSource : AuthDiskSource {
     fun assertOrganizationKeys(userId: String, organizationKeys: Map<String, String>?) {
         assertEquals(organizationKeys, storedOrganizationKeys[userId])
     }
+
+    /**
+     * Assert that the [organizations] were stored successfully using the [userId].
+     */
+    fun assertOrganizations(
+        userId: String,
+        organizations: List<SyncResponseJson.Profile.Organization>?,
+    ) {
+        assertEquals(organizations, storedOrganizations[userId])
+    }
+
+    //region Private helper functions
+
+    private fun getMutableOrganizationsFlow(
+        userId: String,
+    ): MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?> =
+        mutableOrganizationsFlowMap.getOrPut(userId) {
+            MutableSharedFlow(
+                replay = 1,
+                extraBufferCapacity = Int.MAX_VALUE,
+            )
+        }
+
+    //endregion Private helper functions
 }

@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
@@ -16,6 +17,7 @@ private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "$BASE_KEY:masterKeyEncryptedUserKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "$BASE_KEY:encPrivateKey"
+private const val ORGANIZATIONS_KEY = "$BASE_KEY:organizations"
 private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 
 /**
@@ -26,6 +28,12 @@ class AuthDiskSourceImpl(
     private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     AuthDiskSource {
+    private val mutableOrganizationsFlow =
+        MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>(
+            replay = 1,
+            extraBufferCapacity = Int.MAX_VALUE,
+        )
+
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
 
@@ -89,6 +97,29 @@ class AuthDiskSourceImpl(
             key = "${ORGANIZATION_KEYS_KEY}_$userId",
             value = organizationKeys?.let { json.encodeToString(it) },
         )
+    }
+
+    override fun getOrganizations(
+        userId: String,
+    ): List<SyncResponseJson.Profile.Organization>? =
+        getString(key = "${ORGANIZATIONS_KEY}_$userId")
+            ?.let { json.decodeFromString(it) }
+
+    override fun getOrganizationsFlow(
+        userId: String,
+    ): Flow<List<SyncResponseJson.Profile.Organization>?> =
+        mutableOrganizationsFlow
+            .onSubscription { emit(getOrganizations(userId = userId)) }
+
+    override fun storeOrganizations(
+        userId: String,
+        organizations: List<SyncResponseJson.Profile.Organization>?,
+    ) {
+        putString(
+            key = "${ORGANIZATIONS_KEY}_$userId",
+            value = organizations?.let { json.encodeToString(it) },
+        )
+        mutableOrganizationsFlow.tryEmit(organizations)
     }
 
     private fun generateAndStoreUniqueAppId(): String =

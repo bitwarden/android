@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -62,5 +63,23 @@ interface AuthDiskSource {
     fun storeOrganizationKeys(
         userId: String,
         organizationKeys: Map<String, String>?,
+    )
+
+    /**
+     * Gets the organization data for the given [userId].
+     */
+    fun getOrganizations(userId: String): List<SyncResponseJson.Profile.Organization>?
+
+    /**
+     * Emits updates that track [getOrganizations]. This will replay the last known value, if any.
+     */
+    fun getOrganizationsFlow(userId: String): Flow<List<SyncResponseJson.Profile.Organization>?>
+
+    /**
+     * Stores the organization data for the given [userId].
+     */
+    fun storeOrganizations(
+        userId: String,
+        organizations: List<SyncResponseJson.Profile.Organization>?,
     )
 }
