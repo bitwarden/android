@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -927,8 +928,9 @@ class AuthRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `logout for single account should clear the access token and stored keys`() = runTest {
+    fun `logout for single account should clear the access token and profile data`() = runTest {
         // First login:
         val successResponse = GET_TOKEN_RESPONSE_SUCCESS
         coEvery {
@@ -973,6 +975,10 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 organizationKeys = ORGANIZATION_KEYS,
             )
+            storeOrganizations(
+                userId = USER_ID_1,
+                organizations = ORGANIZATIONS,
+            )
         }
 
         repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
@@ -999,6 +1005,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = USER_ID_1,
                 organizationKeys = null,
+            )
+            fakeAuthDiskSource.assertOrganizations(
+                userId = USER_ID_1,
+                organizations = null,
             )
             verify { vaultRepository.deleteVaultData(userId = USER_ID_1) }
             verify { vaultRepository.clearUnlockedData() }
@@ -1356,6 +1366,7 @@ class AuthRepositoryTest {
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private const val USER_ID_3 = "3816ef34-0747-4133-9b7a-ba35d3768a68"
         private val ORGANIZATION_KEYS = mapOf("organizationId1" to "organizationKey1")
+        private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
         )
