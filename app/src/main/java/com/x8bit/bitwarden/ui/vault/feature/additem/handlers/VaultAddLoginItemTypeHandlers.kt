@@ -1,4 +1,7 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.additem.handlers
+
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction
+import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemViewModel
 
 /**
  * A collection of handler functions specifically tailored for managing actions

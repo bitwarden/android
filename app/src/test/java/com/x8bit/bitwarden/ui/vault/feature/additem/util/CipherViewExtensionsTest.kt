@@ -103,7 +103,17 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
-                type = VaultAddItemState.ViewState.Content.ItemType.Identity,
+                type = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    firstName = "John",
+                    middleName = "Richard",
+                    lastName = "Smith",
+                    username = "Dr. JSR",
+                    company = "Bitwarden",
+                    email = "placeholde@email.com",
+                    phone = "555-555-5555",
+                    city = "Minneapolis",
+                    country = "USA",
+                ),
             ),
             result,
         )

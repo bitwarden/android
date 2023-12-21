@@ -27,7 +27,24 @@ fun CipherView.toViewState(): VaultAddItemState.ViewState =
 
             CipherType.SECURE_NOTE -> VaultAddItemState.ViewState.Content.ItemType.SecureNotes
             CipherType.CARD -> VaultAddItemState.ViewState.Content.ItemType.Card
-            CipherType.IDENTITY -> VaultAddItemState.ViewState.Content.ItemType.Identity
+            CipherType.IDENTITY -> VaultAddItemState.ViewState.Content.ItemType.Identity(
+                firstName = identity?.firstName.orEmpty(),
+                middleName = identity?.middleName.orEmpty(),
+                lastName = identity?.lastName.orEmpty(),
+                username = identity?.username.orEmpty(),
+                company = identity?.company.orEmpty(),
+                ssn = identity?.ssn.orEmpty(),
+                passportNumber = identity?.passportNumber.orEmpty(),
+                licenseNumber = identity?.licenseNumber.orEmpty(),
+                email = identity?.email.orEmpty(),
+                phone = identity?.phone.orEmpty(),
+                address1 = identity?.address1.orEmpty(),
+                address2 = identity?.address2.orEmpty(),
+                address3 = identity?.address3.orEmpty(),
+                city = identity?.city.orEmpty(),
+                zip = identity?.postalCode.orEmpty(),
+                country = identity?.country.orEmpty(),
+            )
         },
         common = VaultAddItemState.ViewState.Content.Common(
             originalCipher = this,

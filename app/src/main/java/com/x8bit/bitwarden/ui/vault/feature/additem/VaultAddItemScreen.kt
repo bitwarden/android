@@ -28,6 +28,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddIdentityItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManagerImpl
 
@@ -61,7 +64,11 @@ fun VaultAddItemScreen(
     }
 
     val commonTypeHandlers = remember(viewModel) {
-        VaultAddItemCommonTypeHandlers.create(viewModel = viewModel)
+        VaultAddItemCommonHandlers.create(viewModel = viewModel)
+    }
+
+    val identityItemTypeHandlers = remember(viewModel) {
+        VaultAddIdentityItemTypeHandlers.create(viewModel = viewModel)
     }
 
     VaultAddEditItemDialogs(
@@ -107,6 +114,7 @@ fun VaultAddItemScreen(
                     loginItemTypeHandlers = loginItemTypeHandlers,
                     commonTypeHandlers = commonTypeHandlers,
                     permissionsManager = permissionsManager,
+                    identityItemTypeHandlers = identityItemTypeHandlers,
                     modifier = Modifier
                         .imePadding()
                         .padding(innerPadding)

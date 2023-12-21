@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -30,7 +31,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun LazyListScope.addEditSecureNotesItems(
     commonState: VaultAddItemState.ViewState.Content.Common,
     isAddItemMode: Boolean,
-    commonTypeHandlers: VaultAddItemCommonTypeHandlers,
+    commonTypeHandlers: VaultAddItemCommonHandlers,
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))

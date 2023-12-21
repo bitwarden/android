@@ -25,6 +25,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -37,7 +39,7 @@ fun LazyListScope.addEditLoginItems(
     commonState: VaultAddItemState.ViewState.Content.Common,
     loginState: VaultAddItemState.ViewState.Content.ItemType.Login,
     isAddItemMode: Boolean,
-    commonActionHandler: VaultAddItemCommonTypeHandlers,
+    commonActionHandler: VaultAddItemCommonHandlers,
     loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
     onTotpSetupClick: () -> Unit,
 ) {
