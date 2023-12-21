@@ -13,12 +13,12 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
-import com.x8bit.bitwarden.data.platform.util.zip
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
@@ -39,12 +39,12 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
@@ -55,7 +55,12 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
+/**
+ * A "stop timeout delay" in milliseconds used to let a shared coroutine continue to run for the
+ * specified period of time after it no longer has subscribers.
+ */
+private const val STOP_TIMEOUT_DELAY_MS: Long = 1000L
 
 /**
  * Default implementation of [VaultRepository].
@@ -67,19 +72,17 @@ class VaultRepositoryImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
-    private val dispatcherManager: DispatcherManager,
+    dispatcherManager: DispatcherManager,
 ) : VaultRepository {
 
-    private val scope = CoroutineScope(dispatcherManager.io)
+    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     private var syncJob: Job = Job().apply { complete() }
 
     private var willSyncAfterUnlock = false
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
-
-    private val mutableVaultDataStateFlow =
-        MutableStateFlow<DataState<VaultData>>(DataState.Loading)
 
     private val mutableVaultStateStateFlow =
         MutableStateFlow(VaultState(unlockedVaultUserIds = emptySet()))
@@ -95,8 +98,29 @@ class VaultRepositoryImpl(
     private val mutableCollectionsStateFlow =
         MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
 
-    override val vaultDataStateFlow: StateFlow<DataState<VaultData>>
-        get() = mutableVaultDataStateFlow.asStateFlow()
+    override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
+        combine(
+            ciphersStateFlow,
+            foldersStateFlow,
+            collectionsStateFlow,
+        ) { ciphersDataState, foldersDataState, collectionsDataState ->
+            combineDataStates(
+                ciphersDataState,
+                foldersDataState,
+                collectionsDataState,
+            ) { ciphersData, foldersData, collectionsData ->
+                VaultData(
+                    cipherViewList = ciphersData,
+                    folderViewList = foldersData,
+                    collectionViewList = collectionsData,
+                )
+            }
+        }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.WhileSubscribed(stopTimeoutMillis = STOP_TIMEOUT_DELAY_MS),
+                initialValue = DataState.Loading,
+            )
 
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
@@ -119,31 +143,30 @@ class VaultRepositoryImpl(
             .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
                 observeVaultDiskCiphers(activeUserId)
             }
-            .launchIn(scope)
+            .launchIn(unconfinedScope)
         // Setup folders MutableStateFlow
         mutableFoldersStateFlow
             .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
                 observeVaultDiskFolders(activeUserId)
             }
-            .launchIn(scope)
+            .launchIn(unconfinedScope)
         // Setup collections MutableStateFlow
         mutableCollectionsStateFlow
             .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
                 observeVaultDiskCollections(activeUserId)
             }
-            .launchIn(scope)
+            .launchIn(unconfinedScope)
     }
 
     override fun clearUnlockedData() {
         mutableCiphersStateFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }
         mutableCollectionsStateFlow.update { DataState.Loading }
-        mutableVaultDataStateFlow.update { DataState.Loading }
         mutableSendDataStateFlow.update { DataState.Loading }
     }
 
     override fun deleteVaultData(userId: String) {
-        scope.launch {
+        ioScope.launch {
             vaultDiskSource.deleteVaultData(userId)
         }
     }
@@ -154,9 +177,8 @@ class VaultRepositoryImpl(
         mutableCiphersStateFlow.updateToPendingOrLoading()
         mutableFoldersStateFlow.updateToPendingOrLoading()
         mutableCollectionsStateFlow.updateToPendingOrLoading()
-        mutableVaultDataStateFlow.updateToPendingOrLoading()
         mutableSendDataStateFlow.updateToPendingOrLoading()
-        syncJob = scope.launch {
+        syncJob = ioScope.launch {
             syncService
                 .sync()
                 .fold(
@@ -170,10 +192,7 @@ class VaultRepositoryImpl(
 
                         unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                         storeKeys(syncResponse = syncResponse)
-                        decryptSyncResponseAndUpdateVaultDataState(
-                            userId = userId,
-                            syncResponse = syncResponse,
-                        )
+                        vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                         decryptSendsAndUpdateSendDataState(sendList = syncResponse.sends)
                     },
                     onFailure = { throwable ->
@@ -188,11 +207,6 @@ class VaultRepositoryImpl(
                             )
                         }
                         mutableCollectionsStateFlow.update { currentState ->
-                            throwable.toNetworkOrErrorState(
-                                data = currentState.data,
-                            )
-                        }
-                        mutableVaultDataStateFlow.update { currentState ->
                             throwable.toNetworkOrErrorState(
                                 data = currentState.data,
                             )
@@ -217,7 +231,7 @@ class VaultRepositoryImpl(
                 }
             }
             .stateIn(
-                scope = scope,
+                scope = unconfinedScope,
                 started = SharingStarted.Lazily,
                 initialValue = DataState.Loading,
             )
@@ -232,7 +246,7 @@ class VaultRepositoryImpl(
                 }
             }
             .stateIn(
-                scope = scope,
+                scope = unconfinedScope,
                 started = SharingStarted.Lazily,
                 initialValue = DataState.Loading,
             )
@@ -448,58 +462,6 @@ class VaultRepositoryImpl(
                 onFailure = { DataState.Error(error = it) },
             )
         mutableSendDataStateFlow.update { newState }
-    }
-
-    private suspend fun decryptSyncResponseAndUpdateVaultDataState(
-        userId: String,
-        syncResponse: SyncResponseJson,
-    ) = withContext(dispatcherManager.default) {
-        val deferred = async {
-            vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
-        }
-
-        // Allow decryption of various types in parallel.
-        val newState = zip(
-            {
-                vaultSdkSource
-                    .decryptCipherList(
-                        cipherList = syncResponse
-                            .ciphers
-                            .orEmpty()
-                            .toEncryptedSdkCipherList(),
-                    )
-            },
-            {
-                vaultSdkSource
-                    .decryptFolderList(
-                        folderList = syncResponse
-                            .folders
-                            .orEmpty()
-                            .toEncryptedSdkFolderList(),
-                    )
-            },
-            {
-                vaultSdkSource
-                    .decryptCollectionList(
-                        collectionList = syncResponse
-                            .collections
-                            .orEmpty()
-                            .toEncryptedSdkCollectionList(),
-                    )
-            },
-        ) { decryptedCipherList, decryptedFolderList, decryptedCollectionList ->
-            VaultData(
-                cipherViewList = decryptedCipherList,
-                collectionViewList = decryptedCollectionList,
-                folderViewList = decryptedFolderList,
-            )
-        }
-            .fold(
-                onSuccess = { DataState.Loaded(data = it) },
-                onFailure = { DataState.Error(error = it) },
-            )
-        mutableVaultDataStateFlow.update { newState }
-        deferred.await()
     }
 
     private fun observeVaultDiskCiphers(
