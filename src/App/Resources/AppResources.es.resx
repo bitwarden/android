@@ -1298,13 +1298,13 @@ El escaneo se realizará automáticamente.</value>
     <value>Accede a tu caja fuerte directamente desde tu teclado para autorellenar contraseñas rápidamente.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Para habilitar el Autorellenado de contraseña en su dispositivo, sigue estas instrucciones:</value>
+    <value>Para configurar autocompletar contraseña en tu dispositivo, sigue estas instrucciones:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Ve a la aplicación "Ajustes" de iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Pulsa en "Contraseñas y Cuentas"</value>
+    <value>2. Pulse "Contraseñas"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Pulsa en "Autorellenado de contraseñas"</value>
@@ -1316,10 +1316,10 @@ El escaneo se realizará automáticamente.</value>
     <value>5. Selecciona "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Autorellenado de contraseña</value>
+    <value>Autocompletar contraseña</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>La forma más fácil de añadir nuevas entradas a su caja fuerte es utilizando la extensión de Autorellenado de contraseñas de Bitwarden. Aprenda más sobre cómo utilizar la extensión de Autorellenado de contraseñas de Bitwarden en la sección de "Ajustes".</value>
+    <value>La manera más fácil de añadir nuevos inicios de sesión a tu caja fuerte es utilizando la extensión Autocompletar Contraseña de la aplicación Bitwarden. Aprenda más sobre cómo utilizar la extensión Autocompletar Contraseña de la aplicación de Bitwarden accediendo al menú de "Ajustes".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Dirección de correo electrónico inválida.</value>
