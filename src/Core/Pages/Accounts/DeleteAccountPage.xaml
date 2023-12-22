@@ -59,8 +59,9 @@
                 StyleClass="btn-danger"
                 HorizontalOptions="Start"
                 VerticalOptions="Start"
-                Margin="0,20,0,0"
+                Margin="0,20,6,0"
                 Padding="16,0"
+                MinimumHeightRequest="45"
                 CornerRadius="2"
                 TextTransform="Uppercase"
                 Clicked="DeleteAccount_Clicked"/>
@@ -73,6 +74,7 @@
                 VerticalOptions="Start"
                 Margin="0,20,0,0"
                 Padding="16,0"
+                MinimumHeightRequest="45"
                 CornerRadius="2"
                 TextTransform="Uppercase"
                 Clicked="Close_Clicked" />
