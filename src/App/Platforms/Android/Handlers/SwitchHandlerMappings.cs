@@ -2,7 +2,10 @@
 using Android.Graphics.Drawables;
 using Android.OS;
 using AndroidX.Core.Content.Resources;
+using AndroidX.Core.Graphics;
 using Bit.App.Droid.Utilities;
+using Bit.App.Utilities;
+using Microsoft.Maui.Platform;
 
 namespace Bit.App.Handlers
 {
@@ -36,6 +39,31 @@ namespace Bit.App.Handlers
                     ThemeHelpers.SwitchThumbColor
                 };
                 handler.PlatformView.ThumbTintList = new ColorStateList(thumbStates, thumbColors);
+            });
+
+            Microsoft.Maui.Handlers.SwitchHandler.Mapper.AppendToMapping(nameof(ISwitch.TrackColor), (handler, mauiSwitch) =>
+            {
+                var trackStates = new[]
+                {
+                    new[] { Android.Resource.Attribute.StateChecked }, // checked
+                    new[] { -Android.Resource.Attribute.StateChecked }, // unchecked
+                };
+
+                var selectedColor = ColorUtils.BlendARGB(ThemeHelpers.SwitchOnColor.ToArgb(), Colors.Black.ToPlatform().ToArgb(), 0.5f);
+                var unselectedColor = ColorUtils.BlendARGB(ThemeHelpers.SwitchThumbColor.ToArgb(), Colors.Black.ToPlatform().ToArgb(), 0.7f);
+                if (ThemeManager.UsingLightTheme)
+                {
+                    selectedColor = ColorUtils.BlendARGB(ThemeHelpers.SwitchOnColor.ToArgb(), Colors.White.ToPlatform().ToArgb(), 0.7f);
+                    unselectedColor = ColorUtils.BlendARGB(ThemeHelpers.SwitchThumbColor.ToArgb(), Colors.Black.ToPlatform().ToArgb(), 0.3f);
+                }
+
+                var trackColors = new int[]
+                {
+                    selectedColor,
+                    unselectedColor
+                };
+
+                handler.PlatformView.TrackTintList = new ColorStateList(trackStates, trackColors);
             });
         }
     }

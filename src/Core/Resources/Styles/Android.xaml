@@ -42,11 +42,6 @@
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
     </Style>
-    <Style TargetType="Switch"
-           ApplyToDerivedTypes="True">
-        <Setter Property="OnColor"
-                Value="{DynamicResource SwitchOnColor}" />
-    </Style>
     <Style TargetType="SearchBar"
            ApplyToDerivedTypes="True">
         <Setter Property="BackgroundColor"
