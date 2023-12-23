@@ -72,7 +72,7 @@
                                     Command="{Binding ShowEnvironmentPickerCommand}" />
                             </StackLayout.GestureRecognizers>
                             <Label
-                                Margin="0,0,6,0"
+                                Margin="{OnPlatform Android='0,0,6,1', iOS='0,0,6,0'}"
                                 Text="{Binding RegionText}"
                                 FontSize="13"
                                 TextColor="{DynamicResource MutedColor}"
