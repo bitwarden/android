@@ -69,12 +69,18 @@ namespace Bit.App
                     CurrentWindow.Page = value;
                 }
             }
-        }   
+        }
 
-        public static Window CurrentWindow { get; private set; }
-
-        private Window _autofillWindow;
-        private Window _mainWindow;
+        /// <summary>
+        /// Find the Current Active Window. There should only be one at any point in Android
+        /// </summary>
+        public static ResumeWindow CurrentWindow
+        {
+            get
+            {
+                return Application.Current.Windows.OfType<ResumeWindow>().FirstOrDefault(w => w.IsActive);
+            }
+        }
 
         //Allows setting Options from MainActivity before base.OnCreate
         public void SetOptions(AppOptions appOptions)
@@ -94,64 +100,22 @@ namespace Bit.App
                 return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
             }
 
-            //If there's already an existing autofill window we try to get rid of it, mostly to avoid edge cases scenarios. 
-            if (_autofillWindow != null)
-            {
-                CloseWindow(_autofillWindow);
-            }
-
             //"Internal" Autofill and Uri/Otp/CreateSend. This is where we create the autofill specific Window
             if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null))
             {
-                _autofillWindow = new Window(new NavigationPage(new AndroidNavigationRedirectPage()));
-                _autofillWindow.Created += WindowOnCreatedOrActivated;
-                _autofillWindow.Activated += WindowOnCreatedOrActivated;
-                _autofillWindow.Stopped += WindowOnStopped;
-                _autofillWindow.Destroying += AutofillWindowOnDestroying;
-                _isResumed = true;
-                return _autofillWindow;
+                _isResumed = true; //Specifically for the Autofill scenario we need to manually set the _isResumed here
+                return new AutoFillWindow(new NavigationPage(new AndroidNavigationRedirectPage()));
             }
 
-            //If we don't have an existing main window we create it, otherwise we just reuse the one we had.
-            if(_mainWindow == null)
+            //If we have an existing MainAppWindow we can use that one
+            var mainAppWindow = Windows.OfType<MainAppWindow>().FirstOrDefault();
+            if (mainAppWindow != null)
             {
-                _mainWindow = new Window(new NavigationPage(new HomePage(Options)));
-                _mainWindow.Created += WindowOnCreatedOrActivated;
-                _mainWindow.Activated += WindowOnCreatedOrActivated;
-                _mainWindow.Stopped += WindowOnStopped;
-                _mainWindow.Destroying += MainWindowOnDestroying;
+                mainAppWindow.PendingPage = new NavigationPage(new HomePage(Options));
             }
 
-            return _mainWindow;
-        }
-
-        private void MainWindowOnDestroying(object sender, EventArgs e)
-        {
-            _mainWindow.Created -= WindowOnCreatedOrActivated;
-            _mainWindow.Activated -= WindowOnCreatedOrActivated;
-            _mainWindow.Stopped -= WindowOnStopped;
-            _mainWindow.Destroying -= AutofillWindowOnDestroying;
-        }
-
-        private void AutofillWindowOnDestroying(object sender, EventArgs e)
-        {
-            _autofillWindow.Created -= WindowOnCreatedOrActivated;
-            _autofillWindow.Activated -= WindowOnCreatedOrActivated;
-            _autofillWindow.Stopped -= WindowOnStopped;
-            _autofillWindow.Destroying -= AutofillWindowOnDestroying;
-        }
-
-        private void WindowOnStopped(object sender, EventArgs e)
-        {
-            CurrentWindow = null;
-        }
-
-        private void WindowOnCreatedOrActivated(object sender, EventArgs e)
-        {
-            if (sender is Window window)
-            {
-                CurrentWindow = window;
-            }
+            //Create new main window
+            return new MainAppWindow(new NavigationPage(new HomePage(Options)));
         }
 #elif IOS
         //iOS doesn't use the CreateWindow override used in Android so we just set the Application.Current.MainPage directly
@@ -589,7 +553,7 @@ namespace Bit.App
             };
             _isResumed = true;
 #if IOS
-            //We only set the MainPage here for iOS as Android is using the CreateWindow override for the initial page.
+            //We only set the MainPage here for iOS. Android is using the CreateWindow override for the initial page.
             App.MainPage = new NavigationPage(new HomePage(Options));
 #endif
             _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
