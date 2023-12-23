@@ -283,9 +283,9 @@
            Class="list-icon"
            ApplyToDerivedTypes="True">
         <Setter Property="MinimumWidthRequest"
-                Value="26" />
+                Value="22" />
         <Setter Property="MinimumHeightRequest"
-                Value="26" />
+                Value="22" />
         <Setter Property="HorizontalTextAlignment"
                 Value="Center" />
         <Setter Property="VerticalTextAlignment"

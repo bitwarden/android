@@ -314,7 +314,7 @@
            Class="list-icon-platform"
            ApplyToDerivedTypes="True">
         <Setter Property="FontSize"
-                Value="23" />
+                Value="22" />
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
