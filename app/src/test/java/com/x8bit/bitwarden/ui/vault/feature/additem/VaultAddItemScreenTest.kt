@@ -426,7 +426,549 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `in ItemType_Identity selecting a title should trigger TitleSelected`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Title, Mr")
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "Mx")
+            .onLast()
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.TitleSelected(
+                    title = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Identity the Title should display the selected title from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Title, Mr")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) {
+                copy(
+                    selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Title, Mx")
+            .assertIsDisplayed()
+    }
+
     @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity changing the first name text field should trigger FirstNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .performTextInput(text = "TestFirstName")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange(
+                    firstName = "TestFirstName",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the first name text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(firstName = "NewFirstName") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "First name")
+            .assertTextContains("NewFirstName")
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity changing the middle name text field should trigger MiddleNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Middle name")
+            .performTextInput(text = "TestMiddleName")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange(
+                    middleName = "TestMiddleName",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the middle name text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Middle name")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(middleName = "NewMiddleName") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Middle name")
+            .assertTextContains("NewMiddleName")
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity changing the last name text field should trigger LastNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .performTextInput(text = "TestLastName")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.LastNameTextChange(
+                    lastName = "TestLastName",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the last name text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(lastName = "NewLastName") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Last name")
+            .assertTextContains("NewLastName")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing username text field should trigger UsernameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Username")
+            .performTextInput(text = "TestUsername")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.UsernameTextChange(
+                    username = "TestUsername",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the username text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Username")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(username = "NewUsername") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Username")
+            .assertTextContains("NewUsername")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing company text field should trigger CompanyTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Company")
+            .performTextInput(text = "TestCompany")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.CompanyTextChange(
+                    company = "TestCompany",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the company text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Company")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(company = "NewCompany") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Company")
+            .assertTextContains("NewCompany")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing SSN text field should trigger CompanyTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Social Security number")
+            .performTextInput(text = "TestSsn")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.SsnTextChange(
+                    ssn = "TestSsn",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Identity the SSN text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Social Security number")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(ssn = "NewSsn") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Social Security number")
+            .assertTextContains("NewSsn")
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity changing passport number text field should trigger PassportNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport number")
+            .performTextInput(text = "TestPassportNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange(
+                    passportNumber = "TestPassportNumber",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the passport number text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport number")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(passportNumber = "NewPassportNumber") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Passport number")
+            .assertTextContains("NewPassportNumber")
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity changing license number text field should trigger LicenseNumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License number")
+            .performTextInput(text = "TestLicenseNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange(
+                    licenseNumber = "TestLicenseNumber",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the license number text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License number")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(licenseNumber = "NewLicenseNumber") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "License number")
+            .assertTextContains("NewLicenseNumber")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing email text field should trigger EmailTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Email")
+            .performTextInput(text = "TestEmail")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.EmailTextChange(
+                    email = "TestEmail",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the email text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Email")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(email = "NewEmail") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Email")
+            .assertTextContains("NewEmail")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing address1 text field should trigger Address1TextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 1")
+            .performTextInput(text = "TestAddress1")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.Address1TextChange(
+                    address1 = "TestAddress1",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the address1 text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 1")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(address1 = "NewAddress1") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 1")
+            .assertTextContains("NewAddress1")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing address2 text field should trigger Address2TextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 2")
+            .performTextInput(text = "TestAddress2")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.Address2TextChange(
+                    address2 = "TestAddress2",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the address2 text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 2")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(address2 = "NewAddress2") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 2")
+            .assertTextContains("NewAddress2")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing address3 text field should trigger Address3TextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 3")
+            .performTextInput(text = "TestAddress3")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.Address3TextChange(
+                    address3 = "TestAddress3",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the address3 text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 3")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(address3 = "NewAddress3") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Address 3")
+            .assertTextContains("NewAddress3")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing city text field should trigger CityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "City / Town")
+            .performTextInput(text = "TestCity")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.CityTextChange(
+                    city = "TestCity",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the city text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "City / Town")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(city = "NewCity") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "City / Town")
+            .assertTextContains("NewCity")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing zip text field should trigger ZipTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Zip / Postal code")
+            .performTextInput(text = "TestZip")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.ZipTextChange(
+                    zip = "TestZip",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the zip text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Zip / Postal code")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(zip = "NewZip") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Zip / Postal code")
+            .assertTextContains("NewZip")
+    }
+
+    @Test
+    fun `in ItemType_Identity changing country text field should trigger CountryTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Country")
+            .performTextInput(text = "TestCountry")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.CountryTextChange(
+                    country = "TestCountry",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the country text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Country")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(country = "NewCountry") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Country")
+            .assertTextContains("NewCountry")
+    }
+
     @Test
     fun `clicking New Custom Field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
@@ -923,7 +1465,6 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     //region Helper functions
 
-    @Suppress("MaxLineLength")
     private fun updateLoginType(
         currentState: VaultAddItemState,
         transform: VaultAddItemState.ViewState.Content.ItemType.Login.() ->
@@ -933,6 +1474,27 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             is VaultAddItemState.ViewState.Content -> {
                 when (val type = viewState.type) {
                     is VaultAddItemState.ViewState.Content.ItemType.Login -> {
+                        viewState.copy(
+                            type = type.transform(),
+                        )
+                    }
+                    else -> viewState
+                }
+            }
+            else -> viewState
+        }
+        return currentState.copy(viewState = updatedType)
+    }
+
+    private fun updateIdentityType(
+        currentState: VaultAddItemState,
+        transform: VaultAddItemState.ViewState.Content.ItemType.Identity.() ->
+        VaultAddItemState.ViewState.Content.ItemType.Identity,
+    ): VaultAddItemState {
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddItemState.ViewState.Content -> {
+                when (val type = viewState.type) {
+                    is VaultAddItemState.ViewState.Content.ItemType.Identity -> {
                         viewState.copy(
                             type = type.transform(),
                         )
@@ -976,6 +1538,15 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             viewState = VaultAddItemState.ViewState.Content(
                 common = VaultAddItemState.ViewState.Content.Common(),
                 type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+            ),
+            dialog = null,
+        )
+
+        private val DEFAULT_STATE_IDENTITY = VaultAddItemState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            viewState = VaultAddItemState.ViewState.Content(
+                common = VaultAddItemState.ViewState.Content.Common(),
+                type = VaultAddItemState.ViewState.Content.ItemType.Identity(),
             ),
             dialog = null,
         )
