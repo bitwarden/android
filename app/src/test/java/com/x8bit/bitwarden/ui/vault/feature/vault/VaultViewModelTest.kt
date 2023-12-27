@@ -126,6 +126,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
+                        organizations = emptyList(),
                     ),
                 ),
             )
@@ -773,6 +774,7 @@ private val DEFAULT_USER_STATE = UserState(
             environment = Environment.Us,
             isPremium = true,
             isVaultUnlocked = true,
+            organizations = emptyList(),
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -782,6 +784,7 @@ private val DEFAULT_USER_STATE = UserState(
             environment = Environment.Us,
             isPremium = false,
             isVaultUnlocked = false,
+            organizations = emptyList(),
         ),
     ),
 )

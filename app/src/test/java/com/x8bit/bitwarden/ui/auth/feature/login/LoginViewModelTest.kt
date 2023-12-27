@@ -123,6 +123,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     environment = Environment.Us,
                     isPremium = true,
                     isVaultUnlocked = true,
+                    organizations = emptyList(),
                 ),
             ),
         )

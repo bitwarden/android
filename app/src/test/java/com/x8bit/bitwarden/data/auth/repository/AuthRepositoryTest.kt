@@ -32,8 +32,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
@@ -143,7 +145,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `userStateFlow should update with changes to the UserStateJson and VaultState data`() {
+    fun `userStateFlow should update according to changes in its underyling data sources`() {
         fakeAuthDiskSource.userState = null
         assertEquals(
             null,
@@ -155,6 +157,7 @@ class AuthRepositoryTest {
         assertEquals(
             SINGLE_USER_STATE_1.toUserState(
                 vaultState = VAULT_STATE,
+                userOrganizationsList = emptyList(),
                 specialCircumstance = null,
             ),
             repository.userStateFlow.value,
@@ -164,6 +167,7 @@ class AuthRepositoryTest {
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = VAULT_STATE,
+                userOrganizationsList = emptyList(),
                 specialCircumstance = null,
             ),
             repository.userStateFlow.value,
@@ -174,6 +178,20 @@ class AuthRepositoryTest {
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
+                userOrganizationsList = emptyList(),
+                specialCircumstance = null,
+            ),
+            repository.userStateFlow.value,
+        )
+
+        fakeAuthDiskSource.storeOrganizations(
+            userId = USER_ID_1,
+            organizations = ORGANIZATIONS,
+        )
+        assertEquals(
+            MULTI_USER_STATE.toUserState(
+                vaultState = emptyVaultState,
+                userOrganizationsList = USER_ORGANIZATIONS,
                 specialCircumstance = null,
             ),
             repository.userStateFlow.value,
@@ -201,6 +219,7 @@ class AuthRepositoryTest {
         assertNull(repository.specialCircumstance)
         val initialUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
+            userOrganizationsList = emptyList(),
             specialCircumstance = null,
         )
         mutableVaultStateFlow.value = VAULT_STATE
@@ -1173,6 +1192,7 @@ class AuthRepositoryTest {
         val originalUserId = USER_ID_1
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
+            userOrganizationsList = emptyList(),
             specialCircumstance = null,
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -1203,6 +1223,7 @@ class AuthRepositoryTest {
         val invalidId = "invalidId"
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
+            userOrganizationsList = emptyList(),
             specialCircumstance = null,
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -1231,6 +1252,7 @@ class AuthRepositoryTest {
         val updatedUserId = USER_ID_2
         val originalUserState = MULTI_USER_STATE.toUserState(
             vaultState = VAULT_STATE,
+            userOrganizationsList = emptyList(),
             specialCircumstance = null,
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
@@ -1492,6 +1514,12 @@ class AuthRepositoryTest {
                 USER_ID_1 to ACCOUNT_1,
                 USER_ID_2 to ACCOUNT_2,
                 USER_ID_3 to ACCOUNT_3,
+            ),
+        )
+        private val USER_ORGANIZATIONS = listOf(
+            UserOrganizations(
+                userId = USER_ID_1,
+                organizations = ORGANIZATIONS.toOrganizations(),
             ),
         )
         private val VAULT_STATE = VaultState(

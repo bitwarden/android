@@ -106,6 +106,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
+                        organizations = emptyList(),
                     ),
                 ),
             )
@@ -341,6 +342,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#aa00aa",
             isPremium = true,
             isVaultUnlocked = true,
+            organizations = emptyList(),
         ),
     ),
 )
