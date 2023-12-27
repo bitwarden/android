@@ -536,6 +536,282 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class VaultAddIdentityTypeItemActions {
+        private lateinit var viewModel: VaultAddItemViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddItemState
+        private lateinit var identityInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            vaultAddItemInitialState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(),
+            )
+            identityInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = identityInitialSavedStateHandle,
+            )
+        }
+
+        @Test
+        fun `FirstNameTextChange should update first name`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange(
+                firstName = "newFirstName",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    firstName = "newFirstName",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `MiddleNameTextChange should update middle name`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange(
+                middleName = "newMiddleName",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    middleName = "newMiddleName",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `LastNameTextChange should update last name`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.LastNameTextChange(
+                lastName = "newLastName",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    lastName = "newLastName",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `UsernameTextChange should update username`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.UsernameTextChange(
+                username = "newUsername",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    username = "newUsername",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `CompanyTextChange should update company`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.CompanyTextChange(
+                company = "newCompany",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    company = "newCompany",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `SsnTextChange should update SSN`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.SsnTextChange(
+                ssn = "newSsn",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    ssn = "newSsn",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `PassportNumberTextChange should update passport number`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange(
+                passportNumber = "newPassportNumber",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    passportNumber = "newPassportNumber",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `LicenseNumberTextChange should update license number`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange(
+                licenseNumber = "newLicenseNumber",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    licenseNumber = "newLicenseNumber",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `EmailTextChange should update email`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.EmailTextChange(
+                email = "newEmail",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    email = "newEmail",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `PhoneTextChange should update phone`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.PhoneTextChange(
+                phone = "newPhone",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    phone = "newPhone",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `Address1TextChange should update address1`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.Address1TextChange(
+                address1 = "newAddress1",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    address1 = "newAddress1",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `Address2TextChange should update address2`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.Address2TextChange(
+                address2 = "newAddress2",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    address2 = "newAddress2",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `Address3TextChange should update address3`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.Address3TextChange(
+                address3 = "newAddress3",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    address3 = "newAddress3",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `CityTextChange should update city`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.CityTextChange(
+                city = "newCity",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    city = "newCity",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `ZipTextChange should update zip`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.ZipTextChange(
+                zip = "newZip",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    zip = "newZip",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `CountryTextChange should update country`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.CountryTextChange(
+                country = "newCountry",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    country = "newCountry",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `TitleSelected should update title`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.TitleSelected(
+                title = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
     inner class VaultAddItemCommonActions {
         private lateinit var viewModel: VaultAddItemViewModel
         private lateinit var vaultAddItemInitialState: VaultAddItemState
