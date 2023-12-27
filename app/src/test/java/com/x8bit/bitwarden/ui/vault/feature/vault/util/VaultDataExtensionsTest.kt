@@ -5,6 +5,7 @@ import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
+import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.PasswordHistoryView
@@ -386,6 +387,205 @@ class VaultDataExtensionsTest {
             result,
         )
     }
+
+    @Test
+    fun `toCipherView should transform Identity ItemType to CipherView`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MIN
+        val viewState = VaultAddItemState.ViewState.Content(
+            common = VaultAddItemState.ViewState.Content.Common(
+                name = "mockName-1",
+                folderName = "mockFolder-1".asText(),
+                favorite = false,
+                masterPasswordReprompt = false,
+                notes = "mockNotes-1",
+                ownership = "mockOwnership-1",
+            ),
+            type = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MR,
+                firstName = "mockFirstName",
+                lastName = "mockLastName",
+                middleName = "mockMiddleName",
+                address1 = "mockAddress1",
+                address2 = "mockAddress2",
+                address3 = "mockAddress3",
+                city = "mockCity",
+                state = "mockState",
+                zip = "mockPostalCode",
+                country = "mockCountry",
+                company = "mockCompany",
+                email = "mockEmail",
+                phone = "mockPhone",
+                ssn = "mockSsn",
+                username = "MockUsername",
+                passportNumber = "mockPassportNumber",
+                licenseNumber = "mockLicenseNumber",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = null,
+                folderId = null,
+                collectionIds = emptyList(),
+                key = null,
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.IDENTITY,
+                login = null,
+                identity = IdentityView(
+                    title = "MR",
+                    firstName = "mockFirstName",
+                    lastName = "mockLastName",
+                    middleName = "mockMiddleName",
+                    address1 = "mockAddress1",
+                    address2 = "mockAddress2",
+                    address3 = "mockAddress3",
+                    city = "mockCity",
+                    state = "mockState",
+                    postalCode = "mockPostalCode",
+                    country = "mockCountry",
+                    company = "mockCompany",
+                    email = "mockEmail",
+                    phone = "mockPhone",
+                    ssn = "mockSsn",
+                    username = "MockUsername",
+                    passportNumber = "mockPassportNumber",
+                    licenseNumber = "mockLicenseNumber",
+                ),
+                card = null,
+                secureNote = null,
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                creationDate = Instant.MIN,
+                deletedDate = null,
+                revisionDate = Instant.MIN,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should transform Identity ItemType to CipherView with original cipher`() {
+        val cipherView = DEFAULT_IDENTITY_CIPHER_VIEW
+        val viewState = VaultAddItemState.ViewState.Content(
+            common = VaultAddItemState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                folderName = "mockFolder-1".asText(),
+                favorite = true,
+                masterPasswordReprompt = false,
+                customFieldData = listOf(
+                    VaultAddItemState.Custom.BooleanField("testId", "TestBoolean", false),
+                    VaultAddItemState.Custom.TextField("testId", "TestText", "TestText"),
+                    VaultAddItemState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
+                    VaultAddItemState.Custom.LinkedField(
+                        "testId",
+                        "TestLinked",
+                        VaultLinkedFieldType.USERNAME,
+                    ),
+                ),
+                notes = "mockNotes-1",
+                ownership = "mockOwnership-1",
+            ),
+            type = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MR,
+                firstName = "mockFirstName",
+                lastName = "mockLastName",
+                middleName = "mockMiddleName",
+                address1 = "mockAddress1",
+                address2 = "mockAddress2",
+                address3 = "mockAddress3",
+                city = "mockCity",
+                state = "mockState",
+                zip = "mockPostalCode",
+                country = "mockCountry",
+                company = "mockCompany",
+                email = "mockEmail",
+                phone = "mockPhone",
+                ssn = "mockSsn",
+                username = "MockUsername",
+                passportNumber = "mockPassportNumber",
+                licenseNumber = "mockLicenseNumber",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertEquals(
+            @Suppress("MaxLineLength")
+            cipherView.copy(
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.IDENTITY,
+                identity = IdentityView(
+                    title = "MR",
+                    firstName = "mockFirstName",
+                    lastName = "mockLastName",
+                    middleName = "mockMiddleName",
+                    address1 = "mockAddress1",
+                    address2 = "mockAddress2",
+                    address3 = "mockAddress3",
+                    city = "mockCity",
+                    state = "mockState",
+                    postalCode = "mockPostalCode",
+                    country = "mockCountry",
+                    company = "mockCompany",
+                    email = "mockEmail",
+                    phone = "mockPhone",
+                    ssn = "mockSsn",
+                    username = "MockUsername",
+                    passportNumber = "mockPassportNumber",
+                    licenseNumber = "mockLicenseNumber",
+                ),
+                favorite = true,
+                reprompt = CipherRepromptType.NONE,
+                fields = listOf(
+                    FieldView(
+                        name = "TestBoolean",
+                        value = "false",
+                        type = FieldType.BOOLEAN,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestText",
+                        value = "TestText",
+                        type = FieldType.TEXT,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestHidden",
+                        value = "TestHidden",
+                        type = FieldType.HIDDEN,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestLinked",
+                        value = null,
+                        type = FieldType.LINKED,
+                        linkedId = VaultLinkedFieldType.USERNAME.id,
+                    ),
+                ),
+                passwordHistory = listOf(
+                    PasswordHistoryView(
+                        password = "old_password",
+                        lastUsedDate = Instant.ofEpochSecond(1_000L),
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
 }
 
 private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
@@ -491,4 +691,28 @@ private val DEFAULT_SECURE_NOTES_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_V
         ),
     ),
     secureNote = SecureNoteView(type = SecureNoteType.GENERIC),
+)
+
+private val DEFAULT_IDENTITY_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+    type = CipherType.IDENTITY,
+    identity = IdentityView(
+        title = "MR",
+        firstName = "mockFirstName",
+        lastName = "mockLastName",
+        middleName = "mockMiddleName",
+        address1 = "mockAddress1",
+        address2 = "mockAddress2",
+        address3 = "mockAddress3",
+        city = "mockCity",
+        state = "mockState",
+        postalCode = "mockPostalCode",
+        country = "mockCountry",
+        company = "mockCompany",
+        email = "mockEmail",
+        phone = "mockPhone",
+        ssn = "mockSsn",
+        username = "MockUsername",
+        passportNumber = "mockPassportNumber",
+        licenseNumber = "mockLicenseNumber",
+    ),
 )

@@ -216,6 +216,17 @@ fun LazyListScope.addEditIdentityItems(
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
+            label = stringResource(id = R.string.state_province),
+            value = identityState.state,
+            onValueChange = identityItemTypeHandlers.onStateTextChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        )
+    }
+    item {
+        Spacer(modifier = Modifier.height(8.dp))
+        BitwardenTextField(
             label = stringResource(id = R.string.zip_postal_code),
             value = identityState.zip,
             onValueChange = identityItemTypeHandlers.onZipTextChange,

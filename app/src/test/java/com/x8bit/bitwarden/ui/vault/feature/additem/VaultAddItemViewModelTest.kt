@@ -766,6 +766,21 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         }
 
         @Test
+        fun `StateTextChange should update state text`() = runTest {
+            val action = VaultAddItemAction.ItemType.IdentityType.StateTextChange(
+                state = "newState",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                    state = "newState",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
         fun `ZipTextChange should update zip`() = runTest {
             val action = VaultAddItemAction.ItemType.IdentityType.ZipTextChange(
                 zip = "newZip",

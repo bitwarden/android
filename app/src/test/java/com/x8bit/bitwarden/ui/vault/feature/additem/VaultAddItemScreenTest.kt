@@ -952,6 +952,39 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `in ItemType_Identity changing state text field should trigger CityTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "State / Province")
+            .performTextInput(text = "TestState")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.IdentityType.StateTextChange(
+                    state = "TestState",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Identity the state province text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_IDENTITY
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "State / Province")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(state = "NewState") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "State / Province")
+            .assertTextContains("NewState")
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Identity the country text field should display the text provided by the state`() {

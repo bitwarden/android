@@ -42,6 +42,7 @@ class VaultAddIdentityItemTypeHandlers(
     val onAddress2TextChange: (String) -> Unit,
     val onAddress3TextChange: (String) -> Unit,
     val onCityTextChange: (String) -> Unit,
+    val onStateTextChange: (String) -> Unit,
     val onZipTextChange: (String) -> Unit,
     val onCountryTextChange: (String) -> Unit,
 ) {
@@ -156,6 +157,13 @@ class VaultAddIdentityItemTypeHandlers(
                     viewModel.trySendAction(
                         VaultAddItemAction.ItemType.IdentityType.CityTextChange(
                             city = newCity,
+                        ),
+                    )
+                },
+                onStateTextChange = { newState ->
+                    viewModel.trySendAction(
+                        VaultAddItemAction.ItemType.IdentityType.StateTextChange(
+                            state = newState,
                         ),
                     )
                 },

@@ -14,6 +14,7 @@ import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import java.time.Instant
@@ -160,26 +161,25 @@ private fun VaultAddItemState.ViewState.Content.ItemType.toCardView(): CardView?
 
 private fun VaultAddItemState.ViewState.Content.ItemType.toIdentityView(): IdentityView? =
     (this as? VaultAddItemState.ViewState.Content.ItemType.Identity)?.let {
-        // TODO Create real IdentityView from Content (BIT-508)
         IdentityView(
-            title = null,
-            firstName = null,
-            lastName = null,
-            middleName = null,
-            address1 = null,
-            address2 = null,
-            address3 = null,
-            city = null,
-            state = null,
-            postalCode = null,
-            country = null,
-            company = null,
-            email = null,
-            phone = null,
-            ssn = null,
-            username = null,
-            passportNumber = null,
-            licenseNumber = null,
+            title = it.selectedTitle.name,
+            firstName = it.firstName.orNullIfBlank(),
+            lastName = it.lastName.orNullIfBlank(),
+            middleName = it.middleName.orNullIfBlank(),
+            address1 = it.address1.orNullIfBlank(),
+            address2 = it.address2.orNullIfBlank(),
+            address3 = it.address3.orNullIfBlank(),
+            city = it.city.orNullIfBlank(),
+            state = it.state.orNullIfBlank(),
+            postalCode = it.zip.orNullIfBlank(),
+            country = it.country.orNullIfBlank(),
+            company = it.company.orNullIfBlank(),
+            email = it.email.orNullIfBlank(),
+            phone = it.phone.orNullIfBlank(),
+            ssn = it.ssn.orNullIfBlank(),
+            username = it.username.orNullIfBlank(),
+            passportNumber = it.passportNumber.orNullIfBlank(),
+            licenseNumber = it.licenseNumber.orNullIfBlank(),
         )
     }
 
