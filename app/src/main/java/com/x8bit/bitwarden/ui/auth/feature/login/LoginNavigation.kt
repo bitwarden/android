@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 private const val EMAIL_ADDRESS: String = "email_address"
@@ -16,6 +17,7 @@ private const val LOGIN_ROUTE: String = "login/{$EMAIL_ADDRESS}?$CAPTCHA_TOKEN={
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
+@OmitFromCoverage
 class LoginArgs(val emailAddress: String, val captchaToken: String?) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
