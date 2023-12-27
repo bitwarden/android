@@ -61,6 +61,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod")
 fun LoginScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToEnterpriseSignOn: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
@@ -73,6 +74,7 @@ fun LoginScreen(
                 intentHandler.startCustomTabsActivity(uri = event.uri)
             }
 
+            LoginEvent.NavigateToEnterpriseSignOn -> onNavigateToEnterpriseSignOn()
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
@@ -164,7 +166,7 @@ fun LoginScreen(
     }
 }
 
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun LoginScreenContent(
@@ -233,13 +235,12 @@ private fun LoginScreenContent(
 
             BitwardenOutlinedButtonWithIcon(
                 label = stringResource(id = R.string.log_in_sso),
-                icon = painterResource(id = R.drawable.ic_light_bulb),
+                icon = painterResource(id = R.drawable.ic_briefcase),
                 onClick = onSingleSignOnClick,
                 modifier = Modifier
                     .semantics { testTag = "LogInWithSsoButton" }
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
-                isEnabled = state.isLoginButtonEnabled,
             )
 
             Text(

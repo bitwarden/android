@@ -45,6 +45,7 @@ class LoginScreenTest : BaseComposeTest() {
         every { startCustomTabsActivity(any()) } returns Unit
     }
     private var onNavigateBackCalled = false
+    private var onNavigateToEnterpriseSignOnCalled = false
     private val mutableEventFlow = MutableSharedFlow<LoginEvent>(
         extraBufferCapacity = Int.MAX_VALUE,
     )
@@ -59,6 +60,7 @@ class LoginScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToEnterpriseSignOn = { onNavigateToEnterpriseSignOnCalled = true },
                 viewModel = viewModel,
                 intentHandler = intentHandler,
             )
@@ -264,6 +266,12 @@ class LoginScreenTest : BaseComposeTest() {
         val mockUri = mockk<Uri>()
         mutableEventFlow.tryEmit(LoginEvent.NavigateToCaptcha(mockUri))
         verify { intentHandler.startCustomTabsActivity(mockUri) }
+    }
+
+    @Test
+    fun `NavigateToEnterpriseSignOn should call onNavigateToEnterpriseSignOn`() {
+        mutableEventFlow.tryEmit(LoginEvent.NavigateToEnterpriseSignOn)
+        assertTrue(onNavigateToEnterpriseSignOnCalled)
     }
 }
 

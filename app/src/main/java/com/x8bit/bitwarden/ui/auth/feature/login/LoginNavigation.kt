@@ -44,6 +44,7 @@ fun NavController.navigateToLogin(
  */
 fun NavGraphBuilder.loginDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToEnterpriseSignOn: () -> Unit,
 ) {
     composable(
         route = LOGIN_ROUTE,
@@ -55,12 +56,13 @@ fun NavGraphBuilder.loginDestination(
             },
         ),
         enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.slideDown,
-        popEnterTransition = TransitionProviders.Enter.slideUp,
+        exitTransition = TransitionProviders.Exit.stay,
+        popEnterTransition = TransitionProviders.Enter.stay,
         popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         LoginScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToEnterpriseSignOn = onNavigateToEnterpriseSignOn,
         )
     }
 }
