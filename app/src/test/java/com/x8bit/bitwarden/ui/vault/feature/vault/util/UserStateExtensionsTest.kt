@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -51,6 +52,12 @@ class UserStateExtensionsTest {
                         environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -60,6 +67,12 @@ class UserStateExtensionsTest {
                         environment = Environment.Eu,
                         isPremium = false,
                         isVaultUnlocked = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -73,6 +86,12 @@ class UserStateExtensionsTest {
                         ),
                         isPremium = true,
                         isVaultUnlocked = true,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
                     ),
                 ),
             )
@@ -100,6 +119,12 @@ class UserStateExtensionsTest {
                 environment = Environment.Us,
                 isPremium = true,
                 isVaultUnlocked = true,
+                organizations = listOf(
+                    Organization(
+                        id = "organizationId",
+                        name = "organizationName",
+                    ),
+                ),
             )
                 .toAccountSummary(isActive = true),
         )
@@ -125,6 +150,12 @@ class UserStateExtensionsTest {
                 environment = Environment.Us,
                 isPremium = false,
                 isVaultUnlocked = false,
+                organizations = listOf(
+                    Organization(
+                        id = "organizationId",
+                        name = "organizationName",
+                    ),
+                ),
             )
                 .toAccountSummary(isActive = false),
         )
@@ -154,6 +185,12 @@ class UserStateExtensionsTest {
                         environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
                     ),
                 ),
             )

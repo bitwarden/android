@@ -27,6 +27,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
+import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
+import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -36,6 +38,7 @@ import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -94,14 +97,17 @@ class AuthRepositoryImpl constructor(
             initialValue = AuthState.Uninitialized,
         )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override val userStateFlow: StateFlow<UserState?> = combine(
         authDiskSource.userStateFlow,
+        authDiskSource.userOrganizationsListFlow,
         vaultRepository.vaultStateFlow,
         mutableSpecialCircumstanceStateFlow,
-    ) { userStateJson, vaultState, specialCircumstance ->
+    ) { userStateJson, userOrganizationsList, vaultState, specialCircumstance ->
         userStateJson
             ?.toUserState(
                 vaultState = vaultState,
+                userOrganizationsList = userOrganizationsList,
                 specialCircumstance = specialCircumstance,
             )
     }
@@ -112,6 +118,7 @@ class AuthRepositoryImpl constructor(
                 .userState
                 ?.toUserState(
                     vaultState = vaultRepository.vaultStateFlow.value,
+                    userOrganizationsList = authDiskSource.userOrganizationsList,
                     specialCircumstance = mutableSpecialCircumstanceStateFlow.value,
                 ),
         )

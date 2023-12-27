@@ -23,16 +23,14 @@ private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 /**
  * Primary implementation of [AuthDiskSource].
  */
+@Suppress("TooManyFunctions")
 class AuthDiskSourceImpl(
     sharedPreferences: SharedPreferences,
     private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     AuthDiskSource {
-    private val mutableOrganizationsFlow =
-        MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
+    private val mutableOrganizationsFlowMap =
+        mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
@@ -108,7 +106,7 @@ class AuthDiskSourceImpl(
     override fun getOrganizationsFlow(
         userId: String,
     ): Flow<List<SyncResponseJson.Profile.Organization>?> =
-        mutableOrganizationsFlow
+        getMutableOrganizationsFlow(userId = userId)
             .onSubscription { emit(getOrganizations(userId = userId)) }
 
     override fun storeOrganizations(
@@ -119,7 +117,7 @@ class AuthDiskSourceImpl(
             key = "${ORGANIZATIONS_KEY}_$userId",
             value = organizations?.let { json.encodeToString(it) },
         )
-        mutableOrganizationsFlow.tryEmit(organizations)
+        getMutableOrganizationsFlow(userId = userId).tryEmit(organizations)
     }
 
     private fun generateAndStoreUniqueAppId(): String =
@@ -129,4 +127,14 @@ class AuthDiskSourceImpl(
             .also {
                 putString(key = UNIQUE_APP_ID_KEY, value = it)
             }
+
+    private fun getMutableOrganizationsFlow(
+        userId: String,
+    ): MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?> =
+        mutableOrganizationsFlowMap.getOrPut(userId) {
+            MutableSharedFlow(
+                replay = 1,
+                extraBufferCapacity = Int.MAX_VALUE,
+            )
+        }
 }

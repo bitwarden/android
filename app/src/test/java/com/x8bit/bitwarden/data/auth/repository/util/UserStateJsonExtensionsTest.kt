@@ -4,6 +4,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
@@ -101,6 +103,12 @@ class UserStateJsonExtensionsTest {
                         environment = Environment.Eu,
                         isPremium = false,
                         isVaultUnlocked = true,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
                     ),
                 ),
             ),
@@ -126,6 +134,17 @@ class UserStateJsonExtensionsTest {
                     vaultState = VaultState(
                         unlockedVaultUserIds = setOf("activeUserId"),
                     ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                ),
+                            ),
+                        ),
+                    ),
                     specialCircumstance = null,
                 ),
         )
@@ -146,6 +165,12 @@ class UserStateJsonExtensionsTest {
                         environment = Environment.Eu,
                         isPremium = true,
                         isVaultUnlocked = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
                     ),
                 ),
                 specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
@@ -171,6 +196,17 @@ class UserStateJsonExtensionsTest {
                 .toUserState(
                     vaultState = VaultState(
                         unlockedVaultUserIds = emptySet(),
+                    ),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                ),
+                            ),
+                        ),
                     ),
                     specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
                 ),

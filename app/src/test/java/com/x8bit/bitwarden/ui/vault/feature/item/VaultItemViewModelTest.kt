@@ -598,6 +598,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             environment = Environment.Us,
             isPremium = true,
             isVaultUnlocked = true,
+            organizations = emptyList(),
         ),
     ),
 )

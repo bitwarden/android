@@ -43,6 +43,7 @@ data class UserState(
      * @property environment The [Environment] associated with the user's account.
      * @property isPremium `true` if the account has a premium membership.
      * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
+     * @property organizations List of [Organization]s the user is associated with, if any.
      */
     data class Account(
         val userId: String,
@@ -52,6 +53,7 @@ data class UserState(
         val environment: Environment,
         val isPremium: Boolean,
         val isVaultUnlocked: Boolean,
+        val organizations: List<Organization>,
     )
 
     /**

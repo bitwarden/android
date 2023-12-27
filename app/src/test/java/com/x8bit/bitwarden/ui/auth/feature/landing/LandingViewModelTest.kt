@@ -70,6 +70,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     environment = Environment.Us,
                     isPremium = true,
                     isVaultUnlocked = true,
+                    organizations = emptyList(),
                 ),
             ),
         )
@@ -198,6 +199,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             environment = Environment.Us,
             isPremium = true,
             isVaultUnlocked = true,
+            organizations = emptyList(),
         )
         val userState = UserState(
             activeUserId = "activeUserId",
