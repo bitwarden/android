@@ -204,8 +204,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleSingleSignOnClicked() {
-        // TODO BIT-204 navigate to single sign on
-        sendEvent(LoginEvent.ShowToast("Not yet implemented."))
+        sendEvent(LoginEvent.NavigateToEnterpriseSignOn)
     }
 
     private fun handlePasswordInputChanged(action: LoginAction.PasswordInputChanged) {
@@ -241,6 +240,11 @@ sealed class LoginEvent {
      * Navigates to the captcha verification screen.
      */
     data class NavigateToCaptcha(val uri: Uri) : LoginEvent()
+
+    /**
+     * Navigates to the enterprise single sign on screen.
+     */
+    data object NavigateToEnterpriseSignOn : LoginEvent()
 
     /**
      * Shows a toast with the given [message].

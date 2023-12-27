@@ -8,6 +8,8 @@ import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestination
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
+import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.enterpriseSignOnDestination
+import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.navigateToEnterpriseSignOn
 import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
 import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
@@ -37,6 +39,9 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 )
             },
         )
+        enterpriseSignOnDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
         landingDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
             onNavigateToLogin = { emailAddress ->
@@ -51,6 +56,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         )
         loginDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToEnterpriseSignOn = { navController.navigateToEnterpriseSignOn() },
         )
         environmentDestination(
             onNavigateBack = { navController.popBackStack() },

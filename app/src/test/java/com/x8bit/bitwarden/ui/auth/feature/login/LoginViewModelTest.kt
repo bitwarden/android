@@ -318,13 +318,13 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SingleSignOnClick should emit ShowToast`() = runTest {
+    fun `SingleSignOnClick should emit NavigateToEnterpriseSignOn`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LoginAction.SingleSignOnClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
-                LoginEvent.ShowToast("Not yet implemented."),
+                LoginEvent.NavigateToEnterpriseSignOn,
                 awaitItem(),
             )
         }
