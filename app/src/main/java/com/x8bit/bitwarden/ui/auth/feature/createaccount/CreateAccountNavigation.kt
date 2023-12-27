@@ -18,7 +18,7 @@ fun NavController.navigateToCreateAccount(navOptions: NavOptions? = null) {
 /**
  * Add the create account screen to the nav graph.
  */
-fun NavGraphBuilder.createAccountDestinations(
+fun NavGraphBuilder.createAccountDestination(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
 ) {

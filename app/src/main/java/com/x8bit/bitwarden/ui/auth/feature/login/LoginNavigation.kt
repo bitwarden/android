@@ -40,7 +40,7 @@ fun NavController.navigateToLogin(
 /**
  * Add the Login screen to the nav graph.
  */
-fun NavGraphBuilder.loginDestinations(
+fun NavGraphBuilder.loginDestination(
     onNavigateBack: () -> Unit,
 ) {
     composable(

@@ -20,7 +20,7 @@ fun NavController.navigateToVaultUnlock(
 /**
  * Add the Vault Unlock screen to the nav graph.
  */
-fun NavGraphBuilder.vaultUnlockDestinations() {
+fun NavGraphBuilder.vaultUnlockDestination() {
     composable(
         route = VAULT_UNLOCK_ROUTE,
         enterTransition = TransitionProviders.Enter.slideUp,

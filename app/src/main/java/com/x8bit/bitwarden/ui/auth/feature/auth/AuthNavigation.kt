@@ -6,13 +6,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestinations
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestination
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.navigateToCreateAccount
 import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
 import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
-import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestinations
-import com.x8bit.bitwarden.ui.auth.feature.login.loginDestinations
+import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestination
+import com.x8bit.bitwarden.ui.auth.feature.login.loginDestination
 import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
 
 const val AUTH_GRAPH_ROUTE: String = "auth_graph"
@@ -25,7 +25,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         startDestination = LANDING_ROUTE,
         route = AUTH_GRAPH_ROUTE,
     ) {
-        createAccountDestinations(
+        createAccountDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToLogin = { emailAddress, captchaToken ->
                 navController.navigateToLogin(
@@ -37,7 +37,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 )
             },
         )
-        landingDestinations(
+        landingDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
             onNavigateToLogin = { emailAddress ->
                 navController.navigateToLogin(
@@ -49,7 +49,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 navController.navigateToEnvironment()
             },
         )
-        loginDestinations(
+        loginDestination(
             onNavigateBack = { navController.popBackStack() },
         )
         environmentDestination(
