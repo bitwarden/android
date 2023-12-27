@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
 
 private const val VAULT_ITEM_PREFIX = "vault_item"
@@ -16,6 +17,7 @@ private const val VAULT_ITEM_ROUTE = "$VAULT_ITEM_PREFIX/{$VAULT_ITEM_ID}"
 /**
  * Class to retrieve vault item arguments from the [SavedStateHandle].
  */
+@OmitFromCoverage
 class VaultItemArgs(val vaultItemId: String) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         checkNotNull(savedStateHandle[VAULT_ITEM_ID]) as String,
