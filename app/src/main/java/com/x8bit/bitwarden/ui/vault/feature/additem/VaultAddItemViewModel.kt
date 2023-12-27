@@ -462,6 +462,10 @@ class VaultAddItemViewModel @Inject constructor(
                 handleIdentityCityTextChange(action)
             }
 
+            is VaultAddItemAction.ItemType.IdentityType.StateTextChange -> {
+                handleIdentityStateTextChange(action)
+            }
+
             is VaultAddItemAction.ItemType.IdentityType.CompanyTextChange -> {
                 handleIdentityCompanyTextChange(action)
             }
@@ -534,6 +538,12 @@ class VaultAddItemViewModel @Inject constructor(
         action: VaultAddItemAction.ItemType.IdentityType.CityTextChange,
     ) {
         updateIdentityContent { it.copy(city = action.city) }
+    }
+
+    private fun handleIdentityStateTextChange(
+        action: VaultAddItemAction.ItemType.IdentityType.StateTextChange,
+    ) {
+        updateIdentityContent { it.copy(state = action.state) }
     }
 
     private fun handleIdentityCompanyTextChange(
@@ -949,6 +959,7 @@ data class VaultAddItemState(
                  * @property address2 The address2 for the identity item.
                  * @property address3 The address3 for the identity item.
                  * @property city The city for the identity item.
+                 * @property state the state for the identity item.
                  * @property zip The zip for the identity item.
                  * @property country The country for the identity item.
                  */
@@ -969,6 +980,7 @@ data class VaultAddItemState(
                     val address2: String = "",
                     val address3: String = "",
                     val city: String = "",
+                    val state: String = "",
                     val zip: String = "",
                     val country: String = "",
                 ) : ItemType() {
@@ -1349,6 +1361,13 @@ sealed class VaultAddItemAction {
              * @property city The new city text.
              */
             data class CityTextChange(val city: String) : IdentityType()
+
+            /**
+             * Fired when the state text input is changed.
+             *
+             * @property state The new state text.
+             */
+            data class StateTextChange(val state: String) : IdentityType()
 
             /**
              * Fired when the zip text input is changed.
