@@ -15,7 +15,7 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
-import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestinations
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
@@ -50,7 +50,7 @@ fun RootNavScreen(
     ) {
         splashDestination()
         authGraph(navController)
-        vaultUnlockDestinations()
+        vaultUnlockDestination()
         vaultUnlockedGraph(navController)
     }
 
