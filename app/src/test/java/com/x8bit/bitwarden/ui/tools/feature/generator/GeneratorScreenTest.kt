@@ -927,6 +927,46 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //endregion Forwarded Email Alias Tests
 
+    //region DuckDuckGo Service Type Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_DuckDuckGo state, updating api key text input should send ApiKeyTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .DuckDuckGo(),
+                    ),
+                ),
+            ),
+        )
+
+        val newApiKey = "apiKey"
+
+        composeTestRule
+            .onNodeWithText("API key (required)")
+            .performScrollTo()
+            .performTextInput(newApiKey)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.DuckDuckGo.ApiKeyTextChange(
+                    apiKey = newApiKey,
+                ),
+            )
+        }
+    }
+
+    //endregion DuckDuckGo Service Type Tests
+
     //region Username Plus Addressed Email Tests
 
     @Suppress("MaxLineLength")

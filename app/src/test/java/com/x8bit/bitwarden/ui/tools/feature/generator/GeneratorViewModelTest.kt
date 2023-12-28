@@ -31,6 +31,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val forwardedEmailAliasSavedStateHandle =
         createSavedStateHandleWithState(initialForwardedEmailAliasState)
 
+    private val initialDuckDuckGoState = createDuckDuckGoState()
+    private val duckDuckGoSavedStateHandle = createSavedStateHandleWithState(initialDuckDuckGoState)
+
     private val initialCatchAllEmailState = createCatchAllEmailState()
     private val catchAllEmailSavedStateHandle =
         createSavedStateHandleWithState(initialCatchAllEmailState)
@@ -952,6 +955,50 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class DuckDuckGoActions {
+        private val defaultDuckDuckGoState = createDuckDuckGoState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(duckDuckGoSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Test
+        fun `ApiKeyTextChange should update api key text correctly`() = runTest {
+            val newApiKey = "newApiKey"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .DuckDuckGo.ApiKeyTextChange(
+                    apiKey = newApiKey,
+                )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultDuckDuckGoState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .DuckDuckGo(
+                                apiKey = newApiKey,
+                            ),
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
     inner class PlusAddressedEmailActions {
         private val defaultPlusAddressedEmailState = createPlusAddressedEmailState()
         private lateinit var viewModel: GeneratorViewModel
@@ -1154,6 +1201,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                     selectedServiceType = null,
                     obfuscatedText = obfuscatedText,
+                ),
+            ),
+        )
+
+    private fun createDuckDuckGoState(
+        generatedText: String = "defaultDuckDuckGo",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                    selectedServiceType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceType
+                        .DuckDuckGo(),
                 ),
             ),
         )

@@ -838,7 +838,14 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
         }
 
         is ServiceType.DuckDuckGo -> {
-            // TODO: DuckDuckGo Service Implementation (BIT-714)
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.api_key_required_parenthesis),
+                value = usernameTypeState.selectedServiceType.apiKey,
+                onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
         }
 
         is ServiceType.FastMail -> {
@@ -1171,6 +1178,7 @@ private class PassphraseHandlers(
  */
 private class ForwardedEmailAliasHandlers(
     val onServiceChange: (ServiceTypeOption) -> Unit,
+    val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
 ) {
     companion object {
         fun create(viewModel: GeneratorViewModel): ForwardedEmailAliasHandlers {
@@ -1184,6 +1192,19 @@ private class ForwardedEmailAliasHandlers(
                             .ForwardedEmailAlias
                             .ServiceTypeOptionSelect(
                                 serviceTypeOption = newServiceTypeOption,
+                            ),
+                    )
+                },
+                onDuckDuckGoApiKeyTextChange = { newApiKey ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .DuckDuckGo
+                            .ApiKeyTextChange(
+                                apiKey = newApiKey,
                             ),
                     )
                 },
