@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.DuckDuckGo
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
@@ -111,6 +112,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOptionSelect -> {
                 handleServiceTypeOptionSelect(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.DuckDuckGo.ApiKeyTextChange -> {
+                handleDuckDuckGoTextInputChange(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange -> {
@@ -594,6 +599,21 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion Forwarded Email Alias Specific Handlers
 
+    private fun handleDuckDuckGoTextInputChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .DuckDuckGo
+        .ApiKeyTextChange,
+    ) {
+        updateDuckDuckGoServiceType { duckDuckGoServiceType ->
+            val newApiKey = action.apiKey
+            duckDuckGoServiceType.copy(apiKey = newApiKey)
+        }
+    }
+
     //region Plus Addressed Email Specific Handlers
 
     private fun handlePlusAddressedEmailTextInputChange(
@@ -749,6 +769,30 @@ class GeneratorViewModel @Inject constructor(
                 return@updateGeneratorMainTypeUsername currentSelectedType
             }
             currentSelectedType.copy(selectedType = block(currentUsernameType))
+        }
+    }
+
+    private inline fun updateDuckDuckGoServiceType(
+        crossinline block: (DuckDuckGo) -> DuckDuckGo,
+    ) {
+        updateGeneratorMainTypeUsername { currentUsernameType ->
+            if (currentUsernameType.selectedType !is ForwardedEmailAlias) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
+            if (currentServiceType !is DuckDuckGo) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val updatedServiceType = block(currentServiceType)
+
+            currentUsernameType.copy(
+                selectedType = ForwardedEmailAlias(
+                    selectedServiceType = updatedServiceType,
+                    obfuscatedText = currentUsernameType.selectedType.obfuscatedText,
+                ),
+            )
         }
     }
 
@@ -1401,6 +1445,19 @@ sealed class GeneratorAction {
                         .ForwardedEmailAlias
                         .ServiceTypeOption,
                     ) : ForwardedEmailAlias()
+
+                    /**
+                     * Represents actions specifically related to the DuckDuckGo service.
+                     */
+                    sealed class DuckDuckGo : ForwardedEmailAlias() {
+
+                        /**
+                         * Fired when the api key input text is changed.
+                         *
+                         * @property apiKey The new api key text.
+                         */
+                        data class ApiKeyTextChange(val apiKey: String) : DuckDuckGo()
+                    }
                 }
 
                 /**
