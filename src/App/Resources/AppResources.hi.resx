@@ -465,19 +465,19 @@
     <value>आइटम बदलें</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>ऑटो-सिंक चालू करें</value>
+    <value>ऑटो-सिंक ऑन करें</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>मास्टर पासवर्ड हिंट लेने के लिए अपने अकाउंट का ईमेल पता डालें।</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>ऐप एक्सटेंशन वापस चालू करें</value>
+    <value>ऐप एक्सटेंशन वापस ऑन करें</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>खत्म होने ही वाला है!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>ऐप एक्सटेंशन चालू करें</value>
+    <value>ऐप एक्सटेंशन ऑन करें</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>सफारी में, शेयर आइकन से बिटवार्डन को ढूंढें (हिंट: मेन्यू के सबसे निचले पट्टी पर राइट में जाएं)।</value>
@@ -499,7 +499,7 @@
     <value>एक्सटेंशन खोलने के लिए मेन्यू में बिटवार्डन आइकन पर दबाएं।</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>सफारी और दूसरे ऐप में बिटवार्डन चालू करने के लिए, मेन्यू के सबसे निचले पट्टी में "ज़्यादा" आइकन दबाएं।</value>
+    <value>सफारी और दूसरे ऐप में बिटवार्डन ऑन करने के लिए, मेन्यू के सबसे निचले पट्टी में "ज़्यादा" आइकन दबाएं।</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>मनपसंद</value>
@@ -529,7 +529,7 @@
     <value>लंबाई</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>लॉक</value>
+    <value>लॉक करें</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
     <value>15 मिनट</value>
@@ -592,7 +592,7 @@
     <value>ज़्यादा सेटिंग</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>एक्सटेशन इस्तेमाल करने से पहले मेन बिटवार्डन ऐप में लॉगइन करना पड़ेगा।</value>
+    <value>एक्सटेंशन इस्तेमाल करने से पहले मेन बिटवार्डन ऐप में लॉगइन करना पड़ेगा।</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>कभी नहीं</value>
@@ -601,7 +601,7 @@
     <value>नया आइटम बनाया गया</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>तिजोरी में कोई मनपसंद चीज़ नहीं है।</value>
+    <value>तिजोरी में कोई मनपसंद आइटम नहीं है।</value>
   </data>
   <data name="NoItems" xml:space="preserve">
     <value>तिजोरी में कोई आइटम नहीं है।</value>
@@ -617,13 +617,13 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>ऑप्शन के डिफॉल्ट मेन बिटवार्डन ऐप के पासवर्ड जेनरेटर टूल से सेट होता है।</value>
+    <value>ऑप्शन के डिफॉल्ट मेन बिटवार्डन ऐप के पासवर्ड जेनरेटर टूल से सेट होते है।</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>ऑप्शन</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>दूसरे</value>
+    <value>बाकी</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
     <value>पासवर्ड बनाया गया</value>
@@ -641,44 +641,44 @@
     <value>चालू पासवर्ड पक्का ओवरराइट करें?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>बिटवार्डन पुश नोटिफिकेशन इस्तेमाल करके आपकी तिजोरी अपनेआप सिंक करके रखता है। पुश नोटिफिकेशन की इजाज़त मांगने वाले अगले स्क्रीन पर "दें" चुनें।</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>इस एप्प का मूल्यांकन करें</value>
+    <value>ऐप को रेटिंग दें</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>कृपया हमें एक अच्छी समीक्षा के साथ बाहर की मदद करने पर विचार करें!</value>
+    <value>एक अच्छा रिव्यू लिखकर हमारी मदद करें!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>पासवर्ड पुन: जनरेट करें</value>
+    <value>पासवर्ड वापस बनाएं</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>मास्टर पासवर्ड पुनः टाइप करें</value>
+    <value>मास्टर पासवर्ड वापस लिखें</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>तिजोरी सर्च करें</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>सुरक्षा</value>
+    <value>सेक्योरिटी</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>चयन करें</value>
+    <value>चुनें</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
     <value>पिन सेट करें</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>एप्लिकेशन को अनलॉक करने के लिए 4 अंकों का पिन कोड दर्ज करें।</value>
+    <value>ऐप खोलने के लिए एक पिन कोड डालें।</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>आइटम सूचना</value>
+    <value>आइटम जानकारी</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>आइटम अपडेट किया गया।</value>
+    <value>आइटम सेव किया गया</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>सबमिट हो रहा हैं...</value>
+    <value>भेज रहे है...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -686,29 +686,29 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>सिंकिंग पूर्ण</value>
+    <value>सिंक हो गया</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>सिंकिंग असफल।</value>
+    <value>सिंक नहीं हुआ</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>तिजोरी अभी सिंक करें।</value>
   </data>
   <data name="TouchID" xml:space="preserve">
-    <value>Touch ID</value>
+    <value>टच आईडी</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>द्वि-चरणीय लॉगिन</value>
+    <value>टू-स्टेप लॉगइन</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>{0} से अनलॉक करें</value>
+    <value>{0} से खोलें</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>पिन कोड के साथ अनलॉक करें</value>
+    <value>पिन कोड से खोलें</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>सत्यापित किया जा रहा</value>
+    <value>चेक कर रहे</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -718,20 +718,20 @@
     <value>आइटम देखें</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden Web Vault</value>
+    <value>बिटवार्डन वेब तिजोरी</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>प्रमाणिक एप खो गया?</value>
+    <value>ऑथेंटिकेटर ऐप गुम हो गया?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>आइटम</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>एक्सटेंशन सक्रिय!</value>
+    <value>एक्सटेंशन चल रहा!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>आइकॉन</value>
+    <value>आइकन</value>
   </data>
   <data name="Translations" xml:space="preserve">
     <value>अनुवाद</value>
@@ -745,37 +745,37 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>जब आप एक इनपुट फ़ील्ड का चयन करते हैं और एक बिटवर्डेन ऑटो-फिल ओवरले देखते हैं, तो आप इसे ऑटो-फिल सेवा लॉन्च करने के लिए टैप कर सकते हैं।</value>
+    <value>इनपुट फील्ड को चुनने पर अगर एक बिटवार्डन ऑटो-फिल स्क्रीन दिखता हैं, तो उसपर टैप करके ऑटो-फिल सर्विस लॉन्च किया जा सकता है।</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill a login from your vault.</value>
+    <value>अपने तिजोरी से आइटम ऑटो-फिल करने के लिए इस नोटिफिकेशन पर टैप करें।</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>पहुँच क्षमता सेटिंग्स</value>
+    <value>एक्सेसिबिलिटी सेटिंग खोलें</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. एंड्रॉइड एक्सेसिबिलिटी सेटिंग में, सर्विस टाइटल के अंदर "बिटवार्डन" पर टैप करें।</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. टॉगल स्विच करें और स्वीकार करने के लिए ठीक दबाएँ।</value>
+    <value>2. स्विच ऑन करें और "ठीक है" दबाएं।</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>अक्षम कर दिया गया</value>
-  </data>
-  <data name="Enabled" xml:space="preserve">
-    <value>सक्षम</value>
-  </data>
-  <data name="Off" xml:space="preserve">
     <value>बंद</value>
   </data>
-  <data name="On" xml:space="preserve">
+  <data name="Enabled" xml:space="preserve">
     <value>चालू</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>ऑफ</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>ऑन</value>
+  </data>
   <data name="Status" xml:space="preserve">
-    <value>स्थिति</value>
+    <value>स्टेटस</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>अपनी तिजोरी में नए लॉगिन जोड़ने का सबसे आसान तरीका बिटवर्डन ऑटो-फिल सर्विस है। "सेटिंग्स" स्क्रीन पर नेविगेट करके बिटवर्डेन ऑटो-फिल सेवा का उपयोग करने के बारे में अधिक जानें।</value>
+    <value>बिटवार्डन ऑटो-फिल सर्विस अपने तिजोरी में नए लॉगइन जोड़ने का सबसे आसान तरीका है। "सेटिंग" स्क्रीन पर जाकर बिटवार्डन ऑटो-फिल सर्विस के बारे में ज़्यादा जानें।</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>स्वत:भरण</value>
