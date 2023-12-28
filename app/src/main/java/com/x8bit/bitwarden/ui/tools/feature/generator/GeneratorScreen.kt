@@ -853,7 +853,14 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
         }
 
         is ServiceType.FirefoxRelay -> {
-            // TODO: FirefoxRelay Service Implementation (BIT-1196)
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.api_access_token),
+                value = usernameTypeState.selectedServiceType.apiAccessToken,
+                onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
         }
 
         is ServiceType.SimpleLogin -> {
@@ -1179,6 +1186,7 @@ private class PassphraseHandlers(
 private class ForwardedEmailAliasHandlers(
     val onServiceChange: (ServiceTypeOption) -> Unit,
     val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
+    val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
 ) {
     companion object {
         fun create(viewModel: GeneratorViewModel): ForwardedEmailAliasHandlers {
@@ -1206,6 +1214,20 @@ private class ForwardedEmailAliasHandlers(
                             .ApiKeyTextChange(
                                 apiKey = newApiKey,
                             ),
+                    )
+                },
+                onFirefoxRelayAccessTokenTextChange = { newAccessToken ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .FirefoxRelay
+                            .AccessTokenTextChange(
+                                accessToken = newAccessToken,
+                            ),
+
                     )
                 },
             )

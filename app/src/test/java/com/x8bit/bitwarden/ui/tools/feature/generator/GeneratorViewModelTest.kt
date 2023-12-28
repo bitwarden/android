@@ -34,6 +34,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val initialDuckDuckGoState = createDuckDuckGoState()
     private val duckDuckGoSavedStateHandle = createSavedStateHandleWithState(initialDuckDuckGoState)
 
+    private val initialFirefoxRelay = createFirefoxRelayState()
+    private val firefoxRelaySavedStateHandle = createSavedStateHandleWithState(initialFirefoxRelay)
+
     private val initialCatchAllEmailState = createCatchAllEmailState()
     private val catchAllEmailSavedStateHandle =
         createSavedStateHandleWithState(initialCatchAllEmailState)
@@ -999,6 +1002,51 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class FirefoxRelayActions {
+        private val defaultFirefoxRelayState = createFirefoxRelayState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(firefoxRelaySavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Test
+        fun `AccessTokenTextChange should update access token text correctly`() = runTest {
+            val newAccessToken = "newAccessToken"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .FirefoxRelay
+                .AccessTokenTextChange(
+                    accessToken = newAccessToken,
+                )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultFirefoxRelayState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .FirefoxRelay(
+                                apiAccessToken = newAccessToken,
+                            ),
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
     inner class PlusAddressedEmailActions {
         private val defaultPlusAddressedEmailState = createPlusAddressedEmailState()
         private lateinit var viewModel: GeneratorViewModel
@@ -1219,6 +1267,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .ForwardedEmailAlias
                         .ServiceType
                         .DuckDuckGo(),
+                ),
+            ),
+        )
+
+    private fun createFirefoxRelayState(
+        generatedText: String = "defaultFirefoxRelay",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                    selectedServiceType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceType
+                        .FirefoxRelay(),
                 ),
             ),
         )

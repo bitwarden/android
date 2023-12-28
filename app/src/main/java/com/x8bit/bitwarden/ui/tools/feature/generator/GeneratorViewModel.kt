@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.DuckDuckGo
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.FirefoxRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
@@ -116,6 +117,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.DuckDuckGo.ApiKeyTextChange -> {
                 handleDuckDuckGoTextInputChange(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.FirefoxRelay.AccessTokenTextChange -> {
+                handleFirefoxRelayTextInputChange(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange -> {
@@ -599,6 +604,8 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion Forwarded Email Alias Specific Handlers
 
+    //region DuckDuckGo Service Specific Handlers
+
     private fun handleDuckDuckGoTextInputChange(
         action: GeneratorAction
         .MainType
@@ -613,6 +620,27 @@ class GeneratorViewModel @Inject constructor(
             duckDuckGoServiceType.copy(apiKey = newApiKey)
         }
     }
+
+    //endregion DuckDuckGo Service Specific Handlers
+
+    //region FirefoxRelay Service Specific Handlers
+
+    private fun handleFirefoxRelayTextInputChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .FirefoxRelay
+        .AccessTokenTextChange,
+    ) {
+        updateFirefoxRelayServiceType { firefoxRelayServiceType ->
+            val newAccessToken = action.accessToken
+            firefoxRelayServiceType.copy(apiAccessToken = newAccessToken)
+        }
+    }
+
+    //endregion FirefoxRelay Service Specific Handlers
 
     //region Plus Addressed Email Specific Handlers
 
@@ -782,6 +810,30 @@ class GeneratorViewModel @Inject constructor(
 
             val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
             if (currentServiceType !is DuckDuckGo) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val updatedServiceType = block(currentServiceType)
+
+            currentUsernameType.copy(
+                selectedType = ForwardedEmailAlias(
+                    selectedServiceType = updatedServiceType,
+                    obfuscatedText = currentUsernameType.selectedType.obfuscatedText,
+                ),
+            )
+        }
+    }
+
+    private inline fun updateFirefoxRelayServiceType(
+        crossinline block: (FirefoxRelay) -> FirefoxRelay,
+    ) {
+        updateGeneratorMainTypeUsername { currentUsernameType ->
+            if (currentUsernameType.selectedType !is ForwardedEmailAlias) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
+            if (currentServiceType !is FirefoxRelay) {
                 return@updateGeneratorMainTypeUsername currentUsernameType
             }
 
@@ -1457,6 +1509,19 @@ sealed class GeneratorAction {
                          * @property apiKey The new api key text.
                          */
                         data class ApiKeyTextChange(val apiKey: String) : DuckDuckGo()
+                    }
+
+                    /**
+                     * Represents actions specifically related to the FirefoxRelay service.
+                     */
+                    sealed class FirefoxRelay : ForwardedEmailAlias() {
+
+                        /**
+                         * Fired when the access token input text is changed.
+                         *
+                         * @property accessToken The new access token text.
+                         */
+                        data class AccessTokenTextChange(val accessToken: String) : FirefoxRelay()
                     }
                 }
 
