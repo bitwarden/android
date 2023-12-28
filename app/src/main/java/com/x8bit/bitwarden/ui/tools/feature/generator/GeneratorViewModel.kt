@@ -21,7 +21,8 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AnonAddy
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,6 +45,7 @@ private const val KEY_STATE = "state"
  *
  * @property savedStateHandle Handles the saved state of this ViewModel.
  */
+@Suppress("LargeClass")
 @HiltViewModel
 class GeneratorViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -105,6 +107,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameTypeOptionSelect -> {
                 handleUsernameTypeOptionSelect(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOptionSelect -> {
+                handleServiceTypeOptionSelect(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange -> {
@@ -553,6 +559,41 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion Username Type Handlers
 
+    //region Forwarded Email Alias Specific Handlers
+
+    private fun handleServiceTypeOptionSelect(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .ServiceTypeOptionSelect,
+    ) {
+        when (action.serviceTypeOption) {
+            ForwardedEmailAlias.ServiceTypeOption.ANON_ADDY -> updateForwardedEmailAliasType {
+                ForwardedEmailAlias(selectedServiceType = ServiceType.AnonAddy())
+            }
+
+            ForwardedEmailAlias.ServiceTypeOption.DUCK_DUCK_GO -> updateForwardedEmailAliasType {
+                ForwardedEmailAlias(selectedServiceType = ServiceType.DuckDuckGo())
+            }
+
+            ForwardedEmailAlias.ServiceTypeOption.FAST_MAIL -> updateForwardedEmailAliasType {
+                ForwardedEmailAlias(selectedServiceType = ServiceType.FastMail())
+            }
+
+            ForwardedEmailAlias.ServiceTypeOption.FIREFOX_RELAY -> updateForwardedEmailAliasType {
+                ForwardedEmailAlias(selectedServiceType = ServiceType.FirefoxRelay())
+            }
+
+            ForwardedEmailAlias.ServiceTypeOption.SIMPLE_LOGIN -> updateForwardedEmailAliasType {
+                ForwardedEmailAlias(selectedServiceType = ServiceType.SimpleLogin())
+            }
+        }
+    }
+
+    //endregion Forwarded Email Alias Specific Handlers
+
     //region Plus Addressed Email Specific Handlers
 
     private fun handlePlusAddressedEmailTextInputChange(
@@ -696,6 +737,18 @@ class GeneratorViewModel @Inject constructor(
     ) {
         updateGeneratorMainType {
             if (it !is Username) null else block(it)
+        }
+    }
+
+    private inline fun updateForwardedEmailAliasType(
+        crossinline block: (ForwardedEmailAlias) -> ForwardedEmailAlias,
+    ) {
+        updateGeneratorMainTypeUsername { currentSelectedType ->
+            val currentUsernameType = currentSelectedType.selectedType
+            if (currentUsernameType !is ForwardedEmailAlias) {
+                return@updateGeneratorMainTypeUsername currentSelectedType
+            }
+            currentSelectedType.copy(selectedType = block(currentUsernameType))
         }
     }
 
@@ -1007,7 +1060,8 @@ data class GeneratorState(
                  */
                 @Parcelize
                 data class ForwardedEmailAlias(
-                    val selectedServiceType: ServiceType = AnonAddy(),
+                    val selectedServiceType: ServiceType? = null,
+                    val obfuscatedText: String = "",
                 ) : UsernameType(), Parcelable {
                     override val displayStringResId: Int
                         get() = UsernameTypeOption.FORWARDED_EMAIL_ALIAS.labelRes
@@ -1042,7 +1096,7 @@ data class GeneratorState(
                          * this property to provide the appropriate string resource ID for
                          * its display string.
                          */
-                        abstract val displayStringResId: Int
+                        abstract val displayStringResId: Int?
 
                         /**
                          * Represents the Anon Addy service type, with a configurable option for
@@ -1328,6 +1382,26 @@ sealed class GeneratorAction {
              * Represents actions related to the different types of usernames.
              */
             sealed class UsernameType : Username() {
+
+                /**
+                 * Represents actions specifically related to Forwarded Email Alias.
+                 */
+                sealed class ForwardedEmailAlias : UsernameType() {
+
+                    /**
+                     * Represents the action of selecting a service type option.
+                     *
+                     * @property serviceTypeOption The selected service type option.
+                     */
+                    data class ServiceTypeOptionSelect(
+                        val serviceTypeOption: GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceTypeOption,
+                    ) : ForwardedEmailAlias()
+                }
 
                 /**
                  * Represents actions specifically related to Plus Addressed Email.

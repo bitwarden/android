@@ -44,7 +44,8 @@ import kotlinx.collections.immutable.persistentListOf
  *
  * @param label The descriptive text label for the [OutlinedTextField].
  * @param options A list of strings representing the available options in the dialog.
- * @param selectedOption The currently selected option that is displayed in the [OutlinedTextField].
+ * @param selectedOption The currently selected option that is displayed in the [OutlinedTextField]
+ * (or `null` if no option is selected).
  * @param onOptionSelected A lambda that is invoked when an option
  * is selected from the dropdown menu.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
@@ -56,7 +57,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun BitwardenMultiSelectButton(
     label: String,
     options: ImmutableList<String>,
-    selectedOption: String,
+    selectedOption: String?,
     onOptionSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
@@ -104,7 +105,7 @@ fun BitwardenMultiSelectButton(
                     }
                 }
             },
-            value = selectedOption,
+            value = selectedOption ?: "",
             onValueChange = onOptionSelected,
             enabled = shouldShowDialog,
             trailingIcon = {
