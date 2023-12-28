@@ -84,9 +84,10 @@ fun VaultData.toViewState(): VaultState.ViewState =
                 .filter { it.folderId.isNullOrBlank() }
                 .mapNotNull { it.toVaultItemOrNull() },
             collectionItems = collectionViewList
+                .filter { it.id != null }
                 .map { collectionView ->
                     VaultState.ViewState.CollectionItem(
-                        id = collectionView.id,
+                        id = requireNotNull(collectionView.id),
                         name = collectionView.name,
                         itemCount = cipherViewList
                             .count {
