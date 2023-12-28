@@ -37,6 +37,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class VaultItemScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
@@ -79,7 +80,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithContentDescription(label = "Close").performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.CloseClick)
+            viewModel.trySendAction(VaultItemAction.Common.CloseClick)
         }
     }
 
@@ -143,7 +144,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.DismissDialogClick)
+            viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick)
         }
     }
 
@@ -191,15 +192,26 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.MasterPasswordSubmit(enteredPassword))
+            viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(enteredPassword))
         }
     }
 
     @Test
     fun `in login state, on username copy click should send CopyUsernameClick`() {
         val username = "username1234"
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(username = username))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = VaultItemState.ViewState.Content.ItemType.Login(
+                        username = username,
+                        passwordData = null,
+                        passwordHistoryCount = null,
+                        uris = emptyList(),
+                        passwordRevisionDate = null,
+                        totp = null,
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -209,18 +221,24 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.Login.CopyUsernameClick)
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUsernameClick)
         }
     }
 
     @Test
     fun `in login state, on breach check click should send CheckForBreachClick`() {
-        val passwordData = VaultItemState.ViewState.Content.PasswordData(
+        val passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "12345",
             isVisible = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(passwordData = passwordData))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        passwordData = passwordData,
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -230,7 +248,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.Login.CheckForBreachClick)
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CheckForBreachClick)
         }
     }
 
@@ -245,18 +263,24 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(VaultItemAction.Login.PasswordVisibilityClicked(true))
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordVisibilityClicked(true))
         }
     }
 
     @Test
     fun `in login state, on copy password click should send CopyPasswordClick`() {
-        val passwordData = VaultItemState.ViewState.Content.PasswordData(
+        val passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "12345",
             isVisible = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(passwordData = passwordData))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        passwordData = passwordData,
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -266,19 +290,25 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.Login.CopyPasswordClick)
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
         }
     }
 
     @Test
     fun `in login state, launch uri button should be displayed according to state`() {
-        val uriData = VaultItemState.ViewState.Content.UriData(
+        val uriData = VaultItemState.ViewState.Content.ItemType.Login.UriData(
             uri = "www.example.com",
             isCopyable = true,
             isLaunchable = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(uris = listOf(uriData)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        uris = listOf(uriData),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -287,12 +317,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("Launch"))
             .assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    uris = listOf(uriData.copy(isLaunchable = false)),
-                ),
-            )
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(uris = listOf(uriData.copy(isLaunchable = false)))
+            }
         }
 
         composeTestRule
@@ -304,13 +332,19 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in login state, copy uri button should be displayed according to state`() {
-        val uriData = VaultItemState.ViewState.Content.UriData(
+        val uriData = VaultItemState.ViewState.Content.ItemType.Login.UriData(
             uri = "www.example.com",
             isCopyable = true,
             isLaunchable = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(uris = listOf(uriData)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        uris = listOf(uriData),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -319,12 +353,8 @@ class VaultItemScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("Copy"))
             .assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    uris = listOf(uriData.copy(isCopyable = false)),
-                ),
-            )
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(uris = listOf(uriData.copy(isCopyable = false))) }
         }
 
         composeTestRule
@@ -336,13 +366,19 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in login state, on launch URI click should send LaunchClick`() {
-        val uriData = VaultItemState.ViewState.Content.UriData(
+        val uriData = VaultItemState.ViewState.Content.ItemType.Login.UriData(
             uri = "www.example.com",
             isCopyable = true,
             isLaunchable = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(uris = listOf(uriData)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        uris = listOf(uriData),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -352,19 +388,25 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.Login.LaunchClick(uriData.uri))
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.LaunchClick(uriData.uri))
         }
     }
 
     @Test
     fun `in login state, on copy URI click should send CopyUriClick`() {
-        val uriData = VaultItemState.ViewState.Content.UriData(
+        val uriData = VaultItemState.ViewState.Content.ItemType.Login.UriData(
             uri = "www.example.com",
             isCopyable = true,
             isLaunchable = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(uris = listOf(uriData)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        uris = listOf(uriData),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -374,20 +416,26 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.Login.CopyUriClick(uriData.uri))
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUriClick(uriData.uri))
         }
     }
 
     @Test
-    fun `in login state, on show hidden field click should send HiddenFieldVisibilityClicked`() {
-        val textField = VaultItemState.ViewState.Content.Custom.HiddenField(
+    fun `on show hidden field click should send HiddenFieldVisibilityClicked`() {
+        val textField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
             isVisible = false,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(customFields = listOf(textField)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        customFields = listOf(textField),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -398,7 +446,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemAction.Login.HiddenFieldVisibilityClicked(
+                VaultItemAction.Common.HiddenFieldVisibilityClicked(
                     field = textField,
                     isVisible = true,
                 ),
@@ -407,15 +455,21 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in login state, copy hidden field button should be displayed according to state`() {
-        val hiddenField = VaultItemState.ViewState.Content.Custom.HiddenField(
+    fun `copy hidden field button should be displayed according to state`() {
+        val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
             isVisible = false,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(customFields = listOf(hiddenField)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        customFields = listOf(hiddenField),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -424,12 +478,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("Copy"))
             .assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    customFields = listOf(hiddenField.copy(isCopyable = false)),
-                ),
-            )
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) {
+                copy(customFields = listOf(hiddenField.copy(isCopyable = false)))
+            }
         }
 
         composeTestRule
@@ -440,15 +492,21 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in login state, on copy hidden field click should send CopyCustomHiddenFieldClick`() {
-        val hiddenField = VaultItemState.ViewState.Content.Custom.HiddenField(
+    fun `on copy hidden field click should send CopyCustomHiddenFieldClick`() {
+        val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
             isVisible = false,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(customFields = listOf(hiddenField)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        customFields = listOf(hiddenField),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -459,20 +517,26 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemAction.Login.CopyCustomHiddenFieldClick(hiddenField.value),
+                VaultItemAction.Common.CopyCustomHiddenFieldClick(hiddenField.value),
             )
         }
     }
 
     @Test
-    fun `in login state, on copy text field click should send CopyCustomTextFieldClick`() {
-        val textField = VaultItemState.ViewState.Content.Custom.TextField(
+    fun `on copy text field click should send CopyCustomTextFieldClick`() {
+        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
             name = "text",
             value = "value",
             isCopyable = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(customFields = listOf(textField)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        customFields = listOf(textField),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -483,20 +547,26 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemAction.Login.CopyCustomTextFieldClick(textField.value),
+                VaultItemAction.Common.CopyCustomTextFieldClick(textField.value),
             )
         }
     }
 
     @Test
-    fun `in login state, text field copy button should be displayed according to state`() {
-        val textField = VaultItemState.ViewState.Content.Custom.TextField(
+    fun `text field copy button should be displayed according to state`() {
+        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
             name = "text",
             value = "value",
             isCopyable = true,
         )
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(customFields = listOf(textField)))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        customFields = listOf(textField),
+                    ),
+                ),
+            )
         }
 
         composeTestRule
@@ -505,12 +575,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .filterToOne(hasContentDescription("Copy"))
             .assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    customFields = listOf(textField.copy(isCopyable = false)),
-                ),
-            )
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) {
+                copy(customFields = listOf(textField.copy(isCopyable = false)))
+            }
         }
 
         composeTestRule
@@ -522,15 +590,21 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in login state, on password history click should send PasswordHistoryClick`() {
-        mutableStateFlow.update {
-            it.copy(viewState = EMPTY_LOGIN_VIEW_STATE.copy(passwordHistoryCount = 5))
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        passwordHistoryCount = 5,
+                    ),
+                ),
+            )
         }
 
         composeTestRule.onNodeWithTextAfterScroll("5")
         composeTestRule.onNodeWithText("5").performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.Login.PasswordHistoryClick)
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
         }
     }
 
@@ -551,7 +625,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
         composeTestRule.onNodeWithContentDescription("Edit item").performClick()
         verify(exactly = 1) {
-            viewModel.trySendAction(VaultItemAction.EditClick)
+            viewModel.trySendAction(VaultItemAction.Common.EditClick)
         }
     }
 
@@ -590,8 +664,8 @@ class VaultItemScreenTest : BaseComposeTest() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll(username).assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE.copy(username = null))
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(username = null) }
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist(username)
@@ -604,8 +678,8 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithTextAfterScroll("URI").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("www.example.com").assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE.copy(uris = emptyList()))
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(uris = emptyList()) }
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist("URIs")
@@ -614,13 +688,13 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in login state, notes should be displayed according to state`() {
+    fun `notes should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule.onFirstNodeWithTextAfterScroll("Notes").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("Lots of notes").assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE.copy(notes = null))
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(notes = null) }
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist("Notes")
@@ -628,7 +702,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in login state, custom views should be displayed according to state`() {
+    fun `custom views should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll("Custom fields").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("text").assertIsDisplayed()
@@ -638,8 +712,8 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithTextAfterScroll("linked username").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("linked password").assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE.copy(customFields = emptyList()))
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(customFields = emptyList()) }
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist("Custom fields")
@@ -657,8 +731,8 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithTextAfterScroll("Password updated: ").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("4/14/83 3:56 PM").assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE.copy(passwordRevisionDate = null))
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(passwordRevisionDate = null) }
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist("Password updated: ")
@@ -671,14 +745,57 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithTextAfterScroll("Password history: ").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("1").assertIsDisplayed()
 
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE.copy(passwordHistoryCount = null))
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(passwordHistoryCount = null) }
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist("Password history: ")
         composeTestRule.assertScrollableNodeDoesNotExist("1")
     }
 }
+
+//region Helper functions
+
+@Suppress("MaxLineLength")
+private fun updateLoginType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.Login.() ->
+    VaultItemState.ViewState.Content.ItemType.Login,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.Login -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+
+                else -> viewState
+            }
+        }
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+@Suppress("MaxLineLength")
+private fun updateCommonContent(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.Common.()
+    -> VaultItemState.ViewState.Content.Common,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content ->
+            viewState.copy(common = viewState.common.transform())
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+//endregion Helper functions
 
 private const val VAULT_ITEM_ID = "vault_item_id"
 
@@ -688,67 +805,81 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     dialog = null,
 )
 
-private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content.Login =
-    VaultItemState.ViewState.Content.Login(
-        name = "login cipher",
-        lastUpdated = "12/31/69 06:16 PM",
-        passwordHistoryCount = 1,
-        notes = "Lots of notes",
-        isPremiumUser = true,
-        customFields = listOf(
-            VaultItemState.ViewState.Content.Custom.TextField(
-                name = "text",
-                value = "value",
-                isCopyable = true,
-            ),
-            VaultItemState.ViewState.Content.Custom.HiddenField(
-                name = "hidden",
-                value = "hidden password",
-                isCopyable = true,
+private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        type = VaultItemState.ViewState.Content.ItemType.Login(
+            passwordHistoryCount = 1,
+            username = "the username",
+            passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
+                password = "the password",
                 isVisible = false,
             ),
-            VaultItemState.ViewState.Content.Custom.BooleanField(
-                name = "boolean",
-                value = true,
+            uris = listOf(
+                VaultItemState.ViewState.Content.ItemType.Login.UriData(
+                    uri = "www.example.com",
+                    isCopyable = true,
+                    isLaunchable = true,
+                ),
             ),
-            VaultItemState.ViewState.Content.Custom.LinkedField(
-                name = "linked username",
-                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
-            ),
-            VaultItemState.ViewState.Content.Custom.LinkedField(
-                name = "linked password",
-                vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
-            ),
+            passwordRevisionDate = "4/14/83 3:56 PM",
+            totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
         ),
-        requiresReprompt = true,
-        username = "the username",
-        passwordData = VaultItemState.ViewState.Content.PasswordData(
-            password = "the password",
-            isVisible = false,
-        ),
-        uris = listOf(
-            VaultItemState.ViewState.Content.UriData(
-                uri = "www.example.com",
-                isCopyable = true,
-                isLaunchable = true,
+        common = VaultItemState.ViewState.Content.Common(
+            lastUpdated = "12/31/69 06:16 PM",
+            name = "login cipher",
+            notes = "Lots of notes",
+            isPremiumUser = true,
+            customFields = listOf(
+                VaultItemState.ViewState.Content.Common.Custom.TextField(
+                    name = "text",
+                    value = "value",
+                    isCopyable = true,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                    name = "hidden",
+                    value = "hidden password",
+                    isCopyable = true,
+                    isVisible = false,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+                    name = "boolean",
+                    value = true,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                    name = "linked username",
+                    vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                    name = "linked password",
+                    vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
+                ),
             ),
+            requiresReprompt = true,
         ),
-        passwordRevisionDate = "4/14/83 3:56 PM",
-        totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
     )
 
-private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content.Login =
-    VaultItemState.ViewState.Content.Login(
+private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
+    VaultItemState.ViewState.Content.Common(
         name = "login cipher",
         lastUpdated = "12/31/69 06:16 PM",
-        passwordHistoryCount = null,
         notes = null,
         isPremiumUser = true,
         customFields = emptyList(),
         requiresReprompt = true,
+    )
+
+private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
+    VaultItemState.ViewState.Content.ItemType.Login(
         username = null,
         passwordData = null,
+        passwordHistoryCount = null,
         uris = emptyList(),
         passwordRevisionDate = null,
         totp = null,
+    )
+
+private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = EMPTY_COMMON,
+        type = EMPTY_LOGIN_TYPE,
     )
