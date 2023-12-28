@@ -37,7 +37,7 @@ jobs:
       - name: Build and Run Check
         # Run checks while excluding release-build tests, which are not configured to work properly
         # with the Compose testing library.
-        run: ./gradlew check -x testRelease koverXmlReportDebug
+        run: ./gradlew check -x testStandardRelease -x testFdroidRelease koverXmlReportStandardDebug
 
       - name: Danger
         env:

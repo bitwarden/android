@@ -49,6 +49,17 @@ android {
             )
         }
     }
+
+    flavorDimensions += listOf("mode")
+    productFlavors {
+        create("standard") {
+            dimension = "mode"
+        }
+        create("fdroid") {
+            dimension = "mode"
+        }
+    }
+
     compileOptions {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
