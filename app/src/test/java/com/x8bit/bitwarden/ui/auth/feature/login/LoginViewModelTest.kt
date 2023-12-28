@@ -318,6 +318,19 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `LoginWithDeviceButtonClick should emit NavigateToLoginWithDevice`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(LoginAction.LoginWithDeviceButtonClick)
+            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(
+                LoginEvent.NavigateToLoginWithDevice,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `SingleSignOnClick should emit NavigateToEnterpriseSignOn`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

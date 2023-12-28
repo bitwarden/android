@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestination
 import com.x8bit.bitwarden.ui.auth.feature.login.loginDestination
 import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
+import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.loginWithDeviceDestination
+import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDevice
 
 const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 
@@ -57,6 +59,10 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         loginDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToEnterpriseSignOn = { navController.navigateToEnterpriseSignOn() },
+            onNavigateToLoginWithDevice = { navController.navigateToLoginWithDevice() },
+        )
+        loginWithDeviceDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
         environmentDestination(
             onNavigateBack = { navController.popBackStack() },

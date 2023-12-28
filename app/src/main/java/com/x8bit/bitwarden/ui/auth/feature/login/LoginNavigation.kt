@@ -45,6 +45,7 @@ fun NavController.navigateToLogin(
 fun NavGraphBuilder.loginDestination(
     onNavigateBack: () -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
+    onNavigateToLoginWithDevice: () -> Unit,
 ) {
     composable(
         route = LOGIN_ROUTE,
@@ -63,6 +64,7 @@ fun NavGraphBuilder.loginDestination(
         LoginScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToEnterpriseSignOn = onNavigateToEnterpriseSignOn,
+            onNavigateToLoginWithDevice = onNavigateToLoginWithDevice,
         )
     }
 }
