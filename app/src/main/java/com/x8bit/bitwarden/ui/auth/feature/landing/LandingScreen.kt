@@ -239,7 +239,7 @@ private fun LandingScreenContent(
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -249,16 +249,13 @@ private fun LandingScreenContent(
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
-                .padding(
-                    horizontal = 24.dp,
-                    vertical = 8.dp,
-                )
+                .padding(horizontal = 24.dp)
                 .wrapContentHeight(),
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
         BitwardenTextField(
             modifier = Modifier
