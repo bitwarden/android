@@ -1522,11 +1522,11 @@ El escaneo se realizará automáticamente.</value>
     <value>2 minutos</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Limpiar el Portapapeles</value>
+    <value>Limpiar el portapapeles</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Borrar automáticamente los valores copiados de su portapapeles.</value>
+    <value>Borrar automáticamente los valores copiados de tu portapapeles.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1534,14 +1534,14 @@ El escaneo se realizará automáticamente.</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Elija el método de detección por defecto de coincidencia de URI que se utilizará para acciones de inicio de sesión como autorrellenado.</value>
+    <value>Elija la forma por defecto en la que se maneja la detección de coincidencias URI para inicios de sesión cuando se realizan acciones tales como autocompletar.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Cambiar el tema de la aplicación.</value>
+    <value>Cambiar el color de la aplicación.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
     <value>Por defecto (Sistema)</value>
@@ -1550,7 +1550,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Tema oscuro por defecto</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copiar notas</value>
+    <value>Copiar nota</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Salir</value>
