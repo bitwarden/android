@@ -42,7 +42,7 @@ class LoginViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: LoginState(
             emailAddress = LoginArgs(savedStateHandle).emailAddress,
-            isLoginButtonEnabled = true,
+            isLoginButtonEnabled = false,
             passwordInput = "",
             environmentLabel = environmentRepository.environment.label,
             loadingDialogState = LoadingDialogState.Hidden,
@@ -208,7 +208,12 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handlePasswordInputChanged(action: LoginAction.PasswordInputChanged) {
-        mutableStateFlow.update { it.copy(passwordInput = action.input) }
+        mutableStateFlow.update {
+            it.copy(
+                passwordInput = action.input,
+                isLoginButtonEnabled = action.input.isNotBlank(),
+            )
+        }
     }
 }
 
