@@ -46,6 +46,7 @@ class LoginScreenTest : BaseComposeTest() {
     }
     private var onNavigateBackCalled = false
     private var onNavigateToEnterpriseSignOnCalled = false
+    private var onNavigateToLoginWithDeviceCalled = false
     private val mutableEventFlow = MutableSharedFlow<LoginEvent>(
         extraBufferCapacity = Int.MAX_VALUE,
     )
@@ -61,6 +62,7 @@ class LoginScreenTest : BaseComposeTest() {
             LoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToEnterpriseSignOn = { onNavigateToEnterpriseSignOnCalled = true },
+                onNavigateToLoginWithDevice = { onNavigateToLoginWithDeviceCalled = true },
                 viewModel = viewModel,
                 intentHandler = intentHandler,
             )
@@ -272,6 +274,12 @@ class LoginScreenTest : BaseComposeTest() {
     fun `NavigateToEnterpriseSignOn should call onNavigateToEnterpriseSignOn`() {
         mutableEventFlow.tryEmit(LoginEvent.NavigateToEnterpriseSignOn)
         assertTrue(onNavigateToEnterpriseSignOnCalled)
+    }
+
+    @Test
+    fun `NavigateToLoginWithDevice should call onNavigateToLoginWithDevice`() {
+        mutableEventFlow.tryEmit(LoginEvent.NavigateToLoginWithDevice)
+        assertTrue(onNavigateToLoginWithDeviceCalled)
     }
 }
 

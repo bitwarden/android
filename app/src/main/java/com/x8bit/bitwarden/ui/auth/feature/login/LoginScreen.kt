@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButtonWithIcon
@@ -63,6 +64,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun LoginScreen(
     onNavigateBack: () -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
+    onNavigateToLoginWithDevice: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
@@ -76,6 +78,7 @@ fun LoginScreen(
             }
 
             LoginEvent.NavigateToEnterpriseSignOn -> onNavigateToEnterpriseSignOn()
+            LoginEvent.NavigateToLoginWithDevice -> onNavigateToLoginWithDevice()
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
@@ -132,6 +135,9 @@ fun LoginScreen(
             onLoginButtonClick = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.LoginButtonClick) }
             },
+            onLoginWithDeviceClick = remember(viewModel) {
+                { viewModel.trySendAction(LoginAction.LoginWithDeviceButtonClick) }
+            },
             onSingleSignOnClick = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.SingleSignOnClick) }
             },
@@ -176,6 +182,7 @@ private fun LoginScreenContent(
     onPasswordInputChanged: (String) -> Unit,
     onMasterPasswordClick: () -> Unit,
     onLoginButtonClick: () -> Unit,
+    onLoginWithDeviceClick: () -> Unit,
     onSingleSignOnClick: () -> Unit,
     onNotYouButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -236,6 +243,18 @@ private fun LoginScreenContent(
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            // TODO BIT-808: Hide button for first-time users
+            BitwardenOutlinedButtonWithIcon(
+                label = stringResource(id = R.string.log_in_with_device),
+                icon = painterResource(id = R.drawable.ic_device),
+                onClick = onLoginWithDeviceClick,
+                modifier = Modifier
+                    .semantics { testTag = "LogInWithAnotherDeviceButton" }
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
             BitwardenOutlinedButtonWithIcon(
                 label = stringResource(id = R.string.log_in_sso),
                 icon = painterResource(id = R.drawable.ic_briefcase),
@@ -263,15 +282,11 @@ private fun LoginScreenContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // TODO: Need to figure out better handling for very small clickable text (BIT-724)
-            Text(
+            BitwardenClickableText(
                 modifier = Modifier
-                    .semantics { testTag = "NotYouLabel" }
-                    .clickable { onNotYouButtonClick() },
-                text = stringResource(id = R.string.not_you),
-                textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.labelLarge,
+                    .semantics { testTag = "NotYouLabel" },
+                onClick = onNotYouButtonClick,
+                label = stringResource(id = R.string.not_you),
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }

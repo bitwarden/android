@@ -76,6 +76,7 @@ class LoginViewModel @Inject constructor(
             is LoginAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
             is LoginAction.CloseButtonClick -> handleCloseButtonClicked()
             LoginAction.LoginButtonClick -> handleLoginButtonClicked()
+            LoginAction.LoginWithDeviceButtonClick -> handleLoginWithDeviceButtonClicked()
             LoginAction.MasterPasswordHintClick -> handleMasterPasswordHintClicked()
             LoginAction.NotYouButtonClick -> handleNotYouButtonClicked()
             LoginAction.SingleSignOnClick -> handleSingleSignOnClicked()
@@ -172,6 +173,10 @@ class LoginViewModel @Inject constructor(
         attemptLogin()
     }
 
+    private fun handleLoginWithDeviceButtonClicked() {
+        sendEvent(LoginEvent.NavigateToLoginWithDevice)
+    }
+
     private fun attemptLogin() {
         mutableStateFlow.update {
             it.copy(
@@ -252,6 +257,11 @@ sealed class LoginEvent {
     data object NavigateToEnterpriseSignOn : LoginEvent()
 
     /**
+     * Navigates to the login with device screen.
+     */
+    data object NavigateToLoginWithDevice : LoginEvent()
+
+    /**
      * Shows a toast with the given [message].
      */
     data class ShowToast(val message: String) : LoginEvent()
@@ -300,6 +310,11 @@ sealed class LoginAction {
      * Indicates that the Login button has been clicked.
      */
     data object LoginButtonClick : LoginAction()
+
+    /**
+     * Indicates that the Login With Device button has been clicked.
+     */
+    data object LoginWithDeviceButtonClick : LoginAction()
 
     /**
      * Indicates that the "Not you?" text was clicked.
