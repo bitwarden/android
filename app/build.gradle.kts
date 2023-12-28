@@ -53,6 +53,7 @@ android {
     flavorDimensions += listOf("mode")
     productFlavors {
         create("standard") {
+            isDefault = true
             dimension = "mode"
         }
         create("fdroid") {
