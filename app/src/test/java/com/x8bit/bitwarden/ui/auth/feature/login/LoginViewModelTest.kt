@@ -343,17 +343,49 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `PasswordInputChanged should update password input`() = runTest {
-        val input = "input"
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.PasswordInputChanged(input))
-            assertEquals(
-                DEFAULT_STATE.copy(passwordInput = input),
-                viewModel.stateFlow.value,
-            )
+    fun `PasswordInputChanged should update input and enable button if password is not blank`() =
+        runTest {
+            val input = "input"
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(LoginAction.PasswordInputChanged(input))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        passwordInput = input,
+                        isLoginButtonEnabled = true,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
         }
-    }
+
+    @Test
+    fun `PasswordInputChanged should update input and disable button if password is blank`() =
+        runTest {
+            val input = "input"
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                // set isLoginButtonEnabled to true
+                viewModel.actionChannel.trySend(LoginAction.PasswordInputChanged(input))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        passwordInput = input,
+                        isLoginButtonEnabled = true,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+
+                // set isLoginButtonEnabled to false
+                viewModel.actionChannel.trySend(LoginAction.PasswordInputChanged(""))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        passwordInput = "",
+                        isLoginButtonEnabled = false,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+        }
 
     @Test
     fun `captchaTokenFlow success update should trigger a login`() = runTest {
@@ -383,7 +415,7 @@ class LoginViewModelTest : BaseViewModelTest() {
         private val DEFAULT_STATE = LoginState(
             emailAddress = "test@gmail.com",
             passwordInput = "",
-            isLoginButtonEnabled = true,
+            isLoginButtonEnabled = false,
             environmentLabel = Environment.Us.label,
             loadingDialogState = LoadingDialogState.Hidden,
             errorDialogState = BasicDialogState.Hidden,
