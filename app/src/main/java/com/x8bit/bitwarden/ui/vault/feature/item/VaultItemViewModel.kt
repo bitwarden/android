@@ -47,6 +47,7 @@ class VaultItemViewModel @Inject constructor(
     ),
 ) {
 
+    //region Initialization and Overrides
     init {
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
@@ -63,115 +64,36 @@ class VaultItemViewModel @Inject constructor(
 
     override fun handleAction(action: VaultItemAction) {
         when (action) {
-            VaultItemAction.CloseClick -> handleCloseClick()
-            VaultItemAction.DismissDialogClick -> handleDismissDialogClick()
-            VaultItemAction.EditClick -> handleEditClick()
-            is VaultItemAction.MasterPasswordSubmit -> handleMasterPasswordSubmit(action)
-            VaultItemAction.RefreshClick -> handleRefreshClick()
-            is VaultItemAction.Login -> handleLoginActions(action)
+            is VaultItemAction.ItemType.Login -> handleLoginTypeActions(action)
+            is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
     }
+    //endregion Initialization and Overrides
 
-    private fun handleLoginActions(action: VaultItemAction.Login) {
+    //region Common Handlers
+
+    private fun handleCommonActions(action: VaultItemAction.Common) {
         when (action) {
-            VaultItemAction.Login.CheckForBreachClick -> handleCheckForBreachClick()
-            VaultItemAction.Login.CopyPasswordClick -> handleCopyPasswordClick()
-            is VaultItemAction.Login.CopyCustomHiddenFieldClick -> {
+            is VaultItemAction.Common.CloseClick -> handleCloseClick()
+            is VaultItemAction.Common.DismissDialogClick -> handleDismissDialogClick()
+            is VaultItemAction.Common.EditClick -> handleEditClick()
+            is VaultItemAction.Common.MasterPasswordSubmit -> handleMasterPasswordSubmit(action)
+            is VaultItemAction.Common.RefreshClick -> handleRefreshClick()
+            is VaultItemAction.Common.CopyCustomHiddenFieldClick -> {
                 handleCopyCustomHiddenFieldClick(action)
             }
-
-            is VaultItemAction.Login.CopyCustomTextFieldClick -> {
+            is VaultItemAction.Common.CopyCustomTextFieldClick -> {
                 handleCopyCustomTextFieldClick(action)
             }
-
-            is VaultItemAction.Login.CopyUriClick -> handleCopyUriClick(action)
-            VaultItemAction.Login.CopyUsernameClick -> handleCopyUsernameClick()
-            is VaultItemAction.Login.LaunchClick -> handleLaunchClick(action)
-            VaultItemAction.Login.PasswordHistoryClick -> handlePasswordHistoryClick()
-            is VaultItemAction.Login.PasswordVisibilityClicked -> {
-                handlePasswordVisibilityClicked(action)
-            }
-
-            is VaultItemAction.Login.HiddenFieldVisibilityClicked -> {
+            is VaultItemAction.Common.HiddenFieldVisibilityClicked -> {
                 handleHiddenFieldVisibilityClicked(action)
             }
         }
     }
 
-    private fun handleInternalAction(action: VaultItemAction.Internal) {
-        when (action) {
-            is VaultItemAction.Internal.PasswordBreachReceive -> handlePasswordBreachReceive(action)
-            is VaultItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
-            is VaultItemAction.Internal.VerifyPasswordReceive -> handleVerifyPasswordReceive(action)
-        }
-    }
-
     private fun handleCloseClick() {
         sendEvent(VaultItemEvent.NavigateBack)
-    }
-
-    private fun handleCheckForBreachClick() {
-        onLoginContent { login ->
-            val password = requireNotNull(login.passwordData?.password)
-            mutableStateFlow.update {
-                it.copy(dialog = VaultItemState.DialogState.Loading)
-            }
-            viewModelScope.launch {
-                val result = authRepository.getPasswordBreachCount(password = password)
-                sendAction(VaultItemAction.Internal.PasswordBreachReceive(result))
-            }
-        }
-    }
-
-    private fun handleCopyPasswordClick() {
-        onLoginContent { login ->
-            val password = requireNotNull(login.passwordData?.password)
-            if (login.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
-                }
-                return@onLoginContent
-            }
-            sendEvent(VaultItemEvent.CopyToClipboard(password.asText()))
-        }
-    }
-
-    private fun handleCopyCustomHiddenFieldClick(
-        action: VaultItemAction.Login.CopyCustomHiddenFieldClick,
-    ) {
-        onContent { content ->
-            if (content.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
-                }
-                return@onContent
-            }
-            sendEvent(VaultItemEvent.CopyToClipboard(action.field.asText()))
-        }
-    }
-
-    private fun handleCopyCustomTextFieldClick(
-        action: VaultItemAction.Login.CopyCustomTextFieldClick,
-    ) {
-        sendEvent(VaultItemEvent.CopyToClipboard(action.field.asText()))
-    }
-
-    private fun handleCopyUriClick(action: VaultItemAction.Login.CopyUriClick) {
-        sendEvent(VaultItemEvent.CopyToClipboard(action.uri.asText()))
-    }
-
-    private fun handleCopyUsernameClick() {
-        onLoginContent { login ->
-            val username = requireNotNull(login.username)
-            if (login.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
-                }
-                return@onLoginContent
-            }
-            sendEvent(VaultItemEvent.CopyToClipboard(username.asText()))
-        }
     }
 
     private fun handleDismissDialogClick() {
@@ -180,7 +102,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleEditClick() {
         onContent { content ->
-            if (content.requiresReprompt) {
+            if (content.common.requiresReprompt) {
                 mutableStateFlow.update {
                     it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
                 }
@@ -190,11 +112,7 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleLaunchClick(action: VaultItemAction.Login.LaunchClick) {
-        sendEvent(VaultItemEvent.NavigateToUri(action.uri))
-    }
-
-    private fun handleMasterPasswordSubmit(action: VaultItemAction.MasterPasswordSubmit) {
+    private fun handleMasterPasswordSubmit(action: VaultItemAction.Common.MasterPasswordSubmit) {
         mutableStateFlow.update {
             it.copy(dialog = VaultItemState.DialogState.Loading)
         }
@@ -213,9 +131,147 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleRefreshClick() {
+        // No need to update the view state, the vault repo will emit a new state during this time
+        vaultRepository.sync()
+    }
+
+    private fun handleCopyCustomHiddenFieldClick(
+        action: VaultItemAction.Common.CopyCustomHiddenFieldClick,
+    ) {
+        onContent { content ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+                }
+                return@onContent
+            }
+            sendEvent(VaultItemEvent.CopyToClipboard(action.field.asText()))
+        }
+    }
+
+    private fun handleCopyCustomTextFieldClick(
+        action: VaultItemAction.Common.CopyCustomTextFieldClick,
+    ) {
+        sendEvent(VaultItemEvent.CopyToClipboard(action.field.asText()))
+    }
+
+    private fun handleHiddenFieldVisibilityClicked(
+        action: VaultItemAction.Common.HiddenFieldVisibilityClicked,
+    ) {
+        onContent { content ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+                }
+                return@onContent
+            }
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = content.copy(
+                        common = content.common.copy(
+                            customFields = content.common.customFields.map { customField ->
+                                if (customField == action.field) {
+                                    action.field.copy(isVisible = action.isVisible)
+                                } else {
+                                    customField
+                                }
+                            },
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    //endregion Common Handlers
+
+    //region Login Type Handlers
+
+    private fun handleLoginTypeActions(action: VaultItemAction.ItemType.Login) {
+        when (action) {
+            is VaultItemAction.ItemType.Login.CheckForBreachClick -> {
+                handleCheckForBreachClick()
+            }
+
+            is VaultItemAction.ItemType.Login.CopyPasswordClick -> {
+                handleCopyPasswordClick()
+            }
+
+            is VaultItemAction.ItemType.Login.CopyUriClick -> {
+                handleCopyUriClick(action)
+            }
+
+            is VaultItemAction.ItemType.Login.CopyUsernameClick -> {
+                handleCopyUsernameClick()
+            }
+
+            is VaultItemAction.ItemType.Login.LaunchClick -> {
+                handleLaunchClick(action)
+            }
+
+            is VaultItemAction.ItemType.Login.PasswordHistoryClick -> {
+                handlePasswordHistoryClick()
+            }
+
+            is VaultItemAction.ItemType.Login.PasswordVisibilityClicked -> {
+                handlePasswordVisibilityClicked(action)
+            }
+        }
+    }
+
+    private fun handleCheckForBreachClick() {
+        onLoginContent { _, login ->
+            val password = requireNotNull(login.passwordData?.password)
+            mutableStateFlow.update {
+                it.copy(dialog = VaultItemState.DialogState.Loading)
+            }
+            viewModelScope.launch {
+                val result = authRepository.getPasswordBreachCount(password = password)
+                sendAction(VaultItemAction.Internal.PasswordBreachReceive(result))
+            }
+        }
+    }
+
+    private fun handleCopyPasswordClick() {
+        onLoginContent { content, login ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+                }
+                return@onLoginContent
+            }
+            val password = requireNotNull(login.passwordData?.password)
+            sendEvent(VaultItemEvent.CopyToClipboard(password.asText()))
+        }
+    }
+
+    private fun handleCopyUriClick(action: VaultItemAction.ItemType.Login.CopyUriClick) {
+        sendEvent(VaultItemEvent.CopyToClipboard(action.uri.asText()))
+    }
+
+    private fun handleCopyUsernameClick() {
+        onLoginContent { content, login ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+                }
+                return@onLoginContent
+            }
+            val username = requireNotNull(login.username)
+            sendEvent(VaultItemEvent.CopyToClipboard(username.asText()))
+        }
+    }
+
+    private fun handleLaunchClick(
+        action: VaultItemAction.ItemType.Login.LaunchClick,
+    ) {
+        sendEvent(VaultItemEvent.NavigateToUri(action.uri))
+    }
+
     private fun handlePasswordHistoryClick() {
         onContent { content ->
-            if (content.requiresReprompt) {
+            if (content.common.requiresReprompt) {
                 mutableStateFlow.update {
                     it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
                 }
@@ -225,57 +281,39 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleRefreshClick() {
-        // No need to update the view state, the vault repo will emit a new state during this time
-        vaultRepository.sync()
-    }
-
     private fun handlePasswordVisibilityClicked(
-        action: VaultItemAction.Login.PasswordVisibilityClicked,
+        action: VaultItemAction.ItemType.Login.PasswordVisibilityClicked,
     ) {
-        onLoginContent { login ->
-            if (login.requiresReprompt) {
+        onLoginContent { content, login ->
+            if (content.common.requiresReprompt) {
                 mutableStateFlow.update {
                     it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
                 }
                 return@onLoginContent
             }
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = login.copy(
-                        passwordData = login.passwordData?.copy(
-                            isVisible = action.isVisible,
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = content.copy(
+                            type = login.copy(
+                                passwordData = login.passwordData?.copy(
+                                    isVisible = action.isVisible,
+                                ),
+                            ),
                         ),
-                    ),
-                )
-            }
+                    )
+                }
         }
     }
 
-    private fun handleHiddenFieldVisibilityClicked(
-        action: VaultItemAction.Login.HiddenFieldVisibilityClicked,
-    ) {
-        onLoginContent { login ->
-            if (login.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
-                }
-                return@onLoginContent
-            }
+    //endregion Login Type Handlers
 
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = login.copy(
-                        customFields = login.customFields.map { customField ->
-                            if (customField == action.field) {
-                                action.field.copy(isVisible = action.isVisible)
-                            } else {
-                                customField
-                            }
-                        },
-                    ),
-                )
-            }
+    //region Internal Type Handlers
+
+    private fun handleInternalAction(action: VaultItemAction.Internal) {
+        when (action) {
+            is VaultItemAction.Internal.PasswordBreachReceive -> handlePasswordBreachReceive(action)
+            is VaultItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultItemAction.Internal.VerifyPasswordReceive -> handleVerifyPasswordReceive(action)
         }
     }
 
@@ -372,23 +410,23 @@ class VaultItemViewModel @Inject constructor(
             }
 
             is VerifyPasswordResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = null,
-                        viewState = when (val viewState = state.viewState) {
-                            is VaultItemState.ViewState.Content.Login -> viewState.copy(
-                                requiresReprompt = !result.isVerified,
-                            )
-
-                            is VaultItemState.ViewState.Error -> viewState
-
-                            VaultItemState.ViewState.Loading -> viewState
-                        },
-                    )
+                onContent { content ->
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialog = null,
+                            viewState = content.copy(
+                                common = content.common.copy(
+                                    requiresReprompt = !result.isVerified,
+                                ),
+                            ),
+                        )
+                    }
                 }
             }
         }
     }
+
+    //endregion Internal Type Handlers
 
     private inline fun onContent(
         crossinline block: (VaultItemState.ViewState.Content) -> Unit,
@@ -397,9 +435,18 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private inline fun onLoginContent(
-        crossinline block: (VaultItemState.ViewState.Content.Login) -> Unit,
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.Login,
+        ) -> Unit,
     ) {
-        (state.viewState as? VaultItemState.ViewState.Content.Login)?.let(block)
+        (state.viewState as? VaultItemState.ViewState.Content)
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.Login)
+                    ?.let { loginContent ->
+                        block(content, loginContent)
+                    }
+            }
     }
 }
 
@@ -434,126 +481,142 @@ data class VaultItemState(
         /**
          * Represents a loaded content state for the [VaultItemScreen].
          */
-        sealed class Content : ViewState() {
+        @Parcelize
+        data class Content(
+            val common: Common,
+            val type: ItemType,
+        ) : ViewState() {
 
             /**
-             * The name of the cipher.
-             */
-            abstract val name: String
-
-            /**
-             * A formatted date string indicating when the cipher was last updated.
-             */
-            abstract val lastUpdated: String
-
-            /**
-             * An integer indicating how many times the password has been changed.
-             */
-            abstract val passwordHistoryCount: Int?
-
-            /**
-             * Contains general notes taken by the user.
-             */
-            abstract val notes: String?
-
-            /**
-             * Indicates if the user has subscribed to a premium account or not.
-             */
-            abstract val isPremiumUser: Boolean
-
-            /**
-             * A list of custom fields that user has added.
-             */
-            abstract val customFields: List<Custom>
-
-            /**
-             * Indicates if a master password prompt is required to view secure fields.
-             */
-            abstract val requiresReprompt: Boolean
-
-            /**
-             * Represents a loaded content state for the [VaultItemScreen] when displaying a
-             * login cipher.
+             * Content data that is common for all item types.
+             *
+             * @property name The name of the item.
+             * @property lastUpdated A formatted date string indicating when the item was last
+             * updated.
+             * @property notes Contains general notes taken by the user.
+             * @property isPremiumUser Indicates if the user has subscribed to a premium account.
+             * @property customFields A list of custom fields that user has added.
+             * @property requiresReprompt Indicates if a master password prompt is required to view
+             * secure fields.
              */
             @Parcelize
-            data class Login(
-                override val name: String,
-                override val lastUpdated: String,
-                override val passwordHistoryCount: Int?,
-                override val notes: String?,
-                override val isPremiumUser: Boolean,
-                override val customFields: List<Custom>,
-                override val requiresReprompt: Boolean,
-                val username: String?,
-                val passwordData: PasswordData?,
-                val uris: List<UriData>,
-                val passwordRevisionDate: String?,
-                val totp: String?,
-            ) : Content()
+            data class Common(
+                val name: String,
+                val lastUpdated: String,
+                val notes: String?,
+                val isPremiumUser: Boolean,
+                val customFields: List<Custom>,
+                val requiresReprompt: Boolean,
+            ) : Parcelable {
+
+                /**
+                 * Represents a custom field, TextField, HiddenField, BooleanField, or LinkedField.
+                 */
+                sealed class Custom : Parcelable {
+                    /**
+                     * Represents the data for displaying a custom text field.
+                     */
+                    @Parcelize
+                    data class TextField(
+                        val name: String,
+                        val value: String,
+                        val isCopyable: Boolean,
+                    ) : Custom()
+
+                    /**
+                     * Represents the data for displaying a custom hidden text field.
+                     */
+                    @Parcelize
+                    data class HiddenField(
+                        val name: String,
+                        val value: String,
+                        val isCopyable: Boolean,
+                        val isVisible: Boolean,
+                    ) : Custom()
+
+                    /**
+                     * Represents the data for displaying a custom boolean property field.
+                     */
+                    @Parcelize
+                    data class BooleanField(
+                        val name: String,
+                        val value: Boolean,
+                    ) : Custom()
+
+                    /**
+                     * Represents the data for displaying a custom linked field.
+                     */
+                    @Parcelize
+                    data class LinkedField(
+                        val vaultLinkedFieldType: VaultLinkedFieldType,
+                        val name: String,
+                    ) : Custom()
+                }
+            }
 
             /**
-             * A wrapper for the password data, this includes the [password] itself and whether it
-             * should be visible.
+             * Content data specific to an item type.
              */
             @Parcelize
-            data class PasswordData(
-                val password: String,
-                val isVisible: Boolean,
-            ) : Parcelable
-
-            /**
-             * A wrapper for URI data, including the [uri] itself and whether it is copyable and
-             * launchable.
-             */
-            @Parcelize
-            data class UriData(
-                val uri: String,
-                val isCopyable: Boolean,
-                val isLaunchable: Boolean,
-            ) : Parcelable
-
-            /**
-             * Represents a custom field, TextField, HiddenField, BooleanField, or LinkedField.
-             */
-            sealed class Custom : Parcelable {
-                /**
-                 * Represents the data for displaying a custom text field.
-                 */
-                @Parcelize
-                data class TextField(
-                    val name: String,
-                    val value: String,
-                    val isCopyable: Boolean,
-                ) : Custom()
+            sealed class ItemType : Parcelable {
 
                 /**
-                 * Represents the data for displaying a custom hidden text field.
+                 * Represents the `Login` item type.
+                 *
+                 * @property username The username required for the login item.
+                 * @property passwordData The password required for the login item.
+                 * @property passwordHistoryCount An integer indicating how many times the password
+                 * has been changed.
+                 * @property uris The URI associated with the login item.
+                 * @property passwordRevisionDate
+                 * @property totp
                  */
                 @Parcelize
-                data class HiddenField(
-                    val name: String,
-                    val value: String,
-                    val isCopyable: Boolean,
-                    val isVisible: Boolean,
-                ) : Custom()
+                data class Login(
+                    val username: String?,
+                    val passwordData: PasswordData?,
+                    val passwordHistoryCount: Int?,
+                    val uris: List<UriData>,
+                    val passwordRevisionDate: String?,
+                    val totp: String?,
+                ) : ItemType() {
+
+                    /**
+                     * A wrapper for the password data, this includes the [password] itself
+                     * and whether it should be visible.
+                     */
+                    @Parcelize
+                    data class PasswordData(
+                        val password: String,
+                        val isVisible: Boolean,
+                    ) : Parcelable
+
+                    /**
+                     * A wrapper for URI data, including the [uri] itself and whether it is
+                     * copyable and launch-able.
+                     */
+                    @Parcelize
+                    data class UriData(
+                        val uri: String,
+                        val isCopyable: Boolean,
+                        val isLaunchable: Boolean,
+                    ) : Parcelable
+                }
 
                 /**
-                 * Represents the data for displaying a custom boolean property field.
+                 * Represents the `SecureNote` item type.
                  */
-                @Parcelize
-                data class BooleanField(
-                    val name: String,
-                    val value: Boolean,
-                ) : Custom()
+                data object SecureNote : ItemType()
 
                 /**
-                 * Represents the data for displaying a custom linked field.
+                 * Represents the `Identity` item type.
                  */
-                @Parcelize
-                data class LinkedField(
-                    val vaultLinkedFieldType: VaultLinkedFieldType,
-                    val name: String,
-                ) : Custom()
+                data object Identity : ItemType()
+
+                /**
+                 * Represents the `Card` item type.
+                 */
+                data object Card : ItemType()
             }
         }
     }
@@ -631,102 +694,116 @@ sealed class VaultItemEvent {
 }
 
 /**
- * Represents a set of actions related view a vault item.
+ * Represents a set of actions related to viewing a vault item.
+ * Each subclass of this sealed class denotes a distinct action that can be taken.
  */
 sealed class VaultItemAction {
-    /**
-     * The user has clicked the close button.
-     */
-    data object CloseClick : VaultItemAction()
 
     /**
-     * The user has clicked to dismiss the dialog.
+     * Represents actions common across all item types.
      */
-    data object DismissDialogClick : VaultItemAction()
+    sealed class Common : VaultItemAction() {
 
-    /**
-     * The user has clicked the edit button.
-     */
-    data object EditClick : VaultItemAction()
-
-    /**
-     * The user has submitted their master password.
-     */
-    data class MasterPasswordSubmit(
-        val masterPassword: String,
-    ) : VaultItemAction()
-
-    /**
-     * The user has clicked the refresh button.
-     */
-    data object RefreshClick : VaultItemAction()
-
-    /**
-     * Models actions that are associated with the [VaultItemState.ViewState.Content.Login] state.
-     */
-    sealed class Login : VaultItemAction() {
         /**
-         * The user has clicked the check for breach button.
+         * The user has clicked the close button.
          */
-        data object CheckForBreachClick : Login()
+        data object CloseClick : Common()
+
+        /**
+         * The user has clicked to dismiss the dialog.
+         */
+        data object DismissDialogClick : Common()
+
+        /**
+         * The user has clicked the edit button.
+         */
+        data object EditClick : Common()
+
+        /**
+         * The user has submitted their master password.
+         */
+        data class MasterPasswordSubmit(
+            val masterPassword: String,
+        ) : Common()
+
+        /**
+         * The user has clicked the refresh button.
+         */
+        data object RefreshClick : Common()
 
         /**
          * The user has clicked the copy button for a custom hidden field.
          */
         data class CopyCustomHiddenFieldClick(
             val field: String,
-        ) : Login()
+        ) : Common()
 
         /**
          * The user has clicked the copy button for a custom text field.
          */
         data class CopyCustomTextFieldClick(
             val field: String,
-        ) : Login()
-
-        /**
-         * The user has clicked the copy button for the password.
-         */
-        data object CopyPasswordClick : Login()
-
-        /**
-         * The user has clicked the copy button for a URI.
-         */
-        data class CopyUriClick(
-            val uri: String,
-        ) : Login()
-
-        /**
-         * The user has clicked the copy button for the username.
-         */
-        data object CopyUsernameClick : Login()
-
-        /**
-         * The user has clicked the launch button for a URI.
-         */
-        data class LaunchClick(
-            val uri: String,
-        ) : Login()
-
-        /**
-         * The user has clicked the password history text.
-         */
-        data object PasswordHistoryClick : Login()
-
-        /**
-         * The user has clicked to display the password.
-         */
-        data class PasswordVisibilityClicked(
-            val isVisible: Boolean,
-        ) : Login()
+        ) : Common()
 
         /**
          * The user has clicked to display the a hidden field.
          */
         data class HiddenFieldVisibilityClicked(
-            val field: VaultItemState.ViewState.Content.Custom.HiddenField,
+            val field: VaultItemState.ViewState.Content.Common.Custom.HiddenField,
             val isVisible: Boolean,
-        ) : Login()
+        ) : Common()
+    }
+
+    /**
+     * Represents actions specific to an item type.
+     */
+    sealed class ItemType : VaultItemAction() {
+
+        /**
+         * Represents actions specific to the Login type.
+         */
+        sealed class Login : ItemType() {
+            /**
+             * The user has clicked the check for breach button.
+             */
+            data object CheckForBreachClick : Login()
+
+            /**
+             * The user has clicked the copy button for the password.
+             */
+            data object CopyPasswordClick : Login()
+
+            /**
+             * The user has clicked the copy button for a URI.
+             */
+            data class CopyUriClick(
+                val uri: String,
+            ) : Login()
+
+            /**
+             * The user has clicked the copy button for the username.
+             */
+            data object CopyUsernameClick : Login()
+
+            /**
+             * The user has clicked the launch button for a URI.
+             */
+            data class LaunchClick(
+                val uri: String,
+            ) : Login()
+
+            /**
+             * The user has clicked the password history text.
+             */
+            data object PasswordHistoryClick : Login()
+
+            /**
+             * The user has clicked to display the password.
+             */
+            data class PasswordVisibilityClicked(
+                val isVisible: Boolean,
+            ) : Login()
+        }
     }
 
     /**

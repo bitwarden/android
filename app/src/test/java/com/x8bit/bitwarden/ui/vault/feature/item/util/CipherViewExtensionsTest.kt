@@ -44,7 +44,12 @@ class CipherViewExtensionsTest {
         val isPremiumUser = false
         val viewState = DEFAULT_FULL_LOGIN_CIPHER_VIEW.toViewState(isPremiumUser = isPremiumUser)
 
-        assertEquals(DEFAULT_FULL_LOGIN_VIEW_STATE.copy(isPremiumUser = isPremiumUser), viewState)
+        assertEquals(
+            DEFAULT_FULL_LOGIN_VIEW_STATE.copy(
+                common = DEFAULT_FULL_LOGIN_VIEW_STATE.common.copy(isPremiumUser = isPremiumUser),
+            ),
+            viewState,
+        )
     }
 
     @Test
@@ -168,67 +173,77 @@ val DEFAULT_EMPTY_LOGIN_CIPHER_VIEW: CipherView = CipherView(
     revisionDate = Instant.ofEpochSecond(1_000L),
 )
 
-val DEFAULT_FULL_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content.Login =
-    VaultItemState.ViewState.Content.Login(
-        name = "login cipher",
-        lastUpdated = "1/1/70 12:16 AM",
-        passwordHistoryCount = 1,
-        notes = "Lots of notes",
-        isPremiumUser = true,
-        customFields = listOf(
-            VaultItemState.ViewState.Content.Custom.TextField(
-                name = "text",
-                value = "value",
-                isCopyable = true,
+val DEFAULT_FULL_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = VaultItemState.ViewState.Content.Common(
+            name = "login cipher",
+            lastUpdated = "1/1/70 12:16 AM",
+            notes = "Lots of notes",
+            isPremiumUser = true,
+            customFields = listOf(
+                VaultItemState.ViewState.Content.Common.Custom.TextField(
+                    name = "text",
+                    value = "value",
+                    isCopyable = true,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                    name = "hidden",
+                    value = "value",
+                    isCopyable = true,
+                    isVisible = false,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+                    name = "boolean",
+                    value = true,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                    name = "linked username",
+                    vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
+                ),
+                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                    name = "linked password",
+                    vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
+                ),
             ),
-            VaultItemState.ViewState.Content.Custom.HiddenField(
-                name = "hidden",
-                value = "value",
-                isCopyable = true,
+            requiresReprompt = true,
+        ),
+        type = VaultItemState.ViewState.Content.ItemType.Login(
+            passwordHistoryCount = 1,
+            username = "username",
+            passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
+                password = "password",
                 isVisible = false,
             ),
-            VaultItemState.ViewState.Content.Custom.BooleanField(
-                name = "boolean",
-                value = true,
+            uris = listOf(
+                VaultItemState.ViewState.Content.ItemType.Login.UriData(
+                    uri = "www.example.com",
+                    isCopyable = true,
+                    isLaunchable = true,
+                ),
             ),
-            VaultItemState.ViewState.Content.Custom.LinkedField(
-                name = "linked username",
-                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
-            ),
-            VaultItemState.ViewState.Content.Custom.LinkedField(
-                name = "linked password",
-                vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
-            ),
+            passwordRevisionDate = "1/1/70 12:16 AM",
+            totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
         ),
-        requiresReprompt = true,
-        username = "username",
-        passwordData = VaultItemState.ViewState.Content.PasswordData(
-            password = "password",
-            isVisible = false,
-        ),
-        uris = listOf(
-            VaultItemState.ViewState.Content.UriData(
-                uri = "www.example.com",
-                isCopyable = true,
-                isLaunchable = true,
-            ),
-        ),
-        passwordRevisionDate = "1/1/70 12:16 AM",
-        totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
     )
 
-val DEFAULT_EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content.Login =
-    VaultItemState.ViewState.Content.Login(
-        name = "login cipher",
-        lastUpdated = "1/1/70 12:16 AM",
-        passwordHistoryCount = null,
-        notes = null,
-        isPremiumUser = true,
-        customFields = emptyList(),
-        requiresReprompt = true,
-        username = null,
-        passwordData = null,
-        uris = emptyList(),
-        passwordRevisionDate = null,
-        totp = null,
+val DEFAULT_EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = VaultItemState.ViewState.Content.Common(
+            name = "login cipher",
+            lastUpdated = "1/1/70 12:16 AM",
+
+            notes = null,
+            isPremiumUser = true,
+            customFields = emptyList(),
+            requiresReprompt = true,
+
+            ),
+        type = VaultItemState.ViewState.Content.ItemType.Login(
+            passwordHistoryCount = null,
+            username = null,
+            passwordData = null,
+            uris = emptyList(),
+            passwordRevisionDate = null,
+            totp = null,
+        ),
     )

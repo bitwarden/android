@@ -40,6 +40,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 
 /**
  * Displays the vault item screen.
@@ -82,10 +84,10 @@ fun VaultItemScreen(
     VaultItemDialogs(
         dialog = state.dialog,
         onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemAction.DismissDialogClick) }
+            { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) }
         },
         onSubmitMasterPassword = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemAction.MasterPasswordSubmit(it)) }
+            { viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(it)) }
         },
     )
 
@@ -101,7 +103,7 @@ fun VaultItemScreen(
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultItemAction.CloseClick) }
+                    { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
                 },
                 actions = {
                     BitwardenOverflowActionItem()
@@ -117,7 +119,7 @@ fun VaultItemScreen(
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     onClick = remember(viewModel) {
-                        { viewModel.trySendAction(VaultItemAction.EditClick) }
+                        { viewModel.trySendAction(VaultItemAction.Common.EditClick) }
                     },
                     modifier = Modifier.padding(bottom = 16.dp),
                 ) {
@@ -135,11 +137,11 @@ fun VaultItemScreen(
                 .imePadding()
                 .fillMaxSize()
                 .padding(innerPadding),
-            onRefreshClick = remember(viewModel) {
-                { viewModel.trySendAction(VaultItemAction.RefreshClick) }
+            vaultCommonItemTypeHandlers = remember(viewModel) {
+                VaultCommonItemTypeHandlers.create(viewModel = viewModel)
             },
-            loginHandlers = remember(viewModel) {
-                LoginHandlers.create(viewModel)
+            vaultLoginItemTypeHandlers = remember(viewModel) {
+                VaultLoginItemTypeHandlers.create(viewModel = viewModel)
             },
         )
     }
@@ -178,23 +180,41 @@ private fun VaultItemDialogs(
 @Composable
 private fun VaultItemContent(
     viewState: VaultItemState.ViewState,
+    vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
+    vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     modifier: Modifier = Modifier,
-    onRefreshClick: () -> Unit,
-    loginHandlers: LoginHandlers,
 ) {
     when (viewState) {
         is VaultItemState.ViewState.Error -> VaultItemError(
             errorState = viewState,
-            onRefreshClick = onRefreshClick,
+            onRefreshClick = vaultCommonItemTypeHandlers.onRefreshClick,
             modifier = modifier,
         )
 
-        is VaultItemState.ViewState.Content -> when (viewState) {
-            is VaultItemState.ViewState.Content.Login -> VaultItemLoginContent(
-                viewState = viewState,
-                modifier = modifier,
-                loginHandlers = loginHandlers,
-            )
+        is VaultItemState.ViewState.Content -> {
+            when (viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.Login -> {
+                    VaultItemLoginContent(
+                        commonState = viewState.common,
+                        loginItemState = viewState.type,
+                        modifier = modifier,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultLoginItemTypeHandlers = vaultLoginItemTypeHandlers,
+                    )
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.Card -> {
+                    // TODO UI for viewing Card BIT-513
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.Identity -> {
+                    // TODO UI for viewing Identity BIT-514
+                }
+
+                is VaultItemState.ViewState.Content.ItemType.SecureNote -> {
+                    // TODO UI for viewing SecureNote BIT-515
+                }
+            }
         }
 
         VaultItemState.ViewState.Loading -> VaultItemLoading(
