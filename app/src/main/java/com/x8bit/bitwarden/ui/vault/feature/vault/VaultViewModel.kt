@@ -17,9 +17,13 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,10 +49,14 @@ class VaultViewModel @Inject constructor(
         val userState = requireNotNull(authRepository.userStateFlow.value)
         val accountSummaries = userState.toAccountSummaries()
         val activeAccountSummary = userState.toActiveAccountSummary()
+        val vaultFilterData = userState.activeAccount.toVaultFilterData()
+        val appBarTitle = vaultFilterData.toAppBarTitle()
         VaultState(
+            appBarTitle = appBarTitle,
             initials = activeAccountSummary.initials,
             avatarColorString = activeAccountSummary.avatarColorHex,
             accountSummaries = accountSummaries,
+            vaultFilterData = vaultFilterData,
             viewState = VaultState.ViewState.Loading,
         )
     },
@@ -96,6 +104,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.SyncClick -> handleSyncClick()
             is VaultAction.LockClick -> handleLockClick()
             is VaultAction.ExitConfirmationClick -> handleExitConfirmationClick()
+            is VaultAction.VaultFilterTypeSelect -> handleVaultFilterTypeSelect(action)
             is VaultAction.SecureNoteGroupClick -> handleSecureNoteClick()
             is VaultAction.TrashClick -> handleTrashClick()
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
@@ -183,6 +192,16 @@ class VaultViewModel @Inject constructor(
         sendEvent(VaultEvent.NavigateOutOfApp)
     }
 
+    private fun handleVaultFilterTypeSelect(action: VaultAction.VaultFilterTypeSelect) {
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = it.vaultFilterData?.copy(
+                    selectedVaultFilterType = action.vaultFilterType,
+                ),
+            )
+        }
+    }
+
     private fun handleTrashClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
     }
@@ -214,13 +233,17 @@ class VaultViewModel @Inject constructor(
         // navigating.
         if (state.isSwitchingAccounts) return
 
+        val vaultFilterData = userState.activeAccount.toVaultFilterData()
+        val appBarTitle = vaultFilterData.toAppBarTitle()
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()
             val activeAccountSummary = userState.toActiveAccountSummary()
             it.copy(
+                appBarTitle = appBarTitle,
                 initials = activeAccountSummary.initials,
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
+                vaultFilterData = vaultFilterData,
             )
         }
     }
@@ -284,9 +307,11 @@ class VaultViewModel @Inject constructor(
  */
 @Parcelize
 data class VaultState(
+    val appBarTitle: Text,
     private val avatarColorString: String,
     val initials: String,
     val accountSummaries: List<AccountSummary>,
+    val vaultFilterData: VaultFilterData? = null,
     val viewState: ViewState,
     val dialog: DialogState? = null,
     // Internal-use properties
@@ -311,11 +336,17 @@ data class VaultState(
         abstract val hasFab: Boolean
 
         /**
+         * Determines whether or not the the Vault Filter may be shown (when applicable).
+         */
+        abstract val hasVaultFilter: Boolean
+
+        /**
          * Loading state for the [VaultScreen], signifying that the content is being processed.
          */
         @Parcelize
         data object Loading : ViewState() {
             override val hasFab: Boolean get() = false
+            override val hasVaultFilter: Boolean get() = false
         }
 
         /**
@@ -324,6 +355,7 @@ data class VaultState(
         @Parcelize
         data object NoItems : ViewState() {
             override val hasFab: Boolean get() = true
+            override val hasVaultFilter: Boolean get() = true
         }
 
         /**
@@ -335,6 +367,7 @@ data class VaultState(
             val message: Text,
         ) : ViewState() {
             override val hasFab: Boolean get() = false
+            override val hasVaultFilter: Boolean get() = false
         }
 
         /**
@@ -363,6 +396,7 @@ data class VaultState(
             val trashItemsCount: Int,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
+            override val hasVaultFilter: Boolean get() = true
         }
 
         /**
@@ -620,6 +654,13 @@ sealed class VaultAction {
      * menu.
      */
     data object ExitConfirmationClick : VaultAction()
+
+    /**
+     * User selected a [VaultFilterType] from the Vault Filter menu.
+     */
+    data class VaultFilterTypeSelect(
+        val vaultFilterType: VaultFilterType,
+    ) : VaultAction()
 
     /**
      * Action to trigger when a specific vault item is clicked.
