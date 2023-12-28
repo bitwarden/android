@@ -874,6 +874,59 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //endregion Passcode Passphrase Tests
 
+    //region Forwarded Email Alias Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias state, updating the service type should send ServiceTypeOptionSelect action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = null,
+                    ),
+                ),
+            ),
+        )
+
+        val newServiceType = GeneratorState
+            .MainType
+            .Username
+            .UsernameType
+            .ForwardedEmailAlias
+            .ServiceTypeOption
+            .ANON_ADDY
+
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescription(label = "Service, null")
+            .performScrollTo()
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "addy.io")
+            .onLast()
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOptionSelect(
+                    newServiceType,
+                ),
+            )
+        }
+
+        // Make sure dialog is hidden:
+        composeTestRule
+            .onNode(isDialog())
+            .assertDoesNotExist()
+    }
+
+    //endregion Forwarded Email Alias Tests
+
     //region Username Plus Addressed Email Tests
 
     @Suppress("MaxLineLength")

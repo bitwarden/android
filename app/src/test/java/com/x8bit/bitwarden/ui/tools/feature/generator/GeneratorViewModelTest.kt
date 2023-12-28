@@ -27,6 +27,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val initialUsernameState = createPlusAddressedEmailState()
     private val usernameSavedStateHandle = createSavedStateHandleWithState(initialUsernameState)
 
+    private val initialForwardedEmailAliasState = createForwardedEmailAliasState()
+    private val forwardedEmailAliasSavedStateHandle =
+        createSavedStateHandleWithState(initialForwardedEmailAliasState)
+
     private val initialCatchAllEmailState = createCatchAllEmailState()
     private val catchAllEmailSavedStateHandle =
         createSavedStateHandleWithState(initialCatchAllEmailState)
@@ -896,6 +900,58 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class ForwardedEmailAliasActions {
+        private val defaultForwardedEmailAliasState = createForwardedEmailAliasState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel =
+                GeneratorViewModel(forwardedEmailAliasSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Test
+        fun `ServiceTypeOptionSelect should update service type correctly`() = runTest {
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .ServiceTypeOptionSelect(
+                    serviceTypeOption = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceTypeOption
+                        .ANON_ADDY,
+                )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultForwardedEmailAliasState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    selectedType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias(
+                            selectedServiceType = GeneratorState
+                                .MainType
+                                .Username
+                                .UsernameType
+                                .ForwardedEmailAlias
+                                .ServiceType
+                                .AnonAddy(),
+                        ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
     inner class PlusAddressedEmailActions {
         private val defaultPlusAddressedEmailState = createPlusAddressedEmailState()
         private lateinit var viewModel: GeneratorViewModel
@@ -1084,6 +1140,20 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     wordSeparator = wordSeparator,
                     capitalize = capitalize,
                     includeNumber = includeNumber,
+                ),
+            ),
+        )
+
+    private fun createForwardedEmailAliasState(
+        generatedText: String = "defaultForwardedEmailAlias",
+        obfuscatedText: String = "defaultObfuscatedText",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                    selectedServiceType = null,
+                    obfuscatedText = obfuscatedText,
                 ),
             ),
         )

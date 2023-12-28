@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
@@ -56,6 +55,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenReadOnlyTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
@@ -67,6 +67,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
@@ -151,6 +153,10 @@ fun GeneratorScreen(
         PassphraseHandlers.create(viewModel = viewModel)
     }
 
+    val forwardedEmailAliasHandlers = remember(viewModel) {
+        ForwardedEmailAliasHandlers.create(viewModel = viewModel)
+    }
+
     val plusAddressedEmailHandlers = remember(viewModel) {
         PlusAddressedEmailHandlers.create(viewModel = viewModel)
     }
@@ -203,6 +209,7 @@ fun GeneratorScreen(
             onUsernameSubStateOptionClicked = onUsernameOptionClicked,
             passwordHandlers = passwordHandlers,
             passphraseHandlers = passphraseHandlers,
+            forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
             plusAddressedEmailHandlers = plusAddressedEmailHandlers,
             catchAllEmailHandlers = catchAllEmailHandlers,
             randomWordHandlers = randomWordHandlers,
@@ -224,6 +231,7 @@ private fun ScrollContent(
     onUsernameSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     passwordHandlers: PasswordHandlers,
     passphraseHandlers: PassphraseHandlers,
+    forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
@@ -274,6 +282,7 @@ private fun ScrollContent(
                 UsernameTypeItems(
                     usernameState = selectedType,
                     onSubStateOptionClicked = onUsernameSubStateOptionClicked,
+                    forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
                     plusAddressedEmailHandlers = plusAddressedEmailHandlers,
                     catchAllEmailHandlers = catchAllEmailHandlers,
                     randomWordHandlers = randomWordHandlers,
@@ -734,6 +743,7 @@ private fun PassphraseIncludeNumberToggleItem(
 private fun ColumnScope.UsernameTypeItems(
     usernameState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
+    forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
@@ -749,7 +759,10 @@ private fun ColumnScope.UsernameTypeItems(
         }
 
         is GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias -> {
-            // TODO: Implement ForwardedEmailAlias BIT-657
+            ForwardedEmailAliasTypeContent(
+                usernameTypeState = selectedType,
+                forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+            )
         }
 
         is GeneratorState.MainType.Username.UsernameType.CatchAllEmail -> {
@@ -773,7 +786,7 @@ private fun UsernameOptionsItem(
     currentSubState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
 ) {
-    val possibleSubStates = GeneratorState.MainType.Username.UsernameTypeOption.values().toList()
+    val possibleSubStates = GeneratorState.MainType.Username.UsernameTypeOption.entries
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
@@ -801,6 +814,83 @@ private fun UsernameOptionsItem(
 }
 
 //endregion UsernameType Composables
+
+//region ForwardedEmailAliasType Composables
+
+@Composable
+private fun ColumnScope.ForwardedEmailAliasTypeContent(
+    usernameTypeState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
+    forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
+) {
+    Spacer(modifier = Modifier.height(8.dp))
+
+    ServiceTypeOptionsItem(
+        currentSubState = usernameTypeState,
+        onSubStateOptionClicked = forwardedEmailAliasHandlers.onServiceChange,
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    when (usernameTypeState.selectedServiceType) {
+
+        is ServiceType.AnonAddy -> {
+            // TODO: AnonAddy Service Implementation (BIT-711)
+        }
+
+        is ServiceType.DuckDuckGo -> {
+            // TODO: DuckDuckGo Service Implementation (BIT-714)
+        }
+
+        is ServiceType.FastMail -> {
+            // TODO: FastMail Service Implementation (BIT-712)
+        }
+
+        is ServiceType.FirefoxRelay -> {
+            // TODO: FirefoxRelay Service Implementation (BIT-1196)
+        }
+
+        is ServiceType.SimpleLogin -> {
+            // TODO: SimpleLogin Service Implementation (BIT-713)
+        }
+
+        null -> {
+            var obfuscatedTextField by remember { mutableStateOf("") }
+            BitwardenPasswordField(
+                label = "",
+                value = obfuscatedTextField,
+                onValueChange = { obfuscatedTextField = it },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun ServiceTypeOptionsItem(
+    currentSubState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
+    onSubStateOptionClicked: (ServiceTypeOption) -> Unit,
+) {
+    val possibleSubStates = ServiceTypeOption.entries
+    val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
+
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.service),
+        options = optionsWithStrings.values.toImmutableList(),
+        selectedOption = (currentSubState.selectedServiceType?.displayStringResId)?.let {
+            stringResource(id = it)
+        },
+        onOptionSelected = { selectedOption ->
+            val selectedOptionId =
+                optionsWithStrings.entries.first { it.value == selectedOption }.key
+            onSubStateOptionClicked(selectedOptionId)
+        },
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth(),
+    )
+}
 
 //region PlusAddressedEmailType Composables
 
@@ -1065,6 +1155,35 @@ private class PassphraseHandlers(
                         GeneratorAction.MainType.Passcode.PasscodeType.Passphrase
                             .ToggleIncludeNumberChange(
                                 includeNumber = shouldIncludeNumber,
+                            ),
+                    )
+                },
+            )
+        }
+    }
+}
+
+/**
+ * A class dedicated to handling user interactions related to forwarded email alias
+ * configuration.
+ * Each lambda corresponds to a specific user action, allowing for easy delegation of
+ * logic when user input is detected.
+ */
+private class ForwardedEmailAliasHandlers(
+    val onServiceChange: (ServiceTypeOption) -> Unit,
+) {
+    companion object {
+        fun create(viewModel: GeneratorViewModel): ForwardedEmailAliasHandlers {
+            return ForwardedEmailAliasHandlers(
+                onServiceChange = { newServiceTypeOption ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceTypeOptionSelect(
+                                serviceTypeOption = newServiceTypeOption,
                             ),
                     )
                 },
