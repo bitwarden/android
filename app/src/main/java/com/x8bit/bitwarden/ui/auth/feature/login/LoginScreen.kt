@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -215,7 +216,6 @@ private fun LoginScreenContent(
                 modifier = Modifier
                     .semantics { testTag = "GetMasterPasswordHintLabel" }
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
                     .clickable { onMasterPasswordClick() }
                     .padding(
                         vertical = 4.dp,
@@ -223,15 +223,18 @@ private fun LoginScreenContent(
                     ),
             )
 
+            Spacer(modifier = Modifier.height(20.dp))
+
             BitwardenFilledButton(
                 label = stringResource(id = R.string.log_in_with_master_password),
                 onClick = onLoginButtonClick,
                 isEnabled = state.isLoginButtonEnabled,
                 modifier = Modifier
                     .semantics { testTag = "LogInWithMasterPasswordButton" }
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
+                    .fillMaxWidth(),
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
 
             BitwardenOutlinedButtonWithIcon(
                 label = stringResource(id = R.string.log_in_sso),
@@ -239,9 +242,10 @@ private fun LoginScreenContent(
                 onClick = onSingleSignOnClick,
                 modifier = Modifier
                     .semantics { testTag = "LogInWithSsoButton" }
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
+                    .fillMaxWidth(),
             )
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
                 text = stringResource(
@@ -254,9 +258,10 @@ private fun LoginScreenContent(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .semantics { testTag = "LoggingInAsLabel" }
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                    .fillMaxWidth(),
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             // TODO: Need to figure out better handling for very small clickable text (BIT-724)
             Text(
