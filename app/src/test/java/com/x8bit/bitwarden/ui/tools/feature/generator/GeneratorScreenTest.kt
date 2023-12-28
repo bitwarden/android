@@ -967,6 +967,52 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //endregion DuckDuckGo Service Type Tests
 
+    //region FirefoxRelay Service Type Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_FirefoxRelay state, updating access token text input should send AccessTokenTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .FirefoxRelay(),
+                    ),
+                ),
+            ),
+        )
+
+        val newAccessToken = "accessToken"
+
+        composeTestRule
+            .onNodeWithText("API access token")
+            .performScrollTo()
+            .performTextInput(newAccessToken)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .FirefoxRelay
+                    .AccessTokenTextChange(
+                        accessToken = newAccessToken,
+                    ),
+            )
+        }
+    }
+
+    //endregion FirefoxRelay Service Type Tests
+
     //region Username Plus Addressed Email Tests
 
     @Suppress("MaxLineLength")
