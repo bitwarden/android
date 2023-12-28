@@ -5,7 +5,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class UserStateExtensionsTest {
@@ -195,6 +198,65 @@ class UserStateExtensionsTest {
                 ),
             )
                 .toActiveAccountSummary(),
+        )
+    }
+
+    @Test
+    fun `toVaultFilterData for an account with no organizations should return a null value`() {
+        assertNull(
+            UserState.Account(
+                userId = "activeUserId",
+                name = "name",
+                email = "email",
+                avatarColorHex = "avatarColorHex",
+                environment = Environment.Us,
+                isPremium = true,
+                isVaultUnlocked = true,
+                organizations = emptyList(),
+            )
+                .toVaultFilterData(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toVaultFilterData for an account with organizations should return data with the available types in the correct order`() {
+        assertEquals(
+            VaultFilterData(
+                selectedVaultFilterType = VaultFilterType.AllVaults,
+                vaultFilterTypes = listOf(
+                    VaultFilterType.AllVaults,
+                    VaultFilterType.MyVault,
+                    VaultFilterType.OrganizationVault(
+                        organizationId = "organizationId-A",
+                        organizationName = "Organization A",
+                    ),
+                    VaultFilterType.OrganizationVault(
+                        organizationId = "organizationId-B",
+                        organizationName = "Organization B",
+                    ),
+                ),
+            ),
+            UserState.Account(
+                userId = "activeUserId",
+                name = "name",
+                email = "email",
+                avatarColorHex = "avatarColorHex",
+                environment = Environment.Us,
+                isPremium = true,
+                isVaultUnlocked = true,
+                organizations = listOf(
+                    Organization(
+                        id = "organizationId-B",
+                        name = "Organization B",
+                    ),
+                    Organization(
+                        id = "organizationId-A",
+                        name = "Organization A",
+                    ),
+                ),
+            )
+                .toVaultFilterData(),
         )
     }
 }

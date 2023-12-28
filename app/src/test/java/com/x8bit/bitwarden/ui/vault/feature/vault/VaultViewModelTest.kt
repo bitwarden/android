@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
@@ -16,6 +17,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
@@ -126,13 +129,19 @@ class VaultViewModelTest : BaseViewModelTest() {
                         environment = Environment.Us,
                         isPremium = true,
                         isVaultUnlocked = true,
-                        organizations = emptyList(),
+                        organizations = listOf(
+                            Organization(
+                                id = "organiationId",
+                                name = "Test Organization",
+                            ),
+                        ),
                     ),
                 ),
             )
 
         assertEquals(
             DEFAULT_STATE.copy(
+                appBarTitle = R.string.vaults.asText(),
                 avatarColorString = "#00aaaa",
                 initials = "OU",
                 accountSummaries = listOf(
@@ -144,6 +153,17 @@ class VaultViewModelTest : BaseViewModelTest() {
                         environmentLabel = "bitwarden.com",
                         isActive = true,
                         isVaultUnlocked = true,
+                    ),
+                ),
+                vaultFilterData = VaultFilterData(
+                    selectedVaultFilterType = VaultFilterType.AllVaults,
+                    vaultFilterTypes = listOf(
+                        VaultFilterType.AllVaults,
+                        VaultFilterType.MyVault,
+                        VaultFilterType.OrganizationVault(
+                            organizationId = "organiationId",
+                            organizationName = "Test Organization",
+                        ),
                     ),
                 ),
             ),
@@ -284,6 +304,46 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultAction.ExitConfirmationClick)
             assertEquals(VaultEvent.NavigateOutOfApp, awaitItem())
         }
+    }
+
+    @Test
+    fun `on VaultFilterTypeSelect should update the selected filter type`() {
+        val viewModel = createViewModel()
+
+        // Update to state with filters
+        val initialState = DEFAULT_STATE.copy(
+            appBarTitle = R.string.vaults.asText(),
+            vaultFilterData = VAULT_FILTER_DATA,
+        )
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+            .copy(
+                accounts = listOf(
+                    DEFAULT_USER_STATE.accounts[0].copy(
+                        organizations = listOf(
+                            Organization(
+                                id = "testOrganizationId",
+                                name = "Test Organization",
+                            ),
+                        ),
+                    ),
+                    DEFAULT_USER_STATE.accounts[1],
+                ),
+            )
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        viewModel.trySendAction(VaultAction.VaultFilterTypeSelect(VaultFilterType.MyVault))
+
+        assertEquals(
+            initialState.copy(
+                vaultFilterData = VAULT_FILTER_DATA.copy(
+                    selectedVaultFilterType = VaultFilterType.MyVault,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -760,6 +820,20 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
 }
 
+private val ORGANIZATION_VAULT_FILTER = VaultFilterType.OrganizationVault(
+    organizationId = "testOrganizationId",
+    organizationName = "Test Organization",
+)
+
+private val VAULT_FILTER_DATA = VaultFilterData(
+    selectedVaultFilterType = VaultFilterType.AllVaults,
+    vaultFilterTypes = listOf(
+        VaultFilterType.AllVaults,
+        VaultFilterType.MyVault,
+        ORGANIZATION_VAULT_FILTER,
+    ),
+)
+
 private val DEFAULT_STATE: VaultState =
     createMockVaultState(viewState = VaultState.ViewState.Loading)
 
@@ -794,6 +868,7 @@ private fun createMockVaultState(
     dialog: VaultState.DialogState? = null,
 ): VaultState =
     VaultState(
+        appBarTitle = R.string.my_vault.asText(),
         avatarColorString = "#aa00aa",
         initials = "AU",
         accountSummaries = listOf(

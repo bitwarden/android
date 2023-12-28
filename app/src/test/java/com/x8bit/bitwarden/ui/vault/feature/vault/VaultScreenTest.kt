@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -32,6 +33,8 @@ import com.x8bit.bitwarden.ui.util.performAddAccountClick
 import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.mockk
@@ -78,6 +81,135 @@ class VaultScreenTest : BaseComposeTest() {
                 intentHandler = intentHandler,
             )
         }
+    }
+
+    @Test
+    fun `app bar title should update according to state`() {
+        composeTestRule.onNodeWithText("My vault").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Vaults").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(appBarTitle = R.string.vaults.asText())
+        }
+
+        composeTestRule.onNodeWithText("My vault").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vaults").assertIsDisplayed()
+    }
+
+    @Test
+    fun `vault filter should update according to state`() {
+        composeTestRule.onNodeWithText("Vault: All").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: My vault").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: Test Organization").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = VAULT_FILTER_DATA,
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+            )
+        }
+
+        composeTestRule.onNodeWithText("Vault: All").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Vault: My vault").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: Test Organization").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = VAULT_FILTER_DATA.copy(
+                    selectedVaultFilterType = VaultFilterType.MyVault,
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Vault: All").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: My vault").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Vault: Test Organization").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = VAULT_FILTER_DATA.copy(
+                    selectedVaultFilterType = ORGANIZATION_VAULT_FILTER,
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Vault: All").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: My vault").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: Test Organization").assertIsDisplayed()
+    }
+
+    @Test
+    fun `vault filter menu click should display the filter selection dialog`() {
+        // Display the vault filter
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = VAULT_FILTER_DATA,
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule.onNodeWithContentDescription("Filter items by vault").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("All vaults")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("My vault")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Test Organization")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `cancel click in the filter selection dialog should close the dialog`() {
+        // Display the vault selection dialog
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = VAULT_FILTER_DATA,
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+            )
+        }
+        composeTestRule.onNodeWithContentDescription("Filter items by vault").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vault filter click in the filter selection dialog should send VaultFilterTypeSelect and close the dialog`() {
+        // Display the vault selection dialog
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = VAULT_FILTER_DATA,
+                viewState = DEFAULT_CONTENT_VIEW_STATE,
+            )
+        }
+        composeTestRule.onNodeWithContentDescription("Filter items by vault").performClick()
+
+        composeTestRule
+            .onAllNodesWithText("All vaults")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultAction.VaultFilterTypeSelect(VaultFilterType.AllVaults))
+        }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Suppress("MaxLineLength")
@@ -858,6 +990,20 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     isVaultUnlocked = false,
 )
 
+private val ORGANIZATION_VAULT_FILTER = VaultFilterType.OrganizationVault(
+    organizationId = "testOrganizationId",
+    organizationName = "Test Organization",
+)
+
+private val VAULT_FILTER_DATA = VaultFilterData(
+    selectedVaultFilterType = VaultFilterType.AllVaults,
+    vaultFilterTypes = listOf(
+        VaultFilterType.AllVaults,
+        VaultFilterType.MyVault,
+        ORGANIZATION_VAULT_FILTER,
+    ),
+)
+
 private val DEFAULT_STATE: VaultState = VaultState(
     avatarColorString = "#aa00aa",
     initials = "AU",
@@ -865,6 +1011,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
         ACTIVE_ACCOUNT_SUMMARY,
         LOCKED_ACCOUNT_SUMMARY,
     ),
+    appBarTitle = R.string.my_vault.asText(),
     viewState = VaultState.ViewState.Loading,
 )
 
