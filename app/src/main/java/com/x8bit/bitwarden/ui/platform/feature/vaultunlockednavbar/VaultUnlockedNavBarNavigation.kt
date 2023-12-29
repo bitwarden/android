@@ -3,8 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 
 /**
  * The functions below pertain to entry into the [VaultUnlockedNavBarScreen].
@@ -30,12 +29,8 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
 ) {
-    composable(
+    composableWithStayTransitions(
         route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
-        enterTransition = TransitionProviders.Enter.stay,
-        exitTransition = TransitionProviders.Exit.stay,
-        popEnterTransition = TransitionProviders.Enter.stay,
-        popExitTransition = TransitionProviders.Exit.stay,
     ) {
         VaultUnlockedNavBarScreen(
             onNavigateToVaultAddItem = onNavigateToVaultAddItem,

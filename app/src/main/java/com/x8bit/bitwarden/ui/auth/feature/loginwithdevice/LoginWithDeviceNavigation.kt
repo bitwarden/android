@@ -3,8 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val LOGIN_WITH_DEVICE_ROUTE = "login_with_device"
 
@@ -21,12 +20,8 @@ fun NavController.navigateToLoginWithDevice(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.loginWithDeviceDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = LOGIN_WITH_DEVICE_ROUTE,
-        enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.stay,
-        popEnterTransition = TransitionProviders.Enter.stay,
-        popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         LoginWithDeviceScreen(
             onNavigateBack = onNavigateBack,

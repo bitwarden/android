@@ -3,8 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 
 private const val VAULT_SETTINGS_ROUTE = "vault_settings"
 
@@ -14,12 +13,8 @@ private const val VAULT_SETTINGS_ROUTE = "vault_settings"
 fun NavGraphBuilder.vaultSettingsDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithPushTransitions(
         route = VAULT_SETTINGS_ROUTE,
-        enterTransition = TransitionProviders.Enter.pushLeft,
-        exitTransition = TransitionProviders.Exit.pushLeft,
-        popEnterTransition = TransitionProviders.Enter.pushLeft,
-        popExitTransition = TransitionProviders.Exit.pushRight,
     ) {
         VaultSettingsScreen(onNavigateBack = onNavigateBack)
     }
