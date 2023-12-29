@@ -22,8 +22,11 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AddyIo
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.DuckDuckGo
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.FastMail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.FirefoxRelay
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.SimpleLogin
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
@@ -113,6 +116,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOptionSelect -> {
                 handleServiceTypeOptionSelect(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.AddyIo -> {
+                handleAddyIoSpecificAction(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.DuckDuckGo.ApiKeyTextChange -> {
@@ -554,15 +561,15 @@ class GeneratorViewModel @Inject constructor(
             )
 
             Username.UsernameTypeOption.CATCH_ALL_EMAIL -> loadUsernameOptions(
-                selectedType = Username(selectedType = Username.UsernameType.CatchAllEmail()),
+                selectedType = Username(selectedType = CatchAllEmail()),
             )
 
             Username.UsernameTypeOption.FORWARDED_EMAIL_ALIAS -> loadUsernameOptions(
-                selectedType = Username(selectedType = Username.UsernameType.ForwardedEmailAlias()),
+                selectedType = Username(selectedType = ForwardedEmailAlias()),
             )
 
             Username.UsernameTypeOption.RANDOM_WORD -> loadUsernameOptions(
-                selectedType = Username(selectedType = Username.UsernameType.RandomWord()),
+                selectedType = Username(selectedType = RandomWord()),
             )
         }
     }
@@ -580,29 +587,91 @@ class GeneratorViewModel @Inject constructor(
         .ServiceTypeOptionSelect,
     ) {
         when (action.serviceTypeOption) {
-            ForwardedEmailAlias.ServiceTypeOption.ANON_ADDY -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = ServiceType.AnonAddy())
+            ForwardedEmailAlias.ServiceTypeOption.ADDY_IO -> updateForwardedEmailAliasType {
+                ForwardedEmailAlias(selectedServiceType = AddyIo())
             }
 
             ForwardedEmailAlias.ServiceTypeOption.DUCK_DUCK_GO -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = ServiceType.DuckDuckGo())
+                ForwardedEmailAlias(selectedServiceType = DuckDuckGo())
             }
 
             ForwardedEmailAlias.ServiceTypeOption.FAST_MAIL -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = ServiceType.FastMail())
+                ForwardedEmailAlias(selectedServiceType = FastMail())
             }
 
             ForwardedEmailAlias.ServiceTypeOption.FIREFOX_RELAY -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = ServiceType.FirefoxRelay())
+                ForwardedEmailAlias(selectedServiceType = FirefoxRelay())
             }
 
             ForwardedEmailAlias.ServiceTypeOption.SIMPLE_LOGIN -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = ServiceType.SimpleLogin())
+                ForwardedEmailAlias(selectedServiceType = SimpleLogin())
             }
         }
     }
 
     //endregion Forwarded Email Alias Specific Handlers
+
+    //region Addy.Io Service Specific Handlers
+
+    private fun handleAddyIoSpecificAction(
+        action: GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.AddyIo,
+    ) {
+        when (action) {
+            is GeneratorAction
+            .MainType
+            .Username
+            .UsernameType
+            .ForwardedEmailAlias
+            .AddyIo
+            .AccessTokenTextChange,
+            -> {
+                handleAddyIoAccessTokenTextChange(action)
+            }
+
+            is GeneratorAction
+            .MainType
+            .Username
+            .UsernameType
+            .ForwardedEmailAlias
+            .AddyIo
+            .DomainTextChange,
+            -> {
+                handleAddyIoDomainNameTextChange(action)
+            }
+        }
+    }
+
+    private fun handleAddyIoAccessTokenTextChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .AddyIo
+        .AccessTokenTextChange,
+    ) {
+        updateAddyIoServiceType { addyIoServiceType ->
+            val newAccessToken = action.accessToken
+            addyIoServiceType.copy(apiAccessToken = newAccessToken)
+        }
+    }
+
+    private fun handleAddyIoDomainNameTextChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .AddyIo
+        .DomainTextChange,
+    ) {
+        updateAddyIoServiceType { addyIoServiceType ->
+            val newDomain = action.domain
+            addyIoServiceType.copy(domainName = newDomain)
+        }
+    }
+
+    //endregion Addy.Io Service Specific Handlers
 
     //region DuckDuckGo Service Specific Handlers
 
@@ -797,6 +866,30 @@ class GeneratorViewModel @Inject constructor(
                 return@updateGeneratorMainTypeUsername currentSelectedType
             }
             currentSelectedType.copy(selectedType = block(currentUsernameType))
+        }
+    }
+
+    private inline fun updateAddyIoServiceType(
+        crossinline block: (AddyIo) -> AddyIo,
+    ) {
+        updateGeneratorMainTypeUsername { currentUsernameType ->
+            if (currentUsernameType.selectedType !is ForwardedEmailAlias) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
+            if (currentServiceType !is AddyIo) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val updatedServiceType = block(currentServiceType)
+
+            currentUsernameType.copy(
+                selectedType = ForwardedEmailAlias(
+                    selectedServiceType = updatedServiceType,
+                    obfuscatedText = currentUsernameType.selectedType.obfuscatedText,
+                ),
+            )
         }
     }
 
@@ -1173,7 +1266,7 @@ data class GeneratorState(
                      * the label for each type.
                      */
                     enum class ServiceTypeOption(val labelRes: Int) {
-                        ANON_ADDY(R.string.addy_io),
+                        ADDY_IO(R.string.addy_io),
                         DUCK_DUCK_GO(R.string.duck_duck_go),
                         FAST_MAIL(R.string.fastmail),
                         FIREFOX_RELAY(R.string.firefox_relay),
@@ -1195,19 +1288,19 @@ data class GeneratorState(
                         abstract val displayStringResId: Int?
 
                         /**
-                         * Represents the Anon Addy service type, with a configurable option for
+                         * Represents the Addy Io service type, with a configurable option for
                          * service and api key.
                          *
                          * @property apiAccessToken The token used for generation.
                          * @property domainName The domain name used for generation.
                          */
                         @Parcelize
-                        data class AnonAddy(
+                        data class AddyIo(
                             val apiAccessToken: String = "",
                             val domainName: String = "",
                         ) : ServiceType(), Parcelable {
                             override val displayStringResId: Int
-                                get() = ServiceTypeOption.ANON_ADDY.labelRes
+                                get() = ServiceTypeOption.ADDY_IO.labelRes
                         }
 
                         /**
@@ -1497,6 +1590,26 @@ sealed class GeneratorAction {
                         .ForwardedEmailAlias
                         .ServiceTypeOption,
                     ) : ForwardedEmailAlias()
+
+                    /**
+                     * Represents actions specifically related to the AddyIo service.
+                     */
+                    sealed class AddyIo : ForwardedEmailAlias() {
+
+                        /**
+                         * Fired when the access token input text is changed.
+                         *
+                         * @property accessToken The new access token text.
+                         */
+                        data class AccessTokenTextChange(val accessToken: String) : AddyIo()
+
+                        /**
+                         * Fired when the domain text input is changed.
+                         *
+                         * @property domain The new domain text.
+                         */
+                        data class DomainTextChange(val domain: String) : AddyIo()
+                    }
 
                     /**
                      * Represents actions specifically related to the DuckDuckGo service.

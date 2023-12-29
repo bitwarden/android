@@ -817,6 +817,7 @@ private fun UsernameOptionsItem(
 
 //region ForwardedEmailAliasType Composables
 
+@Suppress("LongMethod")
 @Composable
 private fun ColumnScope.ForwardedEmailAliasTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
@@ -833,8 +834,26 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
 
     when (usernameTypeState.selectedServiceType) {
 
-        is ServiceType.AnonAddy -> {
-            // TODO: AnonAddy Service Implementation (BIT-711)
+        is ServiceType.AddyIo -> {
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.api_access_token),
+                value = usernameTypeState.selectedServiceType.apiAccessToken,
+                onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            BitwardenTextField(
+                label = stringResource(id = R.string.domain_name_required_parenthesis),
+                value = usernameTypeState.selectedServiceType.domainName,
+                onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
         }
 
         is ServiceType.DuckDuckGo -> {
@@ -1185,10 +1204,13 @@ private class PassphraseHandlers(
  */
 private class ForwardedEmailAliasHandlers(
     val onServiceChange: (ServiceTypeOption) -> Unit,
+    val onAddyIoAccessTokenTextChange: (String) -> Unit,
+    val onAddyIoDomainNameTextChange: (String) -> Unit,
     val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
     val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
 ) {
     companion object {
+        @Suppress("LongMethod")
         fun create(viewModel: GeneratorViewModel): ForwardedEmailAliasHandlers {
             return ForwardedEmailAliasHandlers(
                 onServiceChange = { newServiceTypeOption ->
@@ -1200,6 +1222,32 @@ private class ForwardedEmailAliasHandlers(
                             .ForwardedEmailAlias
                             .ServiceTypeOptionSelect(
                                 serviceTypeOption = newServiceTypeOption,
+                            ),
+                    )
+                },
+                onAddyIoAccessTokenTextChange = { newAccessToken ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .AddyIo
+                            .AccessTokenTextChange(
+                                accessToken = newAccessToken,
+                            ),
+                    )
+                },
+                onAddyIoDomainNameTextChange = { newDomainName ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .AddyIo
+                            .DomainTextChange(
+                                domain = newDomainName,
                             ),
                     )
                 },
@@ -1227,7 +1275,6 @@ private class ForwardedEmailAliasHandlers(
                             .AccessTokenTextChange(
                                 accessToken = newAccessToken,
                             ),
-
                     )
                 },
             )
