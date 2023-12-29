@@ -890,7 +890,14 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
         }
 
         is ServiceType.SimpleLogin -> {
-            // TODO: SimpleLogin Service Implementation (BIT-713)
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.api_key_required_parenthesis),
+                value = usernameTypeState.selectedServiceType.apiKey,
+                onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
         }
 
         null -> {
@@ -1209,6 +1216,7 @@ private class PassphraseHandlers(
  * Each lambda corresponds to a specific user action, allowing for easy delegation of
  * logic when user input is detected.
  */
+@Suppress("LongParameterList")
 private class ForwardedEmailAliasHandlers(
     val onServiceChange: (ServiceTypeOption) -> Unit,
     val onAddyIoAccessTokenTextChange: (String) -> Unit,
@@ -1216,6 +1224,7 @@ private class ForwardedEmailAliasHandlers(
     val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
     val onFastMailApiKeyTextChange: (String) -> Unit,
     val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
+    val onSimpleLoginApiKeyTextChange: (String) -> Unit,
 ) {
     companion object {
         @Suppress("LongMethod")
@@ -1295,6 +1304,19 @@ private class ForwardedEmailAliasHandlers(
                             .FirefoxRelay
                             .AccessTokenTextChange(
                                 accessToken = newAccessToken,
+                            ),
+                    )
+                },
+                onSimpleLoginApiKeyTextChange = { newApiKey ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .SimpleLogin
+                            .ApiKeyTextChange(
+                                apiKey = newApiKey,
                             ),
                     )
                 },

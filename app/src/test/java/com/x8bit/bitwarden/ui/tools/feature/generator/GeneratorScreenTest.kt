@@ -1141,6 +1141,46 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //endregion FirefoxRelay Service Type Tests
 
+    //region SimpleLogin Service Type Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_SimpleLogin state, updating api key text input should send ApiKeyTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+            ),
+        )
+
+        val newApiKey = "apiKey"
+
+        composeTestRule
+            .onNodeWithText("API key (required)")
+            .performScrollTo()
+            .performTextInput(newApiKey)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.SimpleLogin.ApiKeyTextChange(
+                    apiKey = newApiKey,
+                ),
+            )
+        }
+    }
+
+    //endregion SimpleLogin Service Type Tests
+
     //region Username Plus Addressed Email Tests
 
     @Suppress("MaxLineLength")
