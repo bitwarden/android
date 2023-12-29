@@ -896,7 +896,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .UsernameType
             .ForwardedEmailAlias
             .ServiceTypeOption
-            .ANON_ADDY
+            .ADDY_IO
 
         // Opens the menu
         composeTestRule
@@ -926,6 +926,94 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     //endregion Forwarded Email Alias Tests
+
+    //region Addy.Io Service Type Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, updating access token text input should send AccessTokenTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        val newAccessToken = "accessToken"
+
+        composeTestRule
+            .onNodeWithText("API access token")
+            .performScrollTo()
+            .performTextInput(newAccessToken)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .AddyIo
+                    .AccessTokenTextChange(
+                        accessToken = newAccessToken,
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, updating domain name text input should send DomainTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        val newDomainName = "domainName"
+
+        composeTestRule
+            .onNodeWithText("Domain name (required)")
+            .performScrollTo()
+            .performTextInput(newDomainName)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .AddyIo
+                    .DomainTextChange(
+                        domain = newDomainName,
+                    ),
+            )
+        }
+    }
+
+    //endregion Addy.Io Service Type Tests
 
     //region DuckDuckGo Service Type Tests
 

@@ -31,6 +31,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val forwardedEmailAliasSavedStateHandle =
         createSavedStateHandleWithState(initialForwardedEmailAliasState)
 
+    private val initialAddyIoState = createAddyIoState()
+    private val addyIoSavedStateHandle = createSavedStateHandleWithState(initialAddyIoState)
+
     private val initialDuckDuckGoState = createDuckDuckGoState()
     private val duckDuckGoSavedStateHandle = createSavedStateHandleWithState(initialDuckDuckGoState)
 
@@ -930,7 +933,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .UsernameType
                         .ForwardedEmailAlias
                         .ServiceTypeOption
-                        .ANON_ADDY,
+                        .ADDY_IO,
                 )
 
             viewModel.actionChannel.trySend(action)
@@ -948,8 +951,87 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                                 .UsernameType
                                 .ForwardedEmailAlias
                                 .ServiceType
-                                .AnonAddy(),
+                                .AddyIo(),
                         ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
+    inner class AddyIoActions {
+        private val defaultAddyIoState = createAddyIoState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(addyIoSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Test
+        fun `AccessTokenTextChange should update access token text correctly`() = runTest {
+            val newAccessToken = "newAccessToken"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .AddyIo
+                .AccessTokenTextChange(
+                    accessToken = newAccessToken,
+                )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultAddyIoState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(
+                                apiAccessToken = newAccessToken,
+                            ),
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `DomainTextChange should update the domain text correctly`() = runTest {
+            val newDomainName = "newDomain"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .AddyIo
+                .DomainTextChange(
+                    domain = newDomainName,
+                )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultAddyIoState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(
+                                domainName = newDomainName,
+                            ),
+                    ),
                 ),
             )
 
@@ -1249,6 +1331,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                     selectedServiceType = null,
                     obfuscatedText = obfuscatedText,
+                ),
+            ),
+        )
+
+    private fun createAddyIoState(
+        generatedText: String = "defaultAddyIo",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                    selectedServiceType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceType
+                        .AddyIo(),
                 ),
             ),
         )
