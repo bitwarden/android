@@ -33,16 +33,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -87,7 +90,7 @@ fun VaultScreen(
             VaultEvent.NavigateOutOfApp -> intentHandler.exitApplication()
             is VaultEvent.ShowToast -> {
                 Toast
-                    .makeText(context, event.message, Toast.LENGTH_SHORT)
+                    .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
                     .show()
             }
         }
@@ -206,6 +209,14 @@ private fun VaultScreenScaffold(
 
     // Dynamic dialogs
     when (val dialog = state.dialog) {
+        is VaultState.DialogState.Syncing -> {
+            BitwardenLoadingDialog(
+                visibilityState = LoadingDialogState.Shown(
+                    text = R.string.syncing.asText(),
+                ),
+            )
+        }
+
         is VaultState.DialogState.Error -> {
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(

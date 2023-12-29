@@ -281,9 +281,15 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on SyncClick should call sync on the VaultRepository`() {
+    fun `on SyncClick should call sync on the VaultRepository and show the syncing dialog`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.SyncClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Syncing,
+            ),
+            viewModel.stateFlow.value,
+        )
         verify {
             vaultRepository.sync()
         }
@@ -405,10 +411,138 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content and show a success Toast`() =
+        runTest {
+            val expectedState = createMockVaultState(
+                viewState = VaultState.ViewState.Content(
+                    loginItemsCount = 1,
+                    cardItemsCount = 0,
+                    identityItemsCount = 0,
+                    secureNoteItemsCount = 0,
+                    favoriteItems = listOf(),
+                    folderItems = listOf(),
+                    collectionItems = listOf(),
+                    noFolderItems = listOf(),
+                    trashItemsCount = 0,
+                ),
+            )
+            val viewModel = createViewModel()
+            viewModel.trySendAction(VaultAction.SyncClick)
+
+            viewModel.eventFlow.test {
+                mutableVaultDataStateFlow.tryEmit(
+                    value = DataState.Loaded(
+                        data = VaultData(
+                            cipherViewList = listOf(createMockCipherView(number = 1)),
+                            collectionViewList = emptyList(),
+                            folderViewList = emptyList(),
+                        ),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+                assertEquals(
+                    VaultEvent.ShowToast(R.string.syncing_complete.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `vaultDataStateFlow Loaded with empty items should update state to NoItems`() = runTest {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            createMockVaultState(viewState = VaultState.ViewState.NoItems),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems and show a success Toast`() =
+        runTest {
+            val expectedState = createMockVaultState(
+                viewState = VaultState.ViewState.NoItems,
+            )
+            val viewModel = createViewModel()
+            viewModel.trySendAction(VaultAction.SyncClick)
+
+            viewModel.eventFlow.test {
+                mutableVaultDataStateFlow.value = DataState.Loaded(
+                    data = VaultData(
+                        cipherViewList = emptyList(),
+                        collectionViewList = emptyList(),
+                        folderViewList = emptyList(),
+                    ),
+                )
+
+                assertEquals(expectedState, viewModel.stateFlow.value)
+                assertEquals(
+                    VaultEvent.ShowToast(R.string.syncing_complete.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `vaultDataStateFlow Pending with items should update state to Content`() {
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.Pending(
+                data = VaultData(
+                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                ),
+            ),
+        )
+
+        val viewModel = createViewModel()
+
+        assertEquals(
+            createMockVaultState(
+                viewState = VaultState.ViewState.Content(
+                    loginItemsCount = 1,
+                    cardItemsCount = 0,
+                    identityItemsCount = 0,
+                    secureNoteItemsCount = 0,
+                    favoriteItems = listOf(),
+                    folderItems = listOf(
+                        VaultState.ViewState.FolderItem(
+                            id = "mockId-1",
+                            name = "mockName-1".asText(),
+                            itemCount = 1,
+                        ),
+                    ),
+                    collectionItems = listOf(
+                        VaultState.ViewState.CollectionItem(
+                            id = "mockId-1",
+                            name = "mockName-1",
+                            itemCount = 1,
+                        ),
+                    ),
+                    noFolderItems = listOf(),
+                    trashItemsCount = 0,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `vaultDataStateFlow Pending with empty items should update state to NoItems`() = runTest {
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.Pending(
                 data = VaultData(
                     cipherViewList = emptyList(),
                     collectionViewList = emptyList(),
