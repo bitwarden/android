@@ -186,6 +186,9 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSyncClick() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.Syncing)
+        }
         vaultRepository.sync()
     }
 
@@ -285,8 +288,18 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
+        if (state.dialog == VaultState.DialogState.Syncing) {
+            sendEvent(
+                VaultEvent.ShowToast(
+                    message = R.string.syncing_complete.asText(),
+                ),
+            )
+        }
         mutableStateFlow.update {
-            it.copy(viewState = vaultData.data.toViewState(vaultFilterTypeOrDefault))
+            it.copy(
+                viewState = vaultData.data.toViewState(vaultFilterTypeOrDefault),
+                dialog = null,
+            )
         }
     }
 
@@ -308,7 +321,6 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(viewState = vaultData.data.toViewState(vaultFilterTypeOrDefault))
         }
-        sendEvent(VaultEvent.ShowToast(message = "Refreshing"))
     }
 
     //endregion VaultAction Handlers
@@ -551,6 +563,12 @@ data class VaultState(
     sealed class DialogState : Parcelable {
 
         /**
+         * Represents a dialog indication and ongoing manual sync.
+         */
+        @Parcelize
+        data object Syncing : DialogState()
+
+        /**
          * Represents an error dialog with the given [title] and [message].
          */
         @Parcelize
@@ -612,7 +630,7 @@ sealed class VaultEvent {
     /**
      * Show a toast with the given [message].
      */
-    data class ShowToast(val message: String) : VaultEvent()
+    data class ShowToast(val message: Text) : VaultEvent()
 }
 
 /**
@@ -778,6 +796,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                 viewState = VaultState.ViewState.Error(
                     message = errorMessage,
                 ),
+                dialog = null,
             )
         }
     }
