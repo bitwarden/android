@@ -12,11 +12,15 @@ private const val VAULT_SETTINGS_ROUTE = "vault_settings"
  */
 fun NavGraphBuilder.vaultSettingsDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToFolders: () -> Unit,
 ) {
     composableWithPushTransitions(
         route = VAULT_SETTINGS_ROUTE,
     ) {
-        VaultSettingsScreen(onNavigateBack = onNavigateBack)
+        VaultSettingsScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToFolders = onNavigateToFolders,
+        )
     }
 }
 

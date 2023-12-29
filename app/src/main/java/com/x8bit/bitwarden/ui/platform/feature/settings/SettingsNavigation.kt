@@ -27,6 +27,7 @@ private const val SETTINGS_ROUTE: String = "settings"
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onNavigateToDeleteAccount: () -> Unit,
+    onNavigateToFolders: () -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
@@ -52,12 +53,15 @@ fun NavGraphBuilder.settingsGraph(
         appearanceDestination(onNavigateBack = { navController.popBackStack() })
         autoFillDestination(onNavigateBack = { navController.popBackStack() })
         otherDestination(onNavigateBack = { navController.popBackStack() })
-        vaultSettingsDestination(onNavigateBack = { navController.popBackStack() })
+        vaultSettingsDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToFolders = onNavigateToFolders,
+        )
     }
 }
 
 /**
- * Navigate to the settings screen screen.
+ * Navigate to the settings screen.
  */
 fun NavController.navigateToSettingsGraph(navOptions: NavOptions? = null) {
     navigate(SETTINGS_GRAPH_ROUTE, navOptions)

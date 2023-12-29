@@ -13,7 +13,28 @@ class VaultSettingsViewModel @Inject constructor() :
         initialState = Unit,
     ) {
     override fun handleAction(action: VaultSettingsAction): Unit = when (action) {
-        VaultSettingsAction.BackClick -> sendEvent(VaultSettingsEvent.NavigateBack)
+        VaultSettingsAction.BackClick -> handleBackClicked()
+        VaultSettingsAction.ExportVaultClick -> handleExportVaultClicked()
+        VaultSettingsAction.FoldersButtonClick -> handleFoldersButtonClicked()
+        VaultSettingsAction.ImportItemsClick -> handleImportItemsClicked()
+    }
+
+    private fun handleBackClicked() {
+        sendEvent(VaultSettingsEvent.NavigateBack)
+    }
+
+    private fun handleExportVaultClicked() {
+        // TODO BIT-1272 go to vault export screen
+        sendEvent(VaultSettingsEvent.ShowToast("Not yet implemented."))
+    }
+
+    private fun handleFoldersButtonClicked() {
+        sendEvent(VaultSettingsEvent.NavigateToFolders)
+    }
+
+    private fun handleImportItemsClicked() {
+        // TODO BIT-972 implement import items functionality
+        sendEvent(VaultSettingsEvent.ShowToast("Not yet implemented."))
     }
 }
 
@@ -25,6 +46,18 @@ sealed class VaultSettingsEvent {
      * Navigate back.
      */
     data object NavigateBack : VaultSettingsEvent()
+
+    /**
+     * Navigate to the Folders screen.
+     */
+    data object NavigateToFolders : VaultSettingsEvent()
+
+    /**
+     * Shows a toast with the given [message].
+     */
+    data class ShowToast(
+        val message: String,
+    ) : VaultSettingsEvent()
 }
 
 /**
@@ -35,4 +68,19 @@ sealed class VaultSettingsAction {
      * User clicked back button.
      */
     data object BackClick : VaultSettingsAction()
+
+    /**
+     * Indicates that the user clicked the Export Vault button.
+     */
+    data object ExportVaultClick : VaultSettingsAction()
+
+    /**
+     * Indicates that the user clicked the Folders button.
+     */
+    data object FoldersButtonClick : VaultSettingsAction()
+
+    /**
+     * Indicates that the user clicked the Import Items button.
+     */
+    data object ImportItemsClick : VaultSettingsAction()
 }

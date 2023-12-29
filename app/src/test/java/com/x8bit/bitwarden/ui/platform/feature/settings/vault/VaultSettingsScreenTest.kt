@@ -1,46 +1,98 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 class VaultSettingsScreenTest : BaseComposeTest() {
 
-    @Test
-    fun `on back click should send BackClick`() {
-        val viewModel: VaultSettingsViewModel = mockk {
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(VaultSettingsAction.BackClick) } returns Unit
-        }
+    private var onNavigateBackCalled = false
+    private var onNavigateToFoldersCalled = false
+    private val mutableEventFlow = MutableSharedFlow<VaultSettingsEvent>(
+        extraBufferCapacity = Int.MAX_VALUE,
+    )
+    private val mutableStateFlow = MutableStateFlow(Unit)
+    val viewModel = mockk<VaultSettingsViewModel>(relaxed = true) {
+        every { eventFlow } returns mutableEventFlow
+        every { stateFlow } returns mutableStateFlow
+    }
+
+    @Before
+    fun setup() {
         composeTestRule.setContent {
             VaultSettingsScreen(
                 viewModel = viewModel,
-                onNavigateBack = { },
+                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToFolders = { onNavigateToFoldersCalled = true },
             )
         }
+    }
+
+    @Test
+    fun `on back click should send BackClick`() {
+        every { viewModel.trySendAction(VaultSettingsAction.BackClick) } returns Unit
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify { viewModel.trySendAction(VaultSettingsAction.BackClick) }
     }
 
     @Test
-    fun `on NavigateAbout should call onNavigateToVault`() {
-        var haveCalledNavigateBack = false
-        val viewModel = mockk<VaultSettingsViewModel> {
-            every { eventFlow } returns flowOf(VaultSettingsEvent.NavigateBack)
+    fun `export vault click should send ExportVaultClick`() {
+        composeTestRule.onNodeWithText("Export vault").performClick()
+        verify {
+            viewModel.trySendAction(VaultSettingsAction.ExportVaultClick)
         }
-        composeTestRule.setContent {
-            VaultSettingsScreen(
-                viewModel = viewModel,
-                onNavigateBack = { haveCalledNavigateBack = true },
-            )
+    }
+
+    @Test
+    fun `import items click should display dialog and confirming should send ImportItemsClick`() {
+        composeTestRule.onNodeWithText("Import items").performClick()
+        composeTestRule
+            .onNodeWithText("Continue")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
         }
-        assertTrue(haveCalledNavigateBack)
+    }
+
+    @Test
+    fun `import items click should display dialog & canceling should not send ImportItemsClick`() {
+        composeTestRule.onNodeWithText("Import items").performClick()
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+        }
+    }
+
+    @Test
+    fun `NavigateBack should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToFolders should call onNavigateToFolders`() {
+        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToFolders)
+        assertTrue(onNavigateToFoldersCalled)
     }
 }

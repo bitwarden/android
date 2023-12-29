@@ -6,6 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.navigateToDeleteAccount
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
@@ -38,6 +40,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         route = VAULT_UNLOCKED_GRAPH_ROUTE,
     ) {
         vaultUnlockedNavBarDestination(
+            onNavigateToFolders = { navController.navigateToFolders() },
             onNavigateToVaultAddItem = {
                 navController.navigateToVaultAddEditItem(VaultAddEditType.AddItem)
             },
@@ -59,5 +62,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         newSendDestination(onNavigateBack = { navController.popBackStack() })
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
+        foldersDestination(onNavigateBack = { navController.popBackStack() })
     }
 }
