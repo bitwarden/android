@@ -37,6 +37,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val initialDuckDuckGoState = createDuckDuckGoState()
     private val duckDuckGoSavedStateHandle = createSavedStateHandleWithState(initialDuckDuckGoState)
 
+    private val initialFastMailState = createFastMailState()
+    private val fastMailSavedStateHandle = createSavedStateHandleWithState(initialFastMailState)
+
     private val initialFirefoxRelay = createFirefoxRelayState()
     private val firefoxRelaySavedStateHandle = createSavedStateHandleWithState(initialFirefoxRelay)
 
@@ -1084,6 +1087,50 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class FastMailActions {
+        private val defaultFastMailState = createFastMailState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(fastMailSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Test
+        fun `ApiKeyTextChange should update api key text correctly`() = runTest {
+            val newApiKey = "newApiKey"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .FastMail.ApiKeyTextChange(
+                    apiKey = newApiKey,
+                )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultFastMailState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .FastMail(
+                                apiKey = newApiKey,
+                            ),
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
     inner class FirefoxRelayActions {
         private val defaultFirefoxRelayState = createFirefoxRelayState()
         private lateinit var viewModel: GeneratorViewModel
@@ -1367,6 +1414,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .ForwardedEmailAlias
                         .ServiceType
                         .DuckDuckGo(),
+                ),
+            ),
+        )
+
+    private fun createFastMailState(
+        generatedText: String = "defaultFastMail",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                    selectedServiceType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceType
+                        .FastMail(),
                 ),
             ),
         )

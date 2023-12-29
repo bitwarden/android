@@ -126,6 +126,10 @@ class GeneratorViewModel @Inject constructor(
                 handleDuckDuckGoTextInputChange(action)
             }
 
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.FastMail.ApiKeyTextChange -> {
+                handleFastMailTextInputChange(action)
+            }
+
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.FirefoxRelay.AccessTokenTextChange -> {
                 handleFirefoxRelayTextInputChange(action)
             }
@@ -692,6 +696,25 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion DuckDuckGo Service Specific Handlers
 
+    //region FastMail Service Specific Handlers
+
+    private fun handleFastMailTextInputChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .FastMail
+        .ApiKeyTextChange,
+    ) {
+        updateFastMailServiceType { fastMailServiceType ->
+            val newApiKey = action.apiKey
+            fastMailServiceType.copy(apiKey = newApiKey)
+        }
+    }
+
+    //endregion FastMail Service Specific Handlers
+
     //region FirefoxRelay Service Specific Handlers
 
     private fun handleFirefoxRelayTextInputChange(
@@ -903,6 +926,30 @@ class GeneratorViewModel @Inject constructor(
 
             val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
             if (currentServiceType !is DuckDuckGo) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val updatedServiceType = block(currentServiceType)
+
+            currentUsernameType.copy(
+                selectedType = ForwardedEmailAlias(
+                    selectedServiceType = updatedServiceType,
+                    obfuscatedText = currentUsernameType.selectedType.obfuscatedText,
+                ),
+            )
+        }
+    }
+
+    private inline fun updateFastMailServiceType(
+        crossinline block: (FastMail) -> FastMail,
+    ) {
+        updateGeneratorMainTypeUsername { currentUsernameType ->
+            if (currentUsernameType.selectedType !is ForwardedEmailAlias) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
+            if (currentServiceType !is FastMail) {
                 return@updateGeneratorMainTypeUsername currentUsernameType
             }
 
@@ -1622,6 +1669,19 @@ sealed class GeneratorAction {
                          * @property apiKey The new api key text.
                          */
                         data class ApiKeyTextChange(val apiKey: String) : DuckDuckGo()
+                    }
+
+                    /**
+                     * Represents actions specifically related to the FastMail service.
+                     */
+                    sealed class FastMail : ForwardedEmailAlias() {
+
+                        /**
+                         * Fired when the api key input text is changed.
+                         *
+                         * @property apiKey The new api key text.
+                         */
+                        data class ApiKeyTextChange(val apiKey: String) : FastMail()
                     }
 
                     /**
