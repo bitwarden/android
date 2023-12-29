@@ -17,7 +17,7 @@ private const val VAULT_ITEM_ROUTE = "$VAULT_ITEM_PREFIX/{$VAULT_ITEM_ID}"
  * Class to retrieve vault item arguments from the [SavedStateHandle].
  */
 @OmitFromCoverage
-class VaultItemArgs(val vaultItemId: String) {
+data class VaultItemArgs(val vaultItemId: String) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         checkNotNull(savedStateHandle[VAULT_ITEM_ID]) as String,
     )

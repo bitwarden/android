@@ -28,7 +28,7 @@ private const val VAULT_ITEM_LISTING_ROUTE: String =
  * Class to retrieve vault item listing arguments from the [SavedStateHandle].
  */
 @OmitFromCoverage
-class VaultItemListingArgs(
+data class VaultItemListingArgs(
     val vaultItemListingType: VaultItemListingType,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
