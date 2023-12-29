@@ -9,11 +9,37 @@ import org.junit.jupiter.api.Test
 class VaultSettingsViewModelTest : BaseViewModelTest() {
 
     @Test
-    fun `on BackClick should emit NavigateBack`() = runTest {
-        val viewModel = VaultSettingsViewModel()
+    fun `BackClick should emit NavigateBack`() = runTest {
+        val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultSettingsAction.BackClick)
             assertEquals(VaultSettingsEvent.NavigateBack, awaitItem())
         }
     }
+
+    @Test
+    fun `ExportVaultClick should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultSettingsAction.ExportVaultClick)
+            assertEquals(
+                VaultSettingsEvent.ShowToast("Not yet implemented."),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ImportItemsClick should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
+            assertEquals(
+                VaultSettingsEvent.ShowToast("Not yet implemented."),
+                awaitItem(),
+            )
+        }
+    }
+
+    private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel()
 }

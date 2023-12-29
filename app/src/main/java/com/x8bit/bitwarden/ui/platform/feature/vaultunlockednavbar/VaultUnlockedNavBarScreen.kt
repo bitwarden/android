@@ -62,6 +62,7 @@ import kotlinx.parcelize.Parcelize
 /**
  * Top level composable for the Vault Unlocked Screen.
  */
+@Suppress("LongParameterList")
 @Composable
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
@@ -71,6 +72,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToNewSend: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
+    onNavigateToFolders: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
@@ -102,6 +104,7 @@ fun VaultUnlockedNavBarScreen(
         navigateToVaultAddItem = onNavigateToVaultAddItem,
         navigateToNewSend = onNavigateToNewSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
+        navigateToFolders = onNavigateToFolders,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
         generatorTabClickedAction = {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
@@ -134,6 +137,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     navigateToNewSend: () -> Unit,
     navigateToDeleteAccount: () -> Unit,
+    navigateToFolders: () -> Unit,
     navigateToPasswordHistory: () -> Unit,
 ) {
     var shouldDimNavBar by remember { mutableStateOf(false) }
@@ -200,6 +204,7 @@ private fun VaultUnlockedNavBarScaffold(
             settingsGraph(
                 navController = navController,
                 onNavigateToDeleteAccount = navigateToDeleteAccount,
+                onNavigateToFolders = navigateToFolders,
             )
         }
     }
