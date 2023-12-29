@@ -24,7 +24,7 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
  * Class to retrieve vault add & edit arguments from the [SavedStateHandle].
  */
 @OmitFromCoverage
-class VaultAddEditItemArgs(
+data class VaultAddEditItemArgs(
     val vaultAddEditType: VaultAddEditType,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
