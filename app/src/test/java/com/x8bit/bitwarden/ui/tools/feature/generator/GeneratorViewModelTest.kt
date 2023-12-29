@@ -43,6 +43,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val initialFirefoxRelay = createFirefoxRelayState()
     private val firefoxRelaySavedStateHandle = createSavedStateHandleWithState(initialFirefoxRelay)
 
+    private val initialSimpleLogin = createSimpleLoginState()
+    private val simpleLoginSavedStateHandle = createSavedStateHandleWithState(initialSimpleLogin)
+
     private val initialCatchAllEmailState = createCatchAllEmailState()
     private val catchAllEmailSavedStateHandle =
         createSavedStateHandleWithState(initialCatchAllEmailState)
@@ -1176,6 +1179,51 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class SimpleLoginActions {
+        private val defaultSimpleLoginState = createSimpleLoginState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = GeneratorViewModel(simpleLoginSavedStateHandle, fakeGeneratorRepository)
+        }
+
+        @Test
+        fun `ApiKeyTextChange should update api key text correctly`() = runTest {
+            val newApiKey = "newApiKey"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .SimpleLogin
+                .ApiKeyTextChange(
+                    apiKey = newApiKey,
+                )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultSimpleLoginState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(
+                                apiKey = newApiKey,
+                            ),
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
     inner class PlusAddressedEmailActions {
         private val defaultPlusAddressedEmailState = createPlusAddressedEmailState()
         private lateinit var viewModel: GeneratorViewModel
@@ -1450,6 +1498,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .ForwardedEmailAlias
                         .ServiceType
                         .FirefoxRelay(),
+                ),
+            ),
+        )
+
+    private fun createSimpleLoginState(
+        generatedText: String = "defaultSimpleLogin",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                    selectedServiceType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceType
+                        .SimpleLogin(),
                 ),
             ),
         )

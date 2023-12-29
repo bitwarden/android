@@ -71,7 +71,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     override fun handleAction(action: GeneratorAction) {
         when (action) {
             is GeneratorAction.PasswordHistoryClick -> {
@@ -132,6 +132,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.FirefoxRelay.AccessTokenTextChange -> {
                 handleFirefoxRelayTextInputChange(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.SimpleLogin.ApiKeyTextChange -> {
+                handleSimpleLoginTextInputChange(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange -> {
@@ -734,6 +738,25 @@ class GeneratorViewModel @Inject constructor(
 
     //endregion FirefoxRelay Service Specific Handlers
 
+    //region SimpleLogin Service Specific Handlers
+
+    private fun handleSimpleLoginTextInputChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .SimpleLogin
+        .ApiKeyTextChange,
+    ) {
+        updateSimpleLoginServiceType { simpleLoginServiceType ->
+            val newApiKey = action.apiKey
+            simpleLoginServiceType.copy(apiKey = newApiKey)
+        }
+    }
+
+    //endregion SimpleLogin Service Specific Handlers
+
     //region Plus Addressed Email Specific Handlers
 
     private fun handlePlusAddressedEmailTextInputChange(
@@ -974,6 +997,30 @@ class GeneratorViewModel @Inject constructor(
 
             val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
             if (currentServiceType !is FirefoxRelay) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val updatedServiceType = block(currentServiceType)
+
+            currentUsernameType.copy(
+                selectedType = ForwardedEmailAlias(
+                    selectedServiceType = updatedServiceType,
+                    obfuscatedText = currentUsernameType.selectedType.obfuscatedText,
+                ),
+            )
+        }
+    }
+
+    private inline fun updateSimpleLoginServiceType(
+        crossinline block: (SimpleLogin) -> SimpleLogin,
+    ) {
+        updateGeneratorMainTypeUsername { currentUsernameType ->
+            if (currentUsernameType.selectedType !is ForwardedEmailAlias) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val currentServiceType = (currentUsernameType.selectedType).selectedServiceType
+            if (currentServiceType !is SimpleLogin) {
                 return@updateGeneratorMainTypeUsername currentUsernameType
             }
 
@@ -1695,6 +1742,19 @@ sealed class GeneratorAction {
                          * @property accessToken The new access token text.
                          */
                         data class AccessTokenTextChange(val accessToken: String) : FirefoxRelay()
+                    }
+
+                    /**
+                     * Represents actions specifically related to the SimpleLogin service.
+                     */
+                    sealed class SimpleLogin : ForwardedEmailAlias() {
+
+                        /**
+                         * Fired when the api key input text is changed.
+                         *
+                         * @property apiKey The new api key text.
+                         */
+                        data class ApiKeyTextChange(val apiKey: String) : SimpleLogin()
                     }
                 }
 
