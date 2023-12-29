@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
+import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,8 @@ fun TopAppBarScrollBehavior.toScrolledContainerColor(
     return lerp(
         start = expandedColor,
         stop = collapsedColor,
-        fraction = progressFraction,
+        // The easing function here matches what is currently in TopAppBarColors.containerColor and
+        // is necessary to match to the app bar color through the full range of motion.
+        fraction = FastOutLinearInEasing.transform(progressFraction),
     )
 }
