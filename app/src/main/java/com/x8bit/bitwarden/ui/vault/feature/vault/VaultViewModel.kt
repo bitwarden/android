@@ -61,6 +61,11 @@ class VaultViewModel @Inject constructor(
         )
     },
 ) {
+    /**
+     * Helper for retrieving the selected vault filter type from the state (or a default).
+     */
+    private val vaultFilterTypeOrDefault: VaultFilterType
+        get() = state.vaultFilterData?.selectedVaultFilterType ?: VaultFilterType.AllVaults
 
     init {
         vaultRepository
@@ -193,6 +198,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleVaultFilterTypeSelect(action: VaultAction.VaultFilterTypeSelect) {
+        // Update the current filter
         mutableStateFlow.update {
             it.copy(
                 vaultFilterData = it.vaultFilterData?.copy(
@@ -200,6 +206,9 @@ class VaultViewModel @Inject constructor(
                 ),
             )
         }
+
+        // Re-process the current vault data with the new filter
+        updateViewState(vaultData = vaultRepository.vaultDataStateFlow.value)
     }
 
     private fun handleTrashClick() {
@@ -253,7 +262,11 @@ class VaultViewModel @Inject constructor(
         // navigating.
         if (state.isSwitchingAccounts) return
 
-        when (val vaultData = action.vaultData) {
+        updateViewState(vaultData = action.vaultData)
+    }
+
+    private fun updateViewState(vaultData: DataState<VaultData>) {
+        when (vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
             is DataState.Loaded -> vaultLoadedReceive(vaultData = vaultData)
             is DataState.Loading -> vaultLoadingReceive()
@@ -265,13 +278,16 @@ class VaultViewModel @Inject constructor(
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
         mutableStateFlow.updateToErrorStateOrDialog(
             vaultData = vaultData.data,
+            vaultFilterType = vaultFilterTypeOrDefault,
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
         )
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
-        mutableStateFlow.update { it.copy(viewState = vaultData.data.toViewState()) }
+        mutableStateFlow.update {
+            it.copy(viewState = vaultData.data.toViewState(vaultFilterTypeOrDefault))
+        }
     }
 
     private fun vaultLoadingReceive() {
@@ -281,6 +297,7 @@ class VaultViewModel @Inject constructor(
     private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
         mutableStateFlow.updateToErrorStateOrDialog(
             vaultData = vaultData.data,
+            vaultFilterType = vaultFilterTypeOrDefault,
             errorTitle = R.string.internet_connection_required_title.asText(),
             errorMessage = R.string.internet_connection_required_message.asText(),
         )
@@ -288,7 +305,9 @@ class VaultViewModel @Inject constructor(
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
         // TODO update state to refresh state BIT-505
-        mutableStateFlow.update { it.copy(viewState = vaultData.data.toViewState()) }
+        mutableStateFlow.update {
+            it.copy(viewState = vaultData.data.toViewState(vaultFilterTypeOrDefault))
+        }
         sendEvent(VaultEvent.ShowToast(message = "Refreshing"))
     }
 
@@ -741,13 +760,14 @@ sealed class VaultAction {
 
 private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     vaultData: VaultData?,
+    vaultFilterType: VaultFilterType,
     errorTitle: Text,
     errorMessage: Text,
 ) {
     this.update {
         if (vaultData != null) {
             it.copy(
-                viewState = vaultData.toViewState(),
+                viewState = vaultData.toViewState(vaultFilterType = vaultFilterType),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,
                     message = errorMessage,

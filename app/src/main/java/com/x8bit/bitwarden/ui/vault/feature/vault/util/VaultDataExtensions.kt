@@ -1,11 +1,15 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
+import com.bitwarden.core.FolderView
 import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
@@ -17,6 +21,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import java.time.Instant
 
 /**
@@ -55,41 +60,45 @@ private fun CipherView.toVaultItemOrNull(): VaultState.ViewState.VaultItem? {
 }
 
 /**
- * Transforms [VaultData] into [VaultState.ViewState].
+ * Transforms [VaultData] into [VaultState.ViewState] using the given [vaultFilterType].
  */
-fun VaultData.toViewState(): VaultState.ViewState =
-    if (cipherViewList.isEmpty() && folderViewList.isEmpty()) {
+fun VaultData.toViewState(
+    vaultFilterType: VaultFilterType,
+): VaultState.ViewState {
+    val filteredCipherViewList = cipherViewList.toFilteredList(vaultFilterType)
+    val filteredFolderViewList = folderViewList.toFilteredList(vaultFilterType)
+    val filteredCollectionViewList = collectionViewList.toFilteredList(vaultFilterType)
+
+    return if (filteredCipherViewList.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
-        // Filter out any items with invalid IDs in the unlikely case they exist
-        val filteredCipherViewList = cipherViewList.filterNot { it.id.isNullOrBlank() }
         VaultState.ViewState.Content(
             loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
             cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },
             identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },
             secureNoteItemsCount = filteredCipherViewList
                 .count { it.type == CipherType.SECURE_NOTE },
-            favoriteItems = cipherViewList
+            favoriteItems = filteredCipherViewList
                 .filter { it.favorite }
                 .mapNotNull { it.toVaultItemOrNull() },
-            folderItems = folderViewList.map { folderView ->
+            folderItems = filteredFolderViewList.map { folderView ->
                 VaultState.ViewState.FolderItem(
                     id = folderView.id,
                     name = folderView.name.asText(),
-                    itemCount = cipherViewList
+                    itemCount = filteredCipherViewList
                         .count { !it.id.isNullOrBlank() && folderView.id == it.folderId },
                 )
             },
-            noFolderItems = cipherViewList
+            noFolderItems = filteredCipherViewList
                 .filter { it.folderId.isNullOrBlank() }
                 .mapNotNull { it.toVaultItemOrNull() },
-            collectionItems = collectionViewList
+            collectionItems = filteredCollectionViewList
                 .filter { it.id != null }
                 .map { collectionView ->
                     VaultState.ViewState.CollectionItem(
                         id = requireNotNull(collectionView.id),
                         name = collectionView.name,
-                        itemCount = cipherViewList
+                        itemCount = filteredCipherViewList
                             .count {
                                 !it.id.isNullOrBlank() &&
                                     collectionView.id in it.collectionIds
@@ -100,6 +109,55 @@ fun VaultData.toViewState(): VaultState.ViewState =
             trashItemsCount = 0,
         )
     }
+}
+
+@JvmName("toFilteredCipherList")
+private fun List<CipherView>.toFilteredList(
+    vaultFilterType: VaultFilterType,
+): List<CipherView> =
+    this
+        // Filter out any items with invalid IDs in the unlikely case they exist
+        .filterNot { it.id.isNullOrBlank() }
+        .filter {
+            when (vaultFilterType) {
+                VaultFilterType.AllVaults -> true
+                VaultFilterType.MyVault -> it.organizationId == null
+                is VaultFilterType.OrganizationVault -> {
+                    it.organizationId == vaultFilterType.organizationId
+                }
+            }
+        }
+
+@JvmName("toFilteredFolderList")
+private fun List<FolderView>.toFilteredList(
+    vaultFilterType: VaultFilterType,
+): List<FolderView> =
+    this
+        .filter {
+            when (vaultFilterType) {
+                // Folders are only included when including the user's personal data.
+                VaultFilterType.AllVaults,
+                VaultFilterType.MyVault,
+                -> true
+
+                is VaultFilterType.OrganizationVault -> false
+            }
+        }
+
+@JvmName("toFilteredCollectionList")
+private fun List<CollectionView>.toFilteredList(
+    vaultFilterType: VaultFilterType,
+): List<CollectionView> =
+    this
+        .filter {
+            when (vaultFilterType) {
+                VaultFilterType.AllVaults -> true
+                VaultFilterType.MyVault -> false
+                is VaultFilterType.OrganizationVault -> {
+                    it.organizationId == vaultFilterType.organizationId
+                }
+            }
+        }
 
 /**
  * Transforms a [VaultAddItemState.ViewState.ItemType] into [CipherView].

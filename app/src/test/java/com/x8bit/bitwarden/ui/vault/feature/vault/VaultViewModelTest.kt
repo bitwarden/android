@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
@@ -306,14 +307,19 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on VaultFilterTypeSelect should update the selected filter type`() {
-        val viewModel = createViewModel()
-
-        // Update to state with filters
-        val initialState = DEFAULT_STATE.copy(
-            appBarTitle = R.string.vaults.asText(),
-            vaultFilterData = VAULT_FILTER_DATA,
+    fun `on VaultFilterTypeSelect should update the selected filter type and re-filter any existing data`() {
+        // Update to state with filters and content
+        val vaultData = VaultData(
+            cipherViewList = listOf(createMockCipherView(number = 1)),
+            collectionViewList = listOf(createMockCollectionView(number = 1)),
+            folderViewList = listOf(createMockFolderView(number = 1)),
+        )
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.Loaded(
+                data = vaultData,
+            ),
         )
         mutableUserStateFlow.value = DEFAULT_USER_STATE
             .copy(
@@ -329,6 +335,14 @@ class VaultViewModelTest : BaseViewModelTest() {
                     DEFAULT_USER_STATE.accounts[1],
                 ),
             )
+        val viewModel = createViewModel()
+        val initialState = createMockVaultState(
+            viewState = vaultData.toViewState(VaultFilterType.AllVaults),
+        )
+            .copy(
+                appBarTitle = R.string.vaults.asText(),
+                vaultFilterData = VAULT_FILTER_DATA,
+            )
         assertEquals(
             initialState,
             viewModel.stateFlow.value,
@@ -341,6 +355,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 vaultFilterData = VAULT_FILTER_DATA.copy(
                     selectedVaultFilterType = VaultFilterType.MyVault,
                 ),
+                viewState = vaultData.toViewState(VaultFilterType.MyVault),
             ),
             viewModel.stateFlow.value,
         )
