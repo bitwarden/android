@@ -5,10 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val EMAIL_ADDRESS: String = "email_address"
 private const val CAPTCHA_TOKEN = "captcha_token"
@@ -47,7 +46,7 @@ fun NavGraphBuilder.loginDestination(
     onNavigateToEnterpriseSignOn: () -> Unit,
     onNavigateToLoginWithDevice: () -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = LOGIN_ROUTE,
         arguments = listOf(
             navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
@@ -56,10 +55,6 @@ fun NavGraphBuilder.loginDestination(
                 nullable = true
             },
         ),
-        enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.stay,
-        popEnterTransition = TransitionProviders.Enter.stay,
-        popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         LoginScreen(
             onNavigateBack = onNavigateBack,

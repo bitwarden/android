@@ -3,8 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val NEW_SEND_ROUTE = "new_send"
 
@@ -14,12 +13,8 @@ private const val NEW_SEND_ROUTE = "new_send"
 fun NavGraphBuilder.newSendDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = NEW_SEND_ROUTE,
-        enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.slideDown,
-        popEnterTransition = TransitionProviders.Enter.slideUp,
-        popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         NewSendScreen(onNavigateBack = onNavigateBack)
     }

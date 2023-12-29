@@ -3,8 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 
 private const val AUTO_FILL_ROUTE = "settings_auto_fill"
 
@@ -14,12 +13,8 @@ private const val AUTO_FILL_ROUTE = "settings_auto_fill"
 fun NavGraphBuilder.autoFillDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithPushTransitions(
         route = AUTO_FILL_ROUTE,
-        enterTransition = TransitionProviders.Enter.pushLeft,
-        exitTransition = TransitionProviders.Exit.pushLeft,
-        popEnterTransition = TransitionProviders.Enter.pushLeft,
-        popExitTransition = TransitionProviders.Exit.pushRight,
     ) {
         AutoFillScreen(onNavigateBack = onNavigateBack)
     }

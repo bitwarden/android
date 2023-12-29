@@ -5,9 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
 private const val CARD: String = "card"
@@ -48,7 +47,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateToVaultItemScreen: (id: String) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
 ) {
-    composable(
+    composableWithPushTransitions(
         route = VAULT_ITEM_LISTING_ROUTE,
         arguments = listOf(
             navArgument(
@@ -63,10 +62,6 @@ fun NavGraphBuilder.vaultItemListingDestination(
                 },
             ),
         ),
-        enterTransition = TransitionProviders.Enter.pushLeft,
-        exitTransition = TransitionProviders.Exit.pushLeft,
-        popEnterTransition = TransitionProviders.Enter.pushLeft,
-        popExitTransition = TransitionProviders.Exit.pushRight,
     ) {
         VaultItemListingScreen(
             onNavigateBack = onNavigateBack,

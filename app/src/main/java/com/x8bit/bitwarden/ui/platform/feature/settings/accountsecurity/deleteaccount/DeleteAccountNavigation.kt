@@ -3,8 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deletea
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val DELETE_ACCOUNT_ROUTE = "delete_account"
 
@@ -14,12 +13,8 @@ private const val DELETE_ACCOUNT_ROUTE = "delete_account"
 fun NavGraphBuilder.deleteAccountDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = DELETE_ACCOUNT_ROUTE,
-        enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.slideDown,
-        popEnterTransition = TransitionProviders.Enter.slideUp,
-        popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         DeleteAccountScreen(onNavigateBack = onNavigateBack)
     }

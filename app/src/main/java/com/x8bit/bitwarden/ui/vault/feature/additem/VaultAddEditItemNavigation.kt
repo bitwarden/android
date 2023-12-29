@@ -5,9 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 private const val ADD_TYPE: String = "add"
@@ -41,15 +40,11 @@ class VaultAddEditItemArgs(
 fun NavGraphBuilder.vaultAddEditItemDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = ADD_EDIT_ITEM_ROUTE,
         arguments = listOf(
             navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
         ),
-        enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.slideDown,
-        popEnterTransition = TransitionProviders.Enter.slideUp,
-        popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         VaultAddItemScreen(onNavigateBack)
     }

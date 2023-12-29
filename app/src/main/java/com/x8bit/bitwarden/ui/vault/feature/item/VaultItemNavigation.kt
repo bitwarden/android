@@ -5,10 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val VAULT_ITEM_PREFIX = "vault_item"
 private const val VAULT_ITEM_ID = "vault_item_id"
@@ -31,15 +30,11 @@ fun NavGraphBuilder.vaultItemDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = VAULT_ITEM_ROUTE,
         arguments = listOf(
             navArgument(VAULT_ITEM_ID) { type = NavType.StringType },
         ),
-        enterTransition = TransitionProviders.Enter.slideUp,
-        exitTransition = TransitionProviders.Exit.stay,
-        popEnterTransition = TransitionProviders.Enter.stay,
-        popExitTransition = TransitionProviders.Exit.slideDown,
     ) {
         VaultItemScreen(
             onNavigateBack = onNavigateBack,
