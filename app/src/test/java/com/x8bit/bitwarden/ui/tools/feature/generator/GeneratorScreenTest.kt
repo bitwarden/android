@@ -1055,6 +1055,46 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //endregion DuckDuckGo Service Type Tests
 
+    //region FastMail Service Type Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_FastMail state, updating api key text input should send ApiKeyTextChange action`() {
+        updateState(
+            GeneratorState(
+                generatedText = "Placeholder",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .FastMail(),
+                    ),
+                ),
+            ),
+        )
+
+        val newApiKey = "apiKey"
+
+        composeTestRule
+            .onNodeWithText("API key (required)")
+            .performScrollTo()
+            .performTextInput(newApiKey)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.FastMail.ApiKeyTextChange(
+                    apiKey = newApiKey,
+                ),
+            )
+        }
+    }
+
+    //endregion FastMail Service Type Tests
+
     //region FirefoxRelay Service Type Tests
 
     @Suppress("MaxLineLength")

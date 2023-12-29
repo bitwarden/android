@@ -868,7 +868,14 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
         }
 
         is ServiceType.FastMail -> {
-            // TODO: FastMail Service Implementation (BIT-712)
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.api_key_required_parenthesis),
+                value = usernameTypeState.selectedServiceType.apiKey,
+                onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
         }
 
         is ServiceType.FirefoxRelay -> {
@@ -1207,6 +1214,7 @@ private class ForwardedEmailAliasHandlers(
     val onAddyIoAccessTokenTextChange: (String) -> Unit,
     val onAddyIoDomainNameTextChange: (String) -> Unit,
     val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
+    val onFastMailApiKeyTextChange: (String) -> Unit,
     val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
 ) {
     companion object {
@@ -1259,6 +1267,19 @@ private class ForwardedEmailAliasHandlers(
                             .UsernameType
                             .ForwardedEmailAlias
                             .DuckDuckGo
+                            .ApiKeyTextChange(
+                                apiKey = newApiKey,
+                            ),
+                    )
+                },
+                onFastMailApiKeyTextChange = { newApiKey ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .FastMail
                             .ApiKeyTextChange(
                                 apiKey = newApiKey,
                             ),
