@@ -164,7 +164,7 @@ Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimi
     <value>Suojaa holvisi Touch ID:llä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Automaattitäytä kirjautumistiedot Safarissa, Chromessa sekä lukuisissa muissa sovelluksissa</value>
+    <value>Täytä kirjautumistietoja Safariin, Chromeen ja moniin muihin sovelluksiin</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synkronoi ja hallitse holviasi useilla laitteilla</value>
