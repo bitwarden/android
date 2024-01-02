@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -62,6 +63,11 @@ interface VaultRepository {
     val sendDataStateFlow: StateFlow<DataState<SendData>>
 
     /**
+     * Flow that represents the totp code.
+     */
+    val totpCodeFlow: Flow<String>
+
+    /**
      * Clear any previously unlocked, in-memory data (vault, send, etc).
      */
     fun clearUnlockedData()
@@ -97,6 +103,11 @@ interface VaultRepository {
      * Locks the vault for the user with the given [userId] if necessary.
      */
     fun lockVaultIfNecessary(userId: String)
+
+    /**
+     * Emits the totp code flow to listeners.
+     */
+    fun emitTotpCode(totpCode: String)
 
     /**
      * Attempt to unlock the vault and sync the vault data for the currently active user.

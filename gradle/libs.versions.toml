@@ -11,6 +11,7 @@ accompanist = "0.30.1"
 androidGradlePlugin = "8.2.0"
 androidxActivity = "1.8.2"
 androidxBrowser = "1.7.0"
+androidxCamera = "1.3.1"
 androidxComposeBom = "2023.10.01"
 # TODO: Once the Material3 color scheme changes are no longer in alpha, we should remove this
 #   individual dependency version and use the Compose BOM version (BIT-702).
@@ -52,6 +53,9 @@ zxing = "3.5.2"
 # Format: <maintainer>-<artifact-name>
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidxBrowser" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidxCamera" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidxCamera" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "androidxCamera" }
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidxComposeMaterial3" }

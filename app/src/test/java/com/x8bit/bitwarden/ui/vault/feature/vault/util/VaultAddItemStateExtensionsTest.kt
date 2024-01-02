@@ -31,10 +31,12 @@ class VaultAddItemStateExtensionsTest {
         unmockkStatic(Instant::class)
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `toCipherView should transform Login ItemType to CipherView`() {
         mockkStatic(Instant::class)
         every { Instant.now() } returns Instant.MIN
+
         val loginItemType = VaultAddItemState.ViewState.Content(
             common = VaultAddItemState.ViewState.Content.Common(
                 name = "mockName-1",
@@ -48,6 +50,7 @@ class VaultAddItemStateExtensionsTest {
                 username = "mockUsername-1",
                 password = "mockPassword-1",
                 uri = "mockUri-1",
+                totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
             ),
         )
 
@@ -73,7 +76,7 @@ class VaultAddItemStateExtensionsTest {
                             match = UriMatchType.DOMAIN,
                         ),
                     ),
-                    totp = null,
+                    totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     autofillOnPageLoad = null,
                 ),
                 identity = null,
@@ -96,6 +99,7 @@ class VaultAddItemStateExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `toCipherView should transform Login ItemType to CipherView with original cipher`() {
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
@@ -123,6 +127,7 @@ class VaultAddItemStateExtensionsTest {
                 username = "mockUsername-1",
                 password = "mockPassword-1",
                 uri = "mockUri-1",
+                totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
             ),
         )
 

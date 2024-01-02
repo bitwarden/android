@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.ui.vault.feature.additem
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -24,16 +26,19 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.FakePermissionManager
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
-import com.x8bit.bitwarden.ui.platform.base.util.FakePermissionManager
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +51,9 @@ import org.junit.Test
 class VaultAddItemScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateQrCodeScanScreenCalled = false
+
+    private val clipboardManager = mockk<ClipboardManager>()
 
     private val mutableEventFlow = MutableSharedFlow<VaultAddItemEvent>(Int.MAX_VALUE)
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -64,6 +72,10 @@ class VaultAddItemScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 permissionsManager = fakePermissionManager,
+                clipboardManager = clipboardManager,
+                onNavigateToQrCodeScanScreen = {
+                    onNavigateQrCodeScanScreenCalled = true
+                },
             )
         }
     }
@@ -72,6 +84,26 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `on NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(VaultAddItemEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on NavigateToQrCodeScan event should invoke NavigateToQrCodeScan`() {
+        mutableEventFlow.tryEmit(VaultAddItemEvent.NavigateToQrCodeScan)
+        assertTrue(onNavigateQrCodeScanScreenCalled)
+    }
+
+    @Test
+    fun `on CopyToClipboard should call setText on ClipboardManager`() {
+        val textString = "text"
+
+        every { clipboardManager.setText(textString.toAnnotatedString()) } just runs
+
+        mutableEventFlow.tryEmit(VaultAddItemEvent.CopyToClipboard(textString))
+
+        verify(exactly = 1) {
+            clipboardManager.setText(textString.toAnnotatedString())
+        }
     }
 
     @Test
@@ -207,12 +239,14 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
             .assertIsDisplayed()
 
-        mutableStateFlow.update { it.copy(
-            viewState = VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(),
-                type = VaultAddItemState.ViewState.Content.ItemType.Card,
-            ),
-        ) }
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultAddItemState.ViewState.Content(
+                    common = VaultAddItemState.ViewState.Content.Common(),
+                    type = VaultAddItemState.ViewState.Content.ItemType.Card,
+                ),
+            )
+        }
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Card")
@@ -321,6 +355,97 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `in ItemType_Login state the totp text field should be present based on state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = "TestCode") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TOTP")
+            .assertTextEquals("TOTP", "TestCode")
+
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = "NewTestCode") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("TOTP")
+            .assertTextEquals("TOTP", "NewTestCode")
+
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = null) }
+        }
+
+        composeTestRule
+            .onNodeWithText("TOTP")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking the copy totp code button should trigger CopyTotpKeyClick`() {
+        val testCode = "TestCode"
+
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = testCode) }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy TOTP")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick(testCode),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking the camera totp code button should trigger SetupTotpClick with result`() {
+        fakePermissionManager.checkPermissionResult = false
+        fakePermissionManager.getPermissionsResult = true
+        val testCode = "TestCode"
+
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = testCode) }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Camera")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                    isGranted = fakePermissionManager.getPermissionsResult,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Login state SetupTOTP button should be present based on state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = null) }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = "TestCode") }
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Set up TOTP")
+            .assertIsNotDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `in ItemType_Login state clicking SetupTOTP button with a positive result should send true if permission check returns true`() {
         fakePermissionManager.checkPermissionResult = true
 
@@ -347,7 +472,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(true),
+                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                    isGranted = true,
+                ),
             )
         }
     }
@@ -364,7 +491,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(false),
+                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                    isGranted = false,
+                ),
             )
         }
     }
@@ -1501,7 +1630,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     private fun updateLoginType(
         currentState: VaultAddItemState,
         transform: VaultAddItemState.ViewState.Content.ItemType.Login.() ->
-    VaultAddItemState.ViewState.Content.ItemType.Login,
+        VaultAddItemState.ViewState.Content.ItemType.Login,
     ): VaultAddItemState {
         val updatedType = when (val viewState = currentState.viewState) {
             is VaultAddItemState.ViewState.Content -> {
@@ -1511,9 +1640,11 @@ class VaultAddItemScreenTest : BaseComposeTest() {
                             type = type.transform(),
                         )
                     }
+
                     else -> viewState
                 }
             }
+
             else -> viewState
         }
         return currentState.copy(viewState = updatedType)
@@ -1532,9 +1663,11 @@ class VaultAddItemScreenTest : BaseComposeTest() {
                             type = type.transform(),
                         )
                     }
+
                     else -> viewState
                 }
             }
+
             else -> viewState
         }
         return currentState.copy(viewState = updatedType)
@@ -1549,6 +1682,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         val updatedType = when (val viewState = currentState.viewState) {
             is VaultAddItemState.ViewState.Content ->
                 viewState.copy(common = viewState.common.transform())
+
             else -> viewState
         }
         return currentState.copy(viewState = updatedType)
@@ -1591,7 +1725,11 @@ class VaultAddItemScreenTest : BaseComposeTest() {
                     customFieldData = listOf(
                         VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", false),
                         VaultAddItemState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
-                        VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", "TestHiddenVal"),
+                        VaultAddItemState.Custom.HiddenField(
+                            "Test ID",
+                            "TestHidden",
+                            "TestHiddenVal",
+                        ),
                     ),
                 ),
                 type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,

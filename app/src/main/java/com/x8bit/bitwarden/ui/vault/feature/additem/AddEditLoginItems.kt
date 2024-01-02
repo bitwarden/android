@@ -110,16 +110,49 @@ fun LazyListScope.addEditLoginItems(
         )
     }
 
-    item {
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenFilledTonalButtonWithIcon(
-            label = stringResource(id = R.string.setup_totp),
-            icon = painterResource(id = R.drawable.ic_light_bulb),
-            onClick = onTotpSetupClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
+    if (loginState.totp != null) {
+        item {
+            BitwardenTextFieldWithActions(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                label = stringResource(id = R.string.totp),
+                value = loginState.totp,
+                onValueChange = {},
+                readOnly = true,
+                singleLine = true,
+                actions = {
+                    BitwardenIconButtonWithResource(
+                        iconRes = IconResource(
+                            iconPainter = painterResource(id = R.drawable.ic_copy),
+                            contentDescription = stringResource(id = R.string.copy_totp),
+                        ),
+                        onClick = {
+                            loginItemTypeHandlers.onCopyTotpKeyClick(loginState.totp)
+                        },
+                    )
+                    BitwardenIconButtonWithResource(
+                        iconRes = IconResource(
+                            iconPainter = painterResource(id = R.drawable.ic_camera),
+                            contentDescription = stringResource(id = R.string.camera),
+                        ),
+                        onClick = onTotpSetupClick,
+                    )
+                },
+            )
+        }
+    } else {
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenFilledTonalButtonWithIcon(
+                label = stringResource(id = R.string.setup_totp),
+                icon = painterResource(id = R.drawable.ic_light_bulb),
+                onClick = onTotpSetupClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
     }
 
     item {

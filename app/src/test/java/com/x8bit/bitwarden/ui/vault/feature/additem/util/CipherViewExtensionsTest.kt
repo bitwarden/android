@@ -119,6 +119,7 @@ class CipherViewExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `toViewState should create a Login ViewState`() {
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
@@ -152,6 +153,7 @@ class CipherViewExtensionsTest {
                     username = "username",
                     password = "password",
                     uri = "www.example.com",
+                    totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                 ),
             ),
             result,

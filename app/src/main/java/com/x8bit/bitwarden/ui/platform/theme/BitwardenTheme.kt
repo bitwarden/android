@@ -165,7 +165,12 @@ val LocalNonMaterialColors: ProvidableCompositionLocal<NonMaterialColors> =
     compositionLocalOf {
         // Default value here will immediately be overridden in BitwardenTheme, similar
         // to how MaterialTheme works.
-        NonMaterialColors(Color.Transparent, Color.Transparent, Color.Transparent)
+        NonMaterialColors(
+            fingerprint = Color.Transparent,
+            passwordWeak = Color.Transparent,
+            passwordStrong = Color.Transparent,
+            qrCodeClickableText = Color.Transparent,
+        )
     }
 
 /**
@@ -175,6 +180,7 @@ data class NonMaterialColors(
     val fingerprint: Color,
     val passwordWeak: Color,
     val passwordStrong: Color,
+    val qrCodeClickableText: Color,
 )
 
 private fun lightNonMaterialColors(context: Context): NonMaterialColors =
@@ -182,6 +188,7 @@ private fun lightNonMaterialColors(context: Context): NonMaterialColors =
         fingerprint = R.color.light_fingerprint.toColor(context),
         passwordWeak = R.color.light_password_strength_weak.toColor(context),
         passwordStrong = R.color.light_password_strength_strong.toColor(context),
+        qrCodeClickableText = R.color.qr_code_clickable_text.toColor(context),
     )
 
 private fun darkNonMaterialColors(context: Context): NonMaterialColors =
@@ -189,4 +196,5 @@ private fun darkNonMaterialColors(context: Context): NonMaterialColors =
         fingerprint = R.color.dark_fingerprint.toColor(context),
         passwordWeak = R.color.dark_password_strength_weak.toColor(context),
         passwordStrong = R.color.dark_password_strength_strong.toColor(context),
+        qrCodeClickableText = R.color.qr_code_clickable_text.toColor(context),
     )

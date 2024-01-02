@@ -13,6 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManagerImpl
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
@@ -42,17 +45,28 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTy
 @Composable
 fun VaultAddItemScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToQrCodeScanScreen: () -> Unit,
     viewModel: VaultAddItemViewModel = hiltViewModel(),
+    clipboardManager: ClipboardManager = LocalClipboardManager.current,
     permissionsManager: PermissionsManager =
         PermissionsManagerImpl(LocalContext.current as Activity),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = context.resources
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            is VaultAddItemEvent.NavigateToQrCodeScan -> {
+                onNavigateToQrCodeScanScreen()
+            }
+
             is VaultAddItemEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
+            }
+
+            is VaultAddItemEvent.CopyToClipboard -> {
+                clipboardManager.setText(event.text.toAnnotatedString())
             }
 
             VaultAddItemEvent.NavigateBack -> onNavigateBack.invoke()

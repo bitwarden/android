@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddEditItem
 import com.x8bit.bitwarden.ui.vault.feature.additem.vaultAddEditItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
+import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
@@ -53,13 +55,19 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToPasswordHistory = { navController.navigateToPasswordHistory() },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
-        vaultAddEditItemDestination(onNavigateBack = { navController.popBackStack() })
+        vaultAddEditItemDestination(
+            onNavigateToQrCodeScanScreen = {
+                navController.navigateToQrCodeScanScreen()
+            },
+            onNavigateBack = { navController.popBackStack() },
+        )
         vaultItemDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToVaultEditItem = {
                 navController.navigateToVaultAddEditItem(VaultAddEditType.EditItem(it))
             },
         )
+        vaultQrCodeScanDestination(onNavigateBack = { navController.popBackStack() })
         addSendDestination(onNavigateBack = { navController.popBackStack() })
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         foldersDestination(onNavigateBack = { navController.popBackStack() })
