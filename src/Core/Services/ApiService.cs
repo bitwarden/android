@@ -593,7 +593,8 @@ namespace Bit.Core.Services
 
         public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest, AuthRequestType authRequestType)
         {
-            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, authRequestType == AuthRequestType.AdminApproval ? "/auth-requests/admin-request" : "/auth-requests", passwordlessCreateLoginRequest, authRequestType == AuthRequestType.AdminApproval, true);
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, authRequestType == AuthRequestType.AdminApproval ? "/auth-requests/admin-request" : "/auth-requests", passwordlessCreateLoginRequest, authRequestType == AuthRequestType.AdminApproval, true,
+                (message) => message.Headers.Add("Device-Identifier", passwordlessCreateLoginRequest.DeviceIdentifier));
         }
 
         public Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string encKey, string encMasterPasswordHash, string deviceIdentifier, bool requestApproved)
