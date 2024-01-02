@@ -15,8 +15,8 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -83,9 +83,11 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.CopyCustomHiddenFieldClick -> {
                 handleCopyCustomHiddenFieldClick(action)
             }
+
             is VaultItemAction.Common.CopyCustomTextFieldClick -> {
                 handleCopyCustomTextFieldClick(action)
             }
+
             is VaultItemAction.Common.HiddenFieldVisibilityClicked -> {
                 handleHiddenFieldVisibilityClicked(action)
             }
@@ -291,17 +293,17 @@ class VaultItemViewModel @Inject constructor(
                 }
                 return@onLoginContent
             }
-                mutableStateFlow.update { currentState ->
-                    currentState.copy(
-                        viewState = content.copy(
-                            type = login.copy(
-                                passwordData = login.passwordData?.copy(
-                                    isVisible = action.isVisible,
-                                ),
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = content.copy(
+                        type = login.copy(
+                            passwordData = login.passwordData?.copy(
+                                isVisible = action.isVisible,
                             ),
                         ),
-                    )
-                }
+                    ),
+                )
+            }
         }
     }
 
