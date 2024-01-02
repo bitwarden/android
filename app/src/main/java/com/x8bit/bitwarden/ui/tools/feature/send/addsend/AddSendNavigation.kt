@@ -1,28 +1,28 @@
-package com.x8bit.bitwarden.ui.tools.feature.send
+package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
-private const val NEW_SEND_ROUTE = "new_send"
+private const val ADD_SEND_ROUTE = "add_send"
 
 /**
  * Add the new send screen to the nav graph.
  */
-fun NavGraphBuilder.newSendDestination(
+fun NavGraphBuilder.addSendDestination(
     onNavigateBack: () -> Unit,
 ) {
     composableWithSlideTransitions(
-        route = NEW_SEND_ROUTE,
+        route = ADD_SEND_ROUTE,
     ) {
-        NewSendScreen(onNavigateBack = onNavigateBack)
+        AddSendScreen(onNavigateBack = onNavigateBack)
     }
 }
 
 /**
  * Navigate to the new send screen.
  */
-fun NavController.navigateToNewSend(navOptions: NavOptions? = null) {
-    navigate(NEW_SEND_ROUTE, navOptions)
+fun NavController.navigateToAddSend(navOptions: NavOptions? = null) {
+    navigate(ADD_SEND_ROUTE, navOptions)
 }

@@ -11,13 +11,13 @@ const val SEND_GRAPH_ROUTE: String = "send_graph"
  * Add send destination to the nav graph.
  */
 fun NavGraphBuilder.sendGraph(
-    onNavigateToNewSend: () -> Unit,
+    onNavigateToAddSend: () -> Unit,
 ) {
     navigation(
         startDestination = SEND_ROUTE,
         route = SEND_GRAPH_ROUTE,
     ) {
-        sendDestination(onNavigateToNewSend = onNavigateToNewSend)
+        sendDestination(onNavigateToAddSend = onNavigateToAddSend)
     }
 }
 

@@ -39,7 +39,7 @@ class SendScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             SendScreen(
                 viewModel = viewModel,
-                onNavigateNewSend = { onNavigateToNewSendCalled = true },
+                onNavigateAddSend = { onNavigateToNewSendCalled = true },
                 intentHandler = intentHandler,
             )
         }
