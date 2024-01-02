@@ -30,6 +30,7 @@ class VaultAddLoginItemTypeHandlers(
     val onPasswordCheckerClick: () -> Unit,
     val onOpenPasswordGeneratorClick: () -> Unit,
     val onSetupTotpClick: (Boolean) -> Unit,
+    val onCopyTotpKeyClick: (String) -> Unit,
     val onUriSettingsClick: () -> Unit,
     val onAddNewUriClick: () -> Unit,
 ) {
@@ -85,6 +86,13 @@ class VaultAddLoginItemTypeHandlers(
                 },
                 onAddNewUriClick = {
                     viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.AddNewUriClick)
+                },
+                onCopyTotpKeyClick = { totpKey ->
+                    viewModel.trySendAction(
+                        VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick(
+                            totpKey,
+                        ),
+                    )
                 },
             )
         }

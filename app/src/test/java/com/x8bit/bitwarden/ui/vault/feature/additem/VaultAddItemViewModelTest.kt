@@ -23,6 +23,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -41,9 +42,15 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         state = loginInitialState,
         vaultAddEditType = VaultAddEditType.AddItem,
     )
+
+    private val totpTestCodeFlow: MutableSharedFlow<String> = MutableSharedFlow(
+        extraBufferCapacity = Int.MAX_VALUE,
+    )
+
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableVaultItemFlow
+        every { totpCodeFlow } returns totpTestCodeFlow
     }
 
     @BeforeEach
@@ -208,7 +215,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         } returns CreateCipherResult.Error
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
-            assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure"), awaitItem())
+            assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure".asText()), awaitItem())
         }
     }
 
@@ -286,7 +293,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
-            assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure"), awaitItem())
+            assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure".asText()), awaitItem())
         }
 
         coVerify(exactly = 1) {
@@ -434,7 +441,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                         VaultAddItemAction.ItemType.LoginType.OpenUsernameGeneratorClick,
                     )
                     assertEquals(
-                        VaultAddItemEvent.ShowToast("Open Username Generator"),
+                        VaultAddItemEvent.ShowToast("Open Username Generator".asText()),
                         awaitItem(),
                     )
                 }
@@ -450,7 +457,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                         .actionChannel
                         .trySend(VaultAddItemAction.ItemType.LoginType.PasswordCheckerClick)
 
-                    assertEquals(VaultAddItemEvent.ShowToast("Password Checker"), awaitItem())
+                    assertEquals(
+                        VaultAddItemEvent.ShowToast(
+                            "Password Checker".asText(),
+                        ),
+                        awaitItem(),
+                    )
                 }
             }
 
@@ -466,7 +478,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                         .trySend(VaultAddItemAction.ItemType.LoginType.OpenPasswordGeneratorClick)
 
                     assertEquals(
-                        VaultAddItemEvent.ShowToast("Open Password Generator"),
+                        VaultAddItemEvent.ShowToast("Open Password Generator".asText()),
                         awaitItem(),
                     )
                 }
@@ -474,17 +486,57 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `SetupTotpClick should emit ShowToast with permission granted when isGranted is true`() = runTest {
+        fun `SetupTotpClick should emit NavigateToQrCodeScan when isGranted is true`() =
+            runTest {
+                val viewModel = createAddVaultItemViewModel()
+
+                viewModel.eventFlow.test {
+                    viewModel.actionChannel.trySend(
+                        VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                           isGranted = true,
+                        ),
+                    )
+                    assertEquals(
+                        VaultAddItemEvent.NavigateToQrCodeScan,
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `SetupTotpClick should emit ShowToast with permission not granted when isGranted is false`() =
+            runTest {
+                val viewModel = createAddVaultItemViewModel()
+
+                viewModel.eventFlow.test {
+                    viewModel.actionChannel.trySend(
+                        VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                          isGranted = false,
+                        ),
+                    )
+                    assertEquals(
+                        VaultAddItemEvent.ShowToast("Permission Not Granted, Manual QR Code Entry Not Implemented".asText()),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `CopyTotpKeyClick should emit a toast and CopyToClipboard`() = runTest {
             val viewModel = createAddVaultItemViewModel()
+            val testKey = "TestKey"
 
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(
-                    VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
-                        true,
+                    VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick(
+                        testKey,
                     ),
                 )
+
                 assertEquals(
-                    VaultAddItemEvent.ShowToast("Permission Granted, QR Code Scanner Not Implemented"),
+                    VaultAddItemEvent.CopyToClipboard(testKey),
                     awaitItem(),
                 )
             }
@@ -492,18 +544,34 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `SetupTotpClick should emit ShowToast with permission not granted when isGranted is false`() = runTest {
+        fun `TotpCodeReceive should update totp code in state`() = runTest {
             val viewModel = createAddVaultItemViewModel()
+            val testKey = "TestKey"
+
+            val expectedState = loginInitialState.copy(
+                viewState = VaultAddItemState.ViewState.Content(
+                    common = createCommonContentViewState(),
+                    type = createLoginTypeContentViewState(
+                        totpCode = testKey,
+                    ),
+                ),
+            )
 
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(
-                    VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
-                        false,
+                    VaultAddItemAction.Internal.TotpCodeReceive(
+                        testKey,
                     ),
                 )
+
                 assertEquals(
-                    VaultAddItemEvent.ShowToast("Permission Not Granted, Manual QR Code Entry Not Implemented"),
+                    VaultAddItemEvent.ShowToast(R.string.authenticator_key_added.asText()),
                     awaitItem(),
+                )
+
+                assertEquals(
+                    expectedState,
+                    viewModel.stateFlow.value,
                 )
             }
         }
@@ -515,7 +583,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(VaultAddItemAction.ItemType.LoginType.UriSettingsClick)
-                assertEquals(VaultAddItemEvent.ShowToast("URI Settings"), awaitItem())
+                assertEquals(VaultAddItemEvent.ShowToast("URI Settings".asText()), awaitItem())
             }
         }
 
@@ -530,7 +598,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                         VaultAddItemAction.ItemType.LoginType.AddNewUriClick,
                     )
 
-                assertEquals(VaultAddItemEvent.ShowToast("Add New URI"), awaitItem())
+                assertEquals(VaultAddItemEvent.ShowToast("Add New URI".asText()), awaitItem())
             }
         }
     }
@@ -967,7 +1035,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         fun `AddNewCustomFieldClick should allow a user to add a custom boolean field in Secure notes item`() =
             runTest {
                 assertAddNewCustomFieldClick(
-                   initialState = vaultAddItemInitialState,
+                    initialState = vaultAddItemInitialState,
                     type = CustomFieldType.BOOLEAN,
                 )
             }
@@ -1075,7 +1143,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                     .trySend(
                         VaultAddItemAction.Common.TooltipClick,
                     )
-                assertEquals(VaultAddItemEvent.ShowToast("Not yet implemented"), awaitItem())
+                assertEquals(
+                    VaultAddItemEvent.ShowToast(
+                        "Not yet implemented".asText(),
+                    ),
+                    awaitItem(),
+                )
             }
         }
     }
@@ -1122,11 +1195,13 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         username: String = "",
         password: String = "",
         uri: String = "",
+        totpCode: String? = null,
     ): VaultAddItemState.ViewState.Content.ItemType.Login =
         VaultAddItemState.ViewState.Content.ItemType.Login(
             username = username,
             password = password,
             uri = uri,
+            totp = totpCode,
         )
 
     private fun createSavedStateHandleWithState(

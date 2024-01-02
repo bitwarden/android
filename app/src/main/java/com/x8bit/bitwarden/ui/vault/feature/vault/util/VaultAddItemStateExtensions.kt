@@ -115,8 +115,7 @@ private fun VaultAddItemState.ViewState.Content.ItemType.toLoginView(
                     match = UriMatchType.DOMAIN,
                 ),
             ),
-            // TODO Implement TOTP (BIT-1066)
-            totp = common.originalCipher?.login?.totp,
+            totp = it.totp,
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
         )
     }

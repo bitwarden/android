@@ -22,6 +22,7 @@ fun CipherView.toViewState(): VaultAddItemState.ViewState =
                     username = login?.username.orEmpty(),
                     password = login?.password.orEmpty(),
                     uri = login?.uris?.firstOrNull()?.uri.orEmpty(),
+                    totp = login?.totp,
                 )
             }
 

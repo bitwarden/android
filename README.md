@@ -67,6 +67,11 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Displays webpages with the user's default browser.
     - License: Apache 2.0
 
+- **AndroidX Camera**
+  - https://developer.android.com/jetpack/androidx/releases/camera
+  - Purpose: Display and capture images for barcode scanning.
+  - License: Apache 2.0
+
 - **Core SplashScreen**
     - https://developer.android.com/jetpack/androidx/releases/core
     - Purpose: Backwards compatible SplashScreen API implementation.

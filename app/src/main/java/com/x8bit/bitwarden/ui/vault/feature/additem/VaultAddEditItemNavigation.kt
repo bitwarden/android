@@ -40,6 +40,7 @@ data class VaultAddEditItemArgs(
  * Add the vault add & edit item screen to the nav graph.
  */
 fun NavGraphBuilder.vaultAddEditItemDestination(
+    onNavigateToQrCodeScanScreen: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -48,7 +49,7 @@ fun NavGraphBuilder.vaultAddEditItemDestination(
             navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
         ),
     ) {
-        VaultAddItemScreen(onNavigateBack)
+        VaultAddItemScreen(onNavigateBack, onNavigateToQrCodeScanScreen)
     }
 }
 

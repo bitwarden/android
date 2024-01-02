@@ -81,6 +81,12 @@ class VaultAddItemViewModel @Inject constructor(
                     .launchIn(viewModelScope)
             }
         }
+
+        vaultRepository
+            .totpCodeFlow
+            .map { VaultAddItemAction.Internal.TotpCodeReceive(totpCode = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultAddItemAction) {
@@ -294,7 +300,7 @@ class VaultAddItemViewModel @Inject constructor(
         // TODO Add the text for the prompt (BIT-1079)
         sendEvent(
             event = VaultAddItemEvent.ShowToast(
-                message = "Not yet implemented",
+                message = "Not yet implemented".asText(),
             ),
         )
     }
@@ -343,6 +349,10 @@ class VaultAddItemViewModel @Inject constructor(
             is VaultAddItemAction.ItemType.LoginType.AddNewUriClick -> {
                 handleLoginAddNewUriClick()
             }
+
+            is VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick -> {
+                handleLoginCopyTotpKeyText(action)
+            }
         }
     }
 
@@ -374,7 +384,7 @@ class VaultAddItemViewModel @Inject constructor(
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
-                    message = "Open Username Generator",
+                    message = "Open Username Generator".asText(),
                 ),
             )
         }
@@ -384,7 +394,7 @@ class VaultAddItemViewModel @Inject constructor(
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
-                    message = "Password Checker",
+                    message = "Password Checker".asText(),
                 ),
             )
         }
@@ -394,7 +404,7 @@ class VaultAddItemViewModel @Inject constructor(
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
-                    message = "Open Password Generator",
+                    message = "Open Password Generator".asText(),
                 ),
             )
         }
@@ -403,25 +413,34 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginSetupTotpClick(
         action: VaultAddItemAction.ItemType.LoginType.SetupTotpClick,
     ) {
-        viewModelScope.launch {
-            val message = if (action.isGranted) {
-                "Permission Granted, QR Code Scanner Not Implemented"
-            } else {
-                "Permission Not Granted, Manual QR Code Entry Not Implemented"
-            }
+        if (action.isGranted) {
+            sendEvent(event = VaultAddItemEvent.NavigateToQrCodeScan)
+        } else {
+            // TODO Add manual QR code entry (BIT-1114)
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
-                    message = message,
+                    message =
+                    "Permission Not Granted, Manual QR Code Entry Not Implemented".asText(),
                 ),
             )
         }
+    }
+
+    private fun handleLoginCopyTotpKeyText(
+        action: VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick,
+    ) {
+        sendEvent(
+            event = VaultAddItemEvent.CopyToClipboard(
+                text = action.totpKey,
+            ),
+        )
     }
 
     private fun handleLoginUriSettingsClick() {
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
-                    message = "URI Settings",
+                    message = "URI Settings".asText(),
                 ),
             )
         }
@@ -431,7 +450,7 @@ class VaultAddItemViewModel @Inject constructor(
         viewModelScope.launch {
             sendEvent(
                 event = VaultAddItemEvent.ShowToast(
-                    message = "Add New URI",
+                    message = "Add New URI".asText(),
                 ),
             )
         }
@@ -638,6 +657,7 @@ class VaultAddItemViewModel @Inject constructor(
             }
 
             is VaultAddItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultAddItemAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
         }
     }
 
@@ -653,7 +673,7 @@ class VaultAddItemViewModel @Inject constructor(
                 // TODO Display error dialog BIT-501
                 sendEvent(
                     event = VaultAddItemEvent.ShowToast(
-                        message = "Save Item Failure",
+                        message = "Save Item Failure".asText(),
                     ),
                 )
             }
@@ -673,7 +693,7 @@ class VaultAddItemViewModel @Inject constructor(
         when (action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
                 // TODO Display error dialog BIT-501
-                sendEvent(VaultAddItemEvent.ShowToast(message = "Save Item Failure"))
+                sendEvent(VaultAddItemEvent.ShowToast(message = "Save Item Failure".asText()))
             }
 
             is UpdateCipherResult.Success -> {
@@ -738,6 +758,18 @@ class VaultAddItemViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun handleVaultTotpCodeReceive(action: VaultAddItemAction.Internal.TotpCodeReceive) {
+        updateLoginContent { loginType ->
+            loginType.copy(totp = action.totpCode)
+        }
+
+        sendEvent(
+            event = VaultAddItemEvent.ShowToast(
+                message = R.string.authenticator_key_added.asText(),
+            ),
+        )
     }
 
     //endregion Internal Type Handlers
@@ -929,6 +961,7 @@ data class VaultAddItemState(
                     val username: String = "",
                     val password: String = "",
                     val uri: String = "",
+                    val totp: String? = null,
                 ) : ItemType() {
                     override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
                 }
@@ -1090,12 +1123,22 @@ sealed class VaultAddItemEvent {
     /**
      * Shows a toast with the given [message].
      */
-    data class ShowToast(val message: String) : VaultAddItemEvent()
+    data class ShowToast(val message: Text) : VaultAddItemEvent()
+
+    /**
+     * Copy the given [text] to the clipboard.
+     */
+    data class CopyToClipboard(val text: String) : VaultAddItemEvent()
 
     /**
      * Navigate back to previous screen.
      */
     data object NavigateBack : VaultAddItemEvent()
+
+    /**
+     * Navigate to the QR code scan screen.
+     */
+    data object NavigateToQrCodeScan : VaultAddItemEvent()
 }
 
 /**
@@ -1229,9 +1272,16 @@ sealed class VaultAddItemAction {
             /**
              * Represents the action to set up TOTP.
              *
-             * @property isGranted the status of the camera permission
+             * @property isGranted the status of the camera permission.
              */
             data class SetupTotpClick(val isGranted: Boolean) : LoginType()
+
+            /**
+             * Represents the action to copy the totp code to the clipboard.
+             *
+             * @property totpKey the totp key being copied.
+             */
+            data class CopyTotpKeyClick(val totpKey: String) : LoginType()
 
             /**
              * Represents the action to open the username generator.
@@ -1398,6 +1448,12 @@ sealed class VaultAddItemAction {
      * Models actions that the [VaultAddItemViewModel] itself might send.
      */
     sealed class Internal : VaultAddItemAction() {
+
+        /**
+         * Indicates that the vault totp code has been received.
+         */
+        data class TotpCodeReceive(val totpCode: String) : Internal()
+
         /**
          * Indicates that the vault item data has been received.
          */

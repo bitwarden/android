@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
@@ -43,6 +44,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -84,6 +86,8 @@ class VaultRepositoryImpl(
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
+    private val mutableTotpCodeFlow = bufferedMutableSharedFlow<String>()
+
     private val mutableVaultStateStateFlow =
         MutableStateFlow(VaultState(unlockedVaultUserIds = emptySet()))
 
@@ -121,6 +125,9 @@ class VaultRepositoryImpl(
                 started = SharingStarted.WhileSubscribed(stopTimeoutMillis = STOP_TIMEOUT_DELAY_MS),
                 initialValue = DataState.Loading,
             )
+
+    override val totpCodeFlow: Flow<String>
+        get() = mutableTotpCodeFlow.asSharedFlow()
 
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
@@ -259,6 +266,10 @@ class VaultRepositoryImpl(
 
     override fun lockVaultIfNecessary(userId: String) {
         setVaultToLocked(userId = userId)
+    }
+
+    override fun emitTotpCode(totpCode: String) {
+        mutableTotpCodeFlow.tryEmit(totpCode)
     }
 
     @Suppress("ReturnCount")
