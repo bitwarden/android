@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.disk.di
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.x8bit.bitwarden.data.tools.generator.datasource.disk.dao.PasswordHistoryDao
-import com.x8bit.bitwarden.data.tools.generator.datasource.disk.database.PasswordHistoryDatabase
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSourceImpl
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSourceImpl
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.dao.PasswordHistoryDao
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.database.PasswordHistoryDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
