@@ -94,7 +94,14 @@ namespace Bit.App.Pages
                 if (message.Command == "syncCompleted")
                 {
                     Device.BeginInvokeOnMainThread(async () => await UpdateVaultButtonTitleAsync());
-                    await ForcePasswordResetIfNeededAsync();
+                    try
+                    {
+                        await ForcePasswordResetIfNeededAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Value.Exception(ex);
+                    }
                 }
             });
             await UpdateVaultButtonTitleAsync();
