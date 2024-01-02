@@ -40,6 +40,16 @@
                     android:scheme="bitwarden" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".autofill.BitwardenAutofillService"
+            android:label="Bitwarden"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.autofill.AutofillService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
