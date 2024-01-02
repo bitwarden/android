@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
@@ -942,6 +943,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .ADDY_IO,
                 )
 
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultForwardedEmailAlias",
+                ),
+            )
+
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultForwardedEmailAliasState.copy(
@@ -989,6 +996,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     accessToken = newAccessToken,
                 )
 
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultAddyIo",
+                ),
+            )
+
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultAddyIoState.copy(
@@ -1006,7 +1019,6 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     ),
                 ),
             )
-
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
@@ -1022,6 +1034,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 .DomainTextChange(
                     domain = newDomainName,
                 )
+
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultAddyIo",
+                ),
+            )
 
             viewModel.actionChannel.trySend(action)
 
@@ -1067,6 +1085,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     apiKey = newApiKey,
                 )
 
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultDuckDuckGo",
+                ),
+            )
+
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultDuckDuckGoState.copy(
@@ -1110,6 +1134,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 .FastMail.ApiKeyTextChange(
                     apiKey = newApiKey,
                 )
+
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultFastMail",
+                ),
+            )
 
             viewModel.actionChannel.trySend(action)
 
@@ -1156,6 +1186,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     accessToken = newAccessToken,
                 )
 
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultFirefoxRelay",
+                ),
+            )
+
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultFirefoxRelayState.copy(
@@ -1200,6 +1236,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 .ApiKeyTextChange(
                     apiKey = newApiKey,
                 )
+
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultSimpleLogin",
+                ),
+            )
 
             viewModel.actionChannel.trySend(action)
 

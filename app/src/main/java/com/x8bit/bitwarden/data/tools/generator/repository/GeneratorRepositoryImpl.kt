@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.tools.generator.repository
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.core.PasswordHistoryView
+import com.bitwarden.core.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswor
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
@@ -118,6 +120,19 @@ class GeneratorRepositoryImpl(
                     GeneratedPassphraseResult.Success(generatedPassphrase)
                 },
                 onFailure = { GeneratedPassphraseResult.InvalidRequest },
+            )
+
+    override suspend fun generateForwardedServiceUsername(
+        forwardedServiceGeneratorRequest: UsernameGeneratorRequest.Forwarded,
+    ): GeneratedForwardedServiceUsernameResult =
+        generatorSdkSource.generateForwardedServiceEmail(forwardedServiceGeneratorRequest)
+            .fold(
+                onSuccess = { generatedEmail ->
+                    GeneratedForwardedServiceUsernameResult.Success(generatedEmail)
+                },
+                onFailure = {
+                    GeneratedForwardedServiceUsernameResult.InvalidRequest
+                },
             )
 
     override fun getPasscodeGenerationOptions(): PasscodeGenerationOptions? {

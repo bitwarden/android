@@ -3,8 +3,10 @@ package com.x8bit.bitwarden.data.tools.generator.repository.util
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.core.PasswordHistoryView
+import com.bitwarden.core.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
@@ -28,6 +30,11 @@ class FakeGeneratorRepository : GeneratorRepository {
     private val mutablePasswordHistoryStateFlow =
         MutableStateFlow<LocalDataState<List<PasswordHistoryView>>>(LocalDataState.Loading)
 
+    private var generateForwardedServiceResult: GeneratedForwardedServiceUsernameResult =
+        GeneratedForwardedServiceUsernameResult.Success(
+            generatedEmailAddress = "updatedUsername",
+        )
+
     override val passwordHistoryStateFlow: StateFlow<LocalDataState<List<PasswordHistoryView>>>
         get() = mutablePasswordHistoryStateFlow
 
@@ -42,6 +49,12 @@ class FakeGeneratorRepository : GeneratorRepository {
         passphraseGeneratorRequest: PassphraseGeneratorRequest,
     ): GeneratedPassphraseResult {
         return generatePassphraseResult
+    }
+
+    override suspend fun generateForwardedServiceUsername(
+        forwardedServiceGeneratorRequest: UsernameGeneratorRequest.Forwarded,
+    ): GeneratedForwardedServiceUsernameResult {
+        return generateForwardedServiceResult
     }
 
     override fun getPasscodeGenerationOptions(): PasscodeGenerationOptions? {
@@ -89,5 +102,12 @@ class FakeGeneratorRepository : GeneratorRepository {
      */
     fun emitPasswordHistoryState(state: LocalDataState<List<PasswordHistoryView>>) {
         mutablePasswordHistoryStateFlow.value = state
+    }
+
+    /**
+     * Sets the mock result for the generateForwardedService function.
+     */
+    fun setMockGenerateForwardedServiceResult(result: GeneratedForwardedServiceUsernameResult) {
+        generateForwardedServiceResult = result
     }
 }

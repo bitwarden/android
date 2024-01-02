@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.data.tools.generator.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.ForwarderServiceType
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.PasswordHistoryView
+import com.bitwarden.core.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -21,6 +23,7 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryD
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
@@ -249,6 +252,48 @@ class GeneratorRepositoryTest {
             assertTrue(result is GeneratedPassphraseResult.InvalidRequest)
             coVerify { generatorSdkSource.generatePassphrase(request) }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generateForwardedService should emit Success result and store the generated email`() = runTest {
+        val userId = "testUserId"
+        val request = UsernameGeneratorRequest.Forwarded(
+            service = ForwarderServiceType.DuckDuckGo(
+                token = "testToken",
+            ),
+            website = null,
+        )
+
+        val generatedEmail = "generated@email.com"
+
+        coEvery { authDiskSource.userState?.activeUserId } returns userId
+        coEvery { generatorSdkSource.generateForwardedServiceEmail(request) } returns
+            Result.success(generatedEmail)
+
+        val result = repository.generateForwardedServiceUsername(request)
+
+        assertEquals(
+            generatedEmail,
+            (result as GeneratedForwardedServiceUsernameResult.Success).generatedEmailAddress,
+        )
+        coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generateForwardedService should emit InvalidRequest result when SDK throws exception`() = runTest {
+        val request = UsernameGeneratorRequest.Forwarded(
+            service = ForwarderServiceType.DuckDuckGo(token = "testToken"),
+            website = null,
+        )
+        val exception = RuntimeException("An error occurred")
+        coEvery { generatorSdkSource.generateForwardedServiceEmail(request) } returns Result.failure(exception)
+
+        val result = repository.generateForwardedServiceUsername(request)
+
+        assertTrue(result is GeneratedForwardedServiceUsernameResult.InvalidRequest)
+        coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
+    }
 
     @Test
     fun `getPasscodeGenerationOptions should return options when available`() = runTest {
