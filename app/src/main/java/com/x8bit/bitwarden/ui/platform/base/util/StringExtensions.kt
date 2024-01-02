@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.platform.base.util
 
 import androidx.compose.runtime.Composable
@@ -154,3 +156,10 @@ fun String.toHexColorRepresentation(): String {
     val blue = ((hash and 0xFF0000) shr 16).toTwoDigitHexString()
     return "#ff$red$green$blue"
 }
+
+/**
+ * Returns a copy of this string having its first letter titlecased using the rules of the specified
+ * [locale], or the original string if it's empty or already starts with a title case letter.
+ */
+fun String.capitalize(locale: Locale = Locale.getDefault()): String =
+    replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }

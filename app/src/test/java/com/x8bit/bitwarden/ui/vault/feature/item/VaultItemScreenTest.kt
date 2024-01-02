@@ -752,6 +752,123 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.assertScrollableNodeDoesNotExist("Password history: ")
         composeTestRule.assertScrollableNodeDoesNotExist("1")
     }
+
+    @Test
+    fun `in identity state, identityName should be displayed according to state`() {
+        val identityName = "the identity name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(identityName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, username should be displayed according to state`() {
+        val identityName = "the username"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(username = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, company should be displayed according to state`() {
+        val identityName = "the company name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(company = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, ssn should be displayed according to state`() {
+        val identityName = "the SSN"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(ssn = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, passportNumber should be displayed according to state`() {
+        val identityName = "the passport number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(passportNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, licenseNumber should be displayed according to state`() {
+        val identityName = "the license number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(licenseNumber = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, email should be displayed according to state`() {
+        val identityName = "the email address"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(email = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, phone should be displayed according to state`() {
+        val identityName = "the phone number"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(phone = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
+
+    @Test
+    fun `in identity state, address should be displayed according to state`() {
+        val identityName = "the address"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(identityName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateIdentityType(currentState) { copy(address = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(identityName)
+    }
 }
 
 //region Helper functions
@@ -775,6 +892,28 @@ private fun updateLoginType(
             }
         }
 
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+@Suppress("MaxLineLength")
+private fun updateIdentityType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.Identity.() ->
+    VaultItemState.ViewState.Content.ItemType.Identity,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.Identity -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+                else -> viewState
+            }
+        }
         else -> viewState
     }
     return currentState.copy(viewState = updatedType)
@@ -805,57 +944,70 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     dialog = null,
 )
 
-private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
-    VaultItemState.ViewState.Content(
-        type = VaultItemState.ViewState.Content.ItemType.Login(
-            passwordHistoryCount = 1,
-            username = "the username",
-            passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
-                password = "the password",
+private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
+    VaultItemState.ViewState.Content.Common(
+        lastUpdated = "12/31/69 06:16 PM",
+        name = "login cipher",
+        notes = "Lots of notes",
+        isPremiumUser = true,
+        customFields = listOf(
+            VaultItemState.ViewState.Content.Common.Custom.TextField(
+                name = "text",
+                value = "value",
+                isCopyable = true,
+            ),
+            VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                name = "hidden",
+                value = "hidden password",
+                isCopyable = true,
                 isVisible = false,
             ),
-            uris = listOf(
-                VaultItemState.ViewState.Content.ItemType.Login.UriData(
-                    uri = "www.example.com",
-                    isCopyable = true,
-                    isLaunchable = true,
-                ),
+            VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+                name = "boolean",
+                value = true,
             ),
-            passwordRevisionDate = "4/14/83 3:56 PM",
-            totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
-        ),
-        common = VaultItemState.ViewState.Content.Common(
-            lastUpdated = "12/31/69 06:16 PM",
-            name = "login cipher",
-            notes = "Lots of notes",
-            isPremiumUser = true,
-            customFields = listOf(
-                VaultItemState.ViewState.Content.Common.Custom.TextField(
-                    name = "text",
-                    value = "value",
-                    isCopyable = true,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.HiddenField(
-                    name = "hidden",
-                    value = "hidden password",
-                    isCopyable = true,
-                    isVisible = false,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.BooleanField(
-                    name = "boolean",
-                    value = true,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
-                    name = "linked username",
-                    vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
-                    name = "linked password",
-                    vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
-                ),
+            VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                name = "linked username",
+                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
             ),
-            requiresReprompt = true,
+            VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                name = "linked password",
+                vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
+            ),
         ),
+        requiresReprompt = true,
+    )
+
+private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
+    VaultItemState.ViewState.Content.ItemType.Login(
+        passwordHistoryCount = 1,
+        username = "the username",
+        passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
+            password = "the password",
+            isVisible = false,
+        ),
+        uris = listOf(
+            VaultItemState.ViewState.Content.ItemType.Login.UriData(
+                uri = "www.example.com",
+                isCopyable = true,
+                isLaunchable = true,
+            ),
+        ),
+        passwordRevisionDate = "4/14/83 3:56 PM",
+        totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+    )
+
+private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity =
+    VaultItemState.ViewState.Content.ItemType.Identity(
+        username = "the username",
+        identityName = "the identity name",
+        company = "the company name",
+        ssn = "the SSN",
+        passportNumber = "the passport number",
+        licenseNumber = "the license number",
+        email = "the email address",
+        phone = "the phone number",
+        address = "the address",
     )
 
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
@@ -882,4 +1034,16 @@ private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = EMPTY_COMMON,
         type = EMPTY_LOGIN_TYPE,
+    )
+
+private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        type = DEFAULT_LOGIN,
+        common = DEFAULT_COMMON,
+    )
+
+private val DEFAULT_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        type = DEFAULT_IDENTITY,
+        common = DEFAULT_COMMON,
     )

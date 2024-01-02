@@ -12,7 +12,8 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.item.util.DEFAULT_EMPTY_LOGIN_VIEW_STATE
+import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
+import com.x8bit.bitwarden.ui.vault.feature.item.util.createLoginContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.coEvery
@@ -294,11 +295,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isCopyable = true,
                     isVisible = false,
                 )
-                val loginViewState = DEFAULT_EMPTY_LOGIN_VIEW_STATE.copy(
-                    common = DEFAULT_EMPTY_LOGIN_VIEW_STATE.common.copy(
+                val loginViewState = VaultItemState.ViewState.Content(
+                    common = createCommonContent(isEmpty = true).copy(
                         requiresReprompt = false,
                         customFields = listOf(hiddenField),
                     ),
+                    type = createLoginContent(isEmpty = true),
                 )
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val mockCipherView = mockk<CipherView> {
@@ -316,7 +318,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         viewState = loginViewState.copy(
-                            common = DEFAULT_EMPTY_LOGIN_VIEW_STATE.common.copy(
+                            common = createCommonContent(isEmpty = true).copy(
                                 requiresReprompt = false,
                                 customFields = listOf(hiddenField.copy(isVisible = true)),
                             ),

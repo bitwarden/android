@@ -28,6 +28,7 @@ fun CipherView.toViewState(): VaultAddItemState.ViewState =
             CipherType.SECURE_NOTE -> VaultAddItemState.ViewState.Content.ItemType.SecureNotes
             CipherType.CARD -> VaultAddItemState.ViewState.Content.ItemType.Card
             CipherType.IDENTITY -> VaultAddItemState.ViewState.Content.ItemType.Identity(
+                selectedTitle = identity?.title.toTitleOrDefault(),
                 firstName = identity?.firstName.orEmpty(),
                 middleName = identity?.middleName.orEmpty(),
                 lastName = identity?.lastName.orEmpty(),
@@ -89,3 +90,10 @@ private fun FieldView.toCustomField() =
             vaultLinkedFieldType = fromId(requireNotNull(this.linkedId)),
         )
     }
+
+@Suppress("MaxLineLength")
+private fun String?.toTitleOrDefault(): VaultAddItemState.ViewState.Content.ItemType.Identity.Title =
+    VaultAddItemState.ViewState.Content.ItemType.Identity.Title
+        .entries
+        .find { it.name == this }
+        ?: VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MR

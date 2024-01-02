@@ -86,4 +86,16 @@ class StringExtensionsTest {
                 )
             }
     }
+
+    @Test
+    fun `capitalize should return a capitalized string`() {
+        val initialString = "lowercase"
+
+        val result = initialString.capitalize()
+
+        assertEquals(
+            "Lowercase",
+            result,
+        )
+    }
 }
