@@ -1164,6 +1164,12 @@ private val EMPTY_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
         type = EMPTY_IDENTITY_TYPE,
     )
 
+private val EMPTY_SECURE_NOTE_VIEW_STATE =
+    VaultItemState.ViewState.Content(
+        common = EMPTY_COMMON,
+        type = VaultItemState.ViewState.Content.ItemType.SecureNote,
+    )
+
 private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         type = DEFAULT_LOGIN,
@@ -1176,12 +1182,20 @@ private val DEFAULT_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
         common = DEFAULT_COMMON,
     )
 
+private val DEFAULT_SECURE_NOTE_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = DEFAULT_COMMON,
+        type = VaultItemState.ViewState.Content.ItemType.SecureNote,
+    )
+
 private val EMPTY_VIEW_STATES = listOf(
     EMPTY_LOGIN_VIEW_STATE,
     EMPTY_IDENTITY_VIEW_STATE,
+    EMPTY_SECURE_NOTE_VIEW_STATE,
 )
 
 private val DEFAULT_VIEW_STATES = listOf(
     DEFAULT_LOGIN_VIEW_STATE,
     DEFAULT_IDENTITY_VIEW_STATE,
+    DEFAULT_SECURE_NOTE_VIEW_STATE,
 )

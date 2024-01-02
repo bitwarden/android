@@ -217,7 +217,11 @@ private fun VaultItemContent(
                 }
 
                 is VaultItemState.ViewState.Content.ItemType.SecureNote -> {
-                    // TODO UI for viewing SecureNote BIT-515
+                    VaultItemSecureNoteContent(
+                        commonState = viewState.common,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        modifier = modifier,
+                    )
                 }
             }
         }
