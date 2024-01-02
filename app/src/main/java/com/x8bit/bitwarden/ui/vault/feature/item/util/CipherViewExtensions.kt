@@ -5,8 +5,12 @@ import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
+import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.platform.base.util.capitalize
+import com.x8bit.bitwarden.ui.platform.base.util.nullIfAllEqual
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
@@ -63,7 +67,17 @@ fun CipherView.toViewState(
             }
 
             CipherType.IDENTITY -> {
-                VaultItemState.ViewState.Content.ItemType.Identity
+                VaultItemState.ViewState.Content.ItemType.Identity(
+                    username = identity?.username,
+                    identityName = identity?.identityName,
+                    company = identity?.company,
+                    ssn = identity?.ssn,
+                    passportNumber = identity?.passportNumber,
+                    licenseNumber = identity?.licenseNumber,
+                    email = identity?.email,
+                    phone = identity?.phone,
+                    address = identity?.identityAddress,
+                )
             }
         },
     )
@@ -100,3 +114,28 @@ private fun LoginUriView.toUriData() =
         isCopyable = !uri.isNullOrBlank(),
         isLaunchable = !uri.isNullOrBlank(),
     )
+
+private val IdentityView.identityAddress: String?
+    get() = listOfNotNull(
+        address1,
+        address2,
+        address3,
+        listOf(city ?: "-", state ?: "-", postalCode ?: "-")
+            .nullIfAllEqual("-")
+            ?.joinToString(", "),
+        country,
+    )
+        .joinToString("\n")
+        .orNullIfBlank()
+
+private val IdentityView.identityName: String?
+    get() = listOfNotNull(
+        title
+            ?.lowercase()
+            ?.capitalize(),
+        firstName,
+        middleName,
+        lastName,
+    )
+        .joinToString(" ")
+        .orNullIfBlank()

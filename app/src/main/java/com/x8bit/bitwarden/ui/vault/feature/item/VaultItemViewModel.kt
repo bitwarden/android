@@ -612,8 +612,28 @@ data class VaultItemState(
 
                 /**
                  * Represents the `Identity` item type.
+                 *
+                 * @property identityName The name for the identity.
+                 * @property username The username for the identity.
+                 * @property company The company associated with the identity.
+                 * @property ssn The SSN for the identity.
+                 * @property passportNumber The passport number for the identity.
+                 * @property licenseNumber The license number for the identity.
+                 * @property email The email for the identity.
+                 * @property phone The phone number for the identity.
+                 * @property address The address for the identity.
                  */
-                data object Identity : ItemType()
+                data class Identity(
+                    val identityName: String?,
+                    val username: String?,
+                    val company: String?,
+                    val ssn: String?,
+                    val passportNumber: String?,
+                    val licenseNumber: String?,
+                    val email: String?,
+                    val phone: String?,
+                    val address: String?,
+                ) : ItemType()
 
                 /**
                  * Represents the `Card` item type.

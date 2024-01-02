@@ -197,9 +197,9 @@ private fun VaultItemContent(
                     VaultItemLoginContent(
                         commonState = viewState.common,
                         loginItemState = viewState.type,
-                        modifier = modifier,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultLoginItemTypeHandlers = vaultLoginItemTypeHandlers,
+                        modifier = modifier,
                     )
                 }
 
@@ -208,7 +208,12 @@ private fun VaultItemContent(
                 }
 
                 is VaultItemState.ViewState.Content.ItemType.Identity -> {
-                    // TODO UI for viewing Identity BIT-514
+                    VaultItemIdentityContent(
+                        commonState = viewState.common,
+                        identityState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        modifier = modifier,
+                    )
                 }
 
                 is VaultItemState.ViewState.Content.ItemType.SecureNote -> {

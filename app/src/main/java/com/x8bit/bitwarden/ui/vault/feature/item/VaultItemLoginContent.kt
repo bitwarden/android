@@ -23,7 +23,6 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
-import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -172,7 +171,7 @@ fun VaultItemLoginContent(
 
         item {
             Spacer(modifier = Modifier.height(24.dp))
-            UpdateText(
+            VaultItemUpdateText(
                 header = "${stringResource(id = R.string.date_updated)}: ",
                 text = commonState.lastUpdated,
                 modifier = Modifier
@@ -183,7 +182,7 @@ fun VaultItemLoginContent(
 
         loginItemState.passwordRevisionDate?.let { revisionDate ->
             item {
-                UpdateText(
+                VaultItemUpdateText(
                     header = "${stringResource(id = R.string.date_password_updated)}: ",
                     text = revisionDate,
                     modifier = Modifier
@@ -208,91 +207,6 @@ fun VaultItemLoginContent(
         item {
             Spacer(modifier = Modifier.height(88.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
-        }
-    }
-}
-
-@Suppress("LongMethod", "MaxLineLength")
-@Composable
-private fun CustomField(
-    customField: VaultItemState.ViewState.Content.Common.Custom,
-    onCopyCustomHiddenField: (String) -> Unit,
-    onCopyCustomTextField: (String) -> Unit,
-    onShowHiddenFieldClick: (VaultItemState.ViewState.Content.Common.Custom.HiddenField, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    when (customField) {
-        is VaultItemState.ViewState.Content.Common.Custom.BooleanField -> {
-            BitwardenWideSwitch(
-                label = customField.name,
-                isChecked = customField.value,
-                readOnly = true,
-                onCheckedChange = { },
-                modifier = modifier,
-            )
-        }
-
-        is VaultItemState.ViewState.Content.Common.Custom.HiddenField -> {
-            BitwardenPasswordFieldWithActions(
-                label = customField.name,
-                value = customField.value,
-                showPasswordChange = { onShowHiddenFieldClick(customField, it) },
-                showPassword = customField.isVisible,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
-                modifier = modifier,
-                actions = {
-                    if (customField.isCopyable) {
-                        BitwardenIconButtonWithResource(
-                            iconRes = IconResource(
-                                iconPainter = painterResource(id = R.drawable.ic_copy),
-                                contentDescription = stringResource(id = R.string.copy),
-                            ),
-                            onClick = {
-                                onCopyCustomHiddenField(customField.value)
-                            },
-                        )
-                    }
-                },
-            )
-        }
-
-        is VaultItemState.ViewState.Content.Common.Custom.LinkedField -> {
-            BitwardenTextField(
-                label = customField.name,
-                value = customField.vaultLinkedFieldType.label.invoke(),
-                leadingIconResource = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_linked),
-                    contentDescription = stringResource(id = R.string.field_type_linked),
-                ),
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
-                modifier = modifier,
-            )
-        }
-
-        is VaultItemState.ViewState.Content.Common.Custom.TextField -> {
-            BitwardenTextFieldWithActions(
-                label = customField.name,
-                value = customField.value,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
-                modifier = modifier,
-                actions = {
-                    if (customField.isCopyable) {
-                        BitwardenIconButtonWithResource(
-                            iconRes = IconResource(
-                                iconPainter = painterResource(id = R.drawable.ic_copy),
-                                contentDescription = stringResource(id = R.string.copy),
-                            ),
-                            onClick = { onCopyCustomTextField(customField.value) },
-                        )
-                    }
-                },
-            )
         }
     }
 }
@@ -389,29 +303,6 @@ private fun TotpField(
             onValueChange = { },
             readOnly = true,
             modifier = modifier,
-        )
-    }
-}
-
-@Composable
-private fun UpdateText(
-    header: String,
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier
-            .semantics(mergeDescendants = true) { },
-    ) {
-        Text(
-            text = header,
-            style = LocalNonMaterialTypography.current.labelMediumProminent,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
