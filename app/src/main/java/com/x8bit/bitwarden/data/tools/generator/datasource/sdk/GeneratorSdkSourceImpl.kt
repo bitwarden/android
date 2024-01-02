@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
+import com.bitwarden.core.UsernameGeneratorRequest
 import com.bitwarden.sdk.ClientGenerators
 
 /**
@@ -23,5 +24,11 @@ class GeneratorSdkSourceImpl(
         request: PassphraseGeneratorRequest,
     ): Result<String> = runCatching {
         clientGenerator.passphrase(request)
+    }
+
+    override suspend fun generateForwardedServiceEmail(
+        request: UsernameGeneratorRequest.Forwarded,
+    ): Result<String> = runCatching {
+        clientGenerator.username(request)
     }
 }

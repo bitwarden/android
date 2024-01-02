@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
+import com.bitwarden.core.ForwarderServiceType
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
+import com.bitwarden.core.UsernameGeneratorRequest
 import com.bitwarden.sdk.ClientGenerators
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -65,6 +67,29 @@ class GeneratorSdkSourceTest {
 
             coVerify {
                 clientGenerators.passphrase(request)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generateForwardedServiceEmail should call SDK and return a Result with the generated email`() =
+        runBlocking {
+            val request = UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.DuckDuckGo(token = "testToken"),
+                website = null,
+            )
+            val expectedResult = "generated@email.com"
+
+            coEvery {
+                clientGenerators.username(request)
+            } returns expectedResult
+
+            val result = generatorSdkSource.generateForwardedServiceEmail(request)
+
+            assertEquals(Result.success(expectedResult), result)
+
+            coVerify {
+                clientGenerators.username(request)
             }
         }
 }
