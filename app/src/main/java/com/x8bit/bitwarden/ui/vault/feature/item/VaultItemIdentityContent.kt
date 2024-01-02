@@ -185,6 +185,27 @@ fun VaultItemIdentityContent(
             }
         }
 
+        commonState.notes?.let { notes ->
+            item {
+                Spacer(modifier = Modifier.height(4.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.notes),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenTextField(
+                    label = stringResource(id = R.string.notes),
+                    value = notes,
+                    onValueChange = { },
+                    readOnly = true,
+                    singleLine = false,
+                    modifier = modifier,
+                )
+            }
+        }
+
         commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
             item {
                 Spacer(modifier = Modifier.height(4.dp))
