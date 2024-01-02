@@ -1,5 +1,10 @@
+import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
+import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
+import com.google.gms.googleservices.GoogleServicesTask
+
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.crashlytics)
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
@@ -7,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.services)
     kotlin("kapt")
 }
 
@@ -89,6 +95,10 @@ android {
 }
 
 dependencies {
+    fun standardImplementation(dependencyNotation: Any) {
+        add("standardImplementation", dependencyNotation)
+    }
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
     implementation(platform(libs.androidx.compose.bom))
@@ -107,11 +117,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.splashscreen)
-    implementation(platform(libs.google.firebase.bom))
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
-    implementation(libs.google.firebase.cloud.messaging)
-    implementation(libs.google.firebase.crashlytics)
     implementation(libs.google.hilt.android)
     kapt(libs.google.hilt.compiler)
     implementation(libs.jakewharton.retrofit.kotlinx.serialization)
@@ -127,6 +134,11 @@ dependencies {
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Standard-specific flavor dependencies
+    standardImplementation(libs.google.firebase.cloud.messaging)
+    standardImplementation(platform(libs.google.firebase.bom))
+    standardImplementation(libs.google.firebase.crashlytics)
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)
@@ -206,4 +218,14 @@ tasks {
     withType<Test> {
         useJUnitPlatform()
     }
+}
+
+afterEvaluate {
+    // Disable Fdroid-specific tasks that we want to exclude
+    val tasks = tasks.withType<GoogleServicesTask>() +
+        tasks.withType<InjectMappingFileIdTask>() +
+        tasks.withType<UploadMappingFileTask>()
+    tasks
+        .filter { it.name.contains("Fdroid") }
+        .forEach { it.enabled = false }
 }
