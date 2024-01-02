@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send
+package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -20,15 +20,15 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class NewSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<NewSendState, NewSendEvent, NewSendAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: NewSendState(
+) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
+    initialState = savedStateHandle[KEY_STATE] ?: AddSendState(
         name = "",
         maxAccessCount = null,
         passwordInput = "",
         noteInput = "",
         isHideEmailChecked = false,
         isDeactivateChecked = false,
-        selectedType = NewSendState.SendType.Text(
+        selectedType = AddSendState.SendType.Text(
             input = "",
             isHideByDefaultChecked = false,
         ),
@@ -41,51 +41,51 @@ class NewSendViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    override fun handleAction(action: NewSendAction): Unit = when (action) {
-        is NewSendAction.CloseClick -> handleCloseClick()
-        is NewSendAction.SaveClick -> handleSaveClick()
-        is NewSendAction.FileTypeClick -> handleFileTypeClick()
-        is NewSendAction.TextTypeClick -> handleTextTypeClick()
-        is NewSendAction.ChooseFileClick -> handleChooseFileClick()
-        is NewSendAction.NameChange -> handleNameChange(action)
-        is NewSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
-        is NewSendAction.TextChange -> handleTextChange(action)
-        is NewSendAction.NoteChange -> handleNoteChange(action)
-        is NewSendAction.PasswordChange -> handlePasswordChange(action)
-        is NewSendAction.HideByDefaultToggle -> handleHideByDefaultToggle(action)
-        is NewSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
-        is NewSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
+    override fun handleAction(action: AddSendAction): Unit = when (action) {
+        is AddSendAction.CloseClick -> handleCloseClick()
+        is AddSendAction.SaveClick -> handleSaveClick()
+        is AddSendAction.FileTypeClick -> handleFileTypeClick()
+        is AddSendAction.TextTypeClick -> handleTextTypeClick()
+        is AddSendAction.ChooseFileClick -> handleChooseFileClick()
+        is AddSendAction.NameChange -> handleNameChange(action)
+        is AddSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
+        is AddSendAction.TextChange -> handleTextChange(action)
+        is AddSendAction.NoteChange -> handleNoteChange(action)
+        is AddSendAction.PasswordChange -> handlePasswordChange(action)
+        is AddSendAction.HideByDefaultToggle -> handleHideByDefaultToggle(action)
+        is AddSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
+        is AddSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
     }
 
-    private fun handlePasswordChange(action: NewSendAction.PasswordChange) {
+    private fun handlePasswordChange(action: AddSendAction.PasswordChange) {
         mutableStateFlow.update {
             it.copy(passwordInput = action.input)
         }
     }
 
-    private fun handleNoteChange(action: NewSendAction.NoteChange) {
+    private fun handleNoteChange(action: AddSendAction.NoteChange) {
         mutableStateFlow.update {
             it.copy(noteInput = action.input)
         }
     }
 
-    private fun handleHideMyEmailToggle(action: NewSendAction.HideMyEmailToggle) {
+    private fun handleHideMyEmailToggle(action: AddSendAction.HideMyEmailToggle) {
         mutableStateFlow.update {
             it.copy(isHideEmailChecked = action.isChecked)
         }
     }
 
-    private fun handleDeactivateThisSendToggle(action: NewSendAction.DeactivateThisSendToggle) {
+    private fun handleDeactivateThisSendToggle(action: AddSendAction.DeactivateThisSendToggle) {
         mutableStateFlow.update {
             it.copy(isDeactivateChecked = action.isChecked)
         }
     }
 
-    private fun handleCloseClick() = sendEvent(NewSendEvent.NavigateBack)
+    private fun handleCloseClick() = sendEvent(AddSendEvent.NavigateBack)
 
-    private fun handleSaveClick() = sendEvent(NewSendEvent.ShowToast("Save Not Implemented"))
+    private fun handleSaveClick() = sendEvent(AddSendEvent.ShowToast("Save Not Implemented"))
 
-    private fun handleNameChange(action: NewSendAction.NameChange) {
+    private fun handleNameChange(action: AddSendAction.NameChange) {
         mutableStateFlow.update {
             it.copy(name = action.input)
         }
@@ -93,27 +93,27 @@ class NewSendViewModel @Inject constructor(
 
     private fun handleFileTypeClick() {
         mutableStateFlow.update {
-            it.copy(selectedType = NewSendState.SendType.File)
+            it.copy(selectedType = AddSendState.SendType.File)
         }
     }
 
     private fun handleTextTypeClick() {
         mutableStateFlow.update {
-            it.copy(selectedType = NewSendState.SendType.Text("", isHideByDefaultChecked = false))
+            it.copy(selectedType = AddSendState.SendType.Text("", isHideByDefaultChecked = false))
         }
     }
 
-    private fun handleTextChange(action: NewSendAction.TextChange) {
+    private fun handleTextChange(action: AddSendAction.TextChange) {
         val currentSendInput =
-            mutableStateFlow.value.selectedType as? NewSendState.SendType.Text ?: return
+            mutableStateFlow.value.selectedType as? AddSendState.SendType.Text ?: return
         mutableStateFlow.update {
             it.copy(selectedType = currentSendInput.copy(input = action.input))
         }
     }
 
-    private fun handleHideByDefaultToggle(action: NewSendAction.HideByDefaultToggle) {
+    private fun handleHideByDefaultToggle(action: AddSendAction.HideByDefaultToggle) {
         val currentSendInput =
-            mutableStateFlow.value.selectedType as? NewSendState.SendType.Text ?: return
+            mutableStateFlow.value.selectedType as? AddSendState.SendType.Text ?: return
         mutableStateFlow.update {
             it.copy(selectedType = currentSendInput.copy(isHideByDefaultChecked = action.isChecked))
         }
@@ -121,10 +121,10 @@ class NewSendViewModel @Inject constructor(
 
     private fun handleChooseFileClick() {
         // TODO: allow for file upload: BIT-1085
-        sendEvent(NewSendEvent.ShowToast("Not Implemented: File Upload"))
+        sendEvent(AddSendEvent.ShowToast("Not Implemented: File Upload"))
     }
 
-    private fun handleMaxAccessCountChange(action: NewSendAction.MaxAccessCountChange) {
+    private fun handleMaxAccessCountChange(action: AddSendAction.MaxAccessCountChange) {
         mutableStateFlow.update {
             it.copy(maxAccessCount = action.value)
         }
@@ -135,7 +135,7 @@ class NewSendViewModel @Inject constructor(
  * Models state for the new send screen.
  */
 @Parcelize
-data class NewSendState(
+data class AddSendState(
     val name: String,
     val selectedType: SendType,
     // Null here means "not set"
@@ -170,85 +170,85 @@ data class NewSendState(
 /**
  * Models events for the new send screen.
  */
-sealed class NewSendEvent {
+sealed class AddSendEvent {
     /**
      * Navigate back.
      */
-    data object NavigateBack : NewSendEvent()
+    data object NavigateBack : AddSendEvent()
 
     /**
      * Show Toast.
      */
-    data class ShowToast(val message: String) : NewSendEvent()
+    data class ShowToast(val message: String) : AddSendEvent()
 }
 
 /**
  * Models actions for the new send screen.
  */
-sealed class NewSendAction {
+sealed class AddSendAction {
 
     /**
      * User clicked the close button.
      */
-    data object CloseClick : NewSendAction()
+    data object CloseClick : AddSendAction()
 
     /**
      * User clicked the save button.
      */
-    data object SaveClick : NewSendAction()
+    data object SaveClick : AddSendAction()
 
     /**
      * Value of the name field was updated.
      */
-    data class NameChange(val input: String) : NewSendAction()
+    data class NameChange(val input: String) : AddSendAction()
 
     /**
      * User clicked the file type segmented button.
      */
-    data object FileTypeClick : NewSendAction()
+    data object FileTypeClick : AddSendAction()
 
     /**
      * User clicked the text type segmented button.
      */
-    data object TextTypeClick : NewSendAction()
+    data object TextTypeClick : AddSendAction()
 
     /**
      * Value of the send text field updated.
      */
-    data class TextChange(val input: String) : NewSendAction()
+    data class TextChange(val input: String) : AddSendAction()
 
     /**
      * Value of the password field updated.
      */
-    data class PasswordChange(val input: String) : NewSendAction()
+    data class PasswordChange(val input: String) : AddSendAction()
 
     /**
      * Value of the note text field updated.
      */
-    data class NoteChange(val input: String) : NewSendAction()
+    data class NoteChange(val input: String) : AddSendAction()
 
     /**
      * User clicked the choose file button.
      */
-    data object ChooseFileClick : NewSendAction()
+    data object ChooseFileClick : AddSendAction()
 
     /**
      * User toggled the "hide text by default" toggle.
      */
-    data class HideByDefaultToggle(val isChecked: Boolean) : NewSendAction()
+    data class HideByDefaultToggle(val isChecked: Boolean) : AddSendAction()
 
     /**
      * User incremented the max access count.
      */
-    data class MaxAccessCountChange(val value: Int) : NewSendAction()
+    data class MaxAccessCountChange(val value: Int) : AddSendAction()
 
     /**
      * User toggled the "hide my email" toggle.
      */
-    data class HideMyEmailToggle(val isChecked: Boolean) : NewSendAction()
+    data class HideMyEmailToggle(val isChecked: Boolean) : AddSendAction()
 
     /**
      * User toggled the "deactivate this send" toggle.
      */
-    data class DeactivateThisSendToggle(val isChecked: Boolean) : NewSendAction()
+    data class DeactivateThisSendToggle(val isChecked: Boolean) : AddSendAction()
 }

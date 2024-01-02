@@ -43,7 +43,7 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
-    onNavigateNewSend: () -> Unit,
+    onNavigateAddSend: () -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
@@ -51,7 +51,7 @@ fun SendScreen(
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is SendEvent.NavigateNewSend -> onNavigateNewSend()
+            is SendEvent.NavigateNewSend -> onNavigateAddSend()
 
             is SendEvent.NavigateToAboutSend -> {
                 intentHandler.launchUri("https://bitwarden.com/products/send".toUri())

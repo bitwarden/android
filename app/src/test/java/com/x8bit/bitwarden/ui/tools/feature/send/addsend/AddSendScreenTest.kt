@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send
+package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
@@ -22,10 +22,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class NewSendScreenTest : BaseComposeTest() {
+class AddSendScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
-    private val mutableEventFlow = MutableSharedFlow<NewSendEvent>(
+    private val mutableEventFlow = MutableSharedFlow<AddSendEvent>(
         extraBufferCapacity = Int.MAX_VALUE,
     )
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -37,7 +37,7 @@ class NewSendScreenTest : BaseComposeTest() {
     @Before
     fun setUp() {
         composeTestRule.setContent {
-            NewSendScreen(
+            AddSendScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
@@ -46,7 +46,7 @@ class NewSendScreenTest : BaseComposeTest() {
 
     @Test
     fun `on NavigateBack should call onNavigateBack`() {
-        mutableEventFlow.tryEmit(NewSendEvent.NavigateBack)
+        mutableEventFlow.tryEmit(AddSendEvent.NavigateBack)
         assert(onNavigateBackCalled)
     }
 
@@ -55,7 +55,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Close")
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.CloseClick) }
+        verify { viewModel.trySendAction(AddSendAction.CloseClick) }
     }
 
     @Test
@@ -63,7 +63,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Save")
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.SaveClick) }
+        verify { viewModel.trySendAction(AddSendAction.SaveClick) }
     }
 
     @Test
@@ -71,7 +71,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Name")
             .performTextInput("input")
-        verify { viewModel.trySendAction(NewSendAction.NameChange("input")) }
+        verify { viewModel.trySendAction(AddSendAction.NameChange("input")) }
     }
 
     @Test
@@ -101,7 +101,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("File")
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.FileTypeClick) }
+        verify { viewModel.trySendAction(AddSendAction.FileTypeClick) }
     }
 
     @Test
@@ -109,19 +109,19 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText("Text")[0]
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.TextTypeClick) }
+        verify { viewModel.trySendAction(AddSendAction.TextTypeClick) }
     }
 
     @Test
     fun `Choose file button click should send ChooseFileClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            selectedType = NewSendState.SendType.File,
+            selectedType = AddSendState.SendType.File,
         )
         composeTestRule
             .onNodeWithText("Choose file")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.ChooseFileClick) }
+        verify { viewModel.trySendAction(AddSendAction.ChooseFileClick) }
     }
 
     @Test
@@ -129,7 +129,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText("Text")[1]
             .performTextInput("input")
-        viewModel.trySendAction(NewSendAction.TextChange("input"))
+        viewModel.trySendAction(AddSendAction.TextChange("input"))
     }
 
     @Test
@@ -145,7 +145,7 @@ class NewSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                selectedType = NewSendState.SendType.Text(
+                selectedType = AddSendState.SendType.Text(
                     input = "input",
                     isHideByDefaultChecked = false,
                 ),
@@ -166,7 +166,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(text = "When accessing the Send", substring = true)
             .performClick()
-        viewModel.trySendAction(NewSendAction.HideByDefaultToggle(true))
+        viewModel.trySendAction(AddSendAction.HideByDefaultToggle(true))
     }
 
     @Test
@@ -177,7 +177,7 @@ class NewSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                selectedType = NewSendState.SendType.Text(
+                selectedType = AddSendState.SendType.Text(
                     input = "",
                     isHideByDefaultChecked = true,
                 ),
@@ -267,7 +267,7 @@ class NewSendScreenTest : BaseComposeTest() {
             .onNodeWithContentDescription("\u2212")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.MaxAccessCountChange(2)) }
+        verify { viewModel.trySendAction(AddSendAction.MaxAccessCountChange(2)) }
     }
 
     @Test
@@ -301,7 +301,7 @@ class NewSendScreenTest : BaseComposeTest() {
             .onNodeWithContentDescription("+")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.MaxAccessCountChange(1)) }
+        verify { viewModel.trySendAction(AddSendAction.MaxAccessCountChange(1)) }
     }
 
     @Test
@@ -315,7 +315,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("New password")
             .performTextInput("input")
-        verify { viewModel.trySendAction(NewSendAction.PasswordChange("input")) }
+        verify { viewModel.trySendAction(AddSendAction.PasswordChange("input")) }
     }
 
     @Test
@@ -358,7 +358,7 @@ class NewSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Notes")
             .performTextInput("input")
-        verify { viewModel.trySendAction(NewSendAction.NoteChange("input")) }
+        verify { viewModel.trySendAction(AddSendAction.NoteChange("input")) }
     }
 
     @Test
@@ -402,7 +402,7 @@ class NewSendScreenTest : BaseComposeTest() {
             .onNodeWithText("Hide my email address", substring = true)
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.HideMyEmailToggle(true)) }
+        verify { viewModel.trySendAction(AddSendAction.HideMyEmailToggle(true)) }
     }
 
     @Test
@@ -438,7 +438,7 @@ class NewSendScreenTest : BaseComposeTest() {
             .onNodeWithText("Deactivate this Send", substring = true)
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(NewSendAction.DeactivateThisSendToggle(true)) }
+        verify { viewModel.trySendAction(AddSendAction.DeactivateThisSendToggle(true)) }
     }
 
     @Test
@@ -463,14 +463,14 @@ class NewSendScreenTest : BaseComposeTest() {
     }
 
     companion object {
-        private val DEFAULT_STATE = NewSendState(
+        private val DEFAULT_STATE = AddSendState(
             name = "",
             maxAccessCount = null,
             passwordInput = "",
             noteInput = "",
             isHideEmailChecked = false,
             isDeactivateChecked = false,
-            selectedType = NewSendState.SendType.Text(
+            selectedType = AddSendState.SendType.Text(
                 input = "",
                 isHideByDefaultChecked = false,
             ),

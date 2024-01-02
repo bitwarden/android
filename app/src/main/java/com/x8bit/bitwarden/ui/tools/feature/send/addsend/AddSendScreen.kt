@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send
+package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -54,6 +54,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
+import com.x8bit.bitwarden.ui.tools.feature.send.SendDeletionDateChooser
+import com.x8bit.bitwarden.ui.tools.feature.send.SendExpirationDateChooser
 
 /**
  * Displays new send UX.
@@ -61,7 +63,7 @@ import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
 @Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewSendScreen(
+fun AddSendScreen(
     viewModel: NewSendViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
 ) {
@@ -71,8 +73,8 @@ fun NewSendScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is NewSendEvent.NavigateBack -> onNavigateBack()
-            is NewSendEvent.ShowToast -> {
+            is AddSendEvent.NavigateBack -> onNavigateBack()
+            is AddSendEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
         }
@@ -88,14 +90,14 @@ fun NewSendScreen(
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(NewSendAction.CloseClick) }
+                    { viewModel.trySendAction(AddSendAction.CloseClick) }
                 },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = R.string.save),
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(NewSendAction.SaveClick) }
+                            { viewModel.trySendAction(AddSendAction.SaveClick) }
                         },
                     )
                 },
@@ -115,7 +117,7 @@ fun NewSendScreen(
                 hint = stringResource(id = R.string.name_info),
                 value = state.name,
                 onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(NewSendAction.NameChange(it)) }
+                    { viewModel.trySendAction(AddSendAction.NameChange(it)) }
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -132,22 +134,22 @@ fun NewSendScreen(
                     SegmentedButtonState(
                         text = stringResource(id = R.string.file),
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(NewSendAction.FileTypeClick) }
+                            { viewModel.trySendAction(AddSendAction.FileTypeClick) }
                         },
-                        isChecked = state.selectedType is NewSendState.SendType.File,
+                        isChecked = state.selectedType is AddSendState.SendType.File,
                     ),
                     SegmentedButtonState(
                         text = stringResource(id = R.string.text),
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(NewSendAction.TextTypeClick) }
+                            { viewModel.trySendAction(AddSendAction.TextTypeClick) }
                         },
-                        isChecked = state.selectedType is NewSendState.SendType.Text,
+                        isChecked = state.selectedType is AddSendState.SendType.Text,
                     ),
                 ),
             )
             Spacer(modifier = Modifier.height(16.dp))
             when (val type = state.selectedType) {
-                is NewSendState.SendType.File -> {
+                is AddSendState.SendType.File -> {
                     BitwardenListHeaderText(
                         label = stringResource(id = R.string.file),
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -163,7 +165,7 @@ fun NewSendScreen(
                     BitwardenFilledTonalButton(
                         label = stringResource(id = R.string.choose_file),
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(NewSendAction.ChooseFileClick) }
+                            { viewModel.trySendAction(AddSendAction.ChooseFileClick) }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -185,14 +187,14 @@ fun NewSendScreen(
                     )
                 }
 
-                is NewSendState.SendType.Text -> {
+                is AddSendState.SendType.Text -> {
                     BitwardenTextField(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         label = stringResource(id = R.string.text),
                         hint = stringResource(id = R.string.type_text_info),
                         value = type.input,
                         onValueChange = remember(viewModel) {
-                            { viewModel.trySendAction(NewSendAction.TextChange(it)) }
+                            { viewModel.trySendAction(AddSendAction.TextChange(it)) }
                         },
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -201,7 +203,7 @@ fun NewSendScreen(
                         label = stringResource(id = R.string.hide_text_by_default),
                         isChecked = type.isHideByDefaultChecked,
                         onCheckedChange = remember(viewModel) {
-                            { viewModel.trySendAction(NewSendAction.HideByDefaultToggle(it)) }
+                            { viewModel.trySendAction(AddSendAction.HideByDefaultToggle(it)) }
                         },
                     )
                 }
@@ -210,19 +212,19 @@ fun NewSendScreen(
             NewSendOptions(
                 state = state,
                 onMaxAccessCountChange = remember(viewModel) {
-                    { viewModel.trySendAction(NewSendAction.MaxAccessCountChange(it)) }
+                    { viewModel.trySendAction(AddSendAction.MaxAccessCountChange(it)) }
                 },
                 onPasswordChange = remember(viewModel) {
-                    { viewModel.trySendAction(NewSendAction.PasswordChange(it)) }
+                    { viewModel.trySendAction(AddSendAction.PasswordChange(it)) }
                 },
                 onNoteChange = remember(viewModel) {
-                    { viewModel.trySendAction(NewSendAction.NoteChange(it)) }
+                    { viewModel.trySendAction(AddSendAction.NoteChange(it)) }
                 },
                 onHideEmailChecked = remember(viewModel) {
-                    { viewModel.trySendAction(NewSendAction.HideMyEmailToggle(it)) }
+                    { viewModel.trySendAction(AddSendAction.HideMyEmailToggle(it)) }
                 },
                 onDeactivateSendChecked = remember(viewModel) {
-                    { viewModel.trySendAction(NewSendAction.DeactivateThisSendToggle(it)) }
+                    { viewModel.trySendAction(AddSendAction.DeactivateThisSendToggle(it)) }
                 },
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -244,7 +246,7 @@ fun NewSendScreen(
 @Suppress("LongMethod")
 @Composable
 private fun NewSendOptions(
-    state: NewSendState,
+    state: AddSendState,
     onMaxAccessCountChange: (Int) -> Unit,
     onPasswordChange: (String) -> Unit,
     onNoteChange: (String) -> Unit,

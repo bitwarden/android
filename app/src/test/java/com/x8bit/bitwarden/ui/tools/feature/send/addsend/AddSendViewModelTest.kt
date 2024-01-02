@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send
+package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class NewSendViewModelTest : BaseViewModelTest() {
+class AddSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct`() {
@@ -18,7 +18,7 @@ class NewSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should read from saved state when present`() {
-        val savedState = mockk<NewSendState>()
+        val savedState = mockk<AddSendState>()
         val viewModel = createViewModel(
             savedStateHandle = SavedStateHandle(mapOf("state" to savedState)),
         )
@@ -29,8 +29,8 @@ class NewSendViewModelTest : BaseViewModelTest() {
     fun `CloseClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(NewSendAction.CloseClick)
-            assertEquals(NewSendEvent.NavigateBack, awaitItem())
+            viewModel.trySendAction(AddSendAction.CloseClick)
+            assertEquals(AddSendEvent.NavigateBack, awaitItem())
         }
     }
 
@@ -38,8 +38,8 @@ class NewSendViewModelTest : BaseViewModelTest() {
     fun `SaveClick should emit ShowToast`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(NewSendAction.SaveClick)
-            assertEquals(NewSendEvent.ShowToast("Save Not Implemented"), awaitItem())
+            viewModel.trySendAction(AddSendAction.SaveClick)
+            assertEquals(AddSendEvent.ShowToast("Save Not Implemented"), awaitItem())
         }
     }
 
@@ -47,8 +47,8 @@ class NewSendViewModelTest : BaseViewModelTest() {
     fun `ChooseFileClick should emit ShowToast`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(NewSendAction.ChooseFileClick)
-            assertEquals(NewSendEvent.ShowToast("Not Implemented: File Upload"), awaitItem())
+            viewModel.trySendAction(AddSendAction.ChooseFileClick)
+            assertEquals(AddSendEvent.ShowToast("Not Implemented: File Upload"), awaitItem())
         }
     }
 
@@ -57,12 +57,12 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.FileTypeClick)
+            viewModel.trySendAction(AddSendAction.FileTypeClick)
             assertEquals(
-                DEFAULT_STATE.copy(selectedType = NewSendState.SendType.File),
+                DEFAULT_STATE.copy(selectedType = AddSendState.SendType.File),
                 awaitItem(),
             )
-            viewModel.trySendAction(NewSendAction.TextTypeClick)
+            viewModel.trySendAction(AddSendAction.TextTypeClick)
             assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
@@ -72,7 +72,7 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.NameChange("input"))
+            viewModel.trySendAction(AddSendAction.NameChange("input"))
             assertEquals(DEFAULT_STATE.copy(name = "input"), awaitItem())
         }
     }
@@ -82,7 +82,7 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.MaxAccessCountChange(5))
+            viewModel.trySendAction(AddSendAction.MaxAccessCountChange(5))
             assertEquals(DEFAULT_STATE.copy(maxAccessCount = 5), awaitItem())
         }
     }
@@ -92,10 +92,10 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.TextChange("input"))
+            viewModel.trySendAction(AddSendAction.TextChange("input"))
             assertEquals(
                 DEFAULT_STATE.copy(
-                    selectedType = NewSendState.SendType.Text(
+                    selectedType = AddSendState.SendType.Text(
                         input = "input",
                         isHideByDefaultChecked = false,
                     ),
@@ -110,7 +110,7 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.NoteChange("input"))
+            viewModel.trySendAction(AddSendAction.NoteChange("input"))
             assertEquals(DEFAULT_STATE.copy(noteInput = "input"), awaitItem())
         }
     }
@@ -120,7 +120,7 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.PasswordChange("input"))
+            viewModel.trySendAction(AddSendAction.PasswordChange("input"))
             assertEquals(DEFAULT_STATE.copy(passwordInput = "input"), awaitItem())
         }
     }
@@ -130,7 +130,7 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.DeactivateThisSendToggle(true))
+            viewModel.trySendAction(AddSendAction.DeactivateThisSendToggle(true))
             assertEquals(DEFAULT_STATE.copy(isDeactivateChecked = true), awaitItem())
         }
     }
@@ -140,7 +140,7 @@ class NewSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(NewSendAction.HideMyEmailToggle(true))
+            viewModel.trySendAction(AddSendAction.HideMyEmailToggle(true))
             assertEquals(DEFAULT_STATE.copy(isHideEmailChecked = true), awaitItem())
         }
     }
@@ -152,14 +152,14 @@ class NewSendViewModelTest : BaseViewModelTest() {
     )
 
     companion object {
-        private val DEFAULT_STATE = NewSendState(
+        private val DEFAULT_STATE = AddSendState(
             name = "",
             maxAccessCount = null,
             passwordInput = "",
             noteInput = "",
             isHideEmailChecked = false,
             isDeactivateChecked = false,
-            selectedType = NewSendState.SendType.Text(
+            selectedType = AddSendState.SendType.Text(
                 input = "",
                 isHideByDefaultChecked = false,
             ),
