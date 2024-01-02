@@ -768,7 +768,7 @@ sealed class VaultItemAction {
         ) : Common()
 
         /**
-         * The user has clicked to display the a hidden field.
+         * The user has clicked to display the hidden field.
          */
         data class HiddenFieldVisibilityClicked(
             val field: VaultItemState.ViewState.Content.Common.Custom.HiddenField,
