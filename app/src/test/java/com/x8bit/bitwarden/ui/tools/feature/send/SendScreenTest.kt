@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDisplayed
@@ -11,10 +12,13 @@ import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
@@ -110,7 +114,33 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `fab should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Loading)
+        }
+        composeTestRule.onNodeWithContentDescription("Add item").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Empty)
+        }
+        composeTestRule.onNodeWithContentDescription("Add item").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
+        }
+        composeTestRule.onNodeWithContentDescription("Add item").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Content)
+        }
+        composeTestRule.onNodeWithContentDescription("Add item").assertIsDisplayed()
+    }
+
+    @Test
     fun `on add item FAB click should send AddItemClick`() {
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Empty)
+        }
         composeTestRule
             .onNodeWithContentDescription("Add item")
             .performClick()
@@ -119,6 +149,9 @@ class SendScreenTest : BaseComposeTest() {
 
     @Test
     fun `on add item click should send AddItemClick`() {
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Empty)
+        }
         composeTestRule
             .onNodeWithText("Add a Send")
             .performClick()
@@ -134,10 +167,57 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToNewSend should call onNavgiateToNewSend`() {
+    fun `on NavigateToNewSend should call onNavigateToNewSend`() {
         mutableEventFlow.tryEmit(SendEvent.NavigateNewSend)
         assert(onNavigateToNewSendCalled)
     }
+
+    @Test
+    fun `progressbar should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Loading)
+        }
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Empty)
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Content)
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+    }
+
+    @Test
+    fun `error should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
+        }
+        composeTestRule.onNodeWithText("Fail").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Try again").assertIsDisplayed()
+    }
+
+    @Test
+    fun `on try again click should send send RefreshClick`() {
+        mutableStateFlow.update {
+            it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
+        }
+
+        composeTestRule.onNodeWithText("Try again").performClick()
+
+        verify {
+            viewModel.trySendAction(SendAction.RefreshClick)
+        }
+    }
 }
 
-private val DEFAULT_STATE = SendState.Empty
+private val DEFAULT_STATE: SendState = SendState(
+    viewState = SendState.ViewState.Loading,
+)

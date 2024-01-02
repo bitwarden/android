@@ -2,11 +2,16 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -21,12 +26,25 @@ class SendViewModel @Inject constructor(
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE] ?: SendState.Empty,
+    initialState = savedStateHandle[KEY_STATE]
+        ?: SendState(
+            viewState = SendState.ViewState.Loading,
+        ),
 ) {
+
+    init {
+        // TODO: Remove this once we start listening to real vault data BIT-481
+        viewModelScope.launch {
+            delay(timeMillis = 3_000L)
+            mutableStateFlow.update { it.copy(viewState = SendState.ViewState.Empty) }
+        }
+    }
+
     override fun handleAction(action: SendAction): Unit = when (action) {
         SendAction.AboutSendClick -> handleAboutSendClick()
         SendAction.AddSendClick -> handleAddSendClick()
         SendAction.LockClick -> handleLockClick()
+        SendAction.RefreshClick -> handleRefreshClick()
         SendAction.SearchClick -> handleSearchClick()
         SendAction.SyncClick -> handleSyncClick()
     }
@@ -43,6 +61,11 @@ class SendViewModel @Inject constructor(
         vaultRepo.lockVaultForCurrentUser()
     }
 
+    private fun handleRefreshClick() {
+        // No need to update the view state, the vault repo will emit a new state during this time.
+        vaultRepo.sync()
+    }
+
     private fun handleSearchClick() {
         // TODO: navigate to send search BIT-594
         sendEvent(SendEvent.ShowToast("Search Not Implemented".asText()))
@@ -57,12 +80,55 @@ class SendViewModel @Inject constructor(
 /**
  * Models state for the Send screen.
  */
-sealed class SendState : Parcelable {
+@Parcelize
+data class SendState(
+    val viewState: ViewState,
+) : Parcelable {
+
     /**
-     * Show the empty state.
+     * Represents the specific view states for the send screen.
      */
-    @Parcelize
-    data object Empty : SendState()
+    sealed class ViewState : Parcelable {
+        /**
+         * Indicates if the FAB should be displayed.
+         */
+        abstract val shouldDisplayFab: Boolean
+
+        /**
+         * Show the empty state.
+         */
+        @Parcelize
+        // TODO: Add actual content BIT-481
+        data object Content : ViewState() {
+            override val shouldDisplayFab: Boolean get() = true
+        }
+
+        /**
+         * Show the empty state.
+         */
+        @Parcelize
+        data object Empty : ViewState() {
+            override val shouldDisplayFab: Boolean get() = true
+        }
+
+        /**
+         * Represents an error state for the [VaultItemScreen].
+         */
+        @Parcelize
+        data class Error(
+            val message: Text,
+        ) : ViewState() {
+            override val shouldDisplayFab: Boolean get() = false
+        }
+
+        /**
+         * Show the loading state.
+         */
+        @Parcelize
+        data object Loading : ViewState() {
+            override val shouldDisplayFab: Boolean get() = false
+        }
+    }
 }
 
 /**
@@ -83,6 +149,11 @@ sealed class SendAction {
      * User clicked the lock button.
      */
     data object LockClick : SendAction()
+
+    /**
+     * User clicked the refresh button.
+     */
+    data object RefreshClick : SendAction()
 
     /**
      * User clicked search button.

@@ -21,7 +21,7 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be Empty`() {
         val viewModel = createViewModel()
-        assertEquals(SendState.Empty, viewModel.stateFlow.value)
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
 
     @Test
@@ -62,6 +62,18 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `RefreshClick should call sync`() {
+        val viewModel = createViewModel()
+        every { vaultRepo.sync() } just runs
+
+        viewModel.trySendAction(SendAction.RefreshClick)
+
+        verify {
+            vaultRepo.sync()
+        }
+    }
+
+    @Test
     fun `SearchClick should emit ShowToast`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -92,3 +104,11 @@ class SendViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
     )
 }
+
+private val DEFAULT_STATE: SendState = SendState(
+    viewState = SendState.ViewState.Loading,
+)
+
+private val DEFAULT_ERROR_STATE: SendState = DEFAULT_STATE.copy(
+    viewState = SendState.ViewState.Error("Fail".asText()),
+)

@@ -2,9 +2,10 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandIn
-import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -20,13 +21,14 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.IntSize
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
@@ -106,10 +108,9 @@ fun SendScreen(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = true,
-                // The enter transition is required for AnimatedVisibility to work correctly on
-                // FloatingActionButton. See - https://issuetracker.google.com/issues/224005027?pli=1
-                enter = fadeIn() + expandIn { IntSize(width = 1, height = 1) },
+                visible = state.viewState.shouldDisplayFab,
+                enter = scaleIn(),
+                exit = scaleOut(),
             ) {
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -126,14 +127,32 @@ fun SendScreen(
             }
         },
     ) { padding ->
-        Box(modifier = Modifier.padding(padding)) {
-            when (state) {
-                SendState.Empty -> SendEmpty(
-                    remember(viewModel) {
-                        { viewModel.trySendAction(SendAction.AddSendClick) }
-                    },
-                )
-            }
+        val modifier = Modifier
+            .imePadding()
+            .fillMaxSize()
+            .padding(padding)
+        when (val viewState = state.viewState) {
+            is SendState.ViewState.Content -> SendContent(
+                modifier = modifier,
+                state = viewState,
+            )
+
+            SendState.ViewState.Empty -> SendEmpty(
+                modifier = modifier,
+                onAddItemClick = remember(viewModel) {
+                    { viewModel.trySendAction(SendAction.AddSendClick) }
+                },
+            )
+
+            is SendState.ViewState.Error -> BitwardenErrorContent(
+                modifier = modifier,
+                message = viewState.message(),
+                onTryAgainClick = remember(viewModel) {
+                    { viewModel.trySendAction(SendAction.RefreshClick) }
+                },
+            )
+
+            SendState.ViewState.Loading -> BitwardenLoadingContent(modifier = modifier)
         }
     }
 }

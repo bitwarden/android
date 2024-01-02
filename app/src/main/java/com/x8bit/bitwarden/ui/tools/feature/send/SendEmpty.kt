@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,10 +25,10 @@ import com.x8bit.bitwarden.R
 @Composable
 fun SendEmpty(
     onAddItemClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -58,5 +58,6 @@ fun SendEmpty(
                 style = MaterialTheme.typography.labelLarge,
             )
         }
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
