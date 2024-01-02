@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
@@ -194,6 +195,326 @@ class VaultItemScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(enteredPassword))
         }
+    }
+
+    @Test
+    fun `name should be displayed according to state`() {
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { it.copy(viewState = typeState) }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll("Name")
+                    .assertTextContains("cipher")
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) { copy(name = "Test Name") }
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll("Name")
+                    .assertTextContains("Test Name")
+            }
+    }
+
+    @Test
+    fun `lastUpdated should be displayed according to state`() {
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { it.copy(viewState = typeState) }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll("Updated: ")
+                    .assertTextContains("12/31/69 06:16 PM")
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) { copy(lastUpdated = "12/31/69 06:20 PM") }
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll("Updated: ")
+                    .assertTextContains("12/31/69 06:20 PM")
+            }
+    }
+
+    @Test
+    fun `notes should be displayed according to state`() {
+        DEFAULT_VIEW_STATES
+            .forEach { typeState ->
+
+                mutableStateFlow.update { it.copy(viewState = typeState) }
+
+                composeTestRule.onFirstNodeWithTextAfterScroll("Notes").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("Lots of notes").assertIsDisplayed()
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) { copy(notes = null) }
+                }
+
+                composeTestRule.assertScrollableNodeDoesNotExist("Notes")
+                composeTestRule.assertScrollableNodeDoesNotExist("Lots of notes")
+            }
+    }
+
+    @Test
+    fun `custom views should be displayed according to state`() {
+        DEFAULT_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { it.copy(viewState = typeState) }
+                composeTestRule.onNodeWithTextAfterScroll("Custom fields").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("text").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("value").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("hidden").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("boolean").assertIsDisplayed()
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) { copy(customFields = emptyList()) }
+                }
+
+                composeTestRule.assertScrollableNodeDoesNotExist("Custom fields")
+                composeTestRule.assertScrollableNodeDoesNotExist("text")
+                composeTestRule.assertScrollableNodeDoesNotExist("value")
+                composeTestRule.assertScrollableNodeDoesNotExist("hidden")
+                composeTestRule.assertScrollableNodeDoesNotExist("boolean")
+            }
+    }
+
+    @Test
+    fun `on show hidden field click should send HiddenFieldVisibilityClicked`() {
+        val textField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            name = "hidden",
+            value = "hidden password",
+            isCopyable = true,
+            isVisible = false,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            common = EMPTY_COMMON.copy(
+                                customFields = listOf(textField),
+                            ),
+                        ),
+                    )
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(textField.name)
+                    .onChildren()
+                    .filterToOne(hasContentDescription("Show"))
+                    .performClick()
+
+                verify {
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.HiddenFieldVisibilityClicked(
+                            field = textField,
+                            isVisible = true,
+                        ),
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `copy hidden field button should be displayed according to state`() {
+        val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            name = "hidden",
+            value = "hidden password",
+            isCopyable = true,
+            isVisible = false,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            common = EMPTY_COMMON.copy(
+                                customFields = listOf(hiddenField),
+                            ),
+                        ),
+                    )
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(hiddenField.name)
+                    .onSiblings()
+                    .filterToOne(hasContentDescription("Copy"))
+                    .assertIsDisplayed()
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) {
+                        copy(customFields = listOf(hiddenField.copy(isCopyable = false)))
+                    }
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(hiddenField.name)
+                    .onSiblings()
+                    .filterToOne(hasContentDescription("Copy"))
+                    .assertDoesNotExist()
+            }
+    }
+
+    @Test
+    fun `on copy hidden field click should send CopyCustomHiddenFieldClick`() {
+        val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            name = "hidden",
+            value = "hidden password",
+            isCopyable = true,
+            isVisible = false,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            common = EMPTY_COMMON.copy(
+                                customFields = listOf(hiddenField),
+                            ),
+                        ),
+                    )
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(hiddenField.name)
+                    .onSiblings()
+                    .filterToOne(hasContentDescription("Copy"))
+                    .performClick()
+
+                verify {
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.CopyCustomHiddenFieldClick(hiddenField.value),
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `on copy text field click should send CopyCustomTextFieldClick`() {
+        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            name = "text",
+            value = "value",
+            isCopyable = true,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            common = EMPTY_COMMON.copy(
+                                customFields = listOf(textField),
+                            ),
+                        ),
+                    )
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(textField.name)
+                    .onSiblings()
+                    .filterToOne(hasContentDescription("Copy"))
+                    .performClick()
+
+                verify {
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.CopyCustomTextFieldClick(textField.value),
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `text field copy button should be displayed according to state`() {
+        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            name = "text",
+            value = "value",
+            isCopyable = true,
+        )
+
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { currentState ->
+                    currentState.copy(
+                        viewState = typeState.copy(
+                            common = EMPTY_COMMON.copy(
+                                customFields = listOf(textField),
+                            ),
+                        ),
+                    )
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(textField.name)
+                    .onSiblings()
+                    .filterToOne(hasContentDescription("Copy"))
+                    .assertIsDisplayed()
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) {
+                        copy(customFields = listOf(textField.copy(isCopyable = false)))
+                    }
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(textField.name)
+                    .onSiblings()
+                    .filterToOne(hasContentDescription("Copy"))
+                    .assertDoesNotExist()
+            }
+    }
+
+    @Test
+    fun `in login state, linked custom fields should be displayed according to state`() {
+        val linkedFieldUserName =
+            VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                name = "linked username",
+                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
+            )
+
+        val linkedFieldsPassword = VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+            name = "linked password",
+            vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
+        )
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        customFields = listOf(linkedFieldUserName, linkedFieldsPassword),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(linkedFieldsPassword.name)
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(linkedFieldUserName.name)
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        customFields = listOf(),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(linkedFieldsPassword.name)
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText(linkedFieldUserName.name)
+            .assertDoesNotExist()
     }
 
     @Test
@@ -421,174 +742,6 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on show hidden field click should send HiddenFieldVisibilityClicked`() {
-        val textField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
-            name = "hidden",
-            value = "hidden password",
-            isCopyable = true,
-            isVisible = false,
-        )
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    common = EMPTY_COMMON.copy(
-                        customFields = listOf(textField),
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(textField.name)
-            .onChildren()
-            .filterToOne(hasContentDescription("Show"))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultItemAction.Common.HiddenFieldVisibilityClicked(
-                    field = textField,
-                    isVisible = true,
-                ),
-            )
-        }
-    }
-
-    @Test
-    fun `copy hidden field button should be displayed according to state`() {
-        val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
-            name = "hidden",
-            value = "hidden password",
-            isCopyable = true,
-            isVisible = false,
-        )
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    common = EMPTY_COMMON.copy(
-                        customFields = listOf(hiddenField),
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(hiddenField.name)
-            .onSiblings()
-            .filterToOne(hasContentDescription("Copy"))
-            .assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateCommonContent(currentState) {
-                copy(customFields = listOf(hiddenField.copy(isCopyable = false)))
-            }
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(hiddenField.name)
-            .onSiblings()
-            .filterToOne(hasContentDescription("Copy"))
-            .assertDoesNotExist()
-    }
-
-    @Test
-    fun `on copy hidden field click should send CopyCustomHiddenFieldClick`() {
-        val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
-            name = "hidden",
-            value = "hidden password",
-            isCopyable = true,
-            isVisible = false,
-        )
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    common = EMPTY_COMMON.copy(
-                        customFields = listOf(hiddenField),
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(hiddenField.name)
-            .onSiblings()
-            .filterToOne(hasContentDescription("Copy"))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultItemAction.Common.CopyCustomHiddenFieldClick(hiddenField.value),
-            )
-        }
-    }
-
-    @Test
-    fun `on copy text field click should send CopyCustomTextFieldClick`() {
-        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
-            name = "text",
-            value = "value",
-            isCopyable = true,
-        )
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    common = EMPTY_COMMON.copy(
-                        customFields = listOf(textField),
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(textField.name)
-            .onSiblings()
-            .filterToOne(hasContentDescription("Copy"))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultItemAction.Common.CopyCustomTextFieldClick(textField.value),
-            )
-        }
-    }
-
-    @Test
-    fun `text field copy button should be displayed according to state`() {
-        val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
-            name = "text",
-            value = "value",
-            isCopyable = true,
-        )
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    common = EMPTY_COMMON.copy(
-                        customFields = listOf(textField),
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(textField.name)
-            .onSiblings()
-            .filterToOne(hasContentDescription("Copy"))
-            .assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateCommonContent(currentState) {
-                copy(customFields = listOf(textField.copy(isCopyable = false)))
-            }
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll(textField.name)
-            .onSiblings()
-            .filterToOne(hasContentDescription("Copy"))
-            .assertDoesNotExist()
-    }
-
-    @Test
     fun `in login state, on password history click should send PasswordHistoryClick`() {
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -685,44 +838,6 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.assertScrollableNodeDoesNotExist("URIs")
         composeTestRule.assertScrollableNodeDoesNotExist("URI")
         composeTestRule.assertScrollableNodeDoesNotExist("www.example.com")
-    }
-
-    @Test
-    fun `notes should be displayed according to state`() {
-        mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onFirstNodeWithTextAfterScroll("Notes").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("Lots of notes").assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateCommonContent(currentState) { copy(notes = null) }
-        }
-
-        composeTestRule.assertScrollableNodeDoesNotExist("Notes")
-        composeTestRule.assertScrollableNodeDoesNotExist("Lots of notes")
-    }
-
-    @Test
-    fun `custom views should be displayed according to state`() {
-        mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll("Custom fields").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("text").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("value").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("hidden").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("boolean").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("linked username").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("linked password").assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateCommonContent(currentState) { copy(customFields = emptyList()) }
-        }
-
-        composeTestRule.assertScrollableNodeDoesNotExist("Custom fields")
-        composeTestRule.assertScrollableNodeDoesNotExist("text")
-        composeTestRule.assertScrollableNodeDoesNotExist("value")
-        composeTestRule.assertScrollableNodeDoesNotExist("hidden")
-        composeTestRule.assertScrollableNodeDoesNotExist("boolean")
-        composeTestRule.assertScrollableNodeDoesNotExist("linked username")
-        composeTestRule.assertScrollableNodeDoesNotExist("linked password")
     }
 
     @Test
@@ -911,9 +1026,11 @@ private fun updateIdentityType(
                         type = type.transform(),
                     )
                 }
+
                 else -> viewState
             }
         }
+
         else -> viewState
     }
     return currentState.copy(viewState = updatedType)
@@ -947,7 +1064,7 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         lastUpdated = "12/31/69 06:16 PM",
-        name = "login cipher",
+        name = "cipher",
         notes = "Lots of notes",
         isPremiumUser = true,
         customFields = listOf(
@@ -965,14 +1082,6 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             VaultItemState.ViewState.Content.Common.Custom.BooleanField(
                 name = "boolean",
                 value = true,
-            ),
-            VaultItemState.ViewState.Content.Common.Custom.LinkedField(
-                name = "linked username",
-                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
-            ),
-            VaultItemState.ViewState.Content.Common.Custom.LinkedField(
-                name = "linked password",
-                vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
             ),
         ),
         requiresReprompt = true,
@@ -1012,7 +1121,7 @@ private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity
 
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
-        name = "login cipher",
+        name = "cipher",
         lastUpdated = "12/31/69 06:16 PM",
         notes = null,
         isPremiumUser = true,
@@ -1030,10 +1139,29 @@ private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
         totp = null,
     )
 
+private val EMPTY_IDENTITY_TYPE: VaultItemState.ViewState.Content.ItemType.Identity =
+    VaultItemState.ViewState.Content.ItemType.Identity(
+        username = "",
+        identityName = "",
+        company = "",
+        ssn = "",
+        passportNumber = "",
+        licenseNumber = "",
+        email = "",
+        phone = "",
+        address = "",
+    )
+
 private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = EMPTY_COMMON,
         type = EMPTY_LOGIN_TYPE,
+    )
+
+private val EMPTY_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = EMPTY_COMMON,
+        type = EMPTY_IDENTITY_TYPE,
     )
 
 private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
@@ -1047,3 +1175,13 @@ private val DEFAULT_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
         type = DEFAULT_IDENTITY,
         common = DEFAULT_COMMON,
     )
+
+private val EMPTY_VIEW_STATES = listOf(
+    EMPTY_LOGIN_VIEW_STATE,
+    EMPTY_IDENTITY_VIEW_STATE,
+)
+
+private val DEFAULT_VIEW_STATES = listOf(
+    DEFAULT_LOGIN_VIEW_STATE,
+    DEFAULT_IDENTITY_VIEW_STATE,
+)
