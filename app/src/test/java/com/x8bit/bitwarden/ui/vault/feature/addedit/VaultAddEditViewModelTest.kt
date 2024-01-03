@@ -266,39 +266,88 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `in edit mode, SaveClick createCipher error should emit ShowToast`() = runTest {
-        val cipherView = mockk<CipherView>()
-        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
-        val stateWithName = createVaultAddItemState(
-            vaultAddEditType = vaultAddEditType,
-            commonContentViewState = createCommonContentViewState(
-                name = "mockName",
-            ),
-        )
-
-        every { cipherView.toViewState() } returns stateWithName.viewState
-        coEvery {
-            vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
-        } returns UpdateCipherResult.Error
-        mutableVaultItemFlow.value = DataState.Loaded(cipherView)
-
-        val viewModel = createAddVaultItemViewModel(
-            createSavedStateHandleWithState(
-                state = stateWithName,
+    fun `in edit mode, SaveClick updateCipher error with a null message should show an error dialog with a generic message`() =
+        runTest {
+            val cipherView = mockk<CipherView>()
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
-            ),
-        )
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName",
+                ),
+            )
 
-        viewModel.eventFlow.test {
+            every { cipherView.toViewState() } returns stateWithName.viewState
+            coEvery {
+                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+            } returns UpdateCipherResult.Error(errorMessage = null)
+            mutableVaultItemFlow.value = DataState.Loaded(cipherView)
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                ),
+            )
+
             viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
-            assertEquals(VaultAddEditEvent.ShowToast("Save Item Failure".asText()), awaitItem())
+
+            assertEquals(
+                stateWithName.copy(
+                    dialog = VaultAddEditState.DialogState.Error(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+            coVerify(exactly = 1) {
+                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+            }
         }
 
-        coVerify(exactly = 1) {
-            vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode, SaveClick updateCipher error with a non-null message should show an error dialog with that message`() =
+        runTest {
+            val cipherView = mockk<CipherView>()
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName",
+                ),
+            )
+            val errorMessage = "You do not have permission to edit this."
+
+            every { cipherView.toViewState() } returns stateWithName.viewState
+            coEvery {
+                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+            } returns UpdateCipherResult.Error(errorMessage = errorMessage)
+            mutableVaultItemFlow.value = DataState.Loaded(cipherView)
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                ),
+            )
+
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+
+            assertEquals(
+                stateWithName.copy(
+                    dialog = VaultAddEditState.DialogState.Error(
+                        message = errorMessage.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+            coVerify(exactly = 1) {
+                vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
+            }
         }
-    }
 
     @Test
     fun `Saving item with an empty name field will cause a dialog to show up`() = runTest {
