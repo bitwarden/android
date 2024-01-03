@@ -9,9 +9,9 @@ import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -879,6 +879,7 @@ class GeneratorViewModel @Inject constructor(
                             generateForwardedEmailAlias(selectedType)
                         }
                     }
+
                     is CatchAllEmail -> {
                         // TODO: Implement catch all email generation (BIT-1334)
                     }

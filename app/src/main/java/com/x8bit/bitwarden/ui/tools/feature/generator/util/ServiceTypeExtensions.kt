@@ -19,24 +19,28 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
                 website = null,
             )
         }
+
         is ServiceType.DuckDuckGo -> {
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.DuckDuckGo(token = this.apiKey),
                 website = null,
             )
         }
+
         is ServiceType.FirefoxRelay -> {
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.Firefox(apiToken = this.apiAccessToken),
                 website = null,
             )
         }
+
         is ServiceType.FastMail -> {
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.Fastmail(apiToken = this.apiKey),
                 website = null,
             )
         }
+
         is ServiceType.SimpleLogin -> {
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.SimpleLogin(apiKey = this.apiKey),

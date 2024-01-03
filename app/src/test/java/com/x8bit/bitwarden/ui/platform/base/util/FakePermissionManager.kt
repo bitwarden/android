@@ -41,6 +41,6 @@ class FakePermissionManager : PermissionsManager {
     override fun shouldShouldRequestPermissionRationale(
         permission: String,
     ): Boolean {
-       return shouldShowRequestRationale
+        return shouldShowRequestRationale
     }
 }

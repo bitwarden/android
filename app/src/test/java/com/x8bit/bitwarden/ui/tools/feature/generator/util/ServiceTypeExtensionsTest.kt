@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
 import com.bitwarden.core.ForwarderServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 internal class ServiceTypeExtensionsTest {
 
@@ -21,7 +21,8 @@ internal class ServiceTypeExtensionsTest {
                 apiToken = "testToken",
                 domain = "test.com",
                 baseUrl = "http://test.com",
-            ), request.service,
+            ),
+            request.service,
         )
         assertEquals(null, request.website)
     }
