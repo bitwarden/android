@@ -42,7 +42,12 @@ fun VaultItemListingContent(
                 onClick = { vaultItemClick(it.id) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(
+                        start = 16.dp,
+                        // There is some built-in padding to the menu button that makes up
+                        // the visual difference here.
+                        end = 12.dp,
+                    ),
             )
         }
     }

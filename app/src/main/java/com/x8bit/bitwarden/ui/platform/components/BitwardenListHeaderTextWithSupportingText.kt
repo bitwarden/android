@@ -30,6 +30,7 @@ fun BitwardenListHeaderTextWithSupportLabel(
             .padding(
                 top = 12.dp,
                 bottom = 4.dp,
+                end = 8.dp,
             )
             .semantics(mergeDescendants = true) { },
         horizontalArrangement = Arrangement.SpaceBetween,
