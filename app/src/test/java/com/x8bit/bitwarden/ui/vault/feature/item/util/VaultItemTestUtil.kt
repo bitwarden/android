@@ -137,7 +137,6 @@ fun createCommonContent(isEmpty: Boolean): VaultItemState.ViewState.Content.Comm
             name = "mockName",
             lastUpdated = "1/1/70 12:16 AM",
             notes = null,
-            isPremiumUser = true,
             customFields = emptyList(),
             requiresReprompt = true,
         )
@@ -146,7 +145,6 @@ fun createCommonContent(isEmpty: Boolean): VaultItemState.ViewState.Content.Comm
             name = "mockName",
             lastUpdated = "1/1/70 12:16 AM",
             notes = "Lots of notes",
-            isPremiumUser = true,
             customFields = listOf(
                 VaultItemState.ViewState.Content.Common.Custom.TextField(
                     name = "text",
@@ -199,6 +197,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
         passwordRevisionDate = "1/1/70 12:16 AM".takeUnless { isEmpty },
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example"
             .takeUnless { isEmpty },
+        isPremiumUser = true,
     )
 
 fun createIdentityContent(

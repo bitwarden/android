@@ -45,8 +45,8 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(isPremiumUser = isPremiumUser),
-                type = createLoginContent(isEmpty = false),
+                common = createCommonContent(isEmpty = false),
+                type = createLoginContent(isEmpty = false).copy(isPremiumUser = isPremiumUser),
             ),
             viewState,
         )
@@ -66,31 +66,14 @@ class CipherViewExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should transform full CipherView into ViewState Identity Content with premium`() {
+    fun `toViewState should transform full CipherView into ViewState Identity Content`() {
         val viewState = createCipherView(type = CipherType.IDENTITY, isEmpty = false)
             .toViewState(isPremiumUser = true)
 
         assertEquals(
             VaultItemState.ViewState.Content(
                 common = createCommonContent(isEmpty = false),
-                type = createIdentityContent(isEmpty = false),
-            ),
-            viewState,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `toViewState should transform full CipherView into ViewState Identity Content without premium`() {
-        val isPremiumUser = false
-        val viewState = createCipherView(type = CipherType.IDENTITY, isEmpty = false)
-            .toViewState(isPremiumUser = isPremiumUser)
-
-        assertEquals(
-            VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(isPremiumUser = isPremiumUser),
                 type = createIdentityContent(isEmpty = false),
             ),
             viewState,
@@ -171,9 +154,8 @@ class CipherViewExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `toViewState should transform full CipherView into ViewState Secure Note Content with premium`() {
+    fun `toViewState should transform full CipherView into ViewState Secure Note Content`() {
         val viewState = createCipherView(type = CipherType.SECURE_NOTE, isEmpty = false)
             .toViewState(isPremiumUser = true)
 
@@ -193,7 +175,7 @@ class CipherViewExtensionsTest {
             .toViewState(isPremiumUser = true)
 
         val expectedState = VaultItemState.ViewState.Content(
-            common = createCommonContent(isEmpty = true).copy(isPremiumUser = true),
+            common = createCommonContent(isEmpty = true),
             type = VaultItemState.ViewState.Content.ItemType.SecureNote,
         )
 

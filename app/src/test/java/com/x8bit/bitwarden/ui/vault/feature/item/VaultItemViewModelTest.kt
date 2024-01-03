@@ -681,6 +681,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 passwordRevisionDate = "12/31/69 06:16 PM",
                 totp = "otpauth://totp/Example:alice@google.com" +
                     "?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+                isPremiumUser = true,
             )
 
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
@@ -688,7 +689,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 name = "login cipher",
                 lastUpdated = "12/31/69 06:16 PM",
                 notes = "Lots of notes",
-                isPremiumUser = true,
                 customFields = listOf(
                     VaultItemState.ViewState.Content.Common.Custom.TextField(
                         name = "text",

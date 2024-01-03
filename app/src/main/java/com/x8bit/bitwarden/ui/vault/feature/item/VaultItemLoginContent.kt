@@ -96,7 +96,7 @@ fun VaultItemLoginContent(
         item {
             Spacer(modifier = Modifier.height(8.dp))
             TotpField(
-                isPremiumUser = commonState.isPremiumUser,
+                isPremiumUser = loginItemState.isPremiumUser,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
