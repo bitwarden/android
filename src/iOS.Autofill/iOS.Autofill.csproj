@@ -84,6 +84,7 @@
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
     <Compile Include="CredentialProviderViewController.TapGestureHack.cs" />
+    <Compile Include="CredentialProviderViewController.Passkeys.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\check.png" />
