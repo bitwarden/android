@@ -1,9 +1,9 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem.model
+package com.x8bit.bitwarden.ui.vault.feature.addedit.model
 
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import java.util.UUID
 
@@ -18,14 +18,14 @@ enum class CustomFieldType(val typeText: Text) {
 }
 
 /**
- * A function that converts [CustomFieldType] and a string to [VaultAddItemState.Custom].
+ * A function that converts [CustomFieldType] and a string to [VaultAddEditState.Custom].
  */
 fun CustomFieldType.toCustomField(
     name: String,
-): VaultAddItemState.Custom {
+): VaultAddEditState.Custom {
     return when (this) {
         CustomFieldType.BOOLEAN -> {
-            VaultAddItemState.Custom.BooleanField(
+            VaultAddEditState.Custom.BooleanField(
                 itemId = UUID.randomUUID().toString(),
                 name = name,
                 value = false,
@@ -33,7 +33,7 @@ fun CustomFieldType.toCustomField(
         }
 
         CustomFieldType.LINKED -> {
-            VaultAddItemState.Custom.LinkedField(
+            VaultAddEditState.Custom.LinkedField(
                 itemId = UUID.randomUUID().toString(),
                 name = name,
                 vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
@@ -41,7 +41,7 @@ fun CustomFieldType.toCustomField(
         }
 
         CustomFieldType.HIDDEN -> {
-            VaultAddItemState.Custom.HiddenField(
+            VaultAddEditState.Custom.HiddenField(
                 itemId = UUID.randomUUID().toString(),
                 name = name,
                 value = "",
@@ -49,7 +49,7 @@ fun CustomFieldType.toCustomField(
         }
 
         CustomFieldType.TEXT -> {
-            VaultAddItemState.Custom.TextField(
+            VaultAddEditState.Custom.TextField(
                 itemId = UUID.randomUUID().toString(),
                 name = name,
                 value = "",

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,11 +15,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 /**
- * The top level error UI state for the [VaultAddItemScreen].
+ * The top level error UI state for the [VaultAddEditScreen].
  */
 @Composable
 fun VaultAddEditError(
-    viewState: VaultAddItemState.ViewState.Error,
+    viewState: VaultAddEditState.ViewState.Error,
     modifier: Modifier = Modifier,
 ) {
     Column(

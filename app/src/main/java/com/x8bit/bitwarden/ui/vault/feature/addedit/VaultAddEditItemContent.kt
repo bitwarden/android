@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.Manifest
 import androidx.compose.foundation.layout.Spacer
@@ -15,35 +15,35 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddIdentityItemTypeHandlers
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import kotlinx.collections.immutable.toImmutableList
 
 /**
- * The top level content UI state for the [VaultAddItemScreen].
+ * The top level content UI state for the [VaultAddEditScreen].
  */
 @Composable
 @Suppress("LongMethod")
-fun AddEditItemContent(
-    state: VaultAddItemState.ViewState.Content,
+fun VaultAddEditContent(
+    state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
-    onTypeOptionClicked: (VaultAddItemState.ItemTypeOption) -> Unit,
-    commonTypeHandlers: VaultAddItemCommonHandlers,
-    loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
-    identityItemTypeHandlers: VaultAddIdentityItemTypeHandlers,
+    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
+    commonTypeHandlers: VaultAddEditCommonHandlers,
+    loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+    identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
     modifier: Modifier = Modifier,
     permissionsManager: PermissionsManager,
 ) {
     val launcher = permissionsManager.getLauncher(
         onResult = { isGranted ->
             when (state.type) {
-                is VaultAddItemState.ViewState.Content.ItemType.SecureNotes -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> Unit
                 // TODO: Create UI for card-type item creation BIT-507
-                is VaultAddItemState.ViewState.Content.ItemType.Card -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.Card -> Unit
                 // TODO: Create UI for identity-type item creation BIT-667
-                is VaultAddItemState.ViewState.Content.ItemType.Identity -> Unit
-                is VaultAddItemState.ViewState.Content.ItemType.Login -> {
+                is VaultAddEditState.ViewState.Content.ItemType.Identity -> Unit
+                is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                     loginItemTypeHandlers.onSetupTotpClick(isGranted)
                 }
             }
@@ -73,8 +73,8 @@ fun AddEditItemContent(
         }
 
         when (state.type) {
-            is VaultAddItemState.ViewState.Content.ItemType.Login -> {
-                addEditLoginItems(
+            is VaultAddEditState.ViewState.Content.ItemType.Login -> {
+                vaultAddEditLoginItems(
                     commonState = state.common,
                     loginState = state.type,
                     isAddItemMode = isAddItemMode,
@@ -90,12 +90,12 @@ fun AddEditItemContent(
                 )
             }
 
-            is VaultAddItemState.ViewState.Content.ItemType.Card -> {
+            is VaultAddEditState.ViewState.Content.ItemType.Card -> {
                 // TODO(BIT-507): Create UI for card-type item creation
             }
 
-            is VaultAddItemState.ViewState.Content.ItemType.Identity -> {
-                addEditIdentityItems(
+            is VaultAddEditState.ViewState.Content.ItemType.Identity -> {
+                vaultAddEditIdentityItems(
                     commonState = state.common,
                     identityState = state.type,
                     isAddItemMode = isAddItemMode,
@@ -104,8 +104,8 @@ fun AddEditItemContent(
                 )
             }
 
-            is VaultAddItemState.ViewState.Content.ItemType.SecureNotes -> {
-                addEditSecureNotesItems(
+            is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> {
+                vaultAddEditSecureNotesItems(
                     commonState = state.common,
                     isAddItemMode = isAddItemMode,
                     commonTypeHandlers = commonTypeHandlers,
@@ -121,11 +121,11 @@ fun AddEditItemContent(
 
 @Composable
 private fun TypeOptionsItem(
-    itemType: VaultAddItemState.ViewState.Content.ItemType,
-    onTypeOptionClicked: (VaultAddItemState.ItemTypeOption) -> Unit,
+    itemType: VaultAddEditState.ViewState.Content.ItemType,
+    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
     modifier: Modifier,
 ) {
-    val possibleMainStates = VaultAddItemState.ItemTypeOption.entries.toList()
+    val possibleMainStates = VaultAddEditState.ItemTypeOption.entries.toList()
     val optionsWithStrings = possibleMainStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ClipboardManager
@@ -34,7 +34,7 @@ import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import io.mockk.every
 import io.mockk.just
@@ -48,19 +48,19 @@ import org.junit.Before
 import org.junit.Test
 
 @Suppress("LargeClass")
-class VaultAddItemScreenTest : BaseComposeTest() {
+class VaultAddEditScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateQrCodeScanScreenCalled = false
 
     private val clipboardManager = mockk<ClipboardManager>()
 
-    private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddItemEvent>()
+    private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
 
     private val fakePermissionManager: FakePermissionManager = FakePermissionManager()
 
-    private val viewModel = mockk<VaultAddItemViewModel>(relaxed = true) {
+    private val viewModel = mockk<VaultAddEditViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
@@ -68,7 +68,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Before
     fun setup() {
         composeTestRule.setContent {
-            VaultAddItemScreen(
+            VaultAddEditScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 permissionsManager = fakePermissionManager,
@@ -82,14 +82,14 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `on NavigateBack event should invoke onNavigateBack`() {
-        mutableEventFlow.tryEmit(VaultAddItemEvent.NavigateBack)
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `on NavigateToQrCodeScan event should invoke NavigateToQrCodeScan`() {
-        mutableEventFlow.tryEmit(VaultAddItemEvent.NavigateToQrCodeScan)
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToQrCodeScan)
         assertTrue(onNavigateQrCodeScanScreenCalled)
     }
 
@@ -99,7 +99,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         every { clipboardManager.setText(textString.toAnnotatedString()) } just runs
 
-        mutableEventFlow.tryEmit(VaultAddItemEvent.CopyToClipboard(textString))
+        mutableEventFlow.tryEmit(VaultAddEditEvent.CopyToClipboard(textString))
 
         verify(exactly = 1) {
             clipboardManager.setText(textString.toAnnotatedString())
@@ -114,7 +114,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.CloseClick,
+                VaultAddEditAction.Common.CloseClick,
             )
         }
     }
@@ -127,7 +127,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.SaveClick,
+                VaultAddEditAction.Common.SaveClick,
             )
         }
     }
@@ -143,7 +143,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.DismissDialog,
+                VaultAddEditAction.Common.DismissDialog,
             )
         }
     }
@@ -169,22 +169,22 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     fun `error text and retry should be displayed according to state`() {
         val message = "error_message"
         mutableStateFlow.update {
-            it.copy(viewState = VaultAddItemState.ViewState.Loading)
+            it.copy(viewState = VaultAddEditState.ViewState.Loading)
         }
         composeTestRule.onNodeWithText(message).assertIsNotDisplayed()
 
         mutableStateFlow.update {
             it.copy(
-                viewState = VaultAddItemState.ViewState.Content(
-                    common = VaultAddItemState.ViewState.Content.Common(),
-                    type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
             )
         }
         composeTestRule.onNodeWithText(message).assertIsNotDisplayed()
 
         mutableStateFlow.update {
-            it.copy(viewState = VaultAddItemState.ViewState.Error(message.asText()))
+            it.copy(viewState = VaultAddEditState.ViewState.Error(message.asText()))
         }
         composeTestRule.onNodeWithText(message).assertIsDisplayed()
     }
@@ -192,20 +192,20 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update {
-            it.copy(viewState = VaultAddItemState.ViewState.Loading)
+            it.copy(viewState = VaultAddEditState.ViewState.Loading)
         }
         composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(viewState = VaultAddItemState.ViewState.Error("Fail".asText()))
+            it.copy(viewState = VaultAddEditState.ViewState.Error("Fail".asText()))
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(
-                viewState = VaultAddItemState.ViewState.Content(
-                    common = VaultAddItemState.ViewState.Content.Common(),
-                    type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
             )
         }
@@ -228,7 +228,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.TypeOptionSelect(VaultAddItemState.ItemTypeOption.LOGIN),
+                VaultAddEditAction.Common.TypeOptionSelect(VaultAddEditState.ItemTypeOption.LOGIN),
             )
         }
     }
@@ -241,9 +241,9 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                viewState = VaultAddItemState.ViewState.Content(
-                    common = VaultAddItemState.ViewState.Content.Common(),
-                    type = VaultAddItemState.ViewState.Content.ItemType.Card,
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Card,
                 ),
             )
         }
@@ -261,7 +261,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.UsernameTextChange(username = "TestUsername"),
+                VaultAddEditAction.ItemType.LoginType.UsernameTextChange(username = "TestUsername"),
             )
         }
     }
@@ -290,7 +290,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.OpenUsernameGeneratorClick,
+                VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick,
             )
         }
     }
@@ -305,7 +305,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.PasswordCheckerClick)
+            viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.PasswordCheckerClick)
         }
     }
 
@@ -320,7 +320,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.OpenPasswordGeneratorClick,
+                VaultAddEditAction.ItemType.LoginType.OpenPasswordGeneratorClick,
             )
         }
     }
@@ -333,7 +333,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.PasswordTextChange("TestPassword"),
+                VaultAddEditAction.ItemType.LoginType.PasswordTextChange("TestPassword"),
             )
         }
     }
@@ -396,7 +396,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick(testCode),
+                VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(testCode),
             )
         }
     }
@@ -418,7 +418,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
                     isGranted = fakePermissionManager.getPermissionsResult,
                 ),
             )
@@ -455,7 +455,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(true),
+                VaultAddEditAction.ItemType.LoginType.SetupTotpClick(true),
             )
         }
     }
@@ -472,7 +472,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
                     isGranted = true,
                 ),
             )
@@ -491,7 +491,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
                     isGranted = false,
                 ),
             )
@@ -506,7 +506,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.UriTextChange("TestURI"),
+                VaultAddEditAction.ItemType.LoginType.UriTextChange("TestURI"),
             )
         }
     }
@@ -537,7 +537,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.UriSettingsClick,
+                VaultAddEditAction.ItemType.LoginType.UriSettingsClick,
             )
         }
     }
@@ -550,7 +550,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.LoginType.AddNewUriClick,
+                VaultAddEditAction.ItemType.LoginType.AddNewUriClick,
             )
         }
     }
@@ -572,8 +572,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.TitleSelected(
-                    title = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+                VaultAddEditAction.ItemType.IdentityType.TitleSelected(
+                    title = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
                 ),
             )
         }
@@ -589,7 +589,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
         mutableStateFlow.update { currentState ->
             updateIdentityType(currentState) {
                 copy(
-                    selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+                    selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
                 )
             }
         }
@@ -609,7 +609,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange(
+                VaultAddEditAction.ItemType.IdentityType.FirstNameTextChange(
                     firstName = "TestFirstName",
                 ),
             )
@@ -643,7 +643,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange(
+                VaultAddEditAction.ItemType.IdentityType.MiddleNameTextChange(
                     middleName = "TestMiddleName",
                 ),
             )
@@ -677,7 +677,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.LastNameTextChange(
+                VaultAddEditAction.ItemType.IdentityType.LastNameTextChange(
                     lastName = "TestLastName",
                 ),
             )
@@ -710,7 +710,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.UsernameTextChange(
+                VaultAddEditAction.ItemType.IdentityType.UsernameTextChange(
                     username = "TestUsername",
                 ),
             )
@@ -743,7 +743,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.CompanyTextChange(
+                VaultAddEditAction.ItemType.IdentityType.CompanyTextChange(
                     company = "TestCompany",
                 ),
             )
@@ -776,7 +776,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.SsnTextChange(
+                VaultAddEditAction.ItemType.IdentityType.SsnTextChange(
                     ssn = "TestSsn",
                 ),
             )
@@ -809,7 +809,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange(
+                VaultAddEditAction.ItemType.IdentityType.PassportNumberTextChange(
                     passportNumber = "TestPassportNumber",
                 ),
             )
@@ -843,7 +843,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange(
+                VaultAddEditAction.ItemType.IdentityType.LicenseNumberTextChange(
                     licenseNumber = "TestLicenseNumber",
                 ),
             )
@@ -876,7 +876,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.EmailTextChange(
+                VaultAddEditAction.ItemType.IdentityType.EmailTextChange(
                     email = "TestEmail",
                 ),
             )
@@ -909,7 +909,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.Address1TextChange(
+                VaultAddEditAction.ItemType.IdentityType.Address1TextChange(
                     address1 = "TestAddress1",
                 ),
             )
@@ -942,7 +942,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.Address2TextChange(
+                VaultAddEditAction.ItemType.IdentityType.Address2TextChange(
                     address2 = "TestAddress2",
                 ),
             )
@@ -975,7 +975,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.Address3TextChange(
+                VaultAddEditAction.ItemType.IdentityType.Address3TextChange(
                     address3 = "TestAddress3",
                 ),
             )
@@ -1008,7 +1008,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.CityTextChange(
+                VaultAddEditAction.ItemType.IdentityType.CityTextChange(
                     city = "TestCity",
                 ),
             )
@@ -1041,7 +1041,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.ZipTextChange(
+                VaultAddEditAction.ItemType.IdentityType.ZipTextChange(
                     zip = "TestZip",
                 ),
             )
@@ -1074,7 +1074,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.CountryTextChange(
+                VaultAddEditAction.ItemType.IdentityType.CountryTextChange(
                     country = "TestCountry",
                 ),
             )
@@ -1090,7 +1090,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.ItemType.IdentityType.StateTextChange(
+                VaultAddEditAction.ItemType.IdentityType.StateTextChange(
                     state = "TestState",
                 ),
             )
@@ -1158,7 +1158,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.AddNewCustomFieldClick(
+                VaultAddEditAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.LINKED,
                     name = "TestLinked",
                 ),
@@ -1184,7 +1184,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.OwnershipChange("a@b.com"),
+                VaultAddEditAction.Common.OwnershipChange("a@b.com"),
             )
         }
     }
@@ -1216,7 +1216,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.NameTextChange(name = "TestName"),
+                VaultAddEditAction.Common.NameTextChange(name = "TestName"),
             )
         }
     }
@@ -1256,7 +1256,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.FolderChange("Folder 1".asText()),
+                VaultAddEditAction.Common.FolderChange("Folder 1".asText()),
             )
         }
     }
@@ -1290,7 +1290,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.ToggleFavorite(
+                VaultAddEditAction.Common.ToggleFavorite(
                     isFavorite = true,
                 ),
             )
@@ -1327,7 +1327,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.ToggleMasterPasswordReprompt(
+                VaultAddEditAction.Common.ToggleMasterPasswordReprompt(
                     isMasterPasswordReprompt = true,
                 ),
             )
@@ -1362,7 +1362,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.TooltipClick,
+                VaultAddEditAction.Common.TooltipClick,
             )
         }
     }
@@ -1378,7 +1378,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.NotesTextChange("TestNotes"),
+                VaultAddEditAction.Common.NotesTextChange("TestNotes"),
             )
         }
     }
@@ -1421,7 +1421,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.OwnershipChange("a@b.com"),
+                VaultAddEditAction.Common.OwnershipChange("a@b.com"),
             )
         }
     }
@@ -1472,7 +1472,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.AddNewCustomFieldClick(
+                VaultAddEditAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.TEXT,
                     name = "TestText",
                 ),
@@ -1527,7 +1527,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.AddNewCustomFieldClick(
+                VaultAddEditAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.BOOLEAN,
                     name = "TestBoolean",
                 ),
@@ -1563,7 +1563,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.AddNewCustomFieldClick(
+                VaultAddEditAction.Common.AddNewCustomFieldClick(
                     customFieldType = CustomFieldType.HIDDEN,
                     name = "TestHidden",
                 ),
@@ -1582,8 +1582,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.CustomFieldValueChange(
-                    VaultAddItemState.Custom.TextField("Test ID", "TestText", ""),
+                VaultAddEditAction.Common.CustomFieldValueChange(
+                    VaultAddEditState.Custom.TextField("Test ID", "TestText", ""),
                 ),
             )
         }
@@ -1600,8 +1600,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.CustomFieldValueChange(
-                    VaultAddItemState.Custom.HiddenField("Test ID", "TestHidden", ""),
+                VaultAddEditAction.Common.CustomFieldValueChange(
+                    VaultAddEditState.Custom.HiddenField("Test ID", "TestHidden", ""),
                 ),
             )
         }
@@ -1618,8 +1618,8 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddItemAction.Common.CustomFieldValueChange(
-                    VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", true),
+                VaultAddEditAction.Common.CustomFieldValueChange(
+                    VaultAddEditState.Custom.BooleanField("Test ID", "TestBoolean", true),
                 ),
             )
         }
@@ -1628,14 +1628,14 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     //region Helper functions
 
     private fun updateLoginType(
-        currentState: VaultAddItemState,
-        transform: VaultAddItemState.ViewState.Content.ItemType.Login.() ->
-        VaultAddItemState.ViewState.Content.ItemType.Login,
-    ): VaultAddItemState {
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.ItemType.Login.() ->
+        VaultAddEditState.ViewState.Content.ItemType.Login,
+    ): VaultAddEditState {
         val updatedType = when (val viewState = currentState.viewState) {
-            is VaultAddItemState.ViewState.Content -> {
+            is VaultAddEditState.ViewState.Content -> {
                 when (val type = viewState.type) {
-                    is VaultAddItemState.ViewState.Content.ItemType.Login -> {
+                    is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                         viewState.copy(
                             type = type.transform(),
                         )
@@ -1651,14 +1651,14 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     }
 
     private fun updateIdentityType(
-        currentState: VaultAddItemState,
-        transform: VaultAddItemState.ViewState.Content.ItemType.Identity.() ->
-        VaultAddItemState.ViewState.Content.ItemType.Identity,
-    ): VaultAddItemState {
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.ItemType.Identity.() ->
+        VaultAddEditState.ViewState.Content.ItemType.Identity,
+    ): VaultAddEditState {
         val updatedType = when (val viewState = currentState.viewState) {
-            is VaultAddItemState.ViewState.Content -> {
+            is VaultAddEditState.ViewState.Content -> {
                 when (val type = viewState.type) {
-                    is VaultAddItemState.ViewState.Content.ItemType.Identity -> {
+                    is VaultAddEditState.ViewState.Content.ItemType.Identity -> {
                         viewState.copy(
                             type = type.transform(),
                         )
@@ -1675,12 +1675,12 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     private fun updateCommonContent(
-        currentState: VaultAddItemState,
-        transform: VaultAddItemState.ViewState.Content.Common.()
-        -> VaultAddItemState.ViewState.Content.Common,
-    ): VaultAddItemState {
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.Common.()
+        -> VaultAddEditState.ViewState.Content.Common,
+    ): VaultAddEditState {
         val updatedType = when (val viewState = currentState.viewState) {
-            is VaultAddItemState.ViewState.Content ->
+            is VaultAddEditState.ViewState.Content ->
                 viewState.copy(common = viewState.common.transform())
 
             else -> viewState
@@ -1691,58 +1691,58 @@ class VaultAddItemScreenTest : BaseComposeTest() {
     //endregion Helper functions
 
     companion object {
-        private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddItemState(
-            viewState = VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(),
-                type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+        private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddEditState(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(),
             ),
-            dialog = VaultAddItemState.DialogState.Error("test".asText()),
+            dialog = VaultAddEditState.DialogState.Error("test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem,
         )
 
-        private val DEFAULT_STATE_LOGIN = VaultAddItemState(
+        private val DEFAULT_STATE_LOGIN = VaultAddEditState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            viewState = VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(),
-                type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(),
             ),
             dialog = null,
         )
 
-        private val DEFAULT_STATE_IDENTITY = VaultAddItemState(
+        private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            viewState = VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(),
-                type = VaultAddItemState.ViewState.Content.ItemType.Identity(),
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
             ),
             dialog = null,
         )
 
         @Suppress("MaxLineLength")
-        private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddItemState(
-            viewState = VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(
+        private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
                     customFieldData = listOf(
-                        VaultAddItemState.Custom.BooleanField("Test ID", "TestBoolean", false),
-                        VaultAddItemState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
-                        VaultAddItemState.Custom.HiddenField(
+                        VaultAddEditState.Custom.BooleanField("Test ID", "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
+                        VaultAddEditState.Custom.HiddenField(
                             "Test ID",
                             "TestHidden",
                             "TestHiddenVal",
                         ),
                     ),
                 ),
-                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             ),
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem,
         )
 
-        private val DEFAULT_STATE_SECURE_NOTES = VaultAddItemState(
+        private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            viewState = VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(),
-                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             ),
             dialog = null,
         )

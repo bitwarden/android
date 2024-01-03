@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem.util
+package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
@@ -7,18 +7,18 @@ import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import java.util.UUID
 
 /**
- * Transforms [CipherView] into [VaultAddItemState.ViewState].
+ * Transforms [CipherView] into [VaultAddEditState.ViewState].
  */
-fun CipherView.toViewState(): VaultAddItemState.ViewState =
-    VaultAddItemState.ViewState.Content(
+fun CipherView.toViewState(): VaultAddEditState.ViewState =
+    VaultAddEditState.ViewState.Content(
         type = when (type) {
             CipherType.LOGIN -> {
-                VaultAddItemState.ViewState.Content.ItemType.Login(
+                VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = login?.username.orEmpty(),
                     password = login?.password.orEmpty(),
                     uri = login?.uris?.firstOrNull()?.uri.orEmpty(),
@@ -26,9 +26,9 @@ fun CipherView.toViewState(): VaultAddItemState.ViewState =
                 )
             }
 
-            CipherType.SECURE_NOTE -> VaultAddItemState.ViewState.Content.ItemType.SecureNotes
-            CipherType.CARD -> VaultAddItemState.ViewState.Content.ItemType.Card
-            CipherType.IDENTITY -> VaultAddItemState.ViewState.Content.ItemType.Identity(
+            CipherType.SECURE_NOTE -> VaultAddEditState.ViewState.Content.ItemType.SecureNotes
+            CipherType.CARD -> VaultAddEditState.ViewState.Content.ItemType.Card
+            CipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity(
                 selectedTitle = identity?.title.toTitleOrDefault(),
                 firstName = identity?.firstName.orEmpty(),
                 middleName = identity?.middleName.orEmpty(),
@@ -48,7 +48,7 @@ fun CipherView.toViewState(): VaultAddItemState.ViewState =
                 country = identity?.country.orEmpty(),
             )
         },
-        common = VaultAddItemState.ViewState.Content.Common(
+        common = VaultAddEditState.ViewState.Content.Common(
             originalCipher = this,
             name = this.name,
             favorite = this.favorite,
@@ -67,25 +67,25 @@ fun CipherView.toViewState(): VaultAddItemState.ViewState =
 
 private fun FieldView.toCustomField() =
     when (this.type) {
-        FieldType.TEXT -> VaultAddItemState.Custom.TextField(
+        FieldType.TEXT -> VaultAddEditState.Custom.TextField(
             itemId = UUID.randomUUID().toString(),
             name = this.name.orEmpty(),
             value = this.value.orEmpty(),
         )
 
-        FieldType.HIDDEN -> VaultAddItemState.Custom.HiddenField(
+        FieldType.HIDDEN -> VaultAddEditState.Custom.HiddenField(
             itemId = UUID.randomUUID().toString(),
             name = this.name.orEmpty(),
             value = this.value.orEmpty(),
         )
 
-        FieldType.BOOLEAN -> VaultAddItemState.Custom.BooleanField(
+        FieldType.BOOLEAN -> VaultAddEditState.Custom.BooleanField(
             itemId = UUID.randomUUID().toString(),
             name = this.name.orEmpty(),
             value = this.value.toBoolean(),
         )
 
-        FieldType.LINKED -> VaultAddItemState.Custom.LinkedField(
+        FieldType.LINKED -> VaultAddEditState.Custom.LinkedField(
             itemId = UUID.randomUUID().toString(),
             name = this.name.orEmpty(),
             vaultLinkedFieldType = fromId(requireNotNull(this.linkedId)),
@@ -93,8 +93,8 @@ private fun FieldView.toCustomField() =
     }
 
 @Suppress("MaxLineLength")
-private fun String?.toTitleOrDefault(): VaultAddItemState.ViewState.Content.ItemType.Identity.Title =
-    VaultAddItemState.ViewState.Content.ItemType.Identity.Title
+private fun String?.toTitleOrDefault(): VaultAddEditState.ViewState.Content.ItemType.Identity.Title =
+    VaultAddEditState.ViewState.Content.ItemType.Identity.Title
         .entries
         .find { it.name == this }
-        ?: VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MR
+        ?: VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MR

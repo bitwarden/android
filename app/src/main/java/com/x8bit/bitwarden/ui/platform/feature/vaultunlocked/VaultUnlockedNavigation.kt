@@ -14,8 +14,8 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateTo
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
-import com.x8bit.bitwarden.ui.vault.feature.additem.navigateToVaultAddEditItem
-import com.x8bit.bitwarden.ui.vault.feature.additem.vaultAddEditItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
+import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
@@ -44,18 +44,18 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         vaultUnlockedNavBarDestination(
             onNavigateToFolders = { navController.navigateToFolders() },
             onNavigateToVaultAddItem = {
-                navController.navigateToVaultAddEditItem(VaultAddEditType.AddItem)
+                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem)
             },
             onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
             onNavigateToVaultEditItem = {
-                navController.navigateToVaultAddEditItem(VaultAddEditType.EditItem(it))
+                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
             },
             onNavigateToAddSend = { navController.navigateToAddSend() },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
             onNavigateToPasswordHistory = { navController.navigateToPasswordHistory() },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
-        vaultAddEditItemDestination(
+        vaultAddEditDestination(
             onNavigateToQrCodeScanScreen = {
                 navController.navigateToQrCodeScanScreen()
             },
@@ -64,7 +64,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         vaultItemDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToVaultEditItem = {
-                navController.navigateToVaultAddEditItem(VaultAddEditType.EditItem(it))
+                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
             },
         )
         vaultQrCodeScanDestination(onNavigateBack = { navController.popBackStack() })

@@ -13,13 +13,13 @@ import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import java.time.Instant
 
 /**
- * Transforms a [VaultAddItemState.ViewState.ItemType] into [CipherView].
+ * Transforms a [VaultAddEditState.ViewState.ItemType] into [CipherView].
  */
-fun VaultAddItemState.ViewState.Content.toCipherView(): CipherView =
+fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
     CipherView(
         // Pulled from original cipher when editing, otherwise uses defaults
         id = common.originalCipher?.id,
@@ -54,16 +54,16 @@ fun VaultAddItemState.ViewState.Content.toCipherView(): CipherView =
         fields = common.customFieldData.map { it.toFieldView() },
     )
 
-private fun VaultAddItemState.ViewState.Content.ItemType.toCipherType(): CipherType =
+private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherType =
     when (this) {
-        is VaultAddItemState.ViewState.Content.ItemType.Card -> CipherType.CARD
-        is VaultAddItemState.ViewState.Content.ItemType.Identity -> CipherType.IDENTITY
-        is VaultAddItemState.ViewState.Content.ItemType.Login -> CipherType.LOGIN
-        is VaultAddItemState.ViewState.Content.ItemType.SecureNotes -> CipherType.SECURE_NOTE
+        is VaultAddEditState.ViewState.Content.ItemType.Card -> CipherType.CARD
+        is VaultAddEditState.ViewState.Content.ItemType.Identity -> CipherType.IDENTITY
+        is VaultAddEditState.ViewState.Content.ItemType.Login -> CipherType.LOGIN
+        is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> CipherType.SECURE_NOTE
     }
 
-private fun VaultAddItemState.ViewState.Content.ItemType.toCardView(): CardView? =
-    (this as? VaultAddItemState.ViewState.Content.ItemType.Card)?.let {
+private fun VaultAddEditState.ViewState.Content.ItemType.toCardView(): CardView? =
+    (this as? VaultAddEditState.ViewState.Content.ItemType.Card)?.let {
         // TODO Create real CardView from Content (BIT-668)
         CardView(
             cardholderName = null,
@@ -75,8 +75,8 @@ private fun VaultAddItemState.ViewState.Content.ItemType.toCardView(): CardView?
         )
     }
 
-private fun VaultAddItemState.ViewState.Content.ItemType.toIdentityView(): IdentityView? =
-    (this as? VaultAddItemState.ViewState.Content.ItemType.Identity)?.let {
+private fun VaultAddEditState.ViewState.Content.ItemType.toIdentityView(): IdentityView? =
+    (this as? VaultAddEditState.ViewState.Content.ItemType.Identity)?.let {
         IdentityView(
             title = it.selectedTitle.name,
             firstName = it.firstName.orNullIfBlank(),
@@ -99,10 +99,10 @@ private fun VaultAddItemState.ViewState.Content.ItemType.toIdentityView(): Ident
         )
     }
 
-private fun VaultAddItemState.ViewState.Content.ItemType.toLoginView(
-    common: VaultAddItemState.ViewState.Content.Common,
+private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
+    common: VaultAddEditState.ViewState.Content.Common,
 ): LoginView? =
-    (this as? VaultAddItemState.ViewState.Content.ItemType.Login)?.let {
+    (this as? VaultAddEditState.ViewState.Content.ItemType.Login)?.let {
         LoginView(
             username = it.username,
             password = it.password,
@@ -120,12 +120,12 @@ private fun VaultAddItemState.ViewState.Content.ItemType.toLoginView(
         )
     }
 
-private fun VaultAddItemState.ViewState.Content.ItemType.toSecureNotesView(): SecureNoteView? =
-    (this as? VaultAddItemState.ViewState.Content.ItemType.SecureNotes)?.let {
+private fun VaultAddEditState.ViewState.Content.ItemType.toSecureNotesView(): SecureNoteView? =
+    (this as? VaultAddEditState.ViewState.Content.ItemType.SecureNotes)?.let {
         SecureNoteView(type = SecureNoteType.GENERIC)
     }
 
-private fun VaultAddItemState.ViewState.Content.Common.toCipherRepromptType(): CipherRepromptType =
+private fun VaultAddEditState.ViewState.Content.Common.toCipherRepromptType(): CipherRepromptType =
     if (masterPasswordReprompt) {
         CipherRepromptType.PASSWORD
     } else {
@@ -135,9 +135,9 @@ private fun VaultAddItemState.ViewState.Content.Common.toCipherRepromptType(): C
 /**
  * Transforms [VaultAddItemState.Custom into [FieldView].
  */
-private fun VaultAddItemState.Custom.toFieldView(): FieldView =
+private fun VaultAddEditState.Custom.toFieldView(): FieldView =
     when (val item = this) {
-        is VaultAddItemState.Custom.BooleanField -> {
+        is VaultAddEditState.Custom.BooleanField -> {
             FieldView(
                 name = item.name,
                 value = item.value.toString(),
@@ -146,7 +146,7 @@ private fun VaultAddItemState.Custom.toFieldView(): FieldView =
             )
         }
 
-        is VaultAddItemState.Custom.HiddenField -> {
+        is VaultAddEditState.Custom.HiddenField -> {
             FieldView(
                 name = item.name,
                 value = item.value,
@@ -155,7 +155,7 @@ private fun VaultAddItemState.Custom.toFieldView(): FieldView =
             )
         }
 
-        is VaultAddItemState.Custom.LinkedField -> {
+        is VaultAddEditState.Custom.LinkedField -> {
             FieldView(
                 name = item.name,
                 value = null,
@@ -164,7 +164,7 @@ private fun VaultAddItemState.Custom.toFieldView(): FieldView =
             )
         }
 
-        is VaultAddItemState.Custom.TextField -> {
+        is VaultAddEditState.Custom.TextField -> {
             FieldView(
                 name = item.name,
                 value = item.value,

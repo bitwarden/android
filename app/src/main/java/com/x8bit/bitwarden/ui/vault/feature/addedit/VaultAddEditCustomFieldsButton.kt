@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextEntryDialog
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -24,7 +24,7 @@ import kotlinx.collections.immutable.persistentListOf
  */
 @Suppress("LongMethod")
 @Composable
-fun AddEditCustomFieldsButton(
+fun VaultAddEditCustomFieldsButton(
     onFinishNamingClick: (CustomFieldType, String) -> Unit,
     modifier: Modifier = Modifier,
     options: ImmutableList<CustomFieldType> = persistentListOf(

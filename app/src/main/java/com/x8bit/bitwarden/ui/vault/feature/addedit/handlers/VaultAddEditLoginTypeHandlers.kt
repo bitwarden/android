@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem.handlers
+package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemViewModel
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
 
 /**
  * A collection of handler functions specifically tailored for managing actions
@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemViewModel
  * @property onAddNewUriClick Handles the action when the add new URI button is clicked.
  */
 @Suppress("LongParameterList")
-class VaultAddLoginItemTypeHandlers(
+class VaultAddEditLoginTypeHandlers(
     val onUsernameTextChange: (String) -> Unit,
     val onPasswordTextChange: (String) -> Unit,
     val onUriTextChange: (String) -> Unit,
@@ -37,59 +37,59 @@ class VaultAddLoginItemTypeHandlers(
     companion object {
 
         /**
-         * Creates an instance of [VaultAddLoginItemTypeHandlers] by binding actions
-         * to the provided [VaultAddItemViewModel].
+         * Creates an instance of [VaultAddEditLoginTypeHandlers] by binding actions
+         * to the provided [VaultAddEditViewModel].
          *
-         * @param viewModel The [VaultAddItemViewModel] to which actions will be sent.
-         * @return A fully initialized [VaultAddLoginItemTypeHandlers] object.
+         * @param viewModel The [VaultAddEditViewModel] to which actions will be sent.
+         * @return A fully initialized [VaultAddEditLoginTypeHandlers] object.
          */
         @Suppress("LongMethod")
-        fun create(viewModel: VaultAddItemViewModel): VaultAddLoginItemTypeHandlers {
-            return VaultAddLoginItemTypeHandlers(
+        fun create(viewModel: VaultAddEditViewModel): VaultAddEditLoginTypeHandlers {
+            return VaultAddEditLoginTypeHandlers(
                 onUsernameTextChange = { newUsername ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.UsernameTextChange(newUsername),
+                        VaultAddEditAction.ItemType.LoginType.UsernameTextChange(newUsername),
                     )
                 },
                 onPasswordTextChange = { newPassword ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.PasswordTextChange(newPassword),
+                        VaultAddEditAction.ItemType.LoginType.PasswordTextChange(newPassword),
                     )
                 },
                 onUriTextChange = { newUri ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.UriTextChange(newUri),
+                        VaultAddEditAction.ItemType.LoginType.UriTextChange(newUri),
                     )
                 },
                 onOpenUsernameGeneratorClick = {
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.OpenUsernameGeneratorClick,
+                        VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick,
                     )
                 },
                 onPasswordCheckerClick = {
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.PasswordCheckerClick,
+                        VaultAddEditAction.ItemType.LoginType.PasswordCheckerClick,
                     )
                 },
                 onOpenPasswordGeneratorClick = {
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.OpenPasswordGeneratorClick,
+                        VaultAddEditAction.ItemType.LoginType.OpenPasswordGeneratorClick,
                     )
                 },
                 onSetupTotpClick = { isGranted ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.SetupTotpClick(isGranted),
+                        VaultAddEditAction.ItemType.LoginType.SetupTotpClick(isGranted),
                     )
                 },
                 onUriSettingsClick = {
-                    viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.UriSettingsClick)
+                    viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.UriSettingsClick)
                 },
                 onAddNewUriClick = {
-                    viewModel.trySendAction(VaultAddItemAction.ItemType.LoginType.AddNewUriClick)
+                    viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.AddNewUriClick)
                 },
                 onCopyTotpKeyClick = { totpKey ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick(
+                        VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
                             totpKey,
                         ),
                     )

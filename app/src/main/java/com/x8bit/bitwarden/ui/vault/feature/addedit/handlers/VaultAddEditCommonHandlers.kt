@@ -1,10 +1,10 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem.handlers
+package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemViewModel
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 
 /**
  * A collection of handler functions for managing actions common
@@ -23,7 +23,7 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
  * @property onCustomFieldValueChange Handles the action when the field's value changes
  */
 @Suppress("LongParameterList")
-class VaultAddItemCommonHandlers(
+class VaultAddEditCommonHandlers(
     val onNameTextChange: (String) -> Unit,
     val onFolderTextChange: (String) -> Unit,
     val onToggleFavorite: (Boolean) -> Unit,
@@ -32,59 +32,59 @@ class VaultAddItemCommonHandlers(
     val onOwnershipTextChange: (String) -> Unit,
     val onTooltipClick: () -> Unit,
     val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
-    val onCustomFieldValueChange: (VaultAddItemState.Custom) -> Unit,
+    val onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
 ) {
     companion object {
 
         /**
-         * Creates an instance of [VaultAddItemCommonHandlers] by binding actions
-         * to the provided [VaultAddItemViewModel].
+         * Creates an instance of [VaultAddEditCommonHandlers] by binding actions
+         * to the provided [VaultAddEditViewModel].
          */
         @Suppress("LongMethod")
-        fun create(viewModel: VaultAddItemViewModel): VaultAddItemCommonHandlers {
-            return VaultAddItemCommonHandlers(
+        fun create(viewModel: VaultAddEditViewModel): VaultAddEditCommonHandlers {
+            return VaultAddEditCommonHandlers(
                 onNameTextChange = { newName ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.NameTextChange(newName),
+                        VaultAddEditAction.Common.NameTextChange(newName),
                     )
                 },
                 onFolderTextChange = { newFolder ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.FolderChange(
+                        VaultAddEditAction.Common.FolderChange(
                             newFolder.asText(),
                         ),
                     )
                 },
                 onToggleFavorite = { isFavorite ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.ToggleFavorite(isFavorite),
+                        VaultAddEditAction.Common.ToggleFavorite(isFavorite),
                     )
                 },
                 onToggleMasterPasswordReprompt = { isMasterPasswordReprompt ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.ToggleMasterPasswordReprompt(
+                        VaultAddEditAction.Common.ToggleMasterPasswordReprompt(
                             isMasterPasswordReprompt,
                         ),
                     )
                 },
                 onNotesTextChange = { newNotes ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.NotesTextChange(newNotes),
+                        VaultAddEditAction.Common.NotesTextChange(newNotes),
                     )
                 },
                 onOwnershipTextChange = { newOwnership ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.OwnershipChange(newOwnership),
+                        VaultAddEditAction.Common.OwnershipChange(newOwnership),
                     )
                 },
                 onTooltipClick = {
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.TooltipClick,
+                        VaultAddEditAction.Common.TooltipClick,
                     )
                 },
                 onAddNewCustomFieldClick = { newCustomFieldType, name ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.AddNewCustomFieldClick(
+                        VaultAddEditAction.Common.AddNewCustomFieldClick(
                             newCustomFieldType,
                             name,
                         ),
@@ -92,7 +92,7 @@ class VaultAddItemCommonHandlers(
                 },
                 onCustomFieldValueChange = { newValue ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.Common.CustomFieldValueChange(
+                        VaultAddEditAction.Common.CustomFieldValueChange(
                             newValue,
                         ),
                     )

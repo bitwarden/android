@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem.handlers
+package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemAction
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemViewModel
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
 
 /**
  * A collection of handler functions specifically tailored for managing actions
@@ -26,8 +26,8 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemViewModel
  * @property onCountryTextChange Handles the action when the country text is changed.
  */
 @Suppress("LongParameterList")
-class VaultAddIdentityItemTypeHandlers(
-    val onTitleSelected: (VaultAddItemState.ViewState.Content.ItemType.Identity.Title) -> Unit,
+class VaultAddEditIdentityTypeHandlers(
+    val onTitleSelected: (VaultAddEditState.ViewState.Content.ItemType.Identity.Title) -> Unit,
     val onFirstNameTextChange: (String) -> Unit,
     val onMiddleNameTextChange: (String) -> Unit,
     val onLastNameTextChange: (String) -> Unit,
@@ -49,134 +49,134 @@ class VaultAddIdentityItemTypeHandlers(
     companion object {
 
         /**
-         * Creates an instance of [VaultAddIdentityItemTypeHandlers] by binding actions
-         * to the provided [VaultAddItemViewModel].
+         * Creates an instance of [VaultAddEditIdentityTypeHandlers] by binding actions
+         * to the provided [VaultAddEditViewModel].
          */
         @Suppress("LongMethod")
-        fun create(viewModel: VaultAddItemViewModel): VaultAddIdentityItemTypeHandlers {
-            return VaultAddIdentityItemTypeHandlers(
+        fun create(viewModel: VaultAddEditViewModel): VaultAddEditIdentityTypeHandlers {
+            return VaultAddEditIdentityTypeHandlers(
                 onTitleSelected = { newTitle ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.TitleSelected(
+                        VaultAddEditAction.ItemType.IdentityType.TitleSelected(
                             title = newTitle,
                         ),
                     )
                 },
                 onFirstNameTextChange = { newFirstName ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.FirstNameTextChange(
                             firstName = newFirstName,
                         ),
                     )
                 },
                 onMiddleNameTextChange = { newMiddleName ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.MiddleNameTextChange(
                             middleName = newMiddleName,
                         ),
                     )
                 },
                 onLastNameTextChange = { newLastName ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.LastNameTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.LastNameTextChange(
                             lastName = newLastName,
                         ),
                     )
                 },
                 onUsernameTextChange = { newUsername ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.UsernameTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.UsernameTextChange(
                             username = newUsername,
                         ),
                     )
                 },
                 onCompanyTextChange = { newCompany ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.CompanyTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.CompanyTextChange(
                             company = newCompany,
                         ),
                     )
                 },
                 onSsnTextChange = { newSsn ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.SsnTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.SsnTextChange(
                             ssn = newSsn,
                         ),
                     )
                 },
                 onPassportNumberTextChange = { newPassportNumber ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.PassportNumberTextChange(
                             passportNumber = newPassportNumber,
                         ),
                     )
                 },
                 onLicenseNumberTextChange = { newLicenseNumber ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.LicenseNumberTextChange(
                             licenseNumber = newLicenseNumber,
                         ),
                     )
                 },
                 onEmailTextChange = { newEmail ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.EmailTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.EmailTextChange(
                             email = newEmail,
                         ),
                     )
                 },
                 onPhoneTextChange = { newPhone ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.PhoneTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.PhoneTextChange(
                             phone = newPhone,
                         ),
                     )
                 },
                 onAddress1TextChange = { newAddress1 ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.Address1TextChange(
+                        VaultAddEditAction.ItemType.IdentityType.Address1TextChange(
                             address1 = newAddress1,
                         ),
                     )
                 },
                 onAddress2TextChange = { newAddress2 ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.Address2TextChange(
+                        VaultAddEditAction.ItemType.IdentityType.Address2TextChange(
                             address2 = newAddress2,
                         ),
                     )
                 },
                 onAddress3TextChange = { newAddress3 ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.Address3TextChange(
+                        VaultAddEditAction.ItemType.IdentityType.Address3TextChange(
                             address3 = newAddress3,
                         ),
                     )
                 },
                 onCityTextChange = { newCity ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.CityTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.CityTextChange(
                             city = newCity,
                         ),
                     )
                 },
                 onStateTextChange = { newState ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.StateTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.StateTextChange(
                             state = newState,
                         ),
                     )
                 },
                 onZipTextChange = { newZip ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.ZipTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.ZipTextChange(
                             zip = newZip,
                         ),
                     )
                 },
                 onCountryTextChange = { newCountry ->
                     viewModel.trySendAction(
-                        VaultAddItemAction.ItemType.IdentityType.CountryTextChange(
+                        VaultAddEditAction.ItemType.IdentityType.CountryTextChange(
                             country = newCountry,
                         ),
                     )
