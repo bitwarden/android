@@ -42,7 +42,7 @@
         </activity>
 
         <service
-            android:name=".autofill.BitwardenAutofillService"
+            android:name=".data.autofill.BitwardenAutofillService"
             android:label="Bitwarden"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE"
             android:exported="true">
