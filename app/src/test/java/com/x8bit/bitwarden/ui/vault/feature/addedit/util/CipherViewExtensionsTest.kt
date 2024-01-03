@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem.util
+package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
@@ -14,7 +14,7 @@ import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -46,8 +46,8 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
                     folderName = R.string.folder_none.asText(),
@@ -56,10 +56,10 @@ class CipherViewExtensionsTest {
                     notes = "Lots of notes",
                     ownership = "",
                     customFieldData = listOf(
-                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
-                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
-                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
-                        VaultAddItemState.Custom.LinkedField(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddEditState.Custom.LinkedField(
                             TEST_ID,
                             "TestLinked",
                             VaultLinkedFieldType.USERNAME,
@@ -68,7 +68,7 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
-                type = VaultAddItemState.ViewState.Content.ItemType.Card,
+                type = VaultAddEditState.ViewState.Content.ItemType.Card,
             ),
             result,
         )
@@ -81,8 +81,8 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
                     folderName = R.string.folder_none.asText(),
@@ -91,10 +91,10 @@ class CipherViewExtensionsTest {
                     notes = "Lots of notes",
                     ownership = "",
                     customFieldData = listOf(
-                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
-                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
-                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
-                        VaultAddItemState.Custom.LinkedField(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddEditState.Custom.LinkedField(
                             TEST_ID,
                             "TestLinked",
                             VaultLinkedFieldType.USERNAME,
@@ -103,7 +103,7 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
-                type = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                type = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     firstName = "John",
                     middleName = "Richard",
                     lastName = "Smith",
@@ -127,8 +127,8 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
                     folderName = R.string.folder_none.asText(),
@@ -139,17 +139,17 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                     customFieldData = listOf(
-                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
-                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
-                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
-                        VaultAddItemState.Custom.LinkedField(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddEditState.Custom.LinkedField(
                             TEST_ID,
                             "TestLinked",
                             VaultLinkedFieldType.USERNAME,
                         ),
                     ),
                 ),
-                type = VaultAddItemState.ViewState.Content.ItemType.Login(
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = "username",
                     password = "password",
                     uri = "www.example.com",
@@ -167,8 +167,8 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            VaultAddItemState.ViewState.Content(
-                common = VaultAddItemState.ViewState.Content.Common(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
                     folderName = R.string.folder_none.asText(),
@@ -177,14 +177,14 @@ class CipherViewExtensionsTest {
                     notes = "Lots of notes",
                     ownership = "",
                     customFieldData = listOf(
-                        VaultAddItemState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
-                        VaultAddItemState.Custom.TextField(TEST_ID, "TestText", "TestText"),
-                        VaultAddItemState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
                     ),
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
-                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             ),
             result,
         )

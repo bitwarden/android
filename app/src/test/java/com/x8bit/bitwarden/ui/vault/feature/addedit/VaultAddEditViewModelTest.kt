@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
@@ -12,9 +12,9 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.toCustomField
-import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.coEvery
@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
-class VaultAddItemViewModelTest : BaseViewModelTest() {
+class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     private val loginInitialState = createVaultAddItemState(
         typeContentViewState = createLoginTypeContentViewState(),
@@ -108,7 +108,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            initState.copy(viewState = VaultAddItemState.ViewState.Loading),
+            initState.copy(viewState = VaultAddEditState.ViewState.Loading),
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
@@ -120,8 +120,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     fun `CloseClick should emit NavigateBack`() = runTest {
         val viewModel = createAddVaultItemViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddItemAction.Common.CloseClick)
-            assertEquals(VaultAddItemEvent.NavigateBack, awaitItem())
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.CloseClick)
+            assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
         }
     }
 
@@ -130,7 +130,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         runTest {
             val stateWithDialog = createVaultAddItemState(
                 vaultAddEditType = VaultAddEditType.AddItem,
-                dialogState = VaultAddItemState.DialogState.Loading(
+                dialogState = VaultAddEditState.DialogState.Loading(
                     R.string.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
@@ -157,7 +157,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             } returns CreateCipherResult.Success
 
             viewModel.stateFlow.test {
-                viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
+                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
                 assertEquals(stateWithName, awaitItem())
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithName, awaitItem())
@@ -188,8 +188,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             vaultRepository.createCipher(any())
         } returns CreateCipherResult.Success
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
-            assertEquals(VaultAddItemEvent.NavigateBack, awaitItem())
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+            assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
         }
     }
 
@@ -213,8 +213,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             vaultRepository.createCipher(any())
         } returns CreateCipherResult.Error
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
-            assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure".asText()), awaitItem())
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+            assertEquals(VaultAddEditEvent.ShowToast("Save Item Failure".asText()), awaitItem())
         }
     }
 
@@ -225,7 +225,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
             val stateWithDialog = createVaultAddItemState(
                 vaultAddEditType = vaultAddEditType,
-                dialogState = VaultAddItemState.DialogState.Loading(
+                dialogState = VaultAddEditState.DialogState.Loading(
                     R.string.saving.asText(),
                 ),
                 commonContentViewState = createCommonContentViewState(
@@ -255,7 +255,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
             viewModel.stateFlow.test {
                 assertEquals(stateWithName, awaitItem())
-                viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
+                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithName, awaitItem())
             }
@@ -291,8 +291,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         )
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
-            assertEquals(VaultAddItemEvent.ShowToast("Save Item Failure".asText()), awaitItem())
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+            assertEquals(VaultAddEditEvent.ShowToast("Save Item Failure".asText()), awaitItem())
         }
 
         coVerify(exactly = 1) {
@@ -308,7 +308,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         val stateWithNoNameAndDialog = createVaultAddItemState(
             commonContentViewState = createCommonContentViewState(name = ""),
-            dialogState = VaultAddItemState.DialogState.Error(
+            dialogState = VaultAddEditState.DialogState.Error(
                 R.string.validation_field_required
                     .asText(R.string.name.asText()),
             ),
@@ -322,7 +322,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         )
         coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
         viewModel.stateFlow.test {
-            viewModel.actionChannel.trySend(VaultAddItemAction.Common.SaveClick)
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
             assertEquals(stateWithNoName, awaitItem())
             assertEquals(stateWithNoNameAndDialog, awaitItem())
         }
@@ -332,7 +332,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     fun `HandleDialogDismiss will remove the current dialog`() = runTest {
         val errorState = createVaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            dialogState = VaultAddItemState.DialogState.Error(
+            dialogState = VaultAddEditState.DialogState.Error(
                 R.string.validation_field_required
                     .asText(R.string.name.asText()),
             ),
@@ -347,7 +347,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
         viewModel.stateFlow.test {
-            viewModel.actionChannel.trySend(VaultAddItemAction.Common.DismissDialog)
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.DismissDialog)
             assertEquals(errorState, awaitItem())
             assertEquals(null, awaitItem().dialog)
         }
@@ -356,14 +356,14 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     @Test
     fun `TypeOptionSelect LOGIN should switch to LoginItem`() = runTest {
         val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddItemAction.Common.TypeOptionSelect(
-            VaultAddItemState.ItemTypeOption.LOGIN,
+        val action = VaultAddEditAction.Common.TypeOptionSelect(
+            VaultAddEditState.ItemTypeOption.LOGIN,
         )
 
         viewModel.actionChannel.trySend(action)
 
         val expectedState = loginInitialState.copy(
-            viewState = VaultAddItemState.ViewState.Content(
+            viewState = VaultAddEditState.ViewState.Content(
                 common = createCommonContentViewState(),
                 type = createLoginTypeContentViewState(),
             ),
@@ -377,17 +377,16 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
     @Nested
     inner class VaultAddLoginTypeItemActions {
-        private lateinit var viewModel: VaultAddItemViewModel
+        private lateinit var viewModel: VaultAddEditViewModel
 
         @BeforeEach
         fun setup() {
             viewModel = createAddVaultItemViewModel()
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `UsernameTextChange should update username in LoginItem`() = runTest {
-            val action = VaultAddItemAction.ItemType.LoginType.UsernameTextChange("newUsername")
+            val action = VaultAddEditAction.ItemType.LoginType.UsernameTextChange("newUsername")
             val expectedState = createVaultAddItemState(
                 typeContentViewState = createLoginTypeContentViewState(
                     username = "newUsername",
@@ -398,10 +397,9 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `PasswordTextChange should update password in LoginItem`() = runTest {
-            val action = VaultAddItemAction.ItemType.LoginType.PasswordTextChange("newPassword")
+            val action = VaultAddEditAction.ItemType.LoginType.PasswordTextChange("newPassword")
 
             viewModel.actionChannel.trySend(action)
 
@@ -416,7 +414,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `UriTextChange should update uri in LoginItem`() = runTest {
-            val action = VaultAddItemAction.ItemType.LoginType.UriTextChange("newUri")
+            val action = VaultAddEditAction.ItemType.LoginType.UriTextChange("newUri")
 
             viewModel.actionChannel.trySend(action)
 
@@ -437,10 +435,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     viewModel.actionChannel.trySend(
-                        VaultAddItemAction.ItemType.LoginType.OpenUsernameGeneratorClick,
+                        VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick,
                     )
                     assertEquals(
-                        VaultAddItemEvent.ShowToast("Open Username Generator".asText()),
+                        VaultAddEditEvent.ShowToast("Open Username Generator".asText()),
                         awaitItem(),
                     )
                 }
@@ -454,10 +452,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     viewModel
                         .actionChannel
-                        .trySend(VaultAddItemAction.ItemType.LoginType.PasswordCheckerClick)
+                        .trySend(VaultAddEditAction.ItemType.LoginType.PasswordCheckerClick)
 
                     assertEquals(
-                        VaultAddItemEvent.ShowToast(
+                        VaultAddEditEvent.ShowToast(
                             "Password Checker".asText(),
                         ),
                         awaitItem(),
@@ -474,10 +472,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     viewModel
                         .actionChannel
-                        .trySend(VaultAddItemAction.ItemType.LoginType.OpenPasswordGeneratorClick)
+                        .trySend(VaultAddEditAction.ItemType.LoginType.OpenPasswordGeneratorClick)
 
                     assertEquals(
-                        VaultAddItemEvent.ShowToast("Open Password Generator".asText()),
+                        VaultAddEditEvent.ShowToast("Open Password Generator".asText()),
                         awaitItem(),
                     )
                 }
@@ -485,22 +483,21 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `SetupTotpClick should emit NavigateToQrCodeScan when isGranted is true`() =
-            runTest {
-                val viewModel = createAddVaultItemViewModel()
+        fun `SetupTotpClick should emit NavigateToQrCodeScan when isGranted is true`() = runTest {
+            val viewModel = createAddVaultItemViewModel()
 
-                viewModel.eventFlow.test {
-                    viewModel.actionChannel.trySend(
-                        VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
-                            isGranted = true,
-                        ),
-                    )
-                    assertEquals(
-                        VaultAddItemEvent.NavigateToQrCodeScan,
-                        awaitItem(),
-                    )
-                }
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(
+                    VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
+                        isGranted = true,
+                    ),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToQrCodeScan,
+                    awaitItem(),
+                )
             }
+        }
 
         @Suppress("MaxLineLength")
         @Test
@@ -510,12 +507,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     viewModel.actionChannel.trySend(
-                        VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
+                        VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
                             isGranted = false,
                         ),
                     )
                     assertEquals(
-                        VaultAddItemEvent.ShowToast("Permission Not Granted, Manual QR Code Entry Not Implemented".asText()),
+                        VaultAddEditEvent.ShowToast("Permission Not Granted, Manual QR Code Entry Not Implemented".asText()),
                         awaitItem(),
                     )
                 }
@@ -529,26 +526,25 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(
-                    VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick(
+                    VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
                         testKey,
                     ),
                 )
 
                 assertEquals(
-                    VaultAddItemEvent.CopyToClipboard(testKey),
+                    VaultAddEditEvent.CopyToClipboard(testKey),
                     awaitItem(),
                 )
             }
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `TotpCodeReceive should update totp code in state`() = runTest {
             val viewModel = createAddVaultItemViewModel()
             val testKey = "TestKey"
 
             val expectedState = loginInitialState.copy(
-                viewState = VaultAddItemState.ViewState.Content(
+                viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(),
                     type = createLoginTypeContentViewState(
                         totpCode = testKey,
@@ -558,13 +554,13 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(
-                    VaultAddItemAction.Internal.TotpCodeReceive(
+                    VaultAddEditAction.Internal.TotpCodeReceive(
                         testKey,
                     ),
                 )
 
                 assertEquals(
-                    VaultAddItemEvent.ShowToast(R.string.authenticator_key_added.asText()),
+                    VaultAddEditEvent.ShowToast(R.string.authenticator_key_added.asText()),
                     awaitItem(),
                 )
 
@@ -581,8 +577,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel()
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(VaultAddItemAction.ItemType.LoginType.UriSettingsClick)
-                assertEquals(VaultAddItemEvent.ShowToast("URI Settings".asText()), awaitItem())
+                viewModel.actionChannel.trySend(VaultAddEditAction.ItemType.LoginType.UriSettingsClick)
+                assertEquals(VaultAddEditEvent.ShowToast("URI Settings".asText()), awaitItem())
             }
         }
 
@@ -594,24 +590,24 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel
                     .actionChannel
                     .trySend(
-                        VaultAddItemAction.ItemType.LoginType.AddNewUriClick,
+                        VaultAddEditAction.ItemType.LoginType.AddNewUriClick,
                     )
 
-                assertEquals(VaultAddItemEvent.ShowToast("Add New URI".asText()), awaitItem())
+                assertEquals(VaultAddEditEvent.ShowToast("Add New URI".asText()), awaitItem())
             }
         }
     }
 
     @Nested
     inner class VaultAddIdentityTypeItemActions {
-        private lateinit var viewModel: VaultAddItemViewModel
-        private lateinit var vaultAddItemInitialState: VaultAddItemState
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
         private lateinit var identityInitialSavedStateHandle: SavedStateHandle
 
         @BeforeEach
         fun setup() {
             vaultAddItemInitialState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(),
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(),
             )
             identityInitialSavedStateHandle = createSavedStateHandleWithState(
                 state = vaultAddItemInitialState,
@@ -624,11 +620,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `FirstNameTextChange should update first name`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.FirstNameTextChange(
                 firstName = "newFirstName",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     firstName = "newFirstName",
                 ),
             )
@@ -639,11 +635,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `MiddleNameTextChange should update middle name`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.MiddleNameTextChange(
                 middleName = "newMiddleName",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     middleName = "newMiddleName",
                 ),
             )
@@ -654,11 +650,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `LastNameTextChange should update last name`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.LastNameTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.LastNameTextChange(
                 lastName = "newLastName",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     lastName = "newLastName",
                 ),
             )
@@ -669,11 +665,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `UsernameTextChange should update username`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.UsernameTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.UsernameTextChange(
                 username = "newUsername",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     username = "newUsername",
                 ),
             )
@@ -684,11 +680,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `CompanyTextChange should update company`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.CompanyTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.CompanyTextChange(
                 company = "newCompany",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     company = "newCompany",
                 ),
             )
@@ -699,11 +695,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `SsnTextChange should update SSN`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.SsnTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.SsnTextChange(
                 ssn = "newSsn",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     ssn = "newSsn",
                 ),
             )
@@ -714,11 +710,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `PassportNumberTextChange should update passport number`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.PassportNumberTextChange(
                 passportNumber = "newPassportNumber",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     passportNumber = "newPassportNumber",
                 ),
             )
@@ -729,11 +725,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `LicenseNumberTextChange should update license number`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.LicenseNumberTextChange(
                 licenseNumber = "newLicenseNumber",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     licenseNumber = "newLicenseNumber",
                 ),
             )
@@ -744,11 +740,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `EmailTextChange should update email`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.EmailTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.EmailTextChange(
                 email = "newEmail",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     email = "newEmail",
                 ),
             )
@@ -759,11 +755,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `PhoneTextChange should update phone`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.PhoneTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.PhoneTextChange(
                 phone = "newPhone",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     phone = "newPhone",
                 ),
             )
@@ -774,11 +770,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `Address1TextChange should update address1`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.Address1TextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.Address1TextChange(
                 address1 = "newAddress1",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     address1 = "newAddress1",
                 ),
             )
@@ -789,11 +785,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `Address2TextChange should update address2`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.Address2TextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.Address2TextChange(
                 address2 = "newAddress2",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     address2 = "newAddress2",
                 ),
             )
@@ -804,11 +800,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `Address3TextChange should update address3`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.Address3TextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.Address3TextChange(
                 address3 = "newAddress3",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     address3 = "newAddress3",
                 ),
             )
@@ -819,11 +815,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `CityTextChange should update city`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.CityTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.CityTextChange(
                 city = "newCity",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     city = "newCity",
                 ),
             )
@@ -834,11 +830,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `StateTextChange should update state text`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.StateTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.StateTextChange(
                 state = "newState",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     state = "newState",
                 ),
             )
@@ -849,11 +845,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `ZipTextChange should update zip`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.ZipTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.ZipTextChange(
                 zip = "newZip",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     zip = "newZip",
                 ),
             )
@@ -864,11 +860,11 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `CountryTextChange should update country`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.CountryTextChange(
+            val action = VaultAddEditAction.ItemType.IdentityType.CountryTextChange(
                 country = "newCountry",
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     country = "newCountry",
                 ),
             )
@@ -879,12 +875,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `TitleSelected should update title`() = runTest {
-            val action = VaultAddItemAction.ItemType.IdentityType.TitleSelected(
-                title = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+            val action = VaultAddEditAction.ItemType.IdentityType.TitleSelected(
+                title = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
             )
             val expectedState = createVaultAddItemState(
-                typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.Identity(
-                    selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MX,
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
+                    selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
                 ),
             )
             viewModel.actionChannel.trySend(action)
@@ -895,8 +891,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
     @Nested
     inner class VaultAddItemCommonActions {
-        private lateinit var viewModel: VaultAddItemViewModel
-        private lateinit var vaultAddItemInitialState: VaultAddItemState
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
         private lateinit var secureNotesInitialSavedStateHandle: SavedStateHandle
 
         @BeforeEach
@@ -906,7 +902,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 state = vaultAddItemInitialState,
                 vaultAddEditType = VaultAddEditType.AddItem,
             )
-            viewModel = VaultAddItemViewModel(
+            viewModel = VaultAddEditViewModel(
                 savedStateHandle = secureNotesInitialSavedStateHandle,
                 vaultRepository = vaultRepository,
             )
@@ -914,12 +910,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `NameTextChange should update name`() = runTest {
-            val action = VaultAddItemAction.Common.NameTextChange("newName")
+            val action = VaultAddEditAction.Common.NameTextChange("newName")
 
             viewModel.actionChannel.trySend(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                viewState = VaultAddItemState.ViewState.Content(
+                viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(
                         name = "newName",
                     ),
@@ -932,14 +928,14 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `FolderChange should update folder`() = runTest {
-            val action = VaultAddItemAction.Common.FolderChange(
+            val action = VaultAddEditAction.Common.FolderChange(
                 "newFolder".asText(),
             )
 
             viewModel.actionChannel.trySend(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                viewState = VaultAddItemState.ViewState.Content(
+                viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(
                         folder = "newFolder".asText(),
                     ),
@@ -952,12 +948,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `ToggleFavorite should update favorite`() = runTest {
-            val action = VaultAddItemAction.Common.ToggleFavorite(true)
+            val action = VaultAddEditAction.Common.ToggleFavorite(true)
 
             viewModel.actionChannel.trySend(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                viewState = VaultAddItemState.ViewState.Content(
+                viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(
                         favorite = true,
                     ),
@@ -968,39 +964,36 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `ToggleMasterPasswordReprompt should update masterPasswordReprompt`() =
-            runTest {
-                val action =
-                    VaultAddItemAction.Common.ToggleMasterPasswordReprompt(
-                        isMasterPasswordReprompt = true,
-                    )
-
-                viewModel.actionChannel.trySend(action)
-
-                val expectedState = vaultAddItemInitialState.copy(
-                    viewState = VaultAddItemState.ViewState.Content(
-                        common = createCommonContentViewState(
-                            masterPasswordReprompt = true,
-                        ),
-                        type = createLoginTypeContentViewState(),
-                    ),
-                )
-
-                assertEquals(expectedState, viewModel.stateFlow.value)
-            }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `NotesTextChange should update notes`() = runTest {
+        fun `ToggleMasterPasswordReprompt should update masterPasswordReprompt`() = runTest {
             val action =
-                VaultAddItemAction.Common.NotesTextChange(notes = "newNotes")
+                VaultAddEditAction.Common.ToggleMasterPasswordReprompt(
+                    isMasterPasswordReprompt = true,
+                )
 
             viewModel.actionChannel.trySend(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                viewState = VaultAddItemState.ViewState.Content(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(
+                        masterPasswordReprompt = true,
+                    ),
+                    type = createLoginTypeContentViewState(),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `NotesTextChange should update notes`() = runTest {
+            val action =
+                VaultAddEditAction.Common.NotesTextChange(notes = "newNotes")
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = vaultAddItemInitialState.copy(
+                viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(
                         notes = "newNotes",
                     ),
@@ -1013,12 +1006,12 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `OwnershipChange should update ownership`() = runTest {
-            val action = VaultAddItemAction.Common.OwnershipChange(ownership = "newOwner")
+            val action = VaultAddEditAction.Common.OwnershipChange(ownership = "newOwner")
 
             viewModel.actionChannel.trySend(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                viewState = VaultAddItemState.ViewState.Content(
+                viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(
                         ownership = "newOwner",
                     ),
@@ -1060,79 +1053,70 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 )
             }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `CustomFieldValueChange should allow a user to update a text custom field`() =
-            runTest {
-
-                val initState =
-                    createVaultAddItemState(
-                        vaultAddEditType = VaultAddEditType.AddItem,
-                        typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
-                        commonContentViewState = VaultAddItemState.ViewState.Content.Common(
-                            customFieldData = listOf(
-                                VaultAddItemState.Custom.TextField(
-                                    "TestId 1",
-                                    "Test Text",
-                                    "Test Text",
-                                ),
-                            ),
+        fun `CustomFieldValueChange should allow a user to update a text custom field`() = runTest {
+            val initState = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem,
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                commonContentViewState = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.TextField(
+                            "TestId 1",
+                            "Test Text",
+                            "Test Text",
                         ),
-                    )
+                    ),
+                ),
+            )
 
-                assertCustomFieldValueChange(
-                    initState,
-                    CustomFieldType.TEXT,
-                )
-            }
+            assertCustomFieldValueChange(
+                initState,
+                CustomFieldType.TEXT,
+            )
+        }
 
         @Test
-        @Suppress("MaxLineLength")
-        fun `CustomFieldValueChange should update hidden custom fields`() =
-            runTest {
-                val initState =
-                    createVaultAddItemState(
-                        typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
-                        commonContentViewState = VaultAddItemState.ViewState.Content.Common(
-                            customFieldData = listOf(
-                                VaultAddItemState.Custom.HiddenField(
-                                    "TestId 2",
-                                    "Test Text",
-                                    "Test Text",
-                                ),
+        fun `CustomFieldValueChange should update hidden custom fields`() = runTest {
+            val initState =
+                createVaultAddItemState(
+                    typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    commonContentViewState = VaultAddEditState.ViewState.Content.Common(
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                "TestId 2",
+                                "Test Text",
+                                "Test Text",
                             ),
                         ),
-                    )
-
-                assertCustomFieldValueChange(
-                    initState,
-                    CustomFieldType.HIDDEN,
+                    ),
                 )
-            }
 
-        @Suppress("MaxLineLength")
+            assertCustomFieldValueChange(
+                initState,
+                CustomFieldType.HIDDEN,
+            )
+        }
+
         @Test
-        fun `CustomFieldValueChange should update boolean custom fields`() =
-            runTest {
-                val initState =
-                    createVaultAddItemState(
-                        typeContentViewState = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
-                        commonContentViewState = VaultAddItemState.ViewState.Content.Common(
-                            customFieldData = listOf(
-                                VaultAddItemState.Custom.BooleanField(
-                                    "TestId 3",
-                                    "Boolean Field",
-                                    true,
-                                ),
-                            ),
+        fun `CustomFieldValueChange should update boolean custom fields`() = runTest {
+            val initState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                commonContentViewState = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(
+                            "TestId 3",
+                            "Boolean Field",
+                            true,
                         ),
-                    )
+                    ),
+                ),
+            )
 
-                assertCustomFieldValueChange(
-                    initState,
-                    CustomFieldType.BOOLEAN,
-                )
-            }
+            assertCustomFieldValueChange(
+                initState,
+                CustomFieldType.BOOLEAN,
+            )
+        }
 
         @Test
         fun `TooltipClick should emit ShowToast with 'Tooltip' message`() = runTest {
@@ -1140,10 +1124,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel
                     .actionChannel
                     .trySend(
-                        VaultAddItemAction.Common.TooltipClick,
+                        VaultAddEditAction.Common.TooltipClick,
                     )
                 assertEquals(
-                    VaultAddItemEvent.ShowToast(
+                    VaultAddEditEvent.ShowToast(
                         "Not yet implemented".asText(),
                     ),
                     awaitItem(),
@@ -1157,13 +1141,13 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     private fun createVaultAddItemState(
         vaultAddEditType: VaultAddEditType = VaultAddEditType.AddItem,
-        commonContentViewState: VaultAddItemState.ViewState.Content.Common = createCommonContentViewState(),
-        typeContentViewState: VaultAddItemState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
-        dialogState: VaultAddItemState.DialogState? = null,
-    ): VaultAddItemState =
-        VaultAddItemState(
+        commonContentViewState: VaultAddEditState.ViewState.Content.Common = createCommonContentViewState(),
+        typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
+        dialogState: VaultAddEditState.DialogState? = null,
+    ): VaultAddEditState =
+        VaultAddEditState(
             vaultAddEditType = vaultAddEditType,
-            viewState = VaultAddItemState.ViewState.Content(
+            viewState = VaultAddEditState.ViewState.Content(
                 common = commonContentViewState,
                 type = typeContentViewState,
             ),
@@ -1177,10 +1161,10 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         favorite: Boolean = false,
         masterPasswordReprompt: Boolean = false,
         notes: String = "",
-        customFieldData: List<VaultAddItemState.Custom> = listOf(),
+        customFieldData: List<VaultAddEditState.Custom> = listOf(),
         ownership: String = "placeholder@email.com",
-    ): VaultAddItemState.ViewState.Content.Common =
-        VaultAddItemState.ViewState.Content.Common(
+    ): VaultAddEditState.ViewState.Content.Common =
+        VaultAddEditState.ViewState.Content.Common(
             name = name,
             folderName = folder,
             favorite = favorite,
@@ -1195,8 +1179,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         password: String = "",
         uri: String = "",
         totpCode: String? = null,
-    ): VaultAddItemState.ViewState.Content.ItemType.Login =
-        VaultAddItemState.ViewState.Content.ItemType.Login(
+    ): VaultAddEditState.ViewState.Content.ItemType.Login =
+        VaultAddEditState.ViewState.Content.ItemType.Login(
             username = username,
             password = password,
             uri = uri,
@@ -1204,7 +1188,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         )
 
     private fun createSavedStateHandleWithState(
-        state: VaultAddItemState?,
+        state: VaultAddEditState?,
         vaultAddEditType: VaultAddEditType,
     ) = SavedStateHandle().apply {
         set("state", state)
@@ -1221,8 +1205,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
     private fun createAddVaultItemViewModel(
         savedStateHandle: SavedStateHandle = loginInitialSavedStateHandle,
         vaultRepo: VaultRepository = vaultRepository,
-    ): VaultAddItemViewModel =
-        VaultAddItemViewModel(
+    ): VaultAddEditViewModel =
+        VaultAddEditViewModel(
             savedStateHandle = savedStateHandle,
             vaultRepository = vaultRepo,
         )
@@ -1231,16 +1215,16 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
      * A function to test the changes in custom fields for each type.
      */
     private fun assertCustomFieldValueChange(
-        initialState: VaultAddItemState,
+        initialState: VaultAddEditState,
         type: CustomFieldType,
     ) {
-        lateinit var expectedCustomField: VaultAddItemState.Custom
-        lateinit var action: VaultAddItemAction.Common
-        lateinit var expectedState: VaultAddItemState.ViewState.Content
+        lateinit var expectedCustomField: VaultAddEditState.Custom
+        lateinit var action: VaultAddEditAction.Common
+        lateinit var expectedState: VaultAddEditState.ViewState.Content
 
         when (type) {
             CustomFieldType.LINKED -> {
-                expectedCustomField = VaultAddItemState.Custom.LinkedField(
+                expectedCustomField = VaultAddEditState.Custom.LinkedField(
                     "TestId 4",
                     "Linked Field",
                     VaultLinkedFieldType.PASSWORD,
@@ -1248,7 +1232,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             }
 
             CustomFieldType.HIDDEN -> {
-                expectedCustomField = VaultAddItemState.Custom.HiddenField(
+                expectedCustomField = VaultAddEditState.Custom.HiddenField(
                     "TestId 2",
                     "Test Hidden",
                     "Updated Test Text",
@@ -1256,7 +1240,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             }
 
             CustomFieldType.BOOLEAN -> {
-                expectedCustomField = VaultAddItemState.Custom.BooleanField(
+                expectedCustomField = VaultAddEditState.Custom.BooleanField(
                     "TestId 3",
                     "Boolean Field",
                     false,
@@ -1264,7 +1248,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
             }
 
             CustomFieldType.TEXT -> {
-                expectedCustomField = VaultAddItemState.Custom.TextField(
+                expectedCustomField = VaultAddEditState.Custom.TextField(
                     "TestId 1",
                     "Test Text",
                     "Updated Test Text",
@@ -1280,8 +1264,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         )
 
         val currentContentState =
-            (viewModel.stateFlow.value.viewState as VaultAddItemState.ViewState.Content)
-        action = VaultAddItemAction.Common.CustomFieldValueChange(expectedCustomField)
+            (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+        action = VaultAddEditAction.Common.CustomFieldValueChange(expectedCustomField)
         expectedState = currentContentState
             .copy(
                 common = currentContentState.common.copy(
@@ -1298,7 +1282,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
      * A function to test the addition of new custom fields for each type.
      */
     private fun assertAddNewCustomFieldClick(
-        initialState: VaultAddItemState,
+        initialState: VaultAddEditState,
         type: CustomFieldType,
     ) {
         val viewModel = createAddVaultItemViewModel(
@@ -1309,14 +1293,14 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         )
 
         var name = ""
-        lateinit var expectedCustomField: VaultAddItemState.Custom
-        lateinit var action: VaultAddItemAction.Common
-        lateinit var expectedState: VaultAddItemState.ViewState.Content
+        lateinit var expectedCustomField: VaultAddEditState.Custom
+        lateinit var action: VaultAddEditAction.Common
+        lateinit var expectedState: VaultAddEditState.ViewState.Content
 
         when (type) {
             CustomFieldType.LINKED -> {
                 name = "Linked"
-                expectedCustomField = VaultAddItemState.Custom.LinkedField(
+                expectedCustomField = VaultAddEditState.Custom.LinkedField(
                     itemId = TEST_ID,
                     name = name,
                     vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
@@ -1325,7 +1309,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
             CustomFieldType.HIDDEN -> {
                 name = "Hidden"
-                expectedCustomField = VaultAddItemState.Custom.HiddenField(
+                expectedCustomField = VaultAddEditState.Custom.HiddenField(
                     itemId = TEST_ID,
                     name = name,
                     value = "",
@@ -1334,7 +1318,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
             CustomFieldType.BOOLEAN -> {
                 name = "Boolean"
-                expectedCustomField = VaultAddItemState.Custom.BooleanField(
+                expectedCustomField = VaultAddEditState.Custom.BooleanField(
                     itemId = TEST_ID,
                     name = name,
                     value = false,
@@ -1343,7 +1327,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 
             CustomFieldType.TEXT -> {
                 name = "Text"
-                expectedCustomField = VaultAddItemState.Custom.TextField(
+                expectedCustomField = VaultAddEditState.Custom.TextField(
                     itemId = TEST_ID,
                     name = name,
                     value = "",
@@ -1352,8 +1336,8 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         }
 
         val currentContentState =
-            (viewModel.stateFlow.value.viewState as VaultAddItemState.ViewState.Content)
-        action = VaultAddItemAction.Common.AddNewCustomFieldClick(type, name)
+            (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+        action = VaultAddEditAction.Common.AddNewCustomFieldClick(type, name)
         expectedState = currentContentState
             .copy(
                 common = currentContentState.common.copy(
@@ -1371,6 +1355,6 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
 private const val TEST_ID = "testId"
 
 private const val CIPHER_VIEW_EXTENSIONS_PATH: String =
-    "com.x8bit.bitwarden.ui.vault.feature.additem.util.CipherViewExtensionsKt"
+    "com.x8bit.bitwarden.ui.vault.feature.addedit.util.CipherViewExtensionsKt"
 
 private const val DEFAULT_EDIT_ITEM_ID: String = "edit_item_id"

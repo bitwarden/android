@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +19,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -28,10 +28,10 @@ import kotlinx.collections.immutable.toImmutableList
  * The UI for adding and editing a secure notes cipher.
  */
 @Suppress("LongMethod")
-fun LazyListScope.addEditSecureNotesItems(
-    commonState: VaultAddItemState.ViewState.Content.Common,
+fun LazyListScope.vaultAddEditSecureNotesItems(
+    commonState: VaultAddEditState.ViewState.Content.Common,
     isAddItemMode: Boolean,
-    commonTypeHandlers: VaultAddItemCommonHandlers,
+    commonTypeHandlers: VaultAddEditCommonHandlers,
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))
@@ -135,7 +135,7 @@ fun LazyListScope.addEditSecureNotesItems(
         )
     }
     items(commonState.customFieldData) { customItem ->
-        AddEditCustomField(
+        VaultAddEditCustomField(
             customItem,
             onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
             modifier = Modifier
@@ -146,7 +146,7 @@ fun LazyListScope.addEditSecureNotesItems(
 
     item {
         Spacer(modifier = Modifier.height(16.dp))
-        AddEditCustomFieldsButton(
+        VaultAddEditCustomFieldsButton(
             onFinishNamingClick = commonTypeHandlers.onAddNewCustomFieldClick,
             options = persistentListOf(
                 CustomFieldType.TEXT,

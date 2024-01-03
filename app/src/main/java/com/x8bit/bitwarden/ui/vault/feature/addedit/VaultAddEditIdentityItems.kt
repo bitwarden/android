@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +21,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddIdentityItemTypeHandlers
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -31,12 +31,12 @@ import kotlinx.collections.immutable.toImmutableList
  * The UI for adding and editing an identity cipher.
  */
 @Suppress("LongMethod")
-fun LazyListScope.addEditIdentityItems(
-    commonState: VaultAddItemState.ViewState.Content.Common,
-    identityState: VaultAddItemState.ViewState.Content.ItemType.Identity,
+fun LazyListScope.vaultAddEditIdentityItems(
+    commonState: VaultAddEditState.ViewState.Content.Common,
+    identityState: VaultAddEditState.ViewState.Content.ItemType.Identity,
     isAddItemMode: Boolean,
-    commonTypeHandlers: VaultAddItemCommonHandlers,
-    identityItemTypeHandlers: VaultAddIdentityItemTypeHandlers,
+    commonTypeHandlers: VaultAddEditCommonHandlers,
+    identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
 ) {
     item {
         Spacer(modifier = Modifier.height(8.dp))
@@ -337,7 +337,7 @@ fun LazyListScope.addEditIdentityItems(
     }
 
     items(commonState.customFieldData) { customItem ->
-        AddEditCustomField(
+        VaultAddEditCustomField(
             customItem,
             onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
             modifier = Modifier
@@ -352,7 +352,7 @@ fun LazyListScope.addEditIdentityItems(
 
     item {
         Spacer(modifier = Modifier.height(16.dp))
-        AddEditCustomFieldsButton(
+        VaultAddEditCustomFieldsButton(
             onFinishNamingClick = commonTypeHandlers.onAddNewCustomFieldClick,
             modifier = Modifier
                 .fillMaxWidth()
@@ -391,21 +391,21 @@ fun LazyListScope.addEditIdentityItems(
 
 @Composable
 private fun TitleMultiSelectButton(
-    selectedTitle: VaultAddItemState.ViewState.Content.ItemType.Identity.Title,
-    onTitleSelected: (VaultAddItemState.ViewState.Content.ItemType.Identity.Title) -> Unit,
+    selectedTitle: VaultAddEditState.ViewState.Content.ItemType.Identity.Title,
+    onTitleSelected: (VaultAddEditState.ViewState.Content.ItemType.Identity.Title) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val resources = LocalContext.current.resources
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.title),
-        options = VaultAddItemState.ViewState.Content.ItemType.Identity.Title
+        options = VaultAddEditState.ViewState.Content.ItemType.Identity.Title
             .entries
             .map { it.value() }
             .toImmutableList(),
         selectedOption = selectedTitle.value(),
         onOptionSelected = { selectedString ->
             onTitleSelected(
-                VaultAddItemState.ViewState.Content.ItemType.Identity.Title
+                VaultAddEditState.ViewState.Content.ItemType.Identity.Title
                     .entries
                     .first { it.value.toString(resources) == selectedString },
             )

@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem.model
+package com.x8bit.bitwarden.ui.vault.feature.addedit.model
 
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -30,7 +30,7 @@ class CustomFieldTypeTests {
         val name = "test"
         val type = CustomFieldType.BOOLEAN
 
-        val expected = VaultAddItemState.Custom.BooleanField(TEST_ID, "test", false)
+        val expected = VaultAddEditState.Custom.BooleanField(TEST_ID, "test", false)
         val actual = type.toCustomField(name)
 
         assertEquals(expected, actual)
@@ -42,7 +42,7 @@ class CustomFieldTypeTests {
         val type = CustomFieldType.LINKED
 
         val expected =
-            VaultAddItemState.Custom.LinkedField(TEST_ID, "test", VaultLinkedFieldType.USERNAME)
+            VaultAddEditState.Custom.LinkedField(TEST_ID, "test", VaultLinkedFieldType.USERNAME)
         val actual = type.toCustomField(name)
 
         assertEquals(expected, actual)
@@ -53,7 +53,7 @@ class CustomFieldTypeTests {
         val name = "test"
         val type = CustomFieldType.TEXT
 
-        val expected = VaultAddItemState.Custom.TextField(TEST_ID, "test", "")
+        val expected = VaultAddEditState.Custom.TextField(TEST_ID, "test", "")
         val actual = type.toCustomField(name)
 
         assertEquals(expected, actual)
@@ -64,7 +64,7 @@ class CustomFieldTypeTests {
         val name = "test"
         val type = CustomFieldType.HIDDEN
 
-        val expected = VaultAddItemState.Custom.HiddenField(TEST_ID, "test", "")
+        val expected = VaultAddEditState.Custom.HiddenField(TEST_ID, "test", "")
         val actual = type.toCustomField(name)
 
         assertEquals(expected, actual)

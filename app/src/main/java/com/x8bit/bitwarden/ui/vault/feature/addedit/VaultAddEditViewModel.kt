@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -14,9 +14,9 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.CustomFieldType
-import com.x8bit.bitwarden.ui.vault.feature.additem.model.toCustomField
-import com.x8bit.bitwarden.ui.vault.feature.additem.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -43,23 +43,23 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 @Suppress("TooManyFunctions", "LargeClass")
-class VaultAddItemViewModel @Inject constructor(
+class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
-) : BaseViewModel<VaultAddItemState, VaultAddItemEvent, VaultAddItemAction>(
+) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val vaultAddEditType = VaultAddEditItemArgs(savedStateHandle).vaultAddEditType
-            VaultAddItemState(
+            val vaultAddEditType = VaultAddEditArgs(savedStateHandle).vaultAddEditType
+            VaultAddEditState(
                 vaultAddEditType = vaultAddEditType,
                 viewState = when (vaultAddEditType) {
-                    VaultAddEditType.AddItem -> VaultAddItemState.ViewState.Content(
-                        common = VaultAddItemState.ViewState.Content.Common(),
-                        type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+                    VaultAddEditType.AddItem -> VaultAddEditState.ViewState.Content(
+                        common = VaultAddEditState.ViewState.Content.Common(),
+                        type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                     )
 
-                    is VaultAddEditType.EditItem -> VaultAddItemState.ViewState.Loading
+                    is VaultAddEditType.EditItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = null,
             )
@@ -76,7 +76,7 @@ class VaultAddItemViewModel @Inject constructor(
                     .getVaultItemStateFlow(vaultAddEditType.vaultItemId)
                     // We'll stop getting updates as soon as we get some loaded data.
                     .takeUntilLoaded()
-                    .map { VaultAddItemAction.Internal.VaultDataReceive(it) }
+                    .map { VaultAddEditAction.Internal.VaultDataReceive(it) }
                     .onEach(::sendAction)
                     .launchIn(viewModelScope)
             }
@@ -84,17 +84,17 @@ class VaultAddItemViewModel @Inject constructor(
 
         vaultRepository
             .totpCodeFlow
-            .map { VaultAddItemAction.Internal.TotpCodeReceive(totpCode = it) }
+            .map { VaultAddEditAction.Internal.TotpCodeReceive(totpCode = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
-    override fun handleAction(action: VaultAddItemAction) {
+    override fun handleAction(action: VaultAddEditAction) {
         when (action) {
-            is VaultAddItemAction.Common -> handleCommonActions(action)
-            is VaultAddItemAction.ItemType.LoginType -> handleAddLoginTypeAction(action)
-            is VaultAddItemAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
-            is VaultAddItemAction.Internal -> handleInternalActions(action)
+            is VaultAddEditAction.Common -> handleCommonActions(action)
+            is VaultAddEditAction.ItemType.LoginType -> handleAddLoginTypeAction(action)
+            is VaultAddEditAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
+            is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
 
@@ -102,46 +102,46 @@ class VaultAddItemViewModel @Inject constructor(
 
     //region Common Handlers
 
-    private fun handleCommonActions(action: VaultAddItemAction.Common) {
+    private fun handleCommonActions(action: VaultAddEditAction.Common) {
         when (action) {
-            is VaultAddItemAction.Common.CustomFieldValueChange -> handleCustomFieldValueChange(
+            is VaultAddEditAction.Common.CustomFieldValueChange -> handleCustomFieldValueChange(
                 action,
             )
 
-            is VaultAddItemAction.Common.FolderChange -> handleFolderTextInputChange(action)
-            is VaultAddItemAction.Common.NameTextChange -> handleNameTextInputChange(action)
-            is VaultAddItemAction.Common.NotesTextChange -> handleNotesTextInputChange(action)
-            is VaultAddItemAction.Common.OwnershipChange -> handleOwnershipTextInputChange(action)
-            is VaultAddItemAction.Common.ToggleFavorite -> handleToggleFavorite(action)
-            is VaultAddItemAction.Common.ToggleMasterPasswordReprompt -> {
+            is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
+            is VaultAddEditAction.Common.NameTextChange -> handleNameTextInputChange(action)
+            is VaultAddEditAction.Common.NotesTextChange -> handleNotesTextInputChange(action)
+            is VaultAddEditAction.Common.OwnershipChange -> handleOwnershipTextInputChange(action)
+            is VaultAddEditAction.Common.ToggleFavorite -> handleToggleFavorite(action)
+            is VaultAddEditAction.Common.ToggleMasterPasswordReprompt -> {
                 handleToggleMasterPasswordReprompt(action)
             }
 
-            is VaultAddItemAction.Common.CloseClick -> handleCloseClick()
-            is VaultAddItemAction.Common.DismissDialog -> handleDismissDialog()
-            is VaultAddItemAction.Common.SaveClick -> handleSaveClick()
-            is VaultAddItemAction.Common.TypeOptionSelect -> handleTypeOptionSelect(action)
-            is VaultAddItemAction.Common.AddNewCustomFieldClick -> handleAddNewCustomFieldClick(
+            is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
+            is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
+            is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
+            is VaultAddEditAction.Common.TypeOptionSelect -> handleTypeOptionSelect(action)
+            is VaultAddEditAction.Common.AddNewCustomFieldClick -> handleAddNewCustomFieldClick(
                 action,
             )
 
-            is VaultAddItemAction.Common.TooltipClick -> handleTooltipClick()
+            is VaultAddEditAction.Common.TooltipClick -> handleTooltipClick()
         }
     }
 
-    private fun handleTypeOptionSelect(action: VaultAddItemAction.Common.TypeOptionSelect) {
+    private fun handleTypeOptionSelect(action: VaultAddEditAction.Common.TypeOptionSelect) {
         when (action.typeOption) {
-            VaultAddItemState.ItemTypeOption.LOGIN -> handleSwitchToAddLoginItem()
-            VaultAddItemState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
-            VaultAddItemState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
-            VaultAddItemState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
+            VaultAddEditState.ItemTypeOption.LOGIN -> handleSwitchToAddLoginItem()
+            VaultAddEditState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
+            VaultAddEditState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
+            VaultAddEditState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
         }
     }
 
     private fun handleSwitchToAddLoginItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                type = VaultAddItemState.ViewState.Content.ItemType.Login(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Login(),
             )
         }
     }
@@ -149,7 +149,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSwitchToAddSecureNotesItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             )
         }
     }
@@ -157,7 +157,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSwitchToAddCardItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                type = VaultAddItemState.ViewState.Content.ItemType.Card,
+                type = VaultAddEditState.ViewState.Content.ItemType.Card,
             )
         }
     }
@@ -165,7 +165,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleSwitchToAddIdentityItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                type = VaultAddItemState.ViewState.Content.ItemType.Identity(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
             )
         }
     }
@@ -174,7 +174,7 @@ class VaultAddItemViewModel @Inject constructor(
         if (content.common.name.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
-                    dialog = VaultAddItemState.DialogState.Error(
+                    dialog = VaultAddEditState.DialogState.Error(
                         R.string.validation_field_required
                             .asText(R.string.name.asText()),
                     ),
@@ -185,7 +185,7 @@ class VaultAddItemViewModel @Inject constructor(
 
         mutableStateFlow.update {
             it.copy(
-                dialog = VaultAddItemState.DialogState.Loading(
+                dialog = VaultAddEditState.DialogState.Loading(
                     R.string.saving.asText(),
                 ),
             )
@@ -195,7 +195,7 @@ class VaultAddItemViewModel @Inject constructor(
             when (val vaultAddEditType = state.vaultAddEditType) {
                 VaultAddEditType.AddItem -> {
                     val result = vaultRepository.createCipher(cipherView = content.toCipherView())
-                    sendAction(VaultAddItemAction.Internal.CreateCipherResultReceive(result))
+                    sendAction(VaultAddEditAction.Internal.CreateCipherResultReceive(result))
                 }
 
                 is VaultAddEditType.EditItem -> {
@@ -203,7 +203,7 @@ class VaultAddItemViewModel @Inject constructor(
                         cipherId = vaultAddEditType.vaultItemId,
                         cipherView = content.toCipherView(),
                     )
-                    sendAction(VaultAddItemAction.Internal.UpdateCipherResultReceive(result))
+                    sendAction(VaultAddEditAction.Internal.UpdateCipherResultReceive(result))
                 }
             }
         }
@@ -211,7 +211,7 @@ class VaultAddItemViewModel @Inject constructor(
 
     private fun handleCloseClick() {
         sendEvent(
-            event = VaultAddItemEvent.NavigateBack,
+            event = VaultAddEditEvent.NavigateBack,
         )
     }
 
@@ -222,9 +222,9 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleAddNewCustomFieldClick(
-        action: VaultAddItemAction.Common.AddNewCustomFieldClick,
+        action: VaultAddEditAction.Common.AddNewCustomFieldClick,
     ) {
-        val newCustomData: VaultAddItemState.Custom =
+        val newCustomData: VaultAddEditState.Custom =
             action.customFieldType.toCustomField(action.name)
 
         updateCommonContent { loginType ->
@@ -233,7 +233,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleCustomFieldValueChange(
-        action: VaultAddItemAction.Common.CustomFieldValueChange,
+        action: VaultAddEditAction.Common.CustomFieldValueChange,
     ) {
         updateCommonContent { commonContent ->
             commonContent.copy(
@@ -249,7 +249,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleFolderTextInputChange(
-        action: VaultAddItemAction.Common.FolderChange,
+        action: VaultAddEditAction.Common.FolderChange,
     ) {
         updateCommonContent { commonContent ->
             commonContent.copy(folderName = action.folder)
@@ -257,7 +257,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleToggleFavorite(
-        action: VaultAddItemAction.Common.ToggleFavorite,
+        action: VaultAddEditAction.Common.ToggleFavorite,
     ) {
         updateCommonContent { commonContent ->
             commonContent.copy(favorite = action.isFavorite)
@@ -265,7 +265,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleToggleMasterPasswordReprompt(
-        action: VaultAddItemAction.Common.ToggleMasterPasswordReprompt,
+        action: VaultAddEditAction.Common.ToggleMasterPasswordReprompt,
     ) {
         updateCommonContent { commonContent ->
             commonContent.copy(masterPasswordReprompt = action.isMasterPasswordReprompt)
@@ -273,7 +273,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleNotesTextInputChange(
-        action: VaultAddItemAction.Common.NotesTextChange,
+        action: VaultAddEditAction.Common.NotesTextChange,
     ) {
         updateCommonContent { commonContent ->
             commonContent.copy(notes = action.notes)
@@ -281,7 +281,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleOwnershipTextInputChange(
-        action: VaultAddItemAction.Common.OwnershipChange,
+        action: VaultAddEditAction.Common.OwnershipChange,
     ) {
         updateCommonContent { commonContent ->
             commonContent.copy(ownership = action.ownership)
@@ -289,7 +289,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleNameTextInputChange(
-        action: VaultAddItemAction.Common.NameTextChange,
+        action: VaultAddEditAction.Common.NameTextChange,
     ) {
         updateCommonContent { commonContent ->
             commonContent.copy(name = action.name)
@@ -299,7 +299,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleTooltipClick() {
         // TODO Add the text for the prompt (BIT-1079)
         sendEvent(
-            event = VaultAddItemEvent.ShowToast(
+            event = VaultAddEditEvent.ShowToast(
                 message = "Not yet implemented".asText(),
             ),
         )
@@ -311,53 +311,53 @@ class VaultAddItemViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleAddLoginTypeAction(
-        action: VaultAddItemAction.ItemType.LoginType,
+        action: VaultAddEditAction.ItemType.LoginType,
     ) {
         when (action) {
-            is VaultAddItemAction.ItemType.LoginType.UsernameTextChange -> {
+            is VaultAddEditAction.ItemType.LoginType.UsernameTextChange -> {
                 handleLoginUsernameTextInputChange(action)
             }
 
-            is VaultAddItemAction.ItemType.LoginType.PasswordTextChange -> {
+            is VaultAddEditAction.ItemType.LoginType.PasswordTextChange -> {
                 handleLoginPasswordTextInputChange(action)
             }
 
-            is VaultAddItemAction.ItemType.LoginType.UriTextChange -> {
+            is VaultAddEditAction.ItemType.LoginType.UriTextChange -> {
                 handleLoginUriTextInputChange(action)
             }
 
-            is VaultAddItemAction.ItemType.LoginType.OpenUsernameGeneratorClick -> {
+            is VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick -> {
                 handleLoginOpenUsernameGeneratorClick()
             }
 
-            is VaultAddItemAction.ItemType.LoginType.PasswordCheckerClick -> {
+            is VaultAddEditAction.ItemType.LoginType.PasswordCheckerClick -> {
                 handleLoginPasswordCheckerClick()
             }
 
-            is VaultAddItemAction.ItemType.LoginType.OpenPasswordGeneratorClick -> {
+            is VaultAddEditAction.ItemType.LoginType.OpenPasswordGeneratorClick -> {
                 handleLoginOpenPasswordGeneratorClick()
             }
 
-            is VaultAddItemAction.ItemType.LoginType.SetupTotpClick -> {
+            is VaultAddEditAction.ItemType.LoginType.SetupTotpClick -> {
                 handleLoginSetupTotpClick(action)
             }
 
-            is VaultAddItemAction.ItemType.LoginType.UriSettingsClick -> {
+            is VaultAddEditAction.ItemType.LoginType.UriSettingsClick -> {
                 handleLoginUriSettingsClick()
             }
 
-            is VaultAddItemAction.ItemType.LoginType.AddNewUriClick -> {
+            is VaultAddEditAction.ItemType.LoginType.AddNewUriClick -> {
                 handleLoginAddNewUriClick()
             }
 
-            is VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick -> {
+            is VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick -> {
                 handleLoginCopyTotpKeyText(action)
             }
         }
     }
 
     private fun handleLoginUsernameTextInputChange(
-        action: VaultAddItemAction.ItemType.LoginType.UsernameTextChange,
+        action: VaultAddEditAction.ItemType.LoginType.UsernameTextChange,
     ) {
         updateLoginContent { loginType ->
             loginType.copy(username = action.username)
@@ -365,7 +365,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleLoginPasswordTextInputChange(
-        action: VaultAddItemAction.ItemType.LoginType.PasswordTextChange,
+        action: VaultAddEditAction.ItemType.LoginType.PasswordTextChange,
     ) {
         updateLoginContent { loginType ->
             loginType.copy(password = action.password)
@@ -373,7 +373,7 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleLoginUriTextInputChange(
-        action: VaultAddItemAction.ItemType.LoginType.UriTextChange,
+        action: VaultAddEditAction.ItemType.LoginType.UriTextChange,
     ) {
         updateLoginContent { loginType ->
             loginType.copy(uri = action.uri)
@@ -383,7 +383,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginOpenUsernameGeneratorClick() {
         viewModelScope.launch {
             sendEvent(
-                event = VaultAddItemEvent.ShowToast(
+                event = VaultAddEditEvent.ShowToast(
                     message = "Open Username Generator".asText(),
                 ),
             )
@@ -393,7 +393,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginPasswordCheckerClick() {
         viewModelScope.launch {
             sendEvent(
-                event = VaultAddItemEvent.ShowToast(
+                event = VaultAddEditEvent.ShowToast(
                     message = "Password Checker".asText(),
                 ),
             )
@@ -403,7 +403,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginOpenPasswordGeneratorClick() {
         viewModelScope.launch {
             sendEvent(
-                event = VaultAddItemEvent.ShowToast(
+                event = VaultAddEditEvent.ShowToast(
                     message = "Open Password Generator".asText(),
                 ),
             )
@@ -411,14 +411,14 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleLoginSetupTotpClick(
-        action: VaultAddItemAction.ItemType.LoginType.SetupTotpClick,
+        action: VaultAddEditAction.ItemType.LoginType.SetupTotpClick,
     ) {
         if (action.isGranted) {
-            sendEvent(event = VaultAddItemEvent.NavigateToQrCodeScan)
+            sendEvent(event = VaultAddEditEvent.NavigateToQrCodeScan)
         } else {
             // TODO Add manual QR code entry (BIT-1114)
             sendEvent(
-                event = VaultAddItemEvent.ShowToast(
+                event = VaultAddEditEvent.ShowToast(
                     message =
                     "Permission Not Granted, Manual QR Code Entry Not Implemented".asText(),
                 ),
@@ -427,10 +427,10 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private fun handleLoginCopyTotpKeyText(
-        action: VaultAddItemAction.ItemType.LoginType.CopyTotpKeyClick,
+        action: VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick,
     ) {
         sendEvent(
-            event = VaultAddItemEvent.CopyToClipboard(
+            event = VaultAddEditEvent.CopyToClipboard(
                 text = action.totpKey,
             ),
         )
@@ -439,7 +439,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginUriSettingsClick() {
         viewModelScope.launch {
             sendEvent(
-                event = VaultAddItemEvent.ShowToast(
+                event = VaultAddEditEvent.ShowToast(
                     message = "URI Settings".asText(),
                 ),
             )
@@ -449,7 +449,7 @@ class VaultAddItemViewModel @Inject constructor(
     private fun handleLoginAddNewUriClick() {
         viewModelScope.launch {
             sendEvent(
-                event = VaultAddItemEvent.ShowToast(
+                event = VaultAddEditEvent.ShowToast(
                     message = "Add New URI".asText(),
                 ),
             )
@@ -459,186 +459,186 @@ class VaultAddItemViewModel @Inject constructor(
     //endregion Add Login Item Type Handlers
 
     //region Identity Type Handlers
-    private fun handleIdentityTypeActions(action: VaultAddItemAction.ItemType.IdentityType) {
+    private fun handleIdentityTypeActions(action: VaultAddEditAction.ItemType.IdentityType) {
         when (action) {
-            is VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.FirstNameTextChange -> {
                 handleIdentityFirstNameTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.Address1TextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.Address1TextChange -> {
                 handleIdentityAddress1TextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.Address2TextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.Address2TextChange -> {
                 handleIdentityAddress2TextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.Address3TextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.Address3TextChange -> {
                 handleIdentityAddress3TextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.CityTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.CityTextChange -> {
                 handleIdentityCityTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.StateTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.StateTextChange -> {
                 handleIdentityStateTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.CompanyTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.CompanyTextChange -> {
                 handleIdentityCompanyTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.CountryTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.CountryTextChange -> {
                 handleIdentityCountryTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.EmailTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.EmailTextChange -> {
                 handleIdentityEmailTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.LastNameTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.LastNameTextChange -> {
                 handleIdentityLastNameTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.LicenseNumberTextChange -> {
                 handleIdentityLicenseNumberTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.MiddleNameTextChange -> {
                 handleIdentityMiddleNameTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.PassportNumberTextChange -> {
                 handleIdentityPassportNumberTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.PhoneTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.PhoneTextChange -> {
                 handleIdentityPhoneTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.ZipTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.ZipTextChange -> {
                 handleIdentityZipTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.SsnTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.SsnTextChange -> {
                 handleIdentitySsnTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.UsernameTextChange -> {
+            is VaultAddEditAction.ItemType.IdentityType.UsernameTextChange -> {
                 handleIdentityUsernameTextChange(action)
             }
 
-            is VaultAddItemAction.ItemType.IdentityType.TitleSelected -> {
+            is VaultAddEditAction.ItemType.IdentityType.TitleSelected -> {
                 handleIdentityTitleSelected(action)
             }
         }
     }
 
     private fun handleIdentityAddress1TextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.Address1TextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.Address1TextChange,
     ) {
         updateIdentityContent { it.copy(address1 = action.address1) }
     }
 
     private fun handleIdentityAddress2TextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.Address2TextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.Address2TextChange,
     ) {
         updateIdentityContent { it.copy(address2 = action.address2) }
     }
 
     private fun handleIdentityAddress3TextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.Address3TextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.Address3TextChange,
     ) {
         updateIdentityContent { it.copy(address3 = action.address3) }
     }
 
     private fun handleIdentityCityTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.CityTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.CityTextChange,
     ) {
         updateIdentityContent { it.copy(city = action.city) }
     }
 
     private fun handleIdentityStateTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.StateTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.StateTextChange,
     ) {
         updateIdentityContent { it.copy(state = action.state) }
     }
 
     private fun handleIdentityCompanyTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.CompanyTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.CompanyTextChange,
     ) {
         updateIdentityContent { it.copy(company = action.company) }
     }
 
     private fun handleIdentityCountryTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.CountryTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.CountryTextChange,
     ) {
         updateIdentityContent { it.copy(country = action.country) }
     }
 
     private fun handleIdentityEmailTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.EmailTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.EmailTextChange,
     ) {
         updateIdentityContent { it.copy(email = action.email) }
     }
 
     private fun handleIdentityLastNameTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.LastNameTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.LastNameTextChange,
     ) {
         updateIdentityContent { it.copy(lastName = action.lastName) }
     }
 
     private fun handleIdentityLicenseNumberTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.LicenseNumberTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.LicenseNumberTextChange,
     ) {
         updateIdentityContent { it.copy(licenseNumber = action.licenseNumber) }
     }
 
     private fun handleIdentityMiddleNameTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.MiddleNameTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.MiddleNameTextChange,
     ) {
         updateIdentityContent { it.copy(middleName = action.middleName) }
     }
 
     private fun handleIdentityPassportNumberTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.PassportNumberTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.PassportNumberTextChange,
     ) {
         updateIdentityContent { it.copy(passportNumber = action.passportNumber) }
     }
 
     private fun handleIdentityPhoneTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.PhoneTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.PhoneTextChange,
     ) {
         updateIdentityContent { it.copy(phone = action.phone) }
     }
 
     private fun handleIdentityZipTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.ZipTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.ZipTextChange,
     ) {
         updateIdentityContent { it.copy(zip = action.zip) }
     }
 
     private fun handleIdentitySsnTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.SsnTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.SsnTextChange,
     ) {
         updateIdentityContent { it.copy(ssn = action.ssn) }
     }
 
     private fun handleIdentityUsernameTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.UsernameTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.UsernameTextChange,
     ) {
         updateIdentityContent { it.copy(username = action.username) }
     }
 
     private fun handleIdentityFirstNameTextChange(
-        action: VaultAddItemAction.ItemType.IdentityType.FirstNameTextChange,
+        action: VaultAddEditAction.ItemType.IdentityType.FirstNameTextChange,
     ) {
         updateIdentityContent { it.copy(firstName = action.firstName) }
     }
 
     private fun handleIdentityTitleSelected(
-        action: VaultAddItemAction.ItemType.IdentityType.TitleSelected,
+        action: VaultAddEditAction.ItemType.IdentityType.TitleSelected,
     ) {
         updateIdentityContent { it.copy(selectedTitle = action.title) }
     }
@@ -646,23 +646,23 @@ class VaultAddItemViewModel @Inject constructor(
 
     //region Internal Type Handlers
 
-    private fun handleInternalActions(action: VaultAddItemAction.Internal) {
+    private fun handleInternalActions(action: VaultAddEditAction.Internal) {
         when (action) {
-            is VaultAddItemAction.Internal.CreateCipherResultReceive -> {
+            is VaultAddEditAction.Internal.CreateCipherResultReceive -> {
                 handleCreateCipherResultReceive(action)
             }
 
-            is VaultAddItemAction.Internal.UpdateCipherResultReceive -> {
+            is VaultAddEditAction.Internal.UpdateCipherResultReceive -> {
                 handleUpdateCipherResultReceive(action)
             }
 
-            is VaultAddItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
-            is VaultAddItemAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
+            is VaultAddEditAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
+            is VaultAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
     }
 
     private fun handleCreateCipherResultReceive(
-        action: VaultAddItemAction.Internal.CreateCipherResultReceive,
+        action: VaultAddEditAction.Internal.CreateCipherResultReceive,
     ) {
         mutableStateFlow.update {
             it.copy(dialog = null)
@@ -672,7 +672,7 @@ class VaultAddItemViewModel @Inject constructor(
             is CreateCipherResult.Error -> {
                 // TODO Display error dialog BIT-501
                 sendEvent(
-                    event = VaultAddItemEvent.ShowToast(
+                    event = VaultAddEditEvent.ShowToast(
                         message = "Save Item Failure".asText(),
                     ),
                 )
@@ -680,34 +680,34 @@ class VaultAddItemViewModel @Inject constructor(
 
             is CreateCipherResult.Success -> {
                 sendEvent(
-                    event = VaultAddItemEvent.NavigateBack,
+                    event = VaultAddEditEvent.NavigateBack,
                 )
             }
         }
     }
 
     private fun handleUpdateCipherResultReceive(
-        action: VaultAddItemAction.Internal.UpdateCipherResultReceive,
+        action: VaultAddEditAction.Internal.UpdateCipherResultReceive,
     ) {
         mutableStateFlow.update { it.copy(dialog = null) }
         when (action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
                 // TODO Display error dialog BIT-501
-                sendEvent(VaultAddItemEvent.ShowToast(message = "Save Item Failure".asText()))
+                sendEvent(VaultAddEditEvent.ShowToast(message = "Save Item Failure".asText()))
             }
 
             is UpdateCipherResult.Success -> {
-                sendEvent(VaultAddItemEvent.NavigateBack)
+                sendEvent(VaultAddEditEvent.NavigateBack)
             }
         }
     }
 
-    private fun handleVaultDataReceive(action: VaultAddItemAction.Internal.VaultDataReceive) {
+    private fun handleVaultDataReceive(action: VaultAddEditAction.Internal.VaultDataReceive) {
         when (val vaultDataState = action.vaultDataState) {
             is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = VaultAddItemState.ViewState.Error(
+                        viewState = VaultAddEditState.ViewState.Error(
                             message = R.string.generic_error_message.asText(),
                         ),
                     )
@@ -720,7 +720,7 @@ class VaultAddItemViewModel @Inject constructor(
                         viewState = vaultDataState
                             .data
                             ?.toViewState()
-                            ?: VaultAddItemState.ViewState.Error(
+                            ?: VaultAddEditState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
                     )
@@ -729,14 +729,14 @@ class VaultAddItemViewModel @Inject constructor(
 
             DataState.Loading -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = VaultAddItemState.ViewState.Loading)
+                    it.copy(viewState = VaultAddEditState.ViewState.Loading)
                 }
             }
 
             is DataState.NoNetwork -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = VaultAddItemState.ViewState.Error(
+                        viewState = VaultAddEditState.ViewState.Error(
                             message = R.string.internet_connection_required_title
                                 .asText()
                                 .concat(R.string.internet_connection_required_message.asText()),
@@ -751,7 +751,7 @@ class VaultAddItemViewModel @Inject constructor(
                         viewState = vaultDataState
                             .data
                             ?.toViewState()
-                            ?: VaultAddItemState.ViewState.Error(
+                            ?: VaultAddEditState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
                     )
@@ -760,13 +760,13 @@ class VaultAddItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleVaultTotpCodeReceive(action: VaultAddItemAction.Internal.TotpCodeReceive) {
+    private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
         updateLoginContent { loginType ->
             loginType.copy(totp = action.totpCode)
         }
 
         sendEvent(
-            event = VaultAddItemEvent.ShowToast(
+            event = VaultAddEditEvent.ShowToast(
                 message = R.string.authenticator_key_added.asText(),
             ),
         )
@@ -777,26 +777,26 @@ class VaultAddItemViewModel @Inject constructor(
     //region Utility Functions
 
     private inline fun onContent(
-        crossinline block: (VaultAddItemState.ViewState.Content) -> Unit,
+        crossinline block: (VaultAddEditState.ViewState.Content) -> Unit,
     ) {
-        (state.viewState as? VaultAddItemState.ViewState.Content)?.let(block)
+        (state.viewState as? VaultAddEditState.ViewState.Content)?.let(block)
     }
 
     private inline fun updateContent(
         crossinline block: (
-            VaultAddItemState.ViewState.Content,
-        ) -> VaultAddItemState.ViewState.Content?,
+            VaultAddEditState.ViewState.Content,
+        ) -> VaultAddEditState.ViewState.Content?,
     ) {
         val currentViewState = state.viewState
-        val updatedContent = (currentViewState as? VaultAddItemState.ViewState.Content)
+        val updatedContent = (currentViewState as? VaultAddEditState.ViewState.Content)
             ?.let(block)
             ?: return
         mutableStateFlow.update { it.copy(viewState = updatedContent) }
     }
 
     private inline fun updateCommonContent(
-        crossinline block: (VaultAddItemState.ViewState.Content.Common) ->
-        VaultAddItemState.ViewState.Content.Common,
+        crossinline block: (VaultAddEditState.ViewState.Content.Common) ->
+        VaultAddEditState.ViewState.Content.Common,
     ) {
         updateContent { currentContent ->
             currentContent.copy(common = block(currentContent.common))
@@ -804,21 +804,21 @@ class VaultAddItemViewModel @Inject constructor(
     }
 
     private inline fun updateLoginContent(
-        crossinline block: (VaultAddItemState.ViewState.Content.ItemType.Login) ->
-        VaultAddItemState.ViewState.Content.ItemType.Login,
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Login) ->
+        VaultAddEditState.ViewState.Content.ItemType.Login,
     ) {
         updateContent { currentContent ->
-            (currentContent.type as? VaultAddItemState.ViewState.Content.ItemType.Login)
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Login)
                 ?.let { currentContent.copy(type = block(it)) }
         }
     }
 
     private inline fun updateIdentityContent(
-        crossinline block: (VaultAddItemState.ViewState.Content.ItemType.Identity) ->
-        VaultAddItemState.ViewState.Content.ItemType.Identity,
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Identity) ->
+        VaultAddEditState.ViewState.Content.ItemType.Identity,
     ) {
         updateContent { currentContent ->
-            (currentContent.type as? VaultAddItemState.ViewState.Content.ItemType.Identity)
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Identity)
                 ?.let { currentContent.copy(type = block(it)) }
         }
     }
@@ -834,7 +834,7 @@ class VaultAddItemViewModel @Inject constructor(
  * @property dialog the state for the dialogs that can be displayed
  */
 @Parcelize
-data class VaultAddItemState(
+data class VaultAddEditState(
     val vaultAddEditType: VaultAddEditType,
     val viewState: ViewState,
     val dialog: DialogState?,
@@ -867,11 +867,11 @@ data class VaultAddItemState(
     }
 
     /**
-     * Represents the specific view states for the [VaultAddItemScreen].
+     * Represents the specific view states for the [VaultAddEditScreen].
      */
     sealed class ViewState : Parcelable {
         /**
-         * Represents an error state for the [VaultAddItemScreen].
+         * Represents an error state for the [VaultAddEditScreen].
          */
         @Parcelize
         data class Error(
@@ -879,14 +879,14 @@ data class VaultAddItemState(
         ) : ViewState()
 
         /**
-         * Loading state for the [VaultAddItemScreen], signifying that the content is being
+         * Loading state for the [VaultAddEditScreen], signifying that the content is being
          * processed.
          */
         @Parcelize
         data object Loading : ViewState()
 
         /**
-         * Represents a loaded content state for the [VaultAddItemScreen].
+         * Represents a loaded content state for the [VaultAddEditScreen].
          */
         @Parcelize
         data class Content(
@@ -1119,38 +1119,38 @@ data class VaultAddItemState(
  * Represents a set of events that can be emitted during the process of adding an item to the vault.
  * Each subclass of this sealed class denotes a distinct event that can occur.
  */
-sealed class VaultAddItemEvent {
+sealed class VaultAddEditEvent {
     /**
      * Shows a toast with the given [message].
      */
-    data class ShowToast(val message: Text) : VaultAddItemEvent()
+    data class ShowToast(val message: Text) : VaultAddEditEvent()
 
     /**
      * Copy the given [text] to the clipboard.
      */
-    data class CopyToClipboard(val text: String) : VaultAddItemEvent()
+    data class CopyToClipboard(val text: String) : VaultAddEditEvent()
 
     /**
      * Navigate back to previous screen.
      */
-    data object NavigateBack : VaultAddItemEvent()
+    data object NavigateBack : VaultAddEditEvent()
 
     /**
      * Navigate to the QR code scan screen.
      */
-    data object NavigateToQrCodeScan : VaultAddItemEvent()
+    data object NavigateToQrCodeScan : VaultAddEditEvent()
 }
 
 /**
  * Represents a set of actions related to the process of adding an item to the vault.
  * Each subclass of this sealed class denotes a distinct action that can be taken.
  */
-sealed class VaultAddItemAction {
+sealed class VaultAddEditAction {
 
     /**
      * Represents actions common across all item types.
      */
-    sealed class Common : VaultAddItemAction() {
+    sealed class Common : VaultAddEditAction() {
 
         /**
          * Represents the action when the save button is clicked.
@@ -1173,7 +1173,7 @@ sealed class VaultAddItemAction {
          * @property typeOption The selected type option.
          */
         data class TypeOptionSelect(
-            val typeOption: VaultAddItemState.ItemTypeOption,
+            val typeOption: VaultAddEditState.ItemTypeOption,
         ) : Common()
 
         /**
@@ -1230,7 +1230,7 @@ sealed class VaultAddItemAction {
         /**
          *  Fired when the custom field data is changed.
          */
-        data class CustomFieldValueChange(val customField: VaultAddItemState.Custom) : Common()
+        data class CustomFieldValueChange(val customField: VaultAddEditState.Custom) : Common()
 
         /**
          * Represents the action to open tooltip
@@ -1241,7 +1241,7 @@ sealed class VaultAddItemAction {
     /**
      * Represents actions specific to an item type.
      */
-    sealed class ItemType : VaultAddItemAction() {
+    sealed class ItemType : VaultAddEditAction() {
 
         /**
          * Represents actions specific to the Login type.
@@ -1439,15 +1439,15 @@ sealed class VaultAddItemAction {
              * @property title The selected title.
              */
             data class TitleSelected(
-                val title: VaultAddItemState.ViewState.Content.ItemType.Identity.Title,
+                val title: VaultAddEditState.ViewState.Content.ItemType.Identity.Title,
             ) : IdentityType()
         }
     }
 
     /**
-     * Models actions that the [VaultAddItemViewModel] itself might send.
+     * Models actions that the [VaultAddEditViewModel] itself might send.
      */
-    sealed class Internal : VaultAddItemAction() {
+    sealed class Internal : VaultAddEditAction() {
 
         /**
          * Indicates that the vault totp code has been received.

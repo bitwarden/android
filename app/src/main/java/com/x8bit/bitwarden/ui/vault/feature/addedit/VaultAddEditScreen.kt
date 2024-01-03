@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.app.Activity
 import android.widget.Toast
@@ -33,9 +33,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddIdentityItemTypeHandlers
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 
 /**
  * Top level composable for the vault add item screen.
@@ -43,10 +43,10 @@ import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTy
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
-fun VaultAddItemScreen(
+fun VaultAddEditScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
-    viewModel: VaultAddItemViewModel = hiltViewModel(),
+    viewModel: VaultAddEditViewModel = hiltViewModel(),
     clipboardManager: ClipboardManager = LocalClipboardManager.current,
     permissionsManager: PermissionsManager =
         PermissionsManagerImpl(LocalContext.current as Activity),
@@ -57,38 +57,38 @@ fun VaultAddItemScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is VaultAddItemEvent.NavigateToQrCodeScan -> {
+            is VaultAddEditEvent.NavigateToQrCodeScan -> {
                 onNavigateToQrCodeScanScreen()
             }
 
-            is VaultAddItemEvent.ShowToast -> {
+            is VaultAddEditEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
 
-            is VaultAddItemEvent.CopyToClipboard -> {
+            is VaultAddEditEvent.CopyToClipboard -> {
                 clipboardManager.setText(event.text.toAnnotatedString())
             }
 
-            VaultAddItemEvent.NavigateBack -> onNavigateBack.invoke()
+            VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
         }
     }
 
     val loginItemTypeHandlers = remember(viewModel) {
-        VaultAddLoginItemTypeHandlers.create(viewModel = viewModel)
+        VaultAddEditLoginTypeHandlers.create(viewModel = viewModel)
     }
 
     val commonTypeHandlers = remember(viewModel) {
-        VaultAddItemCommonHandlers.create(viewModel = viewModel)
+        VaultAddEditCommonHandlers.create(viewModel = viewModel)
     }
 
     val identityItemTypeHandlers = remember(viewModel) {
-        VaultAddIdentityItemTypeHandlers.create(viewModel = viewModel)
+        VaultAddEditIdentityTypeHandlers.create(viewModel = viewModel)
     }
 
     VaultAddEditItemDialogs(
         dialogState = state.dialog,
         onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(VaultAddItemAction.Common.DismissDialog) }
+            { viewModel.trySendAction(VaultAddEditAction.Common.DismissDialog) }
         },
     )
 
@@ -103,14 +103,14 @@ fun VaultAddItemScreen(
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultAddItemAction.Common.CloseClick) }
+                    { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
                 },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = R.string.save),
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(VaultAddItemAction.Common.SaveClick) }
+                            { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
                         },
                     )
                 },
@@ -118,12 +118,12 @@ fun VaultAddItemScreen(
         },
     ) { innerPadding ->
         when (val viewState = state.viewState) {
-            is VaultAddItemState.ViewState.Content -> {
-                AddEditItemContent(
+            is VaultAddEditState.ViewState.Content -> {
+                VaultAddEditContent(
                     state = viewState,
                     isAddItemMode = state.isAddItemMode,
                     onTypeOptionClicked = remember(viewModel) {
-                        { viewModel.trySendAction(VaultAddItemAction.Common.TypeOptionSelect(it)) }
+                        { viewModel.trySendAction(VaultAddEditAction.Common.TypeOptionSelect(it)) }
                     },
                     loginItemTypeHandlers = loginItemTypeHandlers,
                     commonTypeHandlers = commonTypeHandlers,
@@ -136,7 +136,7 @@ fun VaultAddItemScreen(
                 )
             }
 
-            is VaultAddItemState.ViewState.Error -> {
+            is VaultAddEditState.ViewState.Error -> {
                 VaultAddEditError(
                     viewState = viewState,
                     modifier = Modifier
@@ -145,8 +145,8 @@ fun VaultAddItemScreen(
                 )
             }
 
-            VaultAddItemState.ViewState.Loading -> {
-                VaultAddEditItemLoading(
+            VaultAddEditState.ViewState.Loading -> {
+                VaultAddEditLoading(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
@@ -158,17 +158,17 @@ fun VaultAddItemScreen(
 
 @Composable
 private fun VaultAddEditItemDialogs(
-    dialogState: VaultAddItemState.DialogState?,
+    dialogState: VaultAddEditState.DialogState?,
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is VaultAddItemState.DialogState.Loading -> {
+        is VaultAddEditState.DialogState.Loading -> {
             BitwardenLoadingDialog(
                 visibilityState = LoadingDialogState.Shown(dialogState.label),
             )
         }
 
-        is VaultAddItemState.DialogState.Error -> BitwardenBasicDialog(
+        is VaultAddEditState.DialogState.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = dialogState.message,

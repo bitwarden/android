@@ -13,7 +13,7 @@ import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.vault.feature.additem.VaultAddItemState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -37,8 +37,8 @@ class VaultAddItemStateExtensionsTest {
         mockkStatic(Instant::class)
         every { Instant.now() } returns Instant.MIN
 
-        val loginItemType = VaultAddItemState.ViewState.Content(
-            common = VaultAddItemState.ViewState.Content.Common(
+        val loginItemType = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
                 folderName = "mockFolder-1".asText(),
                 favorite = false,
@@ -46,7 +46,7 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 ownership = "mockOwnership-1",
             ),
-            type = VaultAddItemState.ViewState.Content.ItemType.Login(
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
                 uri = "mockUri-1",
@@ -103,18 +103,18 @@ class VaultAddItemStateExtensionsTest {
     @Test
     fun `toCipherView should transform Login ItemType to CipherView with original cipher`() {
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
-        val viewState = VaultAddItemState.ViewState.Content(
-            common = VaultAddItemState.ViewState.Content.Common(
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
                 originalCipher = cipherView,
                 name = "mockName-1",
                 folderName = "mockFolder-1".asText(),
                 favorite = true,
                 masterPasswordReprompt = false,
                 customFieldData = listOf(
-                    VaultAddItemState.Custom.BooleanField("testId", "TestBoolean", false),
-                    VaultAddItemState.Custom.TextField("testId", "TestText", "TestText"),
-                    VaultAddItemState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
-                    VaultAddItemState.Custom.LinkedField(
+                    VaultAddEditState.Custom.BooleanField("testId", "TestBoolean", false),
+                    VaultAddEditState.Custom.TextField("testId", "TestText", "TestText"),
+                    VaultAddEditState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
+                    VaultAddEditState.Custom.LinkedField(
                         "testId",
                         "TestLinked",
                         VaultLinkedFieldType.USERNAME,
@@ -123,7 +123,7 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 ownership = "mockOwnership-1",
             ),
-            type = VaultAddItemState.ViewState.Content.ItemType.Login(
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
                 uri = "mockUri-1",
@@ -195,8 +195,8 @@ class VaultAddItemStateExtensionsTest {
     fun `toCipherView should transform SecureNotes ItemType to CipherView`() {
         mockkStatic(Instant::class)
         every { Instant.now() } returns Instant.MIN
-        val viewState = VaultAddItemState.ViewState.Content(
-            common = VaultAddItemState.ViewState.Content.Common(
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
                 folderName = "mockFolder-1".asText(),
                 favorite = false,
@@ -204,12 +204,12 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 ownership = "mockOwnership-1",
                 customFieldData = listOf(
-                    VaultAddItemState.Custom.BooleanField("testId", "TestBoolean", false),
-                    VaultAddItemState.Custom.TextField("testId", "TestText", "TestText"),
-                    VaultAddItemState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
+                    VaultAddEditState.Custom.BooleanField("testId", "TestBoolean", false),
+                    VaultAddEditState.Custom.TextField("testId", "TestText", "TestText"),
+                    VaultAddEditState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
                 ),
             ),
-            type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+            type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
         )
 
         val result = viewState.toCipherView()
@@ -267,8 +267,8 @@ class VaultAddItemStateExtensionsTest {
     @Test
     fun `toCipherView should transform SecureNotes ItemType to CipherView with original cipher`() {
         val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW
-        val viewState = VaultAddItemState.ViewState.Content(
-            common = VaultAddItemState.ViewState.Content.Common(
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
                 originalCipher = cipherView,
                 name = "mockName-1",
                 folderName = "mockFolder-1".asText(),
@@ -278,7 +278,7 @@ class VaultAddItemStateExtensionsTest {
                 ownership = "mockOwnership-1",
                 customFieldData = emptyList(),
             ),
-            type = VaultAddItemState.ViewState.Content.ItemType.SecureNotes,
+            type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
         )
 
         val result = viewState.toCipherView()
@@ -300,8 +300,8 @@ class VaultAddItemStateExtensionsTest {
     fun `toCipherView should transform Identity ItemType to CipherView`() {
         mockkStatic(Instant::class)
         every { Instant.now() } returns Instant.MIN
-        val viewState = VaultAddItemState.ViewState.Content(
-            common = VaultAddItemState.ViewState.Content.Common(
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
                 name = "mockName-1",
                 folderName = "mockFolder-1".asText(),
                 favorite = false,
@@ -309,8 +309,8 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 ownership = "mockOwnership-1",
             ),
-            type = VaultAddItemState.ViewState.Content.ItemType.Identity(
-                selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MR,
+            type = VaultAddEditState.ViewState.Content.ItemType.Identity(
+                selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MR,
                 firstName = "mockFirstName",
                 lastName = "mockLastName",
                 middleName = "mockMiddleName",
@@ -386,18 +386,18 @@ class VaultAddItemStateExtensionsTest {
     @Test
     fun `toCipherView should transform Identity ItemType to CipherView with original cipher`() {
         val cipherView = DEFAULT_IDENTITY_CIPHER_VIEW
-        val viewState = VaultAddItemState.ViewState.Content(
-            common = VaultAddItemState.ViewState.Content.Common(
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
                 originalCipher = cipherView,
                 name = "mockName-1",
                 folderName = "mockFolder-1".asText(),
                 favorite = true,
                 masterPasswordReprompt = false,
                 customFieldData = listOf(
-                    VaultAddItemState.Custom.BooleanField("testId", "TestBoolean", false),
-                    VaultAddItemState.Custom.TextField("testId", "TestText", "TestText"),
-                    VaultAddItemState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
-                    VaultAddItemState.Custom.LinkedField(
+                    VaultAddEditState.Custom.BooleanField("testId", "TestBoolean", false),
+                    VaultAddEditState.Custom.TextField("testId", "TestText", "TestText"),
+                    VaultAddEditState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
+                    VaultAddEditState.Custom.LinkedField(
                         "testId",
                         "TestLinked",
                         VaultLinkedFieldType.USERNAME,
@@ -406,8 +406,8 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 ownership = "mockOwnership-1",
             ),
-            type = VaultAddItemState.ViewState.Content.ItemType.Identity(
-                selectedTitle = VaultAddItemState.ViewState.Content.ItemType.Identity.Title.MR,
+            type = VaultAddEditState.ViewState.Content.ItemType.Identity(
+                selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MR,
                 firstName = "mockFirstName",
                 lastName = "mockLastName",
                 middleName = "mockMiddleName",

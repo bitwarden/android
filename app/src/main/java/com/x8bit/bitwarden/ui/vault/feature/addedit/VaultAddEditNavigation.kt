@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
@@ -24,7 +24,7 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
  * Class to retrieve vault add & edit arguments from the [SavedStateHandle].
  */
 @OmitFromCoverage
-data class VaultAddEditItemArgs(
+data class VaultAddEditArgs(
     val vaultAddEditType: VaultAddEditType,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
@@ -37,9 +37,9 @@ data class VaultAddEditItemArgs(
 }
 
 /**
- * Add the vault add & edit item screen to the nav graph.
+ * Add the vault add & edit screen to the nav graph.
  */
-fun NavGraphBuilder.vaultAddEditItemDestination(
+fun NavGraphBuilder.vaultAddEditDestination(
     onNavigateToQrCodeScanScreen: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {
@@ -49,14 +49,14 @@ fun NavGraphBuilder.vaultAddEditItemDestination(
             navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
         ),
     ) {
-        VaultAddItemScreen(onNavigateBack, onNavigateToQrCodeScanScreen)
+        VaultAddEditScreen(onNavigateBack, onNavigateToQrCodeScanScreen)
     }
 }
 
 /**
- * Navigate to the vault add & edit item screen.
+ * Navigate to the vault add & edit screen.
  */
-fun NavController.navigateToVaultAddEditItem(
+fun NavController.navigateToVaultAddEdit(
     vaultAddEditType: VaultAddEditType,
     navOptions: NavOptions? = null,
 ) {

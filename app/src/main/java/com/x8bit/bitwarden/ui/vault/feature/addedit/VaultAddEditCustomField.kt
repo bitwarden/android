@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,14 +33,14 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Composable
 @Suppress("LongMethod")
-fun AddEditCustomField(
-    customField: VaultAddItemState.Custom,
-    onCustomFieldValueChange: (VaultAddItemState.Custom) -> Unit,
+fun VaultAddEditCustomField(
+    customField: VaultAddEditState.Custom,
+    onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
     modifier: Modifier = Modifier,
     supportedLinkedTypes: ImmutableList<VaultLinkedFieldType> = persistentListOf(),
 ) {
     when (customField) {
-        is VaultAddItemState.Custom.BooleanField -> {
+        is VaultAddEditState.Custom.BooleanField -> {
             CustomFieldBoolean(
                 label = customField.name,
                 value = customField.value,
@@ -49,7 +49,7 @@ fun AddEditCustomField(
             )
         }
 
-        is VaultAddItemState.Custom.HiddenField -> {
+        is VaultAddEditState.Custom.HiddenField -> {
             CustomFieldHiddenField(
                 customField.name,
                 customField.value,
@@ -60,7 +60,7 @@ fun AddEditCustomField(
             )
         }
 
-        is VaultAddItemState.Custom.LinkedField -> {
+        is VaultAddEditState.Custom.LinkedField -> {
             CustomFieldLinkedField(
                 selectedOption = customField.vaultLinkedFieldType,
                 supportedLinkedTypes = supportedLinkedTypes,
@@ -71,7 +71,7 @@ fun AddEditCustomField(
             )
         }
 
-        is VaultAddItemState.Custom.TextField -> {
+        is VaultAddEditState.Custom.TextField -> {
             CustomFieldTextField(
                 label = customField.name,
                 value = customField.value,

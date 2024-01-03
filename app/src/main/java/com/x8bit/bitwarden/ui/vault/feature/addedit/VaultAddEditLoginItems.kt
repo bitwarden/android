@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.additem
+package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,8 +25,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddItemCommonHandlers
-import com.x8bit.bitwarden.ui.vault.feature.additem.handlers.VaultAddLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -35,12 +35,12 @@ import kotlinx.collections.immutable.toImmutableList
  * The UI for adding and editing a login cipher.
  */
 @Suppress("LongMethod", "LongParameterList")
-fun LazyListScope.addEditLoginItems(
-    commonState: VaultAddItemState.ViewState.Content.Common,
-    loginState: VaultAddItemState.ViewState.Content.ItemType.Login,
+fun LazyListScope.vaultAddEditLoginItems(
+    commonState: VaultAddEditState.ViewState.Content.Common,
+    loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
     isAddItemMode: Boolean,
-    commonActionHandler: VaultAddItemCommonHandlers,
-    loginItemTypeHandlers: VaultAddLoginItemTypeHandlers,
+    commonActionHandler: VaultAddEditCommonHandlers,
+    loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
 ) {
     item {
@@ -287,7 +287,7 @@ fun LazyListScope.addEditLoginItems(
     }
 
     items(commonState.customFieldData) { customItem ->
-        AddEditCustomField(
+        VaultAddEditCustomField(
             customItem,
             onCustomFieldValueChange = commonActionHandler.onCustomFieldValueChange,
             modifier = Modifier
@@ -302,7 +302,7 @@ fun LazyListScope.addEditLoginItems(
 
     item {
         Spacer(modifier = Modifier.height(16.dp))
-        AddEditCustomFieldsButton(
+        VaultAddEditCustomFieldsButton(
             onFinishNamingClick = commonActionHandler.onAddNewCustomFieldClick,
             modifier = Modifier
                 .fillMaxWidth()
