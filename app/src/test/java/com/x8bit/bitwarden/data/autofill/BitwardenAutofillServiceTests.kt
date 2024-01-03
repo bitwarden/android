@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.autofill
+package com.x8bit.bitwarden.data.autofill
 
 import android.os.CancellationSignal
 import android.service.autofill.FillCallback
