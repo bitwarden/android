@@ -496,7 +496,6 @@ data class VaultItemState(
              * @property lastUpdated A formatted date string indicating when the item was last
              * updated.
              * @property notes Contains general notes taken by the user.
-             * @property isPremiumUser Indicates if the user has subscribed to a premium account.
              * @property customFields A list of custom fields that user has added.
              * @property requiresReprompt Indicates if a master password prompt is required to view
              * secure fields.
@@ -506,7 +505,6 @@ data class VaultItemState(
                 val name: String,
                 val lastUpdated: String,
                 val notes: String?,
-                val isPremiumUser: Boolean,
                 val customFields: List<Custom>,
                 val requiresReprompt: Boolean,
             ) : Parcelable {
@@ -570,8 +568,11 @@ data class VaultItemState(
                  * @property passwordHistoryCount An integer indicating how many times the password
                  * has been changed.
                  * @property uris The URI associated with the login item.
-                 * @property passwordRevisionDate
-                 * @property totp
+                 * @property passwordRevisionDate An optional string indicating the last time the
+                 * password was changed.
+                 * @property totp The optional TOTP string value to be displayed.
+                 * @property isPremiumUser Indicates if the user has subscribed to a premium
+                 * account.
                  */
                 @Parcelize
                 data class Login(
@@ -581,6 +582,7 @@ data class VaultItemState(
                     val uris: List<UriData>,
                     val passwordRevisionDate: String?,
                     val totp: String?,
+                    val isPremiumUser: Boolean,
                 ) : ItemType() {
 
                     /**

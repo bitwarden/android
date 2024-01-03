@@ -528,6 +528,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                         uris = emptyList(),
                         passwordRevisionDate = null,
                         totp = null,
+                        isPremiumUser = true,
                     ),
                 ),
             )
@@ -1064,7 +1065,6 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         lastUpdated = "12/31/69 06:16 PM",
         name = "cipher",
         notes = "Lots of notes",
-        isPremiumUser = true,
         customFields = listOf(
             VaultItemState.ViewState.Content.Common.Custom.TextField(
                 name = "text",
@@ -1102,6 +1102,7 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
         ),
         passwordRevisionDate = "4/14/83 3:56 PM",
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+        isPremiumUser = true,
     )
 
 private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity =
@@ -1122,7 +1123,6 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         name = "cipher",
         lastUpdated = "12/31/69 06:16 PM",
         notes = null,
-        isPremiumUser = true,
         customFields = emptyList(),
         requiresReprompt = true,
     )
@@ -1135,6 +1135,7 @@ private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
         uris = emptyList(),
         passwordRevisionDate = null,
         totp = null,
+        isPremiumUser = true,
     )
 
 private val EMPTY_IDENTITY_TYPE: VaultItemState.ViewState.Content.ItemType.Identity =

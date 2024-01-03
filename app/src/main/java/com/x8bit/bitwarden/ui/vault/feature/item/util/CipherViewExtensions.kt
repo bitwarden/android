@@ -32,7 +32,6 @@ fun CipherView.toViewState(
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
             name = name,
-            isPremiumUser = isPremiumUser,
             requiresReprompt = reprompt == CipherRepromptType.PASSWORD,
             customFields = fields.orEmpty().map { it.toCustomField() },
             lastUpdated = dateTimeFormatter.format(revisionDate),
@@ -55,6 +54,7 @@ fun CipherView.toViewState(
                     },
                     passwordHistoryCount = passwordHistory?.count(),
                     totp = loginValues.totp,
+                    isPremiumUser = isPremiumUser,
                 )
             }
 
