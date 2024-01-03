@@ -29,6 +29,7 @@ namespace Bit.iOS.Autofill
         private IAccountsManager _accountsManager;
 
         private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
+        private readonly LazyResolve<IFido2AuthenticationService> _fido2AuthService = new LazyResolve<IFido2AuthenticationService>();
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -411,7 +412,7 @@ namespace Bit.iOS.Autofill
 
                 if (_context.IsPasskey)
                 {
-                    CompleteAssertionRequest(decCipher);
+                    await CompleteAssertionRequestAsync(decCipher);
                     return;
                 }
 

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Globalization;
 using System.Text;
-using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 
@@ -118,6 +115,7 @@ namespace Bit.Core.Utilities
             Register<IUsernameGenerationService>(usernameGenerationService);
             Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);
             Register<IPasswordResetEnrollmentService>(passwordResetEnrollmentService);
+            Register<IFido2AuthenticationService>(new Fido2AuthenticationService());
         }
 
         public static void Register<T>(string serviceName, T obj)

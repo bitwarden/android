@@ -25,7 +25,7 @@ namespace Bit.iOS.Autofill
             await ProvideCredentialAsync(false);
         }
 
-        public void CompleteAssertionRequest(CipherView cipherView)
+        public async Task CompleteAssertionRequestAsync(CipherView cipherView)
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
             {
@@ -34,12 +34,19 @@ namespace Bit.iOS.Autofill
             }
 
             // TODO: Generate the credential Signature and Auth data accordingly
+            var fido2AssertionResult = await _fido2AuthService.Value.GetAssertionAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorGetAssertionParams
+            {
+                RpId = cipherView.Login.MainFido2Credential.RpId,
+                Counter = cipherView.Login.MainFido2Credential.Counter,
+                CredentialId = cipherView.Login.MainFido2Credential.CredentialId
+            });
+
             CompleteAssertionRequest(new ASPasskeyAssertionCredential(
                 cipherView.Login.MainFido2Credential.UserHandle,
                 cipherView.Login.MainFido2Credential.RpId,
-                "TODO: Generate Signature",
+                NSData.FromArray(fido2AssertionResult.Signature),
                 _context.PasskeyCredentialRequest?.ClientDataHash,
-                "TODO: Generate Authenticator Data",
+                NSData.FromArray(fido2AssertionResult.AuthenticatorData),
                 cipherView.Login.MainFido2Credential.CredentialId
             ));
         }
