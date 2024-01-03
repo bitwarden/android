@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
@@ -104,27 +103,100 @@ namespace Bit.iOS.Autofill
             }
         }
 
+        public override async void ProvideCredentialWithoutUserInteraction(IASCredentialRequest credentialRequest)
+        {
+            try
+            {
+                switch (credentialRequest)
+                {
+                    case ASPasswordCredentialRequest passwordRequest:
+                        await ProvideCredentialWithoutUserInteractionAsync(passwordRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                        break;
+                    case ASPasskeyCredentialRequest passkeyRequest:
+                        await ProvideCredentialWithoutUserInteractionAsync(passkeyRequest.CredentialIdentity as ASPasskeyCredentialIdentity);
+                        break;
+                    default:
+                        ExtensionContext?.CancelRequest(new NSError(ASExtensionErrorCodeExtensions.GetDomain(ASExtensionErrorCode.Failed), (int)ASExtensionErrorCode.Failed));
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                OnProvidingCredentialException(ex);
+            }
+        }
+
         public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             try
             {
-                InitAppIfNeeded();
-                await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
-                await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
-                if (!await IsAuthed() || await IsLocked())
-                {
-                    var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                        Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
-                    ExtensionContext.CancelRequest(err);
-                    return;
-                }
-                _context.CredentialIdentity = credentialIdentity;
-                await ProvideCredentialAsync(false);
+                await ProvideCredentialWithoutUserInteractionAsync(credentialIdentity);
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
+            }
+        }
+
+        private void OnProvidingCredentialException(Exception ex)
+        {
+            //LoggerHelper.LogEvenIfCantBeResolved(ex);
+            UIPasteboard.General.String = ex.ToString();
+            ExtensionContext?.CancelRequest(new NSError(ASExtensionErrorCodeExtensions.GetDomain(ASExtensionErrorCode.Failed), (int)ASExtensionErrorCode.Failed));
+        }
+
+        private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity)
+        {
+            InitAppIfNeeded();
+            await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
+            await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
+            if (!await IsAuthed() || await IsLocked())
+            {
+                var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                    Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
+                ExtensionContext.CancelRequest(err);
+                return;
+            }
+            _context.PasswordCredentialIdentity = credentialIdentity;
+            await ProvideCredentialAsync(false);
+        }
+
+        private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasskeyCredentialIdentity passkeyIdentity)
+        {
+            InitAppIfNeeded();
+            await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
+            await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
+            if (!await IsAuthed() || await IsLocked())
+            {
+                var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                    Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
+                ExtensionContext.CancelRequest(err);
+                return;
+            }
+            _context.PasskeyCredentialIdentity = passkeyIdentity;
+            await ProvideCredentialAsync(false);
+        }
+
+        public override async void PrepareInterfaceToProvideCredential(IASCredentialRequest credentialRequest)
+        {
+            try
+            {
+                switch (credentialRequest)
+                {
+                    case ASPasswordCredentialRequest passwordRequest:
+                        PrepareInterfaceToProvideCredential(passwordRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                        break;
+                    case ASPasskeyCredentialRequest passkeyRequest:
+                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasskeyCredentialIdentity = passkeyRequest.CredentialIdentity as ASPasskeyCredentialIdentity);
+                        break;
+                    default:
+                        ExtensionContext?.CancelRequest(new NSError(ASExtensionErrorCodeExtensions.GetDomain(ASExtensionErrorCode.Failed), (int)ASExtensionErrorCode.Failed));
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                OnProvidingCredentialException(ex);
             }
         }
 
@@ -132,21 +204,26 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeeded();
-                if (!await IsAuthed())
-                {
-                    await _accountsManager.NavigateOnAccountChangeAsync(false);
-                    return;
-                }
-                _context.CredentialIdentity = credentialIdentity;
-                await CheckLockAsync(async () => await ProvideCredentialAsync());
+                await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialIdentity);
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
         }
+
+        private async Task PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext)
+        {
+            InitAppIfNeeded();
+            if (!await IsAuthed())
+            {
+                await _accountsManager.NavigateOnAccountChangeAsync(false);
+                return;
+            }
+            updateContext(_context);
+            await CheckLockAsync(async () => await ProvideCredentialAsync());
+        }
+
 
         public override async void PrepareInterfaceForExtensionConfiguration()
         {
@@ -204,6 +281,23 @@ namespace Bit.iOS.Autofill
                 ASExtensionContext?.CompleteRequest(cred, null);
             });
         }
+
+        public void CompleteAssertionRequest(ASPasskeyAssertionCredential assertionCredential)
+        {
+            if (_context == null)
+            {
+                ServiceContainer.Reset();
+                CancelRequest(ASExtensionErrorCode.UserCanceled);
+                return;
+            }
+
+            NSRunLoop.Main.BeginInvokeOnMainThread(() =>
+            {
+                ServiceContainer.Reset();
+                ASExtensionContext?.CompleteAssertionRequest(assertionCredential, null);
+            });
+        }
+
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
@@ -268,7 +362,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                if (_context.CredentialIdentity != null)
+                if (_context.PasswordCredentialIdentity != null)
                 {
                     await MainThread.InvokeOnMainThreadAsync(() => ProvideCredentialAsync());
                     return;
@@ -295,63 +389,85 @@ namespace Bit.iOS.Autofill
             }
         }
 
+        private void CancelRequest(ASExtensionErrorCode code)
+        {
+            //var err = new NSError(new NSString("ASExtensionErrorDomain"), Convert.ToInt32(code), null);
+            var err = new NSError(ASExtensionErrorCodeExtensions.GetDomain(code), (int)code);
+            ExtensionContext?.CancelRequest(err);
+        }
+
         private async Task ProvideCredentialAsync(bool userInteraction = true)
         {
             try
             {
-                var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService", true);
-                Bit.Core.Models.Domain.Cipher cipher = null;
-                var cancel = cipherService == null || _context.CredentialIdentity?.RecordIdentifier == null;
-                if (!cancel)
+                if (!ServiceContainer.TryResolve<ICipherService>(out var cipherService)
+                    ||
+                    _context.RecordIdentifier == null)
                 {
-                    cipher = await cipherService.GetAsync(_context.CredentialIdentity.RecordIdentifier);
-                    cancel = cipher == null || cipher.Type != Bit.Core.Enums.CipherType.Login || cipher.Login == null;
+                    CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
+                    return;
                 }
-                if (cancel)
+
+                var cipher = await cipherService.GetAsync(_context.RecordIdentifier);
+                if (cipher?.Login is null || cipher.Type != CipherType.Login)
                 {
-                    var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                        Convert.ToInt32(ASExtensionErrorCode.CredentialIdentityNotFound), null);
-                    ExtensionContext?.CancelRequest(err);
+                    CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
                     return;
                 }
 
                 var decCipher = await cipher.DecryptAsync();
-                if (decCipher.Reprompt != Bit.Core.Enums.CipherRepromptType.None)
+
+                if (_context.PasskeyCredentialIdentity != null && !decCipher.Login.HasFido2Credentials)
+                {
+                    CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
+                    return;
+                }
+
+                if (decCipher.Reprompt != CipherRepromptType.None)
                 {
                     // Prompt for password using either the lock screen or dialog unless
                     // already verified the password.
                     if (!userInteraction)
                     {
                         await _stateService.Value.SetPasswordRepromptAutofillAsync(true);
-                        var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                        Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
-                        ExtensionContext?.CancelRequest(err);
+                        CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
                         return;
                     }
-                    else if (!await _stateService.Value.GetPasswordVerifiedAutofillAsync())
+
+                    if (!await _stateService.Value.GetPasswordVerifiedAutofillAsync())
                     {
                         // Add a timeout to resolve keyboard not always showing up.
                         await Task.Delay(250);
-                        var passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+                        var passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>();
                         if (!await passwordRepromptService.PromptAndCheckPasswordIfNeededAsync())
                         {
-                            var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                                Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
-                            ExtensionContext?.CancelRequest(err);
+                            CancelRequest(ASExtensionErrorCode.UserCanceled);
                             return;
                         }
                     }
                 }
-                string totpCode = null;
-                var disableTotpCopy = await _stateService.Value.GetDisableAutoTotpCopyAsync();
-                if (!disableTotpCopy.GetValueOrDefault(false))
+
+                if (UIDevice.CurrentDevice.CheckSystemVersion(17, 0) && _context.IsPasskey)
                 {
-                    var canAccessPremiumAsync = await _stateService.Value.CanAccessPremiumAsync();
-                    if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp) &&
-                        (canAccessPremiumAsync || cipher.OrganizationUseTotp))
+                    CompleteAssertionRequest(new ASPasskeyAssertionCredential(
+                        decCipher.Login.MainFido2Credential.UserHandle,
+                        decCipher.Login.MainFido2Credential.RpId,
+                        "qweq",
+                        "adfas",
+                        "adfas",
+                        decCipher.Login.MainFido2Credential.CredentialId
+                        ));
+                    return;
+                }
+
+                string totpCode = null;
+                if (await _stateService.Value.GetDisableAutoTotpCopyAsync() != true)
+                {
+                    if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp)
+                        &&
+                        (cipher.OrganizationUseTotp || await _stateService.Value.CanAccessPremiumAsync()))
                     {
-                        var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-                        totpCode = await totpService.GetCodeAsync(decCipher.Login.Totp);
+                        totpCode = await ServiceContainer.Resolve<ITotpService>().GetCodeAsync(decCipher.Login.Totp);
                     }
                 }
 
@@ -360,7 +476,7 @@ namespace Bit.iOS.Autofill
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                CancelRequest(ASExtensionErrorCode.Failed);
             }
         }
 

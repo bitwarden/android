@@ -188,18 +188,17 @@ namespace Bit.iOS.Core.Controllers
                 await _cipherService.SaveWithServerAsync(cipherDomain);
                 await loadingAlert.DismissViewControllerAsync(true);
                 await _storageService.SaveAsync(Bit.Core.Constants.ClearCiphersCacheKey, true);
-                if (await ASHelpers.IdentitiesCanIncremental())
+                if (await ASHelpers.IdentitiesSupportIncrementalAsync())
                 {
-                    var identity = await ASHelpers.GetCipherIdentityAsync(cipherDomain.Id);
+                    var identity = await ASHelpers.GetCipherPasswordIdentityAsync(cipherDomain.Id);
                     if (identity != null)
                     {
-                        await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
-                            new ASPasswordCredentialIdentity[] { identity });
+                        await ASCredentialIdentityStoreExtensions.SaveCredentialIdentitiesAsync(identity);
                     }
                 }
                 else
                 {
-                    await ASHelpers.ReplaceAllIdentities();
+                    await ASHelpers.ReplaceAllIdentitiesAsync();
                 }
                 Success(cipherDomain.Id);
             }
@@ -229,7 +228,7 @@ namespace Bit.iOS.Core.Controllers
             var appOptions = new AppOptions { IosExtension = true };
             var app = new App.App(appOptions);
 
-            var generatorPage = new GeneratorPage(false, selectAction: async (username) =>
+            var generatorPage = new GeneratorPage(false, selectAction: (username) =>
             {
                 UsernameCell.TextField.Text = username;
                 DismissViewController(false, null);

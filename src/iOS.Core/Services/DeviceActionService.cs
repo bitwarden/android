@@ -375,7 +375,7 @@ namespace Bit.iOS.Core.Services
 
         public async Task OnAccountSwitchCompleteAsync()
         {
-            await ASHelpers.ReplaceAllIdentities();
+            await ASHelpers.ReplaceAllIdentitiesAsync();
         }
 
         public Task SetScreenCaptureAllowedAsync()

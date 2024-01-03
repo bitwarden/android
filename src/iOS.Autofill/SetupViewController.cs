@@ -31,7 +31,7 @@ namespace Bit.iOS.Autofill
 
             BackButton.Title = AppResources.Back;
             base.ViewDidLoad();
-            var task = ASHelpers.ReplaceAllIdentities();
+            var task = ASHelpers.ReplaceAllIdentitiesAsync();
         }
 
         partial void BackButton_Activated(UIBarButtonItem sender)

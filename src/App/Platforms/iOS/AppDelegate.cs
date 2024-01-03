@@ -89,7 +89,7 @@ namespace Bit.iOS
                             Core.Constants.AutofillNeedsIdentityReplacementKey);
                         if (needsAutofillReplacement.GetValueOrDefault())
                         {
-                            await ASHelpers.ReplaceAllIdentities();
+                            await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
                     }
                     else if (message.Command == "showAppExtension")
@@ -103,7 +103,7 @@ namespace Bit.iOS
                             var success = data["successfully"] as bool?;
                             if (success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
                             {
-                                await ASHelpers.ReplaceAllIdentities();
+                                await ASHelpers.ReplaceAllIdentitiesAsync();
                             }
                         }
                     }
@@ -112,65 +112,63 @@ namespace Bit.iOS
                     {
                         if (_deviceActionService.SystemMajorVersion() >= 12)
                         {
-                            if (await ASHelpers.IdentitiesCanIncremental())
+                            if (await ASHelpers.IdentitiesSupportIncrementalAsync())
                             {
                                 var cipherId = message.Data as string;
                                 if (message.Command == "addedCipher" && !string.IsNullOrWhiteSpace(cipherId))
                                 {
-                                    var identity = await ASHelpers.GetCipherIdentityAsync(cipherId);
+                                    var identity = await ASHelpers.GetCipherPasswordIdentityAsync(cipherId);
                                     if (identity == null)
                                     {
                                         return;
                                     }
-                                    await ASCredentialIdentityStore.SharedStore?.SaveCredentialIdentitiesAsync(
-                                        new ASPasswordCredentialIdentity[] { identity });
+                                    await ASCredentialIdentityStoreExtensions.SaveCredentialIdentitiesAsync(identity);
                                     return;
                                 }
                             }
-                            await ASHelpers.ReplaceAllIdentities();
+                            await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
                     }
                     else if (message.Command == "deletedCipher" || message.Command == "softDeletedCipher")
                     {
-                        if (_deviceActionService.SystemMajorVersion() >= 12)
+                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                         {
-                            if (await ASHelpers.IdentitiesCanIncremental())
+                            if (await ASHelpers.IdentitiesSupportIncrementalAsync())
                             {
-                                var identity = ASHelpers.ToCredentialIdentity(
+                                var identity = ASHelpers.ToPasswordCredentialIdentity(
                                     message.Data as Bit.Core.Models.View.CipherView);
                                 if (identity == null)
                                 {
                                     return;
                                 }
-                                await ASCredentialIdentityStore.SharedStore?.RemoveCredentialIdentitiesAsync(
-                                    new ASPasswordCredentialIdentity[] { identity });
+                                await ASCredentialIdentityStoreExtensions.RemoveCredentialIdentitiesAsync(identity);
                                 return;
                             }
-                            await ASHelpers.ReplaceAllIdentities();
+                            await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
                     }
                     else if (message.Command == "logout")
                     {
-                        if (_deviceActionService.SystemMajorVersion() >= 12)
+                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                         {
-                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                            await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
                         }
                     }
                     else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
-                        && _deviceActionService.SystemMajorVersion() >= 12)
-                    {
-                        await ASHelpers.ReplaceAllIdentities();
+                        && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        {
+                        await ASHelpers.ReplaceAllIdentitiesAsync();
                     }
                     else if (message.Command == AppHelpers.VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND)
                     {
                         var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
-                        if (timeoutAction == VaultTimeoutAction.Logout)
+                        if (timeoutAction == VaultTimeoutAction.Logout && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                         {
-                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                            await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
                         }
                         else
                         {
-                            await ASHelpers.ReplaceAllIdentities();
+                            await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
                     }
                 }
@@ -190,30 +188,34 @@ namespace Bit.iOS
 
         public override void OnResignActivation(UIApplication uiApplication)
         {
-            if (UIApplication.SharedApplication.KeyWindow != null)
+            if (UIApplication.SharedApplication.KeyWindow is null)
             {
-                var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
-                {
-                    Tag = SPLASH_VIEW_TAG
-                };
-                var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
-                {
-                    BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToPlatform()
-                };
-                var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
-                var frame = new CGRect(0, 0, 280, 100); //Setting image width to avoid it being larger and getting cropped on smaller devices. This harcoded size should be good even for very small devices.
-                var imageView = new UIImageView(frame)
-                {
-                    Image = logo,
-                    Center = new CGPoint(view.Center.X, view.Center.Y - 30),
-                    ContentMode = UIViewContentMode.ScaleAspectFit
-                };
-                view.AddSubview(backgroundView);
-                view.AddSubview(imageView);
-                UIApplication.SharedApplication.KeyWindow.AddSubview(view);
-                UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
-                UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+                base.OnResignActivation(uiApplication);
+                return;
             }
+
+            var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            {
+                Tag = SPLASH_VIEW_TAG
+            };
+            var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            {
+                BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToPlatform()
+            };
+            var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
+            var frame = new CGRect(0, 0, 280, 100); //Setting image width to avoid it being larger and getting cropped on smaller devices. This harcoded size should be good even for very small devices.
+            var imageView = new UIImageView(frame)
+            {
+                Image = logo,
+                Center = new CGPoint(view.Center.X, view.Center.Y - 30),
+                ContentMode = UIViewContentMode.ScaleAspectFit
+            };
+            view.AddSubview(backgroundView);
+            view.AddSubview(imageView);
+            UIApplication.SharedApplication.KeyWindow.AddSubview(view);
+            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
+            UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+
             base.OnResignActivation(uiApplication);
         }
 
@@ -303,17 +305,6 @@ namespace Bit.iOS
 
             // Migration services
             ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
-
-            // Note: This might cause a race condition. Investigate more.
-            //Task.Run(() =>
-            //{
-            //    FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
-            //    FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
-            //    {
-            //        FadeAnimationEnabled = false,
-            //        FadeAnimationForCachedImages = false
-            //    });
-            //});
 
             iOSCoreHelpers.RegisterLocalServices();
             RegisterPush();

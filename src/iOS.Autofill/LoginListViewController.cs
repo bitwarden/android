@@ -57,7 +57,7 @@ namespace Bit.iOS.Autofill
                 Core.Constants.AutofillNeedsIdentityReplacementKey);
             if (needsAutofillReplacement.GetValueOrDefault())
             {
-                await ASHelpers.ReplaceAllIdentities();
+                await ASHelpers.ReplaceAllIdentitiesAsync();
             }
 
             _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
