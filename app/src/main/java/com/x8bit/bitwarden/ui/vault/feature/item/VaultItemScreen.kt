@@ -34,6 +34,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
@@ -185,9 +187,9 @@ private fun VaultItemContent(
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
-        is VaultItemState.ViewState.Error -> VaultItemError(
-            errorState = viewState,
-            onRefreshClick = vaultCommonItemTypeHandlers.onRefreshClick,
+        is VaultItemState.ViewState.Error -> BitwardenErrorContent(
+            message = viewState.message(),
+            onTryAgainClick = vaultCommonItemTypeHandlers.onRefreshClick,
             modifier = modifier,
         )
 
@@ -226,7 +228,7 @@ private fun VaultItemContent(
             }
         }
 
-        VaultItemState.ViewState.Loading -> VaultItemLoading(
+        VaultItemState.ViewState.Loading -> BitwardenLoadingContent(
             modifier = modifier,
         )
     }

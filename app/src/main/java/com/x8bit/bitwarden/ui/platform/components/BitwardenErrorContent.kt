@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,14 +38,18 @@ fun BitwardenErrorContent(
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
         )
         onTryAgainClick?.let {
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenTextButton(
                 label = stringResource(id = R.string.try_again),
                 onClick = it,
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
