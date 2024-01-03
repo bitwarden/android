@@ -20,6 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
@@ -149,15 +151,15 @@ private fun VaultItemListingScaffold(
             }
 
             is VaultItemListingState.ViewState.Error -> {
-                VaultItemListingError(
-                    state = state.viewState,
-                    onRefreshClick = refreshClick,
+                BitwardenErrorContent(
+                    message = state.viewState.message(),
+                    onTryAgainClick = refreshClick,
                     modifier = modifier,
                 )
             }
 
             is VaultItemListingState.ViewState.Loading -> {
-                VaultItemListingLoading(modifier = modifier)
+                BitwardenLoadingContent(modifier = modifier)
             }
         }
     }

@@ -28,6 +28,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
@@ -137,8 +139,8 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditState.ViewState.Error -> {
-                VaultAddEditError(
-                    viewState = viewState,
+                BitwardenErrorContent(
+                    message = viewState.message(),
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),
@@ -146,7 +148,7 @@ fun VaultAddEditScreen(
             }
 
             VaultAddEditState.ViewState.Loading -> {
-                VaultAddEditLoading(
+                BitwardenLoadingContent(
                     modifier = Modifier
                         .padding(innerPadding)
                         .fillMaxSize(),

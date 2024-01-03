@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
@@ -343,7 +344,10 @@ private fun VaultScreenScaffold(
                         modifier = innerModifier,
                     )
 
-                    is VaultState.ViewState.Loading -> VaultLoading(modifier = innerModifier)
+                    is VaultState.ViewState.Loading -> BitwardenLoadingContent(
+                        modifier = innerModifier,
+                    )
+
                     is VaultState.ViewState.NoItems -> VaultNoItems(
                         modifier = innerModifier,
                         addItemClickAction = addItemClickAction,
@@ -352,8 +356,7 @@ private fun VaultScreenScaffold(
                     is VaultState.ViewState.Error -> BitwardenErrorContent(
                         message = viewState.message(),
                         onTryAgainClick = tryAgainClick,
-                        modifier = innerModifier
-                            .padding(horizontal = 16.dp),
+                        modifier = innerModifier,
                     )
                 }
             }
