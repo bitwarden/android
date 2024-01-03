@@ -690,10 +690,18 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Internal.UpdateCipherResultReceive,
     ) {
         mutableStateFlow.update { it.copy(dialog = null) }
-        when (action.updateCipherResult) {
+        when (val result = action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
-                // TODO Display error dialog BIT-501
-                sendEvent(VaultAddEditEvent.ShowToast(message = "Save Item Failure".asText()))
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.Error(
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
             }
 
             is UpdateCipherResult.Success -> {

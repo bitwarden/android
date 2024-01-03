@@ -13,7 +13,7 @@ import retrofit2.Retrofit
  */
 abstract class BaseServiceTest {
 
-    private val json = PlatformNetworkModule.providesJson()
+    protected val json = PlatformNetworkModule.providesJson()
 
     protected val server = MockWebServer().apply { start() }
 

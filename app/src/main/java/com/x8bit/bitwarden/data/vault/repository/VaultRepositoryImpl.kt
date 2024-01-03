@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -387,10 +388,18 @@ class VaultRepositoryImpl(
                 )
             }
             .fold(
-                onFailure = { UpdateCipherResult.Error },
-                onSuccess = {
-                    sync()
-                    UpdateCipherResult.Success
+                onFailure = { UpdateCipherResult.Error(errorMessage = null) },
+                onSuccess = { response ->
+                    when (response) {
+                        is UpdateCipherResponseJson.Invalid -> {
+                            UpdateCipherResult.Error(errorMessage = response.message)
+                        }
+
+                        is UpdateCipherResponseJson.Success -> {
+                            sync()
+                            UpdateCipherResult.Success
+                        }
+                    }
                 },
             )
 

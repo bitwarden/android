@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import kotlinx.coroutines.test.runTest
@@ -15,6 +16,7 @@ class CiphersServiceTest : BaseServiceTest() {
 
     private val ciphersService: CiphersService = CiphersServiceImpl(
         ciphersApi = ciphersApi,
+        json = json,
     )
 
     @Test
@@ -30,17 +32,37 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `updateCipher should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
-        val result = ciphersService.updateCipher(
-            cipherId = "cipher-id-1",
-            body = createMockCipherJsonRequest(number = 1),
-        )
-        assertEquals(
-            createMockCipher(number = 1),
-            result.getOrThrow(),
-        )
-    }
+    fun `updateCipher with success response should return a Success with the correct cipher`() =
+        runTest {
+            server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+            val result = ciphersService.updateCipher(
+                cipherId = "cipher-id-1",
+                body = createMockCipherJsonRequest(number = 1),
+            )
+            assertEquals(
+                UpdateCipherResponseJson.Success(
+                    cipher = createMockCipher(number = 1),
+                ),
+                result.getOrThrow(),
+            )
+        }
+
+    @Test
+    fun `updateCipher with an invalid response should return an Invalid with the correct data`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(400).setBody(UPDATE_CIPHER_INVALID_JSON))
+            val result = ciphersService.updateCipher(
+                cipherId = "cipher-id-1",
+                body = createMockCipherJsonRequest(number = 1),
+            )
+            assertEquals(
+                UpdateCipherResponseJson.Invalid(
+                    message = "You do not have permission to edit this.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
 }
 
 private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
@@ -132,5 +154,12 @@ private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
     "brand": "mockBrand-1"
   },
   "key": "mockKey-1"
+}
+"""
+
+private const val UPDATE_CIPHER_INVALID_JSON = """
+{
+  "message": "You do not have permission to edit this.",
+  "validationErrors": null
 }
 """

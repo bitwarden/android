@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
@@ -1746,12 +1747,12 @@ class VaultRepositoryTest {
                 cipherView = mockCipherView,
             )
 
-            assertEquals(UpdateCipherResult.Error, result)
+            assertEquals(UpdateCipherResult.Error(errorMessage = null), result)
         }
 
     @Test
     @Suppress("MaxLineLength")
-    fun `updateCipher with ciphersService updateCipher failure should return UpdateCipherResult failure`() =
+    fun `updateCipher with ciphersService updateCipher failure should return UpdateCipherResult Error with a null message`() =
         runTest {
             val cipherId = "cipherId1234"
             val mockCipherView = createMockCipherView(number = 1)
@@ -1770,12 +1771,12 @@ class VaultRepositoryTest {
                 cipherView = mockCipherView,
             )
 
-            assertEquals(UpdateCipherResult.Error, result)
+            assertEquals(UpdateCipherResult.Error(errorMessage = null), result)
         }
 
     @Test
     @Suppress("MaxLineLength")
-    fun `updateCipher with ciphersService updateCipher success should return UpdateCipherResult success`() =
+    fun `updateCipher with ciphersService updateCipher Invalid response should return UpdateCipherResult Error with a non-null message`() =
         runTest {
             val cipherId = "cipherId1234"
             val mockCipherView = createMockCipherView(number = 1)
@@ -1787,7 +1788,43 @@ class VaultRepositoryTest {
                     cipherId = cipherId,
                     body = createMockCipherJsonRequest(number = 1),
                 )
-            } returns createMockCipher(number = 1).asSuccess()
+            } returns UpdateCipherResponseJson
+                .Invalid(
+                    message = "You do not have permission to edit this.",
+                    validationErrors = null,
+                )
+                .asSuccess()
+
+            val result = vaultRepository.updateCipher(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+            )
+
+            assertEquals(
+                UpdateCipherResult.Error(
+                    errorMessage = "You do not have permission to edit this.",
+                ),
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateCipher with ciphersService updateCipher Success response should return UpdateCipherResult success`() =
+        runTest {
+            val cipherId = "cipherId1234"
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(cipherView = mockCipherView)
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            coEvery {
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = createMockCipherJsonRequest(number = 1),
+                )
+            } returns UpdateCipherResponseJson
+                .Success(cipher = createMockCipher(number = 1))
+                .asSuccess()
             coEvery {
                 syncService.sync()
             } returns Result.success(createMockSyncResponse(1))

@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import retrofit2.create
 import javax.inject.Singleton
 
@@ -23,8 +24,10 @@ object VaultNetworkModule {
     @Singleton
     fun provideCiphersService(
         retrofits: Retrofits,
+        json: Json,
     ): CiphersService = CiphersServiceImpl(
         ciphersApi = retrofits.authenticatedApiRetrofit.create(),
+        json = json,
     )
 
     @Provides
