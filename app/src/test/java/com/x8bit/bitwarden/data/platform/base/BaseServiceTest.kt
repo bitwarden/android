@@ -5,7 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapt
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
+import org.junit.jupiter.api.AfterEach
 import retrofit2.Retrofit
 
 /**
@@ -23,7 +23,7 @@ abstract class BaseServiceTest {
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
 
-    @After
+    @AfterEach
     fun after() {
         server.shutdown()
     }
