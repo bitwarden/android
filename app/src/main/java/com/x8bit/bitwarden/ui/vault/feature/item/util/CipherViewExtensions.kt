@@ -46,6 +46,7 @@ fun CipherView.toViewState(
                         VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
                             password = it,
                             isVisible = false,
+                            canViewPassword = viewPassword,
                         )
                     },
                     uris = loginValues.uris.orEmpty().map { it.toUriData() },

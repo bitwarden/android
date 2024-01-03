@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextContains
@@ -251,6 +253,85 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Type, Card")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `in ItemType_Login state the password should change according to state`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password")
+            .assertTextEquals("Password", "")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Check if password has been exposed.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Generate password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                        password = "p@ssw0rd",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "••••••••")
+        composeTestRule
+            .onNodeWithContentDescription("Check if password has been exposed.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Generate password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .assertIsDisplayed()
+
+        // Click on the visibility icon to show the password
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "p@ssw0rd")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Hide")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                        password = "p@ssw0rd",
+                        canViewPassword = false,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "••••••••")
+            .assertIsNotEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Check if password has been exposed.")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription("Generate password")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription("Hide")
+            .assertDoesNotExist()
     }
 
     @Test

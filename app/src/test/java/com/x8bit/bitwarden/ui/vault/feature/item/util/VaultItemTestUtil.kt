@@ -181,6 +181,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "password",
             isVisible = false,
+            canViewPassword = false,
         )
             .takeUnless { isEmpty },
         uris = if (isEmpty) {

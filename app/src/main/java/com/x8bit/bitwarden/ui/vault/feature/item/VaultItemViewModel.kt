@@ -586,13 +586,18 @@ data class VaultItemState(
                 ) : ItemType() {
 
                     /**
-                     * A wrapper for the password data, this includes the [password] itself
-                     * and whether it should be visible.
+                     * A wrapper for the password data.
+                     *
+                     * @property password The password itself.
+                     * @property isVisible Whether or not it is currently visible.
+                     * @property canViewPassword Indicates whether the current user can view and
+                     * copy passwords associated with the login item.
                      */
                     @Parcelize
                     data class PasswordData(
                         val password: String,
                         val isVisible: Boolean,
+                        val canViewPassword: Boolean,
                     ) : Parcelable
 
                     /**

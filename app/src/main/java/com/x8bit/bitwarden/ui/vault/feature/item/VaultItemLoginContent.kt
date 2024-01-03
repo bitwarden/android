@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenHiddenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordFieldWithActions
@@ -234,34 +235,42 @@ private fun PasswordField(
     onCopyPasswordClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenPasswordFieldWithActions(
-        label = stringResource(id = R.string.password),
-        value = passwordData.password,
-        showPasswordChange = { onShowPasswordClick(it) },
-        showPassword = passwordData.isVisible,
-        onValueChange = { },
-        readOnly = true,
-        singleLine = false,
-        actions = {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_check_mark),
-                    contentDescription = stringResource(
-                        id = R.string.check_known_data_breaches_for_this_password,
+    if (passwordData.canViewPassword) {
+        BitwardenPasswordFieldWithActions(
+            label = stringResource(id = R.string.password),
+            value = passwordData.password,
+            showPasswordChange = { onShowPasswordClick(it) },
+            showPassword = passwordData.isVisible,
+            onValueChange = { },
+            readOnly = true,
+            singleLine = false,
+            actions = {
+                BitwardenIconButtonWithResource(
+                    iconRes = IconResource(
+                        iconPainter = painterResource(id = R.drawable.ic_check_mark),
+                        contentDescription = stringResource(
+                            id = R.string.check_known_data_breaches_for_this_password,
+                        ),
                     ),
-                ),
-                onClick = onCheckForBreachClick,
-            )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_copy),
-                    contentDescription = stringResource(id = R.string.copy_password),
-                ),
-                onClick = onCopyPasswordClick,
-            )
-        },
-        modifier = modifier,
-    )
+                    onClick = onCheckForBreachClick,
+                )
+                BitwardenIconButtonWithResource(
+                    iconRes = IconResource(
+                        iconPainter = painterResource(id = R.drawable.ic_copy),
+                        contentDescription = stringResource(id = R.string.copy_password),
+                    ),
+                    onClick = onCopyPasswordClick,
+                )
+            },
+            modifier = modifier,
+        )
+    } else {
+        BitwardenHiddenPasswordField(
+            label = stringResource(id = R.string.password),
+            value = passwordData.password,
+            modifier = modifier,
+        )
+    }
 }
 
 @Composable

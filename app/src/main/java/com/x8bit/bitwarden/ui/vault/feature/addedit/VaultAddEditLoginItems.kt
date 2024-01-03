@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.BitwardenHiddenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
@@ -76,26 +77,37 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     item {
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenPasswordFieldWithActions(
-            label = stringResource(id = R.string.password),
-            value = loginState.password,
-            onValueChange = loginItemTypeHandlers.onPasswordTextChange,
-            modifier = Modifier
-                .padding(horizontal = 16.dp),
-        ) {
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_check_mark),
-                    contentDescription = stringResource(id = R.string.check_password),
-                ),
-                onClick = loginItemTypeHandlers.onPasswordCheckerClick,
-            )
-            BitwardenIconButtonWithResource(
-                iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_generator),
-                    contentDescription = stringResource(id = R.string.generate_password),
-                ),
-                onClick = loginItemTypeHandlers.onOpenPasswordGeneratorClick,
+        if (loginState.canViewPassword) {
+            BitwardenPasswordFieldWithActions(
+                label = stringResource(id = R.string.password),
+                value = loginState.password,
+                onValueChange = loginItemTypeHandlers.onPasswordTextChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            ) {
+                BitwardenIconButtonWithResource(
+                    iconRes = IconResource(
+                        iconPainter = painterResource(id = R.drawable.ic_check_mark),
+                        contentDescription = stringResource(id = R.string.check_password),
+                    ),
+                    onClick = loginItemTypeHandlers.onPasswordCheckerClick,
+                )
+                BitwardenIconButtonWithResource(
+                    iconRes = IconResource(
+                        iconPainter = painterResource(id = R.drawable.ic_generator),
+                        contentDescription = stringResource(id = R.string.generate_password),
+                    ),
+                    onClick = loginItemTypeHandlers.onOpenPasswordGeneratorClick,
+                )
+            }
+        } else {
+            BitwardenHiddenPasswordField(
+                label = stringResource(id = R.string.password),
+                value = loginState.password,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
         }
     }

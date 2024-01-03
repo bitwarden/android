@@ -670,6 +670,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
                     password = DEFAULT_LOGIN_PASSWORD,
                     isVisible = false,
+                    canViewPassword = true,
                 ),
                 uris = listOf(
                     VaultItemState.ViewState.Content.ItemType.Login.UriData(

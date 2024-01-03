@@ -154,6 +154,7 @@ class CipherViewExtensionsTest {
                     password = "password",
                     uri = "www.example.com",
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+                    canViewPassword = false,
                 ),
             ),
             result,
