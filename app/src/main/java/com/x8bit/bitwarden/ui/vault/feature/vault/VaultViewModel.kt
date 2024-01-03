@@ -27,12 +27,10 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -72,18 +70,6 @@ class VaultViewModel @Inject constructor(
             .vaultDataStateFlow
             .onEach { sendAction(VaultAction.Internal.VaultDataReceive(vaultData = it)) }
             .launchIn(viewModelScope)
-        // TODO remove this block once vault unlocked is implemented in BIT-1082
-        viewModelScope.launch {
-            @Suppress("MagicNumber")
-            delay(5000)
-            if (vaultRepository.vaultDataStateFlow.value == DataState.Loading) {
-                sendAction(
-                    VaultAction.Internal.VaultDataReceive(
-                        DataState.Error(error = IllegalStateException()),
-                    ),
-                )
-            }
-        }
 
         authRepository
             .userStateFlow
