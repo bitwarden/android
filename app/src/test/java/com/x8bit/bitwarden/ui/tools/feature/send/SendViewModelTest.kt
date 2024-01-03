@@ -2,33 +2,49 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class SendViewModelTest : BaseViewModelTest() {
 
-    private val vaultRepo: VaultRepository = mockk()
+    private val mutableSendDataFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
+    private val vaultRepo: VaultRepository = mockk {
+        every { sendDataStateFlow } returns mutableSendDataFlow
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SEND_DATA_EXTENSIONS_PATH)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SEND_DATA_EXTENSIONS_PATH)
+    }
 
     @Test
     fun `initial state should be Empty`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-    }
-
-    @Test
-    fun `initial state should read from saved state when present`() {
-        val savedState = mockk<SendState>()
-        val viewModel = createViewModel(state = savedState)
-        assertEquals(savedState, viewModel.stateFlow.value)
     }
 
     @Test
@@ -94,6 +110,78 @@ class SendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `VaultRepository SendData Error should update view state to Error`() {
+        val viewModel = createViewModel()
+
+        mutableSendDataFlow.value = DataState.Error(Throwable("Fail"))
+
+        assertEquals(
+            SendState(
+                viewState = SendState.ViewState.Error(
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `VaultRepository SendData Loaded should update view state`() {
+        val viewModel = createViewModel()
+        val viewState = SendState.ViewState.Content
+        val sendData = mockk<SendData> {
+            every { toViewState() } returns viewState
+        }
+
+        mutableSendDataFlow.value = DataState.Loaded(sendData)
+
+        assertEquals(SendState(viewState = viewState), viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `VaultRepository SendData Loading should update view state to Loading`() {
+        val viewModel = createViewModel()
+
+        mutableSendDataFlow.value = DataState.Loading
+
+        assertEquals(
+            SendState(viewState = SendState.ViewState.Loading),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `VaultRepository SendData NoNetwork should update view state to Error`() {
+        val viewModel = createViewModel()
+
+        mutableSendDataFlow.value = DataState.NoNetwork()
+
+        assertEquals(
+            SendState(
+                viewState = SendState.ViewState.Error(
+                    message = R.string.internet_connection_required_title
+                        .asText()
+                        .concat(R.string.internet_connection_required_message.asText()),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `VaultRepository SendData Pending should update view state`() {
+        val viewModel = createViewModel()
+        val viewState = SendState.ViewState.Content
+        val sendData = mockk<SendData> {
+            every { toViewState() } returns viewState
+        }
+
+        mutableSendDataFlow.value = DataState.Pending(sendData)
+
+        assertEquals(SendState(viewState = viewState), viewModel.stateFlow.value)
+    }
+
     private fun createViewModel(
         state: SendState? = null,
         vaultRepository: VaultRepository = vaultRepo,
@@ -105,10 +193,9 @@ class SendViewModelTest : BaseViewModelTest() {
     )
 }
 
+private const val SEND_DATA_EXTENSIONS_PATH: String =
+    "com.x8bit.bitwarden.ui.tools.feature.send.util.SendDataExtensionsKt"
+
 private val DEFAULT_STATE: SendState = SendState(
     viewState = SendState.ViewState.Loading,
-)
-
-private val DEFAULT_ERROR_STATE: SendState = DEFAULT_STATE.copy(
-    viewState = SendState.ViewState.Error("Fail".asText()),
 )
