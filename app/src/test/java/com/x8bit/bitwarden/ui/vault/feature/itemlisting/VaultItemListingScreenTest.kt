@@ -9,20 +9,20 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import com.x8bit.bitwarden.R
 
 class VaultItemListingScreenTest : BaseComposeTest() {
 
@@ -30,9 +30,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemId: String? = null
 
-    private val mutableEventFlow = MutableSharedFlow<VaultItemListingEvent>(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<VaultItemListingViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow

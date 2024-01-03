@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -58,10 +59,7 @@ class AuthDiskSourceImpl(
         get() = mutableUserStateFlow
             .onSubscription { emit(userState) }
 
-    private val mutableUserStateFlow = MutableSharedFlow<UserStateJson?>(
-        replay = 1,
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     override fun getUserKey(userId: String): String? =
         getString(key = "${MASTER_KEY_ENCRYPTION_USER_KEY}_$userId")
@@ -132,9 +130,6 @@ class AuthDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?> =
         mutableOrganizationsFlowMap.getOrPut(userId) {
-            MutableSharedFlow(
-                replay = 1,
-                extraBufferCapacity = Int.MAX_VALUE,
-            )
+            bufferedMutableSharedFlow(replay = 1)
         }
 }

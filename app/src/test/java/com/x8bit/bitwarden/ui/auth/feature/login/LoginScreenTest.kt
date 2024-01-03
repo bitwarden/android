@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -34,7 +35,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
@@ -47,9 +47,7 @@ class LoginScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToEnterpriseSignOnCalled = false
     private var onNavigateToLoginWithDeviceCalled = false
-    private val mutableEventFlow = MutableSharedFlow<LoginEvent>(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableEventFlow = bufferedMutableSharedFlow<LoginEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LoginViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow

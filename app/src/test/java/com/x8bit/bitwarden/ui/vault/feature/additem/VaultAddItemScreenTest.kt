@@ -25,6 +25,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.FakePermissionManager
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -40,7 +41,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
@@ -55,7 +55,7 @@ class VaultAddItemScreenTest : BaseComposeTest() {
 
     private val clipboardManager = mockk<ClipboardManager>()
 
-    private val mutableEventFlow = MutableSharedFlow<VaultAddItemEvent>(Int.MAX_VALUE)
+    private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddItemEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
 
     private val fakePermissionManager: FakePermissionManager = FakePermissionManager()

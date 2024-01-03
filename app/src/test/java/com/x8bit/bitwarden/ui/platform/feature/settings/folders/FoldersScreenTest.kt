@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -15,9 +15,7 @@ import org.junit.Test
 class FoldersScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
-    private val mutableEventFlow = MutableSharedFlow<FoldersEvent>(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableEventFlow = bufferedMutableSharedFlow<FoldersEvent>()
     private val mutableStateFlow = MutableStateFlow(Unit)
     val viewModel = mockk<FoldersViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow

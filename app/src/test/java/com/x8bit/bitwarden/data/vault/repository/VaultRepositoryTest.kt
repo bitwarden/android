@@ -60,7 +60,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -92,10 +91,8 @@ class VaultRepositoryTest {
             val mockCipherList = listOf(createMockCipher(number = 1))
             val mockEncryptedCipherList = mockCipherList.toEncryptedSdkCipherList()
             val mockCipherViewList = listOf(createMockCipherView(number = 1))
-            val mutableCiphersStateFlow = MutableSharedFlow<List<SyncResponseJson.Cipher>>(
-                replay = 1,
-                extraBufferCapacity = Int.MAX_VALUE,
-            )
+            val mutableCiphersStateFlow =
+                bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>(replay = 1)
             every {
                 vaultDiskSource.getCiphers(userId = MOCK_USER_STATE.activeUserId)
             } returns mutableCiphersStateFlow
@@ -118,10 +115,8 @@ class VaultRepositoryTest {
         val throwable = Throwable("Fail")
         val mockCipherList = listOf(createMockCipher(number = 1))
         val mockEncryptedCipherList = mockCipherList.toEncryptedSdkCipherList()
-        val mutableCiphersStateFlow = MutableSharedFlow<List<SyncResponseJson.Cipher>>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
+        val mutableCiphersStateFlow =
+            bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>(replay = 1)
         every {
             vaultDiskSource.getCiphers(userId = MOCK_USER_STATE.activeUserId)
         } returns mutableCiphersStateFlow
@@ -146,10 +141,8 @@ class VaultRepositoryTest {
             val mockCollectionList = listOf(createMockCollection(number = 1))
             val mockEncryptedCollectionList = mockCollectionList.toEncryptedSdkCollectionList()
             val mockCollectionViewList = listOf(createMockCollectionView(number = 1))
-            val mutableCollectionsStateFlow = MutableSharedFlow<List<SyncResponseJson.Collection>>(
-                replay = 1,
-                extraBufferCapacity = Int.MAX_VALUE,
-            )
+            val mutableCollectionsStateFlow =
+                bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>(replay = 1)
             every {
                 vaultDiskSource.getCollections(userId = MOCK_USER_STATE.activeUserId)
             } returns mutableCollectionsStateFlow
@@ -172,10 +165,8 @@ class VaultRepositoryTest {
         val throwable = Throwable("Fail")
         val mockCollectionList = listOf(createMockCollection(number = 1))
         val mockEncryptedCollectionList = mockCollectionList.toEncryptedSdkCollectionList()
-        val mutableCollectionStateFlow = MutableSharedFlow<List<SyncResponseJson.Collection>>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
+        val mutableCollectionStateFlow =
+            bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>(replay = 1)
         every {
             vaultDiskSource.getCollections(userId = MOCK_USER_STATE.activeUserId)
         } returns mutableCollectionStateFlow
@@ -200,10 +191,8 @@ class VaultRepositoryTest {
             val mockFolderList = listOf(createMockFolder(number = 1))
             val mockEncryptedFolderList = mockFolderList.toEncryptedSdkFolderList()
             val mockFolderViewList = listOf(createMockFolderView(number = 1))
-            val mutableFoldersStateFlow = MutableSharedFlow<List<SyncResponseJson.Folder>>(
-                replay = 1,
-                extraBufferCapacity = Int.MAX_VALUE,
-            )
+            val mutableFoldersStateFlow =
+                bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>(replay = 1)
             every {
                 vaultDiskSource.getFolders(userId = MOCK_USER_STATE.activeUserId)
             } returns mutableFoldersStateFlow
@@ -226,10 +215,8 @@ class VaultRepositoryTest {
         val throwable = Throwable("Fail")
         val mockFolderList = listOf(createMockFolder(number = 1))
         val mockEncryptedFolderList = mockFolderList.toEncryptedSdkFolderList()
-        val mutableFoldersStateFlow = MutableSharedFlow<List<SyncResponseJson.Folder>>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
+        val mutableFoldersStateFlow =
+            bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>(replay = 1)
         every {
             vaultDiskSource.getFolders(userId = MOCK_USER_STATE.activeUserId)
         } returns mutableFoldersStateFlow

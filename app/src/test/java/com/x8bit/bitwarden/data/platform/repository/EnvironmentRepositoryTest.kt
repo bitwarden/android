@@ -9,13 +9,13 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -179,8 +179,5 @@ private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
             .onSubscription { emit(preAuthEnvironmentUrlData) }
 
     private val mutablePreAuthEnvironmentUrlDataFlow =
-        MutableSharedFlow<EnvironmentUrlDataJson?>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
+        bufferedMutableSharedFlow<EnvironmentUrlDataJson?>(replay = 1)
 }

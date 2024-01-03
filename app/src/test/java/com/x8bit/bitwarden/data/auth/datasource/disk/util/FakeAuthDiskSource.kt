@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,11 +17,7 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
-    private val mutableUserStateFlow =
-        MutableSharedFlow<UserStateJson?>(
-            replay = 1,
-            extraBufferCapacity = Int.MAX_VALUE,
-        )
+    private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
@@ -121,10 +118,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         userId: String,
     ): MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?> =
         mutableOrganizationsFlowMap.getOrPut(userId) {
-            MutableSharedFlow(
-                replay = 1,
-                extraBufferCapacity = Int.MAX_VALUE,
-            )
+            bufferedMutableSharedFlow(replay = 1)
         }
 
     //endregion Private helper functions

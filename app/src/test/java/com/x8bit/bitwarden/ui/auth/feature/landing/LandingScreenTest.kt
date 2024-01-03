@@ -19,6 +19,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -36,7 +37,6 @@ import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
@@ -49,9 +49,7 @@ class LandingScreenTest : BaseComposeTest() {
     private var onNavigateToCreateAccountCalled = false
     private var onNavigateToLoginCalled = false
     private var onNavigateToEnvironmentCalled = false
-    private val mutableEventFlow = MutableSharedFlow<LandingEvent>(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableEventFlow = bufferedMutableSharedFlow<LandingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LandingViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
