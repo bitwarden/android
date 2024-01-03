@@ -145,6 +145,8 @@ Global
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.AppStore|iPhone.Build.0 = Release|Any CPU
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{1201A3B6-EF37-420D-A8AD-2C322F6D7B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1201A3B6-EF37-420D-A8AD-2C322F6D7B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
