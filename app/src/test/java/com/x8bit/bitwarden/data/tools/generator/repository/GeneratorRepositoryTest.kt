@@ -76,95 +76,103 @@ class GeneratorRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `generatePassword should emit Success result and store the generated password when shouldSave is true`() = runTest {
-        val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
+    fun `generatePassword should emit Success result and store the generated password when shouldSave is true`() =
+        runTest {
+            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
 
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns fixedInstant
+            mockkStatic(Instant::class)
+            every { Instant.now() } returns fixedInstant
 
-        val userId = "testUserId"
-        val request = PasswordGeneratorRequest(
-            lowercase = true,
-            uppercase = true,
-            numbers = true,
-            special = true,
-            length = 12.toUByte(),
-            avoidAmbiguous = false,
-            minLowercase = null,
-            minUppercase = null,
-            minNumber = null,
-            minSpecial = null,
-        )
-        val generatedPassword = "GeneratedPassword123!"
-        val encryptedPasswordHistory =
-            PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
-
-        coEvery { authDiskSource.userState?.activeUserId } returns userId
-
-        coEvery { generatorSdkSource.generatePassword(request) } returns
-            Result.success(generatedPassword)
-
-        coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
-            Result.success(encryptedPasswordHistory)
-
-        coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
-
-        val result = repository.generatePassword(request, true)
-
-        assertEquals(generatedPassword, (result as GeneratedPasswordResult.Success).generatedString)
-        coVerify { generatorSdkSource.generatePassword(request) }
-
-        coVerify {
-            passwordHistoryDiskSource.insertPasswordHistory(
-                encryptedPasswordHistory.toPasswordHistoryEntity(userId),
+            val userId = "testUserId"
+            val request = PasswordGeneratorRequest(
+                lowercase = true,
+                uppercase = true,
+                numbers = true,
+                special = true,
+                length = 12.toUByte(),
+                avoidAmbiguous = false,
+                minLowercase = null,
+                minUppercase = null,
+                minNumber = null,
+                minSpecial = null,
             )
+            val generatedPassword = "GeneratedPassword123!"
+            val encryptedPasswordHistory =
+                PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
+
+            coEvery { authDiskSource.userState?.activeUserId } returns userId
+
+            coEvery { generatorSdkSource.generatePassword(request) } returns
+                Result.success(generatedPassword)
+
+            coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+                Result.success(encryptedPasswordHistory)
+
+            coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
+
+            val result = repository.generatePassword(request, true)
+
+            assertEquals(
+                generatedPassword,
+                (result as GeneratedPasswordResult.Success).generatedString,
+            )
+            coVerify { generatorSdkSource.generatePassword(request) }
+
+            coVerify {
+                passwordHistoryDiskSource.insertPasswordHistory(
+                    encryptedPasswordHistory.toPasswordHistoryEntity(userId),
+                )
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `generatePassword should emit Success result but not store the generated password when shouldSave is false`() = runTest {
-        val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
+    fun `generatePassword should emit Success result but not store the generated password when shouldSave is false`() =
+        runTest {
+            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
 
-        mockkStatic(Instant::class)
-        every { Instant.now() } returns fixedInstant
+            mockkStatic(Instant::class)
+            every { Instant.now() } returns fixedInstant
 
-        val userId = "testUserId"
-        val request = PasswordGeneratorRequest(
-            lowercase = true,
-            uppercase = true,
-            numbers = true,
-            special = true,
-            length = 12.toUByte(),
-            avoidAmbiguous = false,
-            minLowercase = null,
-            minUppercase = null,
-            minNumber = null,
-            minSpecial = null,
-        )
-        val generatedPassword = "GeneratedPassword123!"
-        val encryptedPasswordHistory =
-            PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
+            val userId = "testUserId"
+            val request = PasswordGeneratorRequest(
+                lowercase = true,
+                uppercase = true,
+                numbers = true,
+                special = true,
+                length = 12.toUByte(),
+                avoidAmbiguous = false,
+                minLowercase = null,
+                minUppercase = null,
+                minNumber = null,
+                minSpecial = null,
+            )
+            val generatedPassword = "GeneratedPassword123!"
+            val encryptedPasswordHistory =
+                PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
 
-        coEvery { authDiskSource.userState?.activeUserId } returns userId
+            coEvery { authDiskSource.userState?.activeUserId } returns userId
 
-        coEvery { generatorSdkSource.generatePassword(request) } returns
-            Result.success(generatedPassword)
+            coEvery { generatorSdkSource.generatePassword(request) } returns
+                Result.success(generatedPassword)
 
-        coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
-            Result.success(encryptedPasswordHistory)
+            coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+                Result.success(encryptedPasswordHistory)
 
-        coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
+            coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
 
-        val result = repository.generatePassword(request, false)
+            val result = repository.generatePassword(request, false)
 
-        assertEquals(generatedPassword, (result as GeneratedPasswordResult.Success).generatedString)
-        coVerify { generatorSdkSource.generatePassword(request) }
+            assertEquals(
+                generatedPassword,
+                (result as GeneratedPasswordResult.Success).generatedString,
+            )
+            coVerify { generatorSdkSource.generatePassword(request) }
 
-        coVerify(exactly = 0) {
-            passwordHistoryDiskSource.insertPasswordHistory(any())
+            coVerify(exactly = 0) {
+                passwordHistoryDiskSource.insertPasswordHistory(any())
+            }
         }
-    }
 
     @Test
     fun `generatePassword should emit InvalidRequest result when SDK throws exception`() = runTest {
@@ -232,7 +240,6 @@ class GeneratorRepositoryTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `generatePassphrase should emit InvalidRequest result when SDK throws exception`() =
         runTest {
@@ -253,47 +260,49 @@ class GeneratorRepositoryTest {
             coVerify { generatorSdkSource.generatePassphrase(request) }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `generateForwardedService should emit Success result and store the generated email`() = runTest {
-        val userId = "testUserId"
-        val request = UsernameGeneratorRequest.Forwarded(
-            service = ForwarderServiceType.DuckDuckGo(
-                token = "testToken",
-            ),
-            website = null,
-        )
+    fun `generateForwardedService should emit Success result and store the generated email`() =
+        runTest {
+            val userId = "testUserId"
+            val request = UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.DuckDuckGo(
+                    token = "testToken",
+                ),
+                website = null,
+            )
 
-        val generatedEmail = "generated@email.com"
+            val generatedEmail = "generated@email.com"
 
-        coEvery { authDiskSource.userState?.activeUserId } returns userId
-        coEvery { generatorSdkSource.generateForwardedServiceEmail(request) } returns
-            Result.success(generatedEmail)
+            coEvery { authDiskSource.userState?.activeUserId } returns userId
+            coEvery { generatorSdkSource.generateForwardedServiceEmail(request) } returns
+                Result.success(generatedEmail)
 
-        val result = repository.generateForwardedServiceUsername(request)
+            val result = repository.generateForwardedServiceUsername(request)
 
-        assertEquals(
-            generatedEmail,
-            (result as GeneratedForwardedServiceUsernameResult.Success).generatedEmailAddress,
-        )
-        coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
-    }
+            assertEquals(
+                generatedEmail,
+                (result as GeneratedForwardedServiceUsernameResult.Success).generatedEmailAddress,
+            )
+            coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
+        }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `generateForwardedService should emit InvalidRequest result when SDK throws exception`() = runTest {
-        val request = UsernameGeneratorRequest.Forwarded(
-            service = ForwarderServiceType.DuckDuckGo(token = "testToken"),
-            website = null,
-        )
-        val exception = RuntimeException("An error occurred")
-        coEvery { generatorSdkSource.generateForwardedServiceEmail(request) } returns Result.failure(exception)
+    fun `generateForwardedService should emit InvalidRequest result when SDK throws exception`() =
+        runTest {
+            val request = UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.DuckDuckGo(token = "testToken"),
+                website = null,
+            )
+            val exception = RuntimeException("An error occurred")
+            coEvery {
+                generatorSdkSource.generateForwardedServiceEmail(request)
+            } returns Result.failure(exception)
 
-        val result = repository.generateForwardedServiceUsername(request)
+            val result = repository.generateForwardedServiceUsername(request)
 
-        assertTrue(result is GeneratedForwardedServiceUsernameResult.InvalidRequest)
-        coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
-    }
+            assertTrue(result is GeneratedForwardedServiceUsernameResult.InvalidRequest)
+            coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
+        }
 
     @Test
     fun `getPasscodeGenerationOptions should return options when available`() = runTest {

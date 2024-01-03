@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
 import app.cash.turbine.test
 import com.bitwarden.core.PasswordHistoryView
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toFormattedPattern

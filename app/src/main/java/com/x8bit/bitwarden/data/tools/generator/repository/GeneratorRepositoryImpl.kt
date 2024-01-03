@@ -13,9 +13,9 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryD
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistory
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
-import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
