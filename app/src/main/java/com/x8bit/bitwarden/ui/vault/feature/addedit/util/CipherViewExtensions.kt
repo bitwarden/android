@@ -23,6 +23,7 @@ fun CipherView.toViewState(): VaultAddEditState.ViewState =
                     password = login?.password.orEmpty(),
                     uri = login?.uris?.firstOrNull()?.uri.orEmpty(),
                     totp = login?.totp,
+                    canViewPassword = this.viewPassword,
                 )
             }
 

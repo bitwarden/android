@@ -3,7 +3,10 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
@@ -466,6 +469,95 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `in login state the password should change according to state`() {
+        composeTestRule.assertScrollableNodeDoesNotExist("Password")
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
+                            password = "p@ssw0rd",
+                            isVisible = false,
+                            canViewPassword = true,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password")
+            .assertTextEquals("Password", "••••••••")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Check known data breaches for this password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Copy password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
+                            password = "p@ssw0rd",
+                            isVisible = true,
+                            canViewPassword = true,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "p@ssw0rd")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Check known data breaches for this password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Copy password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Hide")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
+                            password = "p@ssw0rd",
+                            isVisible = true,
+                            canViewPassword = false,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Password")
+            .assertTextEquals("Password", "••••••••")
+            .assertIsNotEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Check known data breaches for this password")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription("Copy password")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithContentDescription("Hide")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `in login state, linked custom fields should be displayed according to state`() {
         val linkedFieldUserName =
             VaultItemState.ViewState.Content.Common.Custom.LinkedField(
@@ -550,6 +642,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         val passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "12345",
             isVisible = true,
+            canViewPassword = true,
         )
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -592,6 +685,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         val passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "12345",
             isVisible = true,
+            canViewPassword = true,
         )
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -1092,6 +1186,7 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "the password",
             isVisible = false,
+            canViewPassword = true,
         ),
         uris = listOf(
             VaultItemState.ViewState.Content.ItemType.Login.UriData(

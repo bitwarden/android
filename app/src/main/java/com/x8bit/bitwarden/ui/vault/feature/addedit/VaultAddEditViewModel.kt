@@ -963,6 +963,9 @@ data class VaultAddEditState(
                  * @property username The username required for the login item.
                  * @property password The password required for the login item.
                  * @property uri The URI associated with the login item.
+                 * @property totp The current TOTP (if applicable).
+                 * @property canViewPassword Indicates whether the current user can view and copy
+                 * passwords associated with the login item.
                  */
                 @Parcelize
                 data class Login(
@@ -970,6 +973,7 @@ data class VaultAddEditState(
                     val password: String = "",
                     val uri: String = "",
                     val totp: String? = null,
+                    val canViewPassword: Boolean = true,
                 ) : ItemType() {
                     override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
                 }
