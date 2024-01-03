@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.dao
 
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
 
 class FakeCiphersDao : CiphersDao {
@@ -11,10 +11,7 @@ class FakeCiphersDao : CiphersDao {
 
     var deleteCiphersCalled: Boolean = false
 
-    private val ciphersFlow = MutableSharedFlow<List<CipherEntity>>(
-        replay = 1,
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val ciphersFlow = bufferedMutableSharedFlow<List<CipherEntity>>(replay = 1)
 
     init {
         ciphersFlow.tryEmit(emptyList())

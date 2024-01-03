@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -43,9 +44,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
         vaultAddEditType = VaultAddEditType.AddItem,
     )
 
-    private val totpTestCodeFlow: MutableSharedFlow<String> = MutableSharedFlow(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val totpTestCodeFlow: MutableSharedFlow<String> = bufferedMutableSharedFlow()
 
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
@@ -493,7 +492,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     viewModel.actionChannel.trySend(
                         VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
-                           isGranted = true,
+                            isGranted = true,
                         ),
                     )
                     assertEquals(
@@ -512,7 +511,7 @@ class VaultAddItemViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     viewModel.actionChannel.trySend(
                         VaultAddItemAction.ItemType.LoginType.SetupTotpClick(
-                          isGranted = false,
+                            isGranted = false,
                         ),
                     )
                     assertEquals(

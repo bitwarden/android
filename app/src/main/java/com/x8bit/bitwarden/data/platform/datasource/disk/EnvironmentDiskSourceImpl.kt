@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -33,8 +33,6 @@ class EnvironmentDiskSourceImpl(
         get() = mutableEnvironmentUrlDataFlow
             .onSubscription { emit(preAuthEnvironmentUrlData) }
 
-    private val mutableEnvironmentUrlDataFlow = MutableSharedFlow<EnvironmentUrlDataJson?>(
-        replay = 1,
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableEnvironmentUrlDataFlow =
+        bufferedMutableSharedFlow<EnvironmentUrlDataJson?>(replay = 1)
 }

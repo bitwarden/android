@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -28,7 +29,6 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -41,9 +41,8 @@ class LoginViewModelTest : BaseViewModelTest() {
     private val savedStateHandle = SavedStateHandle().also {
         it["email_address"] = "test@gmail.com"
     }
-    private val mutableCaptchaTokenResultFlow = MutableSharedFlow<CaptchaCallbackTokenResult>(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableCaptchaTokenResultFlow =
+        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow

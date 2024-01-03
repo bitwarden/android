@@ -3,21 +3,19 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.navOptions
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.FakeNavHostController
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
 import org.junit.Test
 
 class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     private val fakeNavHostController = FakeNavHostController()
-    private val mutableEventFlow = MutableSharedFlow<VaultUnlockedNavBarEvent>(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableEventFlow = bufferedMutableSharedFlow<VaultUnlockedNavBarEvent>()
     private val mutableStateFlow = MutableStateFlow(Unit)
     val viewModel = mockk<VaultUnlockedNavBarViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow

@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.FakeQrCodeAnalyzer
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -21,9 +21,7 @@ class QrCodeScanScreenTest : BaseComposeTest() {
     private val imageProxy: ImageProxy = mockk()
     private val qrCodeAnalyzer = FakeQrCodeAnalyzer()
 
-    private val mutableEventFlow = MutableSharedFlow<QrCodeScanEvent>(
-        extraBufferCapacity = Int.MAX_VALUE,
-    )
+    private val mutableEventFlow = bufferedMutableSharedFlow<QrCodeScanEvent>()
 
     private val viewModel = mockk<QrCodeScanViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
