@@ -7,9 +7,11 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTyp
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FoldersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.SendsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
+import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
 
 /**
  * Room database for storing any persisted data from the vault sync.
@@ -19,8 +21,9 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
         CipherEntity::class,
         CollectionEntity::class,
         FolderEntity::class,
+        SendEntity::class,
     ],
-    version = 1,
+    version = 2,
 )
 @TypeConverters(ZonedDateTimeTypeConverter::class)
 abstract class VaultDatabase : RoomDatabase() {
@@ -39,4 +42,9 @@ abstract class VaultDatabase : RoomDatabase() {
      * Provides the DAO for accessing folder data.
      */
     abstract fun folderDao(): FoldersDao
+
+    /**
+     * Provides the DAO for accessing send data.
+     */
+    abstract fun sendsDao(): SendsDao
 }

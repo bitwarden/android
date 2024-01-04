@@ -4,9 +4,11 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FoldersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.SendsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
+import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -24,6 +26,7 @@ class VaultDiskSourceImpl(
     private val ciphersDao: CiphersDao,
     private val collectionsDao: CollectionsDao,
     private val foldersDao: FoldersDao,
+    private val sendsDao: SendsDao,
     private val json: Json,
 ) : VaultDiskSource {
 
@@ -31,6 +34,7 @@ class VaultDiskSourceImpl(
     private val forceCollectionsFlow =
         bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
     private val forceFolderFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+    private val forceSendFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
 
     override fun getCiphers(
         userId: String,
@@ -85,6 +89,21 @@ class VaultDiskSourceImpl(
                 },
         )
 
+    override fun getSends(
+        userId: String,
+    ): Flow<List<SyncResponseJson.Send>> =
+        merge(
+            forceSendFlow,
+            sendsDao
+                .getAllSends(userId = userId)
+                .map { entities ->
+                    entities.map { entity ->
+                        json.decodeFromString<SyncResponseJson.Send>(entity.sendJson)
+                    }
+                },
+        )
+
+    @Suppress("LongMethod")
     override suspend fun replaceVaultData(
         userId: String,
         vault: SyncResponseJson,
@@ -132,6 +151,19 @@ class VaultDiskSourceImpl(
                     },
                 )
             }
+            val deferredSends = async {
+                sendsDao.replaceAllSends(
+                    userId = userId,
+                    sends = vault.sends.orEmpty().map { send ->
+                        SendEntity(
+                            userId = userId,
+                            id = send.id,
+                            sendType = json.encodeToString(send.type),
+                            sendJson = json.encodeToString(send),
+                        )
+                    },
+                )
+            }
             // When going from 0 items to 0 items, the respective dao flow will not re-emit
             // So we use this to give it a little push.
             if (!deferredCiphers.await()) {
@@ -143,6 +175,9 @@ class VaultDiskSourceImpl(
             if (!deferredFolders.await()) {
                 forceFolderFlow.tryEmit(emptyList())
             }
+            if (!deferredSends.await()) {
+                forceSendFlow.tryEmit(emptyList())
+            }
         }
     }
 
@@ -151,10 +186,12 @@ class VaultDiskSourceImpl(
             val deferredCiphers = async { ciphersDao.deleteAllCiphers(userId = userId) }
             val deferredCollections = async { collectionsDao.deleteAllCollections(userId = userId) }
             val deferredFolders = async { foldersDao.deleteAllFolders(userId = userId) }
+            val deferredSends = async { sendsDao.deleteAllSends(userId = userId) }
             awaitAll(
                 deferredCiphers,
                 deferredCollections,
                 deferredFolders,
+                deferredSends,
             )
         }
     }

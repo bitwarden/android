@@ -164,6 +164,12 @@ class VaultRepositoryImpl(
                 observeVaultDiskCollections(activeUserId)
             }
             .launchIn(unconfinedScope)
+        // Setup sends MutableStateFlow
+        mutableSendDataStateFlow
+            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+                observeVaultDiskSends(activeUserId)
+            }
+            .launchIn(unconfinedScope)
     }
 
     override fun clearUnlockedData() {
@@ -201,7 +207,6 @@ class VaultRepositoryImpl(
                         unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                         storeProfileData(syncResponse = syncResponse)
                         vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
-                        decryptSendsAndUpdateSendDataState(sendList = syncResponse.sends)
                     },
                     onFailure = { throwable ->
                         mutableCiphersStateFlow.update { currentState ->
@@ -474,20 +479,6 @@ class VaultRepositoryImpl(
             )
     }
 
-    private suspend fun decryptSendsAndUpdateSendDataState(sendList: List<SyncResponseJson.Send>?) {
-        val newState = vaultSdkSource
-            .decryptSendList(
-                sendList = sendList
-                    .orEmpty()
-                    .toEncryptedSdkSendList(),
-            )
-            .fold(
-                onSuccess = { DataState.Loaded(data = SendData(sendViewList = it)) },
-                onFailure = { DataState.Error(error = it) },
-            )
-        mutableSendDataStateFlow.update { newState }
-    }
-
     private fun observeVaultDiskCiphers(
         userId: String,
     ): Flow<DataState<List<CipherView>>> =
@@ -535,6 +526,22 @@ class VaultRepositoryImpl(
                     )
             }
             .onEach { mutableCollectionsStateFlow.value = it }
+
+    private fun observeVaultDiskSends(
+        userId: String,
+    ): Flow<DataState<SendData>> =
+        vaultDiskSource
+            .getSends(userId = userId)
+            .onStart { mutableSendDataStateFlow.value = DataState.Loading }
+            .map {
+                vaultSdkSource
+                    .decryptSendList(sendList = it.toEncryptedSdkSendList())
+                    .fold(
+                        onSuccess = { sends -> DataState.Loaded(SendData(sends)) },
+                        onFailure = { throwable -> DataState.Error(throwable) },
+                    )
+            }
+            .onEach { mutableSendDataStateFlow.value = it }
 }
 
 private fun <T> Throwable.toNetworkOrErrorState(data: T?): DataState<T> =

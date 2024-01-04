@@ -24,6 +24,11 @@ interface VaultDiskSource {
     fun getFolders(userId: String): Flow<List<SyncResponseJson.Folder>>
 
     /**
+     * Retrieves all sends from the data source for a given [userId].
+     */
+    fun getSends(userId: String): Flow<List<SyncResponseJson.Send>>
+
+    /**
      * Replaces all [vault] data for a given [userId] with the new `vault`.
      *
      * This will always cause the [getCiphers], [getCollections], and [getFolders] functions to

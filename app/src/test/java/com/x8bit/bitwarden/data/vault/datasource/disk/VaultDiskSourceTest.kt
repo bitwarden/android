@@ -6,13 +6,16 @@ import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeFoldersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeSendsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
+import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -29,6 +32,7 @@ class VaultDiskSourceTest {
     private lateinit var ciphersDao: FakeCiphersDao
     private lateinit var collectionsDao: FakeCollectionsDao
     private lateinit var foldersDao: FakeFoldersDao
+    private lateinit var sendsDao: FakeSendsDao
 
     private lateinit var vaultDiskSource: VaultDiskSource
 
@@ -37,10 +41,12 @@ class VaultDiskSourceTest {
         ciphersDao = FakeCiphersDao()
         collectionsDao = FakeCollectionsDao()
         foldersDao = FakeFoldersDao()
+        sendsDao = FakeSendsDao()
         vaultDiskSource = VaultDiskSourceImpl(
             ciphersDao = ciphersDao,
             collectionsDao = collectionsDao,
             foldersDao = foldersDao,
+            sendsDao = sendsDao,
             json = json,
         )
     }
@@ -88,16 +94,29 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `getSends should emit all SendsDao updates`() = runTest {
+        val sendEntities = listOf(SEND_ENTITY)
+        val sends = listOf(SEND_1)
+
+        vaultDiskSource
+            .getSends(USER_ID)
+            .test {
+                assertEquals(emptyList<SyncResponseJson.Send>(), awaitItem())
+                sendsDao.insertSends(sendEntities)
+                assertEquals(sends, awaitItem())
+            }
+    }
+
+    @Test
     fun `replaceVaultData should clear the daos and insert the new vault data`() = runTest {
         assertEquals(ciphersDao.storedCiphers, emptyList<CipherEntity>())
         assertEquals(collectionsDao.storedCollections, emptyList<CollectionEntity>())
         assertEquals(foldersDao.storedFolders, emptyList<FolderEntity>())
+        assertEquals(sendsDao.storedSends, emptyList<SendEntity>())
 
         vaultDiskSource.replaceVaultData(USER_ID, VAULT_DATA)
 
         assertEquals(1, ciphersDao.storedCiphers.size)
-        assertEquals(1, foldersDao.storedFolders.size)
-
         // Verify the ciphers dao is updated
         val storedCipherEntity = ciphersDao.storedCiphers.first()
         // We cannot compare the JSON strings directly because of formatting differences
@@ -110,6 +129,14 @@ class VaultDiskSourceTest {
 
         // Verify the folders dao is updated
         assertEquals(listOf(FOLDER_ENTITY), foldersDao.storedFolders)
+
+        assertEquals(1, sendsDao.storedSends.size)
+        // Verify the ciphers dao is updated
+        val storedSendEntity = sendsDao.storedSends.first()
+        // We cannot compare the JSON strings directly because of formatting differences
+        // So we split that off into its own assertion.
+        assertEquals(SEND_ENTITY.copy(sendJson = ""), storedSendEntity.copy(sendJson = ""))
+        assertJsonEquals(SEND_ENTITY.sendJson, storedSendEntity.sendJson)
     }
 
     @Test
@@ -117,10 +144,12 @@ class VaultDiskSourceTest {
         assertFalse(ciphersDao.deleteCiphersCalled)
         assertFalse(collectionsDao.deleteCollectionsCalled)
         assertFalse(foldersDao.deleteFoldersCalled)
+        assertFalse(sendsDao.deleteSendsCalled)
         vaultDiskSource.deleteVaultData(USER_ID)
         assertTrue(ciphersDao.deleteCiphersCalled)
         assertTrue(collectionsDao.deleteCollectionsCalled)
         assertTrue(foldersDao.deleteFoldersCalled)
+        assertTrue(sendsDao.deleteSendsCalled)
     }
 }
 
@@ -129,6 +158,7 @@ private const val USER_ID: String = "test_user_id"
 private val CIPHER_1: SyncResponseJson.Cipher = createMockCipher(1)
 private val COLLECTION_1: SyncResponseJson.Collection = createMockCollection(3)
 private val FOLDER_1: SyncResponseJson.Folder = createMockFolder(2)
+private val SEND_1: SyncResponseJson.Send = createMockSend(1)
 
 private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
     folders = listOf(FOLDER_1),
@@ -142,7 +172,7 @@ private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
         globalEquivalentDomains = null,
         equivalentDomains = null,
     ),
-    sends = null,
+    sends = listOf(SEND_1),
 )
 
 private const val CIPHER_JSON = """
@@ -259,4 +289,40 @@ private val FOLDER_ENTITY = FolderEntity(
     userId = USER_ID,
     name = "mockName-2",
     revisionDate = ZonedDateTime.parse("2023-10-27T12:00Z"),
+)
+
+private const val SEND_JSON = """
+{
+  "accessCount": 1,
+  "notes": "mockNotes-1",
+  "revisionDate": "2023-10-27T12:00:00.000Z",
+  "maxAccessCount": 1,
+  "hideEmail": false,
+  "type": 1,
+  "accessId": "mockAccessId-1",
+  "password": "mockPassword-1",
+  "file": {
+    "fileName": "mockFileName-1",
+    "size": 1,
+    "sizeName": "mockSizeName-1",
+    "id": "mockId-1"
+  },
+  "deletionDate": "2023-10-27T12:00:00.000Z",
+  "name": "mockName-1",
+  "disabled": false,
+  "id": "mockId-1",
+  "text": {
+    "hidden": false,
+    "text": "mockText-1"
+  },
+  "key": "mockKey-1",
+  "expirationDate": "2023-10-27T12:00:00.000Z"
+}
+"""
+
+private val SEND_ENTITY = SendEntity(
+    id = "mockId-1",
+    userId = USER_ID,
+    sendType = "1",
+    sendJson = SEND_JSON,
 )
