@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
+import android.content.res.Configuration
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.Toast
@@ -14,12 +15,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,20 +39,27 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
+import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzer
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import java.util.concurrent.Executors
@@ -73,7 +81,13 @@ fun QrCodeScanScreen(
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
     }
 
+    val orientation = LocalConfiguration.current.orientation
+
     val context = LocalContext.current
+
+    val onEnterCodeManuallyClick = remember(viewModel) {
+        { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -108,64 +122,100 @@ fun QrCodeScanScreen(
                 { viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive) }
             },
             qrCodeAnalyzer = qrCodeAnalyzer,
-            modifier = Modifier
-                .padding(innerPadding),
+            modifier = Modifier.padding(innerPadding),
+        )
+
+        when (orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> {
+                LandscapeQRCodeContent(
+                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
+
+            else -> {
+                PortraitQRCodeContent(
+                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                    modifier = Modifier.padding(innerPadding),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PortraitQRCodeContent(
+    onEnterCodeManuallyClick: () -> Unit,
+    modifier: Modifier,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier,
+    ) {
+        QrCodeSquare(
+            squareOutlineSize = 250.dp,
+            modifier = Modifier.weight(2f),
         )
 
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .background(color = Color.Black.copy(alpha = .4f))
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
         ) {
-            QrCodeSquare(modifier = Modifier.weight(2f))
+            Text(
+                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
 
-            Column(
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .weight(1f)
-                    .background(color = Color.Black.copy(alpha = .4f)),
-            ) {
-                Spacer(modifier = Modifier.height(40.dp))
+            BottomClickableText(
+                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+            )
+        }
+    }
+}
 
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 32.dp)
-                        .weight(1f),
-                    text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
-                    textAlign = TextAlign.Center,
-                    color = Color.White,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
+@Composable
+private fun LandscapeQRCodeContent(
+    onEnterCodeManuallyClick: () -> Unit,
+    modifier: Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
+    ) {
+        QrCodeSquare(
+            squareOutlineSize = 200.dp,
+            modifier = Modifier.weight(2f),
+        )
 
-                Row(
-                    modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        textAlign = TextAlign.End,
-                        text = stringResource(id = R.string.cannot_scan_qr_code),
-                        color = Color.White,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .background(color = Color.Black.copy(alpha = .4f))
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Text(
+                text = stringResource(id = R.string.point_your_camera_at_the_qr_code),
+                textAlign = TextAlign.Center,
+                color = Color.White,
+                style = MaterialTheme.typography.bodySmall,
+            )
 
-                    ClickableText(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(start = 8.dp),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
-                        },
-                        text = stringResource(id = R.string.enter_key_manually).toAnnotatedString(),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = LocalNonMaterialColors.current.qrCodeClickableText,
-                        ),
-                    )
-                }
-            }
+            BottomClickableText(
+                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+            )
         }
     }
 }
@@ -252,7 +302,10 @@ private fun CameraPreview(
  */
 @Suppress("MagicNumber", "LongMethod")
 @Composable
-private fun QrCodeSquare(modifier: Modifier = Modifier) {
+private fun QrCodeSquare(
+    modifier: Modifier = Modifier,
+    squareOutlineSize: Dp,
+) {
     val color = MaterialTheme.colorScheme.primary
 
     Box(
@@ -261,7 +314,7 @@ private fun QrCodeSquare(modifier: Modifier = Modifier) {
     ) {
         Canvas(
             modifier = Modifier
-                .size(250.dp)
+                .size(squareOutlineSize)
                 .padding(8.dp),
         ) {
             val strokeWidth = 3.dp.toPx()
@@ -339,4 +392,68 @@ private fun QrCodeSquare(modifier: Modifier = Modifier) {
             }
         }
     }
+}
+
+@Composable
+private fun BottomClickableText(
+    onEnterCodeManuallyClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val cannotScanText = stringResource(id = R.string.cannot_scan_qr_code)
+    val enterKeyText = stringResource(id = R.string.enter_key_manually)
+    val clickableStyle = clickableSpanStyle()
+    val manualTextColor = LocalNonMaterialColors.current.qrCodeClickableText
+
+    val customTitleLineBreak = LineBreak(
+        strategy = LineBreak.Strategy.Balanced,
+        strictness = LineBreak.Strictness.Strict,
+        wordBreak = LineBreak.WordBreak.Phrase,
+    )
+
+    val annotatedString = remember {
+        buildAnnotatedString {
+            withStyle(style = clickableStyle.copy(color = Color.White)) {
+                pushStringAnnotation(
+                    tag = cannotScanText,
+                    annotation = cannotScanText,
+                )
+                append(cannotScanText)
+            }
+
+            append("  ")
+
+            withStyle(style = clickableStyle.copy(color = manualTextColor)) {
+                pushStringAnnotation(tag = enterKeyText, annotation = enterKeyText)
+                append(enterKeyText)
+            }
+        }
+    }
+
+    ClickableText(
+        text = annotatedString,
+        style = MaterialTheme.typography.bodyMedium.copy(
+            textAlign = TextAlign.Center,
+            lineBreak = customTitleLineBreak,
+        ),
+        onClick = { offset ->
+            annotatedString
+                .getStringAnnotations(
+                    tag = enterKeyText,
+                    start = offset,
+                    end = offset,
+                )
+                .firstOrNull()
+                ?.let { onEnterCodeManuallyClick.invoke() }
+        },
+        modifier = modifier
+            .semantics {
+                CustomAccessibilityAction(
+                    label = enterKeyText,
+                    action = {
+                        onEnterCodeManuallyClick.invoke()
+                        true
+                    },
+                )
+            },
+    )
 }
