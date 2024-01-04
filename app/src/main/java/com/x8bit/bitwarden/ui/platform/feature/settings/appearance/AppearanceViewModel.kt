@@ -1,19 +1,85 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
+import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+private const val KEY_STATE = "state"
 
 /**
  * View model for the appearance screen.
  */
 @HiltViewModel
-class AppearanceViewModel @Inject constructor() :
-    BaseViewModel<Unit, AppearanceEvent, AppearanceAction>(
-        initialState = Unit,
-    ) {
+class AppearanceViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<AppearanceState, AppearanceEvent, AppearanceAction>(
+    initialState = savedStateHandle[KEY_STATE]
+        ?: AppearanceState(
+            language = AppearanceState.Language.DEFAULT,
+            showWebsiteIcons = false,
+            theme = AppearanceState.Theme.DEFAULT,
+        ),
+) {
     override fun handleAction(action: AppearanceAction): Unit = when (action) {
-        AppearanceAction.BackClick -> sendEvent(AppearanceEvent.NavigateBack)
+        AppearanceAction.BackClick -> handleBackClicked()
+        is AppearanceAction.LanguageChange -> handleLanguageChanged(action)
+        is AppearanceAction.ShowWebsiteIconsToggle -> handleShowWebsiteIconsToggled(action)
+        is AppearanceAction.ThemeChange -> handleThemeChanged(action)
+    }
+
+    private fun handleBackClicked() {
+        sendEvent(AppearanceEvent.NavigateBack)
+    }
+
+    private fun handleLanguageChanged(action: AppearanceAction.LanguageChange) {
+        // TODO: BIT-1328 implement language selection support
+        mutableStateFlow.update { it.copy(language = action.newLanguage) }
+    }
+
+    private fun handleShowWebsiteIconsToggled(action: AppearanceAction.ShowWebsiteIconsToggle) {
+        // TODO: BIT-541 add website icon support
+        mutableStateFlow.update { it.copy(showWebsiteIcons = action.newValue) }
+    }
+
+    private fun handleThemeChanged(action: AppearanceAction.ThemeChange) {
+        // TODO: BIT-1327 add theme support
+        mutableStateFlow.update { it.copy(theme = action.newTheme) }
+    }
+}
+
+/**
+ * Models state of the Appearance screen.
+ */
+@Parcelize
+data class AppearanceState(
+    val language: Language,
+    val showWebsiteIcons: Boolean,
+    val theme: Theme,
+) : Parcelable {
+    /**
+     * Represents the languages supported by the app.
+     *
+     * TODO BIT-1328 populate values
+     */
+    enum class Language(val text: Text) {
+        DEFAULT(text = R.string.default_system.asText()),
+        ENGLISH(text = "English".asText()),
+    }
+
+    /**
+     * Represents the theme options the user can set.
+     */
+    enum class Theme(val text: Text) {
+        DEFAULT(text = R.string.default_system.asText()),
+        DARK(text = R.string.dark.asText()),
+        LIGHT(text = R.string.light.asText()),
     }
 }
 
@@ -35,4 +101,25 @@ sealed class AppearanceAction {
      * User clicked back button.
      */
     data object BackClick : AppearanceAction()
+
+    /**
+     * Indicates that the user changed the Language.
+     */
+    data class LanguageChange(
+        val newLanguage: AppearanceState.Language,
+    ) : AppearanceAction()
+
+    /**
+     * Indicates that the user toggled the Show Website Icons switch to [newValue].
+     */
+    data class ShowWebsiteIconsToggle(
+        val newValue: Boolean,
+    ) : AppearanceAction()
+
+    /**
+     * Indicates that the user selected a new theme.
+     */
+    data class ThemeChange(
+        val newTheme: AppearanceState.Theme,
+    ) : AppearanceAction()
 }
