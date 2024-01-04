@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
  * items in a vault.
  */
 @Suppress("LongParameterList")
-class VaultLoginItemTypeHandlers(
+data class VaultLoginItemTypeHandlers(
     val onCheckForBreachClick: () -> Unit,
     val onCopyPasswordClick: () -> Unit,
     val onCopyUriClick: (String) -> Unit,

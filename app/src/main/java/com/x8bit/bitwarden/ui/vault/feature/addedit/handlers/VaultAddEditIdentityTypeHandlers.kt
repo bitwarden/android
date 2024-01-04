@@ -26,7 +26,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
  * @property onCountryTextChange Handles the action when the country text is changed.
  */
 @Suppress("LongParameterList")
-class VaultAddEditIdentityTypeHandlers(
+data class VaultAddEditIdentityTypeHandlers(
     val onTitleSelected: (VaultAddEditState.ViewState.Content.ItemType.Identity.Title) -> Unit,
     val onFirstNameTextChange: (String) -> Unit,
     val onMiddleNameTextChange: (String) -> Unit,

@@ -23,7 +23,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
  * @property onCustomFieldValueChange Handles the action when the field's value changes
  */
 @Suppress("LongParameterList")
-class VaultAddEditCommonHandlers(
+data class VaultAddEditCommonHandlers(
     val onNameTextChange: (String) -> Unit,
     val onFolderTextChange: (String) -> Unit,
     val onToggleFavorite: (Boolean) -> Unit,
