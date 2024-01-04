@@ -44,11 +44,11 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenListItem(
     label: String,
-    supportingLabel: String,
     startIcon: Painter,
     onClick: () -> Unit,
     selectionDataList: List<SelectionItemData>,
     modifier: Modifier = Modifier,
+    supportingLabel: String? = null,
 ) {
     var shouldShowDialog by remember { mutableStateOf(false) }
     Row(
@@ -78,11 +78,13 @@ fun BitwardenListItem(
                 color = MaterialTheme.colorScheme.onSurface,
             )
 
-            Text(
-                text = supportingLabel,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            supportingLabel?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
 
         IconButton(

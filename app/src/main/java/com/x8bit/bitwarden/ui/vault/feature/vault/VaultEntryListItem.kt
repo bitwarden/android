@@ -1,28 +1,15 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
+import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -38,59 +25,27 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun VaultEntryListItem(
     startIcon: Painter,
     label: String,
-    supportingLabel: String? = null,
     onClick: () -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
+    supportingLabel: String? = null,
 ) {
-    Row(
-        modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
-                onClick = onClick,
-            )
-            .defaultMinSize(minHeight = 72.dp)
-            .padding(vertical = 8.dp)
-            .then(modifier),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        Icon(
-            painter = startIcon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
-        )
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-
-            supportingLabel?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-
-        val context = LocalContext.current
-        IconButton(
-            onClick = {
-                // TODO: Provide dialog-based implementation (BIT-1353 - BIT-1356)
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
-            },
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_more_horizontal),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
+    val context = LocalContext.current
+    BitwardenListItem(
+        modifier = modifier,
+        label = label,
+        supportingLabel = supportingLabel,
+        startIcon = startIcon,
+        onClick = onClick,
+        selectionDataList = listOf(
+            SelectionItemData(
+                text = "Not yet implemented",
+                onClick = {
+                    // TODO: Provide dialog-based implementation (BIT-1353 - BIT-1356)
+                    Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+                },
+            ),
+        ),
+    )
 }
 
 @Preview(showBackground = true)
