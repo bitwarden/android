@@ -111,6 +111,54 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `CopyClick should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.CopyClick(sendItem))
+            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
+    fun `SendClick should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.SendClick(sendItem))
+            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
+    fun `ShareClick should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.ShareClick(sendItem))
+            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
+    fun `FileTypeClick should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.FileTypeClick)
+            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
+    fun `TextTypeClick should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.TextTypeClick)
+            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
     fun `VaultRepository SendData Error should update view state to Error`() {
         val viewModel = createViewModel()
 
@@ -129,7 +177,7 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `VaultRepository SendData Loaded should update view state`() {
         val viewModel = createViewModel()
-        val viewState = SendState.ViewState.Content
+        val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
             every { toViewState() } returns viewState
         }
@@ -172,7 +220,7 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `VaultRepository SendData Pending should update view state`() {
         val viewModel = createViewModel()
-        val viewState = SendState.ViewState.Content
+        val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
             every { toViewState() } returns viewState
         }

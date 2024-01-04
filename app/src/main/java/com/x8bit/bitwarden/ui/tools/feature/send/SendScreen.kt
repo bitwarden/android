@@ -18,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
@@ -34,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -43,15 +47,22 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
-    onNavigateAddSend: () -> Unit,
+    onNavigateToAddSend: () -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
+    clipboardManager: ClipboardManager = LocalClipboardManager.current,
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is SendEvent.NavigateNewSend -> onNavigateAddSend()
+            is SendEvent.CopyToClipboard -> {
+                clipboardManager.setText(
+                    event.message(context.resources).toString().toAnnotatedString(),
+                )
+            }
+
+            is SendEvent.NavigateNewSend -> onNavigateToAddSend()
 
             is SendEvent.NavigateToAboutSend -> {
                 intentHandler.launchUri("https://bitwarden.com/products/send".toUri())
@@ -65,6 +76,7 @@ fun SendScreen(
         }
     }
 
+    val sendHandlers = remember(viewModel) { SendHandlers.create(viewModel) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         state = rememberTopAppBarState(),
     )
@@ -135,6 +147,7 @@ fun SendScreen(
             is SendState.ViewState.Content -> SendContent(
                 modifier = modifier,
                 state = viewState,
+                sendHandlers = sendHandlers,
             )
 
             SendState.ViewState.Empty -> SendEmpty(
