@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -26,6 +27,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the send screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -53,6 +55,11 @@ class SendViewModel @Inject constructor(
         SendAction.RefreshClick -> handleRefreshClick()
         SendAction.SearchClick -> handleSearchClick()
         SendAction.SyncClick -> handleSyncClick()
+        is SendAction.CopyClick -> handleCopyClick(action)
+        SendAction.FileTypeClick -> handleFileTypeClick()
+        is SendAction.SendClick -> handleSendClick(action)
+        is SendAction.ShareClick -> handleShareClick(action)
+        SendAction.TextTypeClick -> handleTextTypeClick()
         is SendAction.Internal -> handleInternalAction(action)
     }
 
@@ -130,6 +137,31 @@ class SendViewModel @Inject constructor(
         // TODO: Add loading dialog state BIT-481
         vaultRepo.sync()
     }
+
+    private fun handleCopyClick(action: SendAction.CopyClick) {
+        // TODO: Create a link and copy it to the clipboard BIT-??
+        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+    }
+
+    private fun handleSendClick(action: SendAction.SendClick) {
+        // TODO: Navigate to the edit send screen BIT-??
+        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+    }
+
+    private fun handleShareClick(action: SendAction.ShareClick) {
+        // TODO: Create a link and use the share sheet BIT-??
+        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+    }
+
+    private fun handleFileTypeClick() {
+        // TODO: Navigate to the file type send list screen BIT-??
+        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+    }
+
+    private fun handleTextTypeClick() {
+        // TODO: Navigate to the text type send list screen BIT-??
+        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+    }
 }
 
 /**
@@ -150,12 +182,34 @@ data class SendState(
         abstract val shouldDisplayFab: Boolean
 
         /**
-         * Show the empty state.
+         * Show the populated state.
          */
         @Parcelize
-        // TODO: Add actual content BIT-481
-        data object Content : ViewState() {
+        data class Content(
+            val textTypeCount: Int,
+            val fileTypeCount: Int,
+            val sendItems: List<SendItem>,
+        ) : ViewState() {
             override val shouldDisplayFab: Boolean get() = true
+
+            /**
+             * Represents the an individual send item to be displayed.
+             */
+            @Parcelize
+            data class SendItem(
+                val id: String,
+                val name: String,
+                val deletionDate: String,
+                val type: Type,
+            ) : Parcelable {
+                /**
+                 * Indicates the type of send this, a text or file.
+                 */
+                enum class Type(@DrawableRes val iconRes: Int) {
+                    FILE(iconRes = R.drawable.ic_send_file),
+                    TEXT(iconRes = R.drawable.ic_send_text),
+                }
+            }
         }
 
         /**
@@ -221,6 +275,37 @@ sealed class SendAction {
     data object SyncClick : SendAction()
 
     /**
+     * User clicked the file type button.
+     */
+    data object FileTypeClick : SendAction()
+
+    /**
+     * User clicked the text type button.
+     */
+    data object TextTypeClick : SendAction()
+
+    /**
+     * User clicked the item row.
+     */
+    data class SendClick(
+        val sendItem: SendState.ViewState.Content.SendItem,
+    ) : SendAction()
+
+    /**
+     * User clicked the copy item button.
+     */
+    data class CopyClick(
+        val sendItem: SendState.ViewState.Content.SendItem,
+    ) : SendAction()
+
+    /**
+     * User clicked the share item button.
+     */
+    data class ShareClick(
+        val sendItem: SendState.ViewState.Content.SendItem,
+    ) : SendAction()
+
+    /**
      * Models actions that the [SendViewModel] itself will send.
      */
     sealed class Internal : SendAction() {
@@ -237,6 +322,11 @@ sealed class SendAction {
  * Models events for the send screen.
  */
 sealed class SendEvent {
+    /**
+     * Copies the given [message] to the clipboard.
+     */
+    data class CopyToClipboard(val message: Text) : SendEvent()
+
     /**
      * Navigate to the new send screen.
      */

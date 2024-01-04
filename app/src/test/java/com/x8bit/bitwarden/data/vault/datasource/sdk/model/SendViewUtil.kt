@@ -9,7 +9,10 @@ import java.time.ZonedDateTime
 /**
  * Create a mock [SendView] with a given [number].
  */
-fun createMockSendView(number: Int): SendView =
+fun createMockSendView(
+    number: Int,
+    type: SendType = SendType.FILE,
+): SendView =
     SendView(
         id = "mockId-$number",
         accessId = "mockAccessId-$number",
@@ -17,7 +20,7 @@ fun createMockSendView(number: Int): SendView =
         notes = "mockNotes-$number",
         key = "mockKey-$number",
         password = "mockPassword-$number",
-        type = SendType.FILE,
+        type = type,
         file = createMockFileView(number = number),
         text = createMockTextView(number = number),
         maxAccessCount = 1u,

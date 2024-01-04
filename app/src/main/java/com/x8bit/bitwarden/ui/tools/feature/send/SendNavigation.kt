@@ -17,7 +17,7 @@ fun NavGraphBuilder.sendDestination(
         route = SEND_ROUTE,
     ) {
         SendScreen(
-            onNavigateAddSend = onNavigateToAddSend,
+            onNavigateToAddSend = onNavigateToAddSend,
         )
     }
 }
