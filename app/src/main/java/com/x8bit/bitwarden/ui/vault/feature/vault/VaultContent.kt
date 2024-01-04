@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 
 /**
@@ -96,11 +97,12 @@ fun VaultContent(
         }
 
         item {
-            VaultGroupListItem(
+            BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_login_item),
                 label = stringResource(id = R.string.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
                 onClick = loginGroupClick,
+                showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -108,11 +110,12 @@ fun VaultContent(
         }
 
         item {
-            VaultGroupListItem(
+            BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_card_item),
                 label = stringResource(id = R.string.type_card),
                 supportingLabel = state.cardItemsCount.toString(),
                 onClick = cardGroupClick,
+                showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -120,11 +123,12 @@ fun VaultContent(
         }
 
         item {
-            VaultGroupListItem(
+            BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_identity_item),
                 label = stringResource(id = R.string.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
                 onClick = identityGroupClick,
+                showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -132,11 +136,12 @@ fun VaultContent(
         }
 
         item {
-            VaultGroupListItem(
+            BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_secure_note_item),
                 label = stringResource(id = R.string.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = secureNoteGroupClick,
+                showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -169,11 +174,12 @@ fun VaultContent(
             }
 
             items(state.folderItems) { folder ->
-                VaultGroupListItem(
+                BitwardenGroupItem(
                     startIcon = painterResource(id = R.drawable.ic_folder),
                     label = folder.name(),
                     supportingLabel = folder.itemCount.toString(),
                     onClick = { folderClick(folder) },
+                    showDivider = false,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -236,11 +242,12 @@ fun VaultContent(
             }
 
             items(state.collectionItems) { collection ->
-                VaultGroupListItem(
+                BitwardenGroupItem(
                     startIcon = painterResource(id = R.drawable.ic_collection),
                     label = collection.name,
                     supportingLabel = collection.itemCount.toString(),
                     onClick = { collectionClick(collection) },
+                    showDivider = false,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -273,11 +280,12 @@ fun VaultContent(
         }
 
         item {
-            VaultGroupListItem(
+            BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_trash),
                 label = stringResource(id = R.string.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = trashClick,
+                showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
