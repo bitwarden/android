@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTyp
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FoldersDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.SendsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.database.VaultDatabase
 import dagger.Module
 import dagger.Provides
@@ -32,6 +33,7 @@ class VaultDiskModule {
                 klass = VaultDatabase::class.java,
                 name = "vault_database",
             )
+            .fallbackToDestructiveMigration()
             .addTypeConverter(ZonedDateTimeTypeConverter())
             .build()
 
@@ -49,15 +51,21 @@ class VaultDiskModule {
 
     @Provides
     @Singleton
+    fun provideSendDao(database: VaultDatabase): SendsDao = database.sendsDao()
+
+    @Provides
+    @Singleton
     fun provideVaultDiskSource(
         ciphersDao: CiphersDao,
         collectionsDao: CollectionsDao,
         foldersDao: FoldersDao,
+        sendsDao: SendsDao,
         json: Json,
     ): VaultDiskSource = VaultDiskSourceImpl(
         ciphersDao = ciphersDao,
         collectionsDao = collectionsDao,
         foldersDao = foldersDao,
+        sendsDao = sendsDao,
         json = json,
     )
 }
