@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
  * @property onCopyCustomTextField
  * @property onShowHiddenFieldClick
  */
-class VaultCommonItemTypeHandlers(
+data class VaultCommonItemTypeHandlers(
     val onRefreshClick: () -> Unit,
     val onCopyCustomHiddenField: (String) -> Unit,
     val onCopyCustomTextField: (String) -> Unit,

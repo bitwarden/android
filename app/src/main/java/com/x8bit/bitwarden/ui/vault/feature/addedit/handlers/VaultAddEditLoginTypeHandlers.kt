@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
  * @property onAddNewUriClick Handles the action when the add new URI button is clicked.
  */
 @Suppress("LongParameterList")
-class VaultAddEditLoginTypeHandlers(
+data class VaultAddEditLoginTypeHandlers(
     val onUsernameTextChange: (String) -> Unit,
     val onPasswordTextChange: (String) -> Unit,
     val onUriTextChange: (String) -> Unit,

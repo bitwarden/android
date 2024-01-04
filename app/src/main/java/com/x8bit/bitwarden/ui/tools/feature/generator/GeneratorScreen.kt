@@ -1075,7 +1075,7 @@ private fun GeneratorPreview() {
  * logic when user input is detected.
  */
 @Suppress("LongParameterList")
-private class PasswordHandlers(
+private data class PasswordHandlers(
     val onPasswordSliderLengthChange: (Int, Boolean) -> Unit,
     val onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
     val onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
@@ -1164,7 +1164,7 @@ private class PasswordHandlers(
  * Each lambda corresponds to a specific user action, allowing for easy delegation of
  * logic when user input is detected.
  */
-private class PassphraseHandlers(
+private data class PassphraseHandlers(
     val onPassphraseNumWordsCounterChange: (Int) -> Unit,
     val onPassphraseWordSeparatorChange: (Char?) -> Unit,
     val onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
@@ -1217,7 +1217,7 @@ private class PassphraseHandlers(
  * logic when user input is detected.
  */
 @Suppress("LongParameterList")
-private class ForwardedEmailAliasHandlers(
+private data class ForwardedEmailAliasHandlers(
     val onServiceChange: (ServiceTypeOption) -> Unit,
     val onAddyIoAccessTokenTextChange: (String) -> Unit,
     val onAddyIoDomainNameTextChange: (String) -> Unit,
@@ -1331,7 +1331,7 @@ private class ForwardedEmailAliasHandlers(
  * Each lambda corresponds to a specific user action, allowing for easy delegation of
  * logic when user input is detected.
  */
-private class PlusAddressedEmailHandlers(
+private data class PlusAddressedEmailHandlers(
     val onEmailChange: (String) -> Unit,
 ) {
     companion object {
@@ -1360,7 +1360,7 @@ private class PlusAddressedEmailHandlers(
  * Each lambda corresponds to a specific user action, allowing for easy delegation of
  * logic when user input is detected.
  */
-private class CatchAllEmailHandlers(
+private data class CatchAllEmailHandlers(
     val onDomainChange: (String) -> Unit,
 ) {
     companion object {
@@ -1389,7 +1389,7 @@ private class CatchAllEmailHandlers(
  * Each lambda corresponds to a specific user action, allowing for easy delegation of
  * logic when user input is detected.
  */
-private class RandomWordHandlers(
+private data class RandomWordHandlers(
     val onCapitalizeChange: (Boolean) -> Unit,
     val onIncludeNumberChange: (Boolean) -> Unit,
 ) {
