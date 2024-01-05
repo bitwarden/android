@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import java.time.Instant
 
 /**
@@ -89,7 +90,12 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCardView(): CardView?
 private fun VaultAddEditState.ViewState.Content.ItemType.toIdentityView(): IdentityView? =
     (this as? VaultAddEditState.ViewState.Content.ItemType.Identity)?.let {
         IdentityView(
-            title = it.selectedTitle.name,
+            title = it
+                .selectedTitle
+                .takeUnless { title ->
+                    title == VaultIdentityTitle.SELECT
+                }
+                ?.name,
             firstName = it.firstName.orNullIfBlank(),
             lastName = it.lastName.orNullIfBlank(),
             middleName = it.middleName.orNullIfBlank(),
