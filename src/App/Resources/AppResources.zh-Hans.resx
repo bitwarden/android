@@ -885,17 +885,17 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>验证器密钥已添加。</value>
+    <value>已添加验证器密钥。</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>无法读取验证器密钥。</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>将您的摄像头对准 QR 码。
+    <value>将您的摄像头对准二维码。
 扫描将自动完成。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>扫描 QR 码</value>
+    <value>扫描二维码</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>相机</value>
@@ -2275,10 +2275,10 @@
     <value>无法添加验证器密钥？</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>扫描 QR 码</value>
+    <value>扫描二维码</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>无法扫描 QR 码吗？ </value>
+    <value>无法扫描二维码吗？ </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
     <value>验证器密钥</value>
