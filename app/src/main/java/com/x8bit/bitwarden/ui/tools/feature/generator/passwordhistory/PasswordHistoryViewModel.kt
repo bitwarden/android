@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -26,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 @Suppress("TooManyFunctions")
 class PasswordHistoryViewModel @Inject constructor(
+    private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
 ) : BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
     initialState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading),
@@ -96,7 +98,7 @@ class PasswordHistoryViewModel @Inject constructor(
     }
 
     private fun handleCopyClick(password: GeneratedPassword) {
-        sendEvent(PasswordHistoryEvent.CopyTextToClipboard(password.password))
+        clipboardManager.setText(text = password.password)
     }
 }
 
@@ -174,11 +176,6 @@ sealed class PasswordHistoryEvent {
      * Event to navigate back to the previous screen.
      */
     data object NavigateBack : PasswordHistoryEvent()
-
-    /**
-     * Copies text to the clipboard.
-     */
-    data class CopyTextToClipboard(val text: String) : PasswordHistoryEvent()
 }
 
 /**

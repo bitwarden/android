@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -38,6 +39,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
 
+    private val clipboardManager: BitwardenClipboardManager = mockk()
     private val authRepo: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
     }
@@ -216,40 +218,33 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `on CopyCustomHiddenFieldClick should emit CopyToClipboard when re-prompt is not required`() =
-            runTest {
-                val field = "field"
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(isPremiumUser = true)
-                    }
-                        .returns(
-                            createViewState(
-                                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                            ),
-                        )
-                }
-                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-
-                viewModel.eventFlow.test {
-                    viewModel.trySendAction(VaultItemAction.Common.CopyCustomHiddenFieldClick(field))
-                    assertEquals(
-                        VaultItemEvent.CopyToClipboard(field.asText()),
-                        awaitItem(),
-                    )
-                }
-
-                verify(exactly = 1) {
-                    mockCipherView.toViewState(isPremiumUser = true)
-                }
+        fun `on CopyCustomHiddenFieldClick should call setText on ClipboardManager when re-prompt is not required`() {
+            val field = "field"
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true)
+                } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             }
+            every { clipboardManager.setText(text = field) } just runs
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+
+            viewModel.trySendAction(VaultItemAction.Common.CopyCustomHiddenFieldClick(field))
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = field)
+                mockCipherView.toViewState(isPremiumUser = true)
+            }
+        }
 
         @Test
-        fun `on CopyCustomTextFieldClick should emit CopyToClipboard`() = runTest {
+        fun `on CopyCustomTextFieldClick should call setText on ClipboardManager`() {
             val field = "field"
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemAction.Common.CopyCustomTextFieldClick(field))
-                assertEquals(VaultItemEvent.CopyToClipboard(field.asText()), awaitItem())
+            every { clipboardManager.setText(text = field) } just runs
+
+            viewModel.trySendAction(VaultItemAction.Common.CopyCustomTextFieldClick(field))
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = field)
             }
         }
 
@@ -402,41 +397,33 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
+        @Suppress("MaxLineLength")
         @Test
-        fun `on CopyPasswordClick should emit CopyToClipboard when re-prompt is not required`() =
-            runTest {
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(isPremiumUser = true)
-                    }
-                        .returns(
-                            createViewState(
-                                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                            ),
-                        )
-                }
-                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-
-                viewModel.eventFlow.test {
-                    viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
-                    assertEquals(
-                        VaultItemEvent.CopyToClipboard(DEFAULT_LOGIN_PASSWORD.asText()),
-                        awaitItem(),
-                    )
-                }
-
-                verify(exactly = 1) {
-                    mockCipherView.toViewState(isPremiumUser = true)
-                }
+        fun `on CopyPasswordClick should call setText on the CLipboardManager when re-prompt is not required`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true)
+                } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             }
+            every { clipboardManager.setText(text = DEFAULT_LOGIN_PASSWORD) } just runs
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = DEFAULT_LOGIN_PASSWORD)
+                mockCipherView.toViewState(isPremiumUser = true)
+            }
+        }
 
         @Test
-        fun `on CopyUriClick should emit CopyToClipboard`() = runTest {
+        fun `on CopyUriClick should call setText on ClipboardManager`() {
             val uri = "uri"
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUriClick(uri))
-                assertEquals(VaultItemEvent.CopyToClipboard(uri.asText()), awaitItem())
-            }
+            every { clipboardManager.setText(text = uri) } just runs
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUriClick(uri))
+
+            verify(exactly = 1) { clipboardManager.setText(text = uri) }
         }
 
         @Test
@@ -460,33 +447,24 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
+        @Suppress("MaxLineLength")
         @Test
-        fun `on CopyUsernameClick should emit CopyToClipboard when re-prompt is not required`() =
-            runTest {
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(isPremiumUser = true)
-                    }
-                        .returns(
-                            createViewState(
-                                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                            ),
-                        )
-                }
-                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-
-                viewModel.eventFlow.test {
-                    viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUsernameClick)
-                    assertEquals(
-                        VaultItemEvent.CopyToClipboard(DEFAULT_LOGIN_USERNAME.asText()),
-                        awaitItem(),
-                    )
-                }
-
-                verify(exactly = 1) {
-                    mockCipherView.toViewState(isPremiumUser = true)
-                }
+        fun `on CopyUsernameClick should call setText on ClipboardManager when re-prompt is not required`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true)
+                } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             }
+            every { clipboardManager.setText(text = DEFAULT_LOGIN_USERNAME) } just runs
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUsernameClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = DEFAULT_LOGIN_USERNAME)
+                mockCipherView.toViewState(isPremiumUser = true)
+            }
+        }
 
         @Test
         fun `on LaunchClick should emit NavigateToUri`() = runTest {
@@ -613,6 +591,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: VaultItemState?,
         vaultItemId: String = VAULT_ITEM_ID,
+        bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         authRepository: AuthRepository = authRepo,
         vaultRepository: VaultRepository = vaultRepo,
     ): VaultItemViewModel = VaultItemViewModel(
@@ -620,6 +599,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             set("state", state)
             set("vault_item_id", vaultItemId)
         },
+        clipboardManager = bitwardenClipboardManager,
         authRepository = authRepository,
         vaultRepository = vaultRepository,
     )

@@ -3,11 +3,17 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 import app.cash.turbine.test
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toFormattedPattern
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -17,6 +23,9 @@ import java.time.Instant
 class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     private val initialState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading)
+
+    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val fakeGeneratorRepository = FakeGeneratorRepository()
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -28,10 +37,8 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `when repository emits Loading state the state updates correctly`() = runTest {
-        val fakeRepository = FakeGeneratorRepository().apply {
-            emitPasswordHistoryState(LocalDataState.Loading)
-        }
-        val viewModel = PasswordHistoryViewModel(generatorRepository = fakeRepository)
+        fakeGeneratorRepository.emitPasswordHistoryState(LocalDataState.Loading)
+        val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
             val expectedState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading)
@@ -42,10 +49,10 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `when repository emits Error state the state updates correctly`() = runTest {
-        val fakeRepository = FakeGeneratorRepository().apply {
-            emitPasswordHistoryState(LocalDataState.Error(Exception("An error has occurred.")))
-        }
-        val viewModel = PasswordHistoryViewModel(generatorRepository = fakeRepository)
+        fakeGeneratorRepository.emitPasswordHistoryState(
+            state = LocalDataState.Error(Exception("An error has occurred.")),
+        )
+        val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
             val expectedState = PasswordHistoryState(
@@ -58,10 +65,8 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `when repository emits Empty state the state updates correctly`() = runTest {
-        val fakeRepository = FakeGeneratorRepository().apply {
-            emitPasswordHistoryState(LocalDataState.Loaded(emptyList()))
-        }
-        val viewModel = PasswordHistoryViewModel(generatorRepository = fakeRepository)
+        fakeGeneratorRepository.emitPasswordHistoryState(LocalDataState.Loaded(emptyList()))
+        val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
             val expectedState = PasswordHistoryState(PasswordHistoryState.ViewState.Empty)
@@ -72,11 +77,10 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `when password history updates the state updates correctly`() = runTest {
-        val fakeRepository = FakeGeneratorRepository()
-        val viewModel = PasswordHistoryViewModel(generatorRepository = fakeRepository)
+        val viewModel = createViewModel()
 
         val passwordHistoryView = PasswordHistoryView("password", Instant.now())
-        fakeRepository.storePasswordHistory(passwordHistoryView)
+        fakeGeneratorRepository.storePasswordHistory(passwordHistoryView)
 
         val expectedState = PasswordHistoryState(
             viewState = PasswordHistoryState.ViewState.Content(
@@ -108,45 +112,44 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `PasswordCopyClick action should emit CopyTextToClipboard event`() = runTest {
+    fun `PasswordCopyClick action should call setText on the ClipboardManager`() {
         val viewModel = createViewModel()
         val generatedPassword = PasswordHistoryState.GeneratedPassword(
             password = "testPassword",
             date = "01/01/23",
         )
+        every { clipboardManager.setText(text = generatedPassword.password) } just runs
 
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
-                PasswordHistoryAction.PasswordCopyClick(generatedPassword),
-            )
-            assertEquals(
-                PasswordHistoryEvent.CopyTextToClipboard(generatedPassword.password),
-                awaitItem(),
-            )
+        viewModel.actionChannel.trySend(PasswordHistoryAction.PasswordCopyClick(generatedPassword))
+
+        verify(exactly = 1) {
+            clipboardManager.setText(text = generatedPassword.password)
         }
     }
 
     @Test
     fun `PasswordClearClick action should update to Empty ViewState`() = runTest {
-        val fakeRepository = FakeGeneratorRepository()
-        val viewModel = PasswordHistoryViewModel(generatorRepository = fakeRepository)
+        val viewModel = createViewModel()
 
         val passwordHistoryView = PasswordHistoryView("password", Instant.now())
-        fakeRepository.storePasswordHistory(passwordHistoryView)
+        fakeGeneratorRepository.storePasswordHistory(passwordHistoryView)
 
         viewModel.actionChannel.trySend(PasswordHistoryAction.PasswordClearClick)
 
-        assertTrue(fakeRepository.passwordHistoryStateFlow.value is LocalDataState.Loaded)
+        assertTrue(fakeGeneratorRepository.passwordHistoryStateFlow.value is LocalDataState.Loaded)
         assertTrue(
-            (fakeRepository.passwordHistoryStateFlow.value as LocalDataState.Loaded).data.isEmpty(),
+            (fakeGeneratorRepository.passwordHistoryStateFlow.value as LocalDataState.Loaded)
+                .data
+                .isEmpty(),
         )
     }
 
     //region Helper Functions
 
-    private fun createViewModel(): PasswordHistoryViewModel {
-        return PasswordHistoryViewModel(generatorRepository = FakeGeneratorRepository())
-    }
+    private fun createViewModel(): PasswordHistoryViewModel = PasswordHistoryViewModel(
+        clipboardManager = clipboardManager,
+        generatorRepository = fakeGeneratorRepository,
+    )
 
     //endregion Helper Functions
 }

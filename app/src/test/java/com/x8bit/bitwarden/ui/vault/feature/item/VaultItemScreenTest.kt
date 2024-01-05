@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
-import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -23,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onFirstNodeWithTextAfterScroll
@@ -47,7 +45,6 @@ class VaultItemScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToVaultEditItemId: String? = null
 
-    private val clipboardManager = mockk<ClipboardManager>()
     private val intentHandler = mockk<IntentHandler>()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemEvent>()
@@ -64,7 +61,6 @@ class VaultItemScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultEditItem = { onNavigateToVaultEditItemId = it },
-                clipboardManager = clipboardManager,
                 intentHandler = intentHandler,
             )
         }
@@ -83,19 +79,6 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(VaultItemAction.Common.CloseClick)
-        }
-    }
-
-    @Test
-    fun `CopyToClipboard event should invoke setText`() {
-        val textString = "text"
-        val text = textString.asText()
-        every { clipboardManager.setText(textString.toAnnotatedString()) } just runs
-
-        mutableEventFlow.tryEmit(VaultItemEvent.CopyToClipboard(text))
-
-        verify(exactly = 1) {
-            clipboardManager.setText(textString.toAnnotatedString())
         }
     }
 

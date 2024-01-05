@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -24,6 +25,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val clipboardManager: BitwardenClipboardManager,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
     initialState = savedStateHandle[KEY_STATE] ?: INITIAL_STATE,
 ) {
@@ -67,7 +69,7 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleVersionClick() {
-        sendEvent(AboutEvent.CopyToClipboard(text = stateFlow.value.version))
+        clipboardManager.setText(text = state.version)
     }
 
     private fun handleWebVaultClick() {
@@ -97,13 +99,6 @@ data class AboutState(
  * Models events for the about screen.
  */
 sealed class AboutEvent {
-    /**
-     * Copy the given [text] to the clipboard.
-     */
-    data class CopyToClipboard(
-        val text: Text,
-    ) : AboutEvent()
-
     /**
      * Navigate back.
      */
