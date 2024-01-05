@@ -501,6 +501,7 @@ private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
         name = "mockName-1",
         deletionDate = "1",
         type = SendState.ViewState.Content.SendItem.Type.FILE,
+        iconList = emptyList(),
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.ViewState.Content(
@@ -513,6 +514,7 @@ private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.
             name = "mockName-2",
             deletionDate = "1",
             type = SendState.ViewState.Content.SendItem.Type.TEXT,
+            iconList = emptyList(),
         ),
     ),
 )

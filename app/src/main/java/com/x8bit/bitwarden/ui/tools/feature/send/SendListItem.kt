@@ -9,7 +9,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 
 /**
  * A Composable function that displays a row send item.
@@ -30,6 +32,7 @@ fun SendListItem(
     label: String,
     supportingLabel: String,
     startIcon: Painter,
+    trailingLabelIcons: List<SendStatusIcon>,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
     onCopyClick: () -> Unit,
@@ -40,6 +43,12 @@ fun SendListItem(
         label = label,
         supportingLabel = supportingLabel,
         startIcon = startIcon,
+        trailingLabelIcons = trailingLabelIcons.map {
+            IconResource(
+                iconPainter = painterResource(it.iconRes),
+                contentDescription = it.contentDescription(),
+            )
+        },
         onClick = onClick,
         selectionDataList = listOf(
             SelectionItemData(
@@ -67,6 +76,7 @@ private fun SendListItem_preview() {
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
             startIcon = painterResource(id = R.drawable.ic_send_text),
+            trailingLabelIcons = emptyList(),
             onClick = {},
             onCopyClick = {},
             onEditClick = {},
