@@ -35,16 +35,19 @@ private fun List<SendView>.toSendContent(): SendState.ViewState.Content {
                         SendType.FILE -> SendState.ViewState.Content.SendItem.Type.FILE
                     },
                     iconList = listOfNotNull(
-                        SendStatusIcon.EXPIRED.takeIf {
-                            sendView.expirationDate?.isBefore(Instant.now()) == true
-                        },
+                        SendStatusIcon.DISABLED.takeIf { sendView.disabled },
                         sendView.password?.let { SendStatusIcon.PASSWORD },
                         SendStatusIcon.MAX_ACCESS_COUNT_REACHED.takeIf {
                             sendView.maxAccessCount?.let { maxCount ->
                                 sendView.accessCount >= maxCount
                             } == true
                         },
-                        SendStatusIcon.DISABLED.takeIf { sendView.disabled },
+                        SendStatusIcon.EXPIRED.takeIf {
+                            sendView.expirationDate?.isBefore(Instant.now()) == true
+                        },
+                        SendStatusIcon.PENDING_DELETE.takeIf {
+                            sendView.deletionDate.isBefore(Instant.now())
+                        },
                     ),
                 )
             }
