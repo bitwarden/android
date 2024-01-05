@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -56,15 +57,29 @@ class AppearanceScreenTest : BaseComposeTest() {
     @Test
     fun `on language selection dialog item click should send LanguageChange`() {
         composeTestRule.onNodeWithText("Language").performClick()
-        composeTestRule.onNodeWithText("English").performClick()
+        composeTestRule
+            .onAllNodesWithText("English")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
 
         verify {
             viewModel.trySendAction(
                 AppearanceAction.LanguageChange(
-                    newLanguage = AppearanceState.Language.ENGLISH,
+                    language = AppearanceState.Language.ENGLISH,
                 ),
             )
         }
+    }
+
+    @Test
+    fun `on language selection dialog cancel click should dismiss dialog`() {
+        composeTestRule.onNodeWithText("Language").performClick()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
@@ -79,15 +94,29 @@ class AppearanceScreenTest : BaseComposeTest() {
     @Test
     fun `on theme selection dialog item click should send ThemeChange`() {
         composeTestRule.onNodeWithText("Theme").performClick()
-        composeTestRule.onNodeWithText("Dark").performClick()
+        composeTestRule
+            .onAllNodesWithText("Dark")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
 
         verify {
             viewModel.trySendAction(
                 AppearanceAction.ThemeChange(
-                    newTheme = AppearanceState.Theme.DARK,
+                    theme = AppearanceState.Theme.DARK,
                 ),
             )
         }
+    }
+
+    @Test
+    fun `on theme selection dialog cancel click should dismiss dialog`() {
+        composeTestRule.onNodeWithText("Theme").performClick()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
