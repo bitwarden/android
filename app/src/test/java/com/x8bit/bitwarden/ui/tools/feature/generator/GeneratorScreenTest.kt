@@ -39,21 +39,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 class GeneratorScreenTest : BaseComposeTest() {
     private var onNavigateToPasswordHistoryScreenCalled = false
 
-    private val mutableStateFlow = MutableStateFlow(
-        GeneratorState(
-            generatedText = "Placeholder",
-            selectedType = GeneratorState
-                .MainType
-                .Passcode(
-                    GeneratorState
-                        .MainType
-                        .Passcode
-                        .PasscodeType
-                        .Password(),
-                ),
-            currentEmailAddress = "currentEmail",
-        ),
-    )
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
     private val mutableEventFlow = bufferedMutableSharedFlow<GeneratorEvent>()
     private val viewModel = mockk<GeneratorViewModel>(relaxed = true) {
@@ -166,14 +152,14 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `clicking a UsernameOption should send UsernameTypeOption action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
-                        email = "email",
-                    ),
+                    GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .PlusAddressedEmail(),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -380,21 +366,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Password state, decrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
-        updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(),
-                    ),
-                currentEmailAddress = "currentEmail",
-            ),
-        )
 
         composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
             .onChildren()
@@ -415,21 +386,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Password state, incrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
-        updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(),
-                    ),
-                currentEmailAddress = "currentEmail",
-            ),
-        )
 
         composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
             .onChildren()
@@ -451,18 +407,16 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, decrementing the minimum numbers counter below 0 should do nothing`() {
         val initialMinNumbers = 0
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(minNumbers = initialMinNumbers),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minNumbers = initialMinNumbers,
+                        ),
+                ),
             ),
         )
 
@@ -480,18 +434,16 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, incrementing the minimum numbers counter above 5 should do nothing`() {
         val initialMinNumbers = 5
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(minNumbers = initialMinNumbers),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minNumbers = initialMinNumbers,
+                        ),
+                ),
             ),
         )
 
@@ -508,21 +460,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Password state, decrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
-        updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(),
-                    ),
-                currentEmailAddress = "currentEmail",
-            ),
-        )
 
         composeTestRule.onNodeWithContentDescription("Minimum special, 1")
             .onChildren()
@@ -543,21 +480,6 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Password state, incrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
-        updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(),
-                    ),
-                currentEmailAddress = "currentEmail",
-            ),
-        )
 
         composeTestRule.onNodeWithContentDescription("Minimum special, 1")
             .onChildren()
@@ -579,18 +501,16 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, decrementing the minimum special characters below 0 should do nothing`() {
         val initialSpecialChars = 0
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(minSpecial = initialSpecialChars),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minSpecial = initialSpecialChars,
+                        ),
+                ),
             ),
         )
 
@@ -608,18 +528,16 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, decrementing the minimum special characters above 5 should do nothing`() {
         val initialSpecialChars = 5
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Password(minSpecial = initialSpecialChars),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minSpecial = initialSpecialChars,
+                        ),
+                ),
             ),
         )
 
@@ -662,18 +580,16 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Passphrase state, decrementing number of words should send NumWordsCounterChange action with decremented value`() {
         val initialNumWords = 4
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Passphrase(numWords = initialNumWords),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(
+                            numWords = initialNumWords,
+                        ),
+                ),
             ),
         )
 
@@ -698,18 +614,16 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Passphrase state, decrementing number of words under 3 should do nothing`() {
         val initialNumWords = 3
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Passphrase(numWords = initialNumWords),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(
+                            numWords = initialNumWords,
+                        ),
+                ),
             ),
         )
 
@@ -727,18 +641,16 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Passphrase state, incrementing number of words over 20 should do nothing`() {
         val initialNumWords = 20
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Passphrase(numWords = initialNumWords),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(
+                            numWords = initialNumWords,
+                        ),
+                ),
             ),
         )
 
@@ -757,18 +669,14 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Passphrase state, incrementing number of words should send NumWordsCounterChange action with incremented value`() {
         val initialNumWords = 3
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Passphrase(),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(),
+                ),
             ),
         )
 
@@ -792,18 +700,14 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Passphrase state, toggling capitalize should send ToggleCapitalizeChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Passphrase(),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(),
+                ),
             ),
         )
 
@@ -825,18 +729,14 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Passphrase state, toggling the include number toggle should send ToggleIncludeNumberChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Passphrase(),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(),
+                ),
             ),
         )
 
@@ -857,18 +757,14 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Passphrase state, updating text in word separator should send WordSeparatorTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
-                selectedType = GeneratorState
-                    .MainType
-                    .Passcode(
-                        GeneratorState
-                            .MainType
-                            .Passcode
-                            .PasscodeType
-                            .Passphrase(),
-                    ),
-                currentEmailAddress = "currentEmail",
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(),
+                ),
             ),
         )
 
@@ -894,14 +790,10 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_ForwardedEmailAlias state, updating the service type should send ServiceTypeOptionSelect action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
-                        selectedServiceType = null,
-                    ),
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -948,8 +840,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_ForwardedEmailAlias_AddyIo state, updating access token text input should send AccessTokenTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -961,7 +852,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .AddyIo(),
                     ),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -991,8 +881,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_ForwardedEmailAlias_AddyIo state, updating domain name text input should send DomainTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1004,7 +893,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .AddyIo(),
                     ),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1038,8 +926,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_ForwardedEmailAlias_DuckDuckGo state, updating api key text input should send ApiKeyTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1051,7 +938,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .DuckDuckGo(),
                     ),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1079,8 +965,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_ForwardedEmailAlias_FastMail state, updating api key text input should send ApiKeyTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1092,7 +977,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .FastMail(),
                     ),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1120,8 +1004,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_ForwardedEmailAlias_FirefoxRelay state, updating access token text input should send AccessTokenTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1133,7 +1016,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .FirefoxRelay(),
                     ),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1167,8 +1049,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_ForwardedEmailAlias_SimpleLogin state, updating api key text input should send ApiKeyTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1180,7 +1061,6 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .SimpleLogin(),
                     ),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1208,14 +1088,10 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_PlusAddressedEmail state, updating text in email field should send EmailTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
-                        email = "",
-                    ),
+                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1244,14 +1120,10 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_CatchAllEmail state, updating text in email field should send EmailTextChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
-                    GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
-                        domainName = "",
-                    ),
+                    GeneratorState.MainType.Username.UsernameType.CatchAllEmail(),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1280,12 +1152,10 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_RandomWord state, toggling capitalize should send ToggleCapitalizeChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.RandomWord(),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1306,12 +1176,10 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Username_RandomWord state, toggling the include number toggle should send ToggleIncludeNumberChange action`() {
         updateState(
-            GeneratorState(
-                generatedText = "Placeholder",
+            DEFAULT_STATE.copy(
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.RandomWord(),
                 ),
-                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1334,3 +1202,11 @@ class GeneratorScreenTest : BaseComposeTest() {
         mutableStateFlow.value = state
     }
 }
+
+private val DEFAULT_STATE = GeneratorState(
+    generatedText = "",
+    selectedType = GeneratorState.MainType.Passcode(
+        GeneratorState.MainType.Passcode.PasscodeType.Password(),
+    ),
+    currentEmailAddress = "currentEmail",
+)
