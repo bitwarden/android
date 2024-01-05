@@ -22,84 +22,171 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 interface VaultSdkSource {
 
     /**
-     * Attempts to initialize cryptography functionality for an individual user for the
-     * Bitwarden SDK with a given [InitUserCryptoRequest].
+     * Clears any cryptography-related functionality for the given [userId], effectively locking
+     * the associated vault.
      */
-    suspend fun initializeCrypto(request: InitUserCryptoRequest): Result<InitializeCryptoResult>
+    fun clearCrypto(userId: String)
+
+    /**
+     * Attempts to initialize cryptography functionality for an individual user with the given
+     * [userId] for the Bitwarden SDK with a given [InitUserCryptoRequest].
+     */
+    suspend fun initializeCrypto(
+        userId: String,
+        request: InitUserCryptoRequest,
+    ): Result<InitializeCryptoResult>
 
     /**
      * Attempts to initialize cryptography functionality for organization data associated with
-     * the current user for the Bitwarden SDK with a given [InitOrgCryptoRequest].
+     * the user with the given [userId] for the Bitwarden SDK with a given [InitOrgCryptoRequest].
      *
-     * This should only be called after a successful call to [initializeCrypto].
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
     suspend fun initializeOrganizationCrypto(
+        userId: String,
         request: InitOrgCryptoRequest,
     ): Result<InitializeCryptoResult>
 
     /**
-     * Encrypts a [CipherView] returning a [Cipher] wrapped in a [Result].
+     * Encrypts a [CipherView] for the user with the given [userId], returning a [Cipher] wrapped
+     * in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun encryptCipher(cipherView: CipherView): Result<Cipher>
+    suspend fun encryptCipher(
+        userId: String,
+        cipherView: CipherView,
+    ): Result<Cipher>
 
     /**
-     * Decrypts a [Cipher] returning a [CipherView] wrapped in a [Result].
+     * Decrypts a [Cipher] for the user with the given [userId], returning a [CipherView] wrapped
+     * in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptCipher(cipher: Cipher): Result<CipherView>
+    suspend fun decryptCipher(
+        userId: String,
+        cipher: Cipher,
+    ): Result<CipherView>
 
     /**
-     * Decrypts a list of [Cipher]s returning a list of [CipherListView] wrapped in a [Result].
+     * Decrypts a list of [Cipher]s for the user with the given [userId], returning a list of
+     * [CipherListView] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptCipherListCollection(cipherList: List<Cipher>): Result<List<CipherListView>>
+    suspend fun decryptCipherListCollection(
+        userId: String,
+        cipherList: List<Cipher>,
+    ): Result<List<CipherListView>>
 
     /**
-     * Decrypts a list of [Cipher]s returning a list of [CipherView] wrapped in a [Result].
+     * Decrypts a list of [Cipher]s  for the user with the given [userId], returning a list of
+     * [CipherView] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptCipherList(cipherList: List<Cipher>): Result<List<CipherView>>
+    suspend fun decryptCipherList(
+        userId: String,
+        cipherList: List<Cipher>,
+    ): Result<List<CipherView>>
 
     /**
-     * Decrypts a [Collection] returning a [CollectionView] wrapped in a [Result].
+     * Decrypts a [Collection] for the user with the given [userId], returning a [CollectionView]
+     * wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptCollection(collection: Collection): Result<CollectionView>
+    suspend fun decryptCollection(
+        userId: String,
+        collection: Collection,
+    ): Result<CollectionView>
 
     /**
-     * Decrypts a list of [Collection]s returning a list of [CollectionView] wrapped in a [Result].
+     * Decrypts a list of [Collection]s for the user with the given [userId], returning a list of
+     * [CollectionView] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
     suspend fun decryptCollectionList(
+        userId: String,
         collectionList: List<Collection>,
     ): Result<List<CollectionView>>
 
     /**
-     * Decrypts a [Send] returning a [SendView] wrapped in a [Result].
+     * Decrypts a [Send] for the user with the given [userId], returning a [SendView] wrapped in a
+     * [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptSend(send: Send): Result<SendView>
+    suspend fun decryptSend(
+        userId: String,
+        send: Send,
+    ): Result<SendView>
 
     /**
-     * Decrypts a list of [Send]s returning a list of [SendView] wrapped in a [Result].
+     * Decrypts a list of [Send]s for the user with the given [userId], returning a list of
+     * [SendView] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptSendList(sendList: List<Send>): Result<List<SendView>>
+    suspend fun decryptSendList(
+        userId: String,
+        sendList: List<Send>,
+    ): Result<List<SendView>>
 
     /**
-     * Decrypts a [Folder] returning a [FolderView] wrapped in a [Result].
+     * Decrypts a [Folder] for the user with the given [userId], returning a [FolderView] wrapped
+     * in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptFolder(folder: Folder): Result<FolderView>
+    suspend fun decryptFolder(
+        userId: String,
+        folder: Folder,
+    ): Result<FolderView>
 
     /**
-     * Decrypts a list of [Folder]s returning a list of [FolderView] wrapped in a [Result].
+     * Decrypts a list of [Folder]s for the user with the given [userId], returning a list of
+     * [FolderView] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
-    suspend fun decryptFolderList(folderList: List<Folder>): Result<List<FolderView>>
+    suspend fun decryptFolderList(
+        userId: String,
+        folderList: List<Folder>,
+    ): Result<List<FolderView>>
 
     /**
-     * Encrypts a given password history item.
+     * Encrypts a given password history item for the user with the given [userId].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
     suspend fun encryptPasswordHistory(
+        userId: String,
         passwordHistory: PasswordHistoryView,
     ): Result<PasswordHistory>
 
     /**
-     * Decrypts a list of password history items.
+     * Decrypts a list of password history items for the user with the given [userId].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
      */
     suspend fun decryptPasswordHistoryList(
+        userId: String,
         passwordHistoryList: List<PasswordHistory>,
     ): Result<List<PasswordHistoryView>>
 }

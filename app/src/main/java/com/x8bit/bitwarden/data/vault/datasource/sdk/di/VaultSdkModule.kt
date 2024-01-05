@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.di
 
-import com.bitwarden.sdk.Client
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSourceImpl
 import dagger.Module
@@ -19,11 +19,9 @@ object VaultSdkModule {
     @Provides
     @Singleton
     fun providesVaultSdkSource(
-        client: Client,
+        sdkClientManager: SdkClientManager,
     ): VaultSdkSource =
         VaultSdkSourceImpl(
-            clientVault = client.vault(),
-            clientCrypto = client.crypto(),
-            clientPasswordHistory = client.vault().passwordHistory(),
+            sdkClientManager = sdkClientManager,
         )
 }

@@ -14,32 +14,56 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.sdk.BitwardenException
+import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientVault
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class VaultSdkSourceTest {
-    private val clientVault = mockk<ClientVault>()
     private val clientCrypto = mockk<ClientCrypto>()
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
+    private val clientVault = mockk<ClientVault>() {
+        every { passwordHistory() } returns clientPasswordHistory
+    }
+    private val client = mockk<Client>() {
+        every { vault() } returns clientVault
+        every { crypto() } returns clientCrypto
+    }
+    private val sdkClientManager = mockk<SdkClientManager> {
+        every { getOrCreateClient(any()) } returns client
+        every { destroyClient(any()) } just runs
+    }
     private val vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
-        clientVault = clientVault,
-        clientCrypto = clientCrypto,
-        clientPasswordHistory = clientPasswordHistory,
+        sdkClientManager = sdkClientManager,
     )
+
+    @Test
+    fun `clearCrypto should destroy the associated client via the SDK Manager`() {
+        val userId = "userId"
+
+        vaultSdkSource.clearCrypto(userId = userId)
+
+        verify { sdkClientManager.destroyClient(userId = userId) }
+    }
 
     @Test
     fun `initializeUserCrypto with sdk success should return InitializeCryptoResult Success`() =
         runBlocking {
+            val userId = "userId"
             val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
             coEvery {
                 clientCrypto.initializeUserCrypto(
@@ -47,6 +71,7 @@ class VaultSdkSourceTest {
                 )
             } returns Unit
             val result = vaultSdkSource.initializeCrypto(
+                userId = userId,
                 request = mockInitCryptoRequest,
             )
             assertEquals(
@@ -58,10 +83,12 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `initializeUserCrypto with sdk failure should return failure`() = runBlocking {
+        val userId = "userId"
         val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
         val expectedException = IllegalStateException("mock")
         coEvery {
@@ -70,6 +97,7 @@ class VaultSdkSourceTest {
             )
         } throws expectedException
         val result = vaultSdkSource.initializeCrypto(
+            userId = userId,
             request = mockInitCryptoRequest,
         )
         assertEquals(
@@ -81,11 +109,13 @@ class VaultSdkSourceTest {
                 req = mockInitCryptoRequest,
             )
         }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
     fun `initializeUserCrypto with BitwardenException failure should return AuthenticationError`() =
         runBlocking {
+            val userId = "userId"
             val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
             val expectedException = BitwardenException.E(message = "")
             coEvery {
@@ -94,6 +124,7 @@ class VaultSdkSourceTest {
                 )
             } throws expectedException
             val result = vaultSdkSource.initializeCrypto(
+                userId = userId,
                 request = mockInitCryptoRequest,
             )
             assertEquals(
@@ -105,11 +136,13 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `initializeOrgCrypto with sdk success should return InitializeCryptoResult Success`() =
         runBlocking {
+            val userId = "userId"
             val mockInitCryptoRequest = mockk<InitOrgCryptoRequest>()
             coEvery {
                 clientCrypto.initializeOrgCrypto(
@@ -117,6 +150,7 @@ class VaultSdkSourceTest {
                 )
             } returns Unit
             val result = vaultSdkSource.initializeOrganizationCrypto(
+                userId = userId,
                 request = mockInitCryptoRequest,
             )
             assertEquals(
@@ -128,10 +162,12 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `initializeOrgCrypto with sdk failure should return failure`() = runBlocking {
+        val userId = "userId"
         val mockInitCryptoRequest = mockk<InitOrgCryptoRequest>()
         val expectedException = IllegalStateException("mock")
         coEvery {
@@ -140,6 +176,7 @@ class VaultSdkSourceTest {
             )
         } throws expectedException
         val result = vaultSdkSource.initializeOrganizationCrypto(
+            userId = userId,
             request = mockInitCryptoRequest,
         )
         assertEquals(
@@ -151,11 +188,13 @@ class VaultSdkSourceTest {
                 req = mockInitCryptoRequest,
             )
         }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
     fun `initializeOrgCrypto with BitwardenException failure should return AuthenticationError`() =
         runBlocking {
+            val userId = "userId"
             val mockInitCryptoRequest = mockk<InitOrgCryptoRequest>()
             val expectedException = BitwardenException.E(message = "")
             coEvery {
@@ -164,6 +203,7 @@ class VaultSdkSourceTest {
                 )
             } throws expectedException
             val result = vaultSdkSource.initializeOrganizationCrypto(
+                userId = userId,
                 request = mockInitCryptoRequest,
             )
             assertEquals(
@@ -175,10 +215,12 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `decryptCipher should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
         val mockCipher = mockk<CipherView>()
         val expectedResult = mockk<Cipher>()
         coEvery {
@@ -187,6 +229,7 @@ class VaultSdkSourceTest {
             )
         } returns expectedResult
         val result = vaultSdkSource.encryptCipher(
+            userId = userId,
             cipherView = mockCipher,
         )
         assertEquals(
@@ -198,10 +241,12 @@ class VaultSdkSourceTest {
                 cipherView = mockCipher,
             )
         }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
     fun `Cipher decrypt should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
         val mockCipher = mockk<Cipher>()
         val expectedResult = mockk<CipherView>()
         coEvery {
@@ -210,6 +255,7 @@ class VaultSdkSourceTest {
             )
         } returns expectedResult
         val result = vaultSdkSource.decryptCipher(
+            userId = userId,
             cipher = mockCipher,
         )
         assertEquals(
@@ -221,11 +267,13 @@ class VaultSdkSourceTest {
                 cipher = mockCipher,
             )
         }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
     fun `Cipher decryptListCollection should call SDK and return a Result with correct data`() =
         runBlocking {
+            val userId = "userId"
             val mockCiphers = mockk<List<Cipher>>()
             val expectedResult = mockk<List<CipherListView>>()
             coEvery {
@@ -234,6 +282,7 @@ class VaultSdkSourceTest {
                 )
             } returns expectedResult
             val result = vaultSdkSource.decryptCipherListCollection(
+                userId = userId,
                 cipherList = mockCiphers,
             )
             assertEquals(
@@ -245,10 +294,12 @@ class VaultSdkSourceTest {
                     ciphers = mockCiphers,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `Cipher decryptList should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
         val mockCiphers = mockk<Cipher>()
         val expectedResult = mockk<CipherView>()
         coEvery {
@@ -257,6 +308,7 @@ class VaultSdkSourceTest {
             )
         } returns expectedResult
         val result = vaultSdkSource.decryptCipherList(
+            userId = userId,
             cipherList = listOf(mockCiphers),
         )
         assertEquals(
@@ -268,11 +320,13 @@ class VaultSdkSourceTest {
                 cipher = mockCiphers,
             )
         }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
     fun `decryptCollection should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
+            val userId = "userId"
             val mockCollection = mockk<Collection>()
             val expectedResult = mockk<CollectionView>()
             coEvery {
@@ -281,6 +335,7 @@ class VaultSdkSourceTest {
                 )
             } returns expectedResult
             val result = vaultSdkSource.decryptCollection(
+                userId = userId,
                 collection = mockCollection,
             )
             assertEquals(
@@ -291,11 +346,13 @@ class VaultSdkSourceTest {
                     collection = mockCollection,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `decryptCollectionList should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
+            val userId = "userId"
             val mockCollectionsList = mockk<List<Collection>>()
             val expectedResult = mockk<List<CollectionView>>()
             coEvery {
@@ -304,6 +361,7 @@ class VaultSdkSourceTest {
                 )
             } returns expectedResult
             val result = vaultSdkSource.decryptCollectionList(
+                userId = userId,
                 collectionList = mockCollectionsList,
             )
             assertEquals(
@@ -315,11 +373,13 @@ class VaultSdkSourceTest {
                     collections = mockCollectionsList,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `decryptSendList should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
+            val userId = "userId"
             val mockSend = mockk<Send>()
             val expectedResult = mockk<SendView>()
             coEvery {
@@ -328,6 +388,7 @@ class VaultSdkSourceTest {
                 )
             } returns expectedResult
             val result = vaultSdkSource.decryptSendList(
+                userId = userId,
                 sendList = listOf(mockSend),
             )
             assertEquals(
@@ -339,11 +400,13 @@ class VaultSdkSourceTest {
                     send = mockSend,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `decryptSend should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
+            val userId = "userId"
             val mockSend = mockk<Send>()
             val expectedResult = mockk<SendView>()
             coEvery {
@@ -352,6 +415,7 @@ class VaultSdkSourceTest {
                 )
             } returns expectedResult
             val result = vaultSdkSource.decryptSend(
+                userId = userId,
                 send = mockSend,
             )
             assertEquals(
@@ -362,10 +426,12 @@ class VaultSdkSourceTest {
                     send = mockSend,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `Folder decrypt should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
         val mockFolder = mockk<Folder>()
         val expectedResult = mockk<FolderView>()
         coEvery {
@@ -374,6 +440,7 @@ class VaultSdkSourceTest {
             )
         } returns expectedResult
         val result = vaultSdkSource.decryptFolder(
+            userId = userId,
             folder = mockFolder,
         )
         assertEquals(
@@ -385,10 +452,12 @@ class VaultSdkSourceTest {
                 folder = mockFolder,
             )
         }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
     fun `Folder decryptList should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
         val mockFolders = mockk<List<Folder>>()
         val expectedResult = mockk<List<FolderView>>()
         coEvery {
@@ -397,6 +466,7 @@ class VaultSdkSourceTest {
             )
         } returns expectedResult
         val result = vaultSdkSource.decryptFolderList(
+            userId = userId,
             folderList = mockFolders,
         )
         assertEquals(
@@ -408,11 +478,13 @@ class VaultSdkSourceTest {
                 folders = mockFolders,
             )
         }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
     fun `encryptPasswordHistory should call SDK and return a Result with correct data`() =
         runBlocking {
+            val userId = "userId"
             val mockPasswordHistoryView = mockk<PasswordHistoryView>()
             val expectedResult = mockk<PasswordHistory>()
             coEvery {
@@ -422,6 +494,7 @@ class VaultSdkSourceTest {
             } returns expectedResult
 
             val result = vaultSdkSource.encryptPasswordHistory(
+                userId = userId,
                 passwordHistory = mockPasswordHistoryView,
             )
 
@@ -431,11 +504,13 @@ class VaultSdkSourceTest {
                     passwordHistory = mockPasswordHistoryView,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `decryptPasswordHistoryList should call SDK and return a Result with correct data`() =
         runBlocking {
+            val userId = "userId"
             val mockPasswordHistoryList = mockk<List<PasswordHistory>>()
             val expectedResult = mockk<List<PasswordHistoryView>>()
             coEvery {
@@ -445,6 +520,7 @@ class VaultSdkSourceTest {
             } returns expectedResult
 
             val result = vaultSdkSource.decryptPasswordHistoryList(
+                userId = userId,
                 passwordHistoryList = mockPasswordHistoryList,
             )
 
@@ -454,5 +530,6 @@ class VaultSdkSourceTest {
                     list = mockPasswordHistoryList,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 }

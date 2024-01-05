@@ -105,7 +105,7 @@ class GeneratorRepositoryTest {
             coEvery { generatorSdkSource.generatePassword(request) } returns
                 Result.success(generatedPassword)
 
-            coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+            coEvery { vaultSdkSource.encryptPasswordHistory(any(), any()) } returns
                 Result.success(encryptedPasswordHistory)
 
             coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
@@ -156,7 +156,7 @@ class GeneratorRepositoryTest {
             coEvery { generatorSdkSource.generatePassword(request) } returns
                 Result.success(generatedPassword)
 
-            coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+            coEvery { vaultSdkSource.encryptPasswordHistory(any(), any()) } returns
                 Result.success(encryptedPasswordHistory)
 
             coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
@@ -220,7 +220,7 @@ class GeneratorRepositoryTest {
             coEvery { generatorSdkSource.generatePassphrase(request) } returns
                 Result.success(generatedPassphrase)
 
-            coEvery { vaultSdkSource.encryptPasswordHistory(any()) } returns
+            coEvery { vaultSdkSource.encryptPasswordHistory(any(), any()) } returns
                 Result.success(encryptedPasswordHistory)
 
             coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
@@ -232,7 +232,7 @@ class GeneratorRepositoryTest {
                 (result as GeneratedPassphraseResult.Success).generatedString,
             )
             coVerify { generatorSdkSource.generatePassphrase(request) }
-            coVerify { vaultSdkSource.encryptPasswordHistory(any()) }
+            coVerify { vaultSdkSource.encryptPasswordHistory(any(), any()) }
             coVerify {
                 passwordHistoryDiskSource.insertPasswordHistory(
                     encryptedPasswordHistory.toPasswordHistoryEntity(userId),
@@ -406,7 +406,12 @@ class GeneratorRepositoryTest {
 
         coEvery { authDiskSource.userState?.activeUserId } returns testUserId
 
-        coEvery { vaultSdkSource.encryptPasswordHistory(passwordHistoryView) } returns
+        coEvery {
+            vaultSdkSource.encryptPasswordHistory(
+                userId = testUserId,
+                passwordHistory = passwordHistoryView,
+            )
+        } returns
             Result.success(encryptedPasswordHistory)
 
         coEvery {
@@ -415,7 +420,12 @@ class GeneratorRepositoryTest {
 
         repository.storePasswordHistory(passwordHistoryView)
 
-        coVerify { vaultSdkSource.encryptPasswordHistory(passwordHistoryView) }
+        coVerify {
+            vaultSdkSource.encryptPasswordHistory(
+                userId = testUserId,
+                passwordHistory = passwordHistoryView,
+            )
+        }
         coVerify { passwordHistoryDiskSource.insertPasswordHistory(expectedPasswordHistoryEntity) }
     }
 
@@ -451,7 +461,7 @@ class GeneratorRepositoryTest {
             } returns flowOf(encryptedPasswordHistoryEntities)
 
             coEvery {
-                vaultSdkSource.decryptPasswordHistoryList(any())
+                vaultSdkSource.decryptPasswordHistoryList(any(), any())
             } returns Result.success(decryptedPasswordHistoryList)
 
             val historyFlow = repository.passwordHistoryStateFlow
@@ -467,7 +477,7 @@ class GeneratorRepositoryTest {
                 passwordHistoryDiskSource.getPasswordHistoriesForUser(USER_STATE.activeUserId)
             }
 
-            coVerify { vaultSdkSource.decryptPasswordHistoryList(any()) }
+            coVerify { vaultSdkSource.decryptPasswordHistoryList(any(), any()) }
         }
 
     @Test

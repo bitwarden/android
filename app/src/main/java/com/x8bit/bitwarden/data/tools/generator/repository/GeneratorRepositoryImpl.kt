@@ -67,7 +67,11 @@ class GeneratorRepositoryImpl(
             .onStart { mutablePasswordHistoryStateFlow.value = LocalDataState.Loading }
             .map { encryptedPasswordHistoryList ->
                 val passwordHistories = encryptedPasswordHistoryList.map { it.toPasswordHistory() }
-                vaultSdkSource.decryptPasswordHistoryList(passwordHistories)
+                vaultSdkSource
+                    .decryptPasswordHistoryList(
+                        userId = userId,
+                        passwordHistoryList = passwordHistories,
+                    )
             }
             .onEach { encryptedPasswordHistoryListResult ->
                 mutablePasswordHistoryStateFlow.value = encryptedPasswordHistoryListResult.fold(
@@ -148,7 +152,10 @@ class GeneratorRepositoryImpl(
     override suspend fun storePasswordHistory(passwordHistoryView: PasswordHistoryView) {
         val userId = authDiskSource.userState?.activeUserId ?: return
         val encryptedPasswordHistory = vaultSdkSource
-            .encryptPasswordHistory(passwordHistoryView)
+            .encryptPasswordHistory(
+                userId = userId,
+                passwordHistory = passwordHistoryView,
+            )
             .getOrNull() ?: return
         passwordHistoryDiskSource.insertPasswordHistory(
             encryptedPasswordHistory.toPasswordHistoryEntity(userId),
