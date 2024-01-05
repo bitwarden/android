@@ -16,6 +16,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
@@ -38,6 +39,9 @@ import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -245,7 +249,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             it.copy(
                 viewState = VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(),
-                    type = VaultAddEditState.ViewState.Content.ItemType.Card,
+                    type = VaultAddEditState.ViewState.Content.ItemType.Card(),
                 ),
             )
         }
@@ -653,8 +657,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.ItemType.IdentityType.TitleSelected(
-                    title = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
+                VaultAddEditAction.ItemType.IdentityType.TitleSelect(
+                    title = VaultIdentityTitle.MX,
                 ),
             )
         }
@@ -670,7 +674,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.update { currentState ->
             updateIdentityType(currentState) {
                 copy(
-                    selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
+                    selectedTitle = VaultIdentityTitle.MX,
                 )
             }
         }
@@ -1212,6 +1216,239 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextContains("NewCountry")
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card changing the card holder name text field should trigger CardHolderNameTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Cardholder name")
+            .performTextInput(text = "TestCardHolderName")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.CardHolderNameTextChange(
+                    cardHolderName = "TestCardHolderName",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card the card holder name text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Cardholder name")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) { copy(cardHolderName = "NewCardHolderName") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Cardholder name")
+            .assertTextContains("NewCardHolderName")
+    }
+
+    @Test
+    fun `in ItemType_Card changing the number text field should trigger NumberTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Number")
+            .performTextInput(text = "TestNumber")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.NumberTextChange(
+                    number = "TestNumber",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Card the number text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Number")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) { copy(number = "123") }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Show")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Number")
+            .assertTextContains("123")
+    }
+
+    @Test
+    fun `in ItemType_Card selecting a brand should trigger BrandSelected`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Brand, -- Select --")
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "Visa")
+            .onLast()
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.BrandSelect(
+                    brand = VaultCardBrand.VISA,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card the Brand should display the selected brand from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Brand, -- Select --")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) {
+                copy(
+                    brand = VaultCardBrand.AMERICAN_EXPRESS,
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Brand, American Express")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card selecting an expiration month should trigger ExpirationMonthSelected`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        // Opens the menu
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Expiration month, -- Select --")
+            .performClick()
+
+        // Choose the option from the menu
+        composeTestRule
+            .onAllNodesWithText(text = "02 - February")
+            .onLast()
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.ExpirationMonthSelect(
+                    expirationMonth = VaultCardExpirationMonth.FEBRUARY,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card the Expiration month should display the selected expiration month from the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Expiration month, -- Select --")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) {
+                copy(
+                    expirationMonth = VaultCardExpirationMonth.MARCH,
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Expiration month, 03 - March")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card changing the expiration year text field should trigger ExpirationYearTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Expiration year")
+            .performTextInput(text = "TestExpirationYear")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.ExpirationYearTextChange(
+                    expirationYear = "TestExpirationYear",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card the expiration year text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Expiration year")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) { copy(expirationYear = "NewExpirationYear") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Expiration year")
+            .assertTextContains("NewExpirationYear")
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card changing the security code text field should trigger SecurityCodeTextChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Security code")
+            .performTextInput(text = "TestSecurityCode")
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange(
+                    securityCode = "TestSecurityCode",
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Card the security code text field should display the text provided by the state`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Security code")
+            .assertTextContains("")
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) { copy(securityCode = "123") }
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .onLast()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Security code")
+            .assertTextContains("123")
+    }
     @Test
     fun `clicking New Custom Field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
@@ -1754,6 +1991,29 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         return currentState.copy(viewState = updatedType)
     }
 
+    private fun updateCardType(
+        currentState: VaultAddEditState,
+        transform: VaultAddEditState.ViewState.Content.ItemType.Card.() ->
+        VaultAddEditState.ViewState.Content.ItemType.Card,
+    ): VaultAddEditState {
+        val updatedType = when (val viewState = currentState.viewState) {
+            is VaultAddEditState.ViewState.Content -> {
+                when (val type = viewState.type) {
+                    is VaultAddEditState.ViewState.Content.ItemType.Card -> {
+                        viewState.copy(
+                            type = type.transform(),
+                        )
+                    }
+
+                    else -> viewState
+                }
+            }
+
+            else -> viewState
+        }
+        return currentState.copy(viewState = updatedType)
+    }
+
     @Suppress("MaxLineLength")
     private fun updateCommonContent(
         currentState: VaultAddEditState,
@@ -1795,6 +2055,15 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
+            ),
+            dialog = null,
+        )
+
+        private val DEFAULT_STATE_CARD = VaultAddEditState(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Card(),
             ),
             dialog = null,
         )

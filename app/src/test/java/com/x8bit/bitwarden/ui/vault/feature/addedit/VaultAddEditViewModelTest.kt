@@ -16,6 +16,9 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -923,13 +926,125 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `TitleSelected should update title`() = runTest {
-            val action = VaultAddEditAction.ItemType.IdentityType.TitleSelected(
-                title = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
+        fun `TitleSelect should update title`() = runTest {
+            val action = VaultAddEditAction.ItemType.IdentityType.TitleSelect(
+                title = VaultIdentityTitle.MX,
             )
             val expectedState = createVaultAddItemState(
                 typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Identity(
-                    selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MX,
+                    selectedTitle = VaultIdentityTitle.MX,
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
+    inner class VaultAddCardTypeItemActions {
+        private lateinit var viewModel: VaultAddEditViewModel
+        private lateinit var vaultAddItemInitialState: VaultAddEditState
+        private lateinit var identityInitialSavedStateHandle: SavedStateHandle
+
+        @BeforeEach
+        fun setup() {
+            vaultAddItemInitialState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(),
+            )
+            identityInitialSavedStateHandle = createSavedStateHandleWithState(
+                state = vaultAddItemInitialState,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            )
+            viewModel = createAddVaultItemViewModel(
+                savedStateHandle = identityInitialSavedStateHandle,
+            )
+        }
+
+        @Test
+        fun `CardHolderNameTextChange should update card holder name`() = runTest {
+            val action = VaultAddEditAction.ItemType.CardType.CardHolderNameTextChange(
+                cardHolderName = "newCardHolderName",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    cardHolderName = "newCardHolderName",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `NumberTextChange should update number`() = runTest {
+            val action = VaultAddEditAction.ItemType.CardType.NumberTextChange(
+                number = "newNumber",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    number = "newNumber",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `BrandSelect should update brand`() = runTest {
+            val action = VaultAddEditAction.ItemType.CardType.BrandSelect(
+                brand = VaultCardBrand.VISA,
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    brand = VaultCardBrand.VISA,
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `ExpirationMonthSelect should update expiration month`() = runTest {
+            val action = VaultAddEditAction.ItemType.CardType.ExpirationMonthSelect(
+                expirationMonth = VaultCardExpirationMonth.JUNE,
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    expirationMonth = VaultCardExpirationMonth.JUNE,
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `ExpirationYearTextChange should update expiration year`() = runTest {
+            val action = VaultAddEditAction.ItemType.CardType.ExpirationYearTextChange(
+                expirationYear = "newExpirationYear",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    expirationYear = "newExpirationYear",
+                ),
+            )
+            viewModel.actionChannel.trySend(action)
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `SecurityCodeTextChange should update security code`() = runTest {
+            val action = VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange(
+                securityCode = "newSecurityCode",
+            )
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    securityCode = "newSecurityCode",
                 ),
             )
             viewModel.actionChannel.trySend(action)

@@ -14,10 +14,12 @@ import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import java.time.Instant
 
 /**
- * Transforms a [VaultAddEditState.ViewState.ItemType] into [CipherView].
+ * Transforms [VaultAddEditState.ViewState.Content] into [CipherView].
  */
 fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
     CipherView(
@@ -64,14 +66,23 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCipherType(): CipherT
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toCardView(): CardView? =
     (this as? VaultAddEditState.ViewState.Content.ItemType.Card)?.let {
-        // TODO Create real CardView from Content (BIT-668)
         CardView(
-            cardholderName = null,
-            expMonth = null,
-            expYear = null,
-            code = null,
-            brand = null,
-            number = null,
+            cardholderName = it.cardHolderName.orNullIfBlank(),
+            expMonth = it
+                .expirationMonth
+                .takeUnless { month ->
+                    month == VaultCardExpirationMonth.SELECT
+                }
+                ?.name,
+            expYear = it.expirationYear.orNullIfBlank(),
+            code = it.securityCode.orNullIfBlank(),
+            brand = it
+                .brand
+                .takeUnless { brand ->
+                    brand == VaultCardBrand.SELECT
+                }
+                ?.name,
+            number = it.number.orNullIfBlank(),
         )
     }
 

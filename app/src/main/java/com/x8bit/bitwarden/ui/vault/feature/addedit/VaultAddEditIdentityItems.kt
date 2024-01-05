@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -391,21 +392,21 @@ fun LazyListScope.vaultAddEditIdentityItems(
 
 @Composable
 private fun TitleMultiSelectButton(
-    selectedTitle: VaultAddEditState.ViewState.Content.ItemType.Identity.Title,
-    onTitleSelected: (VaultAddEditState.ViewState.Content.ItemType.Identity.Title) -> Unit,
+    selectedTitle: VaultIdentityTitle,
+    onTitleSelected: (VaultIdentityTitle) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val resources = LocalContext.current.resources
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.title),
-        options = VaultAddEditState.ViewState.Content.ItemType.Identity.Title
+        options = VaultIdentityTitle
             .entries
             .map { it.value() }
             .toImmutableList(),
         selectedOption = selectedTitle.value(),
         onOptionSelected = { selectedString ->
             onTitleSelected(
-                VaultAddEditState.ViewState.Content.ItemType.Identity.Title
+                VaultIdentityTitle
                     .entries
                     .first { it.value.toString(resources) == selectedString },
             )
