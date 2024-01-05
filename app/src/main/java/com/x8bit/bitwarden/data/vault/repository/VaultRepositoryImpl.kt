@@ -320,6 +320,7 @@ class VaultRepositoryImpl(
             emit(
                 vaultSdkSource
                     .initializeCrypto(
+                        userId = userId,
                         request = InitUserCryptoRequest(
                             kdfParams = kdf,
                             email = email,
@@ -336,6 +337,7 @@ class VaultRepositoryImpl(
                             result is InitializeCryptoResult.Success
                         ) {
                             vaultSdkSource.initializeOrganizationCrypto(
+                                userId = userId,
                                 request = InitOrgCryptoRequest(
                                     organizationKeys = organizationKeys,
                                 ),
@@ -363,7 +365,10 @@ class VaultRepositoryImpl(
 
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult =
         vaultSdkSource
-            .encryptCipher(cipherView = cipherView)
+            .encryptCipher(
+                userId = requireNotNull(activeUserId),
+                cipherView = cipherView,
+            )
             .flatMap { cipher ->
                 ciphersService
                     .createCipher(
@@ -385,7 +390,10 @@ class VaultRepositoryImpl(
         cipherView: CipherView,
     ): UpdateCipherResult =
         vaultSdkSource
-            .encryptCipher(cipherView = cipherView)
+            .encryptCipher(
+                userId = requireNotNull(activeUserId),
+                cipherView = cipherView,
+            )
             .flatMap { cipher ->
                 ciphersService.updateCipher(
                     cipherId = cipherId,
@@ -421,6 +429,7 @@ class VaultRepositoryImpl(
     // TODO: This is temporary. Eventually this needs to be based on the presence of various
     //  user keys but this will likely require SDK updates to support this (BIT-1190).
     private fun setVaultToLocked(userId: String) {
+        vaultSdkSource.clearCrypto(userId = userId)
         mutableVaultStateStateFlow.update {
             it.copy(
                 unlockedVaultUserIds = it.unlockedVaultUserIds - userId,
@@ -473,6 +482,7 @@ class VaultRepositoryImpl(
         // the return type here.
         vaultSdkSource
             .initializeOrganizationCrypto(
+                userId = syncResponse.profile.id,
                 request = InitOrgCryptoRequest(
                     organizationKeys = organizationKeys,
                 ),
@@ -484,10 +494,15 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<CipherView>>> =
         vaultDiskSource
             .getCiphers(userId = userId)
-            .onStart { mutableCiphersStateFlow.value = DataState.Loading }
+            .onStart {
+                mutableCiphersStateFlow.value = DataState.Loading
+            }
             .map {
                 vaultSdkSource
-                    .decryptCipherList(cipherList = it.toEncryptedSdkCipherList())
+                    .decryptCipherList(
+                        userId = userId,
+                        cipherList = it.toEncryptedSdkCipherList(),
+                    )
                     .fold(
                         onSuccess = { ciphers -> DataState.Loaded(ciphers) },
                         onFailure = { throwable -> DataState.Error(throwable) },
@@ -503,7 +518,10 @@ class VaultRepositoryImpl(
             .onStart { mutableFoldersStateFlow.value = DataState.Loading }
             .map {
                 vaultSdkSource
-                    .decryptFolderList(folderList = it.toEncryptedSdkFolderList())
+                    .decryptFolderList(
+                        userId = userId,
+                        folderList = it.toEncryptedSdkFolderList(),
+                    )
                     .fold(
                         onSuccess = { folders -> DataState.Loaded(folders) },
                         onFailure = { throwable -> DataState.Error(throwable) },
@@ -519,7 +537,10 @@ class VaultRepositoryImpl(
             .onStart { mutableCollectionsStateFlow.value = DataState.Loading }
             .map {
                 vaultSdkSource
-                    .decryptCollectionList(collectionList = it.toEncryptedSdkCollectionList())
+                    .decryptCollectionList(
+                        userId = userId,
+                        collectionList = it.toEncryptedSdkCollectionList(),
+                    )
                     .fold(
                         onSuccess = { collections -> DataState.Loaded(collections) },
                         onFailure = { throwable -> DataState.Error(throwable) },
@@ -535,7 +556,10 @@ class VaultRepositoryImpl(
             .onStart { mutableSendDataStateFlow.value = DataState.Loading }
             .map {
                 vaultSdkSource
-                    .decryptSendList(sendList = it.toEncryptedSdkSendList())
+                    .decryptSendList(
+                        userId = userId,
+                        sendList = it.toEncryptedSdkSendList(),
+                    )
                     .fold(
                         onSuccess = { sends -> DataState.Loaded(SendData(sends)) },
                         onFailure = { throwable -> DataState.Error(throwable) },

@@ -6,6 +6,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthToke
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -25,6 +27,10 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideBitwardenDispatchers(): DispatcherManager = DispatcherManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideSdkClientManager(): SdkClientManager = SdkClientManagerImpl()
 
     @Provides
     @Singleton
