@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
@@ -15,7 +14,6 @@ import androidx.core.net.toUri
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -105,28 +103,6 @@ class AboutScreenTest : BaseComposeTest() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify {
             viewModel.trySendAction(AboutAction.WebVaultClick)
-        }
-    }
-
-    @Test
-    fun `on CopyToClipboard should call setText on ClipboardManager`() {
-        val text = "copy text"
-        val clipboardManager = mockk<ClipboardManager> {
-            every { setText(any()) } just Runs
-        }
-        val viewModel = mockk<AboutViewModel> {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns flowOf(AboutEvent.CopyToClipboard(text.asText()))
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-                clipboardManager = clipboardManager,
-            )
-        }
-        verify {
-            clipboardManager.setText(text.toAnnotatedString())
         }
     }
 

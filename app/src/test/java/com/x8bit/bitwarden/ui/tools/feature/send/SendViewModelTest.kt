@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
@@ -27,6 +28,8 @@ import org.junit.jupiter.api.Test
 class SendViewModelTest : BaseViewModelTest() {
 
     private val mutableSendDataFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
+
+    private val clipboardManager: BitwardenClipboardManager = mockk()
     private val vaultRepo: VaultRepository = mockk {
         every { sendDataStateFlow } returns mutableSendDataFlow
     }
@@ -232,11 +235,13 @@ class SendViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         state: SendState? = null,
+        bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         vaultRepository: VaultRepository = vaultRepo,
     ): SendViewModel = SendViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
         },
+        clipboardManager = bitwardenClipboardManager,
         vaultRepo = vaultRepository,
     )
 }

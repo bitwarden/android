@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
-import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -23,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
@@ -41,9 +39,6 @@ class SendScreenTest : BaseComposeTest() {
 
     private var onNavigateToNewSendCalled = false
 
-    private val clipboardManager = mockk<ClipboardManager> {
-        every { setText(any()) } just runs
-    }
     private val intentHandler = mockk<IntentHandler> {
         every { launchUri(any()) } just runs
     }
@@ -60,18 +55,8 @@ class SendScreenTest : BaseComposeTest() {
             SendScreen(
                 viewModel = viewModel,
                 onNavigateToAddSend = { onNavigateToNewSendCalled = true },
-                clipboardManager = clipboardManager,
                 intentHandler = intentHandler,
             )
-        }
-    }
-
-    @Test
-    fun `on CopyToClipboard should call setText on the clipboardManager`() {
-        val text = "copy text"
-        mutableEventFlow.tryEmit(SendEvent.CopyToClipboard(text.asText()))
-        verify {
-            clipboardManager.setText(text.toAnnotatedString())
         }
     }
 

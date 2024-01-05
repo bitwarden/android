@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -23,8 +24,10 @@ import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -50,6 +53,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val totpTestCodeFlow: MutableSharedFlow<String> = bufferedMutableSharedFlow()
 
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
+
+    private val clipboardManager: BitwardenClipboardManager = mockk()
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableVaultItemFlow
         every { totpCodeFlow } returns totpTestCodeFlow
@@ -570,23 +575,20 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 }
             }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `CopyTotpKeyClick should emit a toast and CopyToClipboard`() = runTest {
+        fun `CopyTotpKeyClick should call setText on ClipboardManager`() {
             val viewModel = createAddVaultItemViewModel()
             val testKey = "TestKey"
+            every { clipboardManager.setText(text = testKey) } just runs
 
-            viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
-                    VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
-                        testKey,
-                    ),
-                )
+            viewModel.actionChannel.trySend(
+                VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
+                    testKey,
+                ),
+            )
 
-                assertEquals(
-                    VaultAddEditEvent.CopyToClipboard(testKey),
-                    awaitItem(),
-                )
+            verify(exactly = 1) {
+                clipboardManager.setText(text = testKey)
             }
         }
 
@@ -1068,6 +1070,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             viewModel = VaultAddEditViewModel(
                 savedStateHandle = secureNotesInitialSavedStateHandle,
+                clipboardManager = clipboardManager,
                 vaultRepository = vaultRepository,
             )
         }
@@ -1368,10 +1371,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     private fun createAddVaultItemViewModel(
         savedStateHandle: SavedStateHandle = loginInitialSavedStateHandle,
+        bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         vaultRepo: VaultRepository = vaultRepository,
     ): VaultAddEditViewModel =
         VaultAddEditViewModel(
             savedStateHandle = savedStateHandle,
+            clipboardManager = bitwardenClipboardManager,
             vaultRepository = vaultRepo,
         )
 

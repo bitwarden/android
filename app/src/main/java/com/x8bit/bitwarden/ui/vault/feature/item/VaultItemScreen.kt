@@ -18,8 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,7 +29,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -53,7 +50,6 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHand
 @Composable
 fun VaultItemScreen(
     viewModel: VaultItemViewModel = hiltViewModel(),
-    clipboardManager: ClipboardManager = LocalClipboardManager.current,
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
     onNavigateBack: () -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
@@ -63,10 +59,6 @@ fun VaultItemScreen(
     val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is VaultItemEvent.CopyToClipboard -> {
-                clipboardManager.setText(event.message.toString(resources).toAnnotatedString())
-            }
-
             VaultItemEvent.NavigateBack -> onNavigateBack()
 
             is VaultItemEvent.NavigateToEdit -> onNavigateToVaultEditItem(event.itemId)

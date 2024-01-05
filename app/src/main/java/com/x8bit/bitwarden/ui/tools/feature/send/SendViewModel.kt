@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
@@ -32,6 +33,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -324,11 +326,6 @@ sealed class SendAction {
  * Models events for the send screen.
  */
 sealed class SendEvent {
-    /**
-     * Copies the given [message] to the clipboard.
-     */
-    data class CopyToClipboard(val message: Text) : SendEvent()
-
     /**
      * Navigate to the new send screen.
      */

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -32,7 +31,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.FakePermissionManager
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
@@ -43,9 +41,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -58,8 +54,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateQrCodeScanScreenCalled = false
-
-    private val clipboardManager = mockk<ClipboardManager>()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -78,7 +72,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 permissionsManager = fakePermissionManager,
-                clipboardManager = clipboardManager,
                 onNavigateToQrCodeScanScreen = {
                     onNavigateQrCodeScanScreenCalled = true
                 },
@@ -97,19 +90,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `on NavigateToQrCodeScan event should invoke NavigateToQrCodeScan`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToQrCodeScan)
         assertTrue(onNavigateQrCodeScanScreenCalled)
-    }
-
-    @Test
-    fun `on CopyToClipboard should call setText on ClipboardManager`() {
-        val textString = "text"
-
-        every { clipboardManager.setText(textString.toAnnotatedString()) } just runs
-
-        mutableEventFlow.tryEmit(VaultAddEditEvent.CopyToClipboard(textString))
-
-        verify(exactly = 1) {
-            clipboardManager.setText(textString.toAnnotatedString())
-        }
     }
 
     @Test

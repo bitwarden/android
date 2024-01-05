@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
@@ -14,7 +15,10 @@ import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRep
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -65,6 +69,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
     }
 
+    private val clipboardManager: BitwardenClipboardManager = mockk()
     private val fakeGeneratorRepository = FakeGeneratorRepository().apply {
         setMockGeneratePasswordResult(
             GeneratedPasswordResult.Success("defaultPassword"),
@@ -209,11 +214,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick for plus addressed email state should update the plus addressed email correctly`() =
         runTest {
-            val viewModel = GeneratorViewModel(
-                usernameSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            val viewModel = createViewModel(usernameSavedStateHandle)
 
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("DifferentUsername"),
@@ -235,13 +236,14 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CopyClick should emit CopyTextToClipboard event`() = runTest {
+    fun `CopyClick should call setText on ClipboardManager`() {
         val viewModel = createViewModel()
+        every { clipboardManager.setText(viewModel.stateFlow.value.generatedText) } just runs
 
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(GeneratorAction.CopyClick)
+        viewModel.actionChannel.trySend(GeneratorAction.CopyClick)
 
-            assertEquals(GeneratorEvent.CopyTextToClipboard, awaitItem())
+        verify(exactly = 1) {
+            clipboardManager.setText(text = viewModel.stateFlow.value.generatedText)
         }
     }
 
@@ -451,11 +453,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassword"),
             )
-            viewModel = GeneratorViewModel(
-                initialPasscodeSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(initialPasscodeSavedStateHandle)
         }
 
         @Suppress("MaxLineLength")
@@ -828,11 +826,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassphrase"),
             )
-            viewModel = GeneratorViewModel(
-                passphraseSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(passphraseSavedStateHandle)
         }
 
         @Test
@@ -969,12 +963,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel =
-                GeneratorViewModel(
-                    forwardedEmailAliasSavedStateHandle,
-                    fakeGeneratorRepository,
-                    authRepository,
-                )
+            viewModel = createViewModel(forwardedEmailAliasSavedStateHandle)
         }
 
         @Test
@@ -1031,11 +1020,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                addyIoSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(addyIoSavedStateHandle)
         }
 
         @Test
@@ -1125,11 +1110,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                duckDuckGoSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(duckDuckGoSavedStateHandle)
         }
 
         @Test
@@ -1179,11 +1160,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                fastMailSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(fastMailSavedStateHandle)
         }
 
         @Test
@@ -1233,11 +1210,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                firefoxRelaySavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(firefoxRelaySavedStateHandle)
         }
 
         @Test
@@ -1288,11 +1261,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                simpleLoginSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(simpleLoginSavedStateHandle)
         }
 
         @Test
@@ -1343,11 +1312,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                usernameSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(usernameSavedStateHandle)
         }
 
         @Suppress("MaxLineLength")
@@ -1390,11 +1355,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                catchAllEmailSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(catchAllEmailSavedStateHandle)
         }
 
         @Suppress("MaxLineLength")
@@ -1436,11 +1397,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(
-                randomWordSavedStateHandle,
-                fakeGeneratorRepository,
-                authRepository,
-            )
+            viewModel = createViewModel(randomWordSavedStateHandle)
         }
 
         @Suppress("MaxLineLength")
@@ -1704,11 +1661,18 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         }
 
     private fun createViewModel(
-        state: GeneratorState? = initialPasscodeState,
+        savedStateHandle: SavedStateHandle,
     ): GeneratorViewModel = GeneratorViewModel(
-        savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        savedStateHandle = savedStateHandle,
+        clipboardManager = clipboardManager,
         generatorRepository = fakeGeneratorRepository,
         authRepository = authRepository,
+    )
+
+    private fun createViewModel(
+        state: GeneratorState? = initialPasscodeState,
+    ): GeneratorViewModel = createViewModel(
+        savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
 
     //endregion Helper Functions

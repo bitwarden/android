@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VerifyPasswordResult
@@ -36,6 +37,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class VaultItemViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
@@ -148,14 +150,14 @@ class VaultItemViewModel @Inject constructor(
                 }
                 return@onContent
             }
-            sendEvent(VaultItemEvent.CopyToClipboard(action.field.asText()))
+            clipboardManager.setText(text = action.field)
         }
     }
 
     private fun handleCopyCustomTextFieldClick(
         action: VaultItemAction.Common.CopyCustomTextFieldClick,
     ) {
-        sendEvent(VaultItemEvent.CopyToClipboard(action.field.asText()))
+        clipboardManager.setText(text = action.field)
     }
 
     private fun handleHiddenFieldVisibilityClicked(
@@ -244,12 +246,12 @@ class VaultItemViewModel @Inject constructor(
                 return@onLoginContent
             }
             val password = requireNotNull(login.passwordData?.password)
-            sendEvent(VaultItemEvent.CopyToClipboard(password.asText()))
+            clipboardManager.setText(text = password)
         }
     }
 
     private fun handleCopyUriClick(action: VaultItemAction.ItemType.Login.CopyUriClick) {
-        sendEvent(VaultItemEvent.CopyToClipboard(action.uri.asText()))
+        clipboardManager.setText(text = action.uri)
     }
 
     private fun handleCopyUsernameClick() {
@@ -261,7 +263,7 @@ class VaultItemViewModel @Inject constructor(
                 return@onLoginContent
             }
             val username = requireNotNull(login.username)
-            sendEvent(VaultItemEvent.CopyToClipboard(username.asText()))
+            clipboardManager.setText(text = username)
         }
     }
 
@@ -681,13 +683,6 @@ data class VaultItemState(
  * Represents a set of events related view a vault item.
  */
 sealed class VaultItemEvent {
-    /**
-     * Places the given [message] in your clipboard.
-     */
-    data class CopyToClipboard(
-        val message: Text,
-    ) : VaultItemEvent()
-
     /**
      * Navigates back.
      */

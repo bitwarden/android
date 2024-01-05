@@ -13,8 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,7 +23,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManagerImpl
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -50,7 +47,6 @@ fun VaultAddEditScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
     viewModel: VaultAddEditViewModel = hiltViewModel(),
-    clipboardManager: ClipboardManager = LocalClipboardManager.current,
     permissionsManager: PermissionsManager =
         PermissionsManagerImpl(LocalContext.current as Activity),
 ) {
@@ -66,10 +62,6 @@ fun VaultAddEditScreen(
 
             is VaultAddEditEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
-            }
-
-            is VaultAddEditEvent.CopyToClipboard -> {
-                clipboardManager.setText(event.text.toAnnotatedString())
             }
 
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()

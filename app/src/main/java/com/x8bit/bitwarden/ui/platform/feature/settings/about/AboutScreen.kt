@@ -29,8 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.ClipboardManager
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,7 +44,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
@@ -62,7 +59,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun AboutScreen(
     onNavigateBack: () -> Unit,
     viewModel: AboutViewModel = hiltViewModel(),
-    clipboardManager: ClipboardManager = LocalClipboardManager.current,
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -70,10 +66,6 @@ fun AboutScreen(
     val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is AboutEvent.CopyToClipboard -> {
-                clipboardManager.setText(event.text.toString(resources).toAnnotatedString())
-            }
-
             AboutEvent.NavigateBack -> onNavigateBack.invoke()
 
             AboutEvent.NavigateToHelpCenter -> {

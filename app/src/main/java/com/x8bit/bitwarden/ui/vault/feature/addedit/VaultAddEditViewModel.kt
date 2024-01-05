@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -48,6 +49,7 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions", "LargeClass")
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -435,11 +437,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleLoginCopyTotpKeyText(
         action: VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick,
     ) {
-        sendEvent(
-            event = VaultAddEditEvent.CopyToClipboard(
-                text = action.totpKey,
-            ),
-        )
+        clipboardManager.setText(text = action.totpKey)
     }
 
     private fun handleLoginUriSettingsClick() {
@@ -1225,11 +1223,6 @@ sealed class VaultAddEditEvent {
      * Shows a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultAddEditEvent()
-
-    /**
-     * Copy the given [text] to the clipboard.
-     */
-    data class CopyToClipboard(val text: String) : VaultAddEditEvent()
 
     /**
      * Navigate back to previous screen.

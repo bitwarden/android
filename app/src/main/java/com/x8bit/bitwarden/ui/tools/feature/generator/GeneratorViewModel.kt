@@ -11,6 +11,7 @@ import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.core.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
@@ -59,6 +60,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class GeneratorViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
     private val authRepository: AuthRepository,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
@@ -328,7 +330,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun handleCopyClick() {
-        sendEvent(GeneratorEvent.CopyTextToClipboard)
+        clipboardManager.setText(text = state.generatedText)
     }
 
     private fun handleUpdateGeneratedPasswordResult(
@@ -1948,11 +1950,6 @@ sealed class GeneratorEvent {
      * Navigates to the Password History screen.
      */
     data object NavigateToPasswordHistory : GeneratorEvent()
-
-    /**
-     * Copies text to the clipboard.
-     */
-    data object CopyTextToClipboard : GeneratorEvent()
 
     /**
      * Displays the message in a snackbar.
