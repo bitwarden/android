@@ -106,7 +106,7 @@ private fun String?.toTitleOrDefault(): VaultIdentityTitle =
     VaultIdentityTitle
         .entries
         .find { it.name == this }
-        ?: VaultIdentityTitle.MR
+        ?: VaultIdentityTitle.SELECT
 
 private fun String?.toBrandOrDefault(): VaultCardBrand =
     VaultCardBrand

@@ -625,7 +625,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Title, Mr")
+            .onNodeWithContentDescriptionAfterScroll(label = "Title, -- Select --")
             .performClick()
 
         // Choose the option from the menu
@@ -648,7 +648,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `in ItemType_Identity the Title should display the selected title from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Title, Mr")
+            .onNodeWithContentDescriptionAfterScroll(label = "Title, -- Select --")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->

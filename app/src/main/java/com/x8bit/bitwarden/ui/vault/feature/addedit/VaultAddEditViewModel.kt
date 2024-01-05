@@ -1108,7 +1108,7 @@ data class VaultAddEditState(
                  */
                 @Parcelize
                 data class Identity(
-                    val selectedTitle: VaultIdentityTitle = VaultIdentityTitle.MR,
+                    val selectedTitle: VaultIdentityTitle = VaultIdentityTitle.SELECT,
                     val firstName: String = "",
                     val middleName: String = "",
                     val lastName: String = "",
