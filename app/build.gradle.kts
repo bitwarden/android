@@ -4,6 +4,8 @@ import com.google.gms.googleservices.GoogleServicesTask
 
 plugins {
     alias(libs.plugins.android.application)
+    // Crashlytics is enabled for all builds initially but removed for FDroid builds in gradle and
+    // standardDebug builds in the merged manifest.
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt)
