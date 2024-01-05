@@ -5,9 +5,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,22 +25,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A Composable function that displays a row item.
  *
  * @param label The primary text label to display for the item.
- * @param supportingLabel An secondary text label to display beneath the label.
  * @param startIcon The [Painter] object used to draw the icon at the start of the item.
  * @param onClick The lambda to be invoked when the item is clicked.
- * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
- * This allows the caller to specify things like padding, size, etc.
  * @param selectionDataList A list of all the selection items to be displayed in the overflow
  * dialog.
+ * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
+ * This allows the caller to specify things like padding, size, etc.
+ * @param supportingLabel An optional secondary text label to display beneath the label.
+ * @param trailingLabelIcons An optional list of small icons to be displayed after the [label].
  */
 @Suppress("LongMethod")
 @Composable
@@ -49,6 +54,7 @@ fun BitwardenListItem(
     selectionDataList: List<SelectionItemData>,
     modifier: Modifier = Modifier,
     supportingLabel: String? = null,
+    trailingLabelIcons: List<IconResource> = emptyList(),
 ) {
     var shouldShowDialog by remember { mutableStateOf(false) }
     Row(
@@ -72,11 +78,28 @@ fun BitwardenListItem(
         )
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(weight = 1f, fill = false),
+                )
+
+                trailingLabelIcons.forEach {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        painter = it.iconPainter,
+                        contentDescription = it.contentDescription,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.size(16.dp),
+                    )
+                }
+            }
 
             supportingLabel?.let {
                 Text(

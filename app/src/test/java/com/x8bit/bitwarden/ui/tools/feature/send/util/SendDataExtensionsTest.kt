@@ -4,6 +4,7 @@ import com.bitwarden.core.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -36,8 +37,8 @@ class SendDataExtensionsTest {
     @Test
     fun `toViewState should return Content when SendData is not empty`() {
         val list = listOf(
-            createMockSendView(number = 1, type = SendType.FILE),
             createMockSendView(number = 2, type = SendType.TEXT),
+            createMockSendView(number = 1, type = SendType.FILE),
         )
         val sendData = SendData(list)
 
@@ -53,12 +54,22 @@ class SendDataExtensionsTest {
                         name = "mockName-1",
                         deletionDate = "Oct 27, 2023, 12:00 PM",
                         type = SendState.ViewState.Content.SendItem.Type.FILE,
+                        iconList = listOf(
+                            SendStatusIcon.EXPIRED,
+                            SendStatusIcon.PASSWORD,
+                            SendStatusIcon.MAX_ACCESS_COUNT_REACHED,
+                        ),
                     ),
                     SendState.ViewState.Content.SendItem(
                         id = "mockId-2",
                         name = "mockName-2",
                         deletionDate = "Oct 27, 2023, 12:00 PM",
                         type = SendState.ViewState.Content.SendItem.Type.TEXT,
+                        iconList = listOf(
+                            SendStatusIcon.EXPIRED,
+                            SendStatusIcon.PASSWORD,
+                            SendStatusIcon.MAX_ACCESS_COUNT_REACHED,
+                        ),
                     ),
                 ),
             ),

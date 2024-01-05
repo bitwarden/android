@@ -78,6 +78,7 @@ fun SendContent(
                 startIcon = painterResource(id = it.type.iconRes),
                 label = it.name,
                 supportingLabel = it.deletionDate,
+                trailingLabelIcons = it.iconList,
                 onClick = { sendHandlers.onSendClick(it) },
                 onCopyClick = { sendHandlers.onCopySendClick(it) },
                 onEditClick = { sendHandlers.onEditSendClick(it) },
