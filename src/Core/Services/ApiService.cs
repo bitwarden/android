@@ -629,7 +629,7 @@ namespace Bit.Core.Services
 
         public async Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier)
         {
-            var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
+            var path = "/sso/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())
             {
                 requestMessage.Version = new Version(1, 0);
