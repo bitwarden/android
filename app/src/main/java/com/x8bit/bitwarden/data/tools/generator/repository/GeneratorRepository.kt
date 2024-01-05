@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import kotlinx.coroutines.flow.StateFlow
 
@@ -37,6 +38,13 @@ interface GeneratorRepository {
     suspend fun generatePassphrase(
         passphraseGeneratorRequest: PassphraseGeneratorRequest,
     ): GeneratedPassphraseResult
+
+    /**
+     * Attempt to generate a forwarded service username.
+     */
+    suspend fun generatePlusAddressedEmail(
+        plusAddressedEmailGeneratorRequest: UsernameGeneratorRequest.Subaddress,
+    ): GeneratedPlusAddressedUsernameResult
 
     /**
      * Attempt to generate a forwarded service username.

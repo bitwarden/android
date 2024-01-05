@@ -51,6 +51,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                         .PasscodeType
                         .Password(),
                 ),
+            currentEmailAddress = "currentEmail",
         ),
     )
 
@@ -172,6 +173,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                         email = "email",
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -390,6 +392,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -424,6 +427,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -458,6 +462,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(minNumbers = initialMinNumbers),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -486,6 +491,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(minNumbers = initialMinNumbers),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -514,6 +520,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -548,6 +555,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -582,6 +590,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(minSpecial = initialSpecialChars),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -610,6 +619,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Password(minSpecial = initialSpecialChars),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -663,6 +673,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Passphrase(numWords = initialNumWords),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -698,6 +709,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Passphrase(numWords = initialNumWords),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -726,6 +738,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Passphrase(numWords = initialNumWords),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -755,6 +768,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Passphrase(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -789,6 +803,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Passphrase(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -821,6 +836,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Passphrase(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -852,6 +868,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .PasscodeType
                             .Passphrase(),
                     ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -884,6 +901,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                         selectedServiceType = null,
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -943,6 +961,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .AddyIo(),
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -985,6 +1004,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .AddyIo(),
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1031,6 +1051,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .DuckDuckGo(),
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1071,6 +1092,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .FastMail(),
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1111,6 +1133,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .FirefoxRelay(),
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1157,6 +1180,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                             .SimpleLogin(),
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1191,6 +1215,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                         email = "",
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1226,6 +1251,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                         domainName = "",
                     ),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1259,6 +1285,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.RandomWord(),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 
@@ -1284,6 +1311,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.RandomWord(),
                 ),
+                currentEmailAddress = "currentEmail",
             ),
         )
 

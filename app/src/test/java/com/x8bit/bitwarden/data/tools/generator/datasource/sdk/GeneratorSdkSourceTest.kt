@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
+import com.bitwarden.core.AppendType
 import com.bitwarden.core.ForwarderServiceType
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
@@ -67,6 +68,28 @@ class GeneratorSdkSourceTest {
 
             coVerify {
                 clientGenerators.passphrase(request)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generatePlusAddressedEmail should call SDK and return a Result with the generated email`() =
+        runBlocking {
+            val request = UsernameGeneratorRequest.Subaddress(
+                type = AppendType.Random,
+                email = "user@example.com",
+            )
+            val expectedResult = "user+generated@example.com"
+
+            coEvery {
+                clientGenerators.username(request)
+            } returns expectedResult
+
+            val result = generatorSdkSource.generatePlusAddressedEmail(request)
+
+            assertEquals(Result.success(expectedResult), result)
+            coVerify {
+                clientGenerators.username(request)
             }
         }
 
