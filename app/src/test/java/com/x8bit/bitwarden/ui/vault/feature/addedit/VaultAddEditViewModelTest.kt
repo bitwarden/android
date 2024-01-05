@@ -433,7 +433,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
-    inner class VaultAddLoginTypeItemActions {
+    inner class VaultAddEditLoginTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
 
         @BeforeEach
@@ -653,7 +653,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
-    inner class VaultAddIdentityTypeItemActions {
+    inner class VaultAddEditIdentityTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
         private lateinit var vaultAddItemInitialState: VaultAddEditState
         private lateinit var identityInitialSavedStateHandle: SavedStateHandle
@@ -944,7 +944,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
-    inner class VaultAddCardTypeItemActions {
+    inner class VaultAddEditCardTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
         private lateinit var vaultAddItemInitialState: VaultAddEditState
         private lateinit var identityInitialSavedStateHandle: SavedStateHandle
@@ -1056,7 +1056,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
-    inner class VaultAddItemCommonActions {
+    inner class VaultAddEditCommonActions {
         private lateinit var viewModel: VaultAddEditViewModel
         private lateinit var vaultAddItemInitialState: VaultAddEditState
         private lateinit var secureNotesInitialSavedStateHandle: SavedStateHandle
