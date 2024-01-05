@@ -47,6 +47,8 @@ import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTrans
  * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
  * @param autoFocus When set to true, the view will request focus after the first recomposition.
  * Setting this to true on multiple fields at once may have unexpected consequences.
+ * @param keyboardType The type of keyboard the user has access to when inputting values into
+ * the password field.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -61,6 +63,7 @@ fun BitwardenPasswordField(
     hint: String? = null,
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Password,
 ) {
     val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
@@ -76,7 +79,7 @@ fun BitwardenPasswordField(
         },
         singleLine = singleLine,
         readOnly = readOnly,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         supportingText = hint?.let {
             {
                 Text(
@@ -129,6 +132,8 @@ fun BitwardenPasswordField(
  * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
  * @param autoFocus When set to true, the view will request focus after the first recomposition.
  * Setting this to true on multiple fields at once may have unexpected consequences.
+ * @param keyboardType The type of keyboard the user has access to when inputting values into
+ * the password field.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -142,6 +147,7 @@ fun BitwardenPasswordField(
     initialShowPassword: Boolean = false,
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Password,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
     BitwardenPasswordField(
@@ -156,6 +162,7 @@ fun BitwardenPasswordField(
         hint = hint,
         showPasswordTestTag = showPasswordTestTag,
         autoFocus = autoFocus,
+        keyboardType = keyboardType,
     )
 }
 

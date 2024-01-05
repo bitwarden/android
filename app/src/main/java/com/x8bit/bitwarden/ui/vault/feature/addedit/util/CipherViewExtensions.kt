@@ -8,6 +8,9 @@ import com.bitwarden.core.FieldView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import java.util.UUID
 
@@ -28,7 +31,13 @@ fun CipherView.toViewState(): VaultAddEditState.ViewState =
             }
 
             CipherType.SECURE_NOTE -> VaultAddEditState.ViewState.Content.ItemType.SecureNotes
-            CipherType.CARD -> VaultAddEditState.ViewState.Content.ItemType.Card
+            CipherType.CARD -> VaultAddEditState.ViewState.Content.ItemType.Card(
+                cardHolderName = card?.cardholderName.orEmpty(),
+                number = card?.number.orEmpty(),
+                brand = card?.brand.toBrandOrDefault(),
+                expirationMonth = card?.expMonth.toExpirationMonthOrDefault(),
+                securityCode = card?.code.orEmpty(),
+            )
             CipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity(
                 selectedTitle = identity?.title.toTitleOrDefault(),
                 firstName = identity?.firstName.orEmpty(),
@@ -93,9 +102,20 @@ private fun FieldView.toCustomField() =
         )
     }
 
-@Suppress("MaxLineLength")
-private fun String?.toTitleOrDefault(): VaultAddEditState.ViewState.Content.ItemType.Identity.Title =
-    VaultAddEditState.ViewState.Content.ItemType.Identity.Title
+private fun String?.toTitleOrDefault(): VaultIdentityTitle =
+    VaultIdentityTitle
         .entries
         .find { it.name == this }
-        ?: VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MR
+        ?: VaultIdentityTitle.MR
+
+private fun String?.toBrandOrDefault(): VaultCardBrand =
+    VaultCardBrand
+        .entries
+        .find { it.name == this }
+        ?: VaultCardBrand.SELECT
+
+private fun String?.toExpirationMonthOrDefault(): VaultCardExpirationMonth =
+    VaultCardExpirationMonth
+        .entries
+        .find { it.name == this }
+        ?: VaultCardExpirationMonth.SELECT

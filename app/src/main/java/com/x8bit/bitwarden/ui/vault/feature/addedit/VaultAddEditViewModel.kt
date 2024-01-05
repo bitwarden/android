@@ -19,6 +19,9 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -94,6 +97,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common -> handleCommonActions(action)
             is VaultAddEditAction.ItemType.LoginType -> handleAddLoginTypeAction(action)
             is VaultAddEditAction.ItemType.IdentityType -> handleIdentityTypeActions(action)
+            is VaultAddEditAction.ItemType.CardType -> handleCardTypeActions(action)
             is VaultAddEditAction.Internal -> handleInternalActions(action)
         }
     }
@@ -157,7 +161,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddCardItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                type = VaultAddEditState.ViewState.Content.ItemType.Card,
+                type = VaultAddEditState.ViewState.Content.ItemType.Card(),
             )
         }
     }
@@ -224,11 +228,13 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleAddNewCustomFieldClick(
         action: VaultAddEditAction.Common.AddNewCustomFieldClick,
     ) {
-        val newCustomData: VaultAddEditState.Custom =
-            action.customFieldType.toCustomField(action.name)
 
-        updateCommonContent { loginType ->
-            loginType.copy(customFieldData = loginType.customFieldData + newCustomData)
+        updateCommonContent { common ->
+
+            val newCustomData: VaultAddEditState.Custom =
+                action.customFieldType.toCustomField(action.name)
+
+            common.copy(customFieldData = common.customFieldData + newCustomData)
         }
     }
 
@@ -529,7 +535,7 @@ class VaultAddEditViewModel @Inject constructor(
                 handleIdentityUsernameTextChange(action)
             }
 
-            is VaultAddEditAction.ItemType.IdentityType.TitleSelected -> {
+            is VaultAddEditAction.ItemType.IdentityType.TitleSelect -> {
                 handleIdentityTitleSelected(action)
             }
         }
@@ -638,11 +644,78 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleIdentityTitleSelected(
-        action: VaultAddEditAction.ItemType.IdentityType.TitleSelected,
+        action: VaultAddEditAction.ItemType.IdentityType.TitleSelect,
     ) {
         updateIdentityContent { it.copy(selectedTitle = action.title) }
     }
     //endregion Identity Type Handlers
+
+    //region Card Type Handlers
+    private fun handleCardTypeActions(action: VaultAddEditAction.ItemType.CardType) {
+        when (action) {
+            is VaultAddEditAction.ItemType.CardType.BrandSelect -> {
+                handleCardBrandSelected(action)
+            }
+
+            is VaultAddEditAction.ItemType.CardType.CardHolderNameTextChange -> {
+                handleCardCardHolderNameTextChange(action)
+            }
+
+            is VaultAddEditAction.ItemType.CardType.ExpirationMonthSelect -> {
+                handleCardExpirationMonthSelected(action)
+            }
+
+            is VaultAddEditAction.ItemType.CardType.ExpirationYearTextChange -> {
+                handleCardExpirationYearTextChange(action)
+            }
+
+            is VaultAddEditAction.ItemType.CardType.NumberTextChange -> {
+                handleCardNumberTextChange(action)
+            }
+
+            is VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange -> {
+                handleCardSecurityCodeTextChange(action)
+            }
+        }
+    }
+
+    private fun handleCardBrandSelected(
+        action: VaultAddEditAction.ItemType.CardType.BrandSelect,
+    ) {
+        updateCardContent { it.copy(brand = action.brand) }
+    }
+
+    private fun handleCardCardHolderNameTextChange(
+        action: VaultAddEditAction.ItemType.CardType.CardHolderNameTextChange,
+    ) {
+        updateCardContent { it.copy(cardHolderName = action.cardHolderName) }
+    }
+
+    private fun handleCardExpirationMonthSelected(
+        action: VaultAddEditAction.ItemType.CardType.ExpirationMonthSelect,
+    ) {
+        updateCardContent { it.copy(expirationMonth = action.expirationMonth) }
+    }
+
+    private fun handleCardExpirationYearTextChange(
+        action: VaultAddEditAction.ItemType.CardType.ExpirationYearTextChange,
+    ) {
+        updateCardContent { it.copy(expirationYear = action.expirationYear) }
+    }
+
+    private fun handleCardNumberTextChange(
+        action: VaultAddEditAction.ItemType.CardType.NumberTextChange,
+    ) {
+        updateCardContent { it.copy(number = action.number) }
+    }
+
+    private fun handleCardSecurityCodeTextChange(
+        action: VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange,
+    ) {
+        updateCardContent { it.copy(securityCode = action.securityCode) }
+    }
+
+    //endregion Card Type Handlers
 
     //region Internal Type Handlers
 
@@ -831,6 +904,19 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateCardContent(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Card) ->
+        VaultAddEditState.ViewState.Content.ItemType.Card,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.type as? VaultAddEditState.ViewState.Content.ItemType.Card)?.let {
+                currentContent.copy(
+                    type = block(it),
+                )
+            }
+        }
+    }
+
     //endregion Utility Functions
 }
 
@@ -980,9 +1066,23 @@ data class VaultAddEditState(
 
                 /**
                  * Represents the `Card` item type.
+                 *
+                 * @property cardHolderName The card holder name for the card item.
+                 * @property number The number for the card item.
+                 * @property brand The brand for the card item.
+                 * @property expirationMonth The expiration month for the card item.
+                 * @property expirationYear The expiration year for the card item.
+                 * @property securityCode The security code for the card item.
                  */
                 @Parcelize
-                data object Card : ItemType() {
+                data class Card(
+                    val cardHolderName: String = "",
+                    val number: String = "",
+                    val brand: VaultCardBrand = VaultCardBrand.SELECT,
+                    val expirationMonth: VaultCardExpirationMonth = VaultCardExpirationMonth.SELECT,
+                    val expirationYear: String = "",
+                    val securityCode: String = "",
+                ) : ItemType() {
                     override val displayStringResId: Int get() = ItemTypeOption.CARD.labelRes
                 }
 
@@ -1010,7 +1110,7 @@ data class VaultAddEditState(
                  */
                 @Parcelize
                 data class Identity(
-                    val selectedTitle: Title = Title.MR,
+                    val selectedTitle: VaultIdentityTitle = VaultIdentityTitle.MR,
                     val firstName: String = "",
                     val middleName: String = "",
                     val lastName: String = "",
@@ -1029,17 +1129,6 @@ data class VaultAddEditState(
                     val zip: String = "",
                     val country: String = "",
                 ) : ItemType() {
-
-                    /**
-                     * Defines all available title options for identities.
-                     */
-                    enum class Title(val value: Text) {
-                        MR(value = R.string.mr.asText()),
-                        MRS(value = R.string.mrs.asText()),
-                        MS(value = R.string.ms.asText()),
-                        MX(value = R.string.mx.asText()),
-                        DR(value = R.string.dr.asText()),
-                    }
 
                     override val displayStringResId: Int get() = ItemTypeOption.IDENTITY.labelRes
                 }
@@ -1450,9 +1539,62 @@ sealed class VaultAddEditAction {
              *
              * @property title The selected title.
              */
-            data class TitleSelected(
-                val title: VaultAddEditState.ViewState.Content.ItemType.Identity.Title,
+            data class TitleSelect(
+                val title: VaultIdentityTitle,
             ) : IdentityType()
+        }
+
+        /**
+         * Represents actions specific to the Card type.
+         */
+        sealed class CardType : ItemType() {
+
+            /**
+             * Fired when the card holder name text input is changed.
+             *
+             * @property cardHolderName The new card holder name text.
+             */
+            data class CardHolderNameTextChange(val cardHolderName: String) : CardType()
+
+            /**
+             * Fired when the number text input is changed.
+             *
+             * @property number The new number text.
+             */
+            data class NumberTextChange(val number: String) : CardType()
+
+            /**
+             * Fired when the brand input is selected.
+             *
+             * @property brand The selected brand.
+             */
+            data class BrandSelect(
+                val brand: VaultCardBrand,
+            ) : CardType()
+
+            /**
+             * Fired when the expiration month input is selected.
+             *
+             * @property expirationMonth The selected expiration month.
+             */
+            @Suppress("MaxLineLength")
+            data class ExpirationMonthSelect(
+                val expirationMonth: VaultCardExpirationMonth,
+            ) : CardType()
+
+            /**
+             * Fired when the expiration year text input is changed.
+             *
+             * @property expirationYear The new expiration year text.
+             */
+            data class ExpirationYearTextChange(val expirationYear: String) : CardType()
+
+            /**
+             * Fired when the security code text input is changed.
+             *
+             * @property securityCode The new security code text.
+             */
+            data class SecurityCodeTextChange(val securityCode: String) : CardType()
         }
     }
 

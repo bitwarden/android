@@ -201,7 +201,9 @@ fun VaultItemIdentityContent(
                     onValueChange = { },
                     readOnly = true,
                     singleLine = false,
-                    modifier = modifier,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 )
             }
         }

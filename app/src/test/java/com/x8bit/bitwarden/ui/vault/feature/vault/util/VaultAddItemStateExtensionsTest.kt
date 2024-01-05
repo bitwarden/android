@@ -14,6 +14,7 @@ import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -310,7 +311,7 @@ class VaultAddItemStateExtensionsTest {
                 ownership = "mockOwnership-1",
             ),
             type = VaultAddEditState.ViewState.Content.ItemType.Identity(
-                selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MR,
+                selectedTitle = VaultIdentityTitle.MR,
                 firstName = "mockFirstName",
                 lastName = "mockLastName",
                 middleName = "mockMiddleName",
@@ -407,7 +408,7 @@ class VaultAddItemStateExtensionsTest {
                 ownership = "mockOwnership-1",
             ),
             type = VaultAddEditState.ViewState.Content.ItemType.Identity(
-                selectedTitle = VaultAddEditState.ViewState.Content.ItemType.Identity.Title.MR,
+                selectedTitle = VaultIdentityTitle.MR,
                 firstName = "mockFirstName",
                 lastName = "mockLastName",
                 middleName = "mockMiddleName",

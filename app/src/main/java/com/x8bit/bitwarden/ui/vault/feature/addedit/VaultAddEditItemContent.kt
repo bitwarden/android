@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
@@ -32,6 +33,7 @@ fun VaultAddEditContent(
     commonTypeHandlers: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
+    cardItemTypeHandlers: VaultAddEditCardTypeHandlers,
     modifier: Modifier = Modifier,
     permissionsManager: PermissionsManager,
 ) {
@@ -39,9 +41,7 @@ fun VaultAddEditContent(
         onResult = { isGranted ->
             when (state.type) {
                 is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> Unit
-                // TODO: Create UI for card-type item creation BIT-507
                 is VaultAddEditState.ViewState.Content.ItemType.Card -> Unit
-                // TODO: Create UI for identity-type item creation BIT-667
                 is VaultAddEditState.ViewState.Content.ItemType.Identity -> Unit
                 is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                     loginItemTypeHandlers.onSetupTotpClick(isGranted)
@@ -91,7 +91,13 @@ fun VaultAddEditContent(
             }
 
             is VaultAddEditState.ViewState.Content.ItemType.Card -> {
-                // TODO(BIT-507): Create UI for card-type item creation
+                vaultAddEditCardItems(
+                    commonState = state.common,
+                    cardState = state.type,
+                    commonHandlers = commonTypeHandlers,
+                    cardHandlers = cardItemTypeHandlers,
+                    isAddItemMode = isAddItemMode,
+                )
             }
 
             is VaultAddEditState.ViewState.Content.ItemType.Identity -> {

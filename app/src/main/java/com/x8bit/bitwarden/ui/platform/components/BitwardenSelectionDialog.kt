@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -15,10 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 
 /**
  * Displays a dialog with a title and "Cancel" button.
@@ -28,6 +31,7 @@ import com.x8bit.bitwarden.R
  * @param selectionItems Lambda containing selection items to show to the user. See
  * [BitwardenSelectionRow].
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenSelectionDialog(
     title: String,
@@ -37,12 +41,18 @@ fun BitwardenSelectionDialog(
     Dialog(
         onDismissRequest = onDismissRequest,
     ) {
+        val configuration = LocalConfiguration.current
         val scrollState = rememberScrollState()
         Column(
-            modifier = Modifier.background(
-                color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                shape = RoundedCornerShape(28.dp),
-            ),
+            modifier = Modifier
+                .requiredHeightIn(
+                    max = configuration.maxDialogHeight,
+                )
+                // This background is necessary for the dialog to not be transparent.
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    shape = RoundedCornerShape(28.dp),
+                ),
             horizontalAlignment = Alignment.End,
         ) {
             Text(

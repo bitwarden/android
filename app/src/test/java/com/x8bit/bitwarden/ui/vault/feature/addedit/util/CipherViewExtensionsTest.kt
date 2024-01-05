@@ -68,7 +68,11 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
-                type = VaultAddEditState.ViewState.Content.ItemType.Card,
+                type = VaultAddEditState.ViewState.Content.ItemType.Card(
+                    cardHolderName = "Bit Warden",
+                    number = "4012888888881881",
+                    securityCode = "123",
+                ),
             ),
             result,
         )

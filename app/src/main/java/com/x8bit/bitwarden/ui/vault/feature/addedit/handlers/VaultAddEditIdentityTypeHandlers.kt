@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
+import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 
 /**
  * A collection of handler functions specifically tailored for managing actions
@@ -27,7 +27,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
  */
 @Suppress("LongParameterList")
 data class VaultAddEditIdentityTypeHandlers(
-    val onTitleSelected: (VaultAddEditState.ViewState.Content.ItemType.Identity.Title) -> Unit,
+    val onTitleSelected: (VaultIdentityTitle) -> Unit,
     val onFirstNameTextChange: (String) -> Unit,
     val onMiddleNameTextChange: (String) -> Unit,
     val onLastNameTextChange: (String) -> Unit,
@@ -57,7 +57,7 @@ data class VaultAddEditIdentityTypeHandlers(
             return VaultAddEditIdentityTypeHandlers(
                 onTitleSelected = { newTitle ->
                     viewModel.trySendAction(
-                        VaultAddEditAction.ItemType.IdentityType.TitleSelected(
+                        VaultAddEditAction.ItemType.IdentityType.TitleSelect(
                             title = newTitle,
                         ),
                     )

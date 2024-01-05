@@ -16,6 +16,13 @@ enum class VaultLinkedFieldType(
 ) {
     USERNAME(id = 100.toUInt(), label = R.string.username.asText()),
     PASSWORD(id = 101.toUInt(), label = R.string.password.asText()),
+
+    CARDHOLDER_NAME(id = 300.toUInt(), label = R.string.cardholder_name.asText()),
+    EXPIRATION_MONTH(id = 301.toUInt(), label = R.string.expiration_month.asText()),
+    EXPIRATION_YEAR(id = 302.toUInt(), label = R.string.expiration_year.asText()),
+    SECURITY_CODE(id = 303.toUInt(), label = R.string.security_code.asText()),
+    BRAND(id = 304.toUInt(), label = R.string.brand.asText()),
+    NUMBER(id = 305.toUInt(), label = R.string.number.asText()),
     ;
 
     companion object {
