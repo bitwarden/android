@@ -20,6 +20,13 @@ interface GeneratorSdkSource {
     suspend fun generatePassphrase(request: PassphraseGeneratorRequest): Result<String>
 
     /**
+     * Generates a plus addressed email returning a [String] wrapped in a [Result].
+     */
+    suspend fun generatePlusAddressedEmail(
+        request: UsernameGeneratorRequest.Subaddress,
+    ): Result<String>
+
+    /**
      * Generates a forwarded service email returning a [String] wrapped in a [Result].
      */
     suspend fun generateForwardedServiceEmail(

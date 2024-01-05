@@ -26,6 +26,12 @@ class GeneratorSdkSourceImpl(
         clientGenerator.passphrase(request)
     }
 
+    override suspend fun generatePlusAddressedEmail(
+        request: UsernameGeneratorRequest.Subaddress,
+    ): Result<String> = runCatching {
+        clientGenerator.username(request)
+    }
+
     override suspend fun generateForwardedServiceEmail(
         request: UsernameGeneratorRequest.Forwarded,
     ): Result<String> = runCatching {

@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +31,11 @@ class FakeGeneratorRepository : GeneratorRepository {
     private val mutablePasswordHistoryStateFlow =
         MutableStateFlow<LocalDataState<List<PasswordHistoryView>>>(LocalDataState.Loading)
 
+    private var generatePlusAddressedEmailResult: GeneratedPlusAddressedUsernameResult =
+        GeneratedPlusAddressedUsernameResult.Success(
+            generatedEmailAddress = "email+abcd1234@address.com",
+        )
+
     private var generateForwardedServiceResult: GeneratedForwardedServiceUsernameResult =
         GeneratedForwardedServiceUsernameResult.Success(
             generatedEmailAddress = "updatedUsername",
@@ -49,6 +55,12 @@ class FakeGeneratorRepository : GeneratorRepository {
         passphraseGeneratorRequest: PassphraseGeneratorRequest,
     ): GeneratedPassphraseResult {
         return generatePassphraseResult
+    }
+
+    override suspend fun generatePlusAddressedEmail(
+        plusAddressedEmailGeneratorRequest: UsernameGeneratorRequest.Subaddress,
+    ): GeneratedPlusAddressedUsernameResult {
+        return generatePlusAddressedEmailResult
     }
 
     override suspend fun generateForwardedServiceUsername(

@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSourc
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
@@ -124,6 +125,19 @@ class GeneratorRepositoryImpl(
                     GeneratedPassphraseResult.Success(generatedPassphrase)
                 },
                 onFailure = { GeneratedPassphraseResult.InvalidRequest },
+            )
+
+    override suspend fun generatePlusAddressedEmail(
+        plusAddressedEmailGeneratorRequest: UsernameGeneratorRequest.Subaddress,
+    ): GeneratedPlusAddressedUsernameResult =
+        generatorSdkSource.generatePlusAddressedEmail(plusAddressedEmailGeneratorRequest)
+            .fold(
+                onSuccess = { generatedEmail ->
+                    GeneratedPlusAddressedUsernameResult.Success(generatedEmail)
+                },
+                onFailure = {
+                    GeneratedPlusAddressedUsernameResult.InvalidRequest
+                },
             )
 
     override suspend fun generateForwardedServiceUsername(

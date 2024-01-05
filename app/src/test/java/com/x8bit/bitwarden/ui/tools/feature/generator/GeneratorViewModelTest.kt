@@ -3,6 +3,9 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
@@ -10,6 +13,9 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerat
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -54,6 +60,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val initialRandomWordState = createRandomWordState()
     private val randomWordSavedStateHandle = createSavedStateHandleWithState(initialRandomWordState)
 
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val authRepository = mockk<AuthRepository>() {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
+
     private val fakeGeneratorRepository = FakeGeneratorRepository().apply {
         setMockGeneratePasswordResult(
             GeneratedPasswordResult.Success("defaultPassword"),
@@ -61,11 +72,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `initial state should be correct`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(initialPasscodeState, awaitItem())
-        }
+    fun `initial state should be correct when there is no saved state`() {
+        val viewModel = createViewModel(state = null)
+        assertEquals(initialPasscodeState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct when there is a saved state`() {
+        val viewModel = createViewModel(state = initialPasscodeState)
+        assertEquals(initialPasscodeState, viewModel.stateFlow.value)
     }
 
     @Suppress("MaxLineLength")
@@ -190,18 +205,34 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `RegenerateClick for username state should do nothing`() = runTest {
-        val viewModel = GeneratorViewModel(usernameSavedStateHandle, fakeGeneratorRepository)
+    fun `RegenerateClick for plus addressed email state should update the plus addressed email correctly`() =
+        runTest {
+            val viewModel = GeneratorViewModel(
+                usernameSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
 
-        fakeGeneratorRepository.setMockGeneratePasswordResult(
-            GeneratedPasswordResult.Success("DifferentUsername"),
-        )
+            fakeGeneratorRepository.setMockGeneratePasswordResult(
+                GeneratedPasswordResult.Success("DifferentUsername"),
+            )
 
-        viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
 
-        assertEquals(initialUsernameState, viewModel.stateFlow.value)
-    }
+            val expectedState =
+                initialPasscodeState.copy(
+                    generatedText = "email+abcd1234@address.com",
+                    selectedType = GeneratorState.MainType.Username(
+                        GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                            email = "currentEmail",
+                        ),
+                    ),
+                )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
 
     @Test
     fun `CopyClick should emit CopyTextToClipboard event`() = runTest {
@@ -246,7 +277,13 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         viewModel.actionChannel.trySend(action)
 
         val expectedState =
-            initialPasscodeState.copy(selectedType = GeneratorState.MainType.Username())
+            initialPasscodeState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                        email = "currentEmail",
+                    ),
+                ),
+            )
 
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
@@ -320,7 +357,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .MainType
                         .Username
                         .UsernameType
-                        .PlusAddressedEmail(),
+                        .PlusAddressedEmail(
+                            email = "currentEmail",
+                        ),
                 ),
             )
 
@@ -412,7 +451,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassword"),
             )
-            viewModel = GeneratorViewModel(initialPasscodeSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                initialPasscodeSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Suppress("MaxLineLength")
@@ -785,7 +828,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassphrase"),
             )
-            viewModel = GeneratorViewModel(passphraseSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                passphraseSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Test
@@ -923,7 +970,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @BeforeEach
         fun setup() {
             viewModel =
-                GeneratorViewModel(forwardedEmailAliasSavedStateHandle, fakeGeneratorRepository)
+                GeneratorViewModel(
+                    forwardedEmailAliasSavedStateHandle,
+                    fakeGeneratorRepository,
+                    authRepository,
+                )
         }
 
         @Test
@@ -980,7 +1031,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(addyIoSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                addyIoSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Test
@@ -1070,7 +1125,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(duckDuckGoSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                duckDuckGoSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Test
@@ -1120,7 +1179,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(fastMailSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                fastMailSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Test
@@ -1170,7 +1233,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(firefoxRelaySavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                firefoxRelaySavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Test
@@ -1221,7 +1288,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(simpleLoginSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                simpleLoginSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Test
@@ -1272,7 +1343,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(usernameSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                usernameSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Suppress("MaxLineLength")
@@ -1280,6 +1355,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         fun `EmailTextChange should update email correctly`() =
             runTest {
                 val newEmail = "test@example.com"
+                val newGeneratedEmail = "email+abcd1234@address.com"
                 viewModel.actionChannel.trySend(
                     GeneratorAction
                         .MainType
@@ -1314,7 +1390,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(catchAllEmailSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                catchAllEmailSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Suppress("MaxLineLength")
@@ -1356,7 +1436,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
-            viewModel = GeneratorViewModel(randomWordSavedStateHandle, fakeGeneratorRepository)
+            viewModel = GeneratorViewModel(
+                randomWordSavedStateHandle,
+                fakeGeneratorRepository,
+                authRepository,
+            )
         }
 
         @Suppress("MaxLineLength")
@@ -1437,6 +1521,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     avoidAmbiguousChars = avoidAmbiguousChars,
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createPassphraseState(
@@ -1456,6 +1541,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     includeNumber = includeNumber,
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createForwardedEmailAliasState(
@@ -1470,6 +1556,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     obfuscatedText = obfuscatedText,
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createAddyIoState(
@@ -1488,6 +1575,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .AddyIo(),
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createDuckDuckGoState(
@@ -1506,6 +1594,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .DuckDuckGo(),
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createFastMailState(
@@ -1524,6 +1613,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .FastMail(),
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createFirefoxRelayState(
@@ -1542,6 +1632,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .FirefoxRelay(),
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createSimpleLoginState(
@@ -1560,11 +1651,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .SimpleLogin(),
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createPlusAddressedEmailState(
         generatedText: String = "defaultPlusAddressedEmail",
-        email: String = "defaultEmail",
+        email: String = "currentEmail",
     ): GeneratorState =
         GeneratorState(
             generatedText = generatedText,
@@ -1573,6 +1665,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     email = email,
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createCatchAllEmailState(
@@ -1586,6 +1679,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     domainName = domain,
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createRandomWordState(
@@ -1601,6 +1695,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     includeNumber = includeNumber,
                 ),
             ),
+            currentEmailAddress = "currentEmail",
         )
 
     private fun createSavedStateHandleWithState(state: GeneratorState) =
@@ -1613,7 +1708,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     ): GeneratorViewModel = GeneratorViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
         generatorRepository = fakeGeneratorRepository,
+        authRepository = authRepository,
     )
 
     //endregion Helper Functions
 }
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "Active User",
+            email = "currentEmail",
+            environment = Environment.Us,
+            avatarColorHex = "#aa00aa",
+            isPremium = true,
+            isVaultUnlocked = true,
+            organizations = emptyList(),
+        ),
+    ),
+)

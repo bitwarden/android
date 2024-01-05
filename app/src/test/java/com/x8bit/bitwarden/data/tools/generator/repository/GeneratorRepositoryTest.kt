@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.tools.generator.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.AppendType
 import com.bitwarden.core.ForwarderServiceType
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
@@ -26,6 +27,7 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSourc
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.coEvery
@@ -259,6 +261,47 @@ class GeneratorRepositoryTest {
             assertTrue(result is GeneratedPassphraseResult.InvalidRequest)
             coVerify { generatorSdkSource.generatePassphrase(request) }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generatePlusAddressedEmail should return Success with generated email when SDK call is successful`() = runTest {
+        val userId = "testUserId"
+        val request = UsernameGeneratorRequest.Subaddress(
+            type = AppendType.Random,
+            email = "user@example.com",
+        )
+        val generatedEmail = "user+generated@example.com"
+
+        coEvery { authDiskSource.userState?.activeUserId } returns userId
+        coEvery { generatorSdkSource.generatePlusAddressedEmail(request) } returns
+            Result.success(generatedEmail)
+
+        val result = repository.generatePlusAddressedEmail(request)
+
+        assertEquals(
+            generatedEmail,
+            (result as GeneratedPlusAddressedUsernameResult.Success).generatedEmailAddress,
+        )
+        coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generatePlusAddressedEmail should return InvalidRequest on SDK failure`() = runTest {
+        val request = UsernameGeneratorRequest.Subaddress(
+            type = AppendType.Random,
+            email = "user@example.com",
+        )
+        val exception = RuntimeException("An error occurred")
+        coEvery {
+            generatorSdkSource.generatePlusAddressedEmail(request)
+        } returns Result.failure(exception)
+
+        val result = repository.generatePlusAddressedEmail(request)
+
+        assertTrue(result is GeneratedPlusAddressedUsernameResult.InvalidRequest)
+        coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
+    }
 
     @Test
     fun `generateForwardedService should emit Success result and store the generated email`() =

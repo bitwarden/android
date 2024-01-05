@@ -5,13 +5,17 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.AppendType
 import com.bitwarden.core.PassphraseGeneratorRequest
 import com.bitwarden.core.PasswordGeneratorRequest
+import com.bitwarden.core.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -56,8 +60,16 @@ private const val KEY_STATE = "state"
 class GeneratorViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val generatorRepository: GeneratorRepository,
+    private val authRepository: AuthRepository,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: INITIAL_STATE,
+    initialState = savedStateHandle[KEY_STATE] ?: GeneratorState(
+        generatedText = PLACEHOLDER_GENERATED_TEXT,
+        selectedType = Passcode(
+            selectedType = Password(),
+        ),
+        currentEmailAddress =
+        requireNotNull(authRepository.userStateFlow.value?.activeAccount?.email),
+    ),
 ) {
 
     //region Initialization and Overrides
@@ -111,8 +123,12 @@ class GeneratorViewModel @Inject constructor(
                 handleUpdateGeneratedPassphraseResult(action)
             }
 
-            is GeneratorAction.Internal.UpdateGeneratedUsernameResult -> {
-                handleUpdateGeneratedUsernameResult(action)
+            is GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult -> {
+                handleUpdatePlusAddressedGeneratedUsernameResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult -> {
+                handleUpdateForwadedServiceGeneratedUsernameResult(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameTypeOptionSelect -> {
@@ -205,10 +221,21 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun loadUsernameOptions(selectedType: Username) {
-        mutableStateFlow.update {
-            it.copy(selectedType = selectedType)
+        val updatedSelectedType = when (selectedType.selectedType) {
+            is PlusAddressedEmail -> Username(
+                selectedType = PlusAddressedEmail(
+                    // For convenience the default is an empty email value. We can supply the
+                    // dynamic value here before updating the state.
+                    email = state.currentEmailAddress,
+                ),
+            )
+
+            else -> selectedType
         }
-        // TODO: Generate different username types. Plus addressed email: BIT-655
+
+        mutableStateFlow.update {
+            it.copy(selectedType = updatedSelectedType)
+        }
     }
 
     private fun savePasswordOptionsToDisk(password: Password) {
@@ -336,8 +363,24 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleUpdateGeneratedUsernameResult(
-        action: GeneratorAction.Internal.UpdateGeneratedUsernameResult,
+    private fun handleUpdatePlusAddressedGeneratedUsernameResult(
+        action: GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult,
+    ) {
+        when (val result = action.result) {
+            is GeneratedPlusAddressedUsernameResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(generatedText = result.generatedEmailAddress)
+                }
+            }
+
+            GeneratedPlusAddressedUsernameResult.InvalidRequest -> {
+                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+            }
+        }
+    }
+
+    private fun handleUpdateForwadedServiceGeneratedUsernameResult(
+        action: GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult,
     ) {
         when (val result = action.result) {
             is GeneratedForwardedServiceUsernameResult.Success -> {
@@ -885,7 +928,9 @@ class GeneratorViewModel @Inject constructor(
                     }
 
                     is PlusAddressedEmail -> {
-                        // TODO: Implement plus addressed email generation (BIT-1335)
+                        if (isManualRegeneration) {
+                            generatePlusAddressedEmail(selectedType)
+                        }
                     }
 
                     is RandomWord -> {
@@ -899,7 +944,17 @@ class GeneratorViewModel @Inject constructor(
     private suspend fun generateForwardedEmailAlias(alias: ForwardedEmailAlias) {
         val request = alias.selectedServiceType?.toUsernameGeneratorRequest() ?: return
         val result = generatorRepository.generateForwardedServiceUsername(request)
-        sendAction(GeneratorAction.Internal.UpdateGeneratedUsernameResult(result))
+        sendAction(GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult(result))
+    }
+
+    private suspend fun generatePlusAddressedEmail(plusAddressedEmail: PlusAddressedEmail) {
+        val result = generatorRepository.generatePlusAddressedEmail(
+            UsernameGeneratorRequest.Subaddress(
+                type = AppendType.Random,
+                email = plusAddressedEmail.email,
+            ),
+        )
+        sendAction(GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult(result))
     }
 
     private inline fun updateGeneratorMainTypePasscode(
@@ -1119,13 +1174,6 @@ class GeneratorViewModel @Inject constructor(
 
     companion object {
         private const val PLACEHOLDER_GENERATED_TEXT = "Placeholder"
-
-        private val INITIAL_STATE: GeneratorState = GeneratorState(
-            generatedText = PLACEHOLDER_GENERATED_TEXT,
-            selectedType = Passcode(
-                selectedType = Password(),
-            ),
-        )
     }
 }
 
@@ -1135,11 +1183,13 @@ class GeneratorViewModel @Inject constructor(
  *
  * @param generatedText The text that is generated based on the selected options.
  * @param selectedType The currently selected main type for generating text.
+ * @param currentEmailAddress The email address for the current user.
  */
 @Parcelize
 data class GeneratorState(
     val generatedText: String,
     val selectedType: MainType,
+    val currentEmailAddress: String,
 ) : Parcelable {
 
     /**
@@ -1334,7 +1384,7 @@ data class GeneratorState(
                  */
                 @Parcelize
                 data class PlusAddressedEmail(
-                    val email: String = "PLACEHOLDER",
+                    val email: String = "",
                 ) : UsernameType(), Parcelable {
                     override val displayStringResId: Int
                         get() = UsernameTypeOption.PLUS_ADDRESSED_EMAIL.labelRes
@@ -1873,7 +1923,14 @@ sealed class GeneratorAction {
         /**
          * Indicates a generated text update is received.
          */
-        data class UpdateGeneratedUsernameResult(
+        data class UpdateGeneratedPlusAddessedUsernameResult(
+            val result: GeneratedPlusAddressedUsernameResult,
+        ) : Internal()
+
+        /**
+         * Indicates a generated text update is received.
+         */
+        data class UpdateGeneratedForwardedServiceUsernameResult(
             val result: GeneratedForwardedServiceUsernameResult,
         ) : Internal()
     }
