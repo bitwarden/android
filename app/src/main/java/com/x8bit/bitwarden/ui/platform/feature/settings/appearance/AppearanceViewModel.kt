@@ -40,17 +40,17 @@ class AppearanceViewModel @Inject constructor(
 
     private fun handleLanguageChanged(action: AppearanceAction.LanguageChange) {
         // TODO: BIT-1328 implement language selection support
-        mutableStateFlow.update { it.copy(language = action.newLanguage) }
+        mutableStateFlow.update { it.copy(language = action.language) }
     }
 
     private fun handleShowWebsiteIconsToggled(action: AppearanceAction.ShowWebsiteIconsToggle) {
         // TODO: BIT-541 add website icon support
-        mutableStateFlow.update { it.copy(showWebsiteIcons = action.newValue) }
+        mutableStateFlow.update { it.copy(showWebsiteIcons = action.showWebsiteIcons) }
     }
 
     private fun handleThemeChanged(action: AppearanceAction.ThemeChange) {
         // TODO: BIT-1327 add theme support
-        mutableStateFlow.update { it.copy(theme = action.newTheme) }
+        mutableStateFlow.update { it.copy(theme = action.theme) }
     }
 }
 
@@ -106,20 +106,20 @@ sealed class AppearanceAction {
      * Indicates that the user changed the Language.
      */
     data class LanguageChange(
-        val newLanguage: AppearanceState.Language,
+        val language: AppearanceState.Language,
     ) : AppearanceAction()
 
     /**
-     * Indicates that the user toggled the Show Website Icons switch to [newValue].
+     * Indicates that the user toggled the Show Website Icons switch to [showWebsiteIcons].
      */
     data class ShowWebsiteIconsToggle(
-        val newValue: Boolean,
+        val showWebsiteIcons: Boolean,
     ) : AppearanceAction()
 
     /**
      * Indicates that the user selected a new theme.
      */
     data class ThemeChange(
-        val newTheme: AppearanceState.Theme,
+        val theme: AppearanceState.Theme,
     ) : AppearanceAction()
 }
