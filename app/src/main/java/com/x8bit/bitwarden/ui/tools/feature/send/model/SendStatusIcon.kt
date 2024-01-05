@@ -28,4 +28,8 @@ enum class SendStatusIcon(
         iconRes = R.drawable.ic_send_max_access_count_reached,
         contentDescription = R.string.maximum_access_count_reached.asText(),
     ),
+    PENDING_DELETE(
+        iconRes = R.drawable.ic_send_pending_delete,
+        contentDescription = R.string.pending_delete.asText(),
+    ),
 }

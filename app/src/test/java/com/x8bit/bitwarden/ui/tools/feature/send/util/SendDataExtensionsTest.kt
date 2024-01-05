@@ -55,9 +55,10 @@ class SendDataExtensionsTest {
                         deletionDate = "Oct 27, 2023, 12:00 PM",
                         type = SendState.ViewState.Content.SendItem.Type.FILE,
                         iconList = listOf(
-                            SendStatusIcon.EXPIRED,
                             SendStatusIcon.PASSWORD,
                             SendStatusIcon.MAX_ACCESS_COUNT_REACHED,
+                            SendStatusIcon.EXPIRED,
+                            SendStatusIcon.PENDING_DELETE,
                         ),
                     ),
                     SendState.ViewState.Content.SendItem(
@@ -66,9 +67,10 @@ class SendDataExtensionsTest {
                         deletionDate = "Oct 27, 2023, 12:00 PM",
                         type = SendState.ViewState.Content.SendItem.Type.TEXT,
                         iconList = listOf(
-                            SendStatusIcon.EXPIRED,
                             SendStatusIcon.PASSWORD,
                             SendStatusIcon.MAX_ACCESS_COUNT_REACHED,
+                            SendStatusIcon.EXPIRED,
+                            SendStatusIcon.PENDING_DELETE,
                         ),
                     ),
                 ),
