@@ -257,11 +257,12 @@ class AuthDiskSourceTest {
             createMockOrganization(0),
             createMockOrganization(1),
         )
+        val mockOrganizationsMap = mockOrganizations.associateBy { it.id }
         fakeSharedPreferences
             .edit()
             .putString(
                 "${organizationsBaseKey}_$mockUserId",
-                json.encodeToString(mockOrganizations),
+                json.encodeToString(mockOrganizationsMap),
             )
             .apply()
         val actual = authDiskSource.getOrganizations(userId = mockUserId)
@@ -300,6 +301,7 @@ class AuthDiskSourceTest {
             createMockOrganization(0),
             createMockOrganization(1),
         )
+        val mockOrganizationsMap = mockOrganizations.associateBy { it.id }
         authDiskSource.storeOrganizations(
             userId = mockUserId,
             organizations = mockOrganizations,
@@ -309,7 +311,7 @@ class AuthDiskSourceTest {
             null,
         )
         assertEquals(
-            json.encodeToJsonElement(mockOrganizations),
+            json.encodeToJsonElement(mockOrganizationsMap),
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }

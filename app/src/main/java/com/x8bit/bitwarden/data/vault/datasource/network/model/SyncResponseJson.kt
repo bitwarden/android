@@ -205,14 +205,9 @@ data class SyncResponseJson(
          * @property seats The number of seats in the organization (nullable).
          * @property isEnabled If the organization is enabled.
          * @property providerType They type of provider for the organization (nullable).
-         * @property isResetPasswordEnrolled If reset password has been
-         * enrolled for the organization.
-         * @property shouldUseSecretsManager If the organization should use the secrets manager.
          * @property maxCollections The max collections of the organization (nullable).
          * @property isSelfHost If the organization is self hosted.
-         * @property shouldUseKeyConnector If the organization should use a key connector.
          * @property permissions The permissions of the organization.
-         * @property hasPublicAndPrivateKeys If the organization has public and private keys.
          * @property providerId The provider ID of the organization (nullable).
          * @property id The ID of the organization.
          * @property shouldUseGroups If the organization should use groups.
@@ -222,29 +217,17 @@ data class SyncResponseJson(
          * @property shouldUsersGetPremium If users of the organization get premium.
          * @property maxStorageGb The max storage in Gb of the organization (nullable).
          * @property identifier The identifier of the organization (nullable).
-         * @property shouldUseSso If the organization should use single sign on.
-         * @property shouldUseCustomPermissions If the organization should use custom permissions.
-         * @property isFamilySponsorshipAvailable If the organization has
-         * family sponsorship available.
-         * @property shouldUseResetPassword If the organization should use reset password.
-         * @property planProductType The plan product type of the organization.
-         * @property accessSecretsManager If the organization can access secrets manager.
          * @property use2fa If the organization uses 2FA.
          * @property familySponsorshipToDelete If the organization has a
          * family sponsorship to delete (nullable).
          * @property userId The user id (nullable).
-         * @property shouldUseActivateAutofillPolicy If the organization should
-         * use auto fill policy.
          * @property shouldUseEvents If the organization should use events.
          * @property familySponsorshipFriendlyName If the family sponsorship is a friendly name.
-         * @property isKeyConnectorEnabled If the key connector is enabled.
          * @property shouldUseTotp If he organization should use TOTP.
          * @property familySponsorshipLastSyncDate The last date the family sponsorship
          * was synced (nullable).
-         * @property shouldUseScim If the organization should use scim.
          * @property name The name of the organization (nullable).
          * @property shouldUseApi If the organization should use API.
-         * @property isSsoBound If the organization is sso bound.
          * @property familySponsorshipValidUntil The family sponsorship valid until
          * of the organization (nullable).
          * @property status The status of the organization.
@@ -269,26 +252,14 @@ data class SyncResponseJson(
             @SerialName("providerType")
             val providerType: Int?,
 
-            @SerialName("resetPasswordEnrolled")
-            val isResetPasswordEnrolled: Boolean,
-
-            @SerialName("useSecretsManager")
-            val shouldUseSecretsManager: Boolean,
-
             @SerialName("maxCollections")
             val maxCollections: Int?,
 
             @SerialName("selfHost")
             val isSelfHost: Boolean,
 
-            @SerialName("useKeyConnector")
-            val shouldUseKeyConnector: Boolean,
-
             @SerialName("permissions")
             val permissions: Permissions,
-
-            @SerialName("hasPublicAndPrivateKeys")
-            val hasPublicAndPrivateKeys: Boolean,
 
             @SerialName("providerId")
             val providerId: String?,
@@ -317,24 +288,6 @@ data class SyncResponseJson(
             @SerialName("identifier")
             val identifier: String?,
 
-            @SerialName("useSso")
-            val shouldUseSso: Boolean,
-
-            @SerialName("useCustomPermissions")
-            val shouldUseCustomPermissions: Boolean,
-
-            @SerialName("familySponsorshipAvailable")
-            val isFamilySponsorshipAvailable: Boolean,
-
-            @SerialName("useResetPassword")
-            val shouldUseResetPassword: Boolean,
-
-            @SerialName("planProductType")
-            val planProductType: Int,
-
-            @SerialName("accessSecretsManager")
-            val accessSecretsManager: Boolean,
-
             @SerialName("use2fa")
             val use2fa: Boolean,
 
@@ -344,17 +297,11 @@ data class SyncResponseJson(
             @SerialName("userId")
             val userId: String?,
 
-            @SerialName("useActivateAutofillPolicy")
-            val shouldUseActivateAutofillPolicy: Boolean,
-
             @SerialName("useEvents")
             val shouldUseEvents: Boolean,
 
             @SerialName("familySponsorshipFriendlyName")
             val familySponsorshipFriendlyName: String?,
-
-            @SerialName("keyConnectorEnabled")
-            val isKeyConnectorEnabled: Boolean,
 
             @SerialName("useTotp")
             val shouldUseTotp: Boolean,
@@ -363,17 +310,11 @@ data class SyncResponseJson(
             @Contextual
             val familySponsorshipLastSyncDate: ZonedDateTime?,
 
-            @SerialName("useScim")
-            val shouldUseScim: Boolean,
-
             @SerialName("name")
             val name: String?,
 
             @SerialName("useApi")
             val shouldUseApi: Boolean,
-
-            @SerialName("ssoBound")
-            val isSsoBound: Boolean,
 
             @SerialName("familySponsorshipValidUntil")
             @Contextual
@@ -437,7 +378,6 @@ data class SyncResponseJson(
          * @property shouldManageSso If sso should be managed.
          * @property shouldDeleteAssignedCollections If assigned collection should be deleted.
          * @property shouldManageUsers If users should be managed.
-         * @property shouldManageScim If scim should be managed.
          * @property shouldAccessImportExport If import/export should be accessed.
          * @property shouldEditAnyCollection If any collection should be edited.
          * @property shouldAccessEventLogs If event logs should be accessed.
@@ -469,9 +409,6 @@ data class SyncResponseJson(
 
             @SerialName("manageUsers")
             val shouldManageUsers: Boolean,
-
-            @SerialName("manageScim")
-            val shouldManageScim: Boolean,
 
             @SerialName("accessImportExport")
             val shouldAccessImportExport: Boolean,

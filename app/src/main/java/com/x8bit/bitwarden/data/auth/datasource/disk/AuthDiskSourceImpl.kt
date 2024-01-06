@@ -99,7 +99,12 @@ class AuthDiskSourceImpl(
         userId: String,
     ): List<SyncResponseJson.Profile.Organization>? =
         getString(key = "${ORGANIZATIONS_KEY}_$userId")
-            ?.let { json.decodeFromString(it) }
+            ?.let {
+                // The organizations are stored as a map
+                val organizationMap: Map<String, SyncResponseJson.Profile.Organization> =
+                    json.decodeFromString(it)
+                organizationMap.values.toList()
+            }
 
     override fun getOrganizationsFlow(
         userId: String,
@@ -113,7 +118,11 @@ class AuthDiskSourceImpl(
     ) {
         putString(
             key = "${ORGANIZATIONS_KEY}_$userId",
-            value = organizations?.let { json.encodeToString(it) },
+            value = organizations?.let { nonNullOrganizations ->
+                // The organizations are stored as a map
+                val organizationsMap = nonNullOrganizations.associateBy { it.id }
+                json.encodeToString(organizationsMap)
+            },
         )
         getMutableOrganizationsFlow(userId = userId).tryEmit(organizations)
     }
