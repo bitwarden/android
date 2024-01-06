@@ -43,6 +43,7 @@ class SendViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: SendState(
             viewState = SendState.ViewState.Loading,
+            dialogState = null,
         ),
 ) {
 
@@ -81,6 +82,7 @@ class SendViewModel @Inject constructor(
                         viewState = SendState.ViewState.Error(
                             message = R.string.generic_error_message.asText(),
                         ),
+                        dialogState = null,
                     )
                 }
             }
@@ -94,6 +96,7 @@ class SendViewModel @Inject constructor(
                                 .environmentUrlData
                                 .baseWebSendUrl,
                         ),
+                        dialogState = null,
                     )
                 }
             }
@@ -112,6 +115,7 @@ class SendViewModel @Inject constructor(
                                 .asText()
                                 .concat(R.string.internet_connection_required_message.asText()),
                         ),
+                        dialogState = null,
                     )
                 }
             }
@@ -154,7 +158,9 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleSyncClick() {
-        // TODO: Add loading dialog state BIT-481
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.Loading(R.string.syncing.asText()))
+        }
         vaultRepo.sync()
     }
 
@@ -163,22 +169,21 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleSendClick(action: SendAction.SendClick) {
-        // TODO: Navigate to the edit send screen BIT-??
+        // TODO: Navigate to the edit send screen (BIT-1387)
         sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handleShareClick(action: SendAction.ShareClick) {
-        // TODO: Create a link and use the share sheet BIT-??
-        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+        sendEvent(SendEvent.ShowShareSheet(action.sendItem.shareUrl))
     }
 
     private fun handleFileTypeClick() {
-        // TODO: Navigate to the file type send list screen BIT-??
+        // TODO: Navigate to the file type send list screen (BIT-1388)
         sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handleTextTypeClick() {
-        // TODO: Navigate to the text type send list screen BIT-??
+        // TODO: Navigate to the text type send list screen (BIT-1388)
         sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
     }
 }
@@ -189,6 +194,7 @@ class SendViewModel @Inject constructor(
 @Parcelize
 data class SendState(
     val viewState: ViewState,
+    val dialogState: DialogState?,
 ) : Parcelable {
 
     /**
@@ -258,6 +264,20 @@ data class SendState(
         data object Loading : ViewState() {
             override val shouldDisplayFab: Boolean get() = false
         }
+    }
+
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
     }
 }
 
@@ -352,6 +372,11 @@ sealed class SendEvent {
      * Navigate to the about send screen.
      */
     data object NavigateToAboutSend : SendEvent()
+
+    /**
+     * Show a share sheet with the given content.
+     */
+    data class ShowShareSheet(val url: String) : SendEvent()
 
     /**
      * Show a toast to the user.

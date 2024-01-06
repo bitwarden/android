@@ -114,6 +114,12 @@ class SendViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(SendAction.SyncClick)
 
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = SendState.DialogState.Loading(R.string.syncing.asText()),
+            ),
+            viewModel.stateFlow.value,
+        )
         verify {
             vaultRepo.sync()
         }
@@ -146,12 +152,15 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ShareClick should emit ShowToast`() = runTest {
+    fun `ShareClick should emit ShowShareSheet`() = runTest {
         val viewModel = createViewModel()
-        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+        val testUrl = "www.test.com"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { shareUrl } returns testUrl
+        }
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.ShareClick(sendItem))
-            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(SendEvent.ShowShareSheet(testUrl), awaitItem())
         }
     }
 
@@ -175,7 +184,8 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `VaultRepository SendData Error should update view state to Error`() {
-        val viewModel = createViewModel()
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
         mutableSendDataFlow.value = DataState.Error(Throwable("Fail"))
 
@@ -184,6 +194,7 @@ class SendViewModelTest : BaseViewModelTest() {
                 viewState = SendState.ViewState.Error(
                     message = R.string.generic_error_message.asText(),
                 ),
+                dialogState = null,
             ),
             viewModel.stateFlow.value,
         )
@@ -191,7 +202,8 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `VaultRepository SendData Loaded should update view state`() {
-        val viewModel = createViewModel()
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
             every {
@@ -201,24 +213,29 @@ class SendViewModelTest : BaseViewModelTest() {
 
         mutableSendDataFlow.value = DataState.Loaded(sendData)
 
-        assertEquals(SendState(viewState = viewState), viewModel.stateFlow.value)
+        assertEquals(
+            SendState(viewState = viewState, dialogState = null),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
     fun `VaultRepository SendData Loading should update view state to Loading`() {
-        val viewModel = createViewModel()
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
         mutableSendDataFlow.value = DataState.Loading
 
         assertEquals(
-            SendState(viewState = SendState.ViewState.Loading),
+            SendState(viewState = SendState.ViewState.Loading, dialogState = dialogState),
             viewModel.stateFlow.value,
         )
     }
 
     @Test
     fun `VaultRepository SendData NoNetwork should update view state to Error`() {
-        val viewModel = createViewModel()
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
         mutableSendDataFlow.value = DataState.NoNetwork()
 
@@ -229,6 +246,7 @@ class SendViewModelTest : BaseViewModelTest() {
                         .asText()
                         .concat(R.string.internet_connection_required_message.asText()),
                 ),
+                dialogState = null,
             ),
             viewModel.stateFlow.value,
         )
@@ -236,7 +254,8 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `VaultRepository SendData Pending should update view state`() {
-        val viewModel = createViewModel()
+        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
             every {
@@ -246,7 +265,10 @@ class SendViewModelTest : BaseViewModelTest() {
 
         mutableSendDataFlow.value = DataState.Pending(sendData)
 
-        assertEquals(SendState(viewState = viewState), viewModel.stateFlow.value)
+        assertEquals(
+            SendState(viewState = viewState, dialogState = dialogState),
+            viewModel.stateFlow.value,
+        )
     }
 
     private fun createViewModel(
@@ -269,4 +291,5 @@ private const val SEND_DATA_EXTENSIONS_PATH: String =
 
 private val DEFAULT_STATE: SendState = SendState(
     viewState = SendState.ViewState.Loading,
+    dialogState = null,
 )

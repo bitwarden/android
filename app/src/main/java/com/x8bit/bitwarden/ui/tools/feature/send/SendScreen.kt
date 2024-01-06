@@ -29,10 +29,12 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import kotlinx.collections.immutable.persistentListOf
@@ -58,6 +60,10 @@ fun SendScreen(
                 intentHandler.launchUri("https://bitwarden.com/products/send".toUri())
             }
 
+            is SendEvent.ShowShareSheet -> {
+                intentHandler.shareText(event.url)
+            }
+
             is SendEvent.ShowToast -> {
                 Toast
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
@@ -65,6 +71,10 @@ fun SendScreen(
             }
         }
     }
+
+    SendDialogs(
+        dialogState = state.dialogState,
+    )
 
     val sendHandlers = remember(viewModel) { SendHandlers.create(viewModel) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
@@ -157,5 +167,18 @@ fun SendScreen(
 
             SendState.ViewState.Loading -> BitwardenLoadingContent(modifier = modifier)
         }
+    }
+}
+
+@Composable
+private fun SendDialogs(
+    dialogState: SendState.DialogState?,
+) {
+    when (dialogState) {
+        is SendState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(dialogState.message),
+        )
+
+        null -> Unit
     }
 }

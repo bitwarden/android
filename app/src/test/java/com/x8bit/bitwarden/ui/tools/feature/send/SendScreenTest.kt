@@ -41,6 +41,7 @@ class SendScreenTest : BaseComposeTest() {
 
     private val intentHandler = mockk<IntentHandler> {
         every { launchUri(any()) } just runs
+        every { shareText(any()) } just runs
     }
     private val mutableEventFlow = bufferedMutableSharedFlow<SendEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -71,6 +72,15 @@ class SendScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(SendEvent.NavigateToAboutSend)
         verify {
             intentHandler.launchUri("https://bitwarden.com/products/send".toUri())
+        }
+    }
+
+    @Test
+    fun `on ShowShareSheet should call shareText on IntentHandler`() {
+        val text = "sharable stuff"
+        mutableEventFlow.tryEmit(SendEvent.ShowShareSheet(text))
+        verify {
+            intentHandler.shareText(text)
         }
     }
 
@@ -474,10 +484,27 @@ class SendScreenTest : BaseComposeTest() {
             .performClick()
         composeTestRule.assertNoDialogExists()
     }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        val loadingMessage = "syncing"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.Loading(loadingMessage.asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
 }
 
 private val DEFAULT_STATE: SendState = SendState(
     viewState = SendState.ViewState.Loading,
+    dialogState = null,
 )
 
 private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
