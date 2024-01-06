@@ -165,7 +165,7 @@ class EnvironmentRepositoryTest {
 }
 
 private const val ENVIRONMENT_EXTENSIONS_PATH =
-    "com.x8bit.bitwarden.data.platform.repository.util.EnvironmentExtensionsKt"
+    "com.x8bit.bitwarden.data.platform.repository.util.EnvironmentUrlDataJsonExtensionsKt"
 
 private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
     override var preAuthEnvironmentUrlData: EnvironmentUrlDataJson? = null
