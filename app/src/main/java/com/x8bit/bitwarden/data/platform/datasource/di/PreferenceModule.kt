@@ -20,5 +20,9 @@ object PreferenceModule {
     @Singleton
     fun provideDefaultSharedPreferences(
         application: Application,
-    ): SharedPreferences = application.getSharedPreferences(null, Context.MODE_PRIVATE)
+    ): SharedPreferences =
+        application.getSharedPreferences(
+            "${application.packageName}_preferences",
+            Context.MODE_PRIVATE,
+        )
 }
