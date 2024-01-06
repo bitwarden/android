@@ -52,4 +52,15 @@ class IntentHandler(private val context: Context) {
         }
         startActivity(Intent(Intent.ACTION_VIEW, newUri))
     }
+
+    /**
+     * Launches the share sheet with the given [text].
+     */
+    fun shareText(text: String) {
+        val sendIntent: Intent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, text)
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, null))
+    }
 }
