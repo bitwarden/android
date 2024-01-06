@@ -13,14 +13,18 @@ private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
 /**
  * Transforms [SendData] into [SendState.ViewState].
  */
-fun SendData.toViewState(): SendState.ViewState =
+fun SendData.toViewState(
+    baseWebSendUrl: String,
+): SendState.ViewState =
     this
         .sendViewList
         .takeUnless { it.isEmpty() }
-        ?.toSendContent()
+        ?.toSendContent(baseWebSendUrl)
         ?: SendState.ViewState.Empty
 
-private fun List<SendView>.toSendContent(): SendState.ViewState.Content {
+private fun List<SendView>.toSendContent(
+    baseWebSendUrl: String,
+): SendState.ViewState.Content {
     return SendState.ViewState.Content(
         textTypeCount = this.count { it.type == SendType.TEXT },
         fileTypeCount = this.count { it.type == SendType.FILE },
@@ -49,6 +53,7 @@ private fun List<SendView>.toSendContent(): SendState.ViewState.Content {
                             sendView.deletionDate.isBefore(Instant.now())
                         },
                     ),
+                    shareUrl = sendView.toSendUrl(baseWebSendUrl),
                 )
             }
             .sortedBy { it.name },

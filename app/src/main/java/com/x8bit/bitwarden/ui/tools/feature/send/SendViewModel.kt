@@ -6,7 +6,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -34,6 +36,7 @@ private const val KEY_STATE = "state"
 class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
+    private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -84,7 +87,14 @@ class SendViewModel @Inject constructor(
 
             is DataState.Loaded -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = dataState.data.toViewState())
+                    it.copy(
+                        viewState = dataState.data.toViewState(
+                            baseWebSendUrl = environmentRepo
+                                .environment
+                                .environmentUrlData
+                                .baseWebSendUrl,
+                        ),
+                    )
                 }
             }
 
@@ -108,7 +118,14 @@ class SendViewModel @Inject constructor(
 
             is DataState.Pending -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = dataState.data.toViewState())
+                    it.copy(
+                        viewState = dataState.data.toViewState(
+                            baseWebSendUrl = environmentRepo
+                                .environment
+                                .environmentUrlData
+                                .baseWebSendUrl,
+                        ),
+                    )
                 }
             }
         }
@@ -142,8 +159,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleCopyClick(action: SendAction.CopyClick) {
-        // TODO: Create a link and copy it to the clipboard BIT-??
-        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+        clipboardManager.setText(text = action.sendItem.shareUrl)
     }
 
     private fun handleSendClick(action: SendAction.SendClick) {
@@ -205,6 +221,7 @@ data class SendState(
                 val deletionDate: String,
                 val type: Type,
                 val iconList: List<SendStatusIcon>,
+                val shareUrl: String,
             ) : Parcelable {
                 /**
                  * Indicates the type of send this, a text or file.

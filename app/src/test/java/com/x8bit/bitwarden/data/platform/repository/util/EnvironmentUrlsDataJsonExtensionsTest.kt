@@ -3,9 +3,86 @@ package com.x8bit.bitwarden.data.platform.repository.util
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class EnvironmentUrlsDataJsonExtensionsTest {
+    @Test
+    fun `baseWebVaultUrlOrNull should return webVault when populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseWebVaultUrlOrNull
+        assertEquals("webVault", result)
+    }
+
+    @Test
+    fun `baseWebVaultUrlOrNull should return base when webvault is not populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+            .copy(webVault = null)
+            .baseWebVaultUrlOrNull
+        assertEquals("base", result)
+    }
+
+    @Test
+    fun `baseWebVaultUrlOrNull should return null when webvault and base are not populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+            .copy(
+                webVault = null,
+                base = "",
+            )
+            .baseWebVaultUrlOrNull
+        assertNull(result)
+    }
+
+    @Test
+    fun `baseWebVaultUrlOrDefault should return webVault when populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseWebVaultUrlOrDefault
+        assertEquals("webVault", result)
+    }
+
+    @Test
+    fun `baseWebVaultUrlOrDefault should return base when webvault is not populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+            .copy(webVault = null)
+            .baseWebVaultUrlOrDefault
+        assertEquals("base", result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `baseWebVaultUrlOrDefault should return the default when webvault and base are not populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+            .copy(
+                webVault = null,
+                base = "",
+            )
+            .baseWebVaultUrlOrDefault
+        assertEquals("https://vault.bitwarden.com", result)
+    }
+
+    @Test
+    fun `baseWebSendUrl should return the correct result when webVault when populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseWebSendUrl
+        assertEquals("webVault/#/send/", result)
+    }
+
+    @Test
+    fun `baseWebSendUrl should return the correct result when webvault is not populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+            .copy(webVault = null)
+            .baseWebSendUrl
+        assertEquals("base/#/send/", result)
+    }
+
+    @Test
+    fun `baseWebSendUrl should return the default when webvault and base are not populated`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+            .copy(
+                webVault = null,
+                base = "",
+            )
+            .baseWebSendUrl
+        assertEquals("https://send.bitwarden.com/#", result)
+    }
+
     @Test
     fun `labelOrBaseUrlHost should correctly convert US environment to the correct label`() {
         val environment = EnvironmentUrlDataJson.DEFAULT_US
@@ -52,20 +129,11 @@ class EnvironmentUrlsDataJsonExtensionsTest {
 
     @Test
     fun `toEnvironmentUrls should correctly convert custom urls to the expected type`() {
-        val environmentUrlData = EnvironmentUrlDataJson(
-            base = "base",
-            api = "api",
-            identity = "identity",
-            icon = "icon",
-            notifications = "notifications",
-            webVault = "webVault",
-            events = "events",
-        )
         assertEquals(
             Environment.SelfHosted(
-                environmentUrlData = environmentUrlData,
+                environmentUrlData = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA,
             ),
-            environmentUrlData.toEnvironmentUrls(),
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.toEnvironmentUrls(),
         )
     }
 
@@ -87,20 +155,11 @@ class EnvironmentUrlsDataJsonExtensionsTest {
 
     @Test
     fun `toEnvironmentUrlsOrDefault should correctly convert custom urls to the expected type`() {
-        val environmentUrlData = EnvironmentUrlDataJson(
-            base = "base",
-            api = "api",
-            identity = "identity",
-            icon = "icon",
-            notifications = "notifications",
-            webVault = "webVault",
-            events = "events",
-        )
         assertEquals(
             Environment.SelfHosted(
-                environmentUrlData = environmentUrlData,
+                environmentUrlData = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA,
             ),
-            environmentUrlData.toEnvironmentUrlsOrDefault(),
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.toEnvironmentUrlsOrDefault(),
         )
     }
 
@@ -112,3 +171,13 @@ class EnvironmentUrlsDataJsonExtensionsTest {
         )
     }
 }
+
+private val DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA = EnvironmentUrlDataJson(
+    base = "base",
+    api = "api",
+    identity = "identity",
+    icon = "icon",
+    notifications = "notifications",
+    webVault = "webVault",
+    events = "events",
+)
