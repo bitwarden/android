@@ -487,6 +487,7 @@ private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
         deletionDate = "1",
         type = SendState.ViewState.Content.SendItem.Type.FILE,
         iconList = emptyList(),
+        shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.ViewState.Content(
@@ -500,6 +501,7 @@ private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.
             deletionDate = "1",
             type = SendState.ViewState.Content.SendItem.Type.TEXT,
             iconList = emptyList(),
+            shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
         ),
     ),
 )

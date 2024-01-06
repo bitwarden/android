@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -30,6 +33,9 @@ class SendViewModelTest : BaseViewModelTest() {
     private val mutableSendDataFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
     private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val environmentRepo: EnvironmentRepository = mockk {
+        every { environment } returns Environment.Us
+    }
     private val vaultRepo: VaultRepository = mockk {
         every { sendDataStateFlow } returns mutableSendDataFlow
     }
@@ -114,12 +120,18 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CopyClick should emit ShowToast`() = runTest {
+    fun `CopyClick should call setText on the ClipboardManager`() {
         val viewModel = createViewModel()
-        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(SendAction.CopyClick(sendItem))
-            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        val testUrl = "www.test.com/"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { shareUrl } returns testUrl
+        }
+        every { clipboardManager.setText(testUrl) } just runs
+
+        viewModel.trySendAction(SendAction.CopyClick(sendItem))
+
+        verify(exactly = 1) {
+            clipboardManager.setText(testUrl)
         }
     }
 
@@ -182,7 +194,9 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
-            every { toViewState() } returns viewState
+            every {
+                toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
+            } returns viewState
         }
 
         mutableSendDataFlow.value = DataState.Loaded(sendData)
@@ -225,7 +239,9 @@ class SendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val viewState = mockk<SendState.ViewState.Content>()
         val sendData = mockk<SendData> {
-            every { toViewState() } returns viewState
+            every {
+                toViewState(Environment.Us.environmentUrlData.baseWebSendUrl)
+            } returns viewState
         }
 
         mutableSendDataFlow.value = DataState.Pending(sendData)
@@ -236,12 +252,14 @@ class SendViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: SendState? = null,
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
+        environmentRepository: EnvironmentRepository = environmentRepo,
         vaultRepository: VaultRepository = vaultRepo,
     ): SendViewModel = SendViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
         },
         clipboardManager = bitwardenClipboardManager,
+        environmentRepo = environmentRepository,
         vaultRepo = vaultRepository,
     )
 }
