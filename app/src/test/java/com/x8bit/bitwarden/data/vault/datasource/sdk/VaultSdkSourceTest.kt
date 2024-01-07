@@ -404,6 +404,24 @@ class VaultSdkSourceTest {
         }
 
     @Test
+    fun `encryptSend should call SDK and return correct data wrapped in a Result`() = runBlocking {
+        val userId = "userId"
+        val expectedResult = mockk<Send>()
+        val mockSendView = mockk<SendView>()
+        coEvery { clientVault.sends().encrypt(send = mockSendView) } returns expectedResult
+
+        val result = vaultSdkSource.encryptSend(
+            userId = userId,
+            sendView = mockSendView,
+        )
+
+        assertEquals(expectedResult.asSuccess(), result)
+        coVerify {
+            clientVault.sends().encrypt(send = mockSendView)
+        }
+    }
+
+    @Test
     fun `decryptSend should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
             val userId = "userId"
