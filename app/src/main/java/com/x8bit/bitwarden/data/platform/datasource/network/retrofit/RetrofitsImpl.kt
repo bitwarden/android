@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
+import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
@@ -65,9 +67,16 @@ class RetrofitsImpl(
 
     //region Helper properties and functions
     private val loggingInterceptor: HttpLoggingInterceptor by lazy {
-        HttpLoggingInterceptor().apply {
-            setLevel(HttpLoggingInterceptor.Level.BODY)
-        }
+        HttpLoggingInterceptor { Log.d("BitwardenNetworkClient", it) }
+            .apply {
+                setLevel(
+                    if (BuildConfig.DEBUG) {
+                        HttpLoggingInterceptor.Level.BODY
+                    } else {
+                        HttpLoggingInterceptor.Level.NONE
+                    },
+                )
+            }
     }
 
     private val baseOkHttpClient: OkHttpClient =
