@@ -36,6 +36,19 @@ class VaultDiskSourceImpl(
     private val forceFolderFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
     private val forceSendFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
 
+    override suspend fun saveCipher(userId: String, cipher: SyncResponseJson.Cipher) {
+        ciphersDao.insertCiphers(
+            ciphers = listOf(
+                CipherEntity(
+                    id = cipher.id,
+                    userId = userId,
+                    cipherType = json.encodeToString(cipher.type),
+                    cipherJson = json.encodeToString(cipher),
+                ),
+            ),
+        )
+    }
+
     override fun getCiphers(
         userId: String,
     ): Flow<List<SyncResponseJson.Cipher>> =
@@ -49,6 +62,20 @@ class VaultDiskSourceImpl(
                     }
                 },
         )
+
+    override suspend fun saveCollection(userId: String, collection: SyncResponseJson.Collection) {
+        collectionsDao.insertCollection(
+            collection = CollectionEntity(
+                userId = userId,
+                id = collection.id,
+                name = collection.name,
+                organizationId = collection.organizationId,
+                shouldHidePasswords = collection.shouldHidePasswords,
+                externalId = collection.externalId,
+                isReadOnly = collection.isReadOnly,
+            ),
+        )
+    }
 
     override fun getCollections(
         userId: String,
@@ -71,6 +98,17 @@ class VaultDiskSourceImpl(
                 },
         )
 
+    override suspend fun saveFolder(userId: String, folder: SyncResponseJson.Folder) {
+        foldersDao.insertFolder(
+            folder = FolderEntity(
+                userId = userId,
+                id = folder.id,
+                name = folder.name,
+                revisionDate = folder.revisionDate,
+            ),
+        )
+    }
+
     override fun getFolders(
         userId: String,
     ): Flow<List<SyncResponseJson.Folder>> =
@@ -88,6 +126,19 @@ class VaultDiskSourceImpl(
                     }
                 },
         )
+
+    override suspend fun saveSend(userId: String, send: SyncResponseJson.Send) {
+        sendsDao.insertSends(
+            sends = listOf(
+                SendEntity(
+                    userId = userId,
+                    id = send.id,
+                    sendType = json.encodeToString(send.type),
+                    sendJson = json.encodeToString(send),
+                ),
+            ),
+        )
+    }
 
     override fun getSends(
         userId: String,

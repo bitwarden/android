@@ -9,9 +9,19 @@ import kotlinx.coroutines.flow.Flow
 interface VaultDiskSource {
 
     /**
+     * Saves a cipher to the data source for the given [userId].
+     */
+    suspend fun saveCipher(userId: String, cipher: SyncResponseJson.Cipher)
+
+    /**
      * Retrieves all ciphers from the data source for a given [userId].
      */
     fun getCiphers(userId: String): Flow<List<SyncResponseJson.Cipher>>
+
+    /**
+     * Saves a collection to the data source for the given [userId].
+     */
+    suspend fun saveCollection(userId: String, collection: SyncResponseJson.Collection)
 
     /**
      * Retrieves all collections from the data source for a given [userId].
@@ -19,9 +29,19 @@ interface VaultDiskSource {
     fun getCollections(userId: String): Flow<List<SyncResponseJson.Collection>>
 
     /**
+     * Saves a folder to the data source for the given [userId].
+     */
+    suspend fun saveFolder(userId: String, folder: SyncResponseJson.Folder)
+
+    /**
      * Retrieves all folders from the data source for a given [userId].
      */
     fun getFolders(userId: String): Flow<List<SyncResponseJson.Folder>>
+
+    /**
+     * Saves a send to the data source for the given [userId].
+     */
+    suspend fun saveSend(userId: String, send: SyncResponseJson.Send)
 
     /**
      * Retrieves all sends from the data source for a given [userId].

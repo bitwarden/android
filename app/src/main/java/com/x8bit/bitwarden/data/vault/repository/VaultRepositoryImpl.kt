@@ -370,10 +370,11 @@ class VaultRepositoryImpl(
             .onCompletion { willSyncAfterUnlock = false }
             .first()
 
-    override suspend fun createCipher(cipherView: CipherView): CreateCipherResult =
-        vaultSdkSource
+    override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
+        val userId = requireNotNull(activeUserId)
+        return vaultSdkSource
             .encryptCipher(
-                userId = requireNotNull(activeUserId),
+                userId = userId,
                 cipherView = cipherView,
             )
             .flatMap { cipher ->
@@ -387,18 +388,20 @@ class VaultRepositoryImpl(
                     CreateCipherResult.Error
                 },
                 onSuccess = {
-                    sync()
+                    vaultDiskSource.saveCipher(userId = userId, cipher = it)
                     CreateCipherResult.Success
                 },
             )
+    }
 
     override suspend fun updateCipher(
         cipherId: String,
         cipherView: CipherView,
-    ): UpdateCipherResult =
-        vaultSdkSource
+    ): UpdateCipherResult {
+        val userId = requireNotNull(activeUserId)
+        return vaultSdkSource
             .encryptCipher(
-                userId = requireNotNull(activeUserId),
+                userId = userId,
                 cipherView = cipherView,
             )
             .flatMap { cipher ->
@@ -416,35 +419,39 @@ class VaultRepositoryImpl(
                         }
 
                         is UpdateCipherResponseJson.Success -> {
-                            sync()
+                            vaultDiskSource.saveCipher(userId = userId, cipher = response.cipher)
                             UpdateCipherResult.Success
                         }
                     }
                 },
             )
+    }
 
-    override suspend fun createSend(sendView: SendView): CreateSendResult =
-        vaultSdkSource
+    override suspend fun createSend(sendView: SendView): CreateSendResult {
+        val userId = requireNotNull(activeUserId)
+        return vaultSdkSource
             .encryptSend(
-                userId = requireNotNull(activeUserId),
+                userId = userId,
                 sendView = sendView,
             )
             .flatMap { send -> sendsService.createSend(body = send.toEncryptedNetworkSend()) }
             .fold(
                 onFailure = { CreateSendResult.Error },
                 onSuccess = {
-                    sync()
+                    vaultDiskSource.saveSend(userId = userId, send = it)
                     CreateSendResult.Success
                 },
             )
+    }
 
     override suspend fun updateSend(
         sendId: String,
         sendView: SendView,
-    ): UpdateSendResult =
-        vaultSdkSource
+    ): UpdateSendResult {
+        val userId = requireNotNull(activeUserId)
+        return vaultSdkSource
             .encryptSend(
-                userId = requireNotNull(activeUserId),
+                userId = userId,
                 sendView = sendView,
             )
             .flatMap { send ->
@@ -462,12 +469,13 @@ class VaultRepositoryImpl(
                         }
 
                         is UpdateSendResponseJson.Success -> {
-                            sync()
+                            vaultDiskSource.saveSend(userId = userId, send = response.send)
                             UpdateSendResult.Success
                         }
                     }
                 },
             )
+    }
 
     // TODO: This is temporary. Eventually this needs to be based on the presence of various
     //  user keys but this will likely require SDK updates to support this (BIT-1190).
