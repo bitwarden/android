@@ -147,7 +147,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = SavedStateHandle(),
-    ): NewSendViewModel = NewSendViewModel(
+    ): AddSendViewModel = AddSendViewModel(
         savedStateHandle = savedStateHandle,
     )
 

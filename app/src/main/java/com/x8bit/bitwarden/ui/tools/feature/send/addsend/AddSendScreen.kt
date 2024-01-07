@@ -64,7 +64,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.SendExpirationDateChooser
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddSendScreen(
-    viewModel: NewSendViewModel = hiltViewModel(),
+    viewModel: AddSendViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()

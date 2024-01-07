@@ -18,7 +18,7 @@ private const val KEY_STATE = "state"
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
-class NewSendViewModel @Inject constructor(
+class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     initialState = savedStateHandle[KEY_STATE] ?: AddSendState(
