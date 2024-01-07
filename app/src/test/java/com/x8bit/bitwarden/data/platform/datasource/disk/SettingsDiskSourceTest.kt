@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -94,5 +95,84 @@ class SettingsDiskSourceTest {
             vaultTimeoutInMinutes = null,
         )
         assertFalse(fakeSharedPreferences.contains(vaultTimeoutKey))
+    }
+
+    @Test
+    fun `getVaultTimeoutAction when values are present should pull from SharedPreferences`() {
+        val vaultTimeoutActionBaseKey = "bwPreferencesStorage:vaultTimeoutAction"
+        val mockUserId = "mockUserId"
+        val vaultTimeoutAction = VaultTimeoutAction.LOCK
+        fakeSharedPreferences
+            .edit()
+            .putInt(
+                "${vaultTimeoutActionBaseKey}_$mockUserId",
+                vaultTimeoutAction.value,
+            )
+            .apply()
+        val actual = settingsDiskSource.getVaultTimeoutAction(userId = mockUserId)
+        assertEquals(
+            vaultTimeoutAction,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getVaultTimeoutAction when values are absent should return null`() {
+        val mockUserId = "mockUserId"
+        assertNull(settingsDiskSource.getVaultTimeoutAction(userId = mockUserId))
+    }
+
+    @Test
+    fun `getVaultTimeoutActionFlow should react to changes in getOrganizations`() = runTest {
+        val mockUserId = "mockUserId"
+        val vaultTimeoutAction = VaultTimeoutAction.LOCK
+        settingsDiskSource.getVaultTimeoutActionFlow(userId = mockUserId).test {
+            // The initial values of the Flow and the property are in sync
+            assertNull(settingsDiskSource.getVaultTimeoutAction(userId = mockUserId))
+            assertNull(awaitItem())
+
+            // Updating the disk source updates shared preferences
+            settingsDiskSource.storeVaultTimeoutAction(
+                userId = mockUserId,
+                vaultTimeoutAction = vaultTimeoutAction,
+            )
+            assertEquals(vaultTimeoutAction, awaitItem())
+        }
+    }
+
+    @Test
+    fun `storeVaultTimeoutAction for non-null values should update SharedPreferences`() {
+        val vaultTimeoutActionBaseKey = "bwPreferencesStorage:vaultTimeoutAction"
+        val mockUserId = "mockUserId"
+        val vaultTimeoutAction = VaultTimeoutAction.LOCK
+        settingsDiskSource.storeVaultTimeoutAction(
+            userId = mockUserId,
+            vaultTimeoutAction = vaultTimeoutAction,
+        )
+        val actual = fakeSharedPreferences.getInt(
+            "${vaultTimeoutActionBaseKey}_$mockUserId",
+            0,
+        )
+        assertEquals(
+            vaultTimeoutAction.value,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeVaultTimeoutAction for null values should clear SharedPreferences`() {
+        val vaultTimeoutActionBaseKey = "bwPreferencesStorage:vaultTimeoutAction"
+        val mockUserId = "mockUserId"
+        val previousValue = VaultTimeoutAction.LOCK
+        val vaultTimeoutActionKey = "${vaultTimeoutActionBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit {
+            putInt(vaultTimeoutActionKey, previousValue.value)
+        }
+        assertTrue(fakeSharedPreferences.contains(vaultTimeoutActionKey))
+        settingsDiskSource.storeVaultTimeoutAction(
+            userId = mockUserId,
+            vaultTimeoutAction = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(vaultTimeoutActionKey))
     }
 }
