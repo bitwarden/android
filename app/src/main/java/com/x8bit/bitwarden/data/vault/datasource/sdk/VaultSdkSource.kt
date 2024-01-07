@@ -121,6 +121,18 @@ interface VaultSdkSource {
     ): Result<List<CollectionView>>
 
     /**
+     * Encrypts a [SendView] for the user with the given [userId], returning a [Send] wrapped
+     * in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun encryptSend(
+        userId: String,
+        sendView: SendView,
+    ): Result<Send>
+
+    /**
      * Decrypts a [Send] for the user with the given [userId], returning a [SendView] wrapped in a
      * [Result].
      *

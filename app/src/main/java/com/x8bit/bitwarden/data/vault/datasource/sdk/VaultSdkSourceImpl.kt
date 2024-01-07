@@ -63,6 +63,17 @@ class VaultSdkSourceImpl(
             }
         }
 
+    override suspend fun encryptSend(
+        userId: String,
+        sendView: SendView,
+    ): Result<Send> =
+        runCatching {
+            getClient(userId = userId)
+                .vault()
+                .sends()
+                .encrypt(sendView)
+        }
+
     override suspend fun encryptCipher(
         userId: String,
         cipherView: CipherView,
