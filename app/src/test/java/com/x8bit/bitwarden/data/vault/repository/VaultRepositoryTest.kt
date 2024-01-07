@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
@@ -29,8 +30,10 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
+import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -43,8 +46,10 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -76,6 +81,7 @@ class VaultRepositoryTest {
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val syncService: SyncService = mockk()
+    private val sendsService: SendsService = mockk()
     private val ciphersService: CiphersService = mockk()
     private val vaultDiskSource: VaultDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk {
@@ -83,6 +89,7 @@ class VaultRepositoryTest {
     }
     private val vaultRepository = VaultRepositoryImpl(
         syncService = syncService,
+        sendsService = sendsService,
         ciphersService = ciphersService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -1913,6 +1920,198 @@ class VaultRepositoryTest {
             )
 
             assertEquals(UpdateCipherResult.Success, result)
+        }
+
+    @Test
+    fun `createSend with encryptSend failure should return CreateSendResult failure`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val userId = "mockId-1"
+        val mockSendView = createMockSendView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+        } returns IllegalStateException().asFailure()
+
+        val result = vaultRepository.createSend(sendView = mockSendView)
+
+        assertEquals(CreateSendResult.Error, result)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createSend with sendsService createSend failure should return CreateSendResult failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns createMockSdkSend(number = 1).asSuccess()
+            coEvery {
+                sendsService.createSend(body = createMockSendJsonRequest(number = 1))
+            } returns IllegalStateException().asFailure()
+
+            val result = vaultRepository.createSend(sendView = mockSendView)
+
+            assertEquals(CreateSendResult.Error, result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createSend with sendsService createSend success should return CreateSendResult success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns createMockSdkSend(number = 1).asSuccess()
+            coEvery {
+                sendsService.createSend(body = createMockSendJsonRequest(number = 1))
+            } returns createMockSend(number = 1).asSuccess()
+            coEvery { syncService.sync() } returns Result.success(createMockSyncResponse(1))
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = userId,
+                    vault = createMockSyncResponse(1),
+                )
+            } just runs
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+
+            val result = vaultRepository.createSend(sendView = mockSendView)
+
+            assertEquals(CreateSendResult.Success, result)
+        }
+
+    @Test
+    fun `updateSend with encryptSend failure should return UpdateSendResult failure`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val userId = "mockId-1"
+        val sendId = "sendId1234"
+        val mockSendView = createMockSendView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+        } returns IllegalStateException().asFailure()
+
+        val result = vaultRepository.updateSend(
+            sendId = sendId,
+            sendView = mockSendView,
+        )
+
+        assertEquals(UpdateSendResult.Error(errorMessage = null), result)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateSend with sendsService updateSend failure should return UpdateSendResult Error with a null message`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns createMockSdkSend(number = 1).asSuccess()
+            coEvery {
+                sendsService.updateSend(
+                    sendId = sendId,
+                    body = createMockSendJsonRequest(number = 1),
+                )
+            } returns IllegalStateException().asFailure()
+
+            val result = vaultRepository.updateSend(
+                sendId = sendId,
+                sendView = mockSendView,
+            )
+
+            assertEquals(UpdateSendResult.Error(errorMessage = null), result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateSend with sendsService updateSend Invalid response should return UpdateSendResult Error with a non-null message`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns createMockSdkSend(number = 1).asSuccess()
+            coEvery {
+                sendsService.updateSend(
+                    sendId = sendId,
+                    body = createMockSendJsonRequest(number = 1),
+                )
+            } returns UpdateSendResponseJson
+                .Invalid(
+                    message = "You do not have permission to edit this.",
+                    validationErrors = null,
+                )
+                .asSuccess()
+
+            val result = vaultRepository.updateSend(
+                sendId = sendId,
+                sendView = mockSendView,
+            )
+
+            assertEquals(
+                UpdateSendResult.Error(
+                    errorMessage = "You do not have permission to edit this.",
+                ),
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `updateSend with sendsService updateSend Success response should return UpdateSendResult success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns createMockSdkSend(number = 1).asSuccess()
+            coEvery {
+                sendsService.updateSend(
+                    sendId = sendId,
+                    body = createMockSendJsonRequest(number = 1),
+                )
+            } returns UpdateSendResponseJson
+                .Success(send = createMockSend(number = 1))
+                .asSuccess()
+            coEvery {
+                syncService.sync()
+            } returns Result.success(createMockSyncResponse(1))
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = userId,
+                    vault = createMockSyncResponse(1),
+                )
+            } just runs
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+
+            val result = vaultRepository.updateSend(
+                sendId = sendId,
+                sendView = mockSendView,
+            )
+
+            assertEquals(UpdateSendResult.Success, result)
         }
 
     //region Helper functions

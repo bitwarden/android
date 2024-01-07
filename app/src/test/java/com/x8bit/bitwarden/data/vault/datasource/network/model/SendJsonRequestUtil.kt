@@ -7,7 +7,7 @@ import java.time.ZonedDateTime
  */
 fun createMockSendJsonRequest(
     number: Int,
-    type: SendTypeJson = SendTypeJson.TEXT,
+    type: SendTypeJson = SendTypeJson.FILE,
 ): SendJsonRequest =
     SendJsonRequest(
         name = "mockName-$number",
