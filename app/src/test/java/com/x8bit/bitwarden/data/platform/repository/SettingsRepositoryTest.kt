@@ -1,10 +1,13 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -12,12 +15,80 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class SettingsRepositoryTest {
+    private val authDiskSource: AuthDiskSource = mockk()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
 
     private val settingsRepository = SettingsRepositoryImpl(
+        authDiskSource = authDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
         dispatcherManager = FakeDispatcherManager(),
     )
+
+    @Test
+    fun `vaultTimeout should pull from and update SettingsDiskSource for the current user`() {
+        every { authDiskSource.userState?.activeUserId } returns null
+        assertEquals(
+            VaultTimeout.Never,
+            settingsRepository.vaultTimeout,
+        )
+
+        val userId = "userId"
+        every { authDiskSource.userState?.activeUserId } returns userId
+
+        // Updates to the disk source change the repository value
+        VAULT_TIMEOUT_MAP.forEach { (vaultTimeout, vaultTimeoutInMinutes) ->
+            fakeSettingsDiskSource.storeVaultTimeoutInMinutes(
+                userId = userId,
+                vaultTimeoutInMinutes = vaultTimeoutInMinutes,
+            )
+            assertEquals(
+                vaultTimeout,
+                settingsRepository.vaultTimeout,
+            )
+        }
+
+        // Updates to the repository value change the disk source
+        VAULT_TIMEOUT_MAP.forEach { (vaultTimeout, vaultTimeoutInMinutes) ->
+            settingsRepository.vaultTimeout = vaultTimeout
+            assertEquals(
+                vaultTimeoutInMinutes,
+                fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+            )
+        }
+    }
+
+    @Test
+    fun `vaultTimeoutAction should pull from and update SettingsDiskSource`() {
+        every { authDiskSource.userState?.activeUserId } returns null
+        assertEquals(
+            VaultTimeoutAction.LOCK,
+            settingsRepository.vaultTimeoutAction,
+        )
+
+        val userId = "userId"
+        every { authDiskSource.userState?.activeUserId } returns userId
+
+        // Updates to the disk source change the repository value
+        VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
+            fakeSettingsDiskSource.storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = vaultTimeoutAction,
+            )
+            assertEquals(
+                vaultTimeoutAction,
+                settingsRepository.vaultTimeoutAction,
+            )
+        }
+
+        // Updates to the repository value change the disk source
+        VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
+            settingsRepository.vaultTimeoutAction = vaultTimeoutAction
+            assertEquals(
+                vaultTimeoutAction,
+                fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+            )
+        }
+    }
 
     @Test
     fun `getVaultTimeoutStateFlow should react to changes in SettingsDiskSource`() = runTest {
@@ -67,9 +138,7 @@ class SettingsRepositoryTest {
                     VaultTimeoutAction.LOCK,
                     awaitItem(),
                 )
-                // Reverse the order of the entries to ensure the first value differs from the
-                // default.
-                VaultTimeoutAction.entries.reversed().forEach { vaultTimeoutAction ->
+                VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
                     fakeSettingsDiskSource.storeVaultTimeoutAction(
                         userId = userId,
                         vaultTimeoutAction = vaultTimeoutAction,
@@ -105,7 +174,7 @@ class SettingsRepositoryTest {
     @Test
     fun `storeVaultTimeoutAction should properly update SettingsDiskSource`() {
         val userId = "userId"
-        VaultTimeoutAction.entries.forEach { vaultTimeoutAction ->
+        VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
             settingsRepository.storeVaultTimeoutAction(
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
@@ -117,6 +186,13 @@ class SettingsRepositoryTest {
         }
     }
 }
+
+/**
+ * A list of all [VaultTimeoutAction].
+ *
+ * The order is reversed here in order to ensure that the first value differs from the default.
+ */
+private val VAULT_TIMEOUT_ACTIONS = VaultTimeoutAction.entries.reversed()
 
 /**
  * Maps a VaultTimeout to its expected vaultTimeoutInMinutes value.

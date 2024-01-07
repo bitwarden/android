@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -14,10 +15,41 @@ import kotlinx.coroutines.flow.stateIn
  * Primary implementation of [SettingsRepository].
  */
 class SettingsRepositoryImpl(
+    private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
+    private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
+
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
+    override var vaultTimeout: VaultTimeout
+        get() = activeUserId
+            ?.let {
+                getVaultTimeoutStateFlow(userId = it).value
+            }
+            ?: VaultTimeout.Never
+        set(value) {
+            val userId = activeUserId ?: return
+            storeVaultTimeout(
+                userId = userId,
+                vaultTimeout = value,
+            )
+        }
+
+    override var vaultTimeoutAction: VaultTimeoutAction
+        get() = activeUserId
+            ?.let {
+                getVaultTimeoutActionStateFlow(userId = it).value
+            }
+            .orDefault()
+        set(value) {
+            val userId = activeUserId ?: return
+            storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = value,
+            )
+        }
 
     override fun getVaultTimeoutStateFlow(userId: String): StateFlow<VaultTimeout> =
         settingsDiskSource
