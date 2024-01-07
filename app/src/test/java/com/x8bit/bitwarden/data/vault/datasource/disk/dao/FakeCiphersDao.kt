@@ -10,6 +10,7 @@ class FakeCiphersDao : CiphersDao {
     val storedCiphers = mutableListOf<CipherEntity>()
 
     var deleteCiphersCalled: Boolean = false
+    var insertCiphersCalled: Boolean = false
 
     private val ciphersFlow = bufferedMutableSharedFlow<List<CipherEntity>>(replay = 1)
 
@@ -31,6 +32,7 @@ class FakeCiphersDao : CiphersDao {
     override suspend fun insertCiphers(ciphers: List<CipherEntity>) {
         storedCiphers.addAll(ciphers)
         ciphersFlow.tryEmit(ciphers.toList())
+        insertCiphersCalled = true
     }
 
     override suspend fun replaceAllCiphers(userId: String, ciphers: List<CipherEntity>): Boolean {

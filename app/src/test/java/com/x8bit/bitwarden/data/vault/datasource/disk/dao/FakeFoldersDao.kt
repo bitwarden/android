@@ -11,6 +11,7 @@ class FakeFoldersDao : FoldersDao {
 
     var deleteFolderCalled: Boolean = false
     var deleteFoldersCalled: Boolean = false
+    var insertFolderCalled: Boolean = false
 
     private val foldersFlow = bufferedMutableSharedFlow<List<FolderEntity>>(replay = 1)
 
@@ -43,6 +44,7 @@ class FakeFoldersDao : FoldersDao {
     override suspend fun insertFolder(folder: FolderEntity) {
         storedFolders.add(folder)
         foldersFlow.tryEmit(storedFolders.toList())
+        insertFolderCalled = true
     }
 
     override suspend fun replaceAllFolders(userId: String, folders: List<FolderEntity>): Boolean {

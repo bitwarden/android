@@ -10,6 +10,7 @@ class FakeSendsDao : SendsDao {
     val storedSends = mutableListOf<SendEntity>()
 
     var deleteSendsCalled: Boolean = false
+    var insertSendsCalled: Boolean = false
 
     private val sendsFlow = bufferedMutableSharedFlow<List<SendEntity>>(replay = 1)
 
@@ -31,6 +32,7 @@ class FakeSendsDao : SendsDao {
     override suspend fun insertSends(sends: List<SendEntity>) {
         storedSends.addAll(sends)
         sendsFlow.tryEmit(storedSends.toList())
+        insertSendsCalled = true
     }
 
     override suspend fun replaceAllSends(userId: String, sends: List<SendEntity>): Boolean {

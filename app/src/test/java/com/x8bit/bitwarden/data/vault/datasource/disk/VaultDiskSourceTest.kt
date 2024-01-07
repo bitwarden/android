@@ -52,6 +52,23 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `saveCipher should call insertCiphers`() = runTest {
+        assertFalse(ciphersDao.insertCiphersCalled)
+        assertEquals(0, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.saveCipher(USER_ID, CIPHER_1)
+
+        // Verify the ciphers dao is updated
+        assertTrue(ciphersDao.insertCiphersCalled)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+        val storedCipherEntity = ciphersDao.storedCiphers.first()
+        // We cannot compare the JSON strings directly because of formatting differences
+        // So we split that off into its own assertion.
+        assertEquals(CIPHER_ENTITY.copy(cipherJson = ""), storedCipherEntity.copy(cipherJson = ""))
+        assertJsonEquals(CIPHER_ENTITY.cipherJson, storedCipherEntity.cipherJson)
+    }
+
+    @Test
     fun `getCiphers should emit all CiphersDao updates`() = runTest {
         val cipherEntities = listOf(CIPHER_ENTITY)
         val ciphers = listOf(CIPHER_1)
@@ -63,6 +80,17 @@ class VaultDiskSourceTest {
                 ciphersDao.insertCiphers(cipherEntities)
                 assertEquals(ciphers, awaitItem())
             }
+    }
+
+    @Test
+    fun `saveCollection should call insertCollection`() = runTest {
+        assertFalse(collectionsDao.insertCollectionCalled)
+        assertEquals(0, collectionsDao.storedCollections.size)
+
+        vaultDiskSource.saveCollection(USER_ID, COLLECTION_1)
+
+        assertTrue(collectionsDao.insertCollectionCalled)
+        assertEquals(listOf(COLLECTION_ENTITY), collectionsDao.storedCollections)
     }
 
     @Test
@@ -80,6 +108,17 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `saveFolder should call insertFolder`() = runTest {
+        assertFalse(foldersDao.insertFolderCalled)
+        assertEquals(0, foldersDao.storedFolders.size)
+
+        vaultDiskSource.saveFolder(USER_ID, FOLDER_1)
+
+        assertTrue(foldersDao.insertFolderCalled)
+        assertEquals(listOf(FOLDER_ENTITY), foldersDao.storedFolders)
+    }
+
+    @Test
     fun `getFolders should emit all FoldersDao updates`() = runTest {
         val folderEntities = listOf(FOLDER_ENTITY)
         val folders = listOf(FOLDER_1)
@@ -91,6 +130,23 @@ class VaultDiskSourceTest {
                 foldersDao.insertFolders(folderEntities)
                 assertEquals(folders, awaitItem())
             }
+    }
+
+    @Test
+    fun `saveSend should call insertSend`() = runTest {
+        assertFalse(sendsDao.insertSendsCalled)
+        assertEquals(0, sendsDao.storedSends.size)
+
+        vaultDiskSource.saveSend(USER_ID, SEND_1)
+
+        // Verify the sends dao is updated
+        assertTrue(sendsDao.insertSendsCalled)
+        assertEquals(1, sendsDao.storedSends.size)
+        val storedSendEntity = sendsDao.storedSends.first()
+        // We cannot compare the JSON strings directly because of formatting differences
+        // So we split that off into its own assertion.
+        assertEquals(SEND_ENTITY.copy(sendJson = ""), storedSendEntity.copy(sendJson = ""))
+        assertJsonEquals(SEND_ENTITY.sendJson, storedSendEntity.sendJson)
     }
 
     @Test

@@ -11,6 +11,7 @@ class FakeCollectionsDao : CollectionsDao {
 
     var deleteCollectionCalled: Boolean = false
     var deleteCollectionsCalled: Boolean = false
+    var insertCollectionCalled = false
 
     private val collectionsFlow = bufferedMutableSharedFlow<List<CollectionEntity>>(replay = 1)
 
@@ -43,6 +44,7 @@ class FakeCollectionsDao : CollectionsDao {
     override suspend fun insertCollection(collection: CollectionEntity) {
         storedCollections.add(collection)
         collectionsFlow.tryEmit(storedCollections.toList())
+        insertCollectionCalled = true
     }
 
     override suspend fun replaceAllCollections(
