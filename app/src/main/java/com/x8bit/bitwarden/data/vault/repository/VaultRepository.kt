@@ -4,10 +4,13 @@ import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.Kdf
+import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -143,4 +146,17 @@ interface VaultRepository {
         cipherId: String,
         cipherView: CipherView,
     ): UpdateCipherResult
+
+    /**
+     * Attempt to create a send.
+     */
+    suspend fun createSend(sendView: SendView): CreateSendResult
+
+    /**
+     * Attempt to update a send.
+     */
+    suspend fun updateSend(
+        sendId: String,
+        sendView: SendView,
+    ): UpdateSendResult
 }

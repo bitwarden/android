@@ -7,6 +7,7 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Kdf
+import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
@@ -23,17 +24,22 @@ import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
+import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
@@ -68,10 +74,11 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 1000L
 /**
  * Default implementation of [VaultRepository].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 class VaultRepositoryImpl(
     private val syncService: SyncService,
     private val ciphersService: CiphersService,
+    private val sendsService: SendsService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
@@ -411,6 +418,52 @@ class VaultRepositoryImpl(
                         is UpdateCipherResponseJson.Success -> {
                             sync()
                             UpdateCipherResult.Success
+                        }
+                    }
+                },
+            )
+
+    override suspend fun createSend(sendView: SendView): CreateSendResult =
+        vaultSdkSource
+            .encryptSend(
+                userId = requireNotNull(activeUserId),
+                sendView = sendView,
+            )
+            .flatMap { send -> sendsService.createSend(body = send.toEncryptedNetworkSend()) }
+            .fold(
+                onFailure = { CreateSendResult.Error },
+                onSuccess = {
+                    sync()
+                    CreateSendResult.Success
+                },
+            )
+
+    override suspend fun updateSend(
+        sendId: String,
+        sendView: SendView,
+    ): UpdateSendResult =
+        vaultSdkSource
+            .encryptSend(
+                userId = requireNotNull(activeUserId),
+                sendView = sendView,
+            )
+            .flatMap { send ->
+                sendsService.updateSend(
+                    sendId = sendId,
+                    body = send.toEncryptedNetworkSend(),
+                )
+            }
+            .fold(
+                onFailure = { UpdateSendResult.Error(errorMessage = null) },
+                onSuccess = { response ->
+                    when (response) {
+                        is UpdateSendResponseJson.Invalid -> {
+                            UpdateSendResult.Error(errorMessage = response.message)
+                        }
+
+                        is UpdateSendResponseJson.Success -> {
+                            sync()
+                            UpdateSendResult.Success
                         }
                     }
                 },

@@ -4,8 +4,61 @@ import com.bitwarden.core.Send
 import com.bitwarden.core.SendFile
 import com.bitwarden.core.SendText
 import com.bitwarden.core.SendType
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+
+/**
+ * Converts a Bitwarden SDK [Send] object to a corresponding [SyncResponseJson.Send] object.
+ */
+fun Send.toEncryptedNetworkSend(): SendJsonRequest =
+    SendJsonRequest(
+        type = type.toNetworkSendType(),
+        name = name,
+        notes = notes,
+        key = key,
+        maxAccessCount = maxAccessCount?.toInt(),
+        expirationDate = expirationDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
+        deletionDate = ZonedDateTime.ofInstant(deletionDate, ZoneOffset.UTC),
+        file = file?.toNetworkSendFile(),
+        text = text?.toNetworkSendText(),
+        password = password,
+        isDisabled = disabled,
+        shouldHideEmail = hideEmail,
+    )
+
+/**
+ * Converts a Bitwarden SDK [SendFile] object to a corresponding [SyncResponseJson.Send.File]
+ * object.
+ */
+private fun SendFile.toNetworkSendFile(): SyncResponseJson.Send.File =
+    SyncResponseJson.Send.File(
+        fileName = fileName,
+        size = size.toInt(),
+        sizeName = sizeName,
+        id = id,
+    )
+
+/**
+ * Converts a Bitwarden SDK [SendText] object to a corresponding [SyncResponseJson.Send.Text]
+ * object.
+ */
+private fun SendText.toNetworkSendText(): SyncResponseJson.Send.Text =
+    SyncResponseJson.Send.Text(
+        isHidden = hidden,
+        text = text,
+    )
+
+/**
+ * Converts a Bitwarden SDK [SendType] object to a corresponding [SendTypeJson] object.
+ */
+private fun SendType.toNetworkSendType(): SendTypeJson =
+    when (this) {
+        SendType.TEXT -> SendTypeJson.TEXT
+        SendType.FILE -> SendTypeJson.FILE
+    }
 
 /**
  * Converts a list of [SyncResponseJson.Send] objects to a list of corresponding
