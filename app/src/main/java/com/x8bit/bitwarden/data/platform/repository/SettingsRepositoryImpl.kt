@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +37,34 @@ class SettingsRepositoryImpl(
             vaultTimeoutInMinutes = vaultTimeout.vaultTimeoutInMinutes,
         )
     }
+
+    override fun getVaultTimeoutActionStateFlow(
+        userId: String,
+    ): StateFlow<VaultTimeoutAction> =
+        settingsDiskSource
+            .getVaultTimeoutActionFlow(userId = userId)
+            .map { it.orDefault() }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource
+                    .getVaultTimeoutAction(userId = userId)
+                    .orDefault(),
+            )
+
+    override fun isVaultTimeoutActionSet(
+        userId: String,
+    ): Boolean = settingsDiskSource.getVaultTimeoutAction(userId = userId) != null
+
+    override fun storeVaultTimeoutAction(
+        userId: String,
+        vaultTimeoutAction: VaultTimeoutAction?,
+    ) {
+        settingsDiskSource.storeVaultTimeoutAction(
+            userId = userId,
+            vaultTimeoutAction = vaultTimeoutAction,
+        )
+    }
 }
 
 /**
@@ -53,3 +82,9 @@ private fun Int?.toVaultTimeout(): VaultTimeout =
         null -> VaultTimeout.Never
         else -> VaultTimeout.Custom(vaultTimeoutInMinutes = this)
     }
+
+/**
+ * Returns the given [VaultTimeoutAction] or a default value if `null`.
+ */
+private fun VaultTimeoutAction?.orDefault(): VaultTimeoutAction =
+    this ?: VaultTimeoutAction.LOCK

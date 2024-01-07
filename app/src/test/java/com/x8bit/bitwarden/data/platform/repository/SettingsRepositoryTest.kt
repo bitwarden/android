@@ -4,8 +4,11 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class SettingsRepositoryTest {
@@ -50,6 +53,66 @@ class SettingsRepositoryTest {
             assertEquals(
                 vaultTimeoutInMinutes,
                 fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+            )
+        }
+    }
+
+    @Test
+    fun `getVaultTimeoutActionStateFlow should react to changes in SettingsDiskSource`() = runTest {
+        val userId = "userId"
+        settingsRepository
+            .getVaultTimeoutActionStateFlow(userId = userId)
+            .test {
+                assertEquals(
+                    VaultTimeoutAction.LOCK,
+                    awaitItem(),
+                )
+                // Reverse the order of the entries to ensure the first value differs from the
+                // default.
+                VaultTimeoutAction.entries.reversed().forEach { vaultTimeoutAction ->
+                    fakeSettingsDiskSource.storeVaultTimeoutAction(
+                        userId = userId,
+                        vaultTimeoutAction = vaultTimeoutAction,
+                    )
+                    assertEquals(
+                        vaultTimeoutAction,
+                        awaitItem(),
+                    )
+                }
+            }
+    }
+
+    @Test
+    fun `isVaultTimeoutActionSet when no value is persisted should return false`() {
+        val userId = "userId"
+        assertFalse(
+            settingsRepository.isVaultTimeoutActionSet(userId = userId),
+        )
+    }
+
+    @Test
+    fun `isVaultTimeoutActionSet when a value is persisted should return true`() {
+        val userId = "userId"
+        fakeSettingsDiskSource.storeVaultTimeoutAction(
+            userId = userId,
+            vaultTimeoutAction = VaultTimeoutAction.LOGOUT,
+        )
+        assertTrue(
+            settingsRepository.isVaultTimeoutActionSet(userId = userId),
+        )
+    }
+
+    @Test
+    fun `storeVaultTimeoutAction should properly update SettingsDiskSource`() {
+        val userId = "userId"
+        VaultTimeoutAction.entries.forEach { vaultTimeoutAction ->
+            settingsRepository.storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = vaultTimeoutAction,
+            )
+            assertEquals(
+                vaultTimeoutAction,
+                fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
             )
         }
     }
