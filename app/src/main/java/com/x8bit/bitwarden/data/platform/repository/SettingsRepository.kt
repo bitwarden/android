@@ -9,6 +9,16 @@ import kotlinx.coroutines.flow.StateFlow
  */
 interface SettingsRepository {
     /**
+     * The [VaultTimeout] for the current user.
+     */
+    var vaultTimeout: VaultTimeout
+
+    /**
+     * The [VaultTimeoutAction] for the current user.
+     */
+    var vaultTimeoutAction: VaultTimeoutAction
+
+    /**
      * Gets updates for the [VaultTimeout] associated with the given [userId].
      */
     fun getVaultTimeoutStateFlow(userId: String): StateFlow<VaultTimeout>
