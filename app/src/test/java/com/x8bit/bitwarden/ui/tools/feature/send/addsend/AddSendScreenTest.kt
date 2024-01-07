@@ -27,7 +27,7 @@ class AddSendScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<AddSendEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-    private val viewModel = mockk<NewSendViewModel>(relaxed = true) {
+    private val viewModel = mockk<AddSendViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
