@@ -10,14 +10,14 @@ import java.time.Instant
 /**
  * Transforms [AddSendState] into [SendView].
  */
-// TODO: The 'key' needs to be updated in order to get the save operation to work (BIT-480)
 fun AddSendState.ViewState.Content.toSendView(): SendView =
     SendView(
         id = null,
         accessId = null,
         name = common.name,
         notes = common.noteInput,
-        key = "",
+        // TODO: Set this to null after we update the SDK with an encryption fix (BIT-1398)
+        key = "91Xo3Wdf0N0Cc5AHJRC3SQ",
         password = common.passwordInput.takeUnless { it.isBlank() },
         type = selectedType.toSendType(),
         file = toSendFileView(),
@@ -27,8 +27,8 @@ fun AddSendState.ViewState.Content.toSendView(): SendView =
         disabled = common.isDeactivateChecked,
         hideEmail = common.isHideEmailChecked,
         revisionDate = Instant.now(),
-        deletionDate = Instant.now(),
-        expirationDate = null,
+        deletionDate = common.deletionDate,
+        expirationDate = common.expirationDate,
     )
 
 private fun AddSendState.ViewState.Content.SendType.toSendType(): SendType =
@@ -39,7 +39,7 @@ private fun AddSendState.ViewState.Content.SendType.toSendType(): SendType =
 
 private fun AddSendState.ViewState.Content.toSendFileView(): SendFileView? =
     (this.selectedType as? AddSendState.ViewState.Content.SendType.File)?.let {
-        // TODO: Add support for these properties in order to save a file (BIT-480)
+        // TODO: Add support for these properties in order to save a file (BIT-1085)
         SendFileView(
             id = "",
             fileName = "",

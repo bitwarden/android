@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import java.time.Instant
 
 class AddSendScreenTest : BaseComposeTest() {
 
@@ -603,6 +604,8 @@ class AddSendScreenTest : BaseComposeTest() {
             noteInput = "",
             isHideEmailChecked = false,
             isDeactivateChecked = false,
+            deletionDate = Instant.parse("2023-10-27T12:00:00Z"),
+            expirationDate = null,
         )
 
         private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(

@@ -27,9 +27,8 @@ class AddSendStateExtensionsTest {
         val sendView = createMockSendView(number = 1, type = SendType.FILE).copy(
             id = null,
             accessId = null,
-            key = "",
+            key = "91Xo3Wdf0N0Cc5AHJRC3SQ",
             accessCount = 0U,
-            expirationDate = null,
             text = null,
             file = SendFileView(
                 id = "",
@@ -53,9 +52,8 @@ class AddSendStateExtensionsTest {
         val sendView = createMockSendView(number = 1, type = SendType.TEXT).copy(
             id = null,
             accessId = null,
-            key = "",
+            key = "91Xo3Wdf0N0Cc5AHJRC3SQ",
             accessCount = 0U,
-            expirationDate = null,
             file = null,
         )
         mockkStatic(Instant::class)
@@ -65,23 +63,27 @@ class AddSendStateExtensionsTest {
 
         assertEquals(sendView, result)
     }
+
+    companion object {
+        private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
+            name = "mockName-1",
+            maxAccessCount = 1,
+            passwordInput = "mockPassword-1",
+            noteInput = "mockNotes-1",
+            isHideEmailChecked = false,
+            isDeactivateChecked = false,
+            deletionDate = Instant.parse("2023-10-27T12:00:00Z"),
+            expirationDate = Instant.parse("2023-10-27T12:00:00Z"),
+        )
+
+        private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
+            input = "mockText-1",
+            isHideByDefaultChecked = false,
+        )
+
+        private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
+            common = DEFAULT_COMMON_STATE,
+            selectedType = DEFAULT_SELECTED_TYPE_STATE,
+        )
+    }
 }
-
-private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
-    name = "mockName-1",
-    maxAccessCount = 1,
-    passwordInput = "mockPassword-1",
-    noteInput = "mockNotes-1",
-    isHideEmailChecked = false,
-    isDeactivateChecked = false,
-)
-
-private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
-    input = "mockText-1",
-    isHideByDefaultChecked = false,
-)
-
-private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
-    common = DEFAULT_COMMON_STATE,
-    selectedType = DEFAULT_SELECTED_TYPE_STATE,
-)

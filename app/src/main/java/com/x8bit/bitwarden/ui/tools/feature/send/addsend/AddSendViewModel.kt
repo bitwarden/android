@@ -22,9 +22,16 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
+import java.time.Instant
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+
+/**
+ * The default amount of time in the future the deletion date should be set to.
+ */
+private const val DELETION_DATE_OFFSET_SECONDS = 604_800L
 
 /**
  * View model for the new send screen.
@@ -34,6 +41,7 @@ private const val KEY_STATE = "state"
 class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     authRepo: AuthRepository,
+    private val clock: Clock,
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
@@ -46,6 +54,8 @@ class AddSendViewModel @Inject constructor(
                 noteInput = "",
                 isHideEmailChecked = false,
                 isDeactivateChecked = false,
+                deletionDate = clock.instant().plusSeconds(DELETION_DATE_OFFSET_SECONDS),
+                expirationDate = null,
             ),
             selectedType = AddSendState.ViewState.Content.SendType.Text(
                 input = "",
@@ -337,6 +347,8 @@ data class AddSendState(
                 val noteInput: String,
                 val isHideEmailChecked: Boolean,
                 val isDeactivateChecked: Boolean,
+                val deletionDate: Instant,
+                val expirationDate: Instant?,
             ) : Parcelable
 
             /**
