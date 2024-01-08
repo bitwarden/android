@@ -25,6 +25,7 @@ fun ComposeContentTestRule.assertSwitcherIsDisplayed(
     accountSummaries: List<AccountSummary>,
     isAddAccountButtonVisible: Boolean = true,
 ) {
+    this.waitForIdle()
     accountSummaries.forEach { accountSummary ->
         this.onNodeWithText(accountSummary.email).assertIsDisplayed()
     }
@@ -43,6 +44,7 @@ fun ComposeContentTestRule.assertSwitcherIsDisplayed(
 fun ComposeContentTestRule.assertSwitcherIsNotDisplayed(
     accountSummaries: List<AccountSummary>,
 ) {
+    this.waitForIdle()
     accountSummaries.forEach { accountSummary ->
         this.onNodeWithText(accountSummary.email).assertDoesNotExist()
     }
