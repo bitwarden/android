@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryD
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
@@ -301,6 +302,46 @@ class GeneratorRepositoryTest {
 
         assertTrue(result is GeneratedPlusAddressedUsernameResult.InvalidRequest)
         coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generateCatchAllEmail should return Success with generated email when SDK call is successful`() = runTest {
+        val userId = "testUserId"
+        val request = UsernameGeneratorRequest.Catchall(
+            type = AppendType.Random,
+            domain = "domain",
+        )
+        val generatedEmail = "user@domain"
+
+        coEvery { generatorSdkSource.generateCatchAllEmail(request) } returns
+            Result.success(generatedEmail)
+
+        val result = repository.generateCatchAllEmail(request)
+
+        assertEquals(
+            generatedEmail,
+            (result as GeneratedCatchAllUsernameResult.Success).generatedEmailAddress,
+        )
+        coVerify { generatorSdkSource.generateCatchAllEmail(request) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generateCatchAllEmail should return InvalidRequest on SDK failure`() = runTest {
+        val request = UsernameGeneratorRequest.Catchall(
+            type = AppendType.Random,
+            domain = "user@domain",
+        )
+        val exception = RuntimeException("An error occurred")
+        coEvery {
+            generatorSdkSource.generateCatchAllEmail(request)
+        } returns Result.failure(exception)
+
+        val result = repository.generateCatchAllEmail(request)
+
+        assertTrue(result is GeneratedCatchAllUsernameResult.InvalidRequest)
+        coVerify { generatorSdkSource.generateCatchAllEmail(request) }
     }
 
     @Test

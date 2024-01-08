@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
@@ -127,6 +128,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult -> {
                 handleUpdatePlusAddressedGeneratedUsernameResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult -> {
+                handleUpdateCatchAllGeneratedUsernameResult(action)
             }
 
             is GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult -> {
@@ -376,6 +381,22 @@ class GeneratorViewModel @Inject constructor(
             }
 
             GeneratedPlusAddressedUsernameResult.InvalidRequest -> {
+                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+            }
+        }
+    }
+
+    private fun handleUpdateCatchAllGeneratedUsernameResult(
+        action: GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult,
+    ) {
+        when (val result = action.result) {
+            is GeneratedCatchAllUsernameResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(generatedText = result.generatedEmailAddress)
+                }
+            }
+
+            GeneratedCatchAllUsernameResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
@@ -926,7 +947,9 @@ class GeneratorViewModel @Inject constructor(
                     }
 
                     is CatchAllEmail -> {
-                        // TODO: Implement catch all email generation (BIT-1334)
+                        if (isManualRegeneration) {
+                            generateCatchAllEmail(selectedType)
+                        }
                     }
 
                     is PlusAddressedEmail -> {
@@ -957,6 +980,16 @@ class GeneratorViewModel @Inject constructor(
             ),
         )
         sendAction(GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult(result))
+    }
+
+    private suspend fun generateCatchAllEmail(catchAllEmail: CatchAllEmail) {
+        val result = generatorRepository.generateCatchAllEmail(
+            UsernameGeneratorRequest.Catchall(
+                type = AppendType.Random,
+                domain = catchAllEmail.domainName,
+            ),
+        )
+        sendAction(GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult(result))
     }
 
     private inline fun updateGeneratorMainTypePasscode(
@@ -1927,6 +1960,13 @@ sealed class GeneratorAction {
          */
         data class UpdateGeneratedPlusAddessedUsernameResult(
             val result: GeneratedPlusAddressedUsernameResult,
+        ) : Internal()
+
+        /**
+         * Indicates a generated text update is received.
+         */
+        data class UpdateGeneratedCatchAllUsernameResult(
+            val result: GeneratedCatchAllUsernameResult,
         ) : Internal()
 
         /**

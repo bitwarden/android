@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryD
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistory
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.toPasswordHistoryEntity
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
@@ -137,6 +138,19 @@ class GeneratorRepositoryImpl(
                 },
                 onFailure = {
                     GeneratedPlusAddressedUsernameResult.InvalidRequest
+                },
+            )
+
+    override suspend fun generateCatchAllEmail(
+        catchAllEmailGeneratorRequest: UsernameGeneratorRequest.Catchall,
+    ): GeneratedCatchAllUsernameResult =
+        generatorSdkSource.generateCatchAllEmail(catchAllEmailGeneratorRequest)
+            .fold(
+                onSuccess = { generatedEmail ->
+                    GeneratedCatchAllUsernameResult.Success(generatedEmail)
+                },
+                onFailure = {
+                    GeneratedCatchAllUsernameResult.InvalidRequest
                 },
             )
 

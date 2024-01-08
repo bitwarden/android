@@ -6,6 +6,7 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
@@ -36,6 +37,11 @@ class FakeGeneratorRepository : GeneratorRepository {
             generatedEmailAddress = "email+abcd1234@address.com",
         )
 
+    private var generateCatchAllEmailResult: GeneratedCatchAllUsernameResult =
+        GeneratedCatchAllUsernameResult.Success(
+            generatedEmailAddress = "user@domain",
+        )
+
     private var generateForwardedServiceResult: GeneratedForwardedServiceUsernameResult =
         GeneratedForwardedServiceUsernameResult.Success(
             generatedEmailAddress = "updatedUsername",
@@ -61,6 +67,12 @@ class FakeGeneratorRepository : GeneratorRepository {
         plusAddressedEmailGeneratorRequest: UsernameGeneratorRequest.Subaddress,
     ): GeneratedPlusAddressedUsernameResult {
         return generatePlusAddressedEmailResult
+    }
+
+    override suspend fun generateCatchAllEmail(
+        catchAllEmailGeneratorRequest: UsernameGeneratorRequest.Catchall,
+    ): GeneratedCatchAllUsernameResult {
+        return generateCatchAllEmailResult
     }
 
     override suspend fun generateForwardedServiceUsername(
@@ -121,5 +133,12 @@ class FakeGeneratorRepository : GeneratorRepository {
      */
     fun setMockGenerateForwardedServiceResult(result: GeneratedForwardedServiceUsernameResult) {
         generateForwardedServiceResult = result
+    }
+
+    /**
+     * Sets the mock result for the generateCatchAll function.
+     */
+    fun setMockCatchAllResult(result: GeneratedCatchAllUsernameResult) {
+        generateCatchAllEmailResult = result
     }
 }

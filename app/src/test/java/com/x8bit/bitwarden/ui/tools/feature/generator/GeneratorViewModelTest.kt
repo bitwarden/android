@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
@@ -228,6 +229,30 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     selectedType = GeneratorState.MainType.Username(
                         GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
                             email = "currentEmail",
+                        ),
+                    ),
+                )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Test
+    fun `RegenerateClick for catch all email state should update the catch all email correctly`() =
+        runTest {
+            val viewModel = createViewModel(catchAllEmailSavedStateHandle)
+
+            fakeGeneratorRepository.setMockCatchAllResult(
+                GeneratedCatchAllUsernameResult.Success("DifferentUsername"),
+            )
+
+            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+
+            val expectedState =
+                initialCatchAllEmailState.copy(
+                    generatedText = "DifferentUsername",
+                    selectedType = GeneratorState.MainType.Username(
+                        GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
+                            domainName = "defaultDomain",
                         ),
                     ),
                 )
