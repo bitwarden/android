@@ -4,6 +4,8 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -12,6 +14,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,6 +30,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    authRepo: AuthRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     initialState = savedStateHandle[KEY_STATE] ?: AddSendState(
@@ -45,12 +49,19 @@ class AddSendViewModel @Inject constructor(
             ),
         ),
         dialogState = null,
+        isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
     ),
 ) {
 
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
+            .launchIn(viewModelScope)
+
+        authRepo
+            .userStateFlow
+            .map { AddSendAction.Internal.UserStateReceive(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -74,6 +85,7 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleInternalAction(action: AddSendAction.Internal): Unit = when (action) {
         is AddSendAction.Internal.CreateSendResultReceive -> handleCreateSendResultReceive(action)
+        is AddSendAction.Internal.UserStateReceive -> handleUserStateReceive(action)
     }
 
     private fun handleCreateSendResultReceive(
@@ -95,6 +107,12 @@ class AddSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(AddSendEvent.NavigateBack)
             }
+        }
+    }
+
+    private fun handleUserStateReceive(action: AddSendAction.Internal.UserStateReceive) {
+        mutableStateFlow.update {
+            it.copy(isPremiumUser = action.userState?.activeAccount?.isPremium == true)
         }
     }
 
@@ -164,6 +182,17 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleFileTypeClick() {
+        if (!state.isPremiumUser) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AddSendState.DialogState.Error(
+                        title = R.string.send.asText(),
+                        message = R.string.send_file_premium_required.asText(),
+                    ),
+                )
+            }
+            return
+        }
         updateContent {
             it.copy(selectedType = AddSendState.ViewState.Content.SendType.File)
         }
@@ -257,6 +286,7 @@ class AddSendViewModel @Inject constructor(
 data class AddSendState(
     val dialogState: DialogState?,
     val viewState: ViewState,
+    val isPremiumUser: Boolean,
 ) : Parcelable {
 
     /**
@@ -438,6 +468,11 @@ sealed class AddSendAction {
      * Models actions that the [AddSendViewModel] itself might send.
      */
     sealed class Internal : AddSendAction() {
+        /**
+         * Indicates what the current [userState] is.
+         */
+        data class UserStateReceive(val userState: UserState?) : Internal()
+
         /**
          * Indicates a result for creating a send has been received.
          */
