@@ -26,9 +26,16 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.util.TimeZone
 
 class AddSendViewModelTest : BaseViewModelTest() {
 
+    private val clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        TimeZone.getTimeZone("UTC").toZoneId(),
+    )
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
@@ -329,6 +336,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
         authRepo = authRepository,
         environmentRepo = environmentRepository,
+        clock = clock,
         vaultRepo = vaultRepository,
     )
 
@@ -345,6 +353,8 @@ class AddSendViewModelTest : BaseViewModelTest() {
             noteInput = "",
             isHideEmailChecked = false,
             isDeactivateChecked = false,
+            deletionDate = Instant.parse("2023-11-03T12:00:00Z"),
+            expirationDate = null,
         )
 
         private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
