@@ -18,7 +18,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -40,9 +43,11 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
+import com.x8bit.bitwarden.ui.platform.util.displayLabel
 
 /**
  * Displays the account security screen.
@@ -198,19 +203,13 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenTextRow(
-                text = stringResource(id = R.string.session_timeout),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.SessionTimeoutClick) }
+            SessionTimeoutRow(
+                selectedVaultTimeoutType = state.vaultTimeoutType,
+                onVaultTimeoutTypeSelect = remember(viewModel) {
+                    { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
                 },
                 modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    text = state.sessionTimeout(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            )
             BitwardenTextRow(
                 text = stringResource(id = R.string.session_timeout_action),
                 onClick = remember(viewModel) {
@@ -286,6 +285,70 @@ fun AccountSecurityScreen(
     }
 }
 
+@Suppress("LongMethod")
+@Composable
+private fun SessionTimeoutRow(
+    selectedVaultTimeoutType: VaultTimeout.Type,
+    onVaultTimeoutTypeSelect: (VaultTimeout.Type) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowSelectionDialog by remember { mutableStateOf(false) }
+    var shouldShowNeverTimeoutConfirmationDialog by remember { mutableStateOf(false) }
+    BitwardenTextRow(
+        text = stringResource(id = R.string.session_timeout),
+        onClick = { shouldShowSelectionDialog = true },
+        modifier = modifier,
+    ) {
+        Text(
+            text = selectedVaultTimeoutType.displayLabel(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+
+    when {
+        shouldShowSelectionDialog -> {
+            val vaultTimeoutOptions = VaultTimeout.Type.entries
+            BitwardenSelectionDialog(
+                title = stringResource(id = R.string.session_timeout),
+                onDismissRequest = { shouldShowSelectionDialog = false },
+            ) {
+                vaultTimeoutOptions.forEach { vaultTimeoutOption ->
+                    BitwardenSelectionRow(
+                        text = vaultTimeoutOption.displayLabel,
+                        onClick = {
+                            shouldShowSelectionDialog = false
+                            val selectedType =
+                                vaultTimeoutOptions.first { it == vaultTimeoutOption }
+                            if (selectedType == VaultTimeout.Type.NEVER) {
+                                shouldShowNeverTimeoutConfirmationDialog = true
+                            } else {
+                                onVaultTimeoutTypeSelect(selectedType)
+                            }
+                        },
+                        isSelected = selectedVaultTimeoutType == vaultTimeoutOption,
+                    )
+                }
+            }
+        }
+
+        shouldShowNeverTimeoutConfirmationDialog -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.warning),
+                message = stringResource(id = R.string.never_lock_warning),
+                confirmButtonText = stringResource(id = R.string.ok),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = {
+                    shouldShowNeverTimeoutConfirmationDialog = false
+                    onVaultTimeoutTypeSelect(VaultTimeout.Type.NEVER)
+                },
+                onDismissClick = { shouldShowNeverTimeoutConfirmationDialog = false },
+                onDismissRequest = { shouldShowNeverTimeoutConfirmationDialog = false },
+            )
+        }
+    }
+}
+
 @Composable
 private fun FingerPrintPhraseDialog(
     fingerprintPhrase: Text,
@@ -349,7 +412,10 @@ private fun SessionTimeoutActionDialog(
             BitwardenSelectionRow(
                 text = option.text,
                 isSelected = option == selectedSessionTimeoutAction,
-                onClick = { onActionSelect(SessionTimeoutAction.values().first { it == option }) },
+                onClick = {
+                    onActionSelect(
+                        SessionTimeoutAction.values().first { it == option })
+                },
             )
         }
     }

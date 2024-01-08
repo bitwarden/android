@@ -2,9 +2,12 @@ package com.x8bit.bitwarden.data.platform.repository.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +31,19 @@ object PlatformRepositoryModule {
         EnvironmentRepositoryImpl(
             environmentDiskSource = environmentDiskSource,
             authDiskSource = authDiskSource,
+            dispatcherManager = dispatcherManager,
+        )
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        dispatcherManager: DispatcherManager,
+    ): SettingsRepository =
+        SettingsRepositoryImpl(
+            authDiskSource = authDiskSource,
+            settingsDiskSource = settingsDiskSource,
             dispatcherManager = dispatcherManager,
         )
 }

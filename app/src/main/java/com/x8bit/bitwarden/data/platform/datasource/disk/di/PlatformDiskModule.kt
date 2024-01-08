@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.di
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +28,14 @@ object PlatformDiskModule {
         EnvironmentDiskSourceImpl(
             sharedPreferences = sharedPreferences,
             json = json,
+        )
+
+    @Provides
+    @Singleton
+    fun provideSettingsDiskSource(
+        sharedPreferences: SharedPreferences,
+    ): SettingsDiskSource =
+        SettingsDiskSourceImpl(
+            sharedPreferences = sharedPreferences,
         )
 }
