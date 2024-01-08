@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -33,6 +34,7 @@ object AuthRepositoryModule {
         authDiskSource: AuthDiskSource,
         dispatchers: DispatcherManager,
         environmentRepository: EnvironmentRepository,
+        settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
     ): AuthRepository = AuthRepositoryImpl(
         accountsService = accountsService,
@@ -42,6 +44,7 @@ object AuthRepositoryModule {
         haveIBeenPwnedService = haveIBeenPwnedService,
         dispatcherManager = dispatchers,
         environmentRepository = environmentRepository,
+        settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
     )
 }

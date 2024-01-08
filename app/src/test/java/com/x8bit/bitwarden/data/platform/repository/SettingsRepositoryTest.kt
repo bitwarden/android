@@ -11,6 +11,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -23,6 +24,68 @@ class SettingsRepositoryTest {
         settingsDiskSource = fakeSettingsDiskSource,
         dispatcherManager = FakeDispatcherManager(),
     )
+
+    @Test
+    fun `clearData should clear all necessary data for the given user`() {
+        val userId = "userId"
+
+        fakeSettingsDiskSource.apply {
+            storeVaultTimeoutInMinutes(
+                userId = userId,
+                vaultTimeoutInMinutes = 30,
+            )
+            storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = VaultTimeoutAction.LOCK,
+            )
+        }
+
+        settingsRepository.clearData(userId = userId)
+
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId))
+    }
+
+    @Test
+    fun `setDefaultsIfNecessary should set default values for the given user if necessary`() {
+        val userId = "userId"
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId))
+
+        settingsRepository.setDefaultsIfNecessary(userId = userId)
+
+        // Calling once sets values
+        assertEquals(
+            30,
+            fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+        )
+        assertEquals(
+            VaultTimeoutAction.LOCK,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+        )
+
+        // Updating the Vault settings values and calling setDefaultsIfNecessary again has no effect
+        // on the currently stored values.
+        fakeSettingsDiskSource.apply {
+            storeVaultTimeoutInMinutes(
+                userId = userId,
+                vaultTimeoutInMinutes = 240,
+            )
+            storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = VaultTimeoutAction.LOGOUT,
+            )
+        }
+        settingsRepository.setDefaultsIfNecessary(userId = userId)
+        assertEquals(
+            240,
+            fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+        )
+        assertEquals(
+            VaultTimeoutAction.LOGOUT,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+        )
+    }
 
     @Test
     fun `vaultTimeout should pull from and update SettingsDiskSource for the current user`() {

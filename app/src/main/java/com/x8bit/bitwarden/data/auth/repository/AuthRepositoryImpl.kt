@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITER
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
@@ -62,6 +63,7 @@ class AuthRepositoryImpl constructor(
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val environmentRepository: EnvironmentRepository,
+    private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository {
@@ -210,6 +212,9 @@ class AuthRepositoryImpl constructor(
                             userId = userStateJson.activeUserId,
                             privateKey = loginResponse.privateKey,
                         )
+                        settingsRepository.setDefaultsIfNecessary(
+                            userId = userStateJson.activeUserId,
+                        )
                         vaultRepository.sync()
                         specialCircumstance = null
                         LoginResult.Success
@@ -274,6 +279,9 @@ class AuthRepositoryImpl constructor(
             // Update the user information and log out
             authDiskSource.userState = null
         }
+
+        // Clear settings
+        settingsRepository.clearData(userId)
 
         // Delete all the vault data
         vaultRepository.deleteVaultData(userId)
