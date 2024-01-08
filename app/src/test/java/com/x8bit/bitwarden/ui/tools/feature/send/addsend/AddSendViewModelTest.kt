@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -15,6 +18,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -23,6 +27,10 @@ import org.junit.jupiter.api.Test
 
 class AddSendViewModelTest : BaseViewModelTest() {
 
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val authRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
     private val vaultRepository: VaultRepository = mockk()
 
     @BeforeEach
@@ -43,7 +51,9 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should read from saved state when present`() {
-        val savedState = mockk<AddSendState>()
+        val savedState = DEFAULT_STATE.copy(
+            dialogState = AddSendState.DialogState.Loading("Loading".asText()),
+        )
         val viewModel = createViewModel(savedState)
         assertEquals(savedState, viewModel.stateFlow.value)
     }
@@ -158,19 +168,43 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `FileTypeClick and TextTypeClick should toggle sendType`() = runTest {
+    fun `FileTypeClick and TextTypeClick should toggle sendType when user is premium`() = runTest {
         val viewModel = createViewModel()
+        val premiumUserState = DEFAULT_STATE.copy(isPremiumUser = true)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             selectedType = AddSendState.ViewState.Content.SendType.File,
         )
+        // Make sure we are a premium user
+        mutableUserStateFlow.tryEmit(
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(DEFAULT_USER_ACCOUNT_STATE.copy(isPremium = true)),
+            ),
+        )
 
         viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
+            assertEquals(premiumUserState, awaitItem())
             viewModel.trySendAction(AddSendAction.FileTypeClick)
-            assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
+            assertEquals(premiumUserState.copy(viewState = expectedViewState), awaitItem())
             viewModel.trySendAction(AddSendAction.TextTypeClick)
-            assertEquals(DEFAULT_STATE, awaitItem())
+            assertEquals(premiumUserState, awaitItem())
         }
+    }
+
+    @Test
+    fun `FileTypeClick should display error dialog when account is not premium`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(AddSendAction.FileTypeClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = R.string.send.asText(),
+                    message = R.string.send_file_premium_required.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -278,6 +312,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         state: AddSendState? = null,
     ): AddSendViewModel = AddSendViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        authRepo = authRepository,
         vaultRepo = vaultRepository,
     )
 
@@ -307,6 +342,23 @@ class AddSendViewModelTest : BaseViewModelTest() {
         private val DEFAULT_STATE = AddSendState(
             viewState = DEFAULT_VIEW_STATE,
             dialogState = null,
+            isPremiumUser = false,
+        )
+
+        private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
+            userId = "user_id_1",
+            name = "Bit",
+            email = "bitwarden@gmail.com",
+            avatarColorHex = "#ff00ff",
+            environment = Environment.Us,
+            isPremium = false,
+            isVaultUnlocked = true,
+            organizations = emptyList(),
+        )
+
+        private val DEFAULT_USER_STATE = UserState(
+            activeUserId = "user_id_1",
+            accounts = listOf(DEFAULT_USER_ACCOUNT_STATE),
         )
     }
 }

@@ -601,6 +601,7 @@ class AddSendScreenTest : BaseComposeTest() {
         private val DEFAULT_STATE = AddSendState(
             viewState = DEFAULT_VIEW_STATE,
             dialogState = null,
+            isPremiumUser = false,
         )
     }
 }
