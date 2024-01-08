@@ -38,6 +38,12 @@ class GeneratorSdkSourceImpl(
         clientGenerator.username(request)
     }
 
+    override suspend fun generateRandomWord(
+        request: UsernameGeneratorRequest.Word,
+    ): Result<String> = runCatching {
+        clientGenerator.username(request)
+    }
+
     override suspend fun generateForwardedServiceEmail(
         request: UsernameGeneratorRequest.Forwarded,
     ): Result<String> = runCatching {

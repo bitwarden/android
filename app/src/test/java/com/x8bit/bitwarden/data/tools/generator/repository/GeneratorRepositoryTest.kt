@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwar
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.coEvery
@@ -342,6 +343,45 @@ class GeneratorRepositoryTest {
 
         assertTrue(result is GeneratedCatchAllUsernameResult.InvalidRequest)
         coVerify { generatorSdkSource.generateCatchAllEmail(request) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `generateRandomWord should return Success with generated email when SDK call is successful`() = runTest {
+        val userId = "testUserId"
+        val request = UsernameGeneratorRequest.Word(
+            capitalize = false,
+            includeNumber = false,
+        )
+        val generatedEmail = "user"
+
+        coEvery { generatorSdkSource.generateRandomWord(request) } returns
+            Result.success(generatedEmail)
+
+        val result = repository.generateRandomWordUsername(request)
+
+        assertEquals(
+            generatedEmail,
+            (result as GeneratedRandomWordUsernameResult.Success).generatedUsername,
+        )
+        coVerify { generatorSdkSource.generateRandomWord(request) }
+    }
+
+    @Test
+    fun `generateRandomWord should return InvalidRequest on SDK failure`() = runTest {
+        val request = UsernameGeneratorRequest.Word(
+            capitalize = false,
+            includeNumber = false,
+        )
+        val exception = RuntimeException("An error occurred")
+        coEvery {
+            generatorSdkSource.generateRandomWord(request)
+        } returns Result.failure(exception)
+
+        val result = repository.generateRandomWordUsername(request)
+
+        assertTrue(result is GeneratedRandomWordUsernameResult.InvalidRequest)
+        coVerify { generatorSdkSource.generateRandomWord(request) }
     }
 
     @Test
