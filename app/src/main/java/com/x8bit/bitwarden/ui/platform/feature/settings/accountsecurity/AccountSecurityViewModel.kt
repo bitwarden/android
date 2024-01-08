@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -39,7 +40,7 @@ class AccountSecurityViewModel @Inject constructor(
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
             vaultTimeoutType = settingsRepository.vaultTimeout.type,
-            sessionTimeoutAction = SessionTimeoutAction.LOCK,
+            vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
         ),
 ) {
 
@@ -62,11 +63,10 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityAction.LogoutClick -> handleLogoutClick()
         AccountSecurityAction.PendingLoginRequestsClick -> handlePendingLoginRequestsClick()
         is AccountSecurityAction.VaultTimeoutTypeSelect -> handleVaultTimeoutTypeSelect(action)
-        is AccountSecurityAction.SessionTimeoutActionSelect -> {
-            handleSessionTimeoutActionSelect(action)
+        is AccountSecurityAction.VaultTimeoutActionSelect -> {
+            handleVaultTimeoutActionSelect(action)
         }
 
-        AccountSecurityAction.SessionTimeoutActionClick -> handleSessionTimeoutActionClick()
         AccountSecurityAction.TwoStepLoginClick -> handleTwoStepLoginClick()
         is AccountSecurityAction.UnlockWithBiometricToggle -> {
             handleUnlockWithBiometricToggled(action)
@@ -146,21 +146,19 @@ class AccountSecurityViewModel @Inject constructor(
         sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
     }
 
-    private fun handleSessionTimeoutActionSelect(
-        action: AccountSecurityAction.SessionTimeoutActionSelect,
+    private fun handleVaultTimeoutActionSelect(
+        action: AccountSecurityAction.VaultTimeoutActionSelect,
     ) {
-        // TODO BIT-746: Implement session timeout action
+        val vaultTimeoutAction = action.vaultTimeoutAction
         mutableStateFlow.update {
             it.copy(
-                dialog = null,
-                sessionTimeoutAction = action.sessionTimeoutAction,
+                vaultTimeoutAction = action.vaultTimeoutAction,
             )
         }
-        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
-    }
+        settingsRepository.vaultTimeoutAction = vaultTimeoutAction
 
-    private fun handleSessionTimeoutActionClick() {
-        mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.SessionTimeoutAction) }
+        // TODO BIT-746: Finish implementing session timeout action
+        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
     }
 
     private fun handleTwoStepLoginClick() {
@@ -194,7 +192,7 @@ data class AccountSecurityState(
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
     val vaultTimeoutType: VaultTimeout.Type,
-    val sessionTimeoutAction: SessionTimeoutAction,
+    val vaultTimeoutAction: VaultTimeoutAction,
 ) : Parcelable
 
 /**
@@ -212,12 +210,6 @@ sealed class AccountSecurityDialog : Parcelable {
      */
     @Parcelize
     data object FingerprintPhrase : AccountSecurityDialog()
-
-    /**
-     * Allows the user to select a session timeout action.
-     */
-    @Parcelize
-    data object SessionTimeoutAction : AccountSecurityDialog()
 }
 
 /**
@@ -325,16 +317,11 @@ sealed class AccountSecurityAction {
     ) : AccountSecurityAction()
 
     /**
-     * User selected a [SessionTimeoutAction].
+     * User selected a [VaultTimeoutAction].
      */
-    data class SessionTimeoutActionSelect(
-        val sessionTimeoutAction: SessionTimeoutAction,
+    data class VaultTimeoutActionSelect(
+        val vaultTimeoutAction: VaultTimeoutAction,
     ) : AccountSecurityAction()
-
-    /**
-     * User clicked session timeout action.
-     */
-    data object SessionTimeoutActionClick : AccountSecurityAction()
 
     /**
      * User clicked two-step login.

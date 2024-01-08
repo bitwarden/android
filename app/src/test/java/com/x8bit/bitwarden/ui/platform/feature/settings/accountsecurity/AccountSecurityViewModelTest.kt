@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -146,11 +147,14 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on SessionTimeoutActionSelect should update session timeout action`() = runTest {
-        val viewModel = createViewModel()
+    fun `on VaultTimeoutActionSelect should update vault timeout action`() = runTest {
+        val settingsRepository = mockk<SettingsRepository>() {
+            every { vaultTimeoutAction = any() } just runs
+        }
+        val viewModel = createViewModel(settingsRepository = settingsRepository)
         viewModel.eventFlow.test {
             viewModel.trySendAction(
-                AccountSecurityAction.SessionTimeoutActionSelect(SessionTimeoutAction.LOG_OUT),
+                AccountSecurityAction.VaultTimeoutActionSelect(VaultTimeoutAction.LOGOUT),
             )
             assertEquals(
                 AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
@@ -158,21 +162,13 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             )
         }
         assertEquals(
-            DEFAULT_STATE.copy(dialog = null, sessionTimeoutAction = SessionTimeoutAction.LOG_OUT),
+            DEFAULT_STATE.copy(
+                vaultTimeoutAction = VaultTimeoutAction.LOGOUT,
+            ),
             viewModel.stateFlow.value,
         )
+        verify { settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT }
     }
-
-    @Test
-    fun `on SessionTimeoutActionClick should update shouldShowSessionTimeoutActionDialog`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.trySendAction(AccountSecurityAction.SessionTimeoutActionClick)
-            assertEquals(
-                DEFAULT_STATE.copy(dialog = AccountSecurityDialog.SessionTimeoutAction),
-                viewModel.stateFlow.value,
-            )
-        }
 
     @Test
     fun `on TwoStepLoginClick should emit NavigateToTwoStepLogin`() = runTest {
@@ -268,7 +264,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
             vaultTimeoutType = VaultTimeout.Type.THIRTY_MINUTES,
-            sessionTimeoutAction = SessionTimeoutAction.LOCK,
+            vaultTimeoutAction = VaultTimeoutAction.LOCK,
         )
     }
 }

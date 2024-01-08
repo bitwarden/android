@@ -16,6 +16,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
@@ -340,32 +341,97 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on session timeout action click should send SessionTimeoutActionClick`() {
+    fun `on session timeout action click should show a selection dialog`() {
+        composeTestRule.assertNoDialogExists()
+
         composeTestRule
             .onNodeWithText("Session timeout action")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AccountSecurityAction.SessionTimeoutActionClick) }
+
+        composeTestRule
+            .onAllNodesWithText("Vault timeout action")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Lock")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on session timeout action dialog option click should close the dialog and send VaultTimeoutActionSelect`() {
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithText("Session timeout action")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Vault timeout action")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.VaultTimeoutActionSelect(
+                    VaultTimeoutAction.LOGOUT,
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on session timeout action dialog cancel click should close the dialog`() {
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithText("Session timeout action")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Vault timeout action")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
-    fun `session timeout action should be updated on or off according to state`() {
+    fun `session timeout action should be updated according to state`() {
         composeTestRule
             .onNodeWithText("Session timeout action")
             .performScrollTo()
             .assertTextEquals("Session timeout action", "Lock")
-        mutableStateFlow.update { it.copy(sessionTimeoutAction = SessionTimeoutAction.LOG_OUT) }
+        mutableStateFlow.update { it.copy(vaultTimeoutAction = VaultTimeoutAction.LOGOUT) }
         composeTestRule
             .onNodeWithText("Session timeout action")
             .performScrollTo()
             .assertTextEquals("Session timeout action", "Log out")
-    }
-
-    @Test
-    fun `session timeout action dialog should be displayed to state`() {
-        composeTestRule.onNodeWithText("Vault timeout action").assertDoesNotExist()
-        mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.SessionTimeoutAction) }
-        composeTestRule.onNodeWithText("Vault timeout action").assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
@@ -528,7 +594,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
             vaultTimeoutType = VaultTimeout.Type.THIRTY_MINUTES,
-            sessionTimeoutAction = SessionTimeoutAction.LOCK,
+            vaultTimeoutAction = VaultTimeoutAction.LOCK,
         )
     }
 }
