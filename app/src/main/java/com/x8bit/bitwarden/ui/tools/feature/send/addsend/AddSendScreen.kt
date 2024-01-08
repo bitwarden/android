@@ -19,11 +19,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
 
 /**
@@ -48,6 +52,13 @@ fun AddSendScreen(
             }
         }
     }
+
+    AddSendDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(AddSendAction.DismissDialogClick) }
+        },
+    )
 
     BitwardenScaffold(
         modifier = Modifier
@@ -94,5 +105,27 @@ fun AddSendScreen(
                 modifier = modifier,
             )
         }
+    }
+}
+
+@Composable
+private fun AddSendDialogs(
+    dialogState: AddSendState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is AddSendState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
+        is AddSendState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(dialogState.message),
+        )
+
+        null -> Unit
     }
 }
