@@ -61,14 +61,16 @@ fun VaultAddEditCustomField(
         }
 
         is VaultAddEditState.Custom.LinkedField -> {
-            CustomFieldLinkedField(
-                selectedOption = customField.vaultLinkedFieldType,
-                supportedLinkedTypes = supportedLinkedTypes,
-                onValueChanged = {
-                    onCustomFieldValueChange(customField.copy(vaultLinkedFieldType = it))
-                },
-                modifier = modifier,
-            )
+            customField.vaultLinkedFieldType?.let { fieldType ->
+                CustomFieldLinkedField(
+                    selectedOption = fieldType,
+                    supportedLinkedTypes = supportedLinkedTypes,
+                    onValueChanged = {
+                        onCustomFieldValueChange(customField.copy(vaultLinkedFieldType = it))
+                    },
+                    modifier = modifier,
+                )
+            }
         }
 
         is VaultAddEditState.Custom.TextField -> {

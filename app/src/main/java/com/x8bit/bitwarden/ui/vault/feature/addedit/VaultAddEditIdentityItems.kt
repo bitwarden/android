@@ -339,14 +339,31 @@ fun LazyListScope.vaultAddEditIdentityItems(
 
     items(commonState.customFieldData) { customItem ->
         VaultAddEditCustomField(
-            customItem,
+            customField = customItem,
             onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             supportedLinkedTypes = persistentListOf(
-                VaultLinkedFieldType.PASSWORD,
-                VaultLinkedFieldType.USERNAME,
+                VaultLinkedFieldType.TITLE,
+                VaultLinkedFieldType.MIDDLE_NAME,
+                VaultLinkedFieldType.ADDRESS_1,
+                VaultLinkedFieldType.ADDRESS_2,
+                VaultLinkedFieldType.ADDRESS_3,
+                VaultLinkedFieldType.CITY,
+                VaultLinkedFieldType.STATE,
+                VaultLinkedFieldType.POSTAL_CODE,
+                VaultLinkedFieldType.COUNTRY,
+                VaultLinkedFieldType.COMPANY,
+                VaultLinkedFieldType.EMAIL,
+                VaultLinkedFieldType.PHONE,
+                VaultLinkedFieldType.SSN,
+                VaultLinkedFieldType.IDENTITY_USERNAME,
+                VaultLinkedFieldType.PASSPORT_NUMBER,
+                VaultLinkedFieldType.LICENSE_NUMBER,
+                VaultLinkedFieldType.FIRST_NAME,
+                VaultLinkedFieldType.LAST_NAME,
+                VaultLinkedFieldType.FULL_NAME,
             ),
         )
     }

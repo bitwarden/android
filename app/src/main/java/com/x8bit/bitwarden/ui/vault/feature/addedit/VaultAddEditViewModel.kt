@@ -147,6 +147,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddLoginItem() {
         updateContent { currentContent ->
             currentContent.copy(
+                common = currentContent.common.clearNonSharedData(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
             )
         }
@@ -155,6 +156,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddSecureNotesItem() {
         updateContent { currentContent ->
             currentContent.copy(
+                common = currentContent.common.clearNonSharedData(),
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             )
         }
@@ -163,6 +165,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddCardItem() {
         updateContent { currentContent ->
             currentContent.copy(
+                common = currentContent.common.clearNonSharedData(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
             )
         }
@@ -171,6 +174,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddIdentityItem() {
         updateContent { currentContent ->
             currentContent.copy(
+                common = currentContent.common.clearNonSharedData(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
             )
         }
@@ -230,13 +234,17 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleAddNewCustomFieldClick(
         action: VaultAddEditAction.Common.AddNewCustomFieldClick,
     ) {
-
-        updateCommonContent { common ->
-
+        updateContent {
             val newCustomData: VaultAddEditState.Custom =
-                action.customFieldType.toCustomField(action.name)
-
-            common.copy(customFieldData = common.customFieldData + newCustomData)
+                action.customFieldType.toCustomField(
+                    name = action.name,
+                    itemType = it.type,
+                )
+            it.copy(
+                common = it
+                    .common
+                    .copy(customFieldData = it.common.customFieldData + newCustomData),
+            )
         }
     }
 
@@ -457,6 +465,7 @@ class VaultAddEditViewModel @Inject constructor(
     //endregion Add Login Item Type Handlers
 
     //region Identity Type Handlers
+    @Suppress("LongMethod")
     private fun handleIdentityTypeActions(action: VaultAddEditAction.ItemType.IdentityType) {
         when (action) {
             is VaultAddEditAction.ItemType.IdentityType.FirstNameTextChange -> {
@@ -909,6 +918,13 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private fun VaultAddEditState.ViewState.Content.Common.clearNonSharedData():
+        VaultAddEditState.ViewState.Content.Common =
+        copy(
+            customFieldData = customFieldData
+                .filterNot { it is VaultAddEditState.Custom.LinkedField },
+        )
+
     //endregion Utility Functions
 }
 
@@ -1185,7 +1201,7 @@ data class VaultAddEditState(
         data class LinkedField(
             override val itemId: String,
             val name: String,
-            val vaultLinkedFieldType: VaultLinkedFieldType,
+            val vaultLinkedFieldType: VaultLinkedFieldType?,
         ) : Custom()
     }
 
