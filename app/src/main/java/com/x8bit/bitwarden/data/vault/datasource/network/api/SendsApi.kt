@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
+import androidx.annotation.Keep
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import retrofit2.http.Body
@@ -11,6 +12,7 @@ import retrofit2.http.Path
 /**
  * Defines raw calls under the /send API with authentication applied.
  */
+@Keep
 interface SendsApi {
 
     /**
