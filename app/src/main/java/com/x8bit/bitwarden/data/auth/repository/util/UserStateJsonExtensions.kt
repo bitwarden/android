@@ -17,14 +17,16 @@ import com.x8bit.bitwarden.ui.platform.base.util.toHexColorRepresentation
 fun UserStateJson.toUpdatedUserStateJson(
     syncResponse: SyncResponseJson,
 ): UserStateJson {
-    val userId = syncResponse.profile.id
+    val syncProfile = syncResponse.profile
+    val userId = syncProfile.id
     val account = this.accounts[userId] ?: return this
     val profile = account.profile
     // TODO: Update additional missing UserStateJson properties (BIT-916)
     val updatedProfile = profile
         .copy(
-            avatarColorHex = syncResponse.profile.avatarColor,
-            stamp = syncResponse.profile.securityStamp,
+            avatarColorHex = syncProfile.avatarColor,
+            stamp = syncProfile.securityStamp,
+            hasPremium = syncProfile.isPremium || syncProfile.isPremiumFromOrganization,
         )
     val updatedAccount = account.copy(profile = updatedProfile)
     return this
