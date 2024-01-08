@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -31,6 +34,7 @@ private const val KEY_STATE = "state"
 class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     authRepo: AuthRepository,
+    private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     initialState = savedStateHandle[KEY_STATE] ?: AddSendState(
@@ -50,6 +54,7 @@ class AddSendViewModel @Inject constructor(
         ),
         dialogState = null,
         isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
+        baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
     ),
 ) {
 
@@ -91,7 +96,7 @@ class AddSendViewModel @Inject constructor(
     private fun handleCreateSendResultReceive(
         action: AddSendAction.Internal.CreateSendResultReceive,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             CreateSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -103,9 +108,14 @@ class AddSendViewModel @Inject constructor(
                 }
             }
 
-            CreateSendResult.Success -> {
+            is CreateSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(AddSendEvent.NavigateBack)
+                sendEvent(
+                    AddSendEvent.ShowShareSheet(
+                        message = result.sendView.toSendUrl(state.baseWebSendUrl),
+                    ),
+                )
             }
         }
     }
@@ -287,6 +297,7 @@ data class AddSendState(
     val dialogState: DialogState?,
     val viewState: ViewState,
     val isPremiumUser: Boolean,
+    val baseWebSendUrl: String,
 ) : Parcelable {
 
     /**
@@ -382,6 +393,11 @@ sealed class AddSendEvent {
      * Navigate back.
      */
     data object NavigateBack : AddSendEvent()
+
+    /**
+     * Show share sheet.
+     */
+    data class ShowShareSheet(val message: String) : AddSendEvent()
 
     /**
      * Show Toast.

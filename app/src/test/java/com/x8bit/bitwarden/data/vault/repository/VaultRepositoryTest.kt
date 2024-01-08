@@ -1904,24 +1904,28 @@ class VaultRepositoryTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `createSend with sendsService createSend success should return CreateSendResult success`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockSendView = createMockSendView(number = 1)
+            val mockSdkSend = createMockSdkSend(number = 1)
+            val mockSend = createMockSend(number = 1)
+            val mockSendViewResult = createMockSendView(number = 2)
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns createMockSdkSend(number = 1).asSuccess()
-            val mockSend = createMockSend(number = 1)
+            } returns mockSdkSend.asSuccess()
             coEvery {
                 sendsService.createSend(body = createMockSendJsonRequest(number = 1))
             } returns mockSend.asSuccess()
             coEvery { vaultDiskSource.saveSend(userId, mockSend) } just runs
+            coEvery {
+                vaultSdkSource.decryptSend(userId, mockSdkSend)
+            } returns mockSendViewResult.asSuccess()
 
             val result = vaultRepository.createSend(sendView = mockSendView)
 
-            assertEquals(CreateSendResult.Success, result)
+            assertEquals(CreateSendResult.Success(mockSendViewResult), result)
         }
 
     @Test
