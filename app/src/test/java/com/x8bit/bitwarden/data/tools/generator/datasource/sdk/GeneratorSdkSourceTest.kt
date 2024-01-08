@@ -95,6 +95,28 @@ class GeneratorSdkSourceTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `generateCatchAllEmail should call SDK and return a Result with the generated email`() =
+        runBlocking {
+            val request = UsernameGeneratorRequest.Catchall(
+                type = AppendType.Random,
+                domain = "domain",
+            )
+            val expectedResult = "user@domain"
+
+            coEvery {
+                clientGenerators.username(request)
+            } returns expectedResult
+
+            val result = generatorSdkSource.generateCatchAllEmail(request)
+
+            assertEquals(Result.success(expectedResult), result)
+            coVerify {
+                clientGenerators.username(request)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `generateForwardedServiceEmail should call SDK and return a Result with the generated email`() =
         runBlocking {
             val request = UsernameGeneratorRequest.Forwarded(

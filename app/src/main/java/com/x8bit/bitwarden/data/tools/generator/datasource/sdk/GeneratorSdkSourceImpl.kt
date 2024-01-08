@@ -32,6 +32,12 @@ class GeneratorSdkSourceImpl(
         clientGenerator.username(request)
     }
 
+    override suspend fun generateCatchAllEmail(
+        request: UsernameGeneratorRequest.Catchall,
+    ): Result<String> = runCatching {
+        clientGenerator.username(request)
+    }
+
     override suspend fun generateForwardedServiceEmail(
         request: UsernameGeneratorRequest.Forwarded,
     ): Result<String> = runCatching {

@@ -27,6 +27,13 @@ interface GeneratorSdkSource {
     ): Result<String>
 
     /**
+     * Generates a catch all email returning a [String] wrapped in a [Result].
+     */
+    suspend fun generateCatchAllEmail(
+        request: UsernameGeneratorRequest.Catchall,
+    ): Result<String>
+
+    /**
      * Generates a forwarded service email returning a [String] wrapped in a [Result].
      */
     suspend fun generateForwardedServiceEmail(

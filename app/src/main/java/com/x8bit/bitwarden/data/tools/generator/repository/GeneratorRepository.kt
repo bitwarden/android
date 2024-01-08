@@ -5,6 +5,7 @@ import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
@@ -40,11 +41,18 @@ interface GeneratorRepository {
     ): GeneratedPassphraseResult
 
     /**
-     * Attempt to generate a forwarded service username.
+     * Attempt to generate a plus addressed email username.
      */
     suspend fun generatePlusAddressedEmail(
         plusAddressedEmailGeneratorRequest: UsernameGeneratorRequest.Subaddress,
     ): GeneratedPlusAddressedUsernameResult
+
+    /**
+     * Attempt to generate a catch-all email username.
+     */
+    suspend fun generateCatchAllEmail(
+        catchAllEmailGeneratorRequest: UsernameGeneratorRequest.Catchall,
+    ): GeneratedCatchAllUsernameResult
 
     /**
      * Attempt to generate a forwarded service username.
