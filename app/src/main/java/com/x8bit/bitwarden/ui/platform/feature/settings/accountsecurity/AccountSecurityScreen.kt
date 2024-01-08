@@ -31,6 +31,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -97,16 +98,6 @@ fun AccountSecurityScreen(
             },
             onLearnMore = remember(viewModel) {
                 { viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick) }
-            },
-        )
-
-        AccountSecurityDialog.SessionTimeoutAction -> SessionTimeoutActionDialog(
-            selectedSessionTimeoutAction = state.sessionTimeoutAction,
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
-            },
-            onActionSelect = remember(viewModel) {
-                { viewModel.trySendAction(AccountSecurityAction.SessionTimeoutActionSelect(it)) }
             },
         )
 
@@ -210,19 +201,13 @@ fun AccountSecurityScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
-            BitwardenTextRow(
-                text = stringResource(id = R.string.session_timeout_action),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.SessionTimeoutActionClick) }
+            SessionTimeoutActionRow(
+                selectedVaultTimeoutAction = state.vaultTimeoutAction,
+                onVaultTimeoutActionSelect = remember(viewModel) {
+                    { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it)) }
                 },
                 modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(
-                    text = state.sessionTimeoutAction.text(),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            )
 
             Spacer(Modifier.height(16.dp))
             BitwardenListHeaderText(
@@ -349,6 +334,47 @@ private fun SessionTimeoutRow(
     }
 }
 
+@Suppress("LongMethod")
+@Composable
+private fun SessionTimeoutActionRow(
+    selectedVaultTimeoutAction: VaultTimeoutAction,
+    onVaultTimeoutActionSelect: (VaultTimeoutAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowSelectionDialog by remember { mutableStateOf(false) }
+    BitwardenTextRow(
+        text = stringResource(id = R.string.session_timeout_action),
+        onClick = { shouldShowSelectionDialog = true },
+        modifier = modifier,
+    ) {
+        Text(
+            text = selectedVaultTimeoutAction.displayLabel(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+    if (shouldShowSelectionDialog) {
+        BitwardenSelectionDialog(
+            title = stringResource(id = R.string.vault_timeout_action),
+            onDismissRequest = { shouldShowSelectionDialog = false },
+        ) {
+            val vaultTimeoutActionOptions = VaultTimeoutAction.entries
+            vaultTimeoutActionOptions.forEach { option ->
+                BitwardenSelectionRow(
+                    text = option.displayLabel,
+                    isSelected = option == selectedVaultTimeoutAction,
+                    onClick = {
+                        shouldShowSelectionDialog = false
+                        onVaultTimeoutActionSelect(
+                            vaultTimeoutActionOptions.first { it == option },
+                        )
+                    },
+                )
+            }
+        }
+    }
+}
+
 @Composable
 private fun FingerPrintPhraseDialog(
     fingerprintPhrase: Text,
@@ -396,27 +422,4 @@ private fun FingerPrintPhraseDialog(
         },
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
     )
-}
-
-@Composable
-private fun SessionTimeoutActionDialog(
-    selectedSessionTimeoutAction: SessionTimeoutAction,
-    onDismissRequest: () -> Unit,
-    onActionSelect: (SessionTimeoutAction) -> Unit,
-) {
-    BitwardenSelectionDialog(
-        title = stringResource(id = R.string.vault_timeout_action),
-        onDismissRequest = onDismissRequest,
-    ) {
-        SessionTimeoutAction.values().forEach { option ->
-            BitwardenSelectionRow(
-                text = option.text,
-                isSelected = option == selectedSessionTimeoutAction,
-                onClick = {
-                    onActionSelect(
-                        SessionTimeoutAction.values().first { it == option })
-                },
-            )
-        }
-    }
 }
