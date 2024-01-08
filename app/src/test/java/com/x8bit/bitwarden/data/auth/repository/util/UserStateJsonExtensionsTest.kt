@@ -83,6 +83,8 @@ class UserStateJsonExtensionsTest {
                             every { id } returns "activeUserId"
                             every { avatarColor } returns "avatarColor"
                             every { securityStamp } returns "securityStamp"
+                            every { isPremium } returns true
+                            every { isPremiumFromOrganization } returns true
                         }
                     },
                 ),
