@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -38,6 +39,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 @Composable
 fun AddSendScreen(
     viewModel: AddSendViewModel = hiltViewModel(),
+    intentHandler: IntentHandler = IntentHandler(LocalContext.current),
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -47,6 +49,10 @@ fun AddSendScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is AddSendEvent.NavigateBack -> onNavigateBack()
+            is AddSendEvent.ShowShareSheet -> {
+                intentHandler.shareText(event.message)
+            }
+
             is AddSendEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }

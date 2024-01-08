@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
@@ -435,12 +436,19 @@ class VaultRepositoryImpl(
                 sendView = sendView,
             )
             .flatMap { send -> sendsService.createSend(body = send.toEncryptedNetworkSend()) }
+            .onSuccess {
+                // Save the send immediately, regardless of whether the decrypt succeeds
+                vaultDiskSource.saveSend(userId = userId, send = it)
+            }
+            .flatMap {
+                vaultSdkSource.decryptSend(
+                    userId = userId,
+                    send = it.toEncryptedSdkSend(),
+                )
+            }
             .fold(
                 onFailure = { CreateSendResult.Error },
-                onSuccess = {
-                    vaultDiskSource.saveSend(userId = userId, send = it)
-                    CreateSendResult.Success
-                },
+                onSuccess = { CreateSendResult.Success(it) },
             )
     }
 

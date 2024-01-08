@@ -17,10 +17,13 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -31,6 +34,10 @@ import org.junit.Test
 class AddSendScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+
+    private val intentHandler: IntentHandler = mockk {
+        every { shareText(any()) } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<AddSendEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<AddSendViewModel>(relaxed = true) {
@@ -43,6 +50,7 @@ class AddSendScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             AddSendScreen(
                 viewModel = viewModel,
+                intentHandler = intentHandler,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }
@@ -52,6 +60,15 @@ class AddSendScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AddSendEvent.NavigateBack)
         assert(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on ShowShareSheet should call shareText on IntentHandler`() {
+        val text = "sharable stuff"
+        mutableEventFlow.tryEmit(AddSendEvent.ShowShareSheet(text))
+        verify {
+            intentHandler.shareText(text)
+        }
     }
 
     @Test
@@ -602,6 +619,7 @@ class AddSendScreenTest : BaseComposeTest() {
             viewState = DEFAULT_VIEW_STATE,
             dialogState = null,
             isPremiumUser = false,
+            baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
         )
     }
 }
