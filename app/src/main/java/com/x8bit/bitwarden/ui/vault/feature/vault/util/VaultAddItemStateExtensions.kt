@@ -177,7 +177,7 @@ private fun VaultAddEditState.Custom.toFieldView(): FieldView =
                 name = item.name,
                 value = null,
                 type = FieldType.LINKED,
-                linkedId = item.vaultLinkedFieldType.id,
+                linkedId = item.vaultLinkedFieldType?.id,
             )
         }
 

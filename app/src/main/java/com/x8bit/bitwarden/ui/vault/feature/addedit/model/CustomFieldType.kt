@@ -22,6 +22,7 @@ enum class CustomFieldType(val typeText: Text) {
  */
 fun CustomFieldType.toCustomField(
     name: String,
+    itemType: VaultAddEditState.ViewState.Content.ItemType,
 ): VaultAddEditState.Custom {
     return when (this) {
         CustomFieldType.BOOLEAN -> {
@@ -36,7 +37,7 @@ fun CustomFieldType.toCustomField(
             VaultAddEditState.Custom.LinkedField(
                 itemId = UUID.randomUUID().toString(),
                 name = name,
-                vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
+                vaultLinkedFieldType = itemType.defaultLinkedFieldTypeOrNull,
             )
         }
 
@@ -57,3 +58,12 @@ fun CustomFieldType.toCustomField(
         }
     }
 }
+
+@Suppress("MaxLineLength")
+private val VaultAddEditState.ViewState.Content.ItemType.defaultLinkedFieldTypeOrNull: VaultLinkedFieldType?
+    get() = when (this) {
+        is VaultAddEditState.ViewState.Content.ItemType.Card -> VaultLinkedFieldType.CARDHOLDER_NAME
+        is VaultAddEditState.ViewState.Content.ItemType.Identity -> VaultLinkedFieldType.TITLE
+        is VaultAddEditState.ViewState.Content.ItemType.Login -> VaultLinkedFieldType.USERNAME
+        is VaultAddEditState.ViewState.Content.ItemType.SecureNotes -> null
+    }

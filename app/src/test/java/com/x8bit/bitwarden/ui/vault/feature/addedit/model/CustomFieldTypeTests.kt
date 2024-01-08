@@ -31,19 +31,72 @@ class CustomFieldTypeTests {
         val type = CustomFieldType.BOOLEAN
 
         val expected = VaultAddEditState.Custom.BooleanField(TEST_ID, "test", false)
-        val actual = type.toCustomField(name)
+        val actual = type.toCustomField(
+            name = name,
+            itemType = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+        )
 
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `toCustomField should return a custom linked type when we pass in required linked type`() {
+    fun `toCustomField should return a custom linked type when we pass in Login type`() {
         val name = "test"
         val type = CustomFieldType.LINKED
 
         val expected =
             VaultAddEditState.Custom.LinkedField(TEST_ID, "test", VaultLinkedFieldType.USERNAME)
-        val actual = type.toCustomField(name)
+        val actual = type.toCustomField(
+            name = name,
+            itemType = VaultAddEditState.ViewState.Content.ItemType.Login(),
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `toCustomField should return a custom linked type when we pass in Identity type`() {
+        val name = "test"
+        val type = CustomFieldType.LINKED
+
+        val expected =
+            VaultAddEditState.Custom.LinkedField(TEST_ID, "test", VaultLinkedFieldType.TITLE)
+        val actual = type.toCustomField(
+            name = name,
+            itemType = VaultAddEditState.ViewState.Content.ItemType.Identity(),
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toCustomField should return a custom linked type when we pass in Card type`() {
+        val name = "test"
+        val type = CustomFieldType.LINKED
+
+        val expected =
+            VaultAddEditState.Custom.LinkedField(TEST_ID, "test", VaultLinkedFieldType.CARDHOLDER_NAME)
+        val actual = type.toCustomField(
+            name = name,
+            itemType = VaultAddEditState.ViewState.Content.ItemType.Card(),
+        )
+
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toCustomField should return a null custom linked type when we pass in Secure Note type`() {
+        val name = "test"
+        val type = CustomFieldType.LINKED
+
+        val expected =
+            VaultAddEditState.Custom.LinkedField(TEST_ID, "test", null)
+        val actual = type.toCustomField(
+            name = name,
+            itemType = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+        )
 
         assertEquals(expected, actual)
     }
@@ -54,7 +107,10 @@ class CustomFieldTypeTests {
         val type = CustomFieldType.TEXT
 
         val expected = VaultAddEditState.Custom.TextField(TEST_ID, "test", "")
-        val actual = type.toCustomField(name)
+        val actual = type.toCustomField(
+            name = name,
+            itemType = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+        )
 
         assertEquals(expected, actual)
     }
@@ -65,7 +121,10 @@ class CustomFieldTypeTests {
         val type = CustomFieldType.HIDDEN
 
         val expected = VaultAddEditState.Custom.HiddenField(TEST_ID, "test", "")
-        val actual = type.toCustomField(name)
+        val actual = type.toCustomField(
+            name = name,
+            itemType = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+        )
 
         assertEquals(expected, actual)
     }
