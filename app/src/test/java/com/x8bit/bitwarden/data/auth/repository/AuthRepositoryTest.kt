@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -89,6 +90,10 @@ class AuthRepositoryTest {
             .apply {
                 environment = Environment.Us
             }
+    private val settingsRepository: SettingsRepository = mockk() {
+        every { clearData(any()) } just runs
+        every { setDefaultsIfNecessary(any()) } just runs
+    }
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {
             hashPassword(
@@ -123,6 +128,7 @@ class AuthRepositoryTest {
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
         environmentRepository = fakeEnvironmentRepository,
+        settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         dispatcherManager = dispatcherManager,
     )
@@ -498,6 +504,7 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             assertNull(repository.specialCircumstance)
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
             verify(exactly = 0) { vaultRepository.lockVaultIfNecessary(any()) }
             verify { vaultRepository.clearUnlockedData() }
         }
@@ -579,6 +586,7 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             assertNull(repository.specialCircumstance)
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
             verify { vaultRepository.clearUnlockedData() }
         }
@@ -949,7 +957,7 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `logout for single account should clear the access token and profile data`() = runTest {
+    fun `logout for single account should clear the access token and stored data`() = runTest {
         // First login:
         val successResponse = GET_TOKEN_RESPONSE_SUCCESS
         coEvery {
@@ -1029,6 +1037,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 organizations = null,
             )
+            verify { settingsRepository.clearData(userId = USER_ID_1) }
             verify { vaultRepository.deleteVaultData(userId = USER_ID_1) }
             verify { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
@@ -1112,6 +1121,7 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     organizationKeys = null,
                 )
+                verify { settingsRepository.clearData(userId = USER_ID_1) }
                 verify { vaultRepository.deleteVaultData(userId = USER_ID_1) }
                 verify { vaultRepository.clearUnlockedData() }
                 verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
@@ -1163,6 +1173,7 @@ class AuthRepositoryTest {
                 userId = USER_ID_2,
                 organizationKeys = null,
             )
+            verify { settingsRepository.clearData(userId = USER_ID_2) }
             verify { vaultRepository.deleteVaultData(userId = USER_ID_2) }
             verify(exactly = 0) { vaultRepository.clearUnlockedData() }
             verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
