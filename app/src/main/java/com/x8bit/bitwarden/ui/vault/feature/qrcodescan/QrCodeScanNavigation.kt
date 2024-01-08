@@ -12,11 +12,15 @@ private const val QR_CODE_SCAN_ROUTE: String = "qr_code_scan"
  */
 fun NavGraphBuilder.vaultQrCodeScanDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = QR_CODE_SCAN_ROUTE,
     ) {
-        QrCodeScanScreen(onNavigateBack)
+        QrCodeScanScreen(
+            onNavigateToManualCodeEntryScreen = onNavigateToManualCodeEntryScreen,
+            onNavigateBack = onNavigateBack,
+        )
     }
 }
 

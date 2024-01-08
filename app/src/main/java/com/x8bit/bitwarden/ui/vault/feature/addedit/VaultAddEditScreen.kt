@@ -49,6 +49,7 @@ fun VaultAddEditScreen(
     viewModel: VaultAddEditViewModel = hiltViewModel(),
     permissionsManager: PermissionsManager =
         PermissionsManagerImpl(LocalContext.current as Activity),
+    onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -58,6 +59,10 @@ fun VaultAddEditScreen(
         when (event) {
             is VaultAddEditEvent.NavigateToQrCodeScan -> {
                 onNavigateToQrCodeScanScreen()
+            }
+
+            is VaultAddEditEvent.NavigateToManualCodeEntry -> {
+                onNavigateToManualCodeEntryScreen()
             }
 
             is VaultAddEditEvent.ShowToast -> {

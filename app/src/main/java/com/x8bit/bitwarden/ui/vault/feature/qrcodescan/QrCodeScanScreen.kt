@@ -76,6 +76,7 @@ fun QrCodeScanScreen(
     onNavigateBack: () -> Unit,
     viewModel: QrCodeScanViewModel = hiltViewModel(),
     qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
+    onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
     qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
@@ -99,6 +100,10 @@ fun QrCodeScanScreen(
 
             is QrCodeScanEvent.NavigateBack -> {
                 onNavigateBack.invoke()
+            }
+
+            is QrCodeScanEvent.NavigateToManualCodeEntry -> {
+                onNavigateToManualCodeEntryScreen.invoke()
             }
         }
     }

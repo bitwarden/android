@@ -558,7 +558,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `SetupTotpClick should emit ShowToast with permission not granted when isGranted is false`() =
+        fun `SetupTotpClick should emit NavigateToManualCodeEntry when isGranted is false`() =
             runTest {
                 val viewModel = createAddVaultItemViewModel()
 
@@ -568,10 +568,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             isGranted = false,
                         ),
                     )
-                    assertEquals(
-                        VaultAddEditEvent.ShowToast("Permission Not Granted, Manual QR Code Entry Not Implemented".asText()),
-                        awaitItem(),
-                    )
+
+                    assertEquals(VaultAddEditEvent.NavigateToManualCodeEntry, awaitItem())
                 }
             }
 

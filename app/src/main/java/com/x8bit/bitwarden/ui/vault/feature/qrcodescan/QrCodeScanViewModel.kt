@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -21,8 +20,8 @@ class QrCodeScanViewModel @Inject constructor(
         when (action) {
             is QrCodeScanAction.CloseClick -> handleCloseClick()
             is QrCodeScanAction.ManualEntryTextClick -> handleManualEntryTextClick()
+            is QrCodeScanAction.CameraSetupErrorReceive -> handleCameraErrorReceive()
             is QrCodeScanAction.QrCodeScanReceive -> handleQrCodeScanReceive(action)
-            is QrCodeScanAction.CameraSetupErrorReceive -> handleCameraErrorReceive(action)
         }
     }
 
@@ -33,11 +32,8 @@ class QrCodeScanViewModel @Inject constructor(
     }
 
     private fun handleManualEntryTextClick() {
-        // TODO: Implement Manual Entry Screen (BIT-1114)
         sendEvent(
-            QrCodeScanEvent.ShowToast(
-                message = "Not yet implemented.".asText(),
-            ),
+            QrCodeScanEvent.NavigateToManualCodeEntry,
         )
     }
 
@@ -46,14 +42,9 @@ class QrCodeScanViewModel @Inject constructor(
         sendEvent(QrCodeScanEvent.NavigateBack)
     }
 
-    private fun handleCameraErrorReceive(
-        action: QrCodeScanAction.CameraSetupErrorReceive,
-    ) {
-        // TODO: Implement Manual Entry Screen (BIT-1114)
+    private fun handleCameraErrorReceive() {
         sendEvent(
-            QrCodeScanEvent.ShowToast(
-                message = "Not yet implemented.".asText(),
-            ),
+            QrCodeScanEvent.NavigateToManualCodeEntry,
         )
     }
 }
@@ -67,6 +58,11 @@ sealed class QrCodeScanEvent {
      * Navigate back.
      */
     data object NavigateBack : QrCodeScanEvent()
+
+    /**
+     * Navigate to manual code entry screen.
+     */
+    data object NavigateToManualCodeEntry : QrCodeScanEvent()
 
     /**
      * Show a toast with the given [message].

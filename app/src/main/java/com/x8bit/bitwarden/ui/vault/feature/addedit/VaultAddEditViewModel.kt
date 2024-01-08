@@ -424,13 +424,7 @@ class VaultAddEditViewModel @Inject constructor(
         if (action.isGranted) {
             sendEvent(event = VaultAddEditEvent.NavigateToQrCodeScan)
         } else {
-            // TODO Add manual QR code entry (BIT-1114)
-            sendEvent(
-                event = VaultAddEditEvent.ShowToast(
-                    message =
-                    "Permission Not Granted, Manual QR Code Entry Not Implemented".asText(),
-                ),
-            )
+            sendEvent(event = VaultAddEditEvent.NavigateToManualCodeEntry)
         }
     }
 
@@ -1233,6 +1227,11 @@ sealed class VaultAddEditEvent {
      * Navigate to the QR code scan screen.
      */
     data object NavigateToQrCodeScan : VaultAddEditEvent()
+
+    /**
+     * Navigate to the manual code entry screen.
+     */
+    data object NavigateToManualCodeEntry : VaultAddEditEvent()
 }
 
 /**
