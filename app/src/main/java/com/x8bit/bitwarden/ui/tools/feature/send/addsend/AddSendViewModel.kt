@@ -3,12 +3,18 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -21,6 +27,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     initialState = savedStateHandle[KEY_STATE] ?: AddSendState(
         viewState = AddSendState.ViewState.Content(
@@ -37,6 +44,7 @@ class AddSendViewModel @Inject constructor(
                 isHideByDefaultChecked = false,
             ),
         ),
+        dialogState = null,
     ),
 ) {
 
@@ -48,6 +56,7 @@ class AddSendViewModel @Inject constructor(
 
     override fun handleAction(action: AddSendAction): Unit = when (action) {
         is AddSendAction.CloseClick -> handleCloseClick()
+        AddSendAction.DismissDialogClick -> handleDismissDialogClick()
         is AddSendAction.SaveClick -> handleSaveClick()
         is AddSendAction.FileTypeClick -> handleFileTypeClick()
         is AddSendAction.TextTypeClick -> handleTextTypeClick()
@@ -60,6 +69,33 @@ class AddSendViewModel @Inject constructor(
         is AddSendAction.HideByDefaultToggle -> handleHideByDefaultToggle(action)
         is AddSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
         is AddSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
+        is AddSendAction.Internal -> handleInternalAction(action)
+    }
+
+    private fun handleInternalAction(action: AddSendAction.Internal): Unit = when (action) {
+        is AddSendAction.Internal.CreateSendResultReceive -> handleCreateSendResultReceive(action)
+    }
+
+    private fun handleCreateSendResultReceive(
+        action: AddSendAction.Internal.CreateSendResultReceive,
+    ) {
+        when (action.result) {
+            CreateSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            CreateSendResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(AddSendEvent.NavigateBack)
+            }
+        }
     }
 
     private fun handlePasswordChange(action: AddSendAction.PasswordChange) {
@@ -88,7 +124,38 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleCloseClick() = sendEvent(AddSendEvent.NavigateBack)
 
-    private fun handleSaveClick() = sendEvent(AddSendEvent.ShowToast("Save Not Implemented"))
+    private fun handleSaveClick() {
+        onContent { content ->
+            if (content.common.name.isBlank()) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.validation_field_required.asText(
+                                R.string.name.asText(),
+                            ),
+                        ),
+                    )
+                }
+                return@onContent
+            }
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AddSendState.DialogState.Loading(
+                        message = R.string.saving.asText(),
+                    ),
+                )
+            }
+            viewModelScope.launch {
+                val result = vaultRepo.createSend(content.toSendView())
+                sendAction(AddSendAction.Internal.CreateSendResultReceive(result))
+            }
+        }
+    }
+
+    private fun handleDismissDialogClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+    }
 
     private fun handleNameChange(action: AddSendAction.NameChange) {
         updateCommonContent {
@@ -188,6 +255,7 @@ class AddSendViewModel @Inject constructor(
  */
 @Parcelize
 data class AddSendState(
+    val dialogState: DialogState?,
     val viewState: ViewState,
 ) : Parcelable {
 
@@ -251,6 +319,29 @@ data class AddSendState(
             }
         }
     }
+
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+    }
 }
 
 /**
@@ -277,6 +368,11 @@ sealed class AddSendAction {
      * User clicked the close button.
      */
     data object CloseClick : AddSendAction()
+
+    /**
+     * User clicked to dismiss the current dialog.
+     */
+    data object DismissDialogClick : AddSendAction()
 
     /**
      * User clicked the save button.
@@ -337,4 +433,14 @@ sealed class AddSendAction {
      * User toggled the "deactivate this send" toggle.
      */
     data class DeactivateThisSendToggle(val isChecked: Boolean) : AddSendAction()
+
+    /**
+     * Models actions that the [AddSendViewModel] itself might send.
+     */
+    sealed class Internal : AddSendAction() {
+        /**
+         * Indicates a result for creating a send has been received.
+         */
+        data class CreateSendResultReceive(val result: CreateSendResult) : Internal()
+    }
 }

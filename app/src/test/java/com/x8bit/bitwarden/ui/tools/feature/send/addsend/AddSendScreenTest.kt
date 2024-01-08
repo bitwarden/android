@@ -1,11 +1,14 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -521,6 +524,60 @@ class AddSendScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
     }
 
+    @Test
+    fun `error dialog should be displayed according to state`() {
+        val errorTitle = "Fail Title"
+        val errorMessage = "Fail Message"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = errorTitle.asText(),
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
+    fun `error dialog Ok click should send DismissDialogClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = "Fail Title".asText(),
+                    message = "Fail Message".asText(),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+        verify { viewModel.trySendAction(AddSendAction.DismissDialogClick) }
+    }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        val loadingMessage = "syncing"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = AddSendState.DialogState.Loading(loadingMessage.asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
     companion object {
         private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
             name = "",
@@ -543,6 +600,7 @@ class AddSendScreenTest : BaseComposeTest() {
 
         private val DEFAULT_STATE = AddSendState(
             viewState = DEFAULT_VIEW_STATE,
+            dialogState = null,
         )
     }
 }
