@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,15 +23,19 @@ class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     initialState = savedStateHandle[KEY_STATE] ?: AddSendState(
-        name = "",
-        maxAccessCount = null,
-        passwordInput = "",
-        noteInput = "",
-        isHideEmailChecked = false,
-        isDeactivateChecked = false,
-        selectedType = AddSendState.SendType.Text(
-            input = "",
-            isHideByDefaultChecked = false,
+        viewState = AddSendState.ViewState.Content(
+            common = AddSendState.ViewState.Content.Common(
+                name = "",
+                maxAccessCount = null,
+                passwordInput = "",
+                noteInput = "",
+                isHideEmailChecked = false,
+                isDeactivateChecked = false,
+            ),
+            selectedType = AddSendState.ViewState.Content.SendType.Text(
+                input = "",
+                isHideByDefaultChecked = false,
+            ),
         ),
     ),
 ) {
@@ -58,25 +63,25 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handlePasswordChange(action: AddSendAction.PasswordChange) {
-        mutableStateFlow.update {
+        updateCommonContent {
             it.copy(passwordInput = action.input)
         }
     }
 
     private fun handleNoteChange(action: AddSendAction.NoteChange) {
-        mutableStateFlow.update {
+        updateCommonContent {
             it.copy(noteInput = action.input)
         }
     }
 
     private fun handleHideMyEmailToggle(action: AddSendAction.HideMyEmailToggle) {
-        mutableStateFlow.update {
+        updateCommonContent {
             it.copy(isHideEmailChecked = action.isChecked)
         }
     }
 
     private fun handleDeactivateThisSendToggle(action: AddSendAction.DeactivateThisSendToggle) {
-        mutableStateFlow.update {
+        updateCommonContent {
             it.copy(isDeactivateChecked = action.isChecked)
         }
     }
@@ -86,36 +91,37 @@ class AddSendViewModel @Inject constructor(
     private fun handleSaveClick() = sendEvent(AddSendEvent.ShowToast("Save Not Implemented"))
 
     private fun handleNameChange(action: AddSendAction.NameChange) {
-        mutableStateFlow.update {
+        updateCommonContent {
             it.copy(name = action.input)
         }
     }
 
     private fun handleFileTypeClick() {
-        mutableStateFlow.update {
-            it.copy(selectedType = AddSendState.SendType.File)
+        updateContent {
+            it.copy(selectedType = AddSendState.ViewState.Content.SendType.File)
         }
     }
 
     private fun handleTextTypeClick() {
-        mutableStateFlow.update {
-            it.copy(selectedType = AddSendState.SendType.Text("", isHideByDefaultChecked = false))
+        updateContent {
+            it.copy(
+                selectedType = AddSendState.ViewState.Content.SendType.Text(
+                    input = "",
+                    isHideByDefaultChecked = false,
+                ),
+            )
         }
     }
 
     private fun handleTextChange(action: AddSendAction.TextChange) {
-        val currentSendInput =
-            mutableStateFlow.value.selectedType as? AddSendState.SendType.Text ?: return
-        mutableStateFlow.update {
-            it.copy(selectedType = currentSendInput.copy(input = action.input))
+        updateTextContent {
+            it.copy(input = action.input)
         }
     }
 
     private fun handleHideByDefaultToggle(action: AddSendAction.HideByDefaultToggle) {
-        val currentSendInput =
-            mutableStateFlow.value.selectedType as? AddSendState.SendType.Text ?: return
-        mutableStateFlow.update {
-            it.copy(selectedType = currentSendInput.copy(isHideByDefaultChecked = action.isChecked))
+        updateTextContent {
+            it.copy(isHideByDefaultChecked = action.isChecked)
         }
     }
 
@@ -125,8 +131,54 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleMaxAccessCountChange(action: AddSendAction.MaxAccessCountChange) {
-        mutableStateFlow.update {
-            it.copy(maxAccessCount = action.value)
+        updateCommonContent { it.copy(maxAccessCount = action.value) }
+    }
+
+    private inline fun onContent(
+        crossinline block: (AddSendState.ViewState.Content) -> Unit,
+    ) {
+        (state.viewState as? AddSendState.ViewState.Content)?.let(block)
+    }
+
+    private inline fun updateContent(
+        crossinline block: (
+            AddSendState.ViewState.Content,
+        ) -> AddSendState.ViewState.Content?,
+    ) {
+        val currentViewState = state.viewState
+        val updatedContent = (currentViewState as? AddSendState.ViewState.Content)
+            ?.let(block)
+            ?: return
+        mutableStateFlow.update { it.copy(viewState = updatedContent) }
+    }
+
+    private inline fun updateCommonContent(
+        crossinline block: (
+            AddSendState.ViewState.Content.Common,
+        ) -> AddSendState.ViewState.Content.Common,
+    ) {
+        updateContent { it.copy(common = block(it.common)) }
+    }
+
+    private inline fun updateFileContent(
+        crossinline block: (
+            AddSendState.ViewState.Content.SendType.File,
+        ) -> AddSendState.ViewState.Content.SendType.File,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.selectedType as? AddSendState.ViewState.Content.SendType.File)
+                ?.let { currentContent.copy(selectedType = block(it)) }
+        }
+    }
+
+    private inline fun updateTextContent(
+        crossinline block: (
+            AddSendState.ViewState.Content.SendType.Text,
+        ) -> AddSendState.ViewState.Content.SendType.Text,
+    ) {
+        updateContent { currentContent ->
+            (currentContent.selectedType as? AddSendState.ViewState.Content.SendType.Text)
+                ?.let { currentContent.copy(selectedType = block(it)) }
         }
     }
 }
@@ -136,34 +188,68 @@ class AddSendViewModel @Inject constructor(
  */
 @Parcelize
 data class AddSendState(
-    val name: String,
-    val selectedType: SendType,
-    // Null here means "not set"
-    val maxAccessCount: Int?,
-    val passwordInput: String,
-    val noteInput: String,
-    val isHideEmailChecked: Boolean,
-    val isDeactivateChecked: Boolean,
+    val viewState: ViewState,
 ) : Parcelable {
 
     /**
-     * Models what type the user is trying to send.
+     * Represents the specific view states for the [AddSendScreen].
      */
-    sealed class SendType : Parcelable {
+    sealed class ViewState : Parcelable {
         /**
-         * Sending a file.
+         * Represents an error state for the [AddSendScreen].
          */
         @Parcelize
-        data object File : SendType()
+        data class Error(val message: Text) : ViewState()
 
         /**
-         * Sending text.
+         * Loading state for the [AddSendScreen], signifying that the content is being processed.
          */
         @Parcelize
-        data class Text(
-            val input: String,
-            val isHideByDefaultChecked: Boolean,
-        ) : SendType()
+        data object Loading : ViewState()
+
+        /**
+         * Represents a loaded content state for the [AddSendScreen].
+         */
+        @Parcelize
+        data class Content(
+            val common: Common,
+            val selectedType: SendType,
+        ) : ViewState() {
+
+            /**
+             * Content data that is common for all item types.
+             */
+            @Parcelize
+            data class Common(
+                val name: String,
+                // Null here means "not set"
+                val maxAccessCount: Int?,
+                val passwordInput: String,
+                val noteInput: String,
+                val isHideEmailChecked: Boolean,
+                val isDeactivateChecked: Boolean,
+            ) : Parcelable
+
+            /**
+             * Models what type the user is trying to send.
+             */
+            sealed class SendType : Parcelable {
+                /**
+                 * Sending a file.
+                 */
+                @Parcelize
+                data object File : SendType()
+
+                /**
+                 * Sending text.
+                 */
+                @Parcelize
+                data class Text(
+                    val input: String,
+                    val isHideByDefaultChecked: Boolean,
+                ) : SendType()
+            }
+        }
     }
 }
 

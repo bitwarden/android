@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -13,6 +14,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -83,7 +86,11 @@ class AddSendScreenTest : BaseComposeTest() {
             )
 
         mutableStateFlow.update {
-            it.copy(name = "input")
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(name = "input"),
+                ),
+            )
         }
         composeTestRule
             .onNodeWithText("Name")
@@ -113,7 +120,9 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `Choose file button click should send ChooseFileClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            selectedType = AddSendState.SendType.File,
+            viewState = DEFAULT_VIEW_STATE.copy(
+                selectedType = AddSendState.ViewState.Content.SendType.File,
+            ),
         )
         composeTestRule
             .onNodeWithText("Choose file")
@@ -143,9 +152,11 @@ class AddSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                selectedType = AddSendState.SendType.Text(
-                    input = "input",
-                    isHideByDefaultChecked = false,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    selectedType = AddSendState.ViewState.Content.SendType.Text(
+                        input = "input",
+                        isHideByDefaultChecked = false,
+                    ),
                 ),
             )
         }
@@ -175,9 +186,11 @@ class AddSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                selectedType = AddSendState.SendType.Text(
-                    input = "",
-                    isHideByDefaultChecked = true,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    selectedType = AddSendState.ViewState.Content.SendType.Text(
+                        input = "",
+                        isHideByDefaultChecked = true,
+                    ),
                 ),
             )
         }
@@ -253,7 +266,11 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `max access count decrement should send MaxAccessCountChange`() = runTest {
         mutableStateFlow.update {
-            it.copy(maxAccessCount = 3)
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(maxAccessCount = 3),
+                ),
+            )
         }
         // Expand options section:
         composeTestRule
@@ -272,7 +289,11 @@ class AddSendScreenTest : BaseComposeTest() {
     fun `max access count decrement when set to 1 should do nothing`() =
         runTest {
             mutableStateFlow.update {
-                it.copy(maxAccessCount = 1)
+                it.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON_STATE.copy(maxAccessCount = 1),
+                    ),
+                )
             }
             // Expand options section:
             composeTestRule
@@ -333,7 +354,9 @@ class AddSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                passwordInput = "input",
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(passwordInput = "input"),
+                ),
             )
         }
         composeTestRule
@@ -376,7 +399,9 @@ class AddSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                noteInput = "input",
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(noteInput = "input"),
+                ),
             )
         }
         composeTestRule
@@ -416,7 +441,9 @@ class AddSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                isHideEmailChecked = true,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(isHideEmailChecked = true),
+                ),
             )
         }
         composeTestRule
@@ -452,7 +479,9 @@ class AddSendScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                isDeactivateChecked = true,
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(isDeactivateChecked = true),
+                ),
             )
         }
         composeTestRule
@@ -460,18 +489,60 @@ class AddSendScreenTest : BaseComposeTest() {
             .assertIsOn()
     }
 
+    @Test
+    fun `progressbar should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(viewState = AddSendState.ViewState.Loading)
+        }
+        composeTestRule.onNode(isProgressBar).assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = AddSendState.ViewState.Error("Fail".asText()))
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_VIEW_STATE)
+        }
+        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+    }
+
+    @Test
+    fun `error should be displayed according to state`() {
+        val errorMessage = "Fail"
+        mutableStateFlow.update {
+            it.copy(viewState = AddSendState.ViewState.Error(errorMessage.asText()))
+        }
+        composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(viewState = AddSendState.ViewState.Loading)
+        }
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+    }
+
     companion object {
-        private val DEFAULT_STATE = AddSendState(
+        private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
             name = "",
             maxAccessCount = null,
             passwordInput = "",
             noteInput = "",
             isHideEmailChecked = false,
             isDeactivateChecked = false,
-            selectedType = AddSendState.SendType.Text(
-                input = "",
-                isHideByDefaultChecked = false,
-            ),
+        )
+
+        private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
+            input = "",
+            isHideByDefaultChecked = false,
+        )
+
+        private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
+            common = DEFAULT_COMMON_STATE,
+            selectedType = DEFAULT_SELECTED_TYPE_STATE,
+        )
+
+        private val DEFAULT_STATE = AddSendState(
+            viewState = DEFAULT_VIEW_STATE,
         )
     }
 }
