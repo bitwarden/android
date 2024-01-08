@@ -4,7 +4,6 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -34,13 +33,13 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CameraErrorReceive should emit ShowToast`() = runTest {
+    fun `CameraErrorReceive should emit NavigateToManualCodeEntry`() = runTest {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(QrCodeScanAction.CameraSetupErrorReceive)
             assertEquals(
-                QrCodeScanEvent.ShowToast("Not yet implemented.".asText()),
+                QrCodeScanEvent.NavigateToManualCodeEntry,
                 awaitItem(),
             )
         }
@@ -53,7 +52,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(QrCodeScanAction.ManualEntryTextClick)
             assertEquals(
-                QrCodeScanEvent.ShowToast("Not yet implemented.".asText()),
+                QrCodeScanEvent.NavigateToManualCodeEntry,
                 awaitItem(),
             )
         }

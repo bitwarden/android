@@ -54,6 +54,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateQrCodeScanScreenCalled = false
+    private var onNavigateToManualCodeEntryScreenCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -69,12 +70,15 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun setup() {
         composeTestRule.setContent {
             VaultAddEditScreen(
-                viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                permissionsManager = fakePermissionManager,
                 onNavigateToQrCodeScanScreen = {
                     onNavigateQrCodeScanScreenCalled = true
                 },
+                onNavigateToManualCodeEntryScreen = {
+                    onNavigateToManualCodeEntryScreenCalled = true
+                },
+                viewModel = viewModel,
+                permissionsManager = fakePermissionManager,
             )
         }
     }
@@ -90,6 +94,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `on NavigateToQrCodeScan event should invoke NavigateToQrCodeScan`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToQrCodeScan)
         assertTrue(onNavigateQrCodeScanScreenCalled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on NavigateToManualCodeEntry event should invoke NavigateToManualCodeEntry`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToManualCodeEntry)
+        assertTrue(onNavigateToManualCodeEntryScreenCalled)
     }
 
     @Test
@@ -1429,6 +1440,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onNodeWithTextAfterScroll(text = "Security code")
             .assertTextContains("123")
     }
+
     @Test
     fun `clicking New Custom Field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN

@@ -17,6 +17,7 @@ import org.robolectric.annotation.Config
 class QrCodeScanScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToManualCodeEntryScreenCalled = false
 
     private val imageProxy: ImageProxy = mockk()
     private val qrCodeAnalyzer = FakeQrCodeAnalyzer()
@@ -31,9 +32,12 @@ class QrCodeScanScreenTest : BaseComposeTest() {
     fun setup() {
         composeTestRule.setContent {
             QrCodeScanScreen(
-                qrCodeAnalyzer = qrCodeAnalyzer,
-                viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                viewModel = viewModel,
+                qrCodeAnalyzer = qrCodeAnalyzer,
+                onNavigateToManualCodeEntryScreen = {
+                    onNavigateToManualCodeEntryScreenCalled = true
+                },
             )
         }
     }
@@ -42,6 +46,12 @@ class QrCodeScanScreenTest : BaseComposeTest() {
     fun `on NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(QrCodeScanEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToManualCodeEntry event should invoke onNavigateToManualCodeEntryScreen`() {
+        mutableEventFlow.tryEmit(QrCodeScanEvent.NavigateToManualCodeEntry)
+        assertTrue(onNavigateToManualCodeEntryScreenCalled)
     }
 
     @Test

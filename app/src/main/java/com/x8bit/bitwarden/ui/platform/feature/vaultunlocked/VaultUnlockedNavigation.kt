@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCodeEntryScreen
+import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.vaultManualCodeEntryDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -59,6 +61,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToQrCodeScanScreen = {
                 navController.navigateToQrCodeScanScreen()
             },
+            onNavigateToManualCodeEntryScreen = {
+                navController.navigateToManualCodeEntryScreen()
+            },
             onNavigateBack = { navController.popBackStack() },
         )
         vaultItemDestination(
@@ -67,7 +72,22 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
             },
         )
-        vaultQrCodeScanDestination(onNavigateBack = { navController.popBackStack() })
+        vaultQrCodeScanDestination(
+            onNavigateToManualCodeEntryScreen = {
+                navController.popBackStack()
+                navController.navigateToManualCodeEntryScreen()
+            },
+            onNavigateBack = { navController.popBackStack() },
+        )
+
+        vaultManualCodeEntryDestination(
+            onNavigateToQrCodeScreen = {
+                navController.popBackStack()
+                navController.navigateToQrCodeScanScreen()
+            },
+            onNavigateBack = { navController.popBackStack() },
+        )
+
         addSendDestination(onNavigateBack = { navController.popBackStack() })
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         foldersDestination(onNavigateBack = { navController.popBackStack() })
