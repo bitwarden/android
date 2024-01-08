@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.data.tools.generator.repository
 
 import com.bitwarden.core.PassphraseGeneratorRequest
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwar
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
@@ -151,6 +154,19 @@ class GeneratorRepositoryImpl(
                 },
                 onFailure = {
                     GeneratedCatchAllUsernameResult.InvalidRequest
+                },
+            )
+
+    override suspend fun generateRandomWordUsername(
+        randomWordGeneratorRequest: UsernameGeneratorRequest.Word,
+    ): GeneratedRandomWordUsernameResult =
+        generatorSdkSource.generateRandomWord(randomWordGeneratorRequest)
+            .fold(
+                onSuccess = { generatedUsername ->
+                    GeneratedRandomWordUsernameResult.Success(generatedUsername)
+                },
+                onFailure = {
+                    GeneratedRandomWordUsernameResult.InvalidRequest
                 },
             )
 

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwar
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,6 +41,11 @@ class FakeGeneratorRepository : GeneratorRepository {
     private var generateCatchAllEmailResult: GeneratedCatchAllUsernameResult =
         GeneratedCatchAllUsernameResult.Success(
             generatedEmailAddress = "user@domain",
+        )
+
+    private var generateRandomWordUsernameResult: GeneratedRandomWordUsernameResult =
+        GeneratedRandomWordUsernameResult.Success(
+            generatedUsername = "randomWord",
         )
 
     private var generateForwardedServiceResult: GeneratedForwardedServiceUsernameResult =
@@ -73,6 +79,12 @@ class FakeGeneratorRepository : GeneratorRepository {
         catchAllEmailGeneratorRequest: UsernameGeneratorRequest.Catchall,
     ): GeneratedCatchAllUsernameResult {
         return generateCatchAllEmailResult
+    }
+
+    override suspend fun generateRandomWordUsername(
+        randomWordGeneratorRequest: UsernameGeneratorRequest.Word,
+    ): GeneratedRandomWordUsernameResult {
+        return generateRandomWordUsernameResult
     }
 
     override suspend fun generateForwardedServiceUsername(
@@ -140,5 +152,12 @@ class FakeGeneratorRepository : GeneratorRepository {
      */
     fun setMockCatchAllResult(result: GeneratedCatchAllUsernameResult) {
         generateCatchAllEmailResult = result
+    }
+
+    /**
+     * Sets the mock result for the generateRandomWord function.
+     */
+    fun setMockRandomWordResult(result: GeneratedRandomWordUsernameResult) {
+        generateRandomWordUsernameResult = result
     }
 }

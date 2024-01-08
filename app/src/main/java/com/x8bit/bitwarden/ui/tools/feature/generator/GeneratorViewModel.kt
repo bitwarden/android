@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwar
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -132,6 +133,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult -> {
                 handleUpdateCatchAllGeneratedUsernameResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedRandomWordUsernameResult -> {
+                handleUpdateRandomWordGeneratedUsernameResult(action)
             }
 
             is GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult -> {
@@ -397,6 +402,22 @@ class GeneratorViewModel @Inject constructor(
             }
 
             GeneratedCatchAllUsernameResult.InvalidRequest -> {
+                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+            }
+        }
+    }
+
+    private fun handleUpdateRandomWordGeneratedUsernameResult(
+        action: GeneratorAction.Internal.UpdateGeneratedRandomWordUsernameResult,
+    ) {
+        when (val result = action.result) {
+            is GeneratedRandomWordUsernameResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(generatedText = result.generatedUsername)
+                }
+            }
+
+            GeneratedRandomWordUsernameResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
@@ -959,7 +980,9 @@ class GeneratorViewModel @Inject constructor(
                     }
 
                     is RandomWord -> {
-                        // TODO: Implement random word generation (BIT-1336)
+                        if (isManualRegeneration) {
+                            generateRandomWordUsername(selectedType)
+                        }
                     }
                 }
             }
@@ -992,6 +1015,15 @@ class GeneratorViewModel @Inject constructor(
         sendAction(GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult(result))
     }
 
+    private suspend fun generateRandomWordUsername(randomWord: RandomWord) {
+        val result = generatorRepository.generateRandomWordUsername(
+            UsernameGeneratorRequest.Word(
+                capitalize = randomWord.capitalize,
+                includeNumber = randomWord.includeNumber,
+            ),
+        )
+        sendAction(GeneratorAction.Internal.UpdateGeneratedRandomWordUsernameResult(result))
+    }
     private inline fun updateGeneratorMainTypePasscode(
         crossinline block: (Passcode) -> Passcode,
     ) {
@@ -1967,6 +1999,13 @@ sealed class GeneratorAction {
          */
         data class UpdateGeneratedCatchAllUsernameResult(
             val result: GeneratedCatchAllUsernameResult,
+        ) : Internal()
+
+        /**
+         * Indicates a generated text update is received.
+         */
+        data class UpdateGeneratedRandomWordUsernameResult(
+            val result: GeneratedRandomWordUsernameResult,
         ) : Internal()
 
         /**

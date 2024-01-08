@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwar
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import kotlinx.coroutines.flow.StateFlow
 
@@ -53,6 +54,13 @@ interface GeneratorRepository {
     suspend fun generateCatchAllEmail(
         catchAllEmailGeneratorRequest: UsernameGeneratorRequest.Catchall,
     ): GeneratedCatchAllUsernameResult
+
+    /**
+     * Attempt to generate a random word username.
+     */
+    suspend fun generateRandomWordUsername(
+        randomWordGeneratorRequest: UsernameGeneratorRequest.Word,
+    ): GeneratedRandomWordUsernameResult
 
     /**
      * Attempt to generate a forwarded service username.

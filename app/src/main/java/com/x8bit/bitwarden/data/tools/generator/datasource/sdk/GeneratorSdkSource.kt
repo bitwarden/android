@@ -34,6 +34,13 @@ interface GeneratorSdkSource {
     ): Result<String>
 
     /**
+     * Generates a random word username returning a [String] wrapped in a [Result].
+     */
+    suspend fun generateRandomWord(
+        request: UsernameGeneratorRequest.Word,
+    ): Result<String>
+
+    /**
      * Generates a forwarded service email returning a [String] wrapped in a [Result].
      */
     suspend fun generateForwardedServiceEmail(

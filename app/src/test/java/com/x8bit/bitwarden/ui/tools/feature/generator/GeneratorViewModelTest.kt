@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchA
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -254,6 +255,29 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
                             domainName = "defaultDomain",
                         ),
+                    ),
+                )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RegenerateClick for random word username state should update the random word username correctly`() =
+        runTest {
+            val viewModel = createViewModel(randomWordSavedStateHandle)
+
+            fakeGeneratorRepository.setMockRandomWordResult(
+                GeneratedRandomWordUsernameResult.Success("DifferentUsername"),
+            )
+
+            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+
+            val expectedState =
+                initialCatchAllEmailState.copy(
+                    generatedText = "DifferentUsername",
+                    selectedType = GeneratorState.MainType.Username(
+                        GeneratorState.MainType.Username.UsernameType.RandomWord(),
                     ),
                 )
 

@@ -117,6 +117,28 @@ class GeneratorSdkSourceTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `generateRandomWordUsername should call SDK and return a Result with the generated email`() =
+        runBlocking {
+            val request = UsernameGeneratorRequest.Word(
+                capitalize = true,
+                includeNumber = true,
+            )
+            val expectedResult = "USER1"
+
+            coEvery {
+                clientGenerators.username(request)
+            } returns expectedResult
+
+            val result = generatorSdkSource.generateRandomWord(request)
+
+            assertEquals(Result.success(expectedResult), result)
+            coVerify {
+                clientGenerators.username(request)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `generateForwardedServiceEmail should call SDK and return a Result with the generated email`() =
         runBlocking {
             val request = UsernameGeneratorRequest.Forwarded(
