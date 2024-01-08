@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -120,6 +122,30 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on VaultTimeoutTypeSelect should update the selection and emit ShowToast()`() = runTest {
+        val settingsRepository = mockk<SettingsRepository>() {
+            every { vaultTimeout = any() } just runs
+        }
+        val viewModel = createViewModel(settingsRepository = settingsRepository)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                AccountSecurityAction.VaultTimeoutTypeSelect(VaultTimeout.Type.FOUR_HOURS),
+            )
+            assertEquals(
+                AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
+                awaitItem(),
+            )
+        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                vaultTimeoutType = VaultTimeout.Type.FOUR_HOURS,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify { settingsRepository.vaultTimeout = VaultTimeout.FourHours }
+    }
+
+    @Test
     fun `on SessionTimeoutActionSelect should update session timeout action`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -147,18 +173,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
-
-    @Test
-    fun `on SessionTimeoutClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AccountSecurityAction.SessionTimeoutClick)
-            assertEquals(
-                AccountSecurityEvent.ShowToast("Display session timeout dialog.".asText()),
-                awaitItem(),
-            )
-        }
-    }
 
     @Test
     fun `on TwoStepLoginClick should emit NavigateToTwoStepLogin`() = runTest {
@@ -235,12 +249,14 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         authRepository: AuthRepository = mockk(relaxed = true),
         vaultRepository: VaultRepository = mockk(relaxed = true),
+        settingsRepository: SettingsRepository = mockk(relaxed = true),
         savedStateHandle: SavedStateHandle = SavedStateHandle().apply {
             set("state", DEFAULT_STATE)
         },
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
         vaultRepository = vaultRepository,
+        settingsRepository = settingsRepository,
         savedStateHandle = savedStateHandle,
     )
 
@@ -251,7 +267,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
-            sessionTimeout = "15 Minutes".asText(),
+            vaultTimeoutType = VaultTimeout.Type.THIRTY_MINUTES,
             sessionTimeoutAction = SessionTimeoutAction.LOCK,
         )
     }

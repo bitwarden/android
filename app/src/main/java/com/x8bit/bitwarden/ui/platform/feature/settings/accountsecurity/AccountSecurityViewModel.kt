@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -26,6 +28,7 @@ private const val KEY_STATE = "state"
 class AccountSecurityViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
+    private val settingsRepository: SettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -35,7 +38,7 @@ class AccountSecurityViewModel @Inject constructor(
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
-            sessionTimeout = "15 Minutes".asText(),
+            vaultTimeoutType = settingsRepository.vaultTimeout.type,
             sessionTimeoutAction = SessionTimeoutAction.LOCK,
         ),
 ) {
@@ -58,12 +61,12 @@ class AccountSecurityViewModel @Inject constructor(
         is AccountSecurityAction.LoginRequestToggle -> handleLoginRequestToggle(action)
         AccountSecurityAction.LogoutClick -> handleLogoutClick()
         AccountSecurityAction.PendingLoginRequestsClick -> handlePendingLoginRequestsClick()
+        is AccountSecurityAction.VaultTimeoutTypeSelect -> handleVaultTimeoutTypeSelect(action)
         is AccountSecurityAction.SessionTimeoutActionSelect -> {
             handleSessionTimeoutActionSelect(action)
         }
 
         AccountSecurityAction.SessionTimeoutActionClick -> handleSessionTimeoutActionClick()
-        AccountSecurityAction.SessionTimeoutClick -> handleSessionTimeoutClick()
         AccountSecurityAction.TwoStepLoginClick -> handleTwoStepLoginClick()
         is AccountSecurityAction.UnlockWithBiometricToggle -> {
             handleUnlockWithBiometricToggled(action)
@@ -119,6 +122,30 @@ class AccountSecurityViewModel @Inject constructor(
         sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
     }
 
+    private fun handleVaultTimeoutTypeSelect(action: AccountSecurityAction.VaultTimeoutTypeSelect) {
+        val vaultTimeoutType = action.vaultTimeoutType
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutType = action.vaultTimeoutType,
+            )
+        }
+        val vaultTimeout = when (vaultTimeoutType) {
+            VaultTimeout.Type.IMMEDIATELY -> VaultTimeout.Immediately
+            VaultTimeout.Type.ONE_MINUTE -> VaultTimeout.OneMinute
+            VaultTimeout.Type.FIVE_MINUTES -> VaultTimeout.FiveMinutes
+            VaultTimeout.Type.THIRTY_MINUTES -> VaultTimeout.ThirtyMinutes
+            VaultTimeout.Type.ONE_HOUR -> VaultTimeout.OneHour
+            VaultTimeout.Type.FOUR_HOURS -> VaultTimeout.FourHours
+            VaultTimeout.Type.ON_APP_RESTART -> VaultTimeout.OnAppRestart
+            VaultTimeout.Type.NEVER -> VaultTimeout.Never
+            VaultTimeout.Type.CUSTOM -> VaultTimeout.Custom(vaultTimeoutInMinutes = 0)
+        }
+        settingsRepository.vaultTimeout = vaultTimeout
+
+        // TODO: Finish implementing vault timeouts (BIT-1120)
+        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
+    }
+
     private fun handleSessionTimeoutActionSelect(
         action: AccountSecurityAction.SessionTimeoutActionSelect,
     ) {
@@ -134,11 +161,6 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleSessionTimeoutActionClick() {
         mutableStateFlow.update { it.copy(dialog = AccountSecurityDialog.SessionTimeoutAction) }
-    }
-
-    private fun handleSessionTimeoutClick() {
-        // TODO BIT-462: Implement session timeout
-        sendEvent(AccountSecurityEvent.ShowToast("Display session timeout dialog.".asText()))
     }
 
     private fun handleTwoStepLoginClick() {
@@ -171,7 +193,7 @@ data class AccountSecurityState(
     val isApproveLoginRequestsEnabled: Boolean,
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
-    val sessionTimeout: Text,
+    val vaultTimeoutType: VaultTimeout.Type,
     val sessionTimeoutAction: SessionTimeoutAction,
 ) : Parcelable
 
@@ -296,6 +318,13 @@ sealed class AccountSecurityAction {
     data object PendingLoginRequestsClick : AccountSecurityAction()
 
     /**
+     * User selected a [vaultTimeoutType].
+     */
+    data class VaultTimeoutTypeSelect(
+        val vaultTimeoutType: VaultTimeout.Type,
+    ) : AccountSecurityAction()
+
+    /**
      * User selected a [SessionTimeoutAction].
      */
     data class SessionTimeoutActionSelect(
@@ -306,11 +335,6 @@ sealed class AccountSecurityAction {
      * User clicked session timeout action.
      */
     data object SessionTimeoutActionClick : AccountSecurityAction()
-
-    /**
-     * User clicked session timeout.
-     */
-    data object SessionTimeoutClick : AccountSecurityAction()
 
     /**
      * User clicked two-step login.
