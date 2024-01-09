@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.tools.feature.generator.util.toFormattedPattern
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

@@ -1,14 +1,14 @@
-package com.x8bit.bitwarden.ui.tools.feature.generator.util
+package com.x8bit.bitwarden.ui.platform.util
 
-import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAccessor
 import java.util.TimeZone
 
 /**
- * Converts the [Instant] to a formatted string based on the provided pattern and time zone.
+ * Converts the [TemporalAccessor] to a formatted string based on the provided pattern and timezone.
  */
-fun Instant.toFormattedPattern(
+fun TemporalAccessor.toFormattedPattern(
     pattern: String,
     zone: ZoneId = TimeZone.getDefault().toZoneId(),
 ): String {

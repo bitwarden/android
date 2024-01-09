@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.util
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.ui.tools.feature.generator.util.toFormattedPattern
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import java.time.Instant
