@@ -179,7 +179,10 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
 
-        val emptyVaultState = VaultState(unlockedVaultUserIds = emptySet())
+        val emptyVaultState = VaultState(
+            unlockedVaultUserIds = emptySet(),
+            unlockingVaultUserIds = emptySet(),
+        )
         mutableVaultStateFlow.value = emptyVaultState
         assertEquals(
             MULTI_USER_STATE.toUserState(
@@ -1535,6 +1538,7 @@ class AuthRepositoryTest {
         )
         private val VAULT_STATE = VaultState(
             unlockedVaultUserIds = setOf(USER_ID_1),
+            unlockingVaultUserIds = emptySet(),
         )
     }
 }

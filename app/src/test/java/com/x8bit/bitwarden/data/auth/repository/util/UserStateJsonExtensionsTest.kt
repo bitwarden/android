@@ -135,6 +135,7 @@ class UserStateJsonExtensionsTest {
                 .toUserState(
                     vaultState = VaultState(
                         unlockedVaultUserIds = setOf("activeUserId"),
+                        unlockingVaultUserIds = emptySet(),
                     ),
                     userOrganizationsList = listOf(
                         UserOrganizations(
@@ -198,6 +199,7 @@ class UserStateJsonExtensionsTest {
                 .toUserState(
                     vaultState = VaultState(
                         unlockedVaultUserIds = emptySet(),
+                        unlockingVaultUserIds = emptySet(),
                     ),
                     userOrganizationsList = listOf(
                         UserOrganizations(
