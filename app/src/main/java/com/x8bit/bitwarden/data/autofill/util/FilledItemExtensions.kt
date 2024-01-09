@@ -45,7 +45,7 @@ private fun setOverlay(
     remoteViews: RemoteViews,
 ) {
     val presentation = Presentations.Builder()
-        .setDialogPresentation(remoteViews)
+        .setMenuPresentation(remoteViews)
         .build()
 
     datasetBuilder.setField(

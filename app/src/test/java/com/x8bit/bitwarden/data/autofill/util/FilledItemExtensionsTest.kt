@@ -87,7 +87,7 @@ class FilledItemExtensionsTest {
             packageName = PACKAGE_NAME,
             sdkInt = 34,
         )
-        mockBuilder<Presentations.Builder> { it.setDialogPresentation(remoteViews) }
+        mockBuilder<Presentations.Builder> { it.setMenuPresentation(remoteViews) }
         mockBuilder<Field.Builder> { it.setPresentations(presentations) }
         every {
             datasetBuilder.setField(
@@ -105,7 +105,7 @@ class FilledItemExtensionsTest {
 
         // Verify
         verify(exactly = 1) {
-            anyConstructed<Presentations.Builder>().setDialogPresentation(remoteViews)
+            anyConstructed<Presentations.Builder>().setMenuPresentation(remoteViews)
             anyConstructed<Field.Builder>().setPresentations(presentations)
             datasetBuilder.setField(
                 autofillId,
