@@ -137,7 +137,7 @@ private fun TypeOptionsItem(
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.type),
         options = optionsWithStrings.values.toImmutableList(),
-        selectedOption = stringResource(id = itemType.displayStringResId),
+        selectedOption = stringResource(id = itemType.itemTypeOption.labelRes),
         onOptionSelected = { selectedOption ->
             val selectedOptionId = optionsWithStrings
                 .entries

@@ -148,8 +148,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddLoginItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                common = currentContent.common.clearNonSharedData(),
-                type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                common = currentContent.clearNonSharedData(),
+                type = currentContent.previousItemTypeOrDefault(
+                    itemType = VaultAddEditState.ItemTypeOption.LOGIN,
+                ),
+                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
             )
         }
     }
@@ -157,8 +160,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddSecureNotesItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                common = currentContent.common.clearNonSharedData(),
-                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                common = currentContent.clearNonSharedData(),
+                type = currentContent.previousItemTypeOrDefault(
+                    itemType = VaultAddEditState.ItemTypeOption.SECURE_NOTES,
+                ),
+                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
             )
         }
     }
@@ -166,8 +172,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddCardItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                common = currentContent.common.clearNonSharedData(),
-                type = VaultAddEditState.ViewState.Content.ItemType.Card(),
+                common = currentContent.clearNonSharedData(),
+                type = currentContent.previousItemTypeOrDefault(
+                    itemType = VaultAddEditState.ItemTypeOption.CARD,
+                ),
+                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
             )
         }
     }
@@ -175,8 +184,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleSwitchToAddIdentityItem() {
         updateContent { currentContent ->
             currentContent.copy(
-                common = currentContent.common.clearNonSharedData(),
-                type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
+                common = currentContent.clearNonSharedData(),
+                type = currentContent.previousItemTypeOrDefault(
+                    itemType = VaultAddEditState.ItemTypeOption.IDENTITY,
+                ),
+                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
             )
         }
     }
@@ -933,11 +945,41 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun VaultAddEditState.ViewState.Content.Common.clearNonSharedData():
+    private fun VaultAddEditState.ViewState.Content.clearNonSharedData():
         VaultAddEditState.ViewState.Content.Common =
-        copy(
-            customFieldData = customFieldData
+        common.copy(
+            customFieldData = common.customFieldData
                 .filterNot { it is VaultAddEditState.Custom.LinkedField },
+        )
+
+    private fun VaultAddEditState.ViewState.Content.toUpdatedPreviousItemTypes():
+        Map<VaultAddEditState.ItemTypeOption, VaultAddEditState.ViewState.Content.ItemType> =
+        previousItemTypes
+            .toMutableMap()
+            .apply { set(type.itemTypeOption, type) }
+
+    private fun VaultAddEditState.ViewState.Content.previousItemTypeOrDefault(
+        itemType: VaultAddEditState.ItemTypeOption,
+    ): VaultAddEditState.ViewState.Content.ItemType =
+        previousItemTypes.getOrDefault(
+            key = itemType,
+            defaultValue = when (itemType) {
+                VaultAddEditState.ItemTypeOption.LOGIN -> {
+                    VaultAddEditState.ViewState.Content.ItemType.Login()
+                }
+
+                VaultAddEditState.ItemTypeOption.CARD -> {
+                    VaultAddEditState.ViewState.Content.ItemType.Card()
+                }
+
+                VaultAddEditState.ItemTypeOption.IDENTITY -> {
+                    VaultAddEditState.ViewState.Content.ItemType.Identity()
+                }
+
+                VaultAddEditState.ItemTypeOption.SECURE_NOTES -> {
+                    VaultAddEditState.ViewState.Content.ItemType.SecureNotes
+                }
+            },
         )
 
     //endregion Utility Functions
@@ -1009,6 +1051,7 @@ data class VaultAddEditState(
         data class Content(
             val common: Common,
             val type: ItemType,
+            val previousItemTypes: Map<ItemTypeOption, ItemType> = emptyMap(),
         ) : ViewState() {
 
             /**
@@ -1064,7 +1107,7 @@ data class VaultAddEditState(
                  * that must be overridden by each subclass to provide the appropriate string
                  * resource for display purposes.
                  */
-                abstract val displayStringResId: Int
+                abstract val itemTypeOption: ItemTypeOption
 
                 /**
                  * Represents the login item information.
@@ -1084,7 +1127,7 @@ data class VaultAddEditState(
                     val totp: String? = null,
                     val canViewPassword: Boolean = true,
                 ) : ItemType() {
-                    override val displayStringResId: Int get() = ItemTypeOption.LOGIN.labelRes
+                    override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.LOGIN
                 }
 
                 /**
@@ -1106,7 +1149,7 @@ data class VaultAddEditState(
                     val expirationYear: String = "",
                     val securityCode: String = "",
                 ) : ItemType() {
-                    override val displayStringResId: Int get() = ItemTypeOption.CARD.labelRes
+                    override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.CARD
                 }
 
                 /**
@@ -1153,7 +1196,7 @@ data class VaultAddEditState(
                     val country: String = "",
                 ) : ItemType() {
 
-                    override val displayStringResId: Int get() = ItemTypeOption.IDENTITY.labelRes
+                    override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.IDENTITY
                 }
 
                 /**
@@ -1161,8 +1204,7 @@ data class VaultAddEditState(
                  */
                 @Parcelize
                 data object SecureNotes : ItemType() {
-                    override val displayStringResId: Int
-                        get() = ItemTypeOption.SECURE_NOTES.labelRes
+                    override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SECURE_NOTES
                 }
             }
         }
@@ -1223,6 +1265,7 @@ data class VaultAddEditState(
     /**
      * Displays a dialog.
      */
+    @Parcelize
     sealed class DialogState : Parcelable {
 
         /**
