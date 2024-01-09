@@ -3,6 +3,7 @@ using CommunityToolkit.Maui;
 using FFImageLoading.Maui;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
+using Microsoft.Maui.Handlers;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using AppEffects = Bit.App.Effects;
 
@@ -40,6 +41,16 @@ public static class MauiProgram
             })
             .ConfigureMauiHandlers(handlers =>
             {
+#if ANDROID
+                // HACK: Due to https://github.com/dotnet/maui/issues/19681 and not willing to use reflection to access
+                // the alert dialog, we need to redefine the PickerHandler implementation for a custom one of ours
+                // which handles showing the current selected item. Remove this workaround when MAUI releases a fix for this.
+                if (handlers.FirstOrDefault(h => h.ServiceType == typeof(Picker)) is ServiceDescriptor sd)
+                {
+                    handlers.Remove(sd);
+                    handlers.AddHandler(typeof(IPicker), typeof(Controls.Picker.PickerHandler));
+                }
+#endif
                 customHandlers?.Invoke(handlers);
             });
 

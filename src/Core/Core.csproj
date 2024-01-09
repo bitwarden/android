@@ -72,6 +72,7 @@
     <Folder Include="Utilities\Automation\" />
     <Folder Include="Utilities\Prompts\" />
     <Folder Include="Resources\Localization\" />
+    <Folder Include="Controls\Picker\" />
   </ItemGroup>
 	<ItemGroup>
 	  <MauiImage Include="Resources\Images\dotnet_bot.svg">
@@ -98,5 +99,8 @@
 	  <MauiXaml Update="Pages\AndroidNavigationRedirectPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Controls\Picker\" />
 	</ItemGroup>
 </Project>
