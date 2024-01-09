@@ -966,10 +966,12 @@ class VaultRepositoryTest {
         val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
         val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
         val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
         setupVaultDiskSourceFlows(
             ciphersFlow = ciphersFlow,
             collectionsFlow = collectionsFlow,
             foldersFlow = foldersFlow,
+            sendsFlow = sendsFlow,
         )
 
         vaultRepository.vaultDataStateFlow.test {
@@ -978,6 +980,7 @@ class VaultRepositoryTest {
             ciphersFlow.tryEmit(listOf(createMockCipher(number = 1)))
             collectionsFlow.tryEmit(listOf(createMockCollection(number = 1)))
             foldersFlow.tryEmit(listOf(createMockFolder(number = 1)))
+            sendsFlow.tryEmit(listOf(createMockSend(number = 1)))
 
             assertEquals(
                 DataState.Loaded(
@@ -985,6 +988,7 @@ class VaultRepositoryTest {
                         cipherViewList = listOf(createMockCipherView(number = 1)),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
                     ),
                 ),
                 awaitItem(),

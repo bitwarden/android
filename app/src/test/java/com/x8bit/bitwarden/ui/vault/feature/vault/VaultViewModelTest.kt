@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -321,6 +322,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             cipherViewList = listOf(createMockCipherView(number = 1)),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
         )
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Loaded(
@@ -375,6 +377,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             ),
         )
@@ -438,6 +441,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                             cipherViewList = listOf(createMockCipherView(number = 1)),
                             collectionViewList = emptyList(),
                             folderViewList = emptyList(),
+                            sendViewList = emptyList(),
                         ),
                     ),
                 )
@@ -458,6 +462,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     cipherViewList = emptyList(),
                     collectionViewList = emptyList(),
                     folderViewList = emptyList(),
+                    sendViewList = emptyList(),
                 ),
             ),
         )
@@ -484,6 +489,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         cipherViewList = emptyList(),
                         collectionViewList = emptyList(),
                         folderViewList = emptyList(),
+                        sendViewList = emptyList(),
                     ),
                 )
 
@@ -503,6 +509,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             ),
         )
@@ -547,6 +554,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     cipherViewList = emptyList(),
                     collectionViewList = emptyList(),
                     folderViewList = emptyList(),
+                    sendViewList = emptyList(),
                 ),
             ),
         )
@@ -598,6 +606,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         cipherViewList = listOf(createMockCipherView(number = 1)),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
                     ),
                 ),
             )
@@ -649,6 +658,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         cipherViewList = emptyList(),
                         collectionViewList = emptyList(),
                         folderViewList = emptyList(),
+                        sendViewList = emptyList(),
                     ),
                 ),
             )
@@ -693,6 +703,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         cipherViewList = listOf(createMockCipherView(number = 1)),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
                     ),
                 ),
             )
@@ -743,6 +754,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         cipherViewList = emptyList(),
                         collectionViewList = emptyList(),
                         folderViewList = emptyList(),
+                        sendViewList = emptyList(),
                     ),
                 ),
             )
@@ -784,6 +796,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 cipherViewList = emptyList(),
                 collectionViewList = emptyList(),
                 folderViewList = emptyList(),
+                sendViewList = emptyList(),
             ),
         )
 
@@ -940,6 +953,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 cipherViewList = emptyList(),
                 collectionViewList = emptyList(),
                 folderViewList = emptyList(),
+                sendViewList = emptyList(),
             ),
         )
         val initialState = DEFAULT_STATE.copy(

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
@@ -19,6 +20,7 @@ class VaultDataExtensionsTest {
             cipherViewList = listOf(createMockCipherView(number = 1)),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
         )
 
         val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.AllVaults)
@@ -61,6 +63,7 @@ class VaultDataExtensionsTest {
             ),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
         )
 
         val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.MyVault)
@@ -100,6 +103,7 @@ class VaultDataExtensionsTest {
                 createMockCollectionView(number = 2),
             ),
             folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
         )
 
         val actual = vaultData.toViewState(
@@ -137,6 +141,7 @@ class VaultDataExtensionsTest {
             cipherViewList = emptyList(),
             collectionViewList = emptyList(),
             folderViewList = emptyList(),
+            sendViewList = emptyList(),
         )
 
         val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.AllVaults)
@@ -153,6 +158,7 @@ class VaultDataExtensionsTest {
             cipherViewList = listOf(createMockCipherView(number = 1).copy(id = null)),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
             folderViewList = listOf(createMockFolderView(number = 1)),
+            sendViewList = listOf(createMockSendView(number = 1)),
         )
 
         val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.AllVaults)
