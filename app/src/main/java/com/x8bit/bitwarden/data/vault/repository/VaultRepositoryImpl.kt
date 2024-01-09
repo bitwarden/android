@@ -107,16 +107,19 @@ class VaultRepositoryImpl(
             ciphersStateFlow,
             foldersStateFlow,
             collectionsStateFlow,
-        ) { ciphersDataState, foldersDataState, collectionsDataState ->
+            sendDataStateFlow,
+        ) { ciphersDataState, foldersDataState, collectionsDataState, sendsDataState ->
             combineDataStates(
                 ciphersDataState,
                 foldersDataState,
                 collectionsDataState,
-            ) { ciphersData, foldersData, collectionsData ->
+                sendsDataState,
+            ) { ciphersData, foldersData, collectionsData, sendsData ->
                 VaultData(
                     cipherViewList = ciphersData,
                     folderViewList = foldersData,
                     collectionViewList = collectionsData,
+                    sendViewList = sendsData.sendViewList,
                 )
             }
         }

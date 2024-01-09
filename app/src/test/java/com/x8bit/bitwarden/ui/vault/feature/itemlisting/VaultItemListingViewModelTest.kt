@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -102,6 +103,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         ),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
                     ),
                 ),
             )
@@ -129,6 +131,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         cipherViewList = emptyList(),
                         folderViewList = emptyList(),
                         collectionViewList = emptyList(),
+                        sendViewList = emptyList(),
                     ),
                 ),
             )
@@ -148,6 +151,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         cipherViewList = listOf(createMockCipherView(number = 1)),
                         folderViewList = listOf(createMockFolderView(number = 1)),
                         collectionViewList = listOf(createMockCollectionView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
                     ),
                 ),
             )
@@ -180,6 +184,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             ),
         )
@@ -206,6 +211,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             ),
         )
@@ -226,6 +232,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             ),
         )
@@ -266,6 +273,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
                 error = IllegalStateException(),
             ),
@@ -293,6 +301,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = emptyList(),
                     folderViewList = emptyList(),
                     collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
                 ),
                 error = IllegalStateException(),
             ),
@@ -316,6 +325,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
                 error = IllegalStateException(),
             ),
@@ -359,6 +369,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             ),
         )
@@ -385,6 +396,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = emptyList(),
                     folderViewList = emptyList(),
                     collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
                 ),
             ),
         )
@@ -407,6 +419,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             ),
         )
