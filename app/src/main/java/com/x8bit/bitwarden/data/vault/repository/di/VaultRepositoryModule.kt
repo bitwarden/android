@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepositoryImpl
 import dagger.Module
@@ -31,6 +32,7 @@ object VaultRepositoryModule {
         vaultDiskSource: VaultDiskSource,
         vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
+        vaultLockManager: VaultLockManager,
         dispatcherManager: DispatcherManager,
     ): VaultRepository = VaultRepositoryImpl(
         syncService = syncService,
@@ -39,6 +41,7 @@ object VaultRepositoryModule {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = authDiskSource,
+        vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
     )
 }

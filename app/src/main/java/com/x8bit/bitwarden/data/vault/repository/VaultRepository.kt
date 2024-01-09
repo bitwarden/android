@@ -6,14 +6,14 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.Kdf
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
-import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
  * Responsible for managing vault data inside the network layer.
  */
 @Suppress("TooManyFunctions")
-interface VaultRepository {
+interface VaultRepository : VaultLockManager {
 
     /**
      * Flow that represents the current vault data.
@@ -55,11 +55,6 @@ interface VaultRepository {
      * must be collected in order to trigger state changes.
      */
     val foldersStateFlow: StateFlow<DataState<List<FolderView>>>
-
-    /**
-     * Flow that represents the current vault state.
-     */
-    val vaultStateFlow: StateFlow<VaultState>
 
     /**
      * Flow that represents the current send data.
@@ -97,16 +92,6 @@ interface VaultRepository {
      * `null` if the folder cannot be found.
      */
     fun getVaultFolderStateFlow(folderId: String): StateFlow<DataState<FolderView?>>
-
-    /**
-     * Locks the vault for the current user if currently unlocked.
-     */
-    fun lockVaultForCurrentUser()
-
-    /**
-     * Locks the vault for the user with the given [userId] if necessary.
-     */
-    fun lockVaultIfNecessary(userId: String)
 
     /**
      * Emits the totp code result flow to listeners.

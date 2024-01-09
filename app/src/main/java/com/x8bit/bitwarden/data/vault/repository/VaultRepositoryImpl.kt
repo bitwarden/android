@@ -5,7 +5,6 @@ import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Kdf
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -19,7 +18,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -29,15 +27,14 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
-import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
@@ -46,7 +43,6 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionLi
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
-import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -56,11 +52,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -84,8 +77,10 @@ class VaultRepositoryImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
+    private val vaultLockManager: VaultLockManager,
     dispatcherManager: DispatcherManager,
-) : VaultRepository {
+) : VaultRepository,
+    VaultLockManager by vaultLockManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
     private val ioScope = CoroutineScope(dispatcherManager.io)
@@ -95,14 +90,6 @@ class VaultRepositoryImpl(
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val mutableTotpCodeResultFlow = bufferedMutableSharedFlow<TotpCodeResult>()
-
-    private val mutableVaultStateStateFlow =
-        MutableStateFlow(
-            VaultState(
-                unlockedVaultUserIds = emptySet(),
-                unlockingVaultUserIds = emptySet(),
-            ),
-        )
 
     private val mutableSendDataStateFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
@@ -150,9 +137,6 @@ class VaultRepositoryImpl(
 
     override val collectionsStateFlow: StateFlow<DataState<List<CollectionView>>>
         get() = mutableCollectionsStateFlow.asStateFlow()
-
-    override val vaultStateFlow: StateFlow<VaultState>
-        get() = mutableVaultStateStateFlow.asStateFlow()
 
     override val sendDataStateFlow: StateFlow<DataState<SendData>>
         get() = mutableSendDataStateFlow.asStateFlow()
@@ -276,16 +260,6 @@ class VaultRepositoryImpl(
                 initialValue = DataState.Loading,
             )
 
-    override fun lockVaultForCurrentUser() {
-        authDiskSource.userState?.activeUserId?.let {
-            lockVaultIfNecessary(it)
-        }
-    }
-
-    override fun lockVaultIfNecessary(userId: String) {
-        setVaultToLocked(userId = userId)
-    }
-
     override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
@@ -320,7 +294,7 @@ class VaultRepositoryImpl(
         privateKey: String,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult =
-        unlockVaultInternal(
+        unlockVault(
             userId = userId,
             email = email,
             kdf = kdf,
@@ -446,46 +420,6 @@ class VaultRepositoryImpl(
             )
     }
 
-    // TODO: This is temporary. Eventually this needs to be based on the presence of various
-    //  user keys but this will likely require SDK updates to support this (BIT-1190).
-    private fun setVaultToUnlocked(userId: String) {
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockedVaultUserIds = it.unlockedVaultUserIds + userId,
-            )
-        }
-    }
-
-    // TODO: This is temporary. Eventually this needs to be based on the presence of various
-    //  user keys but this will likely require SDK updates to support this (BIT-1190).
-    private fun setVaultToLocked(userId: String) {
-        vaultSdkSource.clearCrypto(userId = userId)
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockedVaultUserIds = it.unlockedVaultUserIds - userId,
-            )
-        }
-    }
-
-    private fun setVaultToUnlocking(userId: String) {
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockingVaultUserIds = it.unlockingVaultUserIds + userId,
-            )
-        }
-    }
-
-    private fun setVaultToNotUnlocking(userId: String) {
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockingVaultUserIds = it.unlockingVaultUserIds - userId,
-            )
-        }
-    }
-
-    private fun isVaultUnlocking(userId: String) =
-        userId in mutableVaultStateStateFlow.value.unlockingVaultUserIds
-
     private fun storeProfileData(
         syncResponse: SyncResponseJson,
     ) {
@@ -527,7 +461,7 @@ class VaultRepositoryImpl(
             ?: return VaultUnlockResult.InvalidStateError
         val organizationKeys = authDiskSource
             .getOrganizationKeys(userId = userId)
-        return unlockVaultInternal(
+        return unlockVault(
             userId = userId,
             email = account.profile.email,
             kdf = account.profile.toSdkParams(),
@@ -536,59 +470,6 @@ class VaultRepositoryImpl(
             organizationKeys = organizationKeys,
         )
     }
-
-    private suspend fun unlockVaultInternal(
-        userId: String,
-        email: String,
-        kdf: Kdf,
-        privateKey: String,
-        initUserCryptoMethod: InitUserCryptoMethod,
-        organizationKeys: Map<String, String>?,
-    ): VaultUnlockResult =
-        flow {
-            setVaultToUnlocking(userId = userId)
-            emit(
-                vaultSdkSource
-                    .initializeCrypto(
-                        userId = userId,
-                        request = InitUserCryptoRequest(
-                            kdfParams = kdf,
-                            email = email,
-                            privateKey = privateKey,
-                            method = initUserCryptoMethod,
-                        ),
-                    )
-                    .flatMap { result ->
-                        // Initialize the SDK for organizations if necessary
-                        if (organizationKeys != null &&
-                            result is InitializeCryptoResult.Success
-                        ) {
-                            vaultSdkSource.initializeOrganizationCrypto(
-                                userId = userId,
-                                request = InitOrgCryptoRequest(
-                                    organizationKeys = organizationKeys,
-                                ),
-                            )
-                        } else {
-                            result.asSuccess()
-                        }
-                    }
-                    .fold(
-                        onFailure = { VaultUnlockResult.GenericError },
-                        onSuccess = { initializeCryptoResult ->
-                            initializeCryptoResult
-                                .toVaultUnlockResult()
-                                .also {
-                                    if (it is VaultUnlockResult.Success) {
-                                        setVaultToUnlocked(userId = userId)
-                                    }
-                                }
-                        },
-                    ),
-            )
-        }
-            .onCompletion { setVaultToNotUnlocking(userId = userId) }
-            .first()
 
     private suspend fun unlockVaultForOrganizationsIfNecessary(
         syncResponse: SyncResponseJson,
