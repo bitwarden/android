@@ -1,0 +1,135 @@
+package com.x8bit.bitwarden.data.platform.datasource.disk
+
+import androidx.core.content.edit
+import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.x8bit.bitwarden.data.platform.util.getBinaryLongFromZoneDateTime
+import com.x8bit.bitwarden.data.platform.util.getZoneDateTimeFromBinaryLong
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
+
+class PushDiskSourceTest {
+    private val fakeSharedPreferences = FakeSharedPreferences()
+
+    private val pushDiskSource = PushDiskSourceImpl(
+        sharedPreferences = fakeSharedPreferences,
+    )
+
+    @Test
+    fun `registeredPushToken should pull from and update SharedPreferences`() {
+        val registeredPushTokenKey = "bwPreferencesStorage:pushRegisteredToken"
+
+        // Shared preferences and the repository start with the same value.
+        assertNull(pushDiskSource.registeredPushToken)
+        assertNull(fakeSharedPreferences.getString(registeredPushTokenKey, null))
+
+        // Updating the repository updates shared preferences
+        pushDiskSource.registeredPushToken = "abcd"
+        assertEquals(
+            "abcd",
+            fakeSharedPreferences.getString(registeredPushTokenKey, null),
+        )
+
+        // Update SharedPreferences updates the repository
+        fakeSharedPreferences.edit().putString(registeredPushTokenKey, null).apply()
+        assertNull(pushDiskSource.registeredPushToken)
+    }
+
+    @Test
+    fun `getCurrentPushToken should pull from SharedPreferences`() {
+        val currentPushTokenBaseKey = "bwPreferencesStorage:pushCurrentToken"
+        val mockUserId = "mockUserId"
+        val mockCurrentPushToken = "abcd"
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                "${currentPushTokenBaseKey}_$mockUserId",
+                mockCurrentPushToken,
+            )
+            .apply()
+        val actual = pushDiskSource.getCurrentPushToken(userId = mockUserId)
+        assertEquals(
+            mockCurrentPushToken,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeCurrentPushToken should update SharedPreferences`() {
+        val currentPushTokenBaseKey = "bwPreferencesStorage:pushCurrentToken"
+        val mockUserId = "mockUserId"
+        val mockCurrentPushToken = "abcd"
+        pushDiskSource.storeCurrentPushToken(
+            userId = mockUserId,
+            pushToken = mockCurrentPushToken,
+        )
+        val actual = fakeSharedPreferences
+            .getString(
+                "${currentPushTokenBaseKey}_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockCurrentPushToken,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getLastPushTokenRegistrationDate should pull from SharedPreferences`() {
+        val lastPushTokenBaseKey = "bwPreferencesStorage:pushLastRegistrationDate"
+        val mockUserId = "mockUserId"
+        val mockLastPushTokenRegistration = ZonedDateTime.parse("2024-01-06T22:27:45.904314Z")
+        fakeSharedPreferences
+            .edit()
+            .putLong(
+                "${lastPushTokenBaseKey}_$mockUserId",
+                getBinaryLongFromZoneDateTime(mockLastPushTokenRegistration),
+            )
+            .apply()
+        val actual = pushDiskSource.getLastPushTokenRegistrationDate(userId = mockUserId)!!
+        assertEquals(
+            mockLastPushTokenRegistration,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeLastPushTokenRegistrationDate for non-null values should update SharedPreferences`() {
+        val lastPushTokenBaseKey = "bwPreferencesStorage:pushLastRegistrationDate"
+        val mockUserId = "mockUserId"
+        val mockLastPushTokenRegistration = ZonedDateTime.parse("2024-01-06T22:27:45.904314Z")
+        pushDiskSource.storeLastPushTokenRegistrationDate(
+            userId = mockUserId,
+            registrationDate = mockLastPushTokenRegistration,
+        )
+        val actual = fakeSharedPreferences
+            .getLong(
+                "${lastPushTokenBaseKey}_$mockUserId",
+                0,
+            )
+        assertEquals(
+            mockLastPushTokenRegistration,
+            getZoneDateTimeFromBinaryLong(actual),
+        )
+    }
+
+    @Test
+    fun `storeLastPushTokenRegistrationDate for null values should clear SharedPreferences`() {
+        val lastPushTokenBaseKey = "bwPreferencesStorage:pushLastRegistrationDate"
+        val mockUserId = "mockUserId"
+        val mockLastPushTokenRegistration = ZonedDateTime.now()
+        val lastPushTokenKey = "${lastPushTokenBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit {
+            putLong(lastPushTokenKey, mockLastPushTokenRegistration.toEpochSecond())
+        }
+        assertTrue(fakeSharedPreferences.contains(lastPushTokenKey))
+        pushDiskSource.storeLastPushTokenRegistrationDate(
+            userId = mockUserId,
+            registrationDate = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(lastPushTokenKey))
+    }
+}

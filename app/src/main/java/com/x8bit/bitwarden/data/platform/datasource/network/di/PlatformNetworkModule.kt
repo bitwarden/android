@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
@@ -9,6 +10,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsIm
 import com.x8bit.bitwarden.data.platform.datasource.network.serializer.ZonedDateTimeSerializer
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigServiceImpl
+import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
+import com.x8bit.bitwarden.data.platform.datasource.network.service.PushServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,6 +36,16 @@ object PlatformNetworkModule {
     fun providesConfigService(
         retrofits: Retrofits,
     ): ConfigService = ConfigServiceImpl(retrofits.unauthenticatedApiRetrofit.create())
+
+    @Provides
+    @Singleton
+    fun providePushService(
+        retrofits: Retrofits,
+        authDiskSource: AuthDiskSource,
+    ): PushService = PushServiceImpl(
+        pushApi = retrofits.authenticatedApiRetrofit.create(),
+        appId = authDiskSource.uniqueAppId,
+    )
 
     @Provides
     @Singleton
