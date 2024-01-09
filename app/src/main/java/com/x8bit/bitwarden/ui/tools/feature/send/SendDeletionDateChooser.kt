@@ -21,12 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenDateSelectButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimeSelectButton
 import kotlinx.collections.immutable.toImmutableList
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 
@@ -42,29 +45,28 @@ fun SendDeletionDateChooser(
     onDateSelect: (ZonedDateTime) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val customOption = stringResource(id = R.string.custom)
-    val options = listOf(
-        stringResource(id = R.string.one_hour),
-        stringResource(id = R.string.one_day),
-        stringResource(id = R.string.two_days),
-        stringResource(id = R.string.three_days),
-        stringResource(id = R.string.seven_days),
-        stringResource(id = R.string.thirty_days),
-        customOption,
-    )
-    val defaultOption = stringResource(id = R.string.seven_days)
-    var selectedOption: String by rememberSaveable { mutableStateOf(defaultOption) }
+    val defaultOption = DeletionOptions.SEVEN_DAYS
+    val options = DeletionOptions.entries.associateWith { it.text() }
+    var selectedOption: DeletionOptions by rememberSaveable { mutableStateOf(defaultOption) }
     Column(
         modifier = modifier,
     ) {
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.deletion_date),
-            options = options.toImmutableList(),
-            selectedOption = selectedOption,
-            onOptionSelected = { selectedOption = it },
+            options = options.values.toImmutableList(),
+            selectedOption = selectedOption.text(),
+            onOptionSelected = { selected ->
+                selectedOption = options.entries.first { it.value == selected }.key
+                if (selectedOption != DeletionOptions.CUSTOM) {
+                    onDateSelect(
+                        // Add the appropriate milliseconds offset based on the selected option
+                        ZonedDateTime.now().plus(selectedOption.offsetMillis, ChronoUnit.MILLIS),
+                    )
+                }
+            },
         )
 
-        AnimatedVisibility(visible = selectedOption == customOption) {
+        AnimatedVisibility(visible = selectedOption == DeletionOptions.CUSTOM) {
             // This tracks the date component (year, month, and day) and ignores lower level
             // components.
             var date: ZonedDateTime by remember {
@@ -119,4 +121,38 @@ fun SendDeletionDateChooser(
                 .padding(horizontal = 16.dp),
         )
     }
+}
+
+private enum class DeletionOptions(
+    val text: Text,
+    val offsetMillis: Long,
+) {
+    ONE_HOUR(
+        text = R.string.one_hour.asText(),
+        offsetMillis = 1.hours.inWholeMilliseconds,
+    ),
+    ONE_DAY(
+        text = R.string.one_day.asText(),
+        offsetMillis = 1.days.inWholeMilliseconds,
+    ),
+    TWO_DAYS(
+        text = R.string.two_days.asText(),
+        offsetMillis = 2.days.inWholeMilliseconds,
+    ),
+    THREE_DAYS(
+        text = R.string.three_days.asText(),
+        offsetMillis = 3.days.inWholeMilliseconds,
+    ),
+    SEVEN_DAYS(
+        text = R.string.seven_days.asText(),
+        offsetMillis = 7.days.inWholeMilliseconds,
+    ),
+    THIRTY_DAYS(
+        text = R.string.thirty_days.asText(),
+        offsetMillis = 30.days.inWholeMilliseconds,
+    ),
+    CUSTOM(
+        text = R.string.custom.asText(),
+        offsetMillis = -1L,
+    ),
 }
