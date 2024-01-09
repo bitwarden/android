@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCollecti
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
@@ -65,11 +66,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -87,6 +85,21 @@ class VaultRepositoryTest {
     private val vaultSdkSource: VaultSdkSource = mockk {
         every { clearCrypto(userId = any()) } just runs
     }
+    private val mutableVaultStateFlow = MutableStateFlow(
+        VaultState(
+            unlockedVaultUserIds = emptySet(),
+            unlockingVaultUserIds = emptySet(),
+        ),
+    )
+    private val vaultLockManager: VaultLockManager = mockk {
+        every { vaultStateFlow } returns mutableVaultStateFlow
+        every { isVaultUnlocked(any()) } returns false
+        every { isVaultUnlocking(any()) } returns false
+        every { lockVault(any()) } just runs
+        every { lockVaultIfNecessary(any()) } just runs
+        every { lockVaultForCurrentUser() } just runs
+    }
+
     private val vaultRepository = VaultRepositoryImpl(
         syncService = syncService,
         sendsService = sendsService,
@@ -94,6 +107,7 @@ class VaultRepositoryTest {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
+        vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
     )
 
@@ -529,61 +543,21 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `lockVaultForCurrentUser should lock the vault for the current user if it is currently unlocked`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            verifyUnlockedVault(userId = userId)
-
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = setOf(userId),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            vaultRepository.lockVaultForCurrentUser()
-
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-            verify { vaultSdkSource.clearCrypto(userId = userId) }
-        }
+    fun `lockVaultForCurrentUser should delegate to the VaultLockManager`() {
+        vaultRepository.lockVaultForCurrentUser()
+        verify { vaultLockManager.lockVaultForCurrentUser() }
+    }
 
     @Test
-    fun `lockVaultIfNecessary should lock the given account if it is currently unlocked`() =
-        runTest {
-            val userId = "userId"
-            verifyUnlockedVault(userId = userId)
-
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = setOf(userId),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            vaultRepository.lockVaultIfNecessary(userId = userId)
-
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-            verify { vaultSdkSource.clearCrypto(userId = userId) }
-        }
+    fun `lockVaultIfNecessary should delete to the VaultLockManager`() {
+        val userId = "userId"
+        vaultRepository.lockVaultIfNecessary(userId = userId)
+        verify { vaultLockManager.lockVaultIfNecessary(userId = userId) }
+    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultAndSyncForCurrentUser with unlockVault Success should sync and return Success`() =
+    fun `unlockVaultAndSyncForCurrentUser with VaultLockManager Success should unlock for the current user, sync, and return Success`() =
         runTest {
             val userId = "mockId-1"
             val mockSyncResponse = createMockSyncResponse(number = 1)
@@ -621,48 +595,183 @@ class VaultRepositoryTest {
                 organizationKeys = createMockOrganizationKeys(number = 1),
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockVaultUnlockResult = VaultUnlockResult.Success
             coEvery {
-                vaultSdkSource.initializeCrypto(
+                vaultLockManager.unlockVault(
                     userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
-                        email = "email",
-                        privateKey = "mockPrivateKey-1",
-                        method = InitUserCryptoMethod.Password(
-                            password = "mockPassword-1",
-                            userKey = "mockKey-1",
-                        ),
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = "mockPassword-1",
+                        userKey = "mockKey-1",
                     ),
+
+                    organizationKeys = createMockOrganizationKeys(number = 1),
                 )
-            } returns Result.success(InitializeCryptoResult.Success)
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
+            } returns mockVaultUnlockResult
 
             val result = vaultRepository.unlockVaultAndSyncForCurrentUser(
                 masterPassword = "mockPassword-1",
             )
 
             assertEquals(
-                VaultUnlockResult.Success,
+                mockVaultUnlockResult,
                 result,
-            )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = setOf("mockId-1"),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
             )
             coVerify { syncService.sync() }
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = "mockPassword-1",
+                        userKey = "mockKey-1",
+                    ),
+
+                    organizationKeys = createMockOrganizationKeys(number = 1),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultAndSyncForCurrentUser with VaultLockManager non-Success should unlock for the current user and return the error`() =
+        runTest {
+            val userId = "mockId-1"
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
+            coEvery {
+                vaultSdkSource.decryptSendList(
+                    userId = userId,
+                    sendList = listOf(createMockSdkSend(number = 1)),
+                )
+            } returns listOf(createMockSendView(number = 1)).asSuccess()
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockId-1",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockId-1",
+                userKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.storeOrganizationKeys(
+                userId = "mockId-1",
+                organizationKeys = createMockOrganizationKeys(number = 1),
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = "mockPassword-1",
+                        userKey = "mockKey-1",
+                    ),
+
+                    organizationKeys = createMockOrganizationKeys(number = 1),
+                )
+            } returns mockVaultUnlockResult
+
+            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(
+                masterPassword = "mockPassword-1",
+            )
+
+            assertEquals(
+                mockVaultUnlockResult,
+                result,
+            )
+            coVerify(exactly = 0) { syncService.sync() }
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = "mockPassword-1",
+                        userKey = "mockKey-1",
+                    ),
+
+                    organizationKeys = createMockOrganizationKeys(number = 1),
+                )
+            }
         }
 
     @Test
-    fun `sync should be able to be called after unlockVaultAndSyncForCurrentUser is canceled`() =
+    fun `unlockVault should delegate to the VaultLockManager`() = runTest {
+        val userId = "userId"
+        val kdf = MOCK_PROFILE.toSdkParams()
+        val email = MOCK_PROFILE.email
+        val masterPassword = "drowssap"
+        val userKey = "12345"
+        val privateKey = "54321"
+        val organizationKeys = mapOf("orgId1" to "orgKey1")
+        val mockVaultUnlockResult = mockk<VaultUnlockResult>()
+        coEvery {
+            vaultLockManager.unlockVault(
+                userId = userId,
+                kdf = kdf,
+                email = email,
+                privateKey = privateKey,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = masterPassword,
+                    userKey = userKey,
+                ),
+
+                organizationKeys = organizationKeys,
+            )
+        } returns mockVaultUnlockResult
+
+        val result = vaultRepository.unlockVault(
+            userId = userId,
+            masterPassword = masterPassword,
+            kdf = kdf,
+            email = email,
+            userKey = userKey,
+            privateKey = privateKey,
+            organizationKeys = organizationKeys,
+        )
+
+        assertEquals(mockVaultUnlockResult, result)
+        coVerify(exactly = 1) {
+            vaultLockManager.unlockVault(
+                userId = userId,
+                kdf = kdf,
+                email = email,
+                privateKey = privateKey,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = masterPassword,
+                    userKey = userKey,
+                ),
+
+                organizationKeys = organizationKeys,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `sync should not be able to be called while isVaultUnlocking is true for the current user`() =
         runTest {
             val userId = "mockId-1"
             val mockSyncResponse = createMockSyncResponse(number = 1)
@@ -711,298 +820,21 @@ class VaultRepositoryTest {
                 )
             } just awaits
 
-            val scope = CoroutineScope(Dispatchers.Unconfined)
-            scope.launch {
-                vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "mockPassword-1")
-            }
-            coVerify(exactly = 0) { syncService.sync() }
-            scope.cancel()
-            vaultRepository.sync()
+            every {
+                vaultLockManager.isVaultUnlocking(userId)
+            } returns true
 
-            coVerify(exactly = 1) { syncService.sync() }
-        }
-
-    @Test
-    fun `sync should not be able to be called while unlockVaultAndSyncForCurrentUser is called`() =
-        runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
-                        email = "email",
-                        privateKey = "mockPrivateKey-1",
-                        method = InitUserCryptoMethod.Password(
-                            password = "mockPassword-1",
-                            userKey = "mockKey-1",
-                        ),
-                    ),
-                )
-            } just awaits
-
-            val scope = CoroutineScope(Dispatchers.Unconfined)
-            scope.launch {
-                vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "mockPassword-1")
-            }
             // We call sync here but the call to the SyncService should be blocked
-            // by the active call to unlockVaultAndSync
+            // by unlocking vault.
             vaultRepository.sync()
-
-            scope.cancel()
-
             coVerify(exactly = 0) { syncService.sync() }
-        }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVaultAndSyncForCurrentUser with unlockVault failure for users should return GenericError`() =
-        runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
-                        email = "email",
-                        privateKey = "mockPrivateKey-1",
-                        method = InitUserCryptoMethod.Password(
-                            password = "mockPassword-1",
-                            userKey = "mockKey-1",
-                        ),
-                    ),
-                )
-            } returns Result.failure(IllegalStateException())
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
+            every {
+                vaultLockManager.isVaultUnlocking(userId)
+            } returns false
 
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(
-                masterPassword = "mockPassword-1",
-            )
-
-            assertEquals(
-                VaultUnlockResult.GenericError,
-                result,
-            )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVaultAndSyncForCurrentUser with unlockVault failure for orgs should return GenericError`() =
-        runTest {
-            coEvery {
-                syncService.sync()
-            } returns Result.success(createMockSyncResponse(number = 1))
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.storeOrganizationKeys(
-                userId = "mockId-1",
-                organizationKeys = createMockOrganizationKeys(number = 1),
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
-                        email = "email",
-                        privateKey = "mockPrivateKey-1",
-                        method = InitUserCryptoMethod.Password(
-                            password = "mockPassword-1",
-                            userKey = "mockKey-1",
-                        ),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(1),
-                    ),
-                )
-            } returns IllegalStateException().asFailure()
-
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(
-                masterPassword = "mockPassword-1",
-            )
-
-            assertEquals(
-                VaultUnlockResult.GenericError,
-                result,
-            )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVaultAndSyncForCurrentUser with unlockVault AuthenticationError for users should return AuthenticationError`() =
-        runTest {
-            coEvery { syncService.sync() } returns Result.success(createMockSyncResponse(number = 1))
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
-                        email = "email",
-                        privateKey = "mockPrivateKey-1",
-                        method = InitUserCryptoMethod.Password(
-                            password = "",
-                            userKey = "mockKey-1",
-                        ),
-                    ),
-                )
-            } returns Result.success(InitializeCryptoResult.AuthenticationError)
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "")
-            assertEquals(
-                VaultUnlockResult.AuthenticationError,
-                result,
-            )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVaultAndSyncForCurrentUser with unlockVault AuthenticationError for orgs should return AuthenticationError`() =
-        runTest {
-            coEvery { syncService.sync() } returns Result.success(createMockSyncResponse(number = 1))
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.storeOrganizationKeys(
-                userId = "mockId-1",
-                organizationKeys = createMockOrganizationKeys(number = 1),
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = "mockId-1"
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
-                        email = "email",
-                        privateKey = "mockPrivateKey-1",
-                        method = InitUserCryptoMethod.Password(
-                            password = "",
-                            userKey = "mockKey-1",
-                        ),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(1),
-                    ),
-                )
-            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "")
-            assertEquals(
-                VaultUnlockResult.AuthenticationError,
-                result,
-            )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
+            vaultRepository.sync()
+            coVerify(exactly = 1) { syncService.sync() }
         }
 
     @Suppress("MaxLineLength")
@@ -1093,117 +925,6 @@ class VaultRepositoryTest {
                 VaultUnlockResult.InvalidStateError,
                 result,
             )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-        }
-
-    @Test
-    fun `unlockVault with initializeCrypto success should return Success`() = runTest {
-        val userId = "userId"
-        val kdf = MOCK_PROFILE.toSdkParams()
-        val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
-        val userKey = "12345"
-        val privateKey = "54321"
-        val organizationKeys = mapOf("orgId1" to "orgKey1")
-        coEvery {
-            vaultSdkSource.initializeCrypto(
-                userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                ),
-            )
-        } returns InitializeCryptoResult.Success.asSuccess()
-        coEvery {
-            vaultSdkSource.initializeOrganizationCrypto(
-                userId = userId,
-                request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
-            )
-        } returns InitializeCryptoResult.Success.asSuccess()
-        assertEquals(
-            VaultState(
-                unlockedVaultUserIds = emptySet(),
-                unlockingVaultUserIds = emptySet(),
-            ),
-            vaultRepository.vaultStateFlow.value,
-        )
-
-        val result = vaultRepository.unlockVault(
-            userId = userId,
-            masterPassword = masterPassword,
-            kdf = kdf,
-            email = email,
-            userKey = userKey,
-            privateKey = privateKey,
-            organizationKeys = organizationKeys,
-        )
-
-        assertEquals(VaultUnlockResult.Success, result)
-        assertEquals(
-            VaultState(
-                unlockedVaultUserIds = setOf(userId),
-                unlockingVaultUserIds = emptySet(),
-            ),
-            vaultRepository.vaultStateFlow.value,
-        )
-        coVerify(exactly = 1) {
-            vaultSdkSource.initializeCrypto(
-                userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                ),
-            )
-        }
-        coVerify(exactly = 1) {
-            vaultSdkSource.initializeOrganizationCrypto(
-                userId = userId,
-                request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVault with initializeCrypto authentication failure for users should return AuthenticationError`() =
-        runTest {
-            val userId = "userId"
-            val kdf = MOCK_PROFILE.toSdkParams()
-            val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
-            val privateKey = "54321"
-            val organizationKeys = mapOf("orgId1" to "orgKey1")
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
 
             assertEquals(
                 VaultState(
@@ -1212,331 +933,7 @@ class VaultRepositoryTest {
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
-
-            val result = vaultRepository.unlockVault(
-                userId = userId,
-                masterPassword = masterPassword,
-                kdf = kdf,
-                email = email,
-                userKey = userKey,
-                privateKey = privateKey,
-                organizationKeys = organizationKeys,
-            )
-
-            assertEquals(VaultUnlockResult.AuthenticationError, result)
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-            coVerify(exactly = 1) {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            }
         }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVault with initializeCrypto authentication failure for orgs should return AuthenticationError`() =
-        runTest {
-            val userId = "userId"
-            val kdf = MOCK_PROFILE.toSdkParams()
-            val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
-            val privateKey = "54321"
-            val organizationKeys = mapOf("orgId1" to "orgKey1")
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
-                )
-            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
-
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVault(
-                userId = userId,
-                masterPassword = masterPassword,
-                kdf = kdf,
-                email = email,
-                userKey = userKey,
-                privateKey = privateKey,
-                organizationKeys = organizationKeys,
-            )
-
-            assertEquals(VaultUnlockResult.AuthenticationError, result)
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-            coVerify(exactly = 1) {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            }
-            coVerify(exactly = 1) {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
-                )
-            }
-        }
-
-    @Test
-    fun `unlockVault with initializeCrypto failure for users should return GenericError`() =
-        runTest {
-            val userId = "userId"
-            val kdf = MOCK_PROFILE.toSdkParams()
-            val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
-            val privateKey = "54321"
-            val organizationKeys = mapOf("orgId1" to "orgKey1")
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            } returns Throwable("Fail").asFailure()
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVault(
-                userId = userId,
-                masterPassword = masterPassword,
-                kdf = kdf,
-                email = email,
-                userKey = userKey,
-                privateKey = privateKey,
-                organizationKeys = organizationKeys,
-            )
-
-            assertEquals(VaultUnlockResult.GenericError, result)
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-            coVerify(exactly = 1) {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            }
-        }
-
-    @Test
-    fun `unlockVault with initializeCrypto failure for orgs should return GenericError`() =
-        runTest {
-            val userId = "userId"
-            val kdf = MOCK_PROFILE.toSdkParams()
-            val email = MOCK_PROFILE.email
-            val masterPassword = "drowssap"
-            val userKey = "12345"
-            val privateKey = "54321"
-            val organizationKeys = mapOf("orgId1" to "orgKey1")
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
-                )
-            } returns Throwable("Fail").asFailure()
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVault(
-                userId = userId,
-                masterPassword = masterPassword,
-                kdf = kdf,
-                email = email,
-                userKey = userKey,
-                privateKey = privateKey,
-                organizationKeys = organizationKeys,
-            )
-
-            assertEquals(VaultUnlockResult.GenericError, result)
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-            coVerify(exactly = 1) {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = kdf,
-                        email = email,
-                        privateKey = privateKey,
-                        method = InitUserCryptoMethod.Password(
-                            password = masterPassword,
-                            userKey = userKey,
-                        ),
-                    ),
-                )
-            }
-            coVerify(exactly = 1) {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
-                )
-            }
-        }
-
-    @Test
-    fun `unlockVault with initializeCrypto awaiting should block calls to sync`() = runTest {
-        val userId = "userId"
-        val kdf = MOCK_PROFILE.toSdkParams()
-        val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
-        val userKey = "12345"
-        val privateKey = "54321"
-        val organizationKeys = null
-        coEvery {
-            vaultSdkSource.initializeCrypto(
-                userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                ),
-            )
-        } just awaits
-
-        val scope = CoroutineScope(Dispatchers.Unconfined)
-        scope.launch {
-            vaultRepository.unlockVault(
-                userId = userId,
-                masterPassword = masterPassword,
-                kdf = kdf,
-                email = email,
-                userKey = userKey,
-                privateKey = privateKey,
-                organizationKeys = organizationKeys,
-            )
-        }
-
-        // The given userId is marked as unlocking
-        assertEquals(
-            VaultState(
-                unlockedVaultUserIds = emptySet(),
-                unlockingVaultUserIds = setOf(userId),
-            ),
-            vaultRepository.vaultStateFlow.value,
-        )
-
-        // Does nothing because we are blocking
-        vaultRepository.sync()
-        scope.cancel()
-
-        coVerify(exactly = 0) { syncService.sync() }
-        coVerify(exactly = 1) {
-            vaultSdkSource.initializeCrypto(
-                userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                ),
-            )
-        }
-    }
 
     @Test
     fun `clearUnlockedData should update the vaultDataStateFlow to Loading`() = runTest {
@@ -1631,24 +1028,25 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `getVaultItemStateFlow should update to Error when a sync fails generically`() = runTest {
-        val folderId = 1234
-        val folderIdString = "mockId-$folderId"
-        val throwable = Throwable("Fail")
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery { syncService.sync() } returns throwable.asFailure()
-        setupVaultDiskSourceFlows()
+    fun `getVaultItemStateFlow should update to Error when a sync fails generically`() =
+        runTest {
+            val folderId = 1234
+            val folderIdString = "mockId-$folderId"
+            val throwable = Throwable("Fail")
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { syncService.sync() } returns throwable.asFailure()
+            setupVaultDiskSourceFlows()
 
-        vaultRepository.getVaultItemStateFlow(folderIdString).test {
-            assertEquals(DataState.Loading, awaitItem())
-            vaultRepository.sync()
-            assertEquals(DataState.Error<CipherView>(throwable), awaitItem())
-        }
+            vaultRepository.getVaultItemStateFlow(folderIdString).test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.Error<CipherView>(throwable), awaitItem())
+            }
 
-        coVerify(exactly = 1) {
-            syncService.sync()
+            coVerify(exactly = 1) {
+                syncService.sync()
+            }
         }
-    }
 
     @Test
     fun `getVaultItemStateFlow should update to NoNetwork when a sync fails from no network`() =
@@ -1691,24 +1089,25 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `getVaultFolderStateFlow should update to Error when a sync fails generically`() = runTest {
-        val folderId = 1234
-        val folderIdString = "mockId-$folderId"
-        val throwable = Throwable("Fail")
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery { syncService.sync() } returns throwable.asFailure()
-        setupVaultDiskSourceFlows()
+    fun `getVaultFolderStateFlow should update to Error when a sync fails generically`() =
+        runTest {
+            val folderId = 1234
+            val folderIdString = "mockId-$folderId"
+            val throwable = Throwable("Fail")
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { syncService.sync() } returns throwable.asFailure()
+            setupVaultDiskSourceFlows()
 
-        vaultRepository.getVaultFolderStateFlow(folderIdString).test {
-            assertEquals(DataState.Loading, awaitItem())
-            vaultRepository.sync()
-            assertEquals(DataState.Error<FolderView>(throwable), awaitItem())
-        }
+            vaultRepository.getVaultFolderStateFlow(folderIdString).test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.Error<FolderView>(throwable), awaitItem())
+            }
 
-        coVerify(exactly = 1) {
-            syncService.sync()
+            coVerify(exactly = 1) {
+                syncService.sync()
+            }
         }
-    }
 
     @Test
     fun `createCipher with encryptCipher failure should return CreateCipherResult failure`() =
@@ -1900,7 +1299,12 @@ class VaultRepositoryTest {
             } returns UpdateCipherResponseJson
                 .Success(cipher = mockCipher)
                 .asSuccess()
-            coEvery { vaultDiskSource.saveCipher(userId = userId, cipher = mockCipher) } just runs
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = mockCipher,
+                )
+            } just runs
 
             val result = vaultRepository.updateCipher(
                 cipherId = cipherId,
@@ -1911,18 +1315,19 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `createSend with encryptSend failure should return CreateSendResult failure`() = runTest {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val userId = "mockId-1"
-        val mockSendView = createMockSendView(number = 1)
-        coEvery {
-            vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-        } returns IllegalStateException().asFailure()
+    fun `createSend with encryptSend failure should return CreateSendResult failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns IllegalStateException().asFailure()
 
-        val result = vaultRepository.createSend(sendView = mockSendView)
+            val result = vaultRepository.createSend(sendView = mockSendView)
 
-        assertEquals(CreateSendResult.Error, result)
-    }
+            assertEquals(CreateSendResult.Error, result)
+        }
 
     @Test
     @Suppress("MaxLineLength")
@@ -1969,22 +1374,23 @@ class VaultRepositoryTest {
         }
 
     @Test
-    fun `updateSend with encryptSend failure should return UpdateSendResult failure`() = runTest {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val userId = "mockId-1"
-        val sendId = "sendId1234"
-        val mockSendView = createMockSendView(number = 1)
-        coEvery {
-            vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-        } returns IllegalStateException().asFailure()
+    fun `updateSend with encryptSend failure should return UpdateSendResult failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns IllegalStateException().asFailure()
 
-        val result = vaultRepository.updateSend(
-            sendId = sendId,
-            sendView = mockSendView,
-        )
+            val result = vaultRepository.updateSend(
+                sendId = sendId,
+                sendView = mockSendView,
+            )
 
-        assertEquals(UpdateSendResult.Error(errorMessage = null), result)
-    }
+            assertEquals(UpdateSendResult.Error(errorMessage = null), result)
+        }
 
     @Test
     @Suppress("MaxLineLength")
