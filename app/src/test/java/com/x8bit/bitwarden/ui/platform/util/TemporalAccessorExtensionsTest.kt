@@ -1,11 +1,11 @@
-package com.x8bit.bitwarden.ui.tools.feature.generator.util
+package com.x8bit.bitwarden.ui.platform.util
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.time.ZoneId
 
-class InstantExtensionsTest {
+class TemporalAccessorExtensionsTest {
 
     @Test
     fun `toFormattedPattern should return correctly formatted string`() {
