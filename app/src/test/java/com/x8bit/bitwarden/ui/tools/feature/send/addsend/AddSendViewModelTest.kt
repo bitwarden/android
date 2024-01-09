@@ -28,13 +28,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
-import java.util.TimeZone
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 class AddSendViewModelTest : BaseViewModelTest() {
 
     private val clock = Clock.fixed(
         Instant.parse("2023-10-27T12:00:00Z"),
-        TimeZone.getTimeZone("UTC").toZoneId(),
+        ZoneOffset.UTC,
     )
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
@@ -89,7 +90,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             )
             val initialState = DEFAULT_STATE.copy(viewState = viewState)
             val mockSendView = mockk<SendView>()
-            every { viewState.toSendView() } returns mockSendView
+            every { viewState.toSendView(clock) } returns mockSendView
             val sendUrl = "www.test.com/send/test"
             val resultSendView = mockk<SendView> {
                 every { toSendUrl(DEFAULT_ENVIRONMENT_URL) } returns sendUrl
@@ -117,7 +118,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         val initialState = DEFAULT_STATE.copy(viewState = viewState)
         val mockSendView = mockk<SendView>()
-        every { viewState.toSendView() } returns mockSendView
+        every { viewState.toSendView(clock) } returns mockSendView
         coEvery { vaultRepository.createSend(mockSendView) } returns CreateSendResult.Error
         val viewModel = createViewModel(initialState)
 
@@ -178,6 +179,27 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         viewModel.trySendAction(AddSendAction.DismissDialogClick)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `DeletionDateChange should store the new deletion date`() {
+        val viewModel = createViewModel()
+        val newDeletionDate = ZonedDateTime.parse("2024-09-13T00:00Z")
+        // DEFAULT deletion date is "2023-11-03T00:00Z"
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        viewModel.trySendAction(AddSendAction.DeletionDateChange(newDeletionDate))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        deletionDate = newDeletionDate,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -353,7 +375,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             noteInput = "",
             isHideEmailChecked = false,
             isDeactivateChecked = false,
-            deletionDate = Instant.parse("2023-11-03T12:00:00Z"),
+            deletionDate = ZonedDateTime.parse("2023-11-03T00:00Z"),
             expirationDate = null,
         )
 

@@ -5,12 +5,14 @@ import com.bitwarden.core.SendTextView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
-import java.time.Instant
+import java.time.Clock
 
 /**
  * Transforms [AddSendState] into [SendView].
  */
-fun AddSendState.ViewState.Content.toSendView(): SendView =
+fun AddSendState.ViewState.Content.toSendView(
+    clock: Clock,
+): SendView =
     SendView(
         id = null,
         accessId = null,
@@ -26,9 +28,9 @@ fun AddSendState.ViewState.Content.toSendView(): SendView =
         accessCount = 0U,
         disabled = common.isDeactivateChecked,
         hideEmail = common.isHideEmailChecked,
-        revisionDate = Instant.now(),
-        deletionDate = common.deletionDate,
-        expirationDate = common.expirationDate,
+        revisionDate = clock.instant(),
+        deletionDate = common.deletionDate.toInstant(),
+        expirationDate = common.expirationDate?.toInstant(),
     )
 
 private fun AddSendState.ViewState.Content.SendType.toSendType(): SendType =

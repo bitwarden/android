@@ -27,6 +27,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 /**
@@ -46,7 +48,7 @@ import java.time.ZonedDateTime
 fun BitwardenDateSelectButton(
     currentZonedDateTime: ZonedDateTime,
     formatPattern: String,
-    onDateSelect: (millis: Long) -> Unit,
+    onDateSelect: (ZonedDateTime) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -100,7 +102,16 @@ fun BitwardenDateSelectButton(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onDateSelect(requireNotNull(datePickerState.selectedDateMillis))
+                        onDateSelect(
+                            ZonedDateTime
+                                .ofInstant(
+                                    Instant.ofEpochMilli(
+                                        requireNotNull(datePickerState.selectedDateMillis),
+                                    ),
+                                    ZoneOffset.UTC,
+                                )
+                                .withZoneSameLocal(currentZonedDateTime.zone),
+                        )
                         shouldShowDialog = false
                     },
                     modifier = modifier,

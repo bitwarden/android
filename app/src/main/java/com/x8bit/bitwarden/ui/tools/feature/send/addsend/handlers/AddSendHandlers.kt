@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers
 
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendAction
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendViewModel
+import java.time.ZonedDateTime
 
 /**
  * A collection of handler functions for managing actions within the context of adding
@@ -19,6 +20,7 @@ data class AddSendHandlers(
     val onNoteChange: (String) -> Unit,
     val onHideEmailToggle: (Boolean) -> Unit,
     val onDeactivateSendToggle: (Boolean) -> Unit,
+    val onDeletionDateChange: (ZonedDateTime) -> Unit,
 ) {
     companion object {
         /**
@@ -47,6 +49,9 @@ data class AddSendHandlers(
                 },
                 onDeactivateSendToggle = {
                     viewModel.trySendAction(AddSendAction.DeactivateThisSendToggle(it))
+                },
+                onDeletionDateChange = {
+                    viewModel.trySendAction(AddSendAction.DeletionDateChange(it))
                 },
             )
     }
