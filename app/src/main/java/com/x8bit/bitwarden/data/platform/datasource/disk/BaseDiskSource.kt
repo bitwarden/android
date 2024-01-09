@@ -41,6 +41,37 @@ abstract class BaseDiskSource(
             }
         }
 
+    /**
+     * Gets the [Long] for the given [key] from [SharedPreferences], or return the [default] value
+     * if that key is not present.
+     */
+    protected fun getLong(
+        key: String,
+        default: Long? = null,
+    ): Long? =
+        if (sharedPreferences.contains(key)) {
+            sharedPreferences.getLong(key, 0)
+        } else {
+            // Make sure we can return a null value as a default if necessary
+            default
+        }
+
+    /**
+     * Puts the [value] in [SharedPreferences] for the given [key] (or removes the key when the
+     * value is `null`).
+     */
+    protected fun putLong(
+        key: String,
+        value: Long?,
+    ): Unit =
+        sharedPreferences.edit {
+            if (value != null) {
+                putLong(key, value)
+            } else {
+                remove(key)
+            }
+        }
+
     protected fun getString(
         key: String,
         default: String? = null,

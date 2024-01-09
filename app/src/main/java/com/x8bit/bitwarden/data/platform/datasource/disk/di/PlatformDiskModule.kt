@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSourceImpl
 import dagger.Module
@@ -29,6 +31,15 @@ object PlatformDiskModule {
         EnvironmentDiskSourceImpl(
             sharedPreferences = sharedPreferences,
             json = json,
+        )
+
+    @Provides
+    @Singleton
+    fun providePushDiskSource(
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
+    ): PushDiskSource =
+        PushDiskSourceImpl(
+            sharedPreferences = sharedPreferences,
         )
 
     @Provides
