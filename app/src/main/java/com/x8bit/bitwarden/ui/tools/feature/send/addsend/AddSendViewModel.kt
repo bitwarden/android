@@ -83,6 +83,7 @@ class AddSendViewModel @Inject constructor(
     override fun handleAction(action: AddSendAction): Unit = when (action) {
         is AddSendAction.CloseClick -> handleCloseClick()
         is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
+        is AddSendAction.ExpirationDateChange -> handleExpirationDateChange(action)
         AddSendAction.DismissDialogClick -> handleDismissDialogClick()
         is AddSendAction.SaveClick -> handleSaveClick()
         is AddSendAction.FileTypeClick -> handleFileTypeClick()
@@ -166,6 +167,12 @@ class AddSendViewModel @Inject constructor(
     private fun handleDeletionDateChange(action: AddSendAction.DeletionDateChange) {
         updateCommonContent {
             it.copy(deletionDate = action.deletionDate)
+        }
+    }
+
+    private fun handleExpirationDateChange(action: AddSendAction.ExpirationDateChange) {
+        updateCommonContent {
+            it.copy(expirationDate = action.expirationDate)
         }
     }
 
@@ -504,9 +511,14 @@ sealed class AddSendAction {
     data class DeactivateThisSendToggle(val isChecked: Boolean) : AddSendAction()
 
     /**
-     * User toggled the "deactivate this send" toggle.
+     * The user changed the deletion date.
      */
     data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddSendAction()
+
+    /**
+     * The user changed the expiration date.
+     */
+    data class ExpirationDateChange(val expirationDate: ZonedDateTime?) : AddSendAction()
 
     /**
      * Models actions that the [AddSendViewModel] itself might send.
