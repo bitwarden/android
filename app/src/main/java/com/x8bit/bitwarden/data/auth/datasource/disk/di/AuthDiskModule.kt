@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.di
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.di.EncryptedPreferences
+import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,10 +22,12 @@ object AuthDiskModule {
     @Provides
     @Singleton
     fun provideAuthDiskSource(
-        sharedPreferences: SharedPreferences,
+        @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
         json: Json,
     ): AuthDiskSource =
         AuthDiskSourceImpl(
+            encryptedSharedPreferences = encryptedSharedPreferences,
             sharedPreferences = sharedPreferences,
             json = json,
         )

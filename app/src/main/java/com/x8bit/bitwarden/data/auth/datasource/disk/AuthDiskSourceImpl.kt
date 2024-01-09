@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
+import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
@@ -26,9 +26,13 @@ private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
  */
 @Suppress("TooManyFunctions")
 class AuthDiskSourceImpl(
+    encryptedSharedPreferences: SharedPreferences,
     sharedPreferences: SharedPreferences,
     private val json: Json,
-) : BaseDiskSource(sharedPreferences = sharedPreferences),
+) : BaseEncryptedDiskSource(
+    encryptedSharedPreferences = encryptedSharedPreferences,
+    sharedPreferences = sharedPreferences,
+),
     AuthDiskSource {
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()

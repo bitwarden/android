@@ -20,11 +20,13 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class AuthDiskSourceTest {
+    private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
 
     private val json = PlatformNetworkModule.providesJson()
 
     private val authDiskSource = AuthDiskSourceImpl(
+        encryptedSharedPreferences = fakeEncryptedSharedPreferences,
         sharedPreferences = fakeSharedPreferences,
         json = json,
     )

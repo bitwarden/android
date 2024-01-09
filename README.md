@@ -72,6 +72,11 @@ The following is a list of all third-party dependencies included as part of the 
   - Purpose: Display and capture images for barcode scanning.
   - License: Apache 2.0
 
+- **AndroidX Security**
+    - https://developer.android.com/jetpack/androidx/releases/security
+    - Purpose: Safely manage keys and encrypt files and sharedpreferences.
+    - License: Apache 2.0
+
 - **Core SplashScreen**
     - https://developer.android.com/jetpack/androidx/releases/core
     - Purpose: Backwards compatible SplashScreen API implementation.
