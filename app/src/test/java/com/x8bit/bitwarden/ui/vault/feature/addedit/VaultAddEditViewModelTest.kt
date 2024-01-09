@@ -41,6 +41,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
+@Suppress("LargeClass")
 class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     private val loginInitialState = createVaultAddItemState(
@@ -424,6 +425,88 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = createCommonContentViewState(),
                 type = createLoginTypeContentViewState(),
+                previousItemTypes = mapOf(
+                    VaultAddEditState.ItemTypeOption.LOGIN
+                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
+                ),
+            ),
+        )
+
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `TypeOptionSelect CARD should switch to CardItem`() = runTest {
+        val viewModel = createAddVaultItemViewModel()
+        val action = VaultAddEditAction.Common.TypeOptionSelect(
+            VaultAddEditState.ItemTypeOption.CARD,
+        )
+
+        viewModel.actionChannel.trySend(action)
+
+        val expectedState = loginInitialState.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = createCommonContentViewState(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Card(),
+                previousItemTypes = mapOf(
+                    VaultAddEditState.ItemTypeOption.LOGIN
+                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
+                ),
+            ),
+        )
+
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `TypeOptionSelect IDENTITY should switch to IdentityItem`() = runTest {
+        val viewModel = createAddVaultItemViewModel()
+        val action = VaultAddEditAction.Common.TypeOptionSelect(
+            VaultAddEditState.ItemTypeOption.IDENTITY,
+        )
+
+        viewModel.actionChannel.trySend(action)
+
+        val expectedState = loginInitialState.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = createCommonContentViewState(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
+                previousItemTypes = mapOf(
+                    VaultAddEditState.ItemTypeOption.LOGIN
+                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
+                ),
+            ),
+        )
+
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `TypeOptionSelect SECURE_NOTES should switch to SecureNotesItem`() = runTest {
+        val viewModel = createAddVaultItemViewModel()
+        val action = VaultAddEditAction.Common.TypeOptionSelect(
+            VaultAddEditState.ItemTypeOption.SECURE_NOTES,
+        )
+
+        viewModel.actionChannel.trySend(action)
+
+        val expectedState = loginInitialState.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = createCommonContentViewState(),
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                previousItemTypes = mapOf(
+                    VaultAddEditState.ItemTypeOption.LOGIN
+                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
+                ),
             ),
         )
 
