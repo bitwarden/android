@@ -538,6 +538,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = setOf(userId),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -547,6 +548,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -562,6 +564,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = setOf(userId),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -571,6 +574,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -634,6 +638,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -649,6 +654,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = setOf("mockId-1"),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -794,6 +800,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -809,6 +816,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -861,6 +869,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -876,6 +885,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -913,6 +923,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -925,6 +936,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -974,6 +986,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -986,6 +999,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -999,6 +1013,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1012,6 +1027,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1024,6 +1040,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1045,6 +1062,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1057,6 +1075,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1077,6 +1096,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1114,6 +1134,7 @@ class VaultRepositoryTest {
         assertEquals(
             VaultState(
                 unlockedVaultUserIds = emptySet(),
+                unlockingVaultUserIds = emptySet(),
             ),
             vaultRepository.vaultStateFlow.value,
         )
@@ -1132,6 +1153,7 @@ class VaultRepositoryTest {
         assertEquals(
             VaultState(
                 unlockedVaultUserIds = setOf(userId),
+                unlockingVaultUserIds = emptySet(),
             ),
             vaultRepository.vaultStateFlow.value,
         )
@@ -1186,6 +1208,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1204,6 +1227,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1258,6 +1282,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1276,6 +1301,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1328,6 +1354,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1346,6 +1373,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1398,6 +1426,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1416,6 +1445,7 @@ class VaultRepositoryTest {
             assertEquals(
                 VaultState(
                     unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
@@ -1477,6 +1507,16 @@ class VaultRepositoryTest {
                 organizationKeys = organizationKeys,
             )
         }
+
+        // The given userId is marked as unlocking
+        assertEquals(
+            VaultState(
+                unlockedVaultUserIds = emptySet(),
+                unlockingVaultUserIds = setOf(userId),
+            ),
+            vaultRepository.vaultStateFlow.value,
+        )
+
         // Does nothing because we are blocking
         vaultRepository.sync()
         scope.cancel()
