@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
 import com.x8bit.bitwarden.ui.tools.feature.send.SendDeletionDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.SendExpirationDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
+import java.time.ZonedDateTime
 
 /**
  * Content view for the [AddSendScreen].
@@ -154,6 +155,7 @@ fun AddSendContent(
             onNoteChange = addSendHandlers.onNoteChange,
             onHideEmailChecked = addSendHandlers.onHideEmailToggle,
             onDeactivateSendChecked = addSendHandlers.onDeactivateSendToggle,
+            onDeletionDateChange = addSendHandlers.onDeletionDateChange,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -180,6 +182,7 @@ private fun AddSendOptions(
     onNoteChange: (String) -> Unit,
     onHideEmailChecked: (Boolean) -> Unit,
     onDeactivateSendChecked: (Boolean) -> Unit,
+    onDeletionDateChange: (ZonedDateTime) -> Unit,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Row(
@@ -223,6 +226,10 @@ private fun AddSendOptions(
         Column {
             SendDeletionDateChooser(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                dateFormatPattern = state.common.dateFormatPattern,
+                timeFormatPattern = state.common.timeFormatPattern,
+                currentZonedDateTime = state.common.deletionDate,
+                onDateSelect = onDeletionDateChange,
             )
             Spacer(modifier = Modifier.height(8.dp))
             SendExpirationDateChooser(

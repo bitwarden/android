@@ -23,15 +23,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
-
-/**
- * The default amount of time in the future the deletion date should be set to.
- */
-private const val DELETION_DATE_OFFSET_SECONDS = 604_800L
 
 /**
  * View model for the new send screen.
@@ -54,7 +50,11 @@ class AddSendViewModel @Inject constructor(
                 noteInput = "",
                 isHideEmailChecked = false,
                 isDeactivateChecked = false,
-                deletionDate = clock.instant().plusSeconds(DELETION_DATE_OFFSET_SECONDS),
+                deletionDate = ZonedDateTime
+                    .now(clock)
+                    // We want the default time to be midnight, so we remove all values beyond days
+                    .truncatedTo(ChronoUnit.DAYS)
+                    .plusWeeks(1),
                 expirationDate = null,
             ),
             selectedType = AddSendState.ViewState.Content.SendType.Text(
@@ -82,6 +82,7 @@ class AddSendViewModel @Inject constructor(
 
     override fun handleAction(action: AddSendAction): Unit = when (action) {
         is AddSendAction.CloseClick -> handleCloseClick()
+        is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
         AddSendAction.DismissDialogClick -> handleDismissDialogClick()
         is AddSendAction.SaveClick -> handleSaveClick()
         is AddSendAction.FileTypeClick -> handleFileTypeClick()
@@ -162,6 +163,12 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleCloseClick() = sendEvent(AddSendEvent.NavigateBack)
 
+    private fun handleDeletionDateChange(action: AddSendAction.DeletionDateChange) {
+        updateCommonContent {
+            it.copy(deletionDate = action.deletionDate)
+        }
+    }
+
     private fun handleSaveClick() {
         onContent { content ->
             if (content.common.name.isBlank()) {
@@ -185,7 +192,7 @@ class AddSendViewModel @Inject constructor(
                 )
             }
             viewModelScope.launch {
-                val result = vaultRepo.createSend(content.toSendView())
+                val result = vaultRepo.createSend(content.toSendView(clock))
                 sendAction(AddSendAction.Internal.CreateSendResultReceive(result))
             }
         }
@@ -347,9 +354,13 @@ data class AddSendState(
                 val noteInput: String,
                 val isHideEmailChecked: Boolean,
                 val isDeactivateChecked: Boolean,
-                val deletionDate: Instant,
-                val expirationDate: Instant?,
-            ) : Parcelable
+                val deletionDate: ZonedDateTime,
+                val expirationDate: ZonedDateTime?,
+            ) : Parcelable {
+                val dateFormatPattern: String get() = "M/d/yyyy"
+
+                val timeFormatPattern: String get() = "hh:mm a"
+            }
 
             /**
              * Models what type the user is trying to send.
@@ -491,6 +502,11 @@ sealed class AddSendAction {
      * User toggled the "deactivate this send" toggle.
      */
     data class DeactivateThisSendToggle(val isChecked: Boolean) : AddSendAction()
+
+    /**
+     * User toggled the "deactivate this send" toggle.
+     */
+    data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddSendAction()
 
     /**
      * Models actions that the [AddSendViewModel] itself might send.
