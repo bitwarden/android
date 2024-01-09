@@ -186,6 +186,7 @@ koverReport {
                 "*.*DefaultImpls*",
                 // OS-level components
                 "com.x8bit.bitwarden.BitwardenApplication",
+                "com.x8bit.bitwarden.data.autofill.BitwardenAutofillService*",
                 "com.x8bit.bitwarden.MainActivity*",
                 // Empty Composables
                 "com.x8bit.bitwarden.ui.platform.feature.splash.SplashScreenKt",
