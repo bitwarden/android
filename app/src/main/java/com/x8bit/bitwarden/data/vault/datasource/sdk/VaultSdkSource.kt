@@ -8,6 +8,7 @@ import com.bitwarden.core.CollectionView
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.PasswordHistoryView
@@ -26,6 +27,15 @@ interface VaultSdkSource {
      * the associated vault.
      */
     fun clearCrypto(userId: String)
+
+    /**
+     * Gets the user's encryption key, which can be used to later unlock their vault via a call to
+     * [initializeCrypto] with [InitUserCryptoMethod.DecryptedKey].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun getUserEncryptionKey(userId: String): Result<String>
 
     /**
      * Attempts to initialize cryptography functionality for an individual user with the given

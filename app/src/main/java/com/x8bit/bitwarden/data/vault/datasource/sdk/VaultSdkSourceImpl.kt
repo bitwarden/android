@@ -31,6 +31,15 @@ class VaultSdkSourceImpl(
         sdkClientManager.destroyClient(userId = userId)
     }
 
+    override suspend fun getUserEncryptionKey(
+        userId: String,
+    ): Result<String> =
+        runCatching {
+            getClient(userId = userId)
+                .crypto()
+                .getUserEncryptionKey()
+        }
+
     override suspend fun initializeCrypto(
         userId: String,
         request: InitUserCryptoRequest,

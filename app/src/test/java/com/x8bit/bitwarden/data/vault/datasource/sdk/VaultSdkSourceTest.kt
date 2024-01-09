@@ -61,6 +61,25 @@ class VaultSdkSourceTest {
     }
 
     @Test
+    fun `getUserEncryptionKey should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val expectedResult = "userEncryptionKey"
+            coEvery {
+                clientCrypto.getUserEncryptionKey()
+            } returns expectedResult
+            val result = vaultSdkSource.getUserEncryptionKey(userId = userId)
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientCrypto.getUserEncryptionKey()
+            }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
+
+    @Test
     fun `initializeUserCrypto with sdk success should return InitializeCryptoResult Success`() =
         runBlocking {
             val userId = "userId"
