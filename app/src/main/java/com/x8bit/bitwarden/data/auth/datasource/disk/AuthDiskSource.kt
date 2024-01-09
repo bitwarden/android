@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Primary access point for disk information.
  */
+@Suppress("TooManyFunctions")
 interface AuthDiskSource {
     /**
      * Retrieves a unique ID for the application that is stored locally. This will generate a new
@@ -49,6 +50,16 @@ interface AuthDiskSource {
      * Stores a private key using a [userId].
      */
     fun storePrivateKey(userId: String, privateKey: String?)
+
+    /**
+     * Retrieves a user auto-unlock key for the given [userId].
+     */
+    fun getUserAutoUnlockKey(userId: String): String?
+
+    /**
+     * Stores a user auto-unlock key for the given [userId].
+     */
+    fun storeUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?)
 
     /**
      * Gets the organization keys for the given [userId] in the form of a mapping from organization

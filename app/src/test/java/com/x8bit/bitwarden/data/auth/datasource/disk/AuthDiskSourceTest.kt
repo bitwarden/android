@@ -194,6 +194,45 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getUserAutoUnlockKey should pull from SharedPreferences`() {
+        val userAutoUnlockKeyBaseKey = "bwSecureStorage:userKeyAutoUnlock"
+        val mockUserId = "mockUserId"
+        val mockUserAutoUnlockKey = "mockUserAutoUnlockKey"
+        fakeEncryptedSharedPreferences
+            .edit()
+            .putString(
+                "${userAutoUnlockKeyBaseKey}_$mockUserId",
+                mockUserAutoUnlockKey,
+            )
+            .apply()
+        val actual = authDiskSource.getUserAutoUnlockKey(userId = mockUserId)
+        assertEquals(
+            mockUserAutoUnlockKey,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeUserAutoUnlockKey should update SharedPreferences`() {
+        val userAutoUnlockKeyBaseKey = "bwSecureStorage:userKeyAutoUnlock"
+        val mockUserId = "mockUserId"
+        val mockUserAutoUnlockKey = "mockUserAutoUnlockKey"
+        authDiskSource.storeUserAutoUnlockKey(
+            userId = mockUserId,
+            userAutoUnlockKey = mockUserAutoUnlockKey,
+        )
+        val actual = fakeEncryptedSharedPreferences
+            .getString(
+                "${userAutoUnlockKeyBaseKey}_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockUserAutoUnlockKey,
+            actual,
+        )
+    }
+
+    @Test
     fun `getOrganizationKeys should pull from SharedPreferences`() {
         val organizationKeysBaseKey = "bwPreferencesStorage:encOrgKeys"
         val mockUserId = "mockUserId"
