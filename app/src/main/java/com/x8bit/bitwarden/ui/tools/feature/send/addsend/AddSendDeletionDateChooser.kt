@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send
+package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column

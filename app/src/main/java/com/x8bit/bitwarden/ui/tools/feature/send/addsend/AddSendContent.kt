@@ -39,10 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
-import com.x8bit.bitwarden.ui.tools.feature.send.SendDeletionDateChooser
-import com.x8bit.bitwarden.ui.tools.feature.send.SendExpirationDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
-import java.time.ZonedDateTime
 
 /**
  * Content view for the [AddSendScreen].
@@ -150,12 +147,7 @@ fun AddSendContent(
         Spacer(modifier = Modifier.height(16.dp))
         AddSendOptions(
             state = state,
-            onMaxAccessCountChange = addSendHandlers.onMaxAccessCountChange,
-            onPasswordChange = addSendHandlers.onPasswordChange,
-            onNoteChange = addSendHandlers.onNoteChange,
-            onHideEmailChecked = addSendHandlers.onHideEmailToggle,
-            onDeactivateSendChecked = addSendHandlers.onDeactivateSendToggle,
-            onDeletionDateChange = addSendHandlers.onDeletionDateChange,
+            addSendHandlers = addSendHandlers,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -167,22 +159,13 @@ fun AddSendContent(
  * Displays a collapsable set of new send options.
  *
  * @param state The content state.
- * @param onMaxAccessCountChange called when max access count changes.
- * @param onPasswordChange called when the password changes.
- * @param onNoteChange called when the notes changes.
- * @param onHideEmailChecked called when hide email is checked.
- * @param onDeactivateSendChecked called when deactivate send is checked.
+ * @param addSendHandlers THe handlers various events.
  */
 @Suppress("LongMethod")
 @Composable
 private fun AddSendOptions(
     state: AddSendState.ViewState.Content,
-    onMaxAccessCountChange: (Int) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onNoteChange: (String) -> Unit,
-    onHideEmailChecked: (Boolean) -> Unit,
-    onDeactivateSendChecked: (Boolean) -> Unit,
-    onDeletionDateChange: (ZonedDateTime) -> Unit,
+    addSendHandlers: AddSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Row(
@@ -229,7 +212,7 @@ private fun AddSendOptions(
                 dateFormatPattern = state.common.dateFormatPattern,
                 timeFormatPattern = state.common.timeFormatPattern,
                 currentZonedDateTime = state.common.deletionDate,
-                onDateSelect = onDeletionDateChange,
+                onDateSelect = addSendHandlers.onDeletionDateChange,
             )
             Spacer(modifier = Modifier.height(8.dp))
             SendExpirationDateChooser(
@@ -239,7 +222,7 @@ private fun AddSendOptions(
             BitwardenStepper(
                 label = stringResource(id = R.string.maximum_access_count),
                 value = state.common.maxAccessCount,
-                onValueChange = onMaxAccessCountChange,
+                onValueChange = addSendHandlers.onMaxAccessCountChange,
                 isDecrementEnabled = state.common.maxAccessCount != null,
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
@@ -258,7 +241,7 @@ private fun AddSendOptions(
                 label = stringResource(id = R.string.new_password),
                 hint = stringResource(id = R.string.password_info),
                 value = state.common.passwordInput,
-                onValueChange = onPasswordChange,
+                onValueChange = addSendHandlers.onPasswordChange,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -266,7 +249,7 @@ private fun AddSendOptions(
                 label = stringResource(id = R.string.notes),
                 hint = stringResource(id = R.string.notes_info),
                 value = state.common.noteInput,
-                onValueChange = onNoteChange,
+                onValueChange = addSendHandlers.onNoteChange,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -274,14 +257,14 @@ private fun AddSendOptions(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.hide_email),
                 isChecked = state.common.isHideEmailChecked,
-                onCheckedChange = onHideEmailChecked,
+                onCheckedChange = addSendHandlers.onHideEmailToggle,
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.disable_send),
                 isChecked = state.common.isDeactivateChecked,
-                onCheckedChange = onDeactivateSendChecked,
+                onCheckedChange = addSendHandlers.onDeactivateSendToggle,
             )
         }
     }
