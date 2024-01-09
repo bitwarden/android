@@ -203,6 +203,27 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `ExpirationDateChange should store the new expiration date`() {
+        val viewModel = createViewModel()
+        val newDeletionDate = ZonedDateTime.parse("2024-09-13T00:00Z")
+        // DEFAULT expiration date is null
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        viewModel.trySendAction(AddSendAction.ExpirationDateChange(newDeletionDate))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        expirationDate = newDeletionDate,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `ChooseFileClick should emit ShowToast`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

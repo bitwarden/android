@@ -21,6 +21,7 @@ data class AddSendHandlers(
     val onHideEmailToggle: (Boolean) -> Unit,
     val onDeactivateSendToggle: (Boolean) -> Unit,
     val onDeletionDateChange: (ZonedDateTime) -> Unit,
+    val onExpirationDateChange: (ZonedDateTime?) -> Unit,
 ) {
     companion object {
         /**
@@ -52,6 +53,9 @@ data class AddSendHandlers(
                 },
                 onDeletionDateChange = {
                     viewModel.trySendAction(AddSendAction.DeletionDateChange(it))
+                },
+                onExpirationDateChange = {
+                    viewModel.trySendAction(AddSendAction.ExpirationDateChange(it))
                 },
             )
     }

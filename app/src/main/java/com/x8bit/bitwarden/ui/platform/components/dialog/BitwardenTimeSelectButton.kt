@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.util.orNow
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.ZonedDateTime
 
@@ -39,7 +40,7 @@ import java.time.ZonedDateTime
  */
 @Composable
 fun BitwardenTimeSelectButton(
-    currentZonedDateTime: ZonedDateTime,
+    currentZonedDateTime: ZonedDateTime?,
     formatPattern: String,
     onTimeSelect: (hour: Int, minute: Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -47,7 +48,11 @@ fun BitwardenTimeSelectButton(
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
     val formattedTime by remember(currentZonedDateTime) {
-        mutableStateOf(currentZonedDateTime.toFormattedPattern(formatPattern))
+        mutableStateOf(
+            currentZonedDateTime
+                ?.toFormattedPattern(formatPattern)
+                ?: "--:-- --",
+        )
     }
     val label = stringResource(id = R.string.time)
     OutlinedTextField(
@@ -87,8 +92,8 @@ fun BitwardenTimeSelectButton(
 
     if (shouldShowDialog) {
         BitwardenTimePickerDialog(
-            initialHour = currentZonedDateTime.hour,
-            initialMinute = currentZonedDateTime.minute,
+            initialHour = currentZonedDateTime.orNow().hour,
+            initialMinute = currentZonedDateTime.orNow().minute,
             onTimeSelect = { hour, minute ->
                 shouldShowDialog = false
                 onTimeSelect(hour, minute)

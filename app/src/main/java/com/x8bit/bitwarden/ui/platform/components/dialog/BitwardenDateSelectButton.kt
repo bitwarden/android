@@ -26,6 +26,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.util.orNow
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.Instant
 import java.time.ZoneOffset
@@ -46,14 +47,18 @@ import java.time.ZonedDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BitwardenDateSelectButton(
-    currentZonedDateTime: ZonedDateTime,
+    currentZonedDateTime: ZonedDateTime?,
     formatPattern: String,
     onDateSelect: (ZonedDateTime) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
     val formattedDate by remember(currentZonedDateTime) {
-        mutableStateOf(currentZonedDateTime.toFormattedPattern(formatPattern))
+        mutableStateOf(
+            currentZonedDateTime
+                ?.toFormattedPattern(formatPattern)
+                ?: "mm/dd/yyyy",
+        )
     }
     // TODO: This should be "Date" but we don't have that string (BIT-1405)
     val label = stringResource(id = R.string.deletion_date)
@@ -95,7 +100,7 @@ fun BitwardenDateSelectButton(
 
     if (shouldShowDialog) {
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = currentZonedDateTime.toInstant().toEpochMilli(),
+            initialSelectedDateMillis = currentZonedDateTime.orNow().toInstant().toEpochMilli(),
         )
         DatePickerDialog(
             onDismissRequest = { shouldShowDialog = false },
@@ -110,7 +115,7 @@ fun BitwardenDateSelectButton(
                                     ),
                                     ZoneOffset.UTC,
                                 )
-                                .withZoneSameLocal(currentZonedDateTime.zone),
+                                .withZoneSameLocal(currentZonedDateTime.orNow().zone),
                         )
                         shouldShowDialog = false
                     },

@@ -217,6 +217,10 @@ private fun AddSendOptions(
             Spacer(modifier = Modifier.height(8.dp))
             SendExpirationDateChooser(
                 modifier = Modifier.padding(horizontal = 16.dp),
+                dateFormatPattern = state.common.dateFormatPattern,
+                timeFormatPattern = state.common.timeFormatPattern,
+                currentZonedDateTime = state.common.expirationDate,
+                onDateSelect = addSendHandlers.onExpirationDateChange,
             )
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenStepper(
