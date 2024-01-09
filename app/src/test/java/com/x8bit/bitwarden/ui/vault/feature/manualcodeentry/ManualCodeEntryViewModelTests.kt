@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
@@ -17,10 +18,10 @@ import org.junit.jupiter.api.Test
 
 class ManualCodeEntryViewModelTests : BaseViewModelTest() {
 
-    private val totpTestCodeFlow: Flow<String> = bufferedMutableSharedFlow()
+    private val totpTestCodeFlow: Flow<TotpCodeResult> = bufferedMutableSharedFlow()
     private val vaultRepository: VaultRepository = mockk {
         every { totpCodeFlow } returns totpTestCodeFlow
-        every { emitTotpCode(any()) } just runs
+        every { emitTotpCodeResult(any()) } just runs
     }
 
     @Test
@@ -41,7 +42,9 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(ManualCodeEntryAction.CodeSubmit)
 
-            verify(exactly = 1) { vaultRepository.emitTotpCode("TestCode") }
+            verify(exactly = 1) {
+                vaultRepository.emitTotpCodeResult(TotpCodeResult.Success("TestCode"))
+            }
             assertEquals(ManualCodeEntryEvent.NavigateBack, awaitItem())
         }
     }

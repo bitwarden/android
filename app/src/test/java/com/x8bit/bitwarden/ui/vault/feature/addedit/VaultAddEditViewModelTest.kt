@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -50,7 +51,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         vaultAddEditType = VaultAddEditType.AddItem,
     )
 
-    private val totpTestCodeFlow: MutableSharedFlow<String> = bufferedMutableSharedFlow()
+    private val totpTestCodeFlow: MutableSharedFlow<TotpCodeResult> = bufferedMutableSharedFlow()
 
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
 
@@ -593,13 +594,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `TotpCodeReceive should update totp code in state`() = runTest {
             val viewModel = createAddVaultItemViewModel()
-            val testKey = "TestKey"
+            val result = TotpCodeResult.Success("TestKey")
 
             val expectedState = loginInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(),
                     type = createLoginTypeContentViewState(
-                        totpCode = testKey,
+                        totpCode = "TestKey",
                     ),
                 ),
             )
@@ -607,7 +608,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.actionChannel.trySend(
                     VaultAddEditAction.Internal.TotpCodeReceive(
-                        testKey,
+                        result,
                     ),
                 )
 

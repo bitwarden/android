@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -89,7 +90,7 @@ class VaultAddEditViewModel @Inject constructor(
 
         vaultRepository
             .totpCodeFlow
-            .map { VaultAddEditAction.Internal.TotpCodeReceive(totpCode = it) }
+            .map { VaultAddEditAction.Internal.TotpCodeReceive(totpResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -843,15 +844,29 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
-        updateLoginContent { loginType ->
-            loginType.copy(totp = action.totpCode)
-        }
+        when (action.totpResult) {
+            is TotpCodeResult.Success -> {
+                sendEvent(
+                    event = VaultAddEditEvent.ShowToast(
+                        message = R.string.authenticator_key_added.asText(),
+                    ),
+                )
 
-        sendEvent(
-            event = VaultAddEditEvent.ShowToast(
-                message = R.string.authenticator_key_added.asText(),
-            ),
-        )
+                updateLoginContent { loginType ->
+                    loginType.copy(totp = action.totpResult.code)
+                }
+            }
+
+            TotpCodeResult.CodeScanningError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.Error(
+                            R.string.authenticator_key_read_error.asText(),
+                        ),
+                    )
+                }
+            }
+        }
     }
 
     //endregion Internal Type Handlers
@@ -1612,9 +1627,9 @@ sealed class VaultAddEditAction {
     sealed class Internal : VaultAddEditAction() {
 
         /**
-         * Indicates that the vault totp code has been received.
+         * Indicates that the vault totp code result has been received.
          */
-        data class TotpCodeReceive(val totpCode: String) : Internal()
+        data class TotpCodeReceive(val totpResult: TotpCodeResult) : Internal()
 
         /**
          * Indicates that the vault item data has been received.

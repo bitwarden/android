@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,7 +46,7 @@ class ManualCodeEntryViewModel @Inject constructor(
     }
 
     private fun handleCodeSubmit() {
-        vaultRepository.emitTotpCode(state.code)
+        vaultRepository.emitTotpCodeResult(TotpCodeResult.Success(state.code))
         sendEvent(ManualCodeEntryEvent.NavigateBack)
     }
 
