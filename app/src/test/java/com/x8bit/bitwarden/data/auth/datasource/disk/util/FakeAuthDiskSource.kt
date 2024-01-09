@@ -21,6 +21,7 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
+    private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
     private val storedOrganizations =
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
@@ -44,6 +45,13 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storePrivateKey(userId: String, privateKey: String?) {
         storedPrivateKeys[userId] = privateKey
+    }
+
+    override fun getUserAutoUnlockKey(userId: String): String? =
+        storedUserAutoUnlockKeys[userId]
+
+    override fun storeUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?) {
+        storedUserAutoUnlockKeys[userId] = userAutoUnlockKey
     }
 
     override fun getOrganizationKeys(

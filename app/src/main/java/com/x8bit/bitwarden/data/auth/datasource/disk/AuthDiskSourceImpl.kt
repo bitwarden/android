@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
+
+import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource.Companion.ENCRYPTED_BASE_KEY
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +15,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.UUID
 
+private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnlock"
 private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
@@ -82,6 +85,22 @@ class AuthDiskSourceImpl(
         putString(
             key = "${MASTER_KEY_ENCRYPTION_PRIVATE_KEY}_$userId",
             value = privateKey,
+        )
+    }
+
+    override fun getUserAutoUnlockKey(userId: String): String? =
+        getEncryptedString(
+            key = "${USER_AUTO_UNLOCK_KEY_KEY}_$userId",
+            default = null,
+        )
+
+    override fun storeUserAutoUnlockKey(
+        userId: String,
+        userAutoUnlockKey: String?,
+    ) {
+        putEncryptedString(
+            key = "${USER_AUTO_UNLOCK_KEY_KEY}_$userId",
+            value = userAutoUnlockKey,
         )
     }
 
