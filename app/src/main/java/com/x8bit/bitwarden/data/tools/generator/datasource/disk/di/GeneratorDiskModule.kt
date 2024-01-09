@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.disk.di
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.room.Room
+import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSourceImpl
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -26,7 +27,7 @@ object GeneratorDiskModule {
     @Provides
     @Singleton
     fun provideGeneratorDiskSource(
-        sharedPreferences: SharedPreferences,
+        @UnencryptedPreferences sharedPreferences: SharedPreferences,
         json: Json,
     ): GeneratorDiskSource =
         GeneratorDiskSourceImpl(
