@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
@@ -93,7 +94,7 @@ class VaultRepositoryImpl(
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
-    private val mutableTotpCodeFlow = bufferedMutableSharedFlow<String>()
+    private val mutableTotpCodeResultFlow = bufferedMutableSharedFlow<TotpCodeResult>()
 
     private val mutableVaultStateStateFlow =
         MutableStateFlow(
@@ -138,8 +139,8 @@ class VaultRepositoryImpl(
                 initialValue = DataState.Loading,
             )
 
-    override val totpCodeFlow: Flow<String>
-        get() = mutableTotpCodeFlow.asSharedFlow()
+    override val totpCodeFlow: Flow<TotpCodeResult>
+        get() = mutableTotpCodeResultFlow.asSharedFlow()
 
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
@@ -285,8 +286,8 @@ class VaultRepositoryImpl(
         setVaultToLocked(userId = userId)
     }
 
-    override fun emitTotpCode(totpCode: String) {
-        mutableTotpCodeFlow.tryEmit(totpCode)
+    override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {
+        mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
 
     @Suppress("ReturnCount")
