@@ -429,7 +429,14 @@ class VaultRepositoryImpl(
 
                         is UpdateSendResponseJson.Success -> {
                             vaultDiskSource.saveSend(userId = userId, send = response.send)
-                            UpdateSendResult.Success
+                            vaultSdkSource
+                                .decryptSend(
+                                    userId = userId,
+                                    send = response.send.toEncryptedSdkSend(),
+                                )
+                                .getOrNull()
+                                ?.let { UpdateSendResult.Success(sendView = it) }
+                                ?: UpdateSendResult.Error(errorMessage = null)
                         }
                     }
                 },

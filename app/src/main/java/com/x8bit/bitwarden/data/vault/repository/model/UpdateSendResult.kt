@@ -1,14 +1,16 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
+import com.bitwarden.core.SendView
+
 /**
  * Models result of updating a send.
  */
 sealed class UpdateSendResult {
 
     /**
-     * Send updated successfully.
+     * Send was updated successfully and contains the decrypted [SendView].
      */
-    data object Success : UpdateSendResult()
+    data class Success(val sendView: SendView) : UpdateSendResult()
 
     /**
      * Generic error while updating a send. The optional [errorMessage] may be displayed directly
