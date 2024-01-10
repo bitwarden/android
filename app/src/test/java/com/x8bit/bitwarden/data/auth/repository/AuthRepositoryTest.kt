@@ -1001,6 +1001,10 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 privateKey = PRIVATE_KEY,
             )
+            storeUserAutoUnlockKey(
+                userId = USER_ID_1,
+                userAutoUnlockKey = USER_AUTO_UNLOCK_KEY,
+            )
             storeOrganizationKeys(
                 userId = USER_ID_1,
                 organizationKeys = ORGANIZATION_KEYS,
@@ -1031,6 +1035,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
                 userKey = null,
+            )
+            fakeAuthDiskSource.assertUserAutoUnlockKey(
+                userId = USER_ID_1,
+                userAutoUnlockKey = null,
             )
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = USER_ID_1,
@@ -1093,6 +1101,10 @@ class AuthRepositoryTest {
                     userId = USER_ID_2,
                     privateKey = PRIVATE_KEY,
                 )
+                storeUserAutoUnlockKey(
+                    userId = USER_ID_2,
+                    userAutoUnlockKey = USER_AUTO_UNLOCK_KEY,
+                )
                 storeOrganizationKeys(
                     userId = USER_ID_2,
                     organizationKeys = ORGANIZATION_KEYS,
@@ -1119,6 +1131,10 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.assertUserKey(
                     userId = USER_ID_1,
                     userKey = null,
+                )
+                fakeAuthDiskSource.assertUserAutoUnlockKey(
+                    userId = USER_ID_1,
+                    userAutoUnlockKey = null,
                 )
                 fakeAuthDiskSource.assertOrganizationKeys(
                     userId = USER_ID_1,
@@ -1148,6 +1164,10 @@ class AuthRepositoryTest {
                 userId = USER_ID_2,
                 privateKey = PRIVATE_KEY,
             )
+            storeUserAutoUnlockKey(
+                userId = USER_ID_2,
+                userAutoUnlockKey = USER_AUTO_UNLOCK_KEY,
+            )
             storeOrganizationKeys(
                 userId = USER_ID_2,
                 organizationKeys = ORGANIZATION_KEYS,
@@ -1171,6 +1191,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_2,
                 userKey = null,
+            )
+            fakeAuthDiskSource.assertUserAutoUnlockKey(
+                userId = USER_ID_2,
+                userAutoUnlockKey = null,
             )
             fakeAuthDiskSource.assertOrganizationKeys(
                 userId = USER_ID_2,
@@ -1398,6 +1422,7 @@ class AuthRepositoryTest {
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"
         private const val PUBLIC_KEY = "PublicKey"
         private const val PRIVATE_KEY = "privateKey"
+        private const val USER_AUTO_UNLOCK_KEY = "userAutoUnlockKey"
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private const val USER_ID_3 = "3816ef34-0747-4133-9b7a-ba35d3768a68"
