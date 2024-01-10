@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
  * @param leadingIconResource the optional resource for the leading icon on the text field.
+ * @param trailingIconContent the content for the trailing icon in the text field.
  * @param hint optional hint text that will appear below the text input.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
@@ -51,6 +52,7 @@ fun BitwardenTextField(
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     leadingIconResource: IconResource? = null,
+    trailingIconContent: (@Composable () -> Unit)? = null,
     hint: String? = null,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
@@ -87,6 +89,9 @@ fun BitwardenTextField(
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+        },
+        trailingIcon = trailingIconContent?.let {
+            trailingIconContent
         },
         placeholder = placeholder?.let {
             { Text(text = it) }

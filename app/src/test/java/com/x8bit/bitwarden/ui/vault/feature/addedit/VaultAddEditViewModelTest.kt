@@ -675,6 +675,38 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
+        fun `ClearTotpKeyClick call should clear the totp code`() {
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        typeContentViewState = createLoginTypeContentViewState(
+                            totpCode = "testCode",
+                        ),
+                    ),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                ),
+            )
+
+            val expectedState = loginInitialState.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(),
+                    type = createLoginTypeContentViewState(
+                        totpCode = null,
+                    ),
+                ),
+            )
+
+            viewModel.actionChannel.trySend(
+                VaultAddEditAction.ItemType.LoginType.ClearTotpKeyClick,
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
         fun `TotpCodeReceive should update totp code in state`() = runTest {
             val viewModel = createAddVaultItemViewModel()
             val result = TotpCodeResult.Success("TestKey")

@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.FakePermissionManager
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.isProgressBar
+import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
@@ -455,6 +456,25 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("TOTP")
             .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state the totp text field click on trailing icon should call ClearTotpKeyClick`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = "TestCode") }
+        }
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Delete")
+            .onFirst()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.ClearTotpKeyClick,
+            )
+        }
     }
 
     @Suppress("MaxLineLength")

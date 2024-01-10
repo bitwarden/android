@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
+ * @param trailingIconContent the content for the trailing icon in the text field.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
  * providing flexibility in the layout definition.
@@ -38,6 +39,7 @@ fun BitwardenTextFieldWithActions(
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
+    trailingIconContent: (@Composable () -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
@@ -53,6 +55,7 @@ fun BitwardenTextFieldWithActions(
             singleLine = singleLine,
             onValueChange = onValueChange,
             keyboardType = keyboardType,
+            trailingIconContent = trailingIconContent,
         )
         BitwardenRowOfActions(actions)
     }
