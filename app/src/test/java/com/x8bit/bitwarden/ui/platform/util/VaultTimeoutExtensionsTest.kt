@@ -13,6 +13,7 @@ class VaultTimeoutExtensionsTest {
             VaultTimeout.Type.IMMEDIATELY to R.string.immediately.asText(),
             VaultTimeout.Type.ONE_MINUTE to R.string.one_minute.asText(),
             VaultTimeout.Type.FIVE_MINUTES to R.string.five_minutes.asText(),
+            VaultTimeout.Type.FIFTEEN_MINUTES to R.string.fifteen_minutes.asText(),
             VaultTimeout.Type.THIRTY_MINUTES to R.string.thirty_minutes.asText(),
             VaultTimeout.Type.ONE_HOUR to R.string.one_hour.asText(),
             VaultTimeout.Type.FOUR_HOURS to R.string.four_hours.asText(),

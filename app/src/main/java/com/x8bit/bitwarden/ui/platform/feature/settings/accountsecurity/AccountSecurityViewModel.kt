@@ -133,6 +133,7 @@ class AccountSecurityViewModel @Inject constructor(
             VaultTimeout.Type.IMMEDIATELY -> VaultTimeout.Immediately
             VaultTimeout.Type.ONE_MINUTE -> VaultTimeout.OneMinute
             VaultTimeout.Type.FIVE_MINUTES -> VaultTimeout.FiveMinutes
+            VaultTimeout.Type.FIFTEEN_MINUTES -> VaultTimeout.FifteenMinutes
             VaultTimeout.Type.THIRTY_MINUTES -> VaultTimeout.ThirtyMinutes
             VaultTimeout.Type.ONE_HOUR -> VaultTimeout.OneHour
             VaultTimeout.Type.FOUR_HOURS -> VaultTimeout.FourHours
