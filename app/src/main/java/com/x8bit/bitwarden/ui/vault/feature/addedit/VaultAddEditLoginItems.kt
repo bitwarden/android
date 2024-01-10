@@ -130,6 +130,16 @@ fun LazyListScope.vaultAddEditLoginItems(
                     .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.totp),
                 value = loginState.totp,
+                trailingIconContent = {
+                    IconButton(
+                        onClick = loginItemTypeHandlers.onClearTotpKeyClick,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_close),
+                            contentDescription = stringResource(id = R.string.delete),
+                        )
+                    }
+                },
                 onValueChange = {},
                 readOnly = true,
                 singleLine = true,

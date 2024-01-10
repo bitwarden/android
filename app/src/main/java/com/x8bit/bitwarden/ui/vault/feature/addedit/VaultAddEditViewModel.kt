@@ -382,6 +382,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick -> {
                 handleLoginCopyTotpKeyText(action)
             }
+
+            is VaultAddEditAction.ItemType.LoginType.ClearTotpKeyClick -> {
+                handleLoginClearTotpKey()
+            }
         }
     }
 
@@ -453,6 +457,12 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick,
     ) {
         clipboardManager.setText(text = action.totpKey)
+    }
+
+    private fun handleLoginClearTotpKey() {
+        updateLoginContent { loginType ->
+            loginType.copy(totp = null)
+        }
     }
 
     private fun handleLoginUriSettingsClick() {
@@ -1449,6 +1459,11 @@ sealed class VaultAddEditAction {
              * @property totpKey the totp key being copied.
              */
             data class CopyTotpKeyClick(val totpKey: String) : LoginType()
+
+            /**
+             * Represents the action to clear the totp code.
+             */
+            data object ClearTotpKeyClick : LoginType()
 
             /**
              * Represents the action to open the username generator.

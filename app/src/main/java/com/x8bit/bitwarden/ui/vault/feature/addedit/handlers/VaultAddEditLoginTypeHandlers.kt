@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
  * @property onOpenPasswordGeneratorClick Handles the action when the password generator
  * button is clicked.
  * @property onSetupTotpClick Handles the action when the setup TOTP button is clicked.
+ * @property onCopyTotpKeyClick Handles the action when the copy TOTP text button is clicked.
+ * @property onClearTotpKeyClick Handles the action when the clear TOTP text button is clicked.
  * @property onUriSettingsClick Handles the action when the URI settings button is clicked.
  * @property onAddNewUriClick Handles the action when the add new URI button is clicked.
  */
@@ -31,6 +33,7 @@ data class VaultAddEditLoginTypeHandlers(
     val onOpenPasswordGeneratorClick: () -> Unit,
     val onSetupTotpClick: (Boolean) -> Unit,
     val onCopyTotpKeyClick: (String) -> Unit,
+    val onClearTotpKeyClick: () -> Unit,
     val onUriSettingsClick: () -> Unit,
     val onAddNewUriClick: () -> Unit,
 ) {
@@ -92,6 +95,11 @@ data class VaultAddEditLoginTypeHandlers(
                         VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
                             totpKey,
                         ),
+                    )
+                },
+                onClearTotpKeyClick = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.ClearTotpKeyClick,
                     )
                 },
             )
