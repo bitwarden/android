@@ -98,7 +98,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClicked(action: LandingAction.LockAccountClick) {
-        vaultRepository.lockVaultIfNecessary(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId)
     }
 
     private fun handleLogoutAccountClicked(action: LandingAction.LogoutAccountClick) {

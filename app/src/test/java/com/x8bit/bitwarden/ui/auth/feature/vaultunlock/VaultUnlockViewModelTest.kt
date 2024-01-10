@@ -40,7 +40,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
-        every { lockVaultIfNecessary(any()) } just runs
+        every { lockVault(any()) } just runs
     }
 
     @Test
@@ -87,8 +87,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `UserState updates with a non-null value update the account information in the state`() {
+    fun `UserState updates with a non-null unlocked account should not update the state`() {
         val viewModel = createViewModel()
         assertEquals(
             DEFAULT_STATE,
@@ -112,6 +113,37 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             )
 
         assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserState updates with a non-null locked account should update the account information in the state`() {
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value =
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active+test@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isVaultUnlocked = false,
+                        organizations = emptyList(),
+                    ),
+                ),
+            )
+
+        assertEquals(
             DEFAULT_STATE.copy(
                 avatarColorString = "#00aaaa",
                 initials = "OU",
@@ -124,7 +156,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         avatarColorHex = "#00aaaa",
                         environmentLabel = "bitwarden.com",
                         isActive = true,
-                        isVaultUnlocked = true,
+                        isVaultUnlocked = false,
                     ),
                 ),
             ),
@@ -172,7 +204,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on LockAccountClick should call lockVaultIfNecessary for the given account`() {
+    fun `on LockAccountClick should call lockVault for the given account`() {
         val accountUserId = "userId"
         val accountSummary = mockk<AccountSummary> {
             every { userId } returns accountUserId
@@ -181,7 +213,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultUnlockAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVaultIfNecessary(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId) }
     }
 
     @Test

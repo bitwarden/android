@@ -50,7 +50,7 @@ class LoginViewModelTest : BaseViewModelTest() {
         every { logout(any()) } just runs
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
-        every { lockVaultIfNecessary(any()) } just runs
+        every { lockVault(any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
@@ -160,7 +160,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LockAccountClick should call lockVaultIfNecessary for the given account`() {
+    fun `LockAccountClick should call lockVault for the given account`() {
         val accountUserId = "userId"
         val accountSummary = mockk<AccountSummary> {
             every { userId } returns accountUserId
@@ -169,7 +169,7 @@ class LoginViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(LoginAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVaultIfNecessary(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId) }
     }
 
     @Test

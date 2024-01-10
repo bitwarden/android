@@ -104,6 +104,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [userAutoUnlockKey] was stored successfully using the [userId].
+     */
+    fun assertUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?) {
+        assertEquals(userAutoUnlockKey, storedUserAutoUnlockKeys[userId])
+    }
+
+    /**
      * Assert the the [organizationKeys] was stored successfully using the [userId].
      */
     fun assertOrganizationKeys(userId: String, organizationKeys: Map<String, String>?) {

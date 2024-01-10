@@ -42,7 +42,12 @@ class RootNavViewModel @Inject constructor(
         val userState = action.userState
         val updatedRootNavState = when {
             userState == null || userState.hasPendingAccountAddition -> RootNavState.Auth
-            userState.activeAccount.isVaultUnlocked -> RootNavState.VaultUnlocked
+            userState.activeAccount.isVaultUnlocked -> {
+                RootNavState.VaultUnlocked(
+                    activeUserId = userState.activeAccount.userId,
+                )
+            }
+
             else -> RootNavState.VaultLocked
         }
         mutableStateFlow.update { updatedRootNavState }
@@ -72,10 +77,12 @@ sealed class RootNavState : Parcelable {
     data object VaultLocked : RootNavState()
 
     /**
-     * App should show vault unlocked nav graph.
+     * App should show vault unlocked nav graph for the given [activeUserId].
      */
     @Parcelize
-    data object VaultUnlocked : RootNavState()
+    data class VaultUnlocked(
+        val activeUserId: String,
+    ) : RootNavState()
 }
 
 /**
