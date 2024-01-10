@@ -218,6 +218,18 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
+    bodySmallProminent = TextStyle(
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight.W700,
+        letterSpacing = 0.4.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    ),
     labelMediumProminent = TextStyle(
         fontSize = 12.sp,
         lineHeight = 16.sp,
@@ -236,6 +248,7 @@ val nonMaterialTypography: NonMaterialTypography = NonMaterialTypography(
  * Models typography that live outside of the Material Theme spec.
  */
 data class NonMaterialTypography(
+    val bodySmallProminent: TextStyle,
     val labelMediumProminent: TextStyle,
     val sensitiveInfoSmall: TextStyle,
     val sensitiveInfoMedium: TextStyle,
