@@ -47,6 +47,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun SendScreen(
     onNavigateToAddSend: () -> Unit,
+    onNavigateToEditSend: (sendItemId: String) -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
 ) {
@@ -55,6 +56,8 @@ fun SendScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is SendEvent.NavigateNewSend -> onNavigateToAddSend()
+
+            is SendEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
 
             is SendEvent.NavigateToAboutSend -> {
                 intentHandler.launchUri("https://bitwarden.com/products/send".toUri())

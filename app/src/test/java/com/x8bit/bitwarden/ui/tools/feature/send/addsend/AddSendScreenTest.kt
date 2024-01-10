@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.just
@@ -596,6 +597,7 @@ class AddSendScreenTest : BaseComposeTest() {
         )
 
         private val DEFAULT_STATE = AddSendState(
+            addSendType = AddSendType.AddItem,
             viewState = DEFAULT_VIEW_STATE,
             dialogState = null,
             isPremiumUser = false,

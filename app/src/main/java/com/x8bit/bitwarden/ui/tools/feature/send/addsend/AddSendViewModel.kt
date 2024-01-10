@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,31 +42,42 @@ class AddSendViewModel @Inject constructor(
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: AddSendState(
-        viewState = AddSendState.ViewState.Content(
-            common = AddSendState.ViewState.Content.Common(
-                name = "",
-                maxAccessCount = null,
-                passwordInput = "",
-                noteInput = "",
-                isHideEmailChecked = false,
-                isDeactivateChecked = false,
-                deletionDate = ZonedDateTime
-                    .now(clock)
-                    // We want the default time to be midnight, so we remove all values beyond days
-                    .truncatedTo(ChronoUnit.DAYS)
-                    .plusWeeks(1),
-                expirationDate = null,
-            ),
-            selectedType = AddSendState.ViewState.Content.SendType.Text(
-                input = "",
-                isHideByDefaultChecked = false,
-            ),
-        ),
-        dialogState = null,
-        isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
-        baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val addSendType = AddSendArgs(savedStateHandle).sendAddType
+        AddSendState(
+            addSendType = addSendType,
+            viewState = when (addSendType) {
+                AddSendType.AddItem -> AddSendState.ViewState.Content(
+                    common = AddSendState.ViewState.Content.Common(
+                        name = "",
+                        maxAccessCount = null,
+                        passwordInput = "",
+                        noteInput = "",
+                        isHideEmailChecked = false,
+                        isDeactivateChecked = false,
+                        deletionDate = ZonedDateTime
+                            .now(clock)
+                            // We want the default time to be midnight, so we remove all values
+                            // beyond days
+                            .truncatedTo(ChronoUnit.DAYS)
+                            .plusWeeks(1),
+                        expirationDate = null,
+                    ),
+                    selectedType = AddSendState.ViewState.Content.SendType.Text(
+                        input = "",
+                        isHideByDefaultChecked = false,
+                    ),
+                )
+
+                is AddSendType.EditItem -> AddSendState.ViewState.Error(
+                    "Not yet implemented".asText(),
+                )
+            },
+            dialogState = null,
+            isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
+            baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
+        )
+    },
 ) {
 
     init {
@@ -320,11 +332,21 @@ class AddSendViewModel @Inject constructor(
  */
 @Parcelize
 data class AddSendState(
+    val addSendType: AddSendType,
     val dialogState: DialogState?,
     val viewState: ViewState,
     val isPremiumUser: Boolean,
     val baseWebSendUrl: String,
 ) : Parcelable {
+
+    /**
+     * Helper to determine the screen display name.
+     */
+    val screenDisplayName: Text
+        get() = when (addSendType) {
+            AddSendType.AddItem -> R.string.add_send.asText()
+            is AddSendType.EditItem -> R.string.edit_send.asText()
+        }
 
     /**
      * Represents the specific view states for the [AddSendScreen].
