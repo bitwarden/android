@@ -2,19 +2,15 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -24,14 +20,11 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenDateSelectButton
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimeSelectButton
 import kotlinx.collections.immutable.toImmutableList
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
 /**
  * Displays UX for choosing deletion date of a send.
@@ -67,47 +60,14 @@ fun SendDeletionDateChooser(
         )
 
         AnimatedVisibility(visible = selectedOption == DeletionOptions.CUSTOM) {
-            // This tracks the date component (year, month, and day) and ignores lower level
-            // components.
-            var date: ZonedDateTime by remember {
-                mutableStateOf(currentZonedDateTime)
-            }
-            // This tracks just the time component (hours and minutes) and ignores the higher level
-            // components. 0 representing midnight and counting up from there.
-            var timeMillis: Long by remember {
-                mutableStateOf(
-                    currentZonedDateTime.hour.hours.inWholeMilliseconds +
-                        currentZonedDateTime.minute.minutes.inWholeMilliseconds,
-                )
-            }
-            val derivedDateTimeMillis: ZonedDateTime by remember {
-                derivedStateOf { date.plus(timeMillis, ChronoUnit.MILLIS) }
-            }
-
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
-                Row {
-                    BitwardenDateSelectButton(
-                        modifier = Modifier.weight(1f),
-                        formatPattern = dateFormatPattern,
-                        currentZonedDateTime = currentZonedDateTime,
-                        onDateSelect = {
-                            date = it
-                            onDateSelect(derivedDateTimeMillis)
-                        },
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    BitwardenTimeSelectButton(
-                        modifier = Modifier.weight(1f),
-                        formatPattern = timeFormatPattern,
-                        currentZonedDateTime = currentZonedDateTime,
-                        onTimeSelect = { hour, minute ->
-                            timeMillis = hour.hours.inWholeMilliseconds +
-                                minute.minutes.inWholeMilliseconds
-                            onDateSelect(derivedDateTimeMillis)
-                        },
-                    )
-                }
+                AddSendCustomDateChooser(
+                    currentZonedDateTime = currentZonedDateTime,
+                    dateFormatPattern = dateFormatPattern,
+                    timeFormatPattern = timeFormatPattern,
+                    onDateSelect = { onDateSelect(requireNotNull(it)) },
+                )
             }
         }
 
