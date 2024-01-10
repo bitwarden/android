@@ -1530,6 +1530,37 @@ class VaultRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `updateSend with sendsService updateSend success and decryption error should return UpdateSendResult Error with a null message`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns createMockSdkSend(number = 1).asSuccess()
+            val mockSend = createMockSend(number = 1)
+            coEvery {
+                sendsService.updateSend(
+                    sendId = sendId,
+                    body = createMockSendJsonRequest(number = 1),
+                )
+            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSend(userId = userId, send = createMockSdkSend(number = 1))
+            } returns Throwable("Fail").asFailure()
+            coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
+
+            val result = vaultRepository.updateSend(
+                sendId = sendId,
+                sendView = mockSendView,
+            )
+
+            assertEquals(UpdateSendResult.Error(errorMessage = null), result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `updateSend with sendsService updateSend Success response should return UpdateSendResult success`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -1545,9 +1576,11 @@ class VaultRepositoryTest {
                     sendId = sendId,
                     body = createMockSendJsonRequest(number = 1),
                 )
-            } returns UpdateSendResponseJson
-                .Success(send = mockSend)
-                .asSuccess()
+            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
+            val mockSendViewResult = createMockSendView(number = 2)
+            coEvery {
+                vaultSdkSource.decryptSend(userId = userId, send = createMockSdkSend(number = 1))
+            } returns mockSendViewResult.asSuccess()
             coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
 
             val result = vaultRepository.updateSend(
@@ -1555,7 +1588,7 @@ class VaultRepositoryTest {
                 sendView = mockSendView,
             )
 
-            assertEquals(UpdateSendResult.Success, result)
+            assertEquals(UpdateSendResult.Success(mockSendViewResult), result)
         }
 
     //region Helper functions
