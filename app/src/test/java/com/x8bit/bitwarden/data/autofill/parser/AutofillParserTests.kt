@@ -27,13 +27,6 @@ class AutofillParserTests {
         every { this@mockk.autofillId } returns cardAutofillId
         every { this@mockk.childCount } returns 0
     }
-    private val identityAutofillHint = View.AUTOFILL_HINT_NAME
-    private val identityAutofillId: AutofillId = mockk()
-    private val identityViewNode: AssistStructure.ViewNode = mockk {
-        every { this@mockk.autofillHints } returns arrayOf(identityAutofillHint)
-        every { this@mockk.autofillId } returns identityAutofillId
-        every { this@mockk.childCount } returns 0
-    }
     private val loginAutofillHint = View.AUTOFILL_HINT_USERNAME
     private val loginAutofillId: AutofillId = mockk()
     private val loginViewNode: AssistStructure.ViewNode = mockk {
@@ -43,9 +36,6 @@ class AutofillParserTests {
     }
     private val cardWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns cardViewNode
-    }
-    private val identityWindowNode: AssistStructure.WindowNode = mockk {
-        every { this@mockk.rootViewNode } returns identityViewNode
     }
     private val loginWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns loginViewNode
@@ -128,10 +118,6 @@ class AutofillParserTests {
             autofillId = cardAutofillId,
             isFocused = true,
         )
-        val identityAutofillView: AutofillView.Identity = AutofillView.Identity.Name(
-            autofillId = identityAutofillId,
-            isFocused = false,
-        )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             autofillId = loginAutofillId,
             isFocused = false,
@@ -144,41 +130,6 @@ class AutofillParserTests {
             partition = autofillPartition,
         )
         every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { identityViewNode.toAutofillView() } returns identityAutofillView
-        every { loginViewNode.toAutofillView() } returns loginAutofillView
-
-        // Test
-        val actual = parser.parse(assistStructure)
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `parse should choose AutofillPartition Identity when an Identity view is focused`() {
-        // Setup
-        setupAssistStructureWithAllAutofillViewTypes()
-        val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            autofillId = cardAutofillId,
-            isFocused = false,
-        )
-        val identityAutofillView: AutofillView.Identity = AutofillView.Identity.Name(
-            autofillId = identityAutofillId,
-            isFocused = true,
-        )
-        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            autofillId = loginAutofillId,
-            isFocused = false,
-        )
-        val autofillPartition = AutofillPartition.Identity(
-            views = listOf(identityAutofillView),
-        )
-        val expected = AutofillRequest.Fillable(
-            ignoreAutofillIds = emptyList(),
-            partition = autofillPartition,
-        )
-        every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { identityViewNode.toAutofillView() } returns identityAutofillView
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
@@ -196,10 +147,6 @@ class AutofillParserTests {
             autofillId = cardAutofillId,
             isFocused = false,
         )
-        val identityAutofillView: AutofillView.Identity = AutofillView.Identity.Name(
-            autofillId = identityAutofillId,
-            isFocused = false,
-        )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             autofillId = loginAutofillId,
             isFocused = true,
@@ -212,7 +159,6 @@ class AutofillParserTests {
             partition = autofillPartition,
         )
         every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { identityViewNode.toAutofillView() } returns identityAutofillView
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
@@ -230,13 +176,9 @@ class AutofillParserTests {
             autofillId = cardAutofillId,
             isFocused = true,
         )
-        val identityAutofillView: AutofillView.Identity = AutofillView.Identity.Name(
-            autofillId = identityAutofillId,
-            isFocused = true,
-        )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             autofillId = loginAutofillId,
-            isFocused = false,
+            isFocused = true,
         )
         val autofillPartition = AutofillPartition.Card(
             views = listOf(cardAutofillView),
@@ -246,7 +188,6 @@ class AutofillParserTests {
             partition = autofillPartition,
         )
         every { cardViewNode.toAutofillView() } returns cardAutofillView
-        every { identityViewNode.toAutofillView() } returns identityAutofillView
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
@@ -257,14 +198,12 @@ class AutofillParserTests {
     }
 
     /**
-     * Setup [assistStructure] to return window nodes with each [AutofillView] type (card, identity,
-     * and login) so we can test how different window node configurations produce different
-     * partitions.
+     * Setup [assistStructure] to return window nodes with each [AutofillView] type (card and login)
+     * so we can test how different window node configurations produce different partitions.
      */
     private fun setupAssistStructureWithAllAutofillViewTypes() {
-        every { assistStructure.windowNodeCount } returns 3
+        every { assistStructure.windowNodeCount } returns 2
         every { assistStructure.getWindowNodeAt(0) } returns cardWindowNode
-        every { assistStructure.getWindowNodeAt(1) } returns identityWindowNode
-        every { assistStructure.getWindowNodeAt(2) } returns loginWindowNode
+        every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
     }
 }

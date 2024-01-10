@@ -105,78 +105,10 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
-    fun `toAutofillView should return AutofillView Identity Name when hint matches`() {
-        // Setup
-        val autofillHint = View.AUTOFILL_HINT_NAME
-        val expected = AutofillView.Identity.Name(
-            autofillId = expectedAutofillId,
-            isFocused = expectedIsFocused,
-        )
-        every { viewNode.autofillHints } returns arrayOf(autofillHint)
-
-        // Test
-        val actual = viewNode.toAutofillView()
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
     fun `toAutofillView should return AutofillView Login Password when hint matches`() {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_PASSWORD
         val expected = AutofillView.Login.Password(
-            autofillId = expectedAutofillId,
-            isFocused = expectedIsFocused,
-        )
-        every { viewNode.autofillHints } returns arrayOf(autofillHint)
-
-        // Test
-        val actual = viewNode.toAutofillView()
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `toAutofillView should return AutofillView Identity PhoneNumber when hint matches`() {
-        // Setup
-        val autofillHint = View.AUTOFILL_HINT_PHONE
-        val expected = AutofillView.Identity.PhoneNumber(
-            autofillId = expectedAutofillId,
-            isFocused = expectedIsFocused,
-        )
-        every { viewNode.autofillHints } returns arrayOf(autofillHint)
-
-        // Test
-        val actual = viewNode.toAutofillView()
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `toAutofillView should return AutofillView Identity PostalAddress when hint matches`() {
-        // Setup
-        val autofillHint = View.AUTOFILL_HINT_POSTAL_ADDRESS
-        val expected = AutofillView.Identity.PostalAddress(
-            autofillId = expectedAutofillId,
-            isFocused = expectedIsFocused,
-        )
-        every { viewNode.autofillHints } returns arrayOf(autofillHint)
-
-        // Test
-        val actual = viewNode.toAutofillView()
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `toAutofillView should return AutofillView Identity PostalCOde when hint matches`() {
-        // Setup
-        val autofillHint = View.AUTOFILL_HINT_POSTAL_CODE
-        val expected = AutofillView.Identity.PostalCode(
             autofillId = expectedAutofillId,
             isFocused = expectedIsFocused,
         )

@@ -68,36 +68,8 @@ private fun buildAutofillView(
         )
     }
 
-    View.AUTOFILL_HINT_NAME -> {
-        AutofillView.Identity.Name(
-            autofillId = autofillId,
-            isFocused = isFocused,
-        )
-    }
-
     View.AUTOFILL_HINT_PASSWORD -> {
         AutofillView.Login.Password(
-            autofillId = autofillId,
-            isFocused = isFocused,
-        )
-    }
-
-    View.AUTOFILL_HINT_PHONE -> {
-        AutofillView.Identity.PhoneNumber(
-            autofillId = autofillId,
-            isFocused = isFocused,
-        )
-    }
-
-    View.AUTOFILL_HINT_POSTAL_ADDRESS -> {
-        AutofillView.Identity.PostalAddress(
-            autofillId = autofillId,
-            isFocused = isFocused,
-        )
-    }
-
-    View.AUTOFILL_HINT_POSTAL_CODE -> {
-        AutofillView.Identity.PostalCode(
             autofillId = autofillId,
             isFocused = isFocused,
         )
@@ -122,10 +94,6 @@ private val SUPPORTED_HINTS: List<String> = listOf(
     View.AUTOFILL_HINT_CREDIT_CARD_NUMBER,
     View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE,
     View.AUTOFILL_HINT_EMAIL_ADDRESS,
-    View.AUTOFILL_HINT_NAME,
     View.AUTOFILL_HINT_PASSWORD,
-    View.AUTOFILL_HINT_PHONE,
-    View.AUTOFILL_HINT_POSTAL_ADDRESS,
-    View.AUTOFILL_HINT_POSTAL_CODE,
     View.AUTOFILL_HINT_USERNAME,
 )

@@ -24,11 +24,11 @@ class FilledDataBuilderTest {
     fun `build should return FilledData with FilledItems and ignored AutofillIds`() = runTest {
         // Setup
         val autofillId: AutofillId = mockk()
-        val autofillView = AutofillView.Identity.PostalCode(
+        val autofillView = AutofillView.Login.Username(
             autofillId = autofillId,
             isFocused = false,
         )
-        val autofillPartition = AutofillPartition.Identity(
+        val autofillPartition = AutofillPartition.Login(
             views = listOf(autofillView),
         )
         val ignoreAutofillIds: List<AutofillId> = mockk()
