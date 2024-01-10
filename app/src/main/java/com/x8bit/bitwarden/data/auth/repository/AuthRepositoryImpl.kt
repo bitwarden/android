@@ -256,6 +256,7 @@ class AuthRepositoryImpl constructor(
         authDiskSource.apply {
             storeUserKey(userId = userId, userKey = null)
             storePrivateKey(userId = userId, privateKey = null)
+            storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
             storeOrganizationKeys(userId = userId, organizationKeys = null)
             storeOrganizations(userId = userId, organizations = null)
         }
