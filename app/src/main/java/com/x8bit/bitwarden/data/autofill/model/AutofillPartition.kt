@@ -17,13 +17,6 @@ sealed class AutofillPartition {
     ) : AutofillPartition()
 
     /**
-     * The identity [AutofillPartition] data.
-     */
-    data class Identity(
-        override val views: List<AutofillView.Identity>,
-    ) : AutofillPartition()
-
-    /**
      * The login [AutofillPartition] data.
      */
     data class Login(

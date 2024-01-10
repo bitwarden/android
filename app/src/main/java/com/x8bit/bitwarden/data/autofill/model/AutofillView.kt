@@ -55,44 +55,6 @@ sealed class AutofillView {
     }
 
     /**
-     * A view that corresponds to the personal info data partition for autofill fields.
-     */
-    sealed class Identity : AutofillView() {
-
-        /**
-         * The name [AutofillView] for the [Identity] data partition.
-         */
-        data class Name(
-            override val autofillId: AutofillId,
-            override val isFocused: Boolean,
-        ) : Identity()
-
-        /**
-         * The phone number [AutofillView] for the [Identity] data partition.
-         */
-        data class PhoneNumber(
-            override val autofillId: AutofillId,
-            override val isFocused: Boolean,
-        ) : Identity()
-
-        /**
-         * The postal address [AutofillView] for the [Identity] data partition.
-         */
-        data class PostalAddress(
-            override val autofillId: AutofillId,
-            override val isFocused: Boolean,
-        ) : Identity()
-
-        /**
-         * The postal code [AutofillView] for the [Identity] data partition.
-         */
-        data class PostalCode(
-            override val autofillId: AutofillId,
-            override val isFocused: Boolean,
-        ) : Identity()
-    }
-
-    /**
      * A view that corresponds to the login data partition for autofill fields.
      */
     sealed class Login : AutofillView() {

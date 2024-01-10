@@ -33,12 +33,6 @@ class AutofillParserImpl : AutofillParser {
                 )
             }
 
-            is AutofillView.Identity -> {
-                AutofillPartition.Identity(
-                    views = autofillViews.filterIsInstance<AutofillView.Identity>(),
-                )
-            }
-
             is AutofillView.Login -> {
                 AutofillPartition.Login(
                     views = autofillViews.filterIsInstance<AutofillView.Login>(),
