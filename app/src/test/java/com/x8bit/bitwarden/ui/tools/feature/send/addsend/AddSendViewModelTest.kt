@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import io.mockk.coEvery
@@ -394,8 +395,19 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         state: AddSendState? = null,
+        addSendType: AddSendType = AddSendType.AddItem,
     ): AddSendViewModel = AddSendViewModel(
-        savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        savedStateHandle = SavedStateHandle().apply {
+            set("state", state)
+            set(
+                "add_send_item_type",
+                when (addSendType) {
+                    AddSendType.AddItem -> "add"
+                    is AddSendType.EditItem -> "edit"
+                },
+            )
+            set("edit_send_id", (addSendType as? AddSendType.EditItem)?.sendItemId)
+        },
         authRepo = authRepository,
         environmentRepo = environmentRepository,
         clock = clock,
@@ -432,6 +444,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         private const val DEFAULT_ENVIRONMENT_URL = "https://vault.bitwarden.com/#/send/"
 
         private val DEFAULT_STATE = AddSendState(
+            addSendType = AddSendType.AddItem,
             viewState = DEFAULT_VIEW_STATE,
             dialogState = null,
             isPremiumUser = false,

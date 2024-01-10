@@ -31,6 +31,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -38,6 +39,7 @@ import org.junit.Test
 class SendScreenTest : BaseComposeTest() {
 
     private var onNavigateToNewSendCalled = false
+    private var onNavigateToEditSendId: String? = null
 
     private val intentHandler = mockk<IntentHandler> {
         every { launchUri(any()) } just runs
@@ -56,6 +58,7 @@ class SendScreenTest : BaseComposeTest() {
             SendScreen(
                 viewModel = viewModel,
                 onNavigateToAddSend = { onNavigateToNewSendCalled = true },
+                onNavigateToEditSend = { onNavigateToEditSendId = it },
                 intentHandler = intentHandler,
             )
         }
@@ -65,6 +68,13 @@ class SendScreenTest : BaseComposeTest() {
     fun `on NavigateToNewSend should call onNavigateToNewSend`() {
         mutableEventFlow.tryEmit(SendEvent.NavigateNewSend)
         assertTrue(onNavigateToNewSendCalled)
+    }
+
+    @Test
+    fun `on NavigateToEditSend should call onNavigateToEditSend`() {
+        val sendId = "sendId1234"
+        mutableEventFlow.tryEmit(SendEvent.NavigateToEditSend(sendId))
+        assertEquals(sendId, onNavigateToEditSendId)
     }
 
     @Test

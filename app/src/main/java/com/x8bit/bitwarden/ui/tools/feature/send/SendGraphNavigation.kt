@@ -12,12 +12,16 @@ const val SEND_GRAPH_ROUTE: String = "send_graph"
  */
 fun NavGraphBuilder.sendGraph(
     onNavigateToAddSend: () -> Unit,
+    onNavigateToEditSend: (sendItemId: String) -> Unit,
 ) {
     navigation(
         startDestination = SEND_ROUTE,
         route = SEND_GRAPH_ROUTE,
     ) {
-        sendDestination(onNavigateToAddSend = onNavigateToAddSend)
+        sendDestination(
+            onNavigateToAddSend = onNavigateToAddSend,
+            onNavigateToEditSend = onNavigateToEditSend,
+        )
     }
 }
 

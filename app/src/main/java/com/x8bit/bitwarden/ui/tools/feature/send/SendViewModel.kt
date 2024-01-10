@@ -169,8 +169,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleSendClick(action: SendAction.SendClick) {
-        // TODO: Navigate to the edit send screen (BIT-1387)
-        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+        sendEvent(SendEvent.NavigateToEditSend(action.sendItem.id))
     }
 
     private fun handleShareClick(action: SendAction.ShareClick) {
@@ -367,6 +366,11 @@ sealed class SendEvent {
      * Navigate to the new send screen.
      */
     data object NavigateNewSend : SendEvent()
+
+    /**
+     * Navigate to the edit send screen.
+     */
+    data class NavigateToEditSend(val sendId: String) : SendEvent()
 
     /**
      * Navigate to the about send screen.

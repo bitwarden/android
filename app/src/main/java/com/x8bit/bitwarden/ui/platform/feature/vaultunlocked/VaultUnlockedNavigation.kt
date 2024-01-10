@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlocked
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendDestination
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
@@ -52,7 +53,8 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToVaultEditItem = {
                 navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
             },
-            onNavigateToAddSend = { navController.navigateToAddSend() },
+            onNavigateToAddSend = { navController.navigateToAddSend(AddSendType.AddItem) },
+            onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
             onNavigateToPasswordHistory = { navController.navigateToPasswordHistory() },
         )

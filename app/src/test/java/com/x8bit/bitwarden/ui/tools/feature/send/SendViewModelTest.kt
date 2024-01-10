@@ -142,12 +142,16 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SendClick should emit ShowToast`() = runTest {
+    fun `SendClick should emit NavigateToEditSend`() = runTest {
+        val sendId = "sendId1234"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { id } returns sendId
+        }
         val viewModel = createViewModel()
-        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.SendClick(sendItem))
-            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(SendEvent.NavigateToEditSend(sendId), awaitItem())
         }
     }
 

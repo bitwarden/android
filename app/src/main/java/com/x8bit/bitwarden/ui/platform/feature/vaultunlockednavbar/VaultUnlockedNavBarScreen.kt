@@ -71,6 +71,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToAddSend: () -> Unit,
+    onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
@@ -103,6 +104,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToVaultEditItem = onNavigateToVaultEditItem,
         navigateToVaultAddItem = onNavigateToVaultAddItem,
         navigateToAddSend = onNavigateToAddSend,
+        onNavigateToEditSend = onNavigateToEditSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
         navigateToFolders = onNavigateToFolders,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
@@ -136,6 +138,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     navigateToAddSend: () -> Unit,
+    onNavigateToEditSend: (sendItemId: String) -> Unit,
     navigateToDeleteAccount: () -> Unit,
     navigateToFolders: () -> Unit,
     navigateToPasswordHistory: () -> Unit,
@@ -197,7 +200,10 @@ private fun VaultUnlockedNavBarScaffold(
                     shouldDimNavBar = shouldDim
                 },
             )
-            sendGraph(onNavigateToAddSend = navigateToAddSend)
+            sendGraph(
+                onNavigateToAddSend = navigateToAddSend,
+                onNavigateToEditSend = onNavigateToEditSend,
+            )
             generatorDestination(
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },
             )
