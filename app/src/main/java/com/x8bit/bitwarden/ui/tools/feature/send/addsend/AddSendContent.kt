@@ -228,6 +228,7 @@ private fun AddSendOptions(
                 value = state.common.maxAccessCount,
                 onValueChange = addSendHandlers.onMaxAccessCountChange,
                 isDecrementEnabled = state.common.maxAccessCount != null,
+                range = 0..Int.MAX_VALUE,
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
             )
