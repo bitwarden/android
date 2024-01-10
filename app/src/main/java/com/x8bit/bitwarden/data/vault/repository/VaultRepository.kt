@@ -94,6 +94,12 @@ interface VaultRepository : VaultLockManager {
     fun getVaultFolderStateFlow(folderId: String): StateFlow<DataState<FolderView?>>
 
     /**
+     * Flow that represents the data for a specific send as found by ID. This may emit `null` if
+     * the send cannot be found.
+     */
+    fun getSendStateFlow(sendId: String): StateFlow<DataState<SendView?>>
+
+    /**
      * Emits the totp code result flow to listeners.
      */
     fun emitTotpCodeResult(totpCodeResult: TotpCodeResult)

@@ -263,6 +263,19 @@ class VaultRepositoryImpl(
                 initialValue = DataState.Loading,
             )
 
+    override fun getSendStateFlow(sendId: String): StateFlow<DataState<SendView?>> =
+        sendDataStateFlow
+            .map { dataState ->
+                dataState.map { sendData ->
+                    sendData.sendViewList.find { it.id == sendId }
+                }
+            }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Lazily,
+                initialValue = DataState.Loading,
+            )
+
     override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
