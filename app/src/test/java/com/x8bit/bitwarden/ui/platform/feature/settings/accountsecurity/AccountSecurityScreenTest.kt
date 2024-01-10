@@ -165,6 +165,10 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
+            .onAllNodesWithText("15 minutes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
             .onAllNodesWithText("30 minutes")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -179,6 +183,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText("On app restart")
             .filterToOne(hasAnyAncestor(isDialog()))
+            .performScrollTo()
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText("Never")

@@ -47,6 +47,15 @@ sealed class VaultTimeout : Parcelable {
     }
 
     /**
+     * The vault should time out after fifteen minutes.
+     */
+    @Parcelize
+    data object FifteenMinutes : VaultTimeout() {
+        override val type: Type get() = Type.FIFTEEN_MINUTES
+        override val vaultTimeoutInMinutes: Int get() = 15
+    }
+
+    /**
      * The vault should time out after thirty minutes.
      */
     @Parcelize
@@ -108,6 +117,7 @@ sealed class VaultTimeout : Parcelable {
         IMMEDIATELY,
         ONE_MINUTE,
         FIVE_MINUTES,
+        FIFTEEN_MINUTES,
         THIRTY_MINUTES,
         ONE_HOUR,
         FOUR_HOURS,
