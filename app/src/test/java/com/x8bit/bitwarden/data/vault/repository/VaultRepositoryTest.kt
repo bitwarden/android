@@ -8,6 +8,7 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.Kdf
+import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
@@ -1106,6 +1107,75 @@ class VaultRepositoryTest {
                 assertEquals(DataState.Loading, awaitItem())
                 vaultRepository.sync()
                 assertEquals(DataState.Error<FolderView>(throwable), awaitItem())
+            }
+
+            coVerify(exactly = 1) {
+                syncService.sync()
+            }
+        }
+
+    @Test
+    fun `getSendStateFlow should update emit SendView when present`() = runTest {
+        val sendId = 1
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val sendView = createMockSendView(number = sendId)
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = MOCK_USER_STATE.activeUserId,
+                sendList = emptyList(),
+            )
+        } returns emptyList<SendView>().asSuccess()
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = MOCK_USER_STATE.activeUserId,
+                sendList = listOf(createMockSdkSend(number = sendId)),
+            )
+        } returns listOf(sendView).asSuccess()
+
+        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+        vaultRepository.getSendStateFlow("mockId-$sendId").test {
+            assertEquals(DataState.Loading, awaitItem())
+            sendsFlow.tryEmit(emptyList())
+            assertEquals(DataState.Loaded<SendView?>(null), awaitItem())
+            sendsFlow.tryEmit(listOf(createMockSend(number = sendId)))
+            assertEquals(DataState.Loaded<SendView?>(sendView), awaitItem())
+        }
+    }
+
+    @Test
+    fun `getSendStateFlow should update to NoNetwork when a sync fails from no network`() =
+        runTest {
+            val sendId = 1234
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { syncService.sync() } returns UnknownHostException().asFailure()
+            setupVaultDiskSourceFlows()
+
+            vaultRepository.getSendStateFlow("mockId-$sendId").test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.NoNetwork<SendView?>(), awaitItem())
+            }
+
+            coVerify(exactly = 1) {
+                syncService.sync()
+            }
+        }
+
+    @Test
+    fun `getSendStateFlow should update to Error when a sync fails generically`() =
+        runTest {
+            val sendId = 1234
+            val throwable = Throwable("Fail")
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { syncService.sync() } returns throwable.asFailure()
+            setupVaultDiskSourceFlows()
+
+            vaultRepository.getSendStateFlow("mockId-$sendId").test {
+                assertEquals(DataState.Loading, awaitItem())
+                vaultRepository.sync()
+                assertEquals(DataState.Error<SendView?>(throwable), awaitItem())
             }
 
             coVerify(exactly = 1) {
