@@ -287,7 +287,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `MaxAccessCountChange should update maxAccessCount`() = runTest {
+    fun `MaxAccessCountChange should update maxAccessCount to value when non-zero`() = runTest {
         val viewModel = createViewModel()
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
             common = DEFAULT_COMMON_STATE.copy(maxAccessCount = 5),
@@ -297,6 +297,25 @@ class AddSendViewModelTest : BaseViewModelTest() {
             assertEquals(DEFAULT_STATE, awaitItem())
             viewModel.trySendAction(AddSendAction.MaxAccessCountChange(5))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
+        }
+    }
+
+    @Test
+    fun `MaxAccessCountChange should update maxAccessCount to null when zero`() = runTest {
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(maxAccessCount = 5),
+            ),
+        )
+        val expectedViewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(maxAccessCount = null),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(AddSendAction.MaxAccessCountChange(0))
+            assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
         }
     }
 

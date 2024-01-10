@@ -307,29 +307,6 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `max access count decrement when set to 1 should do nothing`() =
-        runTest {
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = DEFAULT_VIEW_STATE.copy(
-                        common = DEFAULT_COMMON_STATE.copy(maxAccessCount = 1),
-                    ),
-                )
-            }
-            // Expand options section:
-            composeTestRule
-                .onNodeWithText("Options")
-                .performScrollTo()
-                .performClick()
-
-            composeTestRule
-                .onNodeWithContentDescription("\u2212")
-                .performScrollTo()
-                .performClick()
-            verify(exactly = 0) { viewModel.trySendAction(any()) }
-        }
-
-    @Test
     fun `on max access count increment should send MaxAccessCountChange`() = runTest {
         // Expand options section:
         composeTestRule

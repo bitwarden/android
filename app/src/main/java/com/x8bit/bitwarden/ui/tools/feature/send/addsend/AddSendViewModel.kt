@@ -261,7 +261,9 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleMaxAccessCountChange(action: AddSendAction.MaxAccessCountChange) {
-        updateCommonContent { it.copy(maxAccessCount = action.value) }
+        updateCommonContent { common ->
+            common.copy(maxAccessCount = action.value.takeUnless { it == 0 })
+        }
     }
 
     private inline fun onContent(
@@ -355,7 +357,6 @@ data class AddSendState(
             @Parcelize
             data class Common(
                 val name: String,
-                // Null here means "not set"
                 val maxAccessCount: Int?,
                 val passwordInput: String,
                 val noteInput: String,
