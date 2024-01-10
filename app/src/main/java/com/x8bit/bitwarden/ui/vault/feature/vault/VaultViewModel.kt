@@ -146,7 +146,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultAction.LockAccountClick) {
-        vaultRepository.lockVaultIfNecessary(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId)
     }
 
     private fun handleLogoutAccountClick(action: VaultAction.LogoutAccountClick) {

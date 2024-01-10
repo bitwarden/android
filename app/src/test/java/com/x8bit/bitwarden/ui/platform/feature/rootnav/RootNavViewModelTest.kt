@@ -43,7 +43,10 @@ class RootNavViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
-        assertEquals(RootNavState.VaultUnlocked, viewModel.stateFlow.value)
+        assertEquals(
+            RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test

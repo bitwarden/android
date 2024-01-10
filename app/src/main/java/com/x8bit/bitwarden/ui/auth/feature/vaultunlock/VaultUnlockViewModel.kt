@@ -113,7 +113,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultUnlockAction.LockAccountClick) {
-        vaultRepo.lockVaultIfNecessary(userId = action.accountSummary.userId)
+        vaultRepo.lockVault(userId = action.accountSummary.userId)
     }
 
     private fun handleLogoutAccountClick(action: VaultUnlockAction.LogoutAccountClick) {
@@ -173,6 +173,9 @@ class VaultUnlockViewModel @Inject constructor(
         // Leave the current data alone if there is no UserState; we are in the process of logging
         // out.
         val userState = action.userState ?: return
+
+        // If the Vault is already unlocked, do nothing.
+        if (userState.activeAccount.isVaultUnlocked) return
 
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()

@@ -57,7 +57,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
             every { sync() } returns Unit
             every { lockVaultForCurrentUser() } just runs
-            every { lockVaultIfNecessary(any()) } just runs
+            every { lockVault(any()) } just runs
         }
 
     @Test
@@ -174,7 +174,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on LockAccountClick should call lockVaultIfNecessary for the given account`() {
+    fun `on LockAccountClick should call lockVault for the given account`() {
         val accountUserId = "userId"
         val accountSummary = mockk<AccountSummary> {
             every { userId } returns accountUserId
@@ -184,7 +184,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVaultIfNecessary(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId) }
     }
 
     @Suppress("MaxLineLength")
