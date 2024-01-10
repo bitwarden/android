@@ -18,6 +18,8 @@ using CoreFoundation;
 using CoreNFC;
 using Foundation;
 using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Platform;
 using UIKit;
 
 namespace Bit.iOS.Autofill
@@ -248,7 +250,6 @@ namespace Bit.iOS.Autofill
             }
         }
 
-#if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
         public async void DismissLockAndContinue()
         {
             DismissViewController(false, async () => await OnLockDismissedAsync());
@@ -262,7 +263,6 @@ namespace Bit.iOS.Autofill
 
             PresentViewController(uiController, true, null);
         }
-#endif
 
         public async Task OnLockDismissedAsync()
         {
