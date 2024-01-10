@@ -56,7 +56,9 @@ fun AddSendContent(
             .verticalScroll(rememberScrollState()),
     ) {
         BitwardenTextField(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             label = stringResource(id = R.string.name),
             hint = stringResource(id = R.string.name_info),
             value = state.common.name,
@@ -66,7 +68,9 @@ fun AddSendContent(
         Spacer(modifier = Modifier.height(16.dp))
         BitwardenListHeaderText(
             label = stringResource(id = R.string.type),
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -93,7 +97,9 @@ fun AddSendContent(
             is AddSendState.ViewState.Content.SendType.File -> {
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.file),
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
@@ -115,20 +121,26 @@ fun AddSendContent(
                     text = stringResource(id = R.string.max_file_size),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 32.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(id = R.string.type_file_info),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 )
             }
 
             is AddSendState.ViewState.Content.SendType.Text -> {
                 BitwardenTextField(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.text),
                     hint = stringResource(id = R.string.type_text_info),
                     value = type.input,
@@ -136,7 +148,9 @@ fun AddSendContent(
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 BitwardenWideSwitch(
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.hide_text_by_default),
                     isChecked = type.isHideByDefaultChecked,
                     onCheckedChange = addSendHandlers.onIsHideByDefaultToggle,
@@ -208,7 +222,9 @@ private fun AddSendOptions(
     ) {
         Column {
             SendDeletionDateChooser(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 dateFormatPattern = state.common.dateFormatPattern,
                 timeFormatPattern = state.common.timeFormatPattern,
                 currentZonedDateTime = state.common.deletionDate,
@@ -216,7 +232,9 @@ private fun AddSendOptions(
             )
             Spacer(modifier = Modifier.height(8.dp))
             SendExpirationDateChooser(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 dateFormatPattern = state.common.dateFormatPattern,
                 timeFormatPattern = state.common.timeFormatPattern,
                 currentZonedDateTime = state.common.expirationDate,
@@ -230,6 +248,7 @@ private fun AddSendOptions(
                 isDecrementEnabled = state.common.maxAccessCount != null,
                 range = 0..Int.MAX_VALUE,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(4.dp))
@@ -247,26 +266,35 @@ private fun AddSendOptions(
                 hint = stringResource(id = R.string.password_info),
                 value = state.common.passwordInput,
                 onValueChange = addSendHandlers.onPasswordChange,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.notes),
                 hint = stringResource(id = R.string.notes_info),
                 value = state.common.noteInput,
+                singleLine = false,
                 onValueChange = addSendHandlers.onNoteChange,
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.hide_email),
                 isChecked = state.common.isHideEmailChecked,
                 onCheckedChange = addSendHandlers.onHideEmailToggle,
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.disable_send),
                 isChecked = state.common.isDeactivateChecked,
                 onCheckedChange = addSendHandlers.onDeactivateSendToggle,
