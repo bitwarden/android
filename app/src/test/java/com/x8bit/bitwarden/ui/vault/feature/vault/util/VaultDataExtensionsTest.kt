@@ -23,7 +23,10 @@ class VaultDataExtensionsTest {
             sendViewList = listOf(createMockSendView(number = 1)),
         )
 
-        val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.AllVaults)
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
 
         assertEquals(
             VaultState.ViewState.Content(
@@ -48,6 +51,7 @@ class VaultDataExtensionsTest {
                 ),
                 noFolderItems = listOf(),
                 trashItemsCount = 0,
+                totpItemsCount = 1,
             ),
             actual,
         )
@@ -66,7 +70,10 @@ class VaultDataExtensionsTest {
             sendViewList = listOf(createMockSendView(number = 1)),
         )
 
-        val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.MyVault)
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            vaultFilterType = VaultFilterType.MyVault,
+        )
 
         assertEquals(
             VaultState.ViewState.Content(
@@ -85,6 +92,7 @@ class VaultDataExtensionsTest {
                 collectionItems = listOf(),
                 noFolderItems = listOf(),
                 trashItemsCount = 0,
+                totpItemsCount = 1,
             ),
             actual,
         )
@@ -107,6 +115,7 @@ class VaultDataExtensionsTest {
         )
 
         val actual = vaultData.toViewState(
+            isPremium = true,
             vaultFilterType = VaultFilterType.OrganizationVault(
                 organizationId = "mockOrganizationId-1",
                 organizationName = "Mock Organization 1",
@@ -130,6 +139,7 @@ class VaultDataExtensionsTest {
                 ),
                 noFolderItems = listOf(),
                 trashItemsCount = 0,
+                totpItemsCount = 1,
             ),
             actual,
         )
@@ -144,7 +154,10 @@ class VaultDataExtensionsTest {
             sendViewList = emptyList(),
         )
 
-        val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.AllVaults)
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
 
         assertEquals(
             VaultState.ViewState.NoItems,
@@ -161,10 +174,77 @@ class VaultDataExtensionsTest {
             sendViewList = listOf(createMockSendView(number = 1)),
         )
 
-        val actual = vaultData.toViewState(vaultFilterType = VaultFilterType.AllVaults)
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
 
         assertEquals(
             VaultState.ViewState.NoItems,
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should return 1 for totpItemsCount if user has premium and has one totp item`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(createMockCipherView(number = 1)),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should return 0 for totpItemsCount if user does not have premium and has any totp items`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(createMockCipherView(number = 1)),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = false,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 0,
+            ),
             actual,
         )
     }

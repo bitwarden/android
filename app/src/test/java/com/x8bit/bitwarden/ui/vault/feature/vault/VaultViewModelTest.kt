@@ -345,7 +345,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         val viewModel = createViewModel()
         val initialState = createMockVaultState(
-            viewState = vaultData.toViewState(VaultFilterType.AllVaults),
+            viewState = vaultData.toViewState(
+                isPremium = true,
+                vaultFilterType = VaultFilterType.AllVaults,
+            ),
         )
             .copy(
                 appBarTitle = R.string.vaults.asText(),
@@ -363,7 +366,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 vaultFilterData = VAULT_FILTER_DATA.copy(
                     selectedVaultFilterType = VaultFilterType.MyVault,
                 ),
-                viewState = vaultData.toViewState(VaultFilterType.MyVault),
+                viewState = vaultData.toViewState(
+                    isPremium = true,
+                    vaultFilterType = VaultFilterType.MyVault,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -408,6 +414,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
+                    totpItemsCount = 1,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -429,6 +436,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     collectionItems = listOf(),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
+                    totpItemsCount = 1,
                 ),
             )
             val viewModel = createViewModel()
@@ -540,6 +548,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     ),
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
+                    totpItemsCount = 1,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -637,6 +646,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
+                        totpItemsCount = 1,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
@@ -734,6 +744,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         ),
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
+                        totpItemsCount = 1,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = R.string.internet_connection_required_title.asText(),
@@ -804,6 +815,15 @@ class VaultViewModelTest : BaseViewModelTest() {
             initialState,
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `VerificationCodesClick should emit NavigateToVerificationCodeScreen`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.VerificationCodesClick)
+            assertEquals(VaultEvent.NavigateToVerificationCodeScreen, awaitItem())
+        }
     }
 
     @Test
@@ -1057,4 +1077,5 @@ private fun createMockVaultState(
         viewState = viewState,
         dialog = dialog,
         isSwitchingAccounts = false,
+        isPremium = true,
     )

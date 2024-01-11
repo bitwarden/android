@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -623,6 +624,61 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `totp section should be visible based on state`() {
+        mutableStateFlow.update { state ->
+            state.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    totpItemsCount = 2,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("TOTP")
+            .assertTextEquals("TOTP", "1")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Verification codes")
+            .assertTextEquals("Verification codes", "2")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { state ->
+            state.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    totpItemsCount = 0,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("TOTP")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Verification codes")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `clicking totp section should emit VerificationCodesClick action`() {
+        mutableStateFlow.update { state ->
+            state.copy(
+                isPremium = true,
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    totpItemsCount = 2,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Verification codes")
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.VerificationCodesClick) }
+    }
+
+    @Test
     fun `clicking a favorite item should send VaultItemClick with the correct item`() {
         val itemText = "Test Item"
         val username = "BitWarden"
@@ -1003,14 +1059,15 @@ private val VAULT_FILTER_DATA = VaultFilterData(
 )
 
 private val DEFAULT_STATE: VaultState = VaultState(
+    appBarTitle = R.string.my_vault.asText(),
     avatarColorString = "#aa00aa",
     initials = "AU",
     accountSummaries = persistentListOf(
         ACTIVE_ACCOUNT_SUMMARY,
         LOCKED_ACCOUNT_SUMMARY,
     ),
-    appBarTitle = R.string.my_vault.asText(),
     viewState = VaultState.ViewState.Loading,
+    isPremium = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -1023,4 +1080,5 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     noFolderItems = emptyList(),
     collectionItems = emptyList(),
     trashItemsCount = 0,
+    totpItemsCount = 0,
 )

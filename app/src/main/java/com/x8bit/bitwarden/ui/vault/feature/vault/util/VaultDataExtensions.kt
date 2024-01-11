@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
  * Transforms [VaultData] into [VaultState.ViewState] using the given [vaultFilterType].
  */
 fun VaultData.toViewState(
+    isPremium: Boolean,
     vaultFilterType: VaultFilterType,
 ): VaultState.ViewState {
     val filteredCipherViewList = cipherViewList.toFilteredList(vaultFilterType)
@@ -23,6 +24,11 @@ fun VaultData.toViewState(
         VaultState.ViewState.NoItems
     } else {
         VaultState.ViewState.Content(
+            totpItemsCount = if (isPremium) {
+                filteredCipherViewList.count { it.login?.totp != null }
+            } else {
+                0
+            },
             loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
             cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },
             identityItemsCount = filteredCipherViewList.count { it.type == CipherType.IDENTITY },

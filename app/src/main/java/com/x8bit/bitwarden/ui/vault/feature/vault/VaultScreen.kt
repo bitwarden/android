@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
@@ -78,6 +79,11 @@ fun VaultScreen(
                 Toast
                     .makeText(context, "Navigate to the vault search screen.", Toast.LENGTH_SHORT)
                     .show()
+            }
+
+            is VaultEvent.NavigateToVerificationCodeScreen -> {
+                // TODO Add Verification codes detail screen (BIT-1338)
+                showNotYetImplementedToast(context = context)
             }
 
             is VaultEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.itemId)
@@ -140,6 +146,9 @@ fun VaultScreen(
                 viewModel.trySendAction(VaultAction.CollectionClick(collectionItem))
             }
         },
+        verificationCodesClick = remember(viewModel) {
+            { viewModel.trySendAction(VaultAction.VerificationCodesClick) }
+        },
         loginGroupClick = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.LoginGroupClick) }
         },
@@ -186,6 +195,7 @@ private fun VaultScreenScaffold(
     vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     folderClick: (VaultState.ViewState.FolderItem) -> Unit,
     collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
+    verificationCodesClick: () -> Unit,
     loginGroupClick: () -> Unit,
     cardGroupClick: () -> Unit,
     identityGroupClick: () -> Unit,
@@ -345,6 +355,7 @@ private fun VaultScreenScaffold(
                         cardGroupClick = cardGroupClick,
                         identityGroupClick = identityGroupClick,
                         secureNoteGroupClick = secureNoteGroupClick,
+                        totpItemsClick = verificationCodesClick,
                         trashClick = trashClick,
                         modifier = innerModifier,
                     )

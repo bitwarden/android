@@ -56,6 +56,7 @@ class VaultViewModel @Inject constructor(
             accountSummaries = accountSummaries,
             vaultFilterData = vaultFilterData,
             viewState = VaultState.ViewState.Loading,
+            isPremium = userState.activeAccount.isPremium,
         )
     },
 ) {
@@ -86,6 +87,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.FolderClick -> handleFolderItemClick(action)
             is VaultAction.CollectionClick -> handleCollectionItemClick(action)
             is VaultAction.IdentityGroupClick -> handleIdentityClick()
+            is VaultAction.VerificationCodesClick -> handleVerificationCodeClick()
             is VaultAction.LoginGroupClick -> handleLoginClick()
             is VaultAction.SearchIconClick -> handleSearchIconClick()
             is VaultAction.LockAccountClick -> handleLockAccountClick(action)
@@ -131,6 +133,10 @@ class VaultViewModel @Inject constructor(
                 VaultItemListingType.Collection(action.collectionItem.id),
             ),
         )
+    }
+
+    private fun handleVerificationCodeClick() {
+        sendEvent(VaultEvent.NavigateToVerificationCodeScreen)
     }
 
     private fun handleIdentityClick() {
@@ -268,6 +274,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.updateToErrorStateOrDialog(
             vaultData = vaultData.data,
             vaultFilterType = vaultFilterTypeOrDefault,
+            isPremium = state.isPremium,
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
         )
@@ -283,7 +290,10 @@ class VaultViewModel @Inject constructor(
         }
         mutableStateFlow.update {
             it.copy(
-                viewState = vaultData.data.toViewState(vaultFilterTypeOrDefault),
+                viewState = vaultData.data.toViewState(
+                    isPremium = state.isPremium,
+                    vaultFilterType = vaultFilterTypeOrDefault,
+                ),
                 dialog = null,
             )
         }
@@ -297,6 +307,7 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.updateToErrorStateOrDialog(
             vaultData = vaultData.data,
             vaultFilterType = vaultFilterTypeOrDefault,
+            isPremium = state.isPremium,
             errorTitle = R.string.internet_connection_required_title.asText(),
             errorMessage = R.string.internet_connection_required_message.asText(),
         )
@@ -305,7 +316,12 @@ class VaultViewModel @Inject constructor(
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
         // TODO update state to refresh state BIT-505
         mutableStateFlow.update {
-            it.copy(viewState = vaultData.data.toViewState(vaultFilterTypeOrDefault))
+            it.copy(
+                viewState = vaultData.data.toViewState(
+                    isPremium = state.isPremium,
+                    vaultFilterType = vaultFilterTypeOrDefault,
+                ),
+            )
         }
     }
 
@@ -321,6 +337,7 @@ class VaultViewModel @Inject constructor(
  * @property viewState The specific view state representing loading, no items, or content state.
  * @property dialog Information about any dialogs that may need to be displayed.
  * @property isSwitchingAccounts Whether or not we are actively switching accounts.
+ * @property isPremium Whether the user is a premium user.
  */
 @Parcelize
 data class VaultState(
@@ -333,6 +350,7 @@ data class VaultState(
     val dialog: DialogState? = null,
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
+    val isPremium: Boolean,
 ) : Parcelable {
 
     /**
@@ -390,6 +408,7 @@ data class VaultState(
         /**
          * Content state for the [VaultScreen] showing the actual content or items.
          *
+         * @property totpItemsCount The count of totp code items.
          * @property loginItemsCount The count of Login type items.
          * @property cardItemsCount The count of Card type items.
          * @property identityItemsCount The count of Identity type items.
@@ -402,6 +421,7 @@ data class VaultState(
          */
         @Parcelize
         data class Content(
+            val totpItemsCount: Int,
             val loginItemsCount: Int,
             val cardItemsCount: Int,
             val identityItemsCount: Int,
@@ -609,6 +629,11 @@ sealed class VaultEvent {
     ) : VaultEvent()
 
     /**
+     * Navigate to the verification code screen.
+     */
+    data object NavigateToVerificationCodeScreen : VaultEvent()
+
+    /**
      * Navigate out of the app.
      */
     data object NavigateOutOfApp : VaultEvent()
@@ -707,6 +732,11 @@ sealed class VaultAction {
     ) : VaultAction()
 
     /**
+     * User clicked on the verification codes button.
+     */
+    data object VerificationCodesClick : VaultAction()
+
+    /**
      * User clicked the login types button.
      */
     data object LoginGroupClick : VaultAction()
@@ -765,13 +795,17 @@ sealed class VaultAction {
 private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     vaultData: VaultData?,
     vaultFilterType: VaultFilterType,
+    isPremium: Boolean,
     errorTitle: Text,
     errorMessage: Text,
 ) {
     this.update {
         if (vaultData != null) {
             it.copy(
-                viewState = vaultData.toViewState(vaultFilterType = vaultFilterType),
+                viewState = vaultData.toViewState(
+                    isPremium = isPremium,
+                    vaultFilterType = vaultFilterType,
+                ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,
                     message = errorMessage,
