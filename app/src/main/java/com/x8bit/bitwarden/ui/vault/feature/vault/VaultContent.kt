@@ -27,6 +27,7 @@ fun VaultContent(
     vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
     folderClick: (VaultState.ViewState.FolderItem) -> Unit,
     collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
+    totpItemsClick: () -> Unit,
     loginGroupClick: () -> Unit,
     cardGroupClick: () -> Unit,
     identityGroupClick: () -> Unit,
@@ -37,6 +38,31 @@ fun VaultContent(
     LazyColumn(
         modifier = modifier,
     ) {
+        if (state.totpItemsCount > 0) {
+
+            item {
+                BitwardenListHeaderTextWithSupportLabel(
+                    label = stringResource(id = R.string.totp),
+                    supportingLabel = "1",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+
+            item {
+                BitwardenGroupItem(
+                    startIcon = painterResource(id = R.drawable.access_time),
+                    label = stringResource(id = R.string.verification_codes),
+                    supportingLabel = state.totpItemsCount.toString(),
+                    onClick = totpItemsClick,
+                    showDivider = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                )
+            }
+        }
 
         if (state.favoriteItems.isNotEmpty()) {
 
