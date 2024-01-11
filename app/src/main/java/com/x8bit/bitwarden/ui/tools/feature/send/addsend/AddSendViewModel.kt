@@ -279,22 +279,22 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleCopyLinkClick() {
         // TODO Add copy link support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handleDeleteClick() {
         // TODO Add deletion support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handleRemovePasswordClick() {
         // TODO Add remove password support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handleShareLinkClick() {
         // TODO Add share link support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handlePasswordChange(action: AddSendAction.PasswordChange) {
@@ -432,7 +432,7 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleChooseFileClick() {
         // TODO: allow for file upload: BIT-1085
-        sendEvent(AddSendEvent.ShowToast("Not Implemented: File Upload"))
+        sendEvent(AddSendEvent.ShowToast("Not Implemented: File Upload".asText()))
     }
 
     private fun handleMaxAccessCountChange(action: AddSendAction.MaxAccessCountChange) {
@@ -635,7 +635,7 @@ sealed class AddSendEvent {
     /**
      * Show Toast.
      */
-    data class ShowToast(val message: String) : AddSendEvent()
+    data class ShowToast(val message: Text) : AddSendEvent()
 }
 
 /**

@@ -274,7 +274,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.CopyLinkClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
         }
     }
 
@@ -287,7 +287,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.DeleteClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
         }
     }
 
@@ -300,7 +300,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.RemovePasswordClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
         }
     }
 
@@ -313,7 +313,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.ShareLinkClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
         }
     }
 
@@ -398,7 +398,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.ChooseFileClick)
-            assertEquals(AddSendEvent.ShowToast("Not Implemented: File Upload"), awaitItem())
+            assertEquals(
+                AddSendEvent.ShowToast("Not Implemented: File Upload".asText()),
+                awaitItem(),
+            )
         }
     }
 
