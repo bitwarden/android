@@ -25,11 +25,14 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays new send UX.
@@ -86,6 +89,40 @@ fun AddSendScreen(
                             { viewModel.trySendAction(AddSendAction.SaveClick) }
                         },
                     )
+                    if (!state.isAddMode) {
+                        BitwardenOverflowActionItem(
+                            menuItemDataList = persistentListOf(
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.remove_password),
+                                    onClick = remember(viewModel) {
+                                        {
+                                            viewModel.trySendAction(
+                                                AddSendAction.RemovePasswordClick,
+                                            )
+                                        }
+                                    },
+                                ),
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.copy_link),
+                                    onClick = remember(viewModel) {
+                                        { viewModel.trySendAction(AddSendAction.CopyLinkClick) }
+                                    },
+                                ),
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.share_link),
+                                    onClick = remember(viewModel) {
+                                        { viewModel.trySendAction(AddSendAction.ShareLinkClick) }
+                                    },
+                                ),
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.delete),
+                                    onClick = remember(viewModel) {
+                                        { viewModel.trySendAction(AddSendAction.DeleteClick) }
+                                    },
+                                ),
+                            ),
+                        )
+                    }
                 },
             )
         },

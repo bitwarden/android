@@ -169,6 +169,58 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `CopyLinkClick should send ShowToast`() = runTest {
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
+            addSendType = AddSendType.EditItem("sendId"),
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddSendAction.CopyLinkClick)
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+        }
+    }
+
+    @Test
+    fun `DeleteClick should send ShowToast`() = runTest {
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
+            addSendType = AddSendType.EditItem("sendId"),
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddSendAction.DeleteClick)
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+        }
+    }
+
+    @Test
+    fun `RemovePasswordClick should send ShowToast`() = runTest {
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
+            addSendType = AddSendType.EditItem("sendId"),
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+        }
+    }
+
+    @Test
+    fun `ShareLinkClick should send ShowToast`() = runTest {
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
+            addSendType = AddSendType.EditItem("sendId"),
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddSendAction.ShareLinkClick)
+            assertEquals(AddSendEvent.ShowToast("Not yet implemented"), awaitItem())
+        }
+    }
+
+    @Test
     fun `DismissDialogClick should clear the dialog state`() {
         val viewModel = createViewModel(
             DEFAULT_STATE.copy(

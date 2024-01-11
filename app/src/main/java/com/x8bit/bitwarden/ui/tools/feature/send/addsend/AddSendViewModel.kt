@@ -93,6 +93,10 @@ class AddSendViewModel @Inject constructor(
     }
 
     override fun handleAction(action: AddSendAction): Unit = when (action) {
+        AddSendAction.CopyLinkClick -> handleCopyLinkClick()
+        AddSendAction.DeleteClick -> handleDeleteClick()
+        AddSendAction.RemovePasswordClick -> handleRemovePasswordClick()
+        AddSendAction.ShareLinkClick -> handleShareLinkClick()
         is AddSendAction.CloseClick -> handleCloseClick()
         is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
         is AddSendAction.ExpirationDateChange -> handleExpirationDateChange(action)
@@ -148,6 +152,26 @@ class AddSendViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(isPremiumUser = action.userState?.activeAccount?.isPremium == true)
         }
+    }
+
+    private fun handleCopyLinkClick() {
+        // TODO Add copy link support (BIT-1435)
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
+    }
+
+    private fun handleDeleteClick() {
+        // TODO Add deletion support (BIT-1435)
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
+    }
+
+    private fun handleRemovePasswordClick() {
+        // TODO Add remove password support (BIT-1435)
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
+    }
+
+    private fun handleShareLinkClick() {
+        // TODO Add share link support (BIT-1435)
+        sendEvent(AddSendEvent.ShowToast("Not yet implemented"))
     }
 
     private fun handlePasswordChange(action: AddSendAction.PasswordChange) {
@@ -349,6 +373,11 @@ data class AddSendState(
         }
 
     /**
+     * Helper to determine if the UI should display the content in add send mode.
+     */
+    val isAddMode: Boolean get() = addSendType is AddSendType.AddItem
+
+    /**
      * Represents the specific view states for the [AddSendScreen].
      */
     sealed class ViewState : Parcelable {
@@ -462,6 +491,26 @@ sealed class AddSendEvent {
  * Models actions for the new send screen.
  */
 sealed class AddSendAction {
+
+    /**
+     * User clicked the remove password button.
+     */
+    data object RemovePasswordClick : AddSendAction()
+
+    /**
+     * User clicked the copy link button.
+     */
+    data object CopyLinkClick : AddSendAction()
+
+    /**
+     * User clicked the share link button.
+     */
+    data object ShareLinkClick : AddSendAction()
+
+    /**
+     * User clicked the delete button.
+     */
+    data object DeleteClick : AddSendAction()
 
     /**
      * User clicked the close button.
