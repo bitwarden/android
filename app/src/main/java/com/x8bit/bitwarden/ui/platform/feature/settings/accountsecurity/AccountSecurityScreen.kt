@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -46,9 +47,14 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
+import java.time.LocalTime
+
+private const val MINUTES_PER_HOUR = 60
 
 /**
  * Displays the account security screen.
@@ -195,12 +201,25 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             SessionTimeoutRow(
-                selectedVaultTimeoutType = state.vaultTimeoutType,
+                selectedVaultTimeoutType = state.vaultTimeout.type,
                 onVaultTimeoutTypeSelect = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
                 },
                 modifier = Modifier.fillMaxWidth(),
             )
+            (state.vaultTimeout as? VaultTimeout.Custom)?.let { customTimeout ->
+                SessionCustomTimeoutRow(
+                    customVaultTimeout = customTimeout,
+                    onCustomVaultTimeoutSelect = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(
+                                AccountSecurityAction.CustomVaultTimeoutSelect(it),
+                            )
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
             SessionTimeoutActionRow(
                 selectedVaultTimeoutAction = state.vaultTimeoutAction,
                 onVaultTimeoutActionSelect = remember(viewModel) {
@@ -331,6 +350,50 @@ private fun SessionTimeoutRow(
                 onDismissRequest = { shouldShowNeverTimeoutConfirmationDialog = false },
             )
         }
+    }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun SessionCustomTimeoutRow(
+    customVaultTimeout: VaultTimeout.Custom,
+    onCustomVaultTimeoutSelect: (VaultTimeout.Custom) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowTimePickerDialog by rememberSaveable { mutableStateOf(false) }
+    val vaultTimeoutInMinutes = customVaultTimeout.vaultTimeoutInMinutes
+    BitwardenTextRow(
+        text = stringResource(id = R.string.custom),
+        onClick = { shouldShowTimePickerDialog = true },
+        modifier = modifier,
+    ) {
+        val formattedTime = LocalTime
+            .ofSecondOfDay(
+                vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong(),
+            )
+            .toFormattedPattern("HH:mm")
+        Text(
+            text = formattedTime,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+
+    if (shouldShowTimePickerDialog) {
+        BitwardenTimePickerDialog(
+            initialHour = vaultTimeoutInMinutes / MINUTES_PER_HOUR,
+            initialMinute = vaultTimeoutInMinutes.mod(MINUTES_PER_HOUR),
+            onTimeSelect = { hour, minute ->
+                shouldShowTimePickerDialog = false
+                onCustomVaultTimeoutSelect(
+                    VaultTimeout.Custom(
+                        vaultTimeoutInMinutes = hour * MINUTES_PER_HOUR + minute,
+                    ),
+                )
+            },
+            onDismissRequest = { shouldShowTimePickerDialog = false },
+            is24Hour = true,
+        )
     }
 }
 

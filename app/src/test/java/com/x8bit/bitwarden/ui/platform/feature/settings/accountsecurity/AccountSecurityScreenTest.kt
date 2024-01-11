@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -33,6 +34,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class AccountSecurityScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
@@ -134,7 +136,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasClickAction())
             .performScrollTo()
             .assertTextEquals("Session timeout", "30 minutes")
-        mutableStateFlow.update { it.copy(vaultTimeoutType = VaultTimeout.Type.FOUR_HOURS) }
+        mutableStateFlow.update { it.copy(vaultTimeout = VaultTimeout.FourHours) }
         composeTestRule
             .onAllNodesWithText("Session timeout")
             .filterToOne(hasClickAction())
@@ -340,6 +342,114 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 AccountSecurityAction.VaultTimeoutTypeSelect(VaultTimeout.Type.NEVER),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `custom session timeout should update according to state`() {
+        composeTestRule
+            .onNodeWithText("Custom")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 0))
+        }
+
+        composeTestRule
+            // Check for exact text to differentiate from the Custom label on the Vault Timeout
+            // item above.
+            .onNode(hasTextExactly("Custom", "00:00"))
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
+        }
+
+        composeTestRule
+            .onNode(hasTextExactly("Custom", "02:03"))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 1234))
+        }
+
+        composeTestRule
+            .onNode(hasTextExactly("Custom", "20:34"))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `custom session timeout click should show a time-picker dialog`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
+        }
+        composeTestRule
+            .onNode(hasTextExactly("Custom", "02:03"))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Time")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `custom session timeout dialog Cancel click should dismiss the dialog`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
+        }
+        composeTestRule
+            .onNode(hasTextExactly("Custom", "02:03"))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `custom session timeout dialog Ok click should dismiss the dialog and send CustomVaultTimeoutSelect`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123))
+        }
+        composeTestRule
+            .onNode(hasTextExactly("Custom", "02:03"))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.CustomVaultTimeoutSelect(
+                    VaultTimeout.Custom(vaultTimeoutInMinutes = 123),
+                ),
             )
         }
         composeTestRule.assertNoDialogExists()
@@ -598,7 +708,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
-            vaultTimeoutType = VaultTimeout.Type.THIRTY_MINUTES,
+            vaultTimeout = VaultTimeout.ThirtyMinutes,
             vaultTimeoutAction = VaultTimeoutAction.LOCK,
         )
     }
