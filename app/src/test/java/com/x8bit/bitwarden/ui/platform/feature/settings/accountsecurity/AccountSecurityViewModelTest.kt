@@ -139,11 +139,39 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         }
         assertEquals(
             DEFAULT_STATE.copy(
-                vaultTimeoutType = VaultTimeout.Type.FOUR_HOURS,
+                vaultTimeout = VaultTimeout.FourHours,
             ),
             viewModel.stateFlow.value,
         )
         verify { settingsRepository.vaultTimeout = VaultTimeout.FourHours }
+    }
+
+    @Test
+    fun `on CustomVaultTimeoutSelect should update the selection and emit ShowToast()`() = runTest {
+        val settingsRepository = mockk<SettingsRepository>() {
+            every { vaultTimeout = any() } just runs
+        }
+        val viewModel = createViewModel(settingsRepository = settingsRepository)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                AccountSecurityAction.CustomVaultTimeoutSelect(
+                    customVaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 360),
+                ),
+            )
+            assertEquals(
+                AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
+                awaitItem(),
+            )
+        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 360),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify {
+            settingsRepository.vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 360)
+        }
     }
 
     @Test
@@ -263,7 +291,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
-            vaultTimeoutType = VaultTimeout.Type.THIRTY_MINUTES,
+            vaultTimeout = VaultTimeout.ThirtyMinutes,
             vaultTimeoutAction = VaultTimeoutAction.LOCK,
         )
     }

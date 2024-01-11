@@ -39,7 +39,7 @@ class AccountSecurityViewModel @Inject constructor(
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,
-            vaultTimeoutType = settingsRepository.vaultTimeout.type,
+            vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
         ),
 ) {
@@ -63,6 +63,7 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityAction.LogoutClick -> handleLogoutClick()
         AccountSecurityAction.PendingLoginRequestsClick -> handlePendingLoginRequestsClick()
         is AccountSecurityAction.VaultTimeoutTypeSelect -> handleVaultTimeoutTypeSelect(action)
+        is AccountSecurityAction.CustomVaultTimeoutSelect -> handleCustomVaultTimeoutSelect(action)
         is AccountSecurityAction.VaultTimeoutActionSelect -> {
             handleVaultTimeoutActionSelect(action)
         }
@@ -123,13 +124,8 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleVaultTimeoutTypeSelect(action: AccountSecurityAction.VaultTimeoutTypeSelect) {
-        val vaultTimeoutType = action.vaultTimeoutType
-        mutableStateFlow.update {
-            it.copy(
-                vaultTimeoutType = action.vaultTimeoutType,
-            )
-        }
-        val vaultTimeout = when (vaultTimeoutType) {
+        val previousTimeout = state.vaultTimeout
+        val vaultTimeout = when (action.vaultTimeoutType) {
             VaultTimeout.Type.IMMEDIATELY -> VaultTimeout.Immediately
             VaultTimeout.Type.ONE_MINUTE -> VaultTimeout.OneMinute
             VaultTimeout.Type.FIVE_MINUTES -> VaultTimeout.FiveMinutes
@@ -139,7 +135,28 @@ class AccountSecurityViewModel @Inject constructor(
             VaultTimeout.Type.FOUR_HOURS -> VaultTimeout.FourHours
             VaultTimeout.Type.ON_APP_RESTART -> VaultTimeout.OnAppRestart
             VaultTimeout.Type.NEVER -> VaultTimeout.Never
-            VaultTimeout.Type.CUSTOM -> VaultTimeout.Custom(vaultTimeoutInMinutes = 0)
+            VaultTimeout.Type.CUSTOM -> {
+                if (previousTimeout is VaultTimeout.Custom) {
+                    previousTimeout
+                } else {
+                    VaultTimeout.Custom(vaultTimeoutInMinutes = 0)
+                }
+            }
+        }
+        handleVaultTimeoutSelect(vaultTimeout = vaultTimeout)
+    }
+
+    private fun handleCustomVaultTimeoutSelect(
+        action: AccountSecurityAction.CustomVaultTimeoutSelect,
+    ) {
+        handleVaultTimeoutSelect(vaultTimeout = action.customVaultTimeout)
+    }
+
+    private fun handleVaultTimeoutSelect(vaultTimeout: VaultTimeout) {
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeout = vaultTimeout,
+            )
         }
         settingsRepository.vaultTimeout = vaultTimeout
 
@@ -192,7 +209,7 @@ data class AccountSecurityState(
     val isApproveLoginRequestsEnabled: Boolean,
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
-    val vaultTimeoutType: VaultTimeout.Type,
+    val vaultTimeout: VaultTimeout,
     val vaultTimeoutAction: VaultTimeoutAction,
 ) : Parcelable
 
@@ -315,6 +332,13 @@ sealed class AccountSecurityAction {
      */
     data class VaultTimeoutTypeSelect(
         val vaultTimeoutType: VaultTimeout.Type,
+    ) : AccountSecurityAction()
+
+    /**
+     * User selected an updated [VaultTimeout.Custom].
+     */
+    data class CustomVaultTimeoutSelect(
+        val customVaultTimeout: VaultTimeout.Custom,
     ) : AccountSecurityAction()
 
     /**

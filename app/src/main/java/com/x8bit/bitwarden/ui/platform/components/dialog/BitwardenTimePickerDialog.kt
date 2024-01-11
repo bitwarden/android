@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +46,7 @@ import com.x8bit.bitwarden.R
  * with AM/PM.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun BitwardenTimePickerDialog(
     initialHour: Int,
@@ -99,10 +101,17 @@ fun BitwardenTimePickerDialog(
             }
         },
     ) {
+        val modifier = Modifier.weight(1f)
         if (showTimeInput) {
-            TimeInput(state = timePickerState)
+            TimeInput(
+                state = timePickerState,
+                modifier = modifier,
+            )
         } else {
-            TimePicker(state = timePickerState)
+            TimePicker(
+                state = timePickerState,
+                modifier = modifier,
+            )
         }
     }
 }
@@ -113,7 +122,7 @@ private fun TimePickerDialog(
     inputToggleButton: @Composable () -> Unit,
     dismissButton: @Composable () -> Unit,
     confirmButton: @Composable () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,
