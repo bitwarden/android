@@ -47,7 +47,7 @@ fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
 
         // Fields we always grab from the UI
         name = common.name,
-        notes = common.notes,
+        notes = common.notes.orNullIfBlank(),
         favorite = common.favorite,
         // TODO Use real folder ID (BIT-528)
         folderId = common.originalCipher?.folderId,
@@ -74,7 +74,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCardView(): CardView?
                 .takeUnless { month ->
                     month == VaultCardExpirationMonth.SELECT
                 }
-                ?.name,
+                ?.number,
             expYear = it.expirationYear.orNullIfBlank(),
             code = it.securityCode.orNullIfBlank(),
             brand = it

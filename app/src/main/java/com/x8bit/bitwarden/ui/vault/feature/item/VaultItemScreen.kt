@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 
@@ -137,6 +138,9 @@ fun VaultItemScreen(
             vaultLoginItemTypeHandlers = remember(viewModel) {
                 VaultLoginItemTypeHandlers.create(viewModel = viewModel)
             },
+            vaultCardItemTypeHandlers = remember(viewModel) {
+                VaultCardItemTypeHandlers.create(viewModel = viewModel)
+            },
         )
     }
 }
@@ -176,6 +180,7 @@ private fun VaultItemContent(
     viewState: VaultItemState.ViewState,
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
+    vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
     when (viewState) {
@@ -198,7 +203,13 @@ private fun VaultItemContent(
                 }
 
                 is VaultItemState.ViewState.Content.ItemType.Card -> {
-                    // TODO UI for viewing Card BIT-513
+                    VaultItemCardContent(
+                        commonState = viewState.common,
+                        cardState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
+                        vaultCardItemTypeHandlers = vaultCardItemTypeHandlers,
+                        modifier = modifier,
+                    )
                 }
 
                 is VaultItemState.ViewState.Content.ItemType.Identity -> {

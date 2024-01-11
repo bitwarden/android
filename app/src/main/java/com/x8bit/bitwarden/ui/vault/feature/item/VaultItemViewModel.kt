@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
@@ -17,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -65,8 +67,10 @@ class VaultItemViewModel @Inject constructor(
     }
 
     override fun handleAction(action: VaultItemAction) {
+        Log.d("ramsey", "handleAction: action $action")
         when (action) {
             is VaultItemAction.ItemType.Login -> handleLoginTypeActions(action)
+            is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
             is VaultItemAction.Common -> handleCommonActions(action)
             is VaultItemAction.Internal -> handleInternalAction(action)
         }
@@ -311,6 +315,43 @@ class VaultItemViewModel @Inject constructor(
 
     //endregion Login Type Handlers
 
+    //region Card Type Handlers
+
+    private fun handleCardTypeActions(action: VaultItemAction.ItemType.Card) {
+        when (action) {
+            VaultItemAction.ItemType.Card.CopyNumberClick -> handleCopyNumberClick()
+            VaultItemAction.ItemType.Card.CopySecurityCodeClick -> handleCopySecurityCodeClick()
+        }
+    }
+
+    private fun handleCopyNumberClick() {
+        onCardContent { content, card ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+                }
+                return@onCardContent
+            }
+            val number = requireNotNull(card.number)
+            clipboardManager.setText(text = number)
+        }
+    }
+
+    private fun handleCopySecurityCodeClick() {
+        onCardContent { content, card ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+                }
+                return@onCardContent
+            }
+            val securityCode = requireNotNull(card.securityCode)
+            clipboardManager.setText(text = securityCode)
+        }
+    }
+
+    //endregion Card Type Handlers
+
     //region Internal Type Handlers
 
     private fun handleInternalAction(action: VaultItemAction.Internal) {
@@ -447,6 +488,21 @@ class VaultItemViewModel @Inject constructor(
         (state.viewState as? VaultItemState.ViewState.Content)
             ?.let { content ->
                 (content.type as? VaultItemState.ViewState.Content.ItemType.Login)
+                    ?.let { loginContent ->
+                        block(content, loginContent)
+                    }
+            }
+    }
+
+    private inline fun onCardContent(
+        crossinline block: (
+            VaultItemState.ViewState.Content,
+            VaultItemState.ViewState.Content.ItemType.Card,
+        ) -> Unit,
+    ) {
+        (state.viewState as? VaultItemState.ViewState.Content)
+            ?.let { content ->
+                (content.type as? VaultItemState.ViewState.Content.ItemType.Card)
                     ?.let { loginContent ->
                         block(content, loginContent)
                     }
@@ -646,8 +702,20 @@ data class VaultItemState(
 
                 /**
                  * Represents the `Card` item type.
+                 *
+                 * @property cardholderName The cardholder name for the card.
+                 * @property number The number for the card.
+                 * @property brand The brand for the card.
+                 * @property expiration The expiration for the card.
+                 * @property securityCode The securityCode for the card.
                  */
-                data object Card : ItemType()
+                data class Card(
+                    val cardholderName: String?,
+                    val number: String?,
+                    val brand: VaultCardBrand?,
+                    val expiration: String?,
+                    val securityCode: String?,
+                ) : ItemType()
             }
         }
     }
@@ -827,6 +895,22 @@ sealed class VaultItemAction {
             data class PasswordVisibilityClicked(
                 val isVisible: Boolean,
             ) : Login()
+        }
+
+        /**
+         * Represents actions specific to the Card type.
+         */
+        sealed class Card : ItemType() {
+
+            /**
+             * The user has clicked the copy button for the number.
+             */
+            data object CopyNumberClick : Card()
+
+            /**
+             * The user has clicked the copy button for the security code.
+             */
+            data object CopySecurityCodeClick : Card()
         }
     }
 

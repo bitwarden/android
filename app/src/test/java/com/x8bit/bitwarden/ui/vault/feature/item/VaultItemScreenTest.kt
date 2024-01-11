@@ -10,8 +10,10 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
@@ -25,7 +27,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onFirstNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.just
@@ -649,7 +653,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in login state, on show password click should send CopyPasswordClick`() {
+    fun `in login state, on show password click should send PasswordVisibilityClicked`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
 
         composeTestRule
@@ -1060,6 +1064,170 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule.assertScrollableNodeDoesNotExist(identityName)
     }
+
+    @Test
+    fun `in card state, cardholderName should be displayed according to state`() {
+        val cardholderName = "the cardholder name"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CARD_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(cardholderName).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) { copy(cardholderName = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(cardholderName)
+    }
+
+    @Test
+    fun `in card state the number should be displayed according to state`() {
+        composeTestRule.assertScrollableNodeDoesNotExist("Number")
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        number = "number",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Number")
+            .assertTextEquals("Number", "••••••")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Copy number")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Number")
+            .assertTextEquals("Number", "number")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Copy number")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Hide")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `in card state, on copy number click should send CopyNumberClick`() {
+        val number = "123456789"
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        number = number,
+                        expiration = "test",
+                    ),
+                ),
+            )
+        }
+
+        // Scroll so we can see the Copy number button but not have it covered by the FAB
+        composeTestRule
+            .onNodeWithTextAfterScroll("Expiration")
+        composeTestRule
+            .onNodeWithContentDescription("Copy number")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
+        }
+    }
+
+    @Test
+    fun `in card state, brand should be displayed according to state`() {
+        val visa = "Visa"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CARD_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(visa).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) { copy(brand = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(visa)
+    }
+
+    @Test
+    fun `in card state, expiration should be displayed according to state`() {
+        val expiration = "the expiration"
+        mutableStateFlow.update { it.copy(viewState = DEFAULT_CARD_VIEW_STATE) }
+        composeTestRule.onNodeWithTextAfterScroll(expiration).assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCardType(currentState) { copy(expiration = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist(expiration)
+    }
+
+    @Test
+    fun `in card state the security code should be displayed according to state`() {
+        composeTestRule.assertScrollableNodeDoesNotExist("Security code")
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        securityCode = "123",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Security code")
+            .assertTextEquals("Security code", "•••")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Copy security code")
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .onLast()
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Security code")
+            .assertTextEquals("Security code", "123")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Copy security code")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Hide")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `in card state, on copy security code click should send CopySecurityCodeClick`() {
+        val number = "1234"
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        securityCode = number,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Copy security code")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
+        }
+    }
 }
 
 //region Helper functions
@@ -1098,6 +1266,30 @@ private fun updateIdentityType(
         is VaultItemState.ViewState.Content -> {
             when (val type = viewState.type) {
                 is VaultItemState.ViewState.Content.ItemType.Identity -> {
+                    viewState.copy(
+                        type = type.transform(),
+                    )
+                }
+
+                else -> viewState
+            }
+        }
+
+        else -> viewState
+    }
+    return currentState.copy(viewState = updatedType)
+}
+
+@Suppress("MaxLineLength")
+private fun updateCardType(
+    currentState: VaultItemState,
+    transform: VaultItemState.ViewState.Content.ItemType.Card.() ->
+    VaultItemState.ViewState.Content.ItemType.Card,
+): VaultItemState {
+    val updatedType = when (val viewState = currentState.viewState) {
+        is VaultItemState.ViewState.Content -> {
+            when (val type = viewState.type) {
+                is VaultItemState.ViewState.Content.ItemType.Card -> {
                     viewState.copy(
                         type = type.transform(),
                     )
@@ -1196,6 +1388,15 @@ private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity
         address = "the address",
     )
 
+private val DEFAULT_CARD: VaultItemState.ViewState.Content.ItemType.Card =
+    VaultItemState.ViewState.Content.ItemType.Card(
+        cardholderName = "the cardholder name",
+        number = "the number",
+        brand = VaultCardBrand.VISA,
+        expiration = "the expiration",
+        securityCode = "the security code",
+    )
+
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
@@ -1229,6 +1430,15 @@ private val EMPTY_IDENTITY_TYPE: VaultItemState.ViewState.Content.ItemType.Ident
         address = "",
     )
 
+private val EMPTY_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =
+    VaultItemState.ViewState.Content.ItemType.Card(
+        cardholderName = "",
+        number = "",
+        brand = VaultCardBrand.SELECT,
+        expiration = "",
+        securityCode = "",
+    )
+
 private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = EMPTY_COMMON,
@@ -1239,6 +1449,12 @@ private val EMPTY_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         common = EMPTY_COMMON,
         type = EMPTY_IDENTITY_TYPE,
+    )
+
+private val EMPTY_CARD_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        common = EMPTY_COMMON,
+        type = EMPTY_CARD_TYPE,
     )
 
 private val EMPTY_SECURE_NOTE_VIEW_STATE =
@@ -1256,6 +1472,12 @@ private val DEFAULT_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =
 private val DEFAULT_IDENTITY_VIEW_STATE: VaultItemState.ViewState.Content =
     VaultItemState.ViewState.Content(
         type = DEFAULT_IDENTITY,
+        common = DEFAULT_COMMON,
+    )
+
+private val DEFAULT_CARD_VIEW_STATE: VaultItemState.ViewState.Content =
+    VaultItemState.ViewState.Content(
+        type = DEFAULT_CARD,
         common = DEFAULT_COMMON,
     )
 
