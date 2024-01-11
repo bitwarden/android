@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 /**
  * Primary implementation [VaultLockManager].
@@ -145,6 +146,9 @@ class VaultLockManagerImpl(
                 unlockedVaultUserIds = it.unlockedVaultUserIds + userId,
             )
         }
+        // If we are unlocking an account with a timeout of Never, we should make sure to store the
+        // auto-unlock key.
+        storeUserAutoUnlockKeyIfNecessary(userId = userId)
     }
 
     private fun setVaultToLocked(userId: String) {
@@ -154,6 +158,10 @@ class VaultLockManagerImpl(
                 unlockedVaultUserIds = it.unlockedVaultUserIds - userId,
             )
         }
+        authDiskSource.storeUserAutoUnlockKey(
+            userId = userId,
+            userAutoUnlockKey = null,
+        )
     }
 
     private fun setVaultToUnlocking(userId: String) {
@@ -169,6 +177,26 @@ class VaultLockManagerImpl(
             it.copy(
                 unlockingVaultUserIds = it.unlockingVaultUserIds - userId,
             )
+        }
+    }
+
+    private fun storeUserAutoUnlockKeyIfNecessary(userId: String) {
+        val vaultTimeout = settingsRepository.getVaultTimeoutStateFlow(userId = userId).value
+        if (
+            vaultTimeout == VaultTimeout.Never &&
+            authDiskSource.getUserAutoUnlockKey(userId = userId) == null
+        ) {
+            unconfinedScope.launch {
+                vaultSdkSource
+                    .getUserEncryptionKey(userId = userId)
+                    .getOrNull()
+                    ?.let {
+                        authDiskSource.storeUserAutoUnlockKey(
+                            userId = userId,
+                            userAutoUnlockKey = it,
+                        )
+                    }
+            }
         }
     }
 
