@@ -18,7 +18,7 @@ class AddSendStateExtensionsTest {
         val sendView = createMockSendView(number = 1, type = SendType.FILE).copy(
             id = null,
             accessId = null,
-            key = "91Xo3Wdf0N0Cc5AHJRC3SQ",
+            key = null,
             accessCount = 0U,
             text = null,
             file = SendFileView(
@@ -27,6 +27,7 @@ class AddSendStateExtensionsTest {
                 size = "",
                 sizeName = "",
             ),
+            hasPassword = false,
         )
 
         val result = DEFAULT_VIEW_STATE
@@ -41,9 +42,10 @@ class AddSendStateExtensionsTest {
         val sendView = createMockSendView(number = 1, type = SendType.TEXT).copy(
             id = null,
             accessId = null,
-            key = "91Xo3Wdf0N0Cc5AHJRC3SQ",
+            key = null,
             accessCount = 0U,
             file = null,
+            hasPassword = false,
         )
 
         val result = DEFAULT_VIEW_STATE.toSendView(FIXED_CLOCK)
