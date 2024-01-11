@@ -21,3 +21,19 @@ enum class VaultCardBrand(val value: Text) {
     RUPAY(value = "RuPay".asText()),
     OTHER(value = R.string.other.asText()),
 }
+
+/**
+ * Returns a [VaultCardBrand] with the provided [String] or null.
+ */
+fun String.findVaultCardBrandWithNameOrNull(): VaultCardBrand? =
+    VaultCardBrand
+        .entries
+        .find { vaultCardBrand ->
+            vaultCardBrand.name.lowercaseWithoutSpacesOrUnderScores ==
+                this.lowercaseWithoutSpacesOrUnderScores
+        }
+
+private val String.lowercaseWithoutSpacesOrUnderScores: String
+    get() = lowercase()
+        .replace(" ", "")
+        .replace("_", "")

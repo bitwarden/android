@@ -4,7 +4,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemAction
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
 
 /**
- * A collection of handler functions for managing actions within the context of viewing identity
+ * A collection of handler functions for managing actions within the context of viewing login
  * items in a vault.
  */
 @Suppress("LongParameterList")

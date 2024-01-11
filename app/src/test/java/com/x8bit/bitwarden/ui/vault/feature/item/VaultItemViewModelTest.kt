@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createLoginContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -588,6 +589,106 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
     }
 
+    @Nested
+    inner class CardActions {
+        private lateinit var viewModel: VaultItemViewModel
+
+        @BeforeEach
+        fun setup() {
+            viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    viewState = CARD_VIEW_STATE,
+                ),
+            )
+        }
+
+        @Test
+        fun `on CopyNumberClick should show password dialog when re-prompt is required`() =
+            runTest {
+                val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
+                val mockCipherView = mockk<CipherView> {
+                    every { toViewState(isPremiumUser = true) } returns CARD_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+
+                assertEquals(cardState, viewModel.stateFlow.value)
+                viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
+                assertEquals(
+                    cardState.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog),
+                    viewModel.stateFlow.value,
+                )
+
+                verify(exactly = 1) {
+                    mockCipherView.toViewState(isPremiumUser = true)
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopyNumberClick should call setText on the ClipboardManager when re-prompt is not required`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true)
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_CARD_TYPE,
+                )
+            }
+            every { clipboardManager.setText(text = "12345436") } just runs
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = "12345436")
+                mockCipherView.toViewState(isPremiumUser = true)
+            }
+        }
+
+        @Test
+        fun `on CopySecurityCodeClick should show password dialog when re-prompt is required`() =
+            runTest {
+                val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
+                val mockCipherView = mockk<CipherView> {
+                    every { toViewState(isPremiumUser = true) } returns CARD_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+
+                assertEquals(cardState, viewModel.stateFlow.value)
+                viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
+                assertEquals(
+                    cardState.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog),
+                    viewModel.stateFlow.value,
+                )
+
+                verify(exactly = 1) {
+                    mockCipherView.toViewState(isPremiumUser = true)
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CopySecurityCodeClick should call setText on the ClipboardManager when re-prompt is not required`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true)
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_CARD_TYPE,
+                )
+            }
+            every { clipboardManager.setText(text = "987") } just runs
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+
+            viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
+
+            verify(exactly = 1) {
+                clipboardManager.setText(text = "987")
+                mockCipherView.toViewState(isPremiumUser = true)
+            }
+        }
+    }
+
     private fun createViewModel(
         state: VaultItemState?,
         vaultItemId: String = VAULT_ITEM_ID,
@@ -665,6 +766,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 isPremiumUser = true,
             )
 
+        private val DEFAULT_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =
+            VaultItemState.ViewState.Content.ItemType.Card(
+                cardholderName = "mockName",
+                number = "12345436",
+                brand = VaultCardBrand.VISA,
+                expiration = "03/2027",
+                securityCode = "987",
+            )
+
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             VaultItemState.ViewState.Content.Common(
                 name = "login cipher",
@@ -702,6 +812,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             VaultItemState.ViewState.Content(
                 common = DEFAULT_COMMON,
                 type = DEFAULT_LOGIN_TYPE,
+            )
+
+        private val CARD_VIEW_STATE: VaultItemState.ViewState.Content =
+            VaultItemState.ViewState.Content(
+                common = DEFAULT_COMMON,
+                type = DEFAULT_CARD_TYPE,
             )
     }
 }

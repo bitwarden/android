@@ -15,6 +15,7 @@ import com.bitwarden.core.SecureNoteView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -71,6 +72,8 @@ class CipherViewExtensionsTest {
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
                     cardHolderName = "Bit Warden",
                     number = "4012888888881881",
+                    brand = VaultCardBrand.VISA,
+                    expirationYear = "2030",
                     securityCode = "123",
                 ),
             ),

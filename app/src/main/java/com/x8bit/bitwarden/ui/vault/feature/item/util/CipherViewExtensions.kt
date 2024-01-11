@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
+import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
@@ -14,7 +15,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
@@ -64,7 +67,13 @@ fun CipherView.toViewState(
             }
 
             CipherType.CARD -> {
-                VaultItemState.ViewState.Content.ItemType.Card
+                VaultItemState.ViewState.Content.ItemType.Card(
+                    cardholderName = card?.cardholderName,
+                    number = card?.number,
+                    brand = card?.cardBrand,
+                    expiration = card?.expiration,
+                    securityCode = card?.code,
+                )
             }
 
             CipherType.IDENTITY -> {
@@ -139,4 +148,17 @@ private val IdentityView.identityName: String?
         lastName,
     )
         .joinToString(" ")
+        .orNullIfBlank()
+
+private val CardView.cardBrand: VaultCardBrand?
+    get() = brand
+        ?.findVaultCardBrandWithNameOrNull()
+        .takeUnless { it == VaultCardBrand.SELECT }
+
+private val CardView.expiration: String?
+    get() = listOfNotNull(
+        expMonth?.padStart(length = 2, padChar = '0'),
+        expYear,
+    )
+        .joinToString("/")
         .orNullIfBlank()

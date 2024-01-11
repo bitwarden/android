@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
+import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import java.util.UUID
 
 /**
@@ -36,6 +37,7 @@ fun CipherView.toViewState(): VaultAddEditState.ViewState =
                 number = card?.number.orEmpty(),
                 brand = card?.brand.toBrandOrDefault(),
                 expirationMonth = card?.expMonth.toExpirationMonthOrDefault(),
+                expirationYear = card?.expYear.orEmpty(),
                 securityCode = card?.code.orEmpty(),
             )
             CipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity(
@@ -109,13 +111,12 @@ private fun String?.toTitleOrDefault(): VaultIdentityTitle =
         ?: VaultIdentityTitle.SELECT
 
 private fun String?.toBrandOrDefault(): VaultCardBrand =
-    VaultCardBrand
-        .entries
-        .find { it.name == this }
+    this
+        ?.findVaultCardBrandWithNameOrNull()
         ?: VaultCardBrand.SELECT
 
 private fun String?.toExpirationMonthOrDefault(): VaultCardExpirationMonth =
     VaultCardExpirationMonth
         .entries
-        .find { it.name == this }
+        .find { it.number == this }
         ?: VaultCardExpirationMonth.SELECT
