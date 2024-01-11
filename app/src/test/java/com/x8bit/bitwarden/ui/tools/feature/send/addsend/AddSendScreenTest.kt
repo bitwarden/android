@@ -9,6 +9,8 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -87,6 +89,110 @@ class AddSendScreenTest : BaseComposeTest() {
             .onNodeWithText("Save")
             .performClick()
         verify { viewModel.trySendAction(AddSendAction.SaveClick) }
+    }
+
+    @Test
+    fun `on overflow button click should display overflow menu`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Remove password")
+            .assert(hasAnyAncestor(isPopup()))
+            .isDisplayed()
+        composeTestRule
+            .onNodeWithText("Copy link")
+            .assert(hasAnyAncestor(isPopup()))
+            .isDisplayed()
+        composeTestRule
+            .onNodeWithText("Share link")
+            .assert(hasAnyAncestor(isPopup()))
+            .isDisplayed()
+        composeTestRule
+            .onNodeWithText("Delete")
+            .assert(hasAnyAncestor(isPopup()))
+            .isDisplayed()
+    }
+
+    @Test
+    fun `on overflow remove password button click should send RemovePasswordClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Remove password")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+        }
+    }
+
+    @Test
+    fun `on overflow remove Share link button click should send ShareLinkClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Share link")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AddSendAction.ShareLinkClick)
+        }
+    }
+
+    @Test
+    fun `on overflow remove Delete button click should send DeleteClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Delete")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AddSendAction.DeleteClick)
+        }
+    }
+
+    @Test
+    fun `on overflow remove Copy link button click should send CopyLinkClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Copy link")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AddSendAction.CopyLinkClick)
+        }
     }
 
     @Test
