@@ -3,18 +3,24 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -50,6 +56,7 @@ class AddSendViewModel @Inject constructor(
                 AddSendType.AddItem -> AddSendState.ViewState.Content(
                     common = AddSendState.ViewState.Content.Common(
                         name = "",
+                        currentAccessCount = null,
                         maxAccessCount = null,
                         passwordInput = "",
                         noteInput = "",
@@ -62,6 +69,7 @@ class AddSendViewModel @Inject constructor(
                             .truncatedTo(ChronoUnit.DAYS)
                             .plusWeeks(1),
                         expirationDate = null,
+                        sendUrl = null,
                     ),
                     selectedType = AddSendState.ViewState.Content.SendType.Text(
                         input = "",
@@ -69,9 +77,7 @@ class AddSendViewModel @Inject constructor(
                     ),
                 )
 
-                is AddSendType.EditItem -> AddSendState.ViewState.Error(
-                    "Not yet implemented".asText(),
-                )
+                is AddSendType.EditItem -> AddSendState.ViewState.Loading
             },
             dialogState = null,
             isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
@@ -84,6 +90,19 @@ class AddSendViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
+
+        when (val addSendType = state.addSendType) {
+            AddSendType.AddItem -> Unit
+            is AddSendType.EditItem -> {
+                vaultRepo
+                    .getSendStateFlow(addSendType.sendItemId)
+                    // We'll stop getting updates as soon as we get some loaded data.
+                    .takeUntilLoaded()
+                    .map { AddSendAction.Internal.SendDataReceive(it) }
+                    .onEach(::sendAction)
+                    .launchIn(viewModelScope)
+            }
+        }
 
         authRepo
             .userStateFlow
@@ -100,6 +119,7 @@ class AddSendViewModel @Inject constructor(
         is AddSendAction.CloseClick -> handleCloseClick()
         is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
         is AddSendAction.ExpirationDateChange -> handleExpirationDateChange(action)
+        AddSendAction.ClearExpirationDate -> handleClearExpirationDate()
         AddSendAction.DismissDialogClick -> handleDismissDialogClick()
         is AddSendAction.SaveClick -> handleSaveClick()
         is AddSendAction.FileTypeClick -> handleFileTypeClick()
@@ -118,7 +138,9 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleInternalAction(action: AddSendAction.Internal): Unit = when (action) {
         is AddSendAction.Internal.CreateSendResultReceive -> handleCreateSendResultReceive(action)
+        is AddSendAction.Internal.UpdateSendResultReceive -> handleUpdateSendResultReceive(action)
         is AddSendAction.Internal.UserStateReceive -> handleUserStateReceive(action)
+        is AddSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
     }
 
     private fun handleCreateSendResultReceive(
@@ -148,9 +170,110 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
+    private fun handleUpdateSendResultReceive(
+        action: AddSendAction.Internal.UpdateSendResultReceive,
+    ) {
+        when (val result = action.result) {
+            is UpdateSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is UpdateSendResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(AddSendEvent.NavigateBack)
+                sendEvent(
+                    AddSendEvent.ShowShareSheet(
+                        message = result.sendView.toSendUrl(state.baseWebSendUrl),
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleUserStateReceive(action: AddSendAction.Internal.UserStateReceive) {
         mutableStateFlow.update {
             it.copy(isPremiumUser = action.userState?.activeAccount?.isPremium == true)
+        }
+    }
+
+    @Suppress("LongMethod")
+    private fun handleSendDataReceive(action: AddSendAction.Internal.SendDataReceive) {
+        when (val sendDataState = action.sendDataState) {
+            is DataState.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = AddSendState.ViewState.Error(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is DataState.Loaded -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = sendDataState
+                            .data
+                            ?.toViewState(
+                                clock = clock,
+                                baseWebSendUrl = environmentRepo
+                                    .environment
+                                    .environmentUrlData
+                                    .baseWebSendUrl,
+                            )
+                            ?: AddSendState.ViewState.Error(
+                                message = R.string.generic_error_message.asText(),
+                            ),
+                    )
+                }
+            }
+
+            DataState.Loading -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = AddSendState.ViewState.Loading)
+                }
+            }
+
+            is DataState.NoNetwork -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = AddSendState.ViewState.Error(
+                            message = R.string.internet_connection_required_title
+                                .asText()
+                                .concat(R.string.internet_connection_required_message.asText()),
+                        ),
+                    )
+                }
+            }
+
+            is DataState.Pending -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = sendDataState
+                            .data
+                            ?.toViewState(
+                                clock = clock,
+                                baseWebSendUrl = environmentRepo
+                                    .environment
+                                    .environmentUrlData
+                                    .baseWebSendUrl,
+                            )
+                            ?: AddSendState.ViewState.Error(
+                                message = R.string.generic_error_message.asText(),
+                            ),
+                    )
+                }
+            }
         }
     }
 
@@ -212,6 +335,10 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
+    private fun handleClearExpirationDate() {
+        updateCommonContent { it.copy(expirationDate = null) }
+    }
+
     private fun handleSaveClick() {
         onContent { content ->
             if (content.common.name.isBlank()) {
@@ -235,8 +362,20 @@ class AddSendViewModel @Inject constructor(
                 )
             }
             viewModelScope.launch {
-                val result = vaultRepo.createSend(content.toSendView(clock))
-                sendAction(AddSendAction.Internal.CreateSendResultReceive(result))
+                when (val addSendType = state.addSendType) {
+                    AddSendType.AddItem -> {
+                        val result = vaultRepo.createSend(content.toSendView(clock))
+                        sendAction(AddSendAction.Internal.CreateSendResultReceive(result))
+                    }
+
+                    is AddSendType.EditItem -> {
+                        val result = vaultRepo.updateSend(
+                            sendId = addSendType.sendItemId,
+                            sendView = content.toSendView(clock),
+                        )
+                        sendAction(AddSendAction.Internal.UpdateSendResultReceive(result))
+                    }
+                }
             }
         }
     }
@@ -403,11 +542,22 @@ data class AddSendState(
         ) : ViewState() {
 
             /**
+             * Helper method to indicate if the selected type is [SendType.File].
+             */
+            val isFileType: Boolean get() = selectedType is SendType.File
+
+            /**
+             * Helper method to indicate if the selected type is [SendType.Text].
+             */
+            val isTextType: Boolean get() = selectedType is SendType.Text
+
+            /**
              * Content data that is common for all item types.
              */
             @Parcelize
             data class Common(
                 val name: String,
+                val currentAccessCount: Int?,
                 val maxAccessCount: Int?,
                 val passwordInput: String,
                 val noteInput: String,
@@ -415,6 +565,7 @@ data class AddSendState(
                 val isDeactivateChecked: Boolean,
                 val deletionDate: ZonedDateTime,
                 val expirationDate: ZonedDateTime?,
+                val sendUrl: String?,
             ) : Parcelable {
                 val dateFormatPattern: String get() = "M/d/yyyy"
 
@@ -593,6 +744,11 @@ sealed class AddSendAction {
     data class ExpirationDateChange(val expirationDate: ZonedDateTime?) : AddSendAction()
 
     /**
+     * The user has cleared the expiration date.
+     */
+    data object ClearExpirationDate : AddSendAction()
+
+    /**
      * Models actions that the [AddSendViewModel] itself might send.
      */
     sealed class Internal : AddSendAction() {
@@ -605,5 +761,15 @@ sealed class AddSendAction {
          * Indicates a result for creating a send has been received.
          */
         data class CreateSendResultReceive(val result: CreateSendResult) : Internal()
+
+        /**
+         * Indicates a result for updating a send has been received.
+         */
+        data class UpdateSendResultReceive(val result: UpdateSendResult) : Internal()
+
+        /**
+         * Indicates that the send item data has been received.
+         */
+        data class SendDataReceive(val sendDataState: DataState<SendView?>) : Internal()
     }
 }

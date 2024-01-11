@@ -61,6 +61,7 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
 
 private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
     name = "mockName-1",
+    currentAccessCount = 1,
     maxAccessCount = 1,
     passwordInput = "mockPassword-1",
     noteInput = "mockNotes-1",
@@ -68,6 +69,7 @@ private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
     isDeactivateChecked = false,
     deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    sendUrl = null,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(

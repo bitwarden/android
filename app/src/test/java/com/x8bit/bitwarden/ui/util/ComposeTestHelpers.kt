@@ -19,6 +19,12 @@ import androidx.compose.ui.test.performScrollToNode
 import org.junit.jupiter.api.assertThrows
 
 /**
+ * A [SemanticsMatcher] used to find editable text nodes.
+ */
+val isEditableText: SemanticsMatcher
+    get() = SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText)
+
+/**
  * A [SemanticsMatcher] used to find progressbar nodes.
  */
 val isProgressBar: SemanticsMatcher
