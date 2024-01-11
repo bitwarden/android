@@ -40,7 +40,7 @@ private fun List<SendView>.toSendContent(
                     },
                     iconList = listOfNotNull(
                         SendStatusIcon.DISABLED.takeIf { sendView.disabled },
-                        sendView.password?.let { SendStatusIcon.PASSWORD },
+                        SendStatusIcon.PASSWORD.takeIf { sendView.hasPassword },
                         SendStatusIcon.MAX_ACCESS_COUNT_REACHED.takeIf {
                             sendView.maxAccessCount?.let { maxCount ->
                                 sendView.accessCount >= maxCount

@@ -18,9 +18,9 @@ fun AddSendState.ViewState.Content.toSendView(
         accessId = null,
         name = common.name,
         notes = common.noteInput,
-        // TODO: Set this to null after we update the SDK with an encryption fix (BIT-1398)
-        key = "91Xo3Wdf0N0Cc5AHJRC3SQ",
-        password = common.passwordInput.takeUnless { it.isBlank() },
+        key = null,
+        newPassword = common.passwordInput.takeUnless { it.isBlank() },
+        hasPassword = false,
         type = selectedType.toSendType(),
         file = toSendFileView(),
         text = toSendTextView(),
