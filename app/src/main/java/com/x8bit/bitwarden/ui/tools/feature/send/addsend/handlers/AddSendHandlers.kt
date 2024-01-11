@@ -22,6 +22,7 @@ data class AddSendHandlers(
     val onDeactivateSendToggle: (Boolean) -> Unit,
     val onDeletionDateChange: (ZonedDateTime) -> Unit,
     val onExpirationDateChange: (ZonedDateTime?) -> Unit,
+    val onClearExpirationDateClick: () -> Unit,
 ) {
     companion object {
         /**
@@ -56,6 +57,9 @@ data class AddSendHandlers(
                 },
                 onExpirationDateChange = {
                     viewModel.trySendAction(AddSendAction.ExpirationDateChange(it))
+                },
+                onClearExpirationDateClick = {
+                    viewModel.trySendAction(AddSendAction.ClearExpirationDate)
                 },
             )
     }

@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -36,9 +38,11 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
+import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
 
 /**
@@ -48,6 +52,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 @Composable
 fun AddSendContent(
     state: AddSendState.ViewState.Content,
+    isAddMode: Boolean,
     addSendHandlers: AddSendHandlers,
     modifier: Modifier = Modifier,
 ) {
@@ -65,34 +70,36 @@ fun AddSendContent(
             onValueChange = addSendHandlers.onNamChange,
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.type),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
+        if (isAddMode) {
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = R.string.type),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenSegmentedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            options = listOf(
-                SegmentedButtonState(
-                    text = stringResource(id = R.string.file),
-                    onClick = addSendHandlers.onFileTypeSelect,
-                    isChecked = state.selectedType is AddSendState.ViewState.Content.SendType.File,
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenSegmentedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                options = listOf(
+                    SegmentedButtonState(
+                        text = stringResource(id = R.string.file),
+                        onClick = addSendHandlers.onFileTypeSelect,
+                        isChecked = state.isFileType,
+                    ),
+                    SegmentedButtonState(
+                        text = stringResource(id = R.string.text),
+                        onClick = addSendHandlers.onTextTypeSelect,
+                        isChecked = state.isTextType,
+                    ),
                 ),
-                SegmentedButtonState(
-                    text = stringResource(id = R.string.text),
-                    onClick = addSendHandlers.onTextTypeSelect,
-                    isChecked = state.selectedType is AddSendState.ViewState.Content.SendType.Text,
-                ),
-            ),
-        )
+            )
+        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         when (val type = state.selectedType) {
             is AddSendState.ViewState.Content.SendType.File -> {
                 BitwardenListHeaderText(
@@ -161,6 +168,7 @@ fun AddSendContent(
         Spacer(modifier = Modifier.height(16.dp))
         AddSendOptions(
             state = state,
+            isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
 
@@ -173,12 +181,15 @@ fun AddSendContent(
  * Displays a collapsable set of new send options.
  *
  * @param state The content state.
+ * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
+ * an existing send.
  * @param addSendHandlers THe handlers various events.
  */
 @Suppress("LongMethod")
 @Composable
 private fun AddSendOptions(
     state: AddSendState.ViewState.Content,
+    isAddMode: Boolean,
     addSendHandlers: AddSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -221,25 +232,92 @@ private fun AddSendOptions(
         modifier = Modifier.clipToBounds(),
     ) {
         Column {
-            SendDeletionDateChooser(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                dateFormatPattern = state.common.dateFormatPattern,
-                timeFormatPattern = state.common.timeFormatPattern,
-                currentZonedDateTime = state.common.deletionDate,
-                onDateSelect = addSendHandlers.onDeletionDateChange,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            SendExpirationDateChooser(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                dateFormatPattern = state.common.dateFormatPattern,
-                timeFormatPattern = state.common.timeFormatPattern,
-                currentZonedDateTime = state.common.expirationDate,
-                onDateSelect = addSendHandlers.onExpirationDateChange,
-            )
+            if (isAddMode) {
+                SendDeletionDateChooser(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    dateFormatPattern = state.common.dateFormatPattern,
+                    timeFormatPattern = state.common.timeFormatPattern,
+                    currentZonedDateTime = state.common.deletionDate,
+                    onDateSelect = addSendHandlers.onDeletionDateChange,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                SendExpirationDateChooser(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    dateFormatPattern = state.common.dateFormatPattern,
+                    timeFormatPattern = state.common.timeFormatPattern,
+                    currentZonedDateTime = state.common.expirationDate,
+                    onDateSelect = addSendHandlers.onExpirationDateChange,
+                )
+            } else {
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.deletion_date),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                AddSendCustomDateChooser(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    dateFormatPattern = state.common.dateFormatPattern,
+                    timeFormatPattern = state.common.timeFormatPattern,
+                    currentZonedDateTime = state.common.deletionDate,
+                    onDateSelect = { addSendHandlers.onDeletionDateChange(requireNotNull(it)) },
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(id = R.string.deletion_date_info),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.expiration_date),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                AddSendCustomDateChooser(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    dateFormatPattern = state.common.dateFormatPattern,
+                    timeFormatPattern = state.common.timeFormatPattern,
+                    currentZonedDateTime = state.common.expirationDate,
+                    onDateSelect = addSendHandlers.onExpirationDateChange,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.expiration_date_info),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    BitwardenTextButton(
+                        label = stringResource(id = R.string.clear),
+                        onClick = addSendHandlers.onClearExpirationDateClick,
+                        isEnabled = state.common.expirationDate != null,
+                        modifier = Modifier.wrapContentWidth(),
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenStepper(
                 label = stringResource(id = R.string.maximum_access_count),
@@ -260,6 +338,30 @@ private fun AddSendOptions(
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),
             )
+            if (!isAddMode) {
+                state.common.currentAccessCount?.let {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 32.dp),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.current_access_count) + ":",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = it.toString(),
+                            style = LocalNonMaterialTypography.current.bodySmallProminent,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenPasswordField(
                 label = stringResource(id = R.string.new_password),

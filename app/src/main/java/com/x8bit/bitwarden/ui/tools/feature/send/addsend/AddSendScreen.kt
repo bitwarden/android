@@ -135,6 +135,7 @@ fun AddSendScreen(
         when (val viewState = state.viewState) {
             is AddSendState.ViewState.Content -> AddSendContent(
                 state = viewState,
+                isAddMode = state.isAddMode,
                 addSendHandlers = remember(viewModel) { AddSendHandlers.create(viewModel) },
                 modifier = modifier,
             )

@@ -2,6 +2,9 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -22,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.util.isEditableText
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.just
@@ -35,6 +39,7 @@ import org.junit.Before
 import org.junit.Test
 import java.time.ZonedDateTime
 
+@Suppress("LargeClass")
 class AddSendScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
@@ -227,6 +232,41 @@ class AddSendScreenTest : BaseComposeTest() {
                 "A friendly name to describe this Send.",
                 "input",
             )
+    }
+
+    @Test
+    fun `segmented buttons should appear based on state`() {
+        mutableStateFlow.update { it.copy(addSendType = AddSendType.AddItem) }
+        composeTestRule
+            .onNodeWithText("Type")
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("File")
+            .filterToOne(!isEditableText)
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Text")
+            .filterToOne(!isEditableText)
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(addSendType = AddSendType.EditItem(sendItemId = "sendId"))
+        }
+
+        composeTestRule
+            .onNodeWithText("Type")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onAllNodesWithText("File")
+            .filterToOne(!isEditableText)
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Text")
+            .filterToOne(!isEditableText)
+            .assertIsNotDisplayed()
     }
 
     @Test
@@ -595,6 +635,64 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `in edit mode, clear button should be enabled based on state`() {
+        mutableStateFlow.update {
+            it.copy(addSendType = AddSendType.EditItem(sendItemId = "sendId"))
+        }
+
+        composeTestRule
+            .onNodeWithText("Options")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Clear")
+            .performScrollTo()
+            .assertIsNotEnabled()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Clear")
+            .performScrollTo()
+            .assertIsEnabled()
+    }
+
+    @Test
+    fun `in edit mode, clear button should send ClearExpirationDate`() {
+        mutableStateFlow.update {
+            it.copy(
+                addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Options")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Clear")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AddSendAction.ClearExpirationDate)
+        }
+    }
+
+    @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update {
             it.copy(viewState = AddSendState.ViewState.Loading)
@@ -683,6 +781,7 @@ class AddSendScreenTest : BaseComposeTest() {
     companion object {
         private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
             name = "",
+            currentAccessCount = null,
             maxAccessCount = null,
             passwordInput = "",
             noteInput = "",
@@ -690,6 +789,7 @@ class AddSendScreenTest : BaseComposeTest() {
             isDeactivateChecked = false,
             deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
             expirationDate = null,
+            sendUrl = null,
         )
 
         private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
