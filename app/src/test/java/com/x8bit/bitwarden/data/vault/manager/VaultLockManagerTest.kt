@@ -216,8 +216,64 @@ class VaultLockManagerTest {
             assertFalse(vaultLockManager.isVaultUnlocking(userId = userId))
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `lockVaultIfNecessary should lock the given account if it is currently unlocked`() =
+    fun `lockVault when non-Never timeout should lock the given account if it is currently unlocked`() =
+        runTest {
+            val userId = "userId"
+            verifyUnlockedVault(userId = userId)
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = setOf(userId),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+
+            vaultLockManager.lockVault(userId = userId)
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+            verify { vaultSdkSource.clearCrypto(userId = userId) }
+        }
+
+    @Test
+    fun `lockVault when Never timeout should lock the given account if it is currently unlocked`() =
+        runTest {
+            val userId = "userId"
+            verifyUnlockedVault(userId = userId)
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.Never
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = setOf(userId),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+
+            vaultLockManager.lockVault(userId = userId)
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+            verify { vaultSdkSource.clearCrypto(userId = userId) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `lockVaultIfNecessary when non-Never timeout should lock the given account if it is currently unlocked`() =
         runTest {
             val userId = "userId"
             verifyUnlockedVault(userId = userId)
@@ -240,6 +296,32 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultStateFlow.value,
             )
             verify { vaultSdkSource.clearCrypto(userId = userId) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `lockVaultIfNecessary when Never timeout should not lock the given account if it is currently unlocked`() =
+        runTest {
+            val userId = "userId"
+            verifyUnlockedVault(userId = userId)
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.Never
+
+            val initialVaultState = VaultState(
+                unlockedVaultUserIds = setOf(userId),
+                unlockingVaultUserIds = emptySet(),
+            )
+            assertEquals(
+                initialVaultState,
+                vaultLockManager.vaultStateFlow.value,
+            )
+
+            vaultLockManager.lockVaultIfNecessary(userId = userId)
+
+            assertEquals(
+                initialVaultState,
+                vaultLockManager.vaultStateFlow.value,
+            )
+            verify(exactly = 0) { vaultSdkSource.clearCrypto(userId = userId) }
         }
 
     @Suppress("MaxLineLength")
@@ -270,84 +352,194 @@ class VaultLockManagerTest {
             verify { vaultSdkSource.clearCrypto(userId = userId) }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto success should return Success`() = runTest {
-        val userId = "userId"
-        val kdf = MOCK_PROFILE.toSdkParams()
-        val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
-        val userKey = "12345"
-        val privateKey = "54321"
-        val organizationKeys = mapOf("orgId1" to "orgKey1")
-        coEvery {
-            vaultSdkSource.initializeCrypto(
-                userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
+    fun `unlockVault with initializeCrypto success for a non-Never VaultTimeout should return Success`() =
+        runTest {
+            val userId = "userId"
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "drowssap"
+            val userKey = "12345"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    userId = userId,
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
                     ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
+                vaultLockManager.vaultStateFlow.value,
             )
-        } returns InitializeCryptoResult.Success.asSuccess()
-        coEvery {
-            vaultSdkSource.initializeOrganizationCrypto(
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+            fakeAuthDiskSource.storeUserAutoUnlockKey(
                 userId = userId,
-                request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                userAutoUnlockKey = null,
             )
-        } returns InitializeCryptoResult.Success.asSuccess()
-        assertEquals(
-            VaultState(
-                unlockedVaultUserIds = emptySet(),
-                unlockingVaultUserIds = emptySet(),
-            ),
-            vaultLockManager.vaultStateFlow.value,
-        )
 
-        val result = vaultLockManager.unlockVault(
-            userId = userId,
-            kdf = kdf,
-            email = email,
-            initUserCryptoMethod = InitUserCryptoMethod.Password(
-                password = masterPassword,
-                userKey = userKey,
-            ),
-            privateKey = privateKey,
-            organizationKeys = organizationKeys,
-        )
-
-        assertEquals(VaultUnlockResult.Success, result)
-        assertEquals(
-            VaultState(
-                unlockedVaultUserIds = setOf(userId),
-                unlockingVaultUserIds = emptySet(),
-            ),
-            vaultLockManager.vaultStateFlow.value,
-        )
-        coVerify(exactly = 1) {
-            vaultSdkSource.initializeCrypto(
+            val result = vaultLockManager.unlockVault(
                 userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
+                kdf = kdf,
+                email = email,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = masterPassword,
+                    userKey = userKey,
+                ),
+                privateKey = privateKey,
+                organizationKeys = organizationKeys,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = setOf(userId),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+
+            fakeAuthDiskSource.assertUserAutoUnlockKey(
+                userId = userId,
+                userAutoUnlockKey = null,
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    userId = userId,
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
                     ),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVault with initializeCrypto success for a Never VaultTimeout should return Success and save the auto-unlock key`() =
+        runTest {
+            val userId = "userId"
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "drowssap"
+            val userKey = "12345"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            val userAutoUnlockKey = "userAutoUnlockKey"
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    userId = userId,
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.getUserEncryptionKey(userId = userId)
+            } returns userAutoUnlockKey.asSuccess()
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
                 ),
+                vaultLockManager.vaultStateFlow.value,
             )
-        }
-        coVerify(exactly = 1) {
-            vaultSdkSource.initializeOrganizationCrypto(
+            mutableVaultTimeoutStateFlow.value = VaultTimeout.Never
+            fakeAuthDiskSource.storeUserAutoUnlockKey(
                 userId = userId,
-                request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                userAutoUnlockKey = null,
             )
+
+            val result = vaultLockManager.unlockVault(
+                userId = userId,
+                kdf = kdf,
+                email = email,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = masterPassword,
+                    userKey = userKey,
+                ),
+                privateKey = privateKey,
+                organizationKeys = organizationKeys,
+            )
+
+            assertEquals(VaultUnlockResult.Success, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = setOf(userId),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+
+            fakeAuthDiskSource.assertUserAutoUnlockKey(
+                userId = userId,
+                userAutoUnlockKey = userAutoUnlockKey,
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    userId = userId,
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            }
+            coVerify {
+                vaultSdkSource.getUserEncryptionKey(userId = userId)
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
