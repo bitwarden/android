@@ -1,73 +1,40 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.service.autofill.Dataset
 import android.service.autofill.Field
 import android.service.autofill.Presentations
-import android.view.autofill.AutofillId
 import android.widget.RemoteViews
-import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 
 /**
- * Apply this [FilledItem] to the dataset being built by [datasetBuilder] in the form of an
- * overlay presentation.
- */
-fun FilledItem.applyOverlayToDataset(
-    appInfo: AutofillAppInfo,
-    datasetBuilder: Dataset.Builder,
-    remoteViews: RemoteViews,
-) {
-    if (appInfo.sdkInt >= Build.VERSION_CODES.TIRAMISU) {
-        setOverlay(
-            autoFillId = autofillId,
-            datasetBuilder = datasetBuilder,
-            remoteViews = remoteViews,
-        )
-    } else {
-        setOverlayPreTiramisu(
-            autoFillId = autofillId,
-            datasetBuilder = datasetBuilder,
-            remoteViews = remoteViews,
-        )
-    }
-}
-
-/**
- * Set up an overlay presentation in the [datasetBuilder] for Android devices running on API
- * Tiramisu or greater.
+ * Set up an overlay presentation for this [FilledItem] in the [datasetBuilder] for Android devices
+ * running on API Tiramisu or greater.
  */
 @SuppressLint("NewApi")
-private fun setOverlay(
-    autoFillId: AutofillId,
+fun FilledItem.applyToDatasetPostTiramisu(
     datasetBuilder: Dataset.Builder,
-    remoteViews: RemoteViews,
+    presentations: Presentations,
 ) {
-    val presentation = Presentations.Builder()
-        .setMenuPresentation(remoteViews)
-        .build()
-
     datasetBuilder.setField(
-        autoFillId,
+        autofillId,
         Field.Builder()
-            .setPresentations(presentation)
+            .setPresentations(presentations)
             .build(),
     )
 }
 
 /**
- * Set up an overlay presentation in the [datasetBuilder] for Android devices running on APIs that
- * predate Tiramisu.
+ * Set up an overlay presentation for this [FilledItem] in the [datasetBuilder] for Android devices
+ * running on APIs that predate Tiramisu.
  */
 @Suppress("Deprecation")
-private fun setOverlayPreTiramisu(
-    autoFillId: AutofillId,
+fun FilledItem.applyToDatasetPreTiramisu(
     datasetBuilder: Dataset.Builder,
     remoteViews: RemoteViews,
 ) {
     datasetBuilder.setValue(
-        autoFillId,
+        autofillId,
         null,
         remoteViews,
     )

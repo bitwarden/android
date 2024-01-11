@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.autofill
 
-import android.content.Context
 import android.content.res.Resources
 import android.widget.RemoteViews
 import com.x8bit.bitwarden.R
@@ -18,9 +17,6 @@ import org.junit.jupiter.api.Test
 
 class BitwardenRemoteViewsTest {
     private val testResources: Resources = mockk()
-    private val context: Context = mockk {
-        every { this@mockk.resources } returns testResources
-    }
 
     @BeforeEach
     fun setup() {
@@ -31,7 +27,6 @@ class BitwardenRemoteViewsTest {
     fun teardown() {
         unmockkConstructor(RemoteViews::class)
         confirmVerified(
-            context,
             testResources,
         )
     }
@@ -39,19 +34,18 @@ class BitwardenRemoteViewsTest {
     @Test
     fun `buildAutofillRemoteViews should set text`() {
         // Setup
-        val appName = "Bitwarden"
-        every { testResources.getText(R.string.app_name) } returns appName
+        val title = "Bitwarden"
         every {
             anyConstructed<RemoteViews>()
                 .setTextViewText(
                     R.id.text,
-                    appName,
+                    title,
                 )
         } just runs
 
         // Test
         buildAutofillRemoteViews(
-            context = context,
+            title = title,
             packageName = PACKAGE_NAME,
         )
 
@@ -61,12 +55,10 @@ class BitwardenRemoteViewsTest {
 
         // Verify
         verify(exactly = 1) {
-            context.resources
-            testResources.getText(R.string.app_name)
             anyConstructed<RemoteViews>()
                 .setTextViewText(
                     R.id.text,
-                    "Bitwarden",
+                    title,
                 )
         }
     }

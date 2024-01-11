@@ -11,7 +11,6 @@ import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.FilledData
-import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import io.mockk.coEvery
@@ -138,9 +137,8 @@ class AutofillProcessorTest {
             val fillRequest: FillRequest = mockk {
                 every { this@mockk.fillContexts } returns fillContextList
             }
-            val filledItems: List<FilledItem> = listOf(mockk())
             val filledData = FilledData(
-                filledItems = filledItems,
+                filledPartitions = listOf(mockk()),
                 ignoreAutofillIds = emptyList(),
             )
             val fillResponse: FillResponse = mockk()
