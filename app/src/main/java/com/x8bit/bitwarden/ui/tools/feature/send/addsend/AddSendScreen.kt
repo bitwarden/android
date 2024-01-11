@@ -48,6 +48,7 @@ fun AddSendScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
+    val resources = context.resources
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -57,7 +58,7 @@ fun AddSendScreen(
             }
 
             is AddSendEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
         }
     }
