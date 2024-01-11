@@ -155,6 +155,15 @@
 	  <BundleResource Include="Platforms\Android\Resources\drawable-hdpi\logo_white_legacy.png" />
 	  <BundleResource Include="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher.png" />
 	  <BundleResource Include="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo_white%402x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\more_vert%402x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo_white%403x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo%403x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\more_vert%403x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\more_vert.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo_white.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo%402x.png" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\iOS.Core\iOS.Core.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" />
@@ -234,5 +243,16 @@
 	<ItemGroup>
 	  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
 	  <GoogleServicesJson Include="Platforms\Android\google-services.json.enc" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Platforms\iOS\Resources\logo.png" />
+	  <None Remove="Platforms\iOS\Resources\logo_white%402x.png" />
+	  <None Remove="Platforms\iOS\Resources\more_vert%402x.png" />
+	  <None Remove="Platforms\iOS\Resources\logo_white%403x.png" />
+	  <None Remove="Platforms\iOS\Resources\logo%403x.png" />
+	  <None Remove="Platforms\iOS\Resources\more_vert%403x.png" />
+	  <None Remove="Platforms\iOS\Resources\more_vert.png" />
+	  <None Remove="Platforms\iOS\Resources\logo_white.png" />
+	  <None Remove="Platforms\iOS\Resources\logo%402x.png" />
 	</ItemGroup>
 </Project>
