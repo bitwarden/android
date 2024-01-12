@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswo
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -29,6 +30,8 @@ class FakeGeneratorRepository : GeneratorRepository {
             generatedString = "updatedPassphrase",
         )
     private var passcodeGenerationOptions: PasscodeGenerationOptions? = null
+
+    private var usernameGenerationOptions: UsernameGenerationOptions? = null
 
     private val mutablePasswordHistoryStateFlow =
         MutableStateFlow<LocalDataState<List<PasswordHistoryView>>>(LocalDataState.Loading)
@@ -99,6 +102,14 @@ class FakeGeneratorRepository : GeneratorRepository {
 
     override fun savePasscodeGenerationOptions(options: PasscodeGenerationOptions) {
         passcodeGenerationOptions = options
+    }
+
+    override fun getUsernameGenerationOptions(): UsernameGenerationOptions? {
+        return usernameGenerationOptions
+    }
+
+    override fun saveUsernameGenerationOptions(options: UsernameGenerationOptions) {
+        usernameGenerationOptions = options
     }
 
     override suspend fun storePasswordHistory(passwordHistoryView: PasswordHistoryView) {
