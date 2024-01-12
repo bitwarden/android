@@ -128,6 +128,7 @@ private fun Int?.toVaultTimeout(): VaultTimeout =
         VaultTimeout.Immediately.vaultTimeoutInMinutes -> VaultTimeout.Immediately
         VaultTimeout.OneMinute.vaultTimeoutInMinutes -> VaultTimeout.OneMinute
         VaultTimeout.FiveMinutes.vaultTimeoutInMinutes -> VaultTimeout.FiveMinutes
+        VaultTimeout.FifteenMinutes.vaultTimeoutInMinutes -> VaultTimeout.FifteenMinutes
         VaultTimeout.ThirtyMinutes.vaultTimeoutInMinutes -> VaultTimeout.ThirtyMinutes
         VaultTimeout.OneHour.vaultTimeoutInMinutes -> VaultTimeout.OneHour
         VaultTimeout.FourHours.vaultTimeoutInMinutes -> VaultTimeout.FourHours
