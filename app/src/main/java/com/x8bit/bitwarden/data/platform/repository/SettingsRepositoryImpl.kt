@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +23,12 @@ class SettingsRepositoryImpl(
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
+    override var appLanguage: AppLanguage
+        get() = settingsDiskSource.appLanguage ?: AppLanguage.DEFAULT
+        set(value) {
+            settingsDiskSource.appLanguage = value
+        }
 
     override var vaultTimeout: VaultTimeout
         get() = activeUserId

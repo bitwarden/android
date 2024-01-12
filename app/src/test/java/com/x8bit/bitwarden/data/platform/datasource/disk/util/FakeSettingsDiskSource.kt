@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.util
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
@@ -20,6 +21,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
+
+    override var appLanguage: AppLanguage? = null
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
         storedVaultTimeoutInMinutes[userId]

@@ -23,6 +23,7 @@ androidxNavigation = "2.7.6"
 androidxRoom = "2.6.1"
 androidXSecurityCrypto = "1.1.0-alpha06"
 androidxSplash = "1.1.0-alpha02"
+androidXAppCompat = "1.6.1"
 # Once the app and SDK reach a critical point of completeness we should begin fixing the version
 # here (BIT-311).
 bitwardenSdk = "0.4.0-20240111.141006-33"
@@ -53,6 +54,7 @@ zxing = "3.5.2"
 [libraries]
 # Format: <maintainer>-<artifact-name>
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidXAppCompat" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidxBrowser" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidxCamera" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidxCamera" }

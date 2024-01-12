@@ -4,16 +4,19 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 
+private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
 
 /**
  * Primary implementation of [SettingsDiskSource].
  */
+@Suppress("TooManyFunctions")
 class SettingsDiskSourceImpl(
     val sharedPreferences: SharedPreferences,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
@@ -23,6 +26,18 @@ class SettingsDiskSourceImpl(
 
     private val mutableVaultTimeoutInMinutesFlowMap =
         mutableMapOf<String, MutableSharedFlow<Int?>>()
+
+    override var appLanguage: AppLanguage?
+        get() = getString(key = APP_LANGUAGE_KEY)
+            ?.let { storedValue ->
+                AppLanguage.entries.firstOrNull { storedValue == it.localeName }
+            }
+        set(value) {
+            putString(
+                key = APP_LANGUAGE_KEY,
+                value = value?.localeName,
+            )
+        }
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
         getInt(key = "${VAULT_TIME_IN_MINUTES_KEY}_$userId")

@@ -29,6 +29,52 @@ android {
         versionCode = 1
         versionName = "1.0.0"
 
+        // This is so the build system only includes language resources in the APK for these
+        // languages, preventing translated strings from being included from other libraries that
+        // might support languages this app does not.
+        resourceConfigurations += arrayOf(
+            "af",
+            "be",
+            "bg",
+            "ca",
+            "cs",
+            "da",
+            "de",
+            "el",
+            "en",
+            "en-rGB",
+            "es",
+            "et",
+            "fa",
+            "fi",
+            "fr",
+            "hi",
+            "hr",
+            "hu",
+            "in",
+            "it",
+            "iw",
+            "ja",
+            "ko",
+            "lv",
+            "ml",
+            "nb",
+            "nl",
+            "pl",
+            "pt-rBR",
+            "pt-rPT",
+            "ro",
+            "ru",
+            "sk",
+            "sv",
+            "th",
+            "tr",
+            "uk",
+            "vi",
+            "zh-rCN",
+            "zh-rTW"
+        )
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -102,6 +148,7 @@ dependencies {
     }
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)

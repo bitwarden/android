@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -25,12 +26,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 
 /**
  * Displays the appearance screen.
@@ -74,7 +79,7 @@ fun AppearanceScreen(
         ) {
             LanguageSelectionRow(
                 currentSelection = state.language,
-                onThemeSelection = remember(viewModel) {
+                onLanguageSelection = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.LanguageChange(it)) }
                 },
                 modifier = Modifier.fillMaxWidth(),
@@ -105,15 +110,22 @@ fun AppearanceScreen(
 
 @Composable
 private fun LanguageSelectionRow(
-    currentSelection: AppearanceState.Language,
-    onThemeSelection: (AppearanceState.Language) -> Unit,
+    currentSelection: AppLanguage,
+    onLanguageSelection: (AppLanguage) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowLanguageSelectionDialog by remember { mutableStateOf(false) }
+    var languageChangedDialogState: BasicDialogState by rememberSaveable {
+        mutableStateOf(BasicDialogState.Hidden)
+    }
+    var shouldShowLanguageSelectionDialog by rememberSaveable { mutableStateOf(false) }
+
+    BitwardenBasicDialog(
+        visibilityState = languageChangedDialogState,
+        onDismissRequest = { languageChangedDialogState = BasicDialogState.Hidden },
+    )
 
     BitwardenTextRow(
         text = stringResource(id = R.string.language),
-        description = stringResource(id = R.string.language_change_requires_app_restart),
         onClick = { shouldShowLanguageSelectionDialog = true },
         modifier = modifier,
     ) {
@@ -129,14 +141,16 @@ private fun LanguageSelectionRow(
             title = stringResource(id = R.string.language),
             onDismissRequest = { shouldShowLanguageSelectionDialog = false },
         ) {
-            AppearanceState.Language.entries.forEach { option ->
+            AppLanguage.entries.forEach { option ->
                 BitwardenSelectionRow(
                     text = option.text,
                     isSelected = option == currentSelection,
                     onClick = {
                         shouldShowLanguageSelectionDialog = false
-                        onThemeSelection(
-                            AppearanceState.Language.entries.first { it == option },
+                        onLanguageSelection(option)
+                        languageChangedDialogState = BasicDialogState.Shown(
+                            title = R.string.language.asText(),
+                            message = R.string.language_change_x_description.asText(option.text),
                         )
                     },
                 )

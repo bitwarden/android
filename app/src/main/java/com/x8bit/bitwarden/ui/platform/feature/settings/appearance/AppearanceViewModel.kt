@@ -1,11 +1,15 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
 import android.os.Parcelable
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -18,11 +22,12 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class AppearanceViewModel @Inject constructor(
+    private val settingsRepository: SettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AppearanceState, AppearanceEvent, AppearanceAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: AppearanceState(
-            language = AppearanceState.Language.DEFAULT,
+            language = settingsRepository.appLanguage,
             showWebsiteIcons = false,
             theme = AppearanceState.Theme.DEFAULT,
         ),
@@ -39,8 +44,13 @@ class AppearanceViewModel @Inject constructor(
     }
 
     private fun handleLanguageChanged(action: AppearanceAction.LanguageChange) {
-        // TODO: BIT-1328 implement language selection support
         mutableStateFlow.update { it.copy(language = action.language) }
+        settingsRepository.appLanguage = action.language
+
+        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(
+            action.language.localeName,
+        )
+        AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
     private fun handleShowWebsiteIconsToggled(action: AppearanceAction.ShowWebsiteIconsToggle) {
@@ -59,20 +69,10 @@ class AppearanceViewModel @Inject constructor(
  */
 @Parcelize
 data class AppearanceState(
-    val language: Language,
+    val language: AppLanguage,
     val showWebsiteIcons: Boolean,
     val theme: Theme,
 ) : Parcelable {
-    /**
-     * Represents the languages supported by the app.
-     *
-     * TODO BIT-1328 populate values
-     */
-    enum class Language(val text: Text) {
-        DEFAULT(text = R.string.default_system.asText()),
-        ENGLISH(text = "English".asText()),
-    }
-
     /**
      * Represents the theme options the user can set.
      */
@@ -106,7 +106,7 @@ sealed class AppearanceAction {
      * Indicates that the user changed the Language.
      */
     data class LanguageChange(
-        val language: AppearanceState.Language,
+        val language: AppLanguage,
     ) : AppearanceAction()
 
     /**

@@ -1,12 +1,18 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Primary access point for general settings-related disk information.
  */
 interface SettingsDiskSource {
+    /**
+     * The currently persisted app language (or `null` if not set).
+     */
+    var appLanguage: AppLanguage?
+
     /**
      * Gets the current vault timeout (in minutes) for the given [userId] (or `null` if the vault
      * should never time out).
