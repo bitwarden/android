@@ -38,7 +38,7 @@ fun NavGraphBuilder.vaultItemDestination(
     ) {
         VaultItemScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToVaultEditItem = onNavigateToVaultEditItem,
+            onNavigateToVaultAddEditItem = onNavigateToVaultEditItem,
         )
     }
 }

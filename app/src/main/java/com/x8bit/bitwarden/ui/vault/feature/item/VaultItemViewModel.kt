@@ -97,6 +97,11 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.HiddenFieldVisibilityClicked -> {
                 handleHiddenFieldVisibilityClicked(action)
             }
+
+            is VaultItemAction.Common.AttachmentsClick -> handleAttachmentsClick()
+            is VaultItemAction.Common.CloneClick -> handleCloneClick()
+            is VaultItemAction.Common.DeleteClick -> handleDeleteClick()
+            is VaultItemAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
         }
     }
 
@@ -116,7 +121,12 @@ class VaultItemViewModel @Inject constructor(
                 }
                 return@onContent
             }
-            sendEvent(VaultItemEvent.NavigateToEdit(state.vaultItemId))
+            sendEvent(
+                VaultItemEvent.NavigateToAddEdit(
+                    itemId = state.vaultItemId,
+                    isClone = false,
+                ),
+            )
         }
     }
 
@@ -190,6 +200,28 @@ class VaultItemViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun handleAttachmentsClick() {
+        sendEvent(VaultItemEvent.NavigateToAttachments(itemId = state.vaultItemId))
+    }
+
+    private fun handleCloneClick() {
+        sendEvent(
+            VaultItemEvent.NavigateToAddEdit(
+                itemId = state.vaultItemId,
+                isClone = true,
+            ),
+        )
+    }
+
+    private fun handleDeleteClick() {
+        // TODO Implement delete in BIT-1408
+        sendEvent(VaultItemEvent.ShowToast("Not yet implemented.".asText()))
+    }
+
+    private fun handleMoveToOrganizationClick() {
+        sendEvent(VaultItemEvent.NavigateToMoveToOrganization(itemId = state.vaultItemId))
     }
 
     //endregion Common Handlers
@@ -759,8 +791,9 @@ sealed class VaultItemEvent {
     /**
      * Navigates to the edit screen.
      */
-    data class NavigateToEdit(
+    data class NavigateToAddEdit(
         val itemId: String,
+        val isClone: Boolean,
     ) : VaultItemEvent()
 
     /**
@@ -775,6 +808,20 @@ sealed class VaultItemEvent {
      */
     data class NavigateToUri(
         val uri: String,
+    ) : VaultItemEvent()
+
+    /**
+     * Navigates to the attachments screen.
+     */
+    data class NavigateToAttachments(
+        val itemId: String,
+    ) : VaultItemEvent()
+
+    /**
+     * Navigates to the move to organization screen.
+     */
+    data class NavigateToMoveToOrganization(
+        val itemId: String,
     ) : VaultItemEvent()
 
     /**
@@ -844,6 +891,26 @@ sealed class VaultItemAction {
             val field: VaultItemState.ViewState.Content.Common.Custom.HiddenField,
             val isVisible: Boolean,
         ) : Common()
+
+        /**
+         * The user has clicked the delete button.
+         */
+        data object DeleteClick : Common()
+
+        /**
+         * The user has clicked the attachments button.
+         */
+        data object AttachmentsClick : Common()
+
+        /**
+         * The user has clicked the clone button.
+         */
+        data object CloneClick : Common()
+
+        /**
+         * The user has clicked the move to organization button.
+         */
+        data object MoveToOrganizationClick : Common()
     }
 
     /**
