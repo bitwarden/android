@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * A Composable function that displays a row item.
@@ -51,7 +53,7 @@ fun BitwardenListItem(
     label: String,
     startIcon: Painter,
     onClick: () -> Unit,
-    selectionDataList: List<SelectionItemData>,
+    selectionDataList: PersistentList<SelectionItemData>,
     modifier: Modifier = Modifier,
     supportingLabel: String? = null,
     trailingLabelIcons: List<IconResource> = emptyList(),
@@ -158,7 +160,7 @@ private fun BitwardenListItem_preview() {
             supportingLabel = "Jan 3, 2024, 10:35 AM",
             startIcon = painterResource(id = R.drawable.ic_send_text),
             onClick = {},
-            selectionDataList = emptyList(),
+            selectionDataList = persistentListOf(),
         )
     }
 }
