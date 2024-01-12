@@ -471,6 +471,100 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `on send item overflow dialog remove password click should send RemovePasswordClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 1,
+                    sendItems = listOf(DEFAULT_SEND_ITEM),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Remove password")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(SendAction.RemovePasswordClick(DEFAULT_SEND_ITEM))
+        }
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on send item overflow dialog delete click should show confirmation dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 1,
+                    sendItems = listOf(DEFAULT_SEND_ITEM),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Delete")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Are you sure you want to delete this Send?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on delete confirmation dialog yes click should send DeleteSendClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 1,
+                    sendItems = listOf(DEFAULT_SEND_ITEM),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Delete")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(SendAction.DeleteSendClick(DEFAULT_SEND_ITEM))
+        }
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
     fun `on send item overflow dialog cancel click should close the dialog`() {
         mutableStateFlow.update {
             it.copy(
@@ -525,6 +619,7 @@ private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
         type = SendState.ViewState.Content.SendItem.Type.FILE,
         iconList = emptyList(),
         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
+        hasPassword = true,
     )
 
 private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.ViewState.Content(
@@ -539,6 +634,7 @@ private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.
             type = SendState.ViewState.Content.SendItem.Type.TEXT,
             iconList = emptyList(),
             shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
+            hasPassword = true,
         ),
     ),
 )

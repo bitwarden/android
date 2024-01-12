@@ -108,6 +108,26 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `DeleteSendClick should emit ShowToast`() = runTest {
+        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
+            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
+    fun `RemovePasswordClick should emit ShowToast`() = runTest {
+        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.RemovePasswordClick(sendItem))
+            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
     fun `SyncClick should call sync`() {
         val viewModel = createViewModel()
         every { vaultRepo.sync() } just runs

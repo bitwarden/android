@@ -83,6 +83,12 @@ fun SendContent(
                 onCopyClick = { sendHandlers.onCopySendClick(it) },
                 onEditClick = { sendHandlers.onEditSendClick(it) },
                 onShareClick = { sendHandlers.onShareSendClick(it) },
+                onDeleteClick = { sendHandlers.onDeleteSendClick(it) },
+                onRemovePasswordClick = if (it.hasPassword) {
+                    { sendHandlers.onRemovePasswordClick(it) }
+                } else {
+                    null
+                },
                 modifier = Modifier
                     .padding(
                         start = 16.dp,

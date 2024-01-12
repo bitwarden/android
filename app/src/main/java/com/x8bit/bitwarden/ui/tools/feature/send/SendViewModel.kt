@@ -67,6 +67,8 @@ class SendViewModel @Inject constructor(
         is SendAction.SendClick -> handleSendClick(action)
         is SendAction.ShareClick -> handleShareClick(action)
         SendAction.TextTypeClick -> handleTextTypeClick()
+        is SendAction.DeleteSendClick -> handleDeleteSendClick(action)
+        is SendAction.RemovePasswordClick -> handleRemovePasswordClick(action)
         is SendAction.Internal -> handleInternalAction(action)
     }
 
@@ -185,6 +187,16 @@ class SendViewModel @Inject constructor(
         // TODO: Navigate to the text type send list screen (BIT-1388)
         sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
     }
+
+    private fun handleDeleteSendClick(action: SendAction.DeleteSendClick) {
+        // TODO: Navigate to the text type send list screen (BIT-1388)
+        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+    }
+
+    private fun handleRemovePasswordClick(action: SendAction.RemovePasswordClick) {
+        // TODO: Navigate to the text type send list screen (BIT-1388)
+        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+    }
 }
 
 /**
@@ -227,6 +239,7 @@ data class SendState(
                 val type: Type,
                 val iconList: List<SendStatusIcon>,
                 val shareUrl: String,
+                val hasPassword: Boolean,
             ) : Parcelable {
                 /**
                  * Indicates the type of send this, a text or file.
@@ -342,6 +355,20 @@ sealed class SendAction {
      * User clicked the share item button.
      */
     data class ShareClick(
+        val sendItem: SendState.ViewState.Content.SendItem,
+    ) : SendAction()
+
+    /**
+     * User clicked the delete item button.
+     */
+    data class DeleteSendClick(
+        val sendItem: SendState.ViewState.Content.SendItem,
+    ) : SendAction()
+
+    /**
+     * User clicked the remove password item button.
+     */
+    data class RemovePasswordClick(
         val sendItem: SendState.ViewState.Content.SendItem,
     ) : SendAction()
 

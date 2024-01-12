@@ -72,6 +72,7 @@ class SendDataExtensionsTest {
                             SendStatusIcon.PENDING_DELETE,
                         ),
                         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
+                        hasPassword = true,
                     ),
                     SendState.ViewState.Content.SendItem(
                         id = "mockId-2",
@@ -85,6 +86,7 @@ class SendDataExtensionsTest {
                             SendStatusIcon.PENDING_DELETE,
                         ),
                         shareUrl = "www.test.com/#/send/mockAccessId-2/mockKey-2",
+                        hasPassword = true,
                     ),
                 ),
             ),
