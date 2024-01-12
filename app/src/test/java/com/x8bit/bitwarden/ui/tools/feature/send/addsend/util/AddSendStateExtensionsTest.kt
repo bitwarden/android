@@ -70,6 +70,7 @@ private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
     deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     sendUrl = null,
+    hasPassword = false,
 )
 
 private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(

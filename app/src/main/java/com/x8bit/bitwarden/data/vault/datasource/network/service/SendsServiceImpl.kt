@@ -40,4 +40,18 @@ class SendsServiceImpl(
 
     override suspend fun deleteSend(sendId: String): Result<Unit> =
         sendsApi.deleteSend(sendId = sendId)
+
+    override suspend fun removeSendPassword(sendId: String): Result<UpdateSendResponseJson> =
+        sendsApi
+            .removeSendPassword(sendId = sendId)
+            .map { UpdateSendResponseJson.Success(send = it) }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<UpdateSendResponseJson.Invalid>(
+                        code = 400,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 }

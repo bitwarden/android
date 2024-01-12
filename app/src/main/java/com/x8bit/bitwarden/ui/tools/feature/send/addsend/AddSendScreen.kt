@@ -32,7 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * Displays new send UX.
@@ -92,7 +92,7 @@ fun AddSendScreen(
                     )
                     if (!state.isAddMode) {
                         BitwardenOverflowActionItem(
-                            menuItemDataList = persistentListOf(
+                            menuItemDataList = listOfNotNull(
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.remove_password),
                                     onClick = remember(viewModel) {
@@ -102,7 +102,8 @@ fun AddSendScreen(
                                             )
                                         }
                                     },
-                                ),
+                                )
+                                    .takeIf { state.hasPassword },
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.copy_link),
                                     onClick = remember(viewModel) {
@@ -121,7 +122,8 @@ fun AddSendScreen(
                                         { viewModel.trySendAction(AddSendAction.DeleteClick) }
                                     },
                                 ),
-                            ),
+                            )
+                                .toPersistentList(),
                         )
                     }
                 },

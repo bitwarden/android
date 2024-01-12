@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -292,17 +293,126 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `RemovePasswordClick should send ShowToast`() = runTest {
-        val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
-            addSendType = AddSendType.EditItem("sendId"),
-        )
+    fun `in add item state, RemovePasswordClick should do nothing`() = runTest {
+        val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.RemovePasswordClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            expectNoEvents()
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit item state, RemovePasswordClick vaultRepository removePasswordSend Error without message should show default error dialog`() =
+        runTest {
+            val sendId = "mockId-1"
+            coEvery {
+                vaultRepository.removePasswordSend(sendId)
+            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            val initialState = DEFAULT_STATE.copy(
+                addSendType = AddSendType.EditItem(sendItemId = sendId),
+            )
+            val mockSendView = createMockSendView(number = 1)
+            every {
+                mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL)
+            } returns DEFAULT_VIEW_STATE
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val viewModel = createViewModel(
+                state = initialState,
+                addSendType = AddSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddSendState.DialogState.Loading(
+                            message = R.string.removing_send_password.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit item state, RemovePasswordClick vaultRepository removePasswordSend Error with message should show error dialog with message`() =
+        runTest {
+            val sendId = "mockId-1"
+            val errorMessage = "Fail"
+            coEvery {
+                vaultRepository.removePasswordSend(sendId)
+            } returns RemovePasswordSendResult.Error(errorMessage = errorMessage)
+            val mockSendView = createMockSendView(number = 1)
+            every {
+                mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL)
+            } returns DEFAULT_VIEW_STATE
+            mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+            val initialState = DEFAULT_STATE.copy(
+                addSendType = AddSendType.EditItem(sendItemId = sendId),
+            )
+            val viewModel = createViewModel(
+                state = initialState,
+                addSendType = AddSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddSendState.DialogState.Loading(
+                            message = R.string.removing_send_password.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = errorMessage.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit item state, RemovePasswordClick vaultRepository removePasswordSend Success should show toast`() =
+        runTest {
+            val sendId = "mockId-1"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                vaultRepository.removePasswordSend(sendId)
+            } returns RemovePasswordSendResult.Success(mockSendView)
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem(sendItemId = sendId)),
+                addSendType = AddSendType.EditItem(sendItemId = sendId),
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+                assertEquals(
+                    AddSendEvent.ShowToast(R.string.send_password_removed.asText()),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `ShareLinkClick should send ShowToast`() = runTest {
@@ -605,6 +715,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             deletionDate = ZonedDateTime.parse("2023-11-03T00:00Z"),
             expirationDate = null,
             sendUrl = null,
+            hasPassword = false,
         )
 
         private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(

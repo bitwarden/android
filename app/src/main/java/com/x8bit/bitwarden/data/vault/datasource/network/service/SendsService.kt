@@ -24,9 +24,16 @@ interface SendsService {
     ): Result<UpdateSendResponseJson>
 
     /**
-     * Attempt to delete a cipher.
+     * Attempt to delete a send.
      */
     suspend fun deleteSend(
         sendId: String,
     ): Result<Unit>
+
+    /**
+     * Attempt to remove password protection from a send.
+     */
+    suspend fun removeSendPassword(
+        sendId: String,
+    ): Result<UpdateSendResponseJson>
 }

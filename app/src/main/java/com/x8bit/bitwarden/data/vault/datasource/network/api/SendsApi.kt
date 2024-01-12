@@ -35,4 +35,10 @@ interface SendsApi {
      */
     @DELETE("sends/{sendId}")
     suspend fun deleteSend(@Path("sendId") sendId: String): Result<Unit>
+
+    /**
+     * Deletes a send.
+     */
+    @PUT("sends/{sendId}/remove-password")
+    suspend fun removeSendPassword(@Path("sendId") sendId: String): Result<SyncResponseJson.Send>
 }

@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -440,6 +441,34 @@ class VaultRepositoryImpl(
                         }
                     }
                 },
+            )
+    }
+
+    override suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult {
+        val userId = requireNotNull(activeUserId)
+        return sendsService
+            .removeSendPassword(sendId = sendId)
+            .fold(
+                onSuccess = { response ->
+                    when (response) {
+                        is UpdateSendResponseJson.Invalid -> {
+                            RemovePasswordSendResult.Error(errorMessage = response.message)
+                        }
+
+                        is UpdateSendResponseJson.Success -> {
+                            vaultDiskSource.saveSend(userId = userId, send = response.send)
+                            vaultSdkSource
+                                .decryptSend(
+                                    userId = userId,
+                                    send = response.send.toEncryptedSdkSend(),
+                                )
+                                .getOrNull()
+                                ?.let { RemovePasswordSendResult.Success(sendView = it) }
+                                ?: RemovePasswordSendResult.Error(errorMessage = null)
+                        }
+                    }
+                },
+                onFailure = { RemovePasswordSendResult.Error(errorMessage = null) },
             )
     }
 

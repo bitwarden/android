@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
@@ -1589,6 +1590,65 @@ class VaultRepositoryTest {
             )
 
             assertEquals(UpdateSendResult.Success(mockSendViewResult), result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `removePasswordSend with sendsService removeSendPassword Error should return RemovePasswordSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1)
+            coEvery {
+                sendsService.removeSendPassword(sendId = sendId)
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.removePasswordSend(sendId = sendId)
+
+            assertEquals(RemovePasswordSendResult.Error(errorMessage = null), result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `removePasswordSend with sendsService removeSendPassword Success and vaultSdkSource decryptSend Failure should return RemovePasswordSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSend = createMockSend(number = 1)
+            coEvery {
+                sendsService.removeSendPassword(sendId = sendId)
+            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSend(userId = userId, send = createMockSdkSend(number = 1))
+            } returns Throwable("Fail").asFailure()
+            coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
+
+            val result = vaultRepository.removePasswordSend(sendId = sendId)
+
+            assertEquals(RemovePasswordSendResult.Error(errorMessage = null), result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `removePasswordSend with sendsService removeSendPassword Success should return RemovePasswordSendResult success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "sendId1234"
+            val mockSendView = createMockSendView(number = 1)
+            val mockSend = createMockSend(number = 1)
+            coEvery {
+                sendsService.removeSendPassword(sendId = sendId)
+            } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSend(userId = userId, send = createMockSdkSend(number = 1))
+            } returns mockSendView.asSuccess()
+            coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
+
+            val result = vaultRepository.removePasswordSend(sendId = sendId)
+
+            assertEquals(RemovePasswordSendResult.Success(mockSendView), result)
         }
 
     //region Helper functions
