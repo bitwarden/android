@@ -72,7 +72,6 @@ class FilledDataBuilderTest {
     @Test
     fun `build should return filled data and ignored AutofillIds when Card`() = runTest {
         // Setup
-        val autofillId: AutofillId = mockk()
         val autofillView = AutofillView.Card.Number(
             data = autofillViewData,
         )
