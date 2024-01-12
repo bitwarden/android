@@ -150,6 +150,18 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `DeleteSend should call deleteSend`() = runTest {
+        assertFalse(sendsDao.deleteSendCalled)
+        sendsDao.storedSends.add(SEND_ENTITY)
+        assertEquals(1, sendsDao.storedSends.size)
+
+        vaultDiskSource.deleteSend(USER_ID, SEND_1.id)
+
+        assertTrue(sendsDao.deleteSendCalled)
+        assertEquals(emptyList<SendEntity>(), sendsDao.storedSends)
+    }
+
+    @Test
     fun `getSends should emit all SendsDao updates`() = runTest {
         val sendEntities = listOf(SEND_ENTITY)
         val sends = listOf(SEND_1)

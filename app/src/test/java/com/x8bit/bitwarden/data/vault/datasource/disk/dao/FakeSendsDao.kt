@@ -10,6 +10,7 @@ class FakeSendsDao : SendsDao {
     val storedSends = mutableListOf<SendEntity>()
 
     var deleteSendsCalled: Boolean = false
+    var deleteSendCalled: Boolean = false
     var insertSendsCalled: Boolean = false
 
     private val sendsFlow = bufferedMutableSharedFlow<List<SendEntity>>(replay = 1)
@@ -22,6 +23,14 @@ class FakeSendsDao : SendsDao {
         deleteSendsCalled = true
         val count = storedSends.count { it.userId == userId }
         storedSends.removeAll { it.userId == userId }
+        sendsFlow.tryEmit(storedSends.toList())
+        return count
+    }
+
+    override suspend fun deleteSend(userId: String, sendId: String): Int {
+        deleteSendCalled = true
+        val count = storedSends.count { it.userId == userId && it.id == sendId }
+        storedSends.removeAll { it.userId == userId && it.id == sendId }
         sendsFlow.tryEmit(storedSends.toList())
         return count
     }
