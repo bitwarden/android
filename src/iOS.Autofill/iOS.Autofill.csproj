@@ -10,7 +10,7 @@
 
       <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
 
-      <DefineConstants>$(DefineConstants);ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND</DefineConstants>
+      <DefineConstants>$(DefineConstants)</DefineConstants>
 
       <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">12.0</SupportedOSPlatformVersion>
   </PropertyGroup>
@@ -83,7 +83,6 @@
     <Compile Include="Models\Context.cs" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
-    <Compile Include="CredentialProviderViewController.TapGestureHack.cs" />
     <Compile Include="CredentialProviderViewController.Passkeys.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,13 +122,13 @@
     <BundleResource Include="Resources\logo_white%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="..\iOS\Resources\more_vert.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert.png">
       <Link>Resources\more_vert.png</Link>
     </BundleResource>
-    <BundleResource Include="..\iOS\Resources\more_vert%402x.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert%402x.png">
       <Link>Resources\more_vert%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\iOS\Resources\more_vert%403x.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert%403x.png">
       <Link>Resources\more_vert%403x.png</Link>
     </BundleResource>
   </ItemGroup>

@@ -18,6 +18,7 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ISendService _sendService;
+        private readonly ILogger _logger;
         private readonly SendGroupingsPageViewModel _vm;
         private readonly string _pageName;
 
@@ -33,6 +34,8 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
+            _logger = ServiceContainer.Resolve<ILogger>();
+
             _vm = BindingContext as SendGroupingsPageViewModel;
             _vm.Page = this;
             _vm.MainPage = mainPage;
@@ -43,85 +46,89 @@ namespace Bit.App.Pages
                 _vm.PageTitle = pageTitle;
             }
 
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.iOS)
+#if IOS
+            _absLayout.Children.Remove(_fab);
+            if (type == null)
             {
-                _absLayout.Children.Remove(_fab);
-                if (type == null)
-                {
-                    ToolbarItems.Add(_aboutIconItem);
-                }
-                ToolbarItems.Add(_addItem);
+                ToolbarItems.Add(_aboutIconItem);
             }
-            else
-            {
-                ToolbarItems.Add(_syncItem);
-                ToolbarItems.Add(_lockItem);
-                ToolbarItems.Add(_aboutTextItem);
-            }
+            ToolbarItems.Add(_addItem);
+#else
+            ToolbarItems.Add(_syncItem);
+            ToolbarItems.Add(_lockItem);
+            ToolbarItems.Add(_aboutTextItem);
+#endif
         }
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
-            if (_syncService.SyncInProgress)
+            try
             {
-                IsBusy = true;
-            }
-
-            _broadcasterService.Subscribe(_pageName, async (message) =>
-            {
-                try
+                base.OnAppearing();
+                if (_syncService.SyncInProgress)
                 {
-                    if (message.Command == "syncStarted")
-                    {
-                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
-                    }
-                    else if (message.Command == "syncCompleted" || message.Command == "sendUpdated")
-                    {
-                        await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            IsBusy = false;
-                            if (_vm.LoadedOnce)
-                            {
-                                var task = _vm.LoadAsync();
-                            }
-                        });
-                    }
+                    IsBusy = true;
                 }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                }
-            });
 
-            await LoadOnAppearedAsync(_mainLayout, false, async () =>
-            {
-                if (!_syncService.SyncInProgress || (await _sendService.GetAllAsync()).Any())
+                _broadcasterService.Subscribe(_pageName, async (message) =>
                 {
                     try
                     {
-                        await _vm.LoadAsync();
+                        if (message.Command == "syncStarted")
+                        {
+                            MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
+                        }
+                        else if (message.Command == "syncCompleted" || message.Command == "sendUpdated")
+                        {
+                            await Task.Delay(500);
+                            await MainThread.InvokeOnMainThreadAsync(() =>
+                            {
+                                IsBusy = false;
+                                if (_vm.LoadedOnce)
+                                {
+                                    var task = _vm.LoadAsync();
+                                }
+                            });
+                        }
                     }
-                    catch (Exception e) when (e.Message.Contains("No key."))
+                    catch (Exception ex)
                     {
-                        await Task.Delay(1000);
-                        await _vm.LoadAsync();
+                        LoggerHelper.LogEvenIfCantBeResolved(ex);
                     }
-                }
-                else
-                {
-                    await Task.Delay(5000);
-                    if (!_vm.Loaded)
-                    {
-                        await _vm.LoadAsync();
-                    }
-                }
+                });
 
-                AdjustToolbar();
-                await CheckAddRequest();
-            }, _mainContent);
+                await LoadOnAppearedAsync(_mainLayout, false, async () =>
+                {
+                    if (!_syncService.SyncInProgress || (await _sendService.GetAllAsync()).Any())
+                    {
+                        try
+                        {
+                            await _vm.LoadAsync();
+                        }
+                        catch (Exception e) when (e.Message.Contains("No key."))
+                        {
+                            await Task.Delay(1000);
+                            await _vm.LoadAsync();
+                        }
+                    }
+                    else
+                    {
+                        await Task.Delay(5000);
+                        if (!_vm.Loaded)
+                        {
+                            await _vm.LoadAsync();
+                        }
+                    }
+
+                    AdjustToolbar();
+                    await CheckAddRequest();
+                }, _mainContent);
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                throw;
+            }
         }
 
         protected override void OnDisappearing()

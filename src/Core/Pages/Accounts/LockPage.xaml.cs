@@ -4,6 +4,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Bit.Core.Services;
 
 namespace Bit.App.Pages
 {
@@ -26,16 +27,24 @@ namespace Bit.App.Pages
             _vm = BindingContext as LockPageViewModel;
             _vm.CheckPendingAuthRequests = checkPendingAuthRequests;
             _vm.Page = this;
-            _vm.UnlockedAction = () => MainThread.BeginInvokeOnMainThread(async () => await UnlockedAsync());
+            _vm.UnlockedAction = () => MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                try
+                {
+                    await UnlockedAsync();
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    throw;
+                }
+            });
 
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                ToolbarItems.Add(_moreItem);
-            }
-            else
-            {
-                ToolbarItems.Add(_logOut);
-            }
+#if IOS
+            ToolbarItems.Add(_moreItem);
+#else
+            ToolbarItems.Add(_logOut);
+#endif
         }
 
         public Entry SecretEntry
@@ -65,52 +74,60 @@ namespace Bit.App.Pages
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(LockPage), message =>
+            try
             {
-                if (message.Command == Constants.ClearSensitiveFields)
+                base.OnAppearing();
+                _broadcasterService.Subscribe(nameof(LockPage), message =>
                 {
-                    MainThread.BeginInvokeOnMainThread(_vm.ResetPinPasswordFields);
-                }
-            });
-            if (_appeared)
-            {
-                return;
-            }
-
-            _appeared = true;
-            _mainContent.Content = _mainLayout;
-
-            //Workaround: This delay allows the Avatar to correctly load on iOS. The cause of this issue is also likely connected with the race conditions issue when using loading modals in iOS
-            await Task.Delay(50);
-
-            _accountAvatar?.OnAppearing();
-
-            _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-
-            await _vm.InitAsync();
-
-            _vm.FocusSecretEntry += PerformFocusSecretEntry;
-
-            if (!_vm.BiometricEnabled)
-            {
-                RequestFocus(SecretEntry);
-            }
-            else
-            {
-                if (!_vm.HasMasterPassword && !_vm.PinEnabled)
-                {
-                    _passwordGrid.IsVisible = false;
-                    _unlockButton.IsVisible = false;
-                }
-                if (_autoPromptBiometric)
-                {
-                    var tasks = Task.Run(async () =>
+                    if (message.Command == Constants.ClearSensitiveFields)
                     {
-                        await Task.Delay(500);
-                        MainThread.BeginInvokeOnMainThread(async () => await _vm.PromptBiometricAsync());
-                    });
+                        MainThread.BeginInvokeOnMainThread(_vm.ResetPinPasswordFields);
+                    }
+                });
+                if (_appeared)
+                {
+                    return;
                 }
+
+                _appeared = true;
+                _mainContent.Content = _mainLayout;
+
+                //Workaround: This delay allows the Avatar to correctly load on iOS. The cause of this issue is also likely connected with the race conditions issue when using loading modals in iOS
+                await Task.Delay(50);
+
+                _accountAvatar?.OnAppearing();
+
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+
+                await _vm.InitAsync();
+
+                _vm.FocusSecretEntry += PerformFocusSecretEntry;
+
+                if (!_vm.BiometricEnabled)
+                {
+                    RequestFocus(SecretEntry);
+                }
+                else
+                {
+                    if (!_vm.HasMasterPassword && !_vm.PinEnabled)
+                    {
+                        _passwordGrid.IsVisible = false;
+                        _unlockButton.IsVisible = false;
+                    }
+                    if (_autoPromptBiometric)
+                    {
+                        var tasks = Task.Run(async () =>
+                        {
+                            await Task.Delay(500);
+                            await MainThread.InvokeOnMainThreadAsync(async () => await _vm.PromptBiometricAsync());
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
             }
         }
 
@@ -167,27 +184,44 @@ namespace Bit.App.Pages
 
         private async void Biometric_Clicked(object sender, EventArgs e)
         {
-            if (DoOnce())
+            try
             {
-                await _vm.PromptBiometricAsync();
+                if (DoOnce())
+                {
+                    await _vm.PromptBiometricAsync();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
             }
         }
 
         private async void More_Clicked(object sender, System.EventArgs e)
         {
-            await _accountListOverlay.HideAsync();
-
-            if (!DoOnce())
+            try
             {
-                return;
+                await _accountListOverlay.HideAsync();
+
+                if (!DoOnce())
+                {
+                    return;
+                }
+
+                var selection = await DisplayActionSheet(AppResources.Options,
+                    AppResources.Cancel, null, AppResources.LogOut);
+
+                if (selection == AppResources.LogOut)
+                {
+                    await _vm.LogOutAsync();
+                }
             }
-
-            var selection = await DisplayActionSheet(AppResources.Options,
-                AppResources.Cancel, null, AppResources.LogOut);
-
-            if (selection == AppResources.LogOut)
+            catch (Exception ex)
             {
-                await _vm.LogOutAsync();
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
             }
         }
 

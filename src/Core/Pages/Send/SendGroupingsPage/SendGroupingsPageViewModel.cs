@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
-using Bit.Core.Resources.Localization;
+﻿using Bit.App.Abstractions;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
-
-using DeviceType = Bit.Core.Enums.DeviceType;
-using Microsoft.Maui.Networking;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -117,28 +106,38 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var authed = await _stateService.IsAuthenticatedAsync();
-            if (!authed)
+
+            try
             {
-                return;
+                var authed = await _stateService.IsAuthenticatedAsync();
+                if (!authed)
+                {
+                    return;
+                }
+                if (await _vaultTimeoutService.IsLockedAsync())
+                {
+                    return;
+                }
+                if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
+                {
+                    SyncRefreshing = true;
+                    await _syncService.FullSyncAsync(false);
+                    return;
+                }
+
+                _doingLoad = true;
+                LoadedOnce = true;
+                ShowNoData = false;
+                Loading = true;
+                ShowList = false;
+                SendEnabled = !await AppHelpers.IsSendDisabledByPolicyAsync();
             }
-            if (await _vaultTimeoutService.IsLockedAsync())
+            catch (Exception ex)
             {
-                return;
-            }
-            if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
-            {
-                SyncRefreshing = true;
-                await _syncService.FullSyncAsync(false);
-                return;
+                _logger.Value.Exception(ex);
+                throw;
             }
 
-            _doingLoad = true;
-            LoadedOnce = true;
-            ShowNoData = false;
-            Loading = true;
-            ShowList = false;
-            SendEnabled = !await AppHelpers.IsSendDisabledByPolicyAsync();
             var groupedSends = new List<SendGroupingsPageListGroup>();
             var page = Page as SendGroupingsPage;
 
@@ -146,8 +145,11 @@ namespace Bit.App.Pages
             {
                 await LoadDataAsync();
 
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                var uppercaseGroupNames = Device.RuntimePlatform == Device.iOS;
+#if IOS
+                var uppercaseGroupNames = true;
+#else
+                var uppercaseGroupNames = false;
+#endif
                 if (MainPage)
                 {
                     groupedSends.Add(new SendGroupingsPageListGroup(
@@ -207,6 +209,11 @@ namespace Bit.App.Pages
                         GroupedSends.Clear();
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+                throw;
             }
             finally
             {
@@ -315,13 +322,21 @@ namespace Bit.App.Pages
 
         private async void SendOptionsAsync(SendView send)
         {
-            if ((Page as BaseContentPage).DoOnce())
+            try
             {
-                var selection = await AppHelpers.SendListOptions(Page, send);
-                if (selection == AppResources.RemovePassword || selection == AppResources.Delete)
+                if ((Page as BaseContentPage).DoOnce())
                 {
-                    await LoadAsync();
+                    var selection = await AppHelpers.SendListOptions(Page, send);
+                    if (selection == AppResources.RemovePassword || selection == AppResources.Delete)
+                    {
+                        await LoadAsync();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+                throw;
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Bit.App.Pages
         {
             var cipher = await _cipherService.GetAsync(CipherId);
             var decCipher = await cipher.DecryptAsync();
-            Device.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(() =>
             {
                 History.ResetWithRange(decCipher.PasswordHistory ?? new List<PasswordHistoryView>());
                 ShowNoData = History.Count == 0;

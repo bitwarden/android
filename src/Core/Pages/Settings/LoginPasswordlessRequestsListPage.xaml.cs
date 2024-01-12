@@ -49,12 +49,10 @@ namespace Bit.App.Pages
 
         private void UpdatePlaceholder()
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                    _emptyPlaceholder.Source = ImageSource.FromFile(ThemeManager.UsingLightTheme ? "empty_login_requests" : "empty_login_requests_dark"));
-            }
+#if ANDROID
+            MainThread.BeginInvokeOnMainThread(() =>
+                _emptyPlaceholder.Source = ImageSource.FromFile(ThemeManager.UsingLightTheme ? "empty_login_requests" : "empty_login_requests_dark"));
+#endif
         }
     }
 }

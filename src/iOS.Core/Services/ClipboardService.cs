@@ -31,7 +31,7 @@ namespace Bit.iOS.Core.Services
 
             var dictArr = new NSDictionary<NSString, NSObject>[1];
             dictArr[0] = new NSDictionary<NSString, NSObject>(new NSString(UTType.UTF8PlainText), new NSString(text));
-            Device.BeginInvokeOnMainThread(() => UIPasteboard.General.SetItems(dictArr, new UIPasteboardOptions
+            MainThread.BeginInvokeOnMainThread(() => UIPasteboard.General.SetItems(dictArr, new UIPasteboardOptions
             {
                 LocalOnly = true,
                 ExpirationDate = clearSeconds > 0 ? NSDate.FromTimeIntervalSinceNow(clearSeconds) : null

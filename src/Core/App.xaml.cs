@@ -35,6 +35,8 @@ namespace Bit.App
         private readonly IAccountsManager _accountsManager;
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IConfigService _configService;
+        private readonly ILogger _logger;
+
         private static bool _isResumed;
         // these variables are static because the app is launching new activities on notification click, creating new instances of App. 
         private static bool _pendingCheckPasswordlessLoginRequests;
@@ -155,6 +157,7 @@ namespace Bit.App
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
             _configService = ServiceContainer.Resolve<IConfigService>();
+            _logger = ServiceContainer.Resolve<ILogger>();
 
             _accountsManager.Init(() => Options, this);
 
@@ -169,7 +172,7 @@ namespace Bit.App
                         var confirmed = true;
                         var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                             AppResources.Ok : details.ConfirmText;
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
                         {
                             if (!string.IsNullOrWhiteSpace(details.CancelText))
                             {
@@ -183,20 +186,16 @@ namespace Bit.App
                             _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                         });
                     }
+#if IOS
                     else if (message.Command == AppHelpers.RESUMED_MESSAGE_COMMAND)
                     {
-                        if (DeviceInfo.Platform == DevicePlatform.iOS)
-                        {
-                            ResumedAsync().FireAndForget();
-                        }
+                        ResumedAsync().FireAndForget();
                     }
                     else if (message.Command == "slept")
                     {
-                        if (DeviceInfo.Platform == DevicePlatform.iOS)
-                        {
-                            await SleptAsync();
-                        }
+                        await SleptAsync();
                     }
+#endif
                     else if (message.Command == "migrated")
                     {
                         await Task.Delay(1000);
@@ -213,7 +212,7 @@ namespace Bit.App
                             Options.OtpData = new OtpData((string)message.Data);
                         }
 
-                        MainThread.InvokeOnMainThreadAsync(async () =>
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
                         {
                             if (MainPage is TabsPage tabsPage)
                             {
@@ -249,7 +248,7 @@ namespace Bit.App
                     }
                     else if (message.Command == "convertAccountToKeyConnector")
                     {
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
                         {
                             await MainPage.Navigation.PushModalAsync(
                                 new NavigationPage(new RemoveMasterPasswordPage()));
@@ -257,7 +256,7 @@ namespace Bit.App
                     }
                     else if (message.Command == Constants.ForceUpdatePassword)
                     {
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
                         {
                             await MainPage.Navigation.PushModalAsync(
                                 new NavigationPage(new UpdateTempPasswordPage()));
@@ -373,40 +372,52 @@ namespace Bit.App
 
         protected override async void OnStart()
         {
-            System.Diagnostics.Debug.WriteLine("XF App: OnStart");
-            _isResumed = true;
-            await ClearCacheIfNeededAsync();
-            Prime();
-            if (string.IsNullOrWhiteSpace(Options.Uri))
+            try
             {
-                var updated = await AppHelpers.PerformUpdateTasksAsync(_syncService, _deviceActionService,
-                    _stateService);
-                if (!updated)
+                System.Diagnostics.Debug.WriteLine("XF App: OnStart");
+                _isResumed = true;
+                await ClearCacheIfNeededAsync();
+                Prime();
+                if (string.IsNullOrWhiteSpace(Options.Uri))
                 {
-                    SyncIfNeeded();
+                    var updated = await AppHelpers.PerformUpdateTasksAsync(_syncService, _deviceActionService,
+                        _stateService);
+                    if (!updated)
+                    {
+                        SyncIfNeeded();
+                    }
                 }
-            }
-            if (_pendingCheckPasswordlessLoginRequests)
-            {
-                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
-            }
-            if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
+                if (_pendingCheckPasswordlessLoginRequests)
+                {
+                    _messagingService.Send(Constants.PasswordlessLoginRequestKey);
+                }
+    #if ANDROID
                 await _vaultTimeoutService.CheckVaultTimeoutAsync();
                 // Reset delay on every start
                 _vaultTimeoutService.DelayLockAndLogoutMs = null;
-            }
+    #endif
 
-            await _configService.GetAsync();
-            _messagingService.Send("startEventTimer");
+                await _configService.GetAsync();
+                _messagingService.Send("startEventTimer");
+            }
+            catch (Exception ex)
+            {
+                _logger?.Exception(ex);
+                throw;
+            }
         }
 
+#if ANDROID
         protected override async void OnSleep()
+#else
+        protected override void OnSleep()
+#endif
         {
-            System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
-            _isResumed = false;
-            if (DeviceInfo.Platform == DevicePlatform.Android)
+            try
             {
+                System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
+                _isResumed = false;
+#if ANDROID
                 var isLocked = await _vaultTimeoutService.IsLockedAsync();
                 if (!isLocked)
                 {
@@ -417,20 +428,34 @@ namespace Bit.App
                     ClearAutofillUri();
                 }
                 await SleptAsync();
+#endif
+            }
+            catch (Exception ex)
+            {
+                _logger?.Exception(ex);
+                throw;
             }
         }
 
         protected override void OnResume()
         {
-            System.Diagnostics.Debug.WriteLine("XF App: OnResume");
-            _isResumed = true;
-            if (_pendingCheckPasswordlessLoginRequests)
+            try
             {
-                _messagingService.Send(Constants.PasswordlessLoginRequestKey);
-            }
-            if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
+                System.Diagnostics.Debug.WriteLine("XF App: OnResume");
+                _isResumed = true;
+                if (_pendingCheckPasswordlessLoginRequests)
+                {
+                    _messagingService.Send(Constants.PasswordlessLoginRequestKey);
+                }
+#if ANDROID
                 ResumedAsync().FireAndForget();
+#endif
+
+            }
+            catch (Exception ex)
+            {
+                _logger?.Exception(ex);
+                throw;
             }
         }
 
@@ -517,14 +542,22 @@ namespace Bit.App
                 {
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
-                        Options.Uri = null;
-                        if (isLocked)
+                        try
                         {
-                            App.MainPage = new NavigationPage(new LockPage());
+                            Options.Uri = null;
+                            if (isLocked)
+                            {
+                                App.MainPage = new NavigationPage(new LockPage());
+                            }
+                            else
+                            {
+                                App.MainPage = new TabsPage();
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            App.MainPage = new TabsPage();
+                            LoggerHelper.LogEvenIfCantBeResolved(ex);
+                            throw;
                         }
                     });
                 });
@@ -549,7 +582,7 @@ namespace Bit.App
             ThemeManager.SetTheme(Resources);
             RequestedThemeChanged += (s, a) =>
             {
-                UpdateThemeAsync();
+                UpdateThemeAsync().FireAndForget();
             };
             _isResumed = true;
 #if IOS
@@ -568,11 +601,18 @@ namespace Bit.App
             }
             Task.Run(async () =>
             {
-                var lastSync = await _syncService.GetLastSyncAsync();
-                if (lastSync == null || ((DateTime.UtcNow - lastSync) > TimeSpan.FromMinutes(30)))
+                try
                 {
-                    await Task.Delay(1000);
-                    await _syncService.FullSyncAsync(false);
+                    var lastSync = await _syncService.GetLastSyncAsync();
+                    if (lastSync == null || ((DateTime.UtcNow - lastSync) > TimeSpan.FromMinutes(30)))
+                    {
+                        await Task.Delay(1000);
+                        await _syncService.FullSyncAsync(false);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Exception(ex);
                 }
             });
         }

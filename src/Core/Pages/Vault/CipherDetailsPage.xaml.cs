@@ -63,12 +63,12 @@ namespace Bit.App.Pages
                 {
                     if (message.Command == "syncStarted")
                     {
-                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                        MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
                     }
                     else if (message.Command == "syncCompleted")
                     {
                         await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             IsBusy = false;
                             if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
@@ -83,7 +83,7 @@ namespace Bit.App.Pages
                     }
                     else if (message.Command == "selectSaveFileResult")
                     {
-                        Device.BeginInvokeOnMainThread(() =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             var data = message.Data as Tuple<string, string>;
                             if (data == null)

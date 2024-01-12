@@ -7,6 +7,7 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Microsoft.Maui.Controls.PlatformConfiguration;
 using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
+using Bit.Core.Services;
 
 namespace Bit.App.Pages
 {
@@ -263,8 +264,16 @@ namespace Bit.App.Pages
                 {
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
-                        await Navigation.PopModalAsync();
-                        await _vm.UpdateTotpKeyAsync(key);
+                        try
+                        {
+                            await Navigation.PopModalAsync();
+                            await _vm.UpdateTotpKeyAsync(key);
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerHelper.LogEvenIfCantBeResolved(ex);
+                            throw;
+                        }
                     });
                 });
 

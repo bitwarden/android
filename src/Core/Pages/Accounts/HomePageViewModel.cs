@@ -165,7 +165,7 @@ namespace Bit.App.Pages
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                var result = await Page.DisplayActionSheet(AppResources.LoggingInOn, AppResources.Cancel, null, options);
+                var result = await _deviceActionService.Value.DisplayActionSheetAsync(AppResources.LoggingInOn, AppResources.Cancel, null, options);
 
                 if (result is null || result == AppResources.Cancel)
                 {

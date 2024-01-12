@@ -166,41 +166,52 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var authed = await _stateService.IsAuthenticatedAsync();
-            if (!authed)
-            {
-                return;
-            }
-            if (await _vaultTimeoutService.IsLockedAsync())
-            {
-                return;
-            }
-            if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
-            {
-                SyncRefreshing = true;
-                await _syncService.SyncPasswordlessLoginRequestsAsync();
-                await _syncService.FullSyncAsync(false);
-                return;
-            }
 
-            _deviceActionService.SetScreenCaptureAllowedAsync().FireAndForget();
-
-            await InitVaultFilterAsync(MainPage);
-            if (MainPage)
+            try
             {
-                PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
+                var authed = await _stateService.IsAuthenticatedAsync();
+                if (!authed)
+                {
+                    return;
+                }
+                if (await _vaultTimeoutService.IsLockedAsync())
+                {
+                    return;
+                }
+                if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
+                {
+                    SyncRefreshing = true;
+                    await _syncService.SyncPasswordlessLoginRequestsAsync();
+                    await _syncService.FullSyncAsync(false);
+                    return;
+                }
+
+                _deviceActionService.SetScreenCaptureAllowedAsync().FireAndForget();
+
+                await InitVaultFilterAsync(MainPage);
+                if (MainPage)
+                {
+                    PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
+                }
+
+                _doingLoad = true;
+                LoadedOnce = true;
+                ShowNoData = false;
+                Loading = true;
+                ShowList = false;
+                ShowAddCipherButton = !Deleted;
+
+                _websiteIconsEnabled = await _stateService.GetDisableFaviconAsync() != true;
             }
-            _doingLoad = true;
-            LoadedOnce = true;
-            ShowNoData = false;
-            Loading = true;
-            ShowList = false;
-            ShowAddCipherButton = !Deleted;
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                throw;
+            }
 
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
 
-            _websiteIconsEnabled = await _stateService.GetDisableFaviconAsync() != true;
             try
             {
                 await LoadDataAsync();
@@ -307,11 +318,6 @@ namespace Bit.App.Pages
 
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-#if IOS
-                        // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                        // because of update to XF v5.0.0.2401
-                        GroupedItems.Clear();
-#endif
                         GroupedItems.ReplaceRange(items);
                     });
                 }
@@ -335,22 +341,21 @@ namespace Bit.App.Pages
 
                     await MainThread.InvokeOnMainThreadAsync(() =>
                     {
-                        if (groupedItems.Any())
-                        {
-#if IOS
-                            // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                            // because of update to XF v5.0.0.2401
-                            GroupedItems.Clear();
-#endif
-                            GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
-                            GroupedItems.AddRange(items);
-                        }
-                        else
+                        if (!groupedItems.Any())
                         {
                             GroupedItems.Clear();
+                            return;
                         }
+
+                        GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
+                        GroupedItems.AddRange(items);
                     });
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                throw;
             }
             finally
             {

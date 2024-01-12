@@ -100,13 +100,13 @@
     <BundleResource Include="Resources\yubikey.png" />
     <BundleResource Include="Resources\yubikey%403x.png" />
     <BundleResource Include="Resources\yubikey%402x.png" />
-    <BundleResource Include="..\iOS\Resources\more_vert.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert.png">
       <Link>Resources\more_vert.png</Link>
     </BundleResource>
-    <BundleResource Include="..\iOS\Resources\more_vert%402x.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert%402x.png">
       <Link>Resources\more_vert%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\iOS\Resources\more_vert%403x.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert%403x.png">
       <Link>Resources\more_vert%403x.png</Link>
     </BundleResource>
   </ItemGroup>

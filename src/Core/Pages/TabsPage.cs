@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using Bit.Core.Services;
 
 namespace Bit.App.Pages
 {
@@ -87,21 +88,29 @@ namespace Bit.App.Pages
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(TabsPage), async (message) =>
+            try
             {
-                if (message.Command == "syncCompleted")
+                base.OnAppearing();
+                _broadcasterService.Subscribe(nameof(TabsPage), async (message) =>
                 {
-                    MainThread.BeginInvokeOnMainThread(async () => await UpdateVaultButtonTitleAsync());
+                    if (message.Command == "syncCompleted")
+                    {
+                        MainThread.BeginInvokeOnMainThread(async () => await UpdateVaultButtonTitleAsync());
+                    }
+                });
+                await UpdateVaultButtonTitleAsync();
+                if (await _keyConnectorService.UserNeedsMigrationAsync())
+                {
+                    _messagingService.Send("convertAccountToKeyConnector");
                 }
-            });
-            await UpdateVaultButtonTitleAsync();
-            if (await _keyConnectorService.UserNeedsMigrationAsync())
-            {
-                _messagingService.Send("convertAccountToKeyConnector");
-            }
 
-            await ForcePasswordResetIfNeededAsync();
+                await ForcePasswordResetIfNeededAsync();
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
+            }
         }
 
         private async Task ForcePasswordResetIfNeededAsync()
@@ -174,22 +183,30 @@ namespace Bit.App.Pages
 
         protected override async void OnCurrentPageChanged()
         {
-            if (CurrentPage is NavigationPage navPage)
+            try
             {
-                if (_groupingsPage?.RootPage is GroupingsPage groupingsPage)
+                if (CurrentPage is NavigationPage navPage)
                 {
-                    await groupingsPage.HideAccountSwitchingOverlayAsync();
-                }
+                    if (_groupingsPage?.RootPage is GroupingsPage groupingsPage)
+                    {
+                        await groupingsPage.HideAccountSwitchingOverlayAsync();
+                    }
 
-                _messagingService.Send(ThemeManager.UPDATED_THEME_MESSAGE_KEY);
-                if (navPage.RootPage is GroupingsPage)
-                {
-                    // Load something?
+                    _messagingService.Send(ThemeManager.UPDATED_THEME_MESSAGE_KEY);
+                    if (navPage.RootPage is GroupingsPage)
+                    {
+                        // Load something?
+                    }
+                    else if (navPage.RootPage is GeneratorPage genPage)
+                    {
+                        await genPage.InitAsync();
+                    }
                 }
-                else if (navPage.RootPage is GeneratorPage genPage)
-                {
-                    await genPage.InitAsync();
-                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
             }
         }
 
