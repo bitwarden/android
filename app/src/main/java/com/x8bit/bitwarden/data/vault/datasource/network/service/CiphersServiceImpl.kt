@@ -34,4 +34,7 @@ class CiphersServiceImpl constructor(
                     )
                     ?: throw throwable
             }
+
+    override suspend fun deleteCipher(cipherId: String): Result<Unit> =
+        ciphersApi.deleteCipher(cipherId = cipherId)
 }

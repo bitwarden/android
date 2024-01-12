@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.api
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -26,4 +27,12 @@ interface CiphersApi {
         @Path("cipherId") cipherId: String,
         @Body body: CipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Deletes a cipher.
+     */
+    @DELETE("ciphers/{cipherId}")
+    suspend fun deleteCipher(
+        @Path("cipherId") cipherId: String,
+    ): Result<Unit>
 }

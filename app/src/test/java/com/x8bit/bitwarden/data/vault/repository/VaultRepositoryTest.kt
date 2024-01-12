@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
@@ -1388,6 +1389,36 @@ class VaultRepositoryTest {
             )
 
             assertEquals(UpdateCipherResult.Success, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deleteCipher with ciphersService deleteCipher failure should return DeleteCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherId = "mockId-1"
+            coEvery {
+                ciphersService.deleteCipher(cipherId = cipherId)
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.deleteCipher(cipherId)
+
+            assertEquals(DeleteCipherResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deleteCipher with ciphersService deleteCipher success should return DeleteCipherResult success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            coEvery { ciphersService.deleteCipher(cipherId = cipherId) } returns Unit.asSuccess()
+            coEvery { vaultDiskSource.deleteCipher(userId, cipherId) } just runs
+
+            val result = vaultRepository.deleteCipher(cipherId)
+
+            assertEquals(DeleteCipherResult.Success, result)
         }
 
     @Test

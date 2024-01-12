@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
@@ -132,6 +133,11 @@ interface VaultRepository : VaultLockManager {
      * Attempt to create a cipher.
      */
     suspend fun createCipher(cipherView: CipherView): CreateCipherResult
+
+    /**
+     * Attempt to delete a cipher.
+     */
+    suspend fun deleteCipher(cipherId: String): DeleteCipherResult
 
     /**
      * Attempt to update a cipher.
