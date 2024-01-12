@@ -6,6 +6,7 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -24,9 +25,12 @@ import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -45,6 +49,9 @@ class AddSendViewModelTest : BaseViewModelTest() {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(any<String>()) } just runs
+    }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
@@ -269,15 +276,28 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CopyLinkClick should send ShowToast`() = runTest {
+    fun `CopyLinkClick with nonnull sendUrl should copy to clipboard`() {
+        val sendUrl = "www.test.com/send-stuff"
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(sendUrl = sendUrl),
+        )
+        val mockSendView = createMockSendView(number = 1)
+        every {
+            mockSendView.toViewState(clock = clock, baseWebSendUrl = DEFAULT_ENVIRONMENT_URL)
+        } returns viewState
+        mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
+            state = DEFAULT_STATE.copy(
+                addSendType = AddSendType.EditItem("sendId"),
+                viewState = viewState,
+            ),
             addSendType = AddSendType.EditItem("sendId"),
         )
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.CopyLinkClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        viewModel.trySendAction(AddSendAction.CopyLinkClick)
+
+        verify(exactly = 1) {
+            clipboardManager.setText(sendUrl)
         }
     }
 
@@ -460,15 +480,27 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ShareLinkClick should send ShowToast`() = runTest {
+    fun `ShareLinkClick with nonnull sendUrl should launch share sheet`() = runTest {
+        val sendUrl = "www.test.com/send-stuff"
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(sendUrl = sendUrl),
+        )
+        val mockSendView = createMockSendView(number = 1)
+        every {
+            mockSendView.toViewState(clock = clock, baseWebSendUrl = DEFAULT_ENVIRONMENT_URL)
+        } returns viewState
+        mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
+            state = DEFAULT_STATE.copy(
+                addSendType = AddSendType.EditItem("sendId"),
+                viewState = viewState,
+            ),
             addSendType = AddSendType.EditItem("sendId"),
         )
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.ShareLinkClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(AddSendEvent.ShowShareSheet(sendUrl), awaitItem())
         }
     }
 
@@ -738,6 +770,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         authRepo = authRepository,
         environmentRepo = environmentRepository,
         clock = clock,
+        clipboardManager = clipboardManager,
         vaultRepo = vaultRepository,
     )
 
