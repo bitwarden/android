@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswo
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -191,6 +192,16 @@ class GeneratorRepositoryImpl(
     override fun savePasscodeGenerationOptions(options: PasscodeGenerationOptions) {
         val userId = authDiskSource.userState?.activeUserId
         userId?.let { generatorDiskSource.storePasscodeGenerationOptions(it, options) }
+    }
+
+    override fun getUsernameGenerationOptions(): UsernameGenerationOptions? {
+        val userId = authDiskSource.userState?.activeUserId
+        return userId?.let { generatorDiskSource.getUsernameGenerationOptions(it) }
+    }
+
+    override fun saveUsernameGenerationOptions(options: UsernameGenerationOptions) {
+        val userId = authDiskSource.userState?.activeUserId
+        userId?.let { generatorDiskSource.storeUsernameGenerationOptions(it, options) }
     }
 
     override suspend fun storePasswordHistory(passwordHistoryView: PasswordHistoryView) {

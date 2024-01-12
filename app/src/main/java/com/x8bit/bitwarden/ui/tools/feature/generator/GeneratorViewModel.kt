@@ -20,9 +20,11 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswo
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password
@@ -140,7 +142,7 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult -> {
-                handleUpdateForwadedServiceGeneratedUsernameResult(action)
+                handleUpdateForwardedServiceGeneratedUsernameResult(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameTypeOptionSelect -> {
@@ -233,21 +235,48 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private fun loadUsernameOptions(selectedType: Username) {
-        val updatedSelectedType = when (selectedType.selectedType) {
-            is PlusAddressedEmail -> Username(
-                selectedType = PlusAddressedEmail(
-                    // For convenience the default is an empty email value. We can supply the
-                    // dynamic value here before updating the state.
-                    email = state.currentEmailAddress,
-                ),
-            )
+        val options = generatorRepository.getUsernameGenerationOptions()
+        val updatedSelectedType = when (val type = selectedType.selectedType) {
+            is PlusAddressedEmail -> {
+                val emailToUse = options
+                    ?.plusAddressedEmail
+                    ?.orNullIfBlank()
+                    ?: state.currentEmailAddress
 
-            else -> selectedType
+                Username(selectedType = PlusAddressedEmail(email = emailToUse))
+            }
+
+            is CatchAllEmail -> {
+                val catchAllEmail = CatchAllEmail(
+                    domainName = options?.catchAllEmailDomain ?: type.domainName,
+                )
+                Username(selectedType = catchAllEmail)
+            }
+
+            is RandomWord -> {
+                val randomWord = RandomWord(
+                    capitalize = options?.capitalizeRandomWordUsername ?: type.capitalize,
+                    includeNumber = options?.includeNumberRandomWordUsername ?: type.includeNumber,
+                )
+                Username(selectedType = randomWord)
+            }
+
+            is ForwardedEmailAlias -> {
+                val mappedServiceType = options
+                    ?.serviceType
+                    ?.toServiceType(options)
+                    ?: type.selectedServiceType
+
+                Username(
+                    selectedType = ForwardedEmailAlias(
+                        selectedServiceType = mappedServiceType,
+                        obfuscatedText = "",
+                    ),
+                )
+            }
         }
 
-        mutableStateFlow.update {
-            it.copy(selectedType = updatedSelectedType)
-        }
+        mutableStateFlow.update { it.copy(selectedType = updatedSelectedType) }
     }
 
     private fun savePasswordOptionsToDisk(password: Password) {
@@ -278,6 +307,82 @@ class GeneratorViewModel @Inject constructor(
         generatorRepository.savePasscodeGenerationOptions(newOptions)
     }
 
+    private fun savePlusAddressedEmailOptionsToDisk(plusAddressedEmail: PlusAddressedEmail) {
+        val options = generatorRepository.getUsernameGenerationOptions()
+            ?: generateUsernameDefaultOptions()
+        val newOptions = options.copy(
+            type = UsernameGenerationOptions.UsernameType.PLUS_ADDRESSED_EMAIL,
+            plusAddressedEmail = plusAddressedEmail.email,
+        )
+
+        generatorRepository.saveUsernameGenerationOptions(newOptions)
+    }
+
+    private fun saveCatchAllEmailOptionsToDisk(catchAllEmail: CatchAllEmail) {
+        val options = generatorRepository
+            .getUsernameGenerationOptions() ?: generateUsernameDefaultOptions()
+        val newOptions = options.copy(
+            type = UsernameGenerationOptions.UsernameType.CATCH_ALL_EMAIL,
+            catchAllEmailDomain = catchAllEmail.domainName,
+        )
+        generatorRepository.saveUsernameGenerationOptions(newOptions)
+    }
+
+    private fun saveRandomWordOptionsToDisk(randomWord: RandomWord) {
+        val options = generatorRepository
+            .getUsernameGenerationOptions() ?: generateUsernameDefaultOptions()
+        val newOptions = options.copy(
+            type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+            capitalizeRandomWordUsername = randomWord.capitalize,
+            includeNumberRandomWordUsername = randomWord.includeNumber,
+        )
+        generatorRepository.saveUsernameGenerationOptions(newOptions)
+    }
+
+    private fun saveForwardedEmailAliasServiceTypeToDisk(forwardedEmailAlias: ForwardedEmailAlias) {
+        val options =
+            generatorRepository.getUsernameGenerationOptions() ?: generateUsernameDefaultOptions()
+        val newOptions = when (forwardedEmailAlias.selectedServiceType) {
+            is AddyIo -> options.copy(
+                type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.ANON_ADDY,
+                anonAddyApiAccessToken = forwardedEmailAlias.selectedServiceType.apiAccessToken,
+                anonAddyDomainName = forwardedEmailAlias.selectedServiceType.domainName,
+            )
+
+            is DuckDuckGo -> options.copy(
+                type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.DUCK_DUCK_GO,
+                duckDuckGoApiKey = forwardedEmailAlias.selectedServiceType.apiKey,
+            )
+
+            is FastMail -> options.copy(
+                type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.FASTMAIL,
+                fastMailApiKey = forwardedEmailAlias.selectedServiceType.apiKey,
+            )
+
+            is FirefoxRelay -> options.copy(
+                type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.FIREFOX_RELAY,
+                firefoxRelayApiAccessToken = forwardedEmailAlias.selectedServiceType.apiAccessToken,
+            )
+
+            is SimpleLogin -> options.copy(
+                type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.SIMPLE_LOGIN,
+                simpleLoginApiKey = forwardedEmailAlias.selectedServiceType.apiKey,
+            )
+
+            else -> options.copy(
+                type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+            )
+        }
+
+        generatorRepository.saveUsernameGenerationOptions(newOptions)
+    }
+
     private fun generatePasscodeDefaultOptions(): PasscodeGenerationOptions {
         val defaultPassword = Password()
         val defaultPassphrase = Passphrase()
@@ -295,6 +400,26 @@ class GeneratorViewModel @Inject constructor(
             allowIncludeNumber = defaultPassphrase.includeNumber,
             wordSeparator = defaultPassphrase.wordSeparator.toString(),
             numWords = defaultPassphrase.numWords,
+        )
+    }
+
+    private fun generateUsernameDefaultOptions(): UsernameGenerationOptions {
+        return UsernameGenerationOptions(
+            type = UsernameGenerationOptions.UsernameType.PLUS_ADDRESSED_EMAIL,
+            serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+            capitalizeRandomWordUsername = false,
+            includeNumberRandomWordUsername = false,
+            plusAddressedEmail = "",
+            catchAllEmailDomain = "",
+            firefoxRelayApiAccessToken = "",
+            simpleLoginApiKey = "",
+            duckDuckGoApiKey = "",
+            fastMailApiKey = "",
+            anonAddyApiAccessToken = "",
+            anonAddyDomainName = "",
+            forwardEmailApiAccessToken = "",
+            forwardEmailDomainName = "",
+            emailWebsite = "",
         )
     }
 
@@ -423,7 +548,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun handleUpdateForwadedServiceGeneratedUsernameResult(
+    private fun handleUpdateForwardedServiceGeneratedUsernameResult(
         action: GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult,
     ) {
         when (val result = action.result) {
@@ -702,25 +827,48 @@ class GeneratorViewModel @Inject constructor(
         .ForwardedEmailAlias
         .ServiceTypeOptionSelect,
     ) {
+        val options = generatorRepository.getUsernameGenerationOptions()
+            ?: generateUsernameDefaultOptions()
         when (action.serviceTypeOption) {
             ForwardedEmailAlias.ServiceTypeOption.ADDY_IO -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = AddyIo())
+                ForwardedEmailAlias(
+                    selectedServiceType = AddyIo(
+                        apiAccessToken = options.anonAddyApiAccessToken.orEmpty(),
+                        domainName = options.anonAddyDomainName.orEmpty(),
+                    ),
+                )
             }
 
             ForwardedEmailAlias.ServiceTypeOption.DUCK_DUCK_GO -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = DuckDuckGo())
+                ForwardedEmailAlias(
+                    selectedServiceType = DuckDuckGo(
+                        apiKey = options.duckDuckGoApiKey.orEmpty(),
+                    ),
+                )
             }
 
             ForwardedEmailAlias.ServiceTypeOption.FAST_MAIL -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = FastMail())
+                ForwardedEmailAlias(
+                    selectedServiceType = FastMail(
+                        apiKey = options.fastMailApiKey.orEmpty(),
+                    ),
+                )
             }
 
             ForwardedEmailAlias.ServiceTypeOption.FIREFOX_RELAY -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = FirefoxRelay())
+                ForwardedEmailAlias(
+                    selectedServiceType = FirefoxRelay(
+                        apiAccessToken = options.firefoxRelayApiAccessToken.orEmpty(),
+                    ),
+                )
             }
 
             ForwardedEmailAlias.ServiceTypeOption.SIMPLE_LOGIN -> updateForwardedEmailAliasType {
-                ForwardedEmailAlias(selectedServiceType = SimpleLogin())
+                ForwardedEmailAlias(
+                    selectedServiceType = SimpleLogin(
+                        apiKey = options.simpleLoginApiKey.orEmpty(),
+                    ),
+                )
             }
         }
     }
@@ -962,24 +1110,28 @@ class GeneratorViewModel @Inject constructor(
 
                 is Username -> when (val selectedType = updatedMainType.selectedType) {
                     is ForwardedEmailAlias -> {
+                        saveForwardedEmailAliasServiceTypeToDisk(selectedType)
                         if (isManualRegeneration) {
                             generateForwardedEmailAlias(selectedType)
                         }
                     }
 
                     is CatchAllEmail -> {
+                        saveCatchAllEmailOptionsToDisk(selectedType)
                         if (isManualRegeneration) {
                             generateCatchAllEmail(selectedType)
                         }
                     }
 
                     is PlusAddressedEmail -> {
+                        savePlusAddressedEmailOptionsToDisk(selectedType)
                         if (isManualRegeneration) {
                             generatePlusAddressedEmail(selectedType)
                         }
                     }
 
                     is RandomWord -> {
+                        saveRandomWordOptionsToDisk(selectedType)
                         if (isManualRegeneration) {
                             generateRandomWordUsername(selectedType)
                         }
@@ -1024,6 +1176,7 @@ class GeneratorViewModel @Inject constructor(
         )
         sendAction(GeneratorAction.Internal.UpdateGeneratedRandomWordUsernameResult(result))
     }
+
     private inline fun updateGeneratorMainTypePasscode(
         crossinline block: (Passcode) -> Passcode,
     ) {
@@ -2050,3 +2203,34 @@ private fun Password.enforceAtLeastOneToggleOn(): Password =
     } else {
         this
     }
+
+private fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
+    options: UsernameGenerationOptions,
+): ForwardedEmailAlias.ServiceType? {
+    return when (this) {
+        UsernameGenerationOptions.ForwardedEmailServiceType.FIREFOX_RELAY -> {
+            FirefoxRelay(apiAccessToken = options.firefoxRelayApiAccessToken.orEmpty())
+        }
+
+        UsernameGenerationOptions.ForwardedEmailServiceType.SIMPLE_LOGIN -> {
+            SimpleLogin(apiKey = options.simpleLoginApiKey.orEmpty())
+        }
+
+        UsernameGenerationOptions.ForwardedEmailServiceType.DUCK_DUCK_GO -> {
+            DuckDuckGo(apiKey = options.duckDuckGoApiKey.orEmpty())
+        }
+
+        UsernameGenerationOptions.ForwardedEmailServiceType.FASTMAIL -> {
+            FastMail(apiKey = options.fastMailApiKey.orEmpty())
+        }
+
+        UsernameGenerationOptions.ForwardedEmailServiceType.ANON_ADDY -> {
+            AddyIo(
+                apiAccessToken = options.anonAddyApiAccessToken.orEmpty(),
+                domainName = options.anonAddyDomainName.orEmpty(),
+            )
+        }
+
+        else -> null
+    }
+}

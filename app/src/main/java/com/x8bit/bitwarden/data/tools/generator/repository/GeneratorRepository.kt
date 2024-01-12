@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.data.tools.generator.repository
 
 import com.bitwarden.core.PassphraseGeneratorRequest
@@ -12,6 +14,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswo
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -78,6 +81,16 @@ interface GeneratorRepository {
      * Save the [PasscodeGenerationOptions] for the current user.
      */
     fun savePasscodeGenerationOptions(options: PasscodeGenerationOptions)
+
+    /**
+     * Get the [UsernameGenerationOptions] for the current user.
+     */
+    fun getUsernameGenerationOptions(): UsernameGenerationOptions?
+
+    /**
+     * Save the [UsernameGenerationOptions] for the current user.
+     */
+    fun saveUsernameGenerationOptions(options: UsernameGenerationOptions)
 
     /**
      * Store a password history item for the current user.

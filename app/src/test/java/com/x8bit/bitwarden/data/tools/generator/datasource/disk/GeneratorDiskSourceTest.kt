@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -84,6 +85,74 @@ class GeneratorDiskSourceTest {
         val key = "bwPreferencesStorage_passwordGenerationOptions_$userId"
 
         generatorDiskSource.storePasscodeGenerationOptions(userId, options)
+
+        val storedValue = fakeSharedPreferences.getString(key, null)
+        assertNotNull(storedValue)
+        assertEquals(json.encodeToString(options), storedValue)
+    }
+
+    @Test
+    fun `getUsernameGenerationOptions should return correct options when available`() {
+        val userId = "user123"
+        val options = UsernameGenerationOptions(
+            type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+            serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+            capitalizeRandomWordUsername = true,
+            includeNumberRandomWordUsername = false,
+            plusAddressedEmail = "example+plus@gmail.com",
+            catchAllEmailDomain = "example.com",
+            firefoxRelayApiAccessToken = "access_token_firefox_relay",
+            simpleLoginApiKey = "api_key_simple_login",
+            duckDuckGoApiKey = "api_key_duck_duck_go",
+            fastMailApiKey = "api_key_fast_mail",
+            anonAddyApiAccessToken = "access_token_anon_addy",
+            anonAddyDomainName = "anonaddy.com",
+            forwardEmailApiAccessToken = "access_token_forward_email",
+            forwardEmailDomainName = "forwardemail.net",
+            emailWebsite = "email.example.com",
+        )
+
+        val key = "bwPreferencesStorage_usernameGenerationOptions_$userId"
+        fakeSharedPreferences.edit().putString(key, json.encodeToString(options)).apply()
+
+        val result = generatorDiskSource.getUsernameGenerationOptions(userId)
+
+        assertEquals(options, result)
+    }
+
+    @Test
+    fun `getUsernameGenerationOptions should return null when options are not available`() {
+        val userId = "user123"
+
+        val result = generatorDiskSource.getUsernameGenerationOptions(userId)
+
+        assertNull(result)
+    }
+
+    @Test
+    fun `storeUsernameGenerationOptions should correctly store options`() {
+        val userId = "user123"
+        val options = UsernameGenerationOptions(
+            type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+            serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+            capitalizeRandomWordUsername = true,
+            includeNumberRandomWordUsername = false,
+            plusAddressedEmail = "example+plus@gmail.com",
+            catchAllEmailDomain = "example.com",
+            firefoxRelayApiAccessToken = "access_token_firefox_relay",
+            simpleLoginApiKey = "api_key_simple_login",
+            duckDuckGoApiKey = "api_key_duck_duck_go",
+            fastMailApiKey = "api_key_fast_mail",
+            anonAddyApiAccessToken = "access_token_anon_addy",
+            anonAddyDomainName = "anonaddy.com",
+            forwardEmailApiAccessToken = "access_token_forward_email",
+            forwardEmailDomainName = "forwardemail.net",
+            emailWebsite = "email.example.com",
+        )
+
+        val key = "bwPreferencesStorage_usernameGenerationOptions_$userId"
+
+        generatorDiskSource.storeUsernameGenerationOptions(userId, options)
 
         val storedValue = fakeSharedPreferences.getString(key, null)
         assertNotNull(storedValue)

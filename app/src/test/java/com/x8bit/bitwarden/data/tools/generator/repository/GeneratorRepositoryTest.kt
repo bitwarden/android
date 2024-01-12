@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswo
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -50,6 +51,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
+@Suppress("LargeClass")
 class GeneratorRepositoryTest {
 
     private val mutableUserStateFlow = MutableStateFlow<UserStateJson?>(null)
@@ -641,6 +643,119 @@ class GeneratorRepositoryTest {
 
             coVerify(exactly = 0) {
                 generatorDiskSource.storePasscodeGenerationOptions(any(), any())
+            }
+        }
+
+    @Test
+    fun `getUsernameGenerationOptions should return options when available`() = runTest {
+        val userId = "activeUserId"
+        val expectedOptions = UsernameGenerationOptions(
+            type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+            serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+            capitalizeRandomWordUsername = true,
+            includeNumberRandomWordUsername = false,
+            plusAddressedEmail = "example+plus@gmail.com",
+            catchAllEmailDomain = "example.com",
+            firefoxRelayApiAccessToken = "access_token_firefox_relay",
+            simpleLoginApiKey = "api_key_simple_login",
+            duckDuckGoApiKey = "api_key_duck_duck_go",
+            fastMailApiKey = "api_key_fast_mail",
+            anonAddyApiAccessToken = "access_token_anon_addy",
+            anonAddyDomainName = "anonaddy.com",
+            forwardEmailApiAccessToken = "access_token_forward_email",
+            forwardEmailDomainName = "forwardemail.net",
+            emailWebsite = "email.example.com",
+        )
+
+        coEvery { authDiskSource.userState } returns USER_STATE
+        coEvery { generatorDiskSource.getUsernameGenerationOptions(userId) } returns expectedOptions
+
+        val result = repository.getUsernameGenerationOptions()
+
+        assertEquals(expectedOptions, result)
+        coVerify { generatorDiskSource.getUsernameGenerationOptions(userId) }
+    }
+
+    @Test
+    fun `getUsernameGenerationOptions should return null when there is no active user`() = runTest {
+        coEvery { authDiskSource.userState } returns null
+
+        val result = repository.getUsernameGenerationOptions()
+
+        assertNull(result)
+        coVerify(exactly = 0) { generatorDiskSource.getUsernameGenerationOptions(any()) }
+    }
+
+    @Test
+    fun `getUsernameGenerationOptions should return null when no data is stored for active user`() =
+        runTest {
+            val userId = "activeUserId"
+            coEvery { authDiskSource.userState } returns USER_STATE
+            coEvery { generatorDiskSource.getUsernameGenerationOptions(userId) } returns null
+
+            val result = repository.getUsernameGenerationOptions()
+
+            assertNull(result)
+            coVerify { generatorDiskSource.getUsernameGenerationOptions(userId) }
+        }
+
+    @Test
+    fun `saveUsernameGenerationOptions should store options correctly`() = runTest {
+        val userId = "activeUserId"
+        val optionsToSave = UsernameGenerationOptions(
+            type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+            serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+            capitalizeRandomWordUsername = true,
+            includeNumberRandomWordUsername = false,
+            plusAddressedEmail = "example+plus@gmail.com",
+            catchAllEmailDomain = "example.com",
+            firefoxRelayApiAccessToken = "access_token_firefox_relay",
+            simpleLoginApiKey = "api_key_simple_login",
+            duckDuckGoApiKey = "api_key_duck_duck_go",
+            fastMailApiKey = "api_key_fast_mail",
+            anonAddyApiAccessToken = "access_token_anon_addy",
+            anonAddyDomainName = "anonaddy.com",
+            forwardEmailApiAccessToken = "access_token_forward_email",
+            forwardEmailDomainName = "forwardemail.net",
+            emailWebsite = "email.example.com",
+        )
+
+        coEvery { authDiskSource.userState } returns USER_STATE
+        coEvery {
+            generatorDiskSource.storeUsernameGenerationOptions(userId, optionsToSave)
+        } just runs
+
+        repository.saveUsernameGenerationOptions(optionsToSave)
+
+        coVerify { generatorDiskSource.storeUsernameGenerationOptions(userId, optionsToSave) }
+    }
+
+    @Test
+    fun `saveUsernameGenerationOptions should not store options when there is no active user`() =
+        runTest {
+            val optionsToSave = UsernameGenerationOptions(
+                type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+                capitalizeRandomWordUsername = true,
+                includeNumberRandomWordUsername = false,
+                plusAddressedEmail = "example+plus@gmail.com",
+                catchAllEmailDomain = "example.com",
+                firefoxRelayApiAccessToken = "access_token_firefox_relay",
+                simpleLoginApiKey = "api_key_simple_login",
+                duckDuckGoApiKey = "api_key_duck_duck_go",
+                fastMailApiKey = "api_key_fast_mail",
+                anonAddyApiAccessToken = "access_token_anon_addy",
+                anonAddyDomainName = "anonaddy.com",
+                forwardEmailApiAccessToken = "access_token_forward_email",
+                forwardEmailDomainName = "forwardemail.net",
+                emailWebsite = "email.example.com",
+            )
+            coEvery { authDiskSource.userState } returns null
+
+            repository.saveUsernameGenerationOptions(optionsToSave)
+
+            coVerify(exactly = 0) {
+                generatorDiskSource.storeUsernameGenerationOptions(any(), any())
             }
         }
 
