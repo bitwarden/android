@@ -42,6 +42,8 @@ data class UserState(
      * @property avatarColorHex Hex color value for a user's avatar in the "#AARRGGBB" format.
      * @property environment The [Environment] associated with the user's account.
      * @property isPremium `true` if the account has a premium membership.
+     * @property isLoggedIn `true` if the account is logged in, or `false` if it requires additional
+     * authentication to view their vault.
      * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
      * @property organizations List of [Organization]s the user is associated with, if any.
      */
@@ -52,6 +54,7 @@ data class UserState(
         val avatarColorHex: String,
         val environment: Environment,
         val isPremium: Boolean,
+        val isLoggedIn: Boolean,
         val isVaultUnlocked: Boolean,
         val organizations: List<Organization>,
     )

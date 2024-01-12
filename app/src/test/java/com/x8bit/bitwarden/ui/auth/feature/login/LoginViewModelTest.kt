@@ -121,6 +121,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     avatarColorHex = "avatarColorHex",
                     environment = Environment.Us,
                     isPremium = true,
+                    isLoggedIn = true,
                     isVaultUnlocked = true,
                     organizations = emptyList(),
                 ),

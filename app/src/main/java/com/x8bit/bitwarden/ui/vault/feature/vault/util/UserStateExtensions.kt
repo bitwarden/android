@@ -39,6 +39,7 @@ fun UserState.Account.toAccountSummary(
         avatarColorHex = this.avatarColorHex,
         environmentLabel = this.environment.label,
         isActive = isActive,
+        isLoggedIn = this.isLoggedIn,
         isVaultUnlocked = this.isVaultUnlocked,
     )
 

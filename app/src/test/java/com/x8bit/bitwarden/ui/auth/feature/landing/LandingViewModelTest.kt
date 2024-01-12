@@ -69,6 +69,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     avatarColorHex = "avatarColorHex",
                     environment = Environment.Us,
                     isPremium = true,
+                    isLoggedIn = true,
                     isVaultUnlocked = true,
                     organizations = emptyList(),
                 ),
@@ -189,7 +190,7 @@ class LandingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueButtonClick with an email input matching an existing account should show the account already added dialog`() {
+    fun `ContinueButtonClick with an email input matching an existing account that is logged in should show the account already added dialog`() {
         val rememberedEmail = "active@bitwarden.com"
         val activeAccount = UserState.Account(
             userId = "activeUserId",
@@ -198,6 +199,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             avatarColorHex = "avatarColorHex",
             environment = Environment.Us,
             isPremium = true,
+            isLoggedIn = true,
             isVaultUnlocked = true,
             organizations = emptyList(),
         )
@@ -233,6 +235,55 @@ class LandingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick with an email input matching an existing account that is logged out should emit NavigateToLogin`() =
+        runTest {
+            val rememberedEmail = "active@bitwarden.com"
+            val activeAccount = UserState.Account(
+                userId = "activeUserId",
+                name = "name",
+                email = rememberedEmail,
+                avatarColorHex = "avatarColorHex",
+                environment = Environment.Us,
+                isPremium = true,
+                isLoggedIn = false,
+                isVaultUnlocked = true,
+                organizations = emptyList(),
+            )
+            val userState = UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(activeAccount),
+            )
+            val viewModel = createViewModel(
+                rememberedEmail = rememberedEmail,
+                userState = userState,
+            )
+            val accountSummaries = userState.toAccountSummaries()
+            val initialState = DEFAULT_STATE.copy(
+                emailInput = rememberedEmail,
+                isContinueButtonEnabled = true,
+                isRememberMeEnabled = true,
+                accountSummaries = accountSummaries,
+            )
+            assertEquals(
+                initialState,
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
+                assertEquals(
+                    LandingEvent.NavigateToLogin(rememberedEmail),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState,
+                    viewModel.stateFlow.value,
+                )
+            }
+        }
 
     @Test
     fun `CreateAccountClick should emit NavigateToCreateAccount`() = runTest {

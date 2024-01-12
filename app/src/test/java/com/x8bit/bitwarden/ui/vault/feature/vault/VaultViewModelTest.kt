@@ -130,6 +130,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         avatarColorHex = "#00aaaa",
                         environment = Environment.Us,
                         isPremium = true,
+                        isLoggedIn = true,
                         isVaultUnlocked = true,
                         organizations = listOf(
                             Organization(
@@ -154,6 +155,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         avatarColorHex = "#00aaaa",
                         environmentLabel = "bitwarden.com",
                         isActive = true,
+                        isLoggedIn = true,
                         isVaultUnlocked = true,
                     ),
                 ),
@@ -1030,6 +1032,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#aa00aa",
             environment = Environment.Us,
             isPremium = true,
+            isLoggedIn = true,
             isVaultUnlocked = true,
             organizations = emptyList(),
         ),
@@ -1040,6 +1043,7 @@ private val DEFAULT_USER_STATE = UserState(
             avatarColorHex = "#00aaaa",
             environment = Environment.Us,
             isPremium = false,
+            isLoggedIn = true,
             isVaultUnlocked = false,
             organizations = emptyList(),
         ),
@@ -1062,6 +1066,7 @@ private fun createMockVaultState(
                 avatarColorHex = "#aa00aa",
                 environmentLabel = "bitwarden.com",
                 isActive = true,
+                isLoggedIn = true,
                 isVaultUnlocked = true,
             ),
             AccountSummary(
@@ -1071,6 +1076,7 @@ private fun createMockVaultState(
                 avatarColorHex = "#00aaaa",
                 environmentLabel = "bitwarden.com",
                 isActive = false,
+                isLoggedIn = true,
                 isVaultUnlocked = false,
             ),
         ),

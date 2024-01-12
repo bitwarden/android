@@ -795,6 +795,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     avatarColorHex = "#ff00ff",
                     environment = Environment.Us,
                     isPremium = true,
+                    isLoggedIn = true,
                     isVaultUnlocked = true,
                     organizations = emptyList(),
                 ),

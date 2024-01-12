@@ -41,7 +41,10 @@ class RootNavViewModel @Inject constructor(
     ) {
         val userState = action.userState
         val updatedRootNavState = when {
-            userState == null || userState.hasPendingAccountAddition -> RootNavState.Auth
+            userState == null ||
+                !userState.activeAccount.isLoggedIn ||
+                userState.hasPendingAccountAddition -> RootNavState.Auth
+
             userState.activeAccount.isVaultUnlocked -> {
                 RootNavState.VaultUnlocked(
                     activeUserId = userState.activeAccount.userId,
