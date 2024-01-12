@@ -878,17 +878,17 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Todennusmenetelmän avain (TOTP)</value>
+    <value>Todennusavain (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Todennuskoodi (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Todennusmenetelmän avain lisätty.</value>
+    <value>Todennusavain on lisätty.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Todennusavaimen luku epäonnistui.</value>
+    <value>Todennusavaimen lukeminen ei onnistu.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
     <value>Kohdista kamera QR-koodiin.
@@ -907,7 +907,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Kopioi TOTP-todennuskoodi</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Jos kirjautumistieto sisältää kaksivaiheisen TOTP-todennusavaimen, kopioidaan todennuskoodi automaattisesti leikepöydälle automaattisen täytön yhteydessä.</value>
+    <value>Jos kirjautumistieto sisältää kaksivaiheisen todennuksen avaimen, kopioidaan TOTP-todennuskoodi leikepöydälle kohteen automaattisen täytön yhteydessä.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTP-koodin kopiointi</value>
@@ -1853,7 +1853,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Jos käytössä, esteettömyyspalvelu näyttää pikavalintapalkin laajentaakseen automaattisen täytön palvelun toiminnan kattamaan myös vanhemmat sovellukset, jotka eivät tue Android Autofill Framework -rajapintaa.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Yrityskäytännön johdosta kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista.</value>
+    <value>Yrityskäytännön vuoksi kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Organisaatiokäytäntö vaikuttaa omistajuusvalintoihisi.</value>
@@ -2126,7 +2126,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Varmista, että oletusselaimesi sisältää WebAuthn-tuen ja yritä uudelleen.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
+    <value>Organisaatiolla on yrityskäytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Organisaatiokäytännöt ovat määrittäneet holvisi aikakatkaisun enimmäisajaksi {0} tunti(a) {1} minuutti(a).</value>
@@ -2273,7 +2273,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Premium-tilaus vaaditaan</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Etkö voi lisätä todennusavainta? </value>
+    <value>Eikä todennusavaimen lisääminen onnistu?</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
     <value>Skannaa QR-koodi</value>
@@ -2282,7 +2282,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Eikö QR-koodin skannaus onnistu? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Todentajan avain</value>
+    <value>Todennusavain</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
     <value>Syötä se manuaalisesti</value>
