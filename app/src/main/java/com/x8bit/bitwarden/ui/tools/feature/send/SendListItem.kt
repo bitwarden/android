@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * A Composable function that displays a row send item.
@@ -50,7 +51,7 @@ fun SendListItem(
             )
         },
         onClick = onClick,
-        selectionDataList = listOf(
+        selectionDataList = persistentListOf(
             SelectionItemData(
                 text = stringResource(id = R.string.edit),
                 onClick = onEditClick,

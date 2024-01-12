@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * A Composable function that displays a row item for different types of vault entries.
@@ -36,7 +37,7 @@ fun VaultEntryListItem(
         supportingLabel = supportingLabel,
         startIcon = startIcon,
         onClick = onClick,
-        selectionDataList = listOf(
+        selectionDataList = persistentListOf(
             SelectionItemData(
                 text = "Not yet implemented",
                 onClick = {
