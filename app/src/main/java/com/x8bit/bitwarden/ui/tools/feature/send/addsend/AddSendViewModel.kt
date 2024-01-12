@@ -7,6 +7,7 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
@@ -47,6 +48,7 @@ class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     authRepo: AuthRepository,
     private val clock: Clock,
+    private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
@@ -335,8 +337,9 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleCopyLinkClick() {
-        // TODO Add copy link support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
+        onContent {
+            it.common.sendUrl?.let { sendUrl -> clipboardManager.setText(text = sendUrl) }
+        }
     }
 
     private fun handleDeleteClick() {
@@ -368,8 +371,11 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleShareLinkClick() {
-        // TODO Add share link support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
+        onContent {
+            it.common.sendUrl?.let { sendUrl ->
+                sendEvent(AddSendEvent.ShowShareSheet(sendUrl))
+            }
+        }
     }
 
     private fun handlePasswordChange(action: AddSendAction.PasswordChange) {
