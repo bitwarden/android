@@ -24,7 +24,7 @@ class AutofillParserImpl : AutofillParser {
 
         // Find the focused view (or indicate there is no fulfillment to be performed.)
         val focusedView = autofillViews
-            .firstOrNull { it.isFocused }
+            .firstOrNull { it.data.isFocused }
             ?: return AutofillRequest.Unfillable
 
         val uri = traversalDataList.buildUriOrNull(

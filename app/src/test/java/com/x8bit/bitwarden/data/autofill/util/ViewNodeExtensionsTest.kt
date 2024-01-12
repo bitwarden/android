@@ -13,6 +13,13 @@ import org.junit.jupiter.api.Test
 class ViewNodeExtensionsTest {
     private val expectedAutofillId: AutofillId = mockk()
     private val expectedIsFocused = true
+    private val autofillViewData = AutofillView.Data(
+        autofillId = expectedAutofillId,
+        idPackage = ID_PACKAGE,
+        isFocused = expectedIsFocused,
+        webDomain = WEB_DOMAIN,
+        webScheme = WEB_SCHEME,
+    )
     private val viewNode: AssistStructure.ViewNode = mockk {
         every { this@mockk.autofillId } returns expectedAutofillId
         every { this@mockk.childCount } returns 0
@@ -27,11 +34,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH
         val expected = AutofillView.Card.ExpirationMonth(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -47,11 +50,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
         val expected = AutofillView.Card.ExpirationYear(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -67,11 +66,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_CREDIT_CARD_NUMBER
         val expected = AutofillView.Card.Number(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -87,11 +82,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE
         val expected = AutofillView.Card.SecurityCode(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -107,11 +98,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_EMAIL_ADDRESS
         val expected = AutofillView.Login.EmailAddress(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -127,11 +114,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_PASSWORD
         val expected = AutofillView.Login.Password(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -147,11 +130,7 @@ class ViewNodeExtensionsTest {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_USERNAME
         val expected = AutofillView.Login.Username(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -181,11 +160,7 @@ class ViewNodeExtensionsTest {
         val autofillHintOne = "Shenanigans"
         val autofillHintTwo = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
         val expected = AutofillView.Card.ExpirationYear(
-            autofillId = expectedAutofillId,
-            idPackage = ID_PACKAGE,
-            isFocused = expectedIsFocused,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHintOne, autofillHintTwo)
 

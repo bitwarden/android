@@ -15,16 +15,22 @@ class ViewNodeTraversalDataExtensionsTest {
         every { this@mockk.windowNodeCount } returns 1
         every { this@mockk.getWindowNodeAt(0) } returns windowNode
     }
+    private val autofillViewData = AutofillView.Data(
+        autofillId = mockk(),
+        idPackage = null,
+        isFocused = false,
+        webDomain = null,
+        webScheme = null,
+    )
 
     @Test
     fun `buildUriOrNull should return URI when contains valid domain and scheme`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = null,
-            isFocused = false,
-            webDomain = WEB_DOMAIN,
-            webScheme = WEB_SCHEME,
+            data = autofillViewData.copy(
+                webDomain = WEB_DOMAIN,
+                webScheme = WEB_SCHEME,
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -47,11 +53,10 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return URI with default scheme when domain valid and scheme null`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = null,
-            isFocused = false,
-            webDomain = WEB_DOMAIN,
-            webScheme = null,
+            data = autofillViewData.copy(
+                webDomain = WEB_DOMAIN,
+                webScheme = null,
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -75,11 +80,10 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return URI with default scheme when domain valid and scheme empty`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = null,
-            isFocused = false,
-            webDomain = WEB_DOMAIN,
-            webScheme = "",
+            data = autofillViewData.copy(
+                webDomain = WEB_DOMAIN,
+                webScheme = "",
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -102,11 +106,11 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return idPackage URI when domain is null`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = ID_PACKAGE,
-            isFocused = false,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                idPackage = ID_PACKAGE,
+                webDomain = null,
+                webScheme = null,
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -129,11 +133,11 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return idPackage URI when domain is empty`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = ID_PACKAGE,
-            isFocused = false,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                idPackage = ID_PACKAGE,
+                webDomain = "",
+                webScheme = "",
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -156,11 +160,11 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return title URI when domain and idPackage are null`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = null,
-            isFocused = false,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                idPackage = null,
+                webDomain = null,
+                webScheme = null,
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -184,11 +188,11 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return title URI when domain and idPackage are empty`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = "",
-            isFocused = false,
-            webDomain = "",
-            webScheme = null,
+            data = autofillViewData.copy(
+                idPackage = "",
+                webDomain = "",
+                webScheme = null,
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -212,11 +216,11 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return null when title, domain, and idPackage are null`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = null,
-            isFocused = false,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                idPackage = null,
+                webDomain = null,
+                webScheme = null,
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(
@@ -239,11 +243,11 @@ class ViewNodeTraversalDataExtensionsTest {
     fun `buildUriOrNull should return null when title, domain, and idPackage are empty`() {
         // Setup
         val autofillView = AutofillView.Card.Number(
-            autofillId = mockk(),
-            idPackage = "",
-            isFocused = false,
-            webDomain = "",
-            webScheme = null,
+            data = autofillViewData.copy(
+                idPackage = "",
+                webDomain = "",
+                webScheme = null,
+            ),
         )
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = listOf(

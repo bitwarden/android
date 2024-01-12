@@ -16,6 +16,15 @@ import org.junit.jupiter.api.Test
 class FilledDataBuilderTest {
     private lateinit var filledDataBuilder: FilledDataBuilder
 
+    private val autofillId: AutofillId = mockk()
+    private val autofillViewData = AutofillView.Data(
+        autofillId = autofillId,
+        idPackage = null,
+        isFocused = false,
+        webDomain = null,
+        webScheme = null,
+    )
+
     @BeforeEach
     fun setup() {
         filledDataBuilder = FilledDataBuilderImpl()
@@ -24,13 +33,8 @@ class FilledDataBuilderTest {
     @Test
     fun `build should return filled data and ignored AutofillIds when Login`() = runTest {
         // Setup
-        val autofillId: AutofillId = mockk()
         val autofillView = AutofillView.Login.Username(
-            autofillId = autofillId,
-            idPackage = null,
-            isFocused = false,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData,
         )
         val autofillPartition = AutofillPartition.Login(
             views = listOf(autofillView),
@@ -70,11 +74,7 @@ class FilledDataBuilderTest {
         // Setup
         val autofillId: AutofillId = mockk()
         val autofillView = AutofillView.Card.Number(
-            autofillId = autofillId,
-            idPackage = null,
-            isFocused = false,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData,
         )
         val autofillPartition = AutofillPartition.Card(
             views = listOf(autofillView),
