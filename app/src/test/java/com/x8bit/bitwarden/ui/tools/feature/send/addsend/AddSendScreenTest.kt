@@ -125,6 +125,24 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `overflow remove password button should be hidden when hasPassword is false`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(hasPassword = false),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Remove password")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `on overflow remove password button click should send RemovePasswordClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             addSendType = AddSendType.EditItem(sendItemId = "sendId"),
@@ -790,6 +808,7 @@ class AddSendScreenTest : BaseComposeTest() {
             deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
             expirationDate = null,
             sendUrl = null,
+            hasPassword = true,
         )
 
         private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(

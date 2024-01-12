@@ -60,6 +60,7 @@ private val DEFAULT_COMMON: AddSendState.ViewState.Content.Common =
             ZoneOffset.UTC,
         ),
         sendUrl = "www.test.com/mockAccessId-1/mockKey-1",
+        hasPassword = true,
     )
 
 private val DEFAULT_TEXT_TYPE: AddSendState.ViewState.Content.SendType.Text =

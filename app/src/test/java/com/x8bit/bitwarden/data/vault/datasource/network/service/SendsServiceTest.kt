@@ -70,6 +70,32 @@ class SendsServiceTest : BaseServiceTest() {
         val result = sendsService.deleteSend(sendId = "send-id-1")
         assertEquals(Unit, result.getOrThrow())
     }
+
+    @Test
+    fun `removeSendPassword with success response should return a Success with the correct send`() =
+        runTest {
+            server.enqueue(MockResponse().setBody(CREATE_UPDATE_SEND_SUCCESS_JSON))
+            val result = sendsService.removeSendPassword(sendId = "send-id-1")
+            assertEquals(
+                UpdateSendResponseJson.Success(send = createMockSend(number = 1)),
+                result.getOrThrow(),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `removeSendPassword with an invalid response should return an Invalid with the correct data`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(400).setBody(UPDATE_SEND_INVALID_JSON))
+            val result = sendsService.removeSendPassword(sendId = "send-id-1")
+            assertEquals(
+                UpdateSendResponseJson.Invalid(
+                    message = "You do not have permission to edit this.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
 }
 
 private const val CREATE_UPDATE_SEND_SUCCESS_JSON = """

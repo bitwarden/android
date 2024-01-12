@@ -28,6 +28,7 @@ fun SendView.toViewState(
             deletionDate = ZonedDateTime.ofInstant(this.deletionDate, clock.zone),
             expirationDate = this.expirationDate?.let { ZonedDateTime.ofInstant(it, clock.zone) },
             sendUrl = this.toSendUrl(baseWebSendUrl),
+            hasPassword = this.hasPassword,
         ),
         selectedType = when (type) {
             SendType.TEXT -> {

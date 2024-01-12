@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -70,6 +71,7 @@ class AddSendViewModel @Inject constructor(
                             .plusWeeks(1),
                         expirationDate = null,
                         sendUrl = null,
+                        hasPassword = false,
                     ),
                     selectedType = AddSendState.ViewState.Content.SendType.Text(
                         input = "",
@@ -139,6 +141,10 @@ class AddSendViewModel @Inject constructor(
     private fun handleInternalAction(action: AddSendAction.Internal): Unit = when (action) {
         is AddSendAction.Internal.CreateSendResultReceive -> handleCreateSendResultReceive(action)
         is AddSendAction.Internal.UpdateSendResultReceive -> handleUpdateSendResultReceive(action)
+        is AddSendAction.Internal.RemovePasswordResultReceive -> handleRemovePasswordResultReceive(
+            action,
+        )
+
         is AddSendAction.Internal.UserStateReceive -> handleUserStateReceive(action)
         is AddSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
     }
@@ -196,6 +202,32 @@ class AddSendViewModel @Inject constructor(
                         message = result.sendView.toSendUrl(state.baseWebSendUrl),
                     ),
                 )
+            }
+        }
+    }
+
+    private fun handleRemovePasswordResultReceive(
+        action: AddSendAction.Internal.RemovePasswordResultReceive,
+    ) {
+        when (val result = action.result) {
+            is RemovePasswordSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is RemovePasswordSendResult.Success -> {
+                updateCommonContent { it.copy(hasPassword = false) }
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(AddSendEvent.ShowToast(message = R.string.send_password_removed.asText()))
             }
         }
     }
@@ -288,8 +320,22 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleRemovePasswordClick() {
-        // TODO Add remove password support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
+        when (val addSendType = state.addSendType) {
+            AddSendType.AddItem -> Unit
+            is AddSendType.EditItem -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Loading(
+                            message = R.string.removing_send_password.asText(),
+                        ),
+                    )
+                }
+                viewModelScope.launch {
+                    val result = vaultRepo.removePasswordSend(addSendType.sendItemId)
+                    sendAction(AddSendAction.Internal.RemovePasswordResultReceive(result))
+                }
+            }
+        }
     }
 
     private fun handleShareLinkClick() {
@@ -517,6 +563,12 @@ data class AddSendState(
     val isAddMode: Boolean get() = addSendType is AddSendType.AddItem
 
     /**
+     * Helper to determine if the currently displayed send has a password already set.
+     */
+    val hasPassword: Boolean
+        get() = (viewState as? ViewState.Content)?.common?.hasPassword == true
+
+    /**
      * Represents the specific view states for the [AddSendScreen].
      */
     sealed class ViewState : Parcelable {
@@ -566,6 +618,7 @@ data class AddSendState(
                 val deletionDate: ZonedDateTime,
                 val expirationDate: ZonedDateTime?,
                 val sendUrl: String?,
+                val hasPassword: Boolean,
             ) : Parcelable {
                 val dateFormatPattern: String get() = "M/d/yyyy"
 
@@ -766,6 +819,11 @@ sealed class AddSendAction {
          * Indicates a result for updating a send has been received.
          */
         data class UpdateSendResultReceive(val result: UpdateSendResult) : Internal()
+
+        /**
+         * Indicates a result for removing the password from a send has been received.
+         */
+        data class RemovePasswordResultReceive(val result: RemovePasswordSendResult) : Internal()
 
         /**
          * Indicates that the send item data has been received.
