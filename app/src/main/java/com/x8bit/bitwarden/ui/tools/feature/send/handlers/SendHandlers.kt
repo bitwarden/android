@@ -15,6 +15,8 @@ data class SendHandlers(
     val onEditSendClick: (SendState.ViewState.Content.SendItem) -> Unit,
     val onCopySendClick: (SendState.ViewState.Content.SendItem) -> Unit,
     val onShareSendClick: (SendState.ViewState.Content.SendItem) -> Unit,
+    val onDeleteSendClick: (SendState.ViewState.Content.SendItem) -> Unit,
+    val onRemovePasswordClick: (SendState.ViewState.Content.SendItem) -> Unit,
 ) {
     companion object {
         /**
@@ -30,6 +32,10 @@ data class SendHandlers(
                 onEditSendClick = { viewModel.trySendAction(SendAction.SendClick(it)) },
                 onCopySendClick = { viewModel.trySendAction(SendAction.CopyClick(it)) },
                 onShareSendClick = { viewModel.trySendAction(SendAction.ShareClick(it)) },
+                onDeleteSendClick = { viewModel.trySendAction(SendAction.DeleteSendClick(it)) },
+                onRemovePasswordClick = {
+                    viewModel.trySendAction(SendAction.RemovePasswordClick(it))
+                },
             )
     }
 }

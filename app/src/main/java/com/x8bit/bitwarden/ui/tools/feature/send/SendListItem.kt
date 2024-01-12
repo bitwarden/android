@@ -1,6 +1,10 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -8,11 +12,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * A Composable function that displays a row send item.
@@ -24,6 +29,9 @@ import kotlinx.collections.immutable.persistentListOf
  * @param onEditClick The lambda to be invoked when the edit option is clicked from the menu.
  * @param onCopyClick The lambda to be invoked when the copy option is clicked from the menu.
  * @param onShareClick The lambda to be invoked when the share option is clicked from the menu.
+ * @param onDeleteClick The lambda to be invoked when the delete option is clicked from the menu.
+ * @param onRemovePasswordClick The lambda to be invoked when the remove password option is clicked
+ * from the menu, if `null` the remove password button is not displayed.
  * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
  * This allows the caller to specify things like padding, size, etc.
  */
@@ -38,8 +46,11 @@ fun SendListItem(
     onEditClick: () -> Unit,
     onCopyClick: () -> Unit,
     onShareClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+    onRemovePasswordClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
+    var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenListItem(
         label = label,
         supportingLabel = supportingLabel,
@@ -51,7 +62,7 @@ fun SendListItem(
             )
         },
         onClick = onClick,
-        selectionDataList = persistentListOf(
+        selectionDataList = persistentListOfNotNull(
             SelectionItemData(
                 text = stringResource(id = R.string.edit),
                 onClick = onEditClick,
@@ -64,9 +75,33 @@ fun SendListItem(
                 text = stringResource(id = R.string.share_link),
                 onClick = onShareClick,
             ),
+            onRemovePasswordClick?.let {
+                SelectionItemData(
+                    text = stringResource(id = R.string.remove_password),
+                    onClick = it,
+                )
+            },
+            SelectionItemData(
+                text = stringResource(id = R.string.delete),
+                onClick = { shouldShowDeleteConfirmationDialog = true },
+            ),
         ),
         modifier = modifier,
     )
+    if (shouldShowDeleteConfirmationDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete),
+            message = stringResource(id = R.string.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                shouldShowDeleteConfirmationDialog = false
+                onDeleteClick()
+            },
+            onDismissClick = { shouldShowDeleteConfirmationDialog = false },
+            onDismissRequest = { shouldShowDeleteConfirmationDialog = false },
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -82,6 +117,8 @@ private fun SendListItem_preview() {
             onCopyClick = {},
             onEditClick = {},
             onShareClick = {},
+            onDeleteClick = {},
+            onRemovePasswordClick = null,
         )
     }
 }
