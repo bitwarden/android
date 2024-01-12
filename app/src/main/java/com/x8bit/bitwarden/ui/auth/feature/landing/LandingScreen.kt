@@ -352,7 +352,7 @@ private fun EnvironmentSelector(
     modifier: Modifier,
 ) {
     val options = Environment.Type.values()
-    var shouldShowDialog by remember { mutableStateOf(false) }
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
     Box(modifier = modifier) {
         Row(

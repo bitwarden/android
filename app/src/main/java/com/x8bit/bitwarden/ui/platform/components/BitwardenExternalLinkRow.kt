@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -41,7 +41,7 @@ fun BitwardenExternalLinkRow(
     dialogConfirmButtonText: String = stringResource(id = R.string.continue_text),
     dialogDismissButtonText: String = stringResource(id = R.string.cancel),
 ) {
-    var shouldShowDialog by remember { mutableStateOf(false) }
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(
         text = text,
         onClick = { shouldShowDialog = true },
