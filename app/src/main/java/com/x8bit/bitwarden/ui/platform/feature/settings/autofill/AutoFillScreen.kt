@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -179,7 +180,7 @@ private fun UriMatchDetectionDialog(
     selectedUriDetection: AutoFillState.UriDetectionMethod,
     onDetectionSelect: (AutoFillState.UriDetectionMethod) -> Unit,
 ) {
-    var shouldShowDialog by remember { mutableStateOf(false) }
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
     BitwardenTextRow(
         text = stringResource(id = R.string.default_uri_match_detection),
