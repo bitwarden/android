@@ -50,7 +50,7 @@ class FilledDataBuilderImpl : FilledDataBuilder {
         val filledItems = autofillViews
             .map { autofillView ->
                 FilledItem(
-                    autofillId = autofillView.autofillId,
+                    autofillId = autofillView.data.autofillId,
                 )
             }
 
@@ -68,7 +68,7 @@ class FilledDataBuilderImpl : FilledDataBuilder {
         val filledItems = autofillViews
             .map { autofillView ->
                 FilledItem(
-                    autofillId = autofillView.autofillId,
+                    autofillId = autofillView.data.autofillId,
                 )
             }
 

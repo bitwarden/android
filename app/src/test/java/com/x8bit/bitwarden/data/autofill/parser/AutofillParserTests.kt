@@ -22,6 +22,13 @@ import org.junit.jupiter.api.Test
 class AutofillParserTests {
     private lateinit var parser: AutofillParser
 
+    private val autofillViewData = AutofillView.Data(
+        autofillId = mockk(),
+        isFocused = true,
+        idPackage = null,
+        webDomain = null,
+        webScheme = null,
+    )
     private val assistStructure: AssistStructure = mockk()
     private val cardAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
     private val cardAutofillId: AutofillId = mockk()
@@ -86,11 +93,10 @@ class AutofillParserTests {
         val parentAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
         val parentAutofillId: AutofillId = mockk()
         val parentAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            autofillId = parentAutofillId,
-            isFocused = true,
-            idPackage = null,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                autofillId = parentAutofillId,
+                isFocused = true,
+            ),
         )
         val parentViewNode: AssistStructure.ViewNode = mockk {
             every { this@mockk.autofillHints } returns arrayOf(parentAutofillHint)
@@ -128,18 +134,16 @@ class AutofillParserTests {
         // Setup
         setupAssistStructureWithAllAutofillViewTypes()
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            autofillId = cardAutofillId,
-            isFocused = true,
-            idPackage = null,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                autofillId = cardAutofillId,
+                isFocused = true,
+            ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            autofillId = loginAutofillId,
-            isFocused = false,
-            idPackage = null,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                autofillId = loginAutofillId,
+                isFocused = false,
+            ),
         )
         val autofillPartition = AutofillPartition.Card(
             views = listOf(cardAutofillView),
@@ -167,18 +171,16 @@ class AutofillParserTests {
         // Setup
         setupAssistStructureWithAllAutofillViewTypes()
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            autofillId = cardAutofillId,
-            isFocused = false,
-            idPackage = null,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                autofillId = cardAutofillId,
+                isFocused = false,
+            ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            autofillId = loginAutofillId,
-            isFocused = true,
-            idPackage = null,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                autofillId = loginAutofillId,
+                isFocused = true,
+            ),
         )
         val autofillPartition = AutofillPartition.Login(
             views = listOf(loginAutofillView),
@@ -206,18 +208,16 @@ class AutofillParserTests {
         // Setup
         setupAssistStructureWithAllAutofillViewTypes()
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            autofillId = cardAutofillId,
-            isFocused = true,
-            idPackage = null,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                autofillId = cardAutofillId,
+                isFocused = true,
+            ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            autofillId = loginAutofillId,
-            isFocused = true,
-            idPackage = null,
-            webDomain = null,
-            webScheme = null,
+            data = autofillViewData.copy(
+                autofillId = loginAutofillId,
+                isFocused = true,
+            ),
         )
         val autofillPartition = AutofillPartition.Card(
             views = listOf(cardAutofillView),

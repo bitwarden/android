@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
 import android.view.View
-import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 
 /**
@@ -16,96 +15,66 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? = autofillId
         autofillHints
             ?.firstOrNull { SUPPORTED_HINTS.contains(it) }
             ?.let { supportedHint ->
-                buildAutofillView(
+                val autofillViewData = AutofillView.Data(
                     autofillId = nonNullAutofillId,
                     idPackage = idPackage,
                     isFocused = isFocused,
-                    hint = supportedHint,
                     webDomain = webDomain,
                     webScheme = webScheme,
+                )
+                buildAutofillView(
+                    autofillViewData = autofillViewData,
+                    hint = supportedHint,
                 )
             }
     }
 
 /**
- * Convert the data into an [AutofillView] if the [hint] is supported.
+ * Convert [autofillViewData] into an [AutofillView] if the [hint] is supported.
  */
-@Suppress("LongMethod", "LongParameterList")
 private fun buildAutofillView(
-    autofillId: AutofillId,
-    idPackage: String?,
-    isFocused: Boolean,
+    autofillViewData: AutofillView.Data,
     hint: String,
-    webDomain: String?,
-    webScheme: String?,
 ): AutofillView? = when (hint) {
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> {
         AutofillView.Card.ExpirationMonth(
-            autofillId = autofillId,
-            idPackage = idPackage,
-            isFocused = isFocused,
-            webDomain = webDomain,
-            webScheme = webScheme,
+            data = autofillViewData,
         )
     }
 
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> {
         AutofillView.Card.ExpirationYear(
-            autofillId = autofillId,
-            idPackage = idPackage,
-            isFocused = isFocused,
-            webDomain = webDomain,
-            webScheme = webScheme,
+            data = autofillViewData,
         )
     }
 
     View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> {
         AutofillView.Card.Number(
-            autofillId = autofillId,
-            idPackage = idPackage,
-            isFocused = isFocused,
-            webDomain = webDomain,
-            webScheme = webScheme,
+            data = autofillViewData,
         )
     }
 
     View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> {
         AutofillView.Card.SecurityCode(
-            autofillId = autofillId,
-            idPackage = idPackage,
-            isFocused = isFocused,
-            webDomain = webDomain,
-            webScheme = webScheme,
+            data = autofillViewData,
         )
     }
 
     View.AUTOFILL_HINT_EMAIL_ADDRESS -> {
         AutofillView.Login.EmailAddress(
-            autofillId = autofillId,
-            idPackage = idPackage,
-            isFocused = isFocused,
-            webDomain = webDomain,
-            webScheme = webScheme,
+            data = autofillViewData,
         )
     }
 
     View.AUTOFILL_HINT_PASSWORD -> {
         AutofillView.Login.Password(
-            autofillId = autofillId,
-            idPackage = idPackage,
-            isFocused = isFocused,
-            webDomain = webDomain,
-            webScheme = webScheme,
+            data = autofillViewData,
         )
     }
 
     View.AUTOFILL_HINT_USERNAME -> {
         AutofillView.Login.Username(
-            autofillId = autofillId,
-            idPackage = idPackage,
-            isFocused = isFocused,
-            webDomain = webDomain,
-            webScheme = webScheme,
+            data = autofillViewData,
         )
     }
 

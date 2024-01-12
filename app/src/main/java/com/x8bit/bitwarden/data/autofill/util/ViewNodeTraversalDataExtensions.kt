@@ -81,7 +81,8 @@ private fun AssistStructure.buildPackageNameOrNull(): String? = if (windowNodeCo
  */
 private fun List<ViewNodeTraversalData>.buildPackageNameOrNull(): String? =
     flatMap { it.autofillViews }
-        .firstOrNull { !it.idPackage.isNullOrEmpty() }
+        .firstOrNull { !it.data.idPackage.isNullOrEmpty() }
+        ?.data
         ?.idPackage
 
 /**
@@ -90,10 +91,10 @@ private fun List<ViewNodeTraversalData>.buildPackageNameOrNull(): String? =
  */
 private fun List<ViewNodeTraversalData>.buildWebsiteUriOrNull(): String? =
     flatMap { it.autofillViews }
-        .firstOrNull { !it.webDomain.isNullOrEmpty() }
+        .firstOrNull { !it.data.webDomain.isNullOrEmpty() }
         ?.let { autofillView ->
-            val webDomain = requireNotNull(autofillView.webDomain)
-            val webScheme = autofillView.webScheme.orNullIfBlank() ?: DEFAULT_SCHEME
+            val webDomain = requireNotNull(autofillView.data.webDomain)
+            val webScheme = autofillView.data.webScheme.orNullIfBlank() ?: DEFAULT_SCHEME
             buildUri(
                 domain = webDomain,
                 scheme = webScheme,
