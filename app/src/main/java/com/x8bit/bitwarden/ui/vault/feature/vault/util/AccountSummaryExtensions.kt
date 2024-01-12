@@ -37,6 +37,7 @@ val AccountSummary.iconRes: Int
     get() = when (this.status) {
         AccountSummary.Status.ACTIVE -> R.drawable.ic_check_mark
         AccountSummary.Status.LOCKED -> R.drawable.ic_locked
+        AccountSummary.Status.LOGGED_OUT -> R.drawable.ic_locked
         AccountSummary.Status.UNLOCKED -> R.drawable.ic_unlocked
     }
 
@@ -48,5 +49,6 @@ val AccountSummary.supportingTextResOrNull: Int?
     get() = when (this.status) {
         AccountSummary.Status.ACTIVE -> null
         AccountSummary.Status.LOCKED -> R.string.account_locked
+        AccountSummary.Status.LOGGED_OUT -> R.string.account_logged_out
         AccountSummary.Status.UNLOCKED -> R.string.account_unlocked
     }

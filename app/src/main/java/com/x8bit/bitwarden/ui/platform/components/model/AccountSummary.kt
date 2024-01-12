@@ -25,6 +25,7 @@ data class AccountSummary(
     val avatarColorHex: String,
     val environmentLabel: String,
     val isActive: Boolean,
+    val isLoggedIn: Boolean,
     val isVaultUnlocked: Boolean,
 ) : Parcelable {
 
@@ -40,6 +41,7 @@ data class AccountSummary(
     val status: Status
         get() = when {
             isActive -> Status.ACTIVE
+            !isLoggedIn -> Status.LOGGED_OUT
             isVaultUnlocked -> Status.UNLOCKED
             else -> Status.LOCKED
         }
@@ -57,6 +59,11 @@ data class AccountSummary(
          * The account is currently locked.
          */
         LOCKED,
+
+        /**
+         * The account is currently logged out.
+         */
+        LOGGED_OUT,
 
         /**
          * The account is currently unlocked.

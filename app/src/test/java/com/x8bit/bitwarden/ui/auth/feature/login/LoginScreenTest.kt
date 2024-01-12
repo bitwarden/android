@@ -288,6 +288,7 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
     avatarColorHex = "#aa00aa",
     environmentLabel = "bitwarden.com",
     isActive = true,
+    isLoggedIn = true,
     isVaultUnlocked = true,
 )
 

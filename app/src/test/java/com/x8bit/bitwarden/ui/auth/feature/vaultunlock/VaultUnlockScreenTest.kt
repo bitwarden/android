@@ -273,6 +273,7 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
     avatarColorHex = "#aa00aa",
     environmentLabel = "bitwarden.com",
     isActive = true,
+    isLoggedIn = true,
     isVaultUnlocked = true,
 )
 
@@ -283,6 +284,7 @@ private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
     avatarColorHex = "#00aaaa",
     environmentLabel = "bitwarden.com",
     isActive = false,
+    isLoggedIn = true,
     isVaultUnlocked = false,
 )
 

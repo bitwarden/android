@@ -823,6 +823,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             avatarColorHex = "#ff00ff",
             environment = Environment.Us,
             isPremium = false,
+            isLoggedIn = true,
             isVaultUnlocked = true,
             organizations = emptyList(),
         )

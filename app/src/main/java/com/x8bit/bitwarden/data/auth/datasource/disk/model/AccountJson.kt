@@ -23,6 +23,10 @@ data class AccountJson(
     @SerialName("settings")
     val settings: Settings,
 ) {
+    /**
+     * Whether or not the account should be considered logged in.
+     */
+    val isLoggedIn: Boolean get() = tokens.accessToken != null
 
     /**
      * Represents a user's personal profile.
@@ -96,10 +100,10 @@ data class AccountJson(
     @Serializable
     data class Tokens(
         @SerialName("accessToken")
-        val accessToken: String,
+        val accessToken: String?,
 
         @SerialName("refreshToken")
-        val refreshToken: String,
+        val refreshToken: String?,
     )
 
     /**

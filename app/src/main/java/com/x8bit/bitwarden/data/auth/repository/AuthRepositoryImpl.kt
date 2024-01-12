@@ -83,13 +83,11 @@ class AuthRepositoryImpl constructor(
         .userStateFlow
         .map { userState ->
             userState
+                ?.activeAccount
+                ?.tokens
+                ?.accessToken
                 ?.let {
-                    AuthState.Authenticated(
-                        userState
-                            .activeAccount
-                            .tokens
-                            .accessToken,
-                    )
+                    AuthState.Authenticated(accessToken = it)
                 }
                 ?: AuthState.Unauthenticated
         }
@@ -191,6 +189,13 @@ class AuthRepositoryImpl constructor(
                                 .environment
                                 .environmentUrlData,
                         )
+                        // Check for existing organization keys for a soft-logout account.
+                        // We can separately unlock the vault for organization data after receiving
+                        // the sync response if this data is currently absent.
+                        val organizationKeys =
+                            authDiskSource.getOrganizationKeys(
+                                userId = userStateJson.activeUserId,
+                            )
                         vaultRepository.clearUnlockedData()
                         vaultRepository.unlockVault(
                             userId = userStateJson.activeUserId,
@@ -199,9 +204,7 @@ class AuthRepositoryImpl constructor(
                             userKey = loginResponse.key,
                             privateKey = loginResponse.privateKey,
                             masterPassword = password,
-                            // We can separately unlock the vault for organization data after
-                            // receiving the sync response.
-                            organizationKeys = null,
+                            organizationKeys = organizationKeys,
                         )
                         authDiskSource.userState = userStateJson
                         authDiskSource.storeUserKey(
@@ -228,10 +231,15 @@ class AuthRepositoryImpl constructor(
         )
 
     override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> {
-        val refreshAccount = authDiskSource.userState?.accounts?.get(userId)
+        val refreshToken = authDiskSource
+            .userState
+            ?.accounts
+            ?.get(userId)
+            ?.tokens
+            ?.refreshToken
             ?: return IllegalStateException("Must be logged in.").asFailure()
         return identityService
-            .refreshTokenSynchronously(refreshAccount.tokens.refreshToken)
+            .refreshTokenSynchronously(refreshToken)
             .onSuccess {
                 // Update the existing UserState with updated token information
                 authDiskSource.userState = it.toUserStateJson(

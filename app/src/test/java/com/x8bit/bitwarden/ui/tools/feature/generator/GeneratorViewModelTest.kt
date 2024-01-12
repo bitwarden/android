@@ -1737,6 +1737,7 @@ private val DEFAULT_USER_STATE = UserState(
             environment = Environment.Us,
             avatarColorHex = "#aa00aa",
             isPremium = true,
+            isLoggedIn = true,
             isVaultUnlocked = true,
             organizations = emptyList(),
         ),

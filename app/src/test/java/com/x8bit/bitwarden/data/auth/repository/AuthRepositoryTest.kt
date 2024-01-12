@@ -594,6 +594,89 @@ class AuthRepositoryTest {
             verify { vaultRepository.clearUnlockedData() }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `login get token succeeds when the current user is in a soft-logout state should use existing organization keys when unlocking the vault`() =
+        runTest {
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                accountsService.preLogin(email = EMAIL)
+            } returns Result.success(PRE_LOGIN_SUCCESS)
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+                .returns(Result.success(successResponse))
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationKeys = ORGANIZATION_KEYS,
+                    masterPassword = PASSWORD,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.sync() } just runs
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            // Users in a soft-logout state have some existing data stored to disk from previous
+            // sync requests.
+            fakeAuthDiskSource.storeOrganizationKeys(
+                userId = USER_ID_1,
+                organizationKeys = ORGANIZATION_KEYS,
+            )
+
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            coVerify { accountsService.preLogin(email = EMAIL) }
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationKeys = ORGANIZATION_KEYS,
+                    masterPassword = PASSWORD,
+                )
+                vaultRepository.sync()
+            }
+            assertEquals(
+                SINGLE_USER_STATE_1,
+                fakeAuthDiskSource.userState,
+            )
+            assertNull(repository.specialCircumstance)
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify(exactly = 0) { vaultRepository.lockVaultIfNecessary(any()) }
+            verify { vaultRepository.clearUnlockedData() }
+        }
+
     @Test
     fun `login get token returns captcha request should return CaptchaRequired`() = runTest {
         coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
@@ -981,7 +1064,7 @@ class AuthRepositoryTest {
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 userKey = successResponse.key,
                 privateKey = successResponse.privateKey,
-                organizationKeys = null,
+                organizationKeys = ORGANIZATION_KEYS,
                 masterPassword = PASSWORD,
             )
         } returns VaultUnlockResult.Success

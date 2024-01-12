@@ -53,7 +53,9 @@ class LandingViewModel @Inject constructor(
         get() {
             val currentEmail = state.emailInput
             val accountSummaries = state.accountSummaries
-            return accountSummaries.find { it.email == currentEmail }
+            return accountSummaries
+                .find { it.email == currentEmail }
+                ?.takeUnless { !it.isLoggedIn }
         }
 
     init {

@@ -69,6 +69,17 @@ class AccountSummaryExtensionsTest {
     }
 
     @Test
+    fun `iconRes returns a locked lock for logged out accounts`() {
+        assertEquals(
+            R.drawable.ic_locked,
+            mockk<AccountSummary>() {
+                every { status } returns AccountSummary.Status.LOGGED_OUT
+            }
+                .iconRes,
+        )
+    }
+
+    @Test
     fun `iconRes returns an unlocked lock for unlocked accounts`() {
         assertEquals(
             R.drawable.ic_unlocked,
@@ -95,6 +106,17 @@ class AccountSummaryExtensionsTest {
             R.string.account_locked,
             mockk<AccountSummary>() {
                 every { status } returns AccountSummary.Status.LOCKED
+            }
+                .supportingTextResOrNull,
+        )
+    }
+
+    @Test
+    fun `supportingTextResOrNull returns Logged Out for logged out accounts`() {
+        assertEquals(
+            R.string.account_logged_out,
+            mockk<AccountSummary>() {
+                every { status } returns AccountSummary.Status.LOGGED_OUT
             }
                 .supportingTextResOrNull,
         )

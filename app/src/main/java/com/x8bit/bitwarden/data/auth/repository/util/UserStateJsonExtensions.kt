@@ -66,6 +66,7 @@ fun UserStateJson.toUserState(
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault(),
                     isPremium = accountJson.profile.hasPremium == true,
+                    isLoggedIn = accountJson.isLoggedIn,
                     isVaultUnlocked = userId in vaultState.unlockedVaultUserIds,
                     organizations = userOrganizationsList
                         .find { it.userId == userId }

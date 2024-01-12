@@ -23,6 +23,7 @@ class UserStateExtensionsTest {
                     avatarColorHex = "activeAvatarColorHex",
                     environmentLabel = "bitwarden.com",
                     isActive = true,
+                    isLoggedIn = true,
                     isVaultUnlocked = true,
                 ),
                 AccountSummary(
@@ -32,6 +33,7 @@ class UserStateExtensionsTest {
                     avatarColorHex = "lockedAvatarColorHex",
                     environmentLabel = "bitwarden.eu",
                     isActive = false,
+                    isLoggedIn = true,
                     isVaultUnlocked = false,
                 ),
                 AccountSummary(
@@ -41,7 +43,18 @@ class UserStateExtensionsTest {
                     avatarColorHex = "unlockedAvatarColorHex",
                     environmentLabel = "vault.qa.bitwarden.pw",
                     isActive = false,
+                    isLoggedIn = true,
                     isVaultUnlocked = true,
+                ),
+                AccountSummary(
+                    userId = "loggedOutUserId",
+                    name = "loggedOutName",
+                    email = "loggedOutEmail",
+                    avatarColorHex = "loggedOutAvatarColorHex",
+                    environmentLabel = "vault.qa.bitwarden.pw",
+                    isActive = false,
+                    isLoggedIn = false,
+                    isVaultUnlocked = false,
                 ),
             ),
             UserState(
@@ -54,6 +67,7 @@ class UserStateExtensionsTest {
                         avatarColorHex = "activeAvatarColorHex",
                         environment = Environment.Us,
                         isPremium = true,
+                        isLoggedIn = true,
                         isVaultUnlocked = true,
                         organizations = listOf(
                             Organization(
@@ -69,6 +83,7 @@ class UserStateExtensionsTest {
                         avatarColorHex = "lockedAvatarColorHex",
                         environment = Environment.Eu,
                         isPremium = false,
+                        isLoggedIn = true,
                         isVaultUnlocked = false,
                         organizations = listOf(
                             Organization(
@@ -88,7 +103,28 @@ class UserStateExtensionsTest {
                             ),
                         ),
                         isPremium = true,
+                        isLoggedIn = true,
                         isVaultUnlocked = true,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
+                    ),
+                    UserState.Account(
+                        userId = "loggedOutUserId",
+                        name = "loggedOutName",
+                        email = "loggedOutEmail",
+                        avatarColorHex = "loggedOutAvatarColorHex",
+                        environment = Environment.SelfHosted(
+                            environmentUrlData = EnvironmentUrlDataJson(
+                                base = "https://vault.qa.bitwarden.pw",
+                            ),
+                        ),
+                        isPremium = true,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -112,6 +148,7 @@ class UserStateExtensionsTest {
                 avatarColorHex = "avatarColorHex",
                 environmentLabel = "bitwarden.com",
                 isActive = true,
+                isLoggedIn = true,
                 isVaultUnlocked = true,
             ),
             UserState.Account(
@@ -121,6 +158,7 @@ class UserStateExtensionsTest {
                 avatarColorHex = "avatarColorHex",
                 environment = Environment.Us,
                 isPremium = true,
+                isLoggedIn = true,
                 isVaultUnlocked = true,
                 organizations = listOf(
                     Organization(
@@ -143,6 +181,7 @@ class UserStateExtensionsTest {
                 avatarColorHex = "avatarColorHex",
                 environmentLabel = "bitwarden.com",
                 isActive = false,
+                isLoggedIn = true,
                 isVaultUnlocked = false,
             ),
             UserState.Account(
@@ -152,6 +191,7 @@ class UserStateExtensionsTest {
                 avatarColorHex = "avatarColorHex",
                 environment = Environment.Us,
                 isPremium = false,
+                isLoggedIn = true,
                 isVaultUnlocked = false,
                 organizations = listOf(
                     Organization(
@@ -175,6 +215,7 @@ class UserStateExtensionsTest {
                 avatarColorHex = "avatarColorHex",
                 environmentLabel = "bitwarden.com",
                 isActive = true,
+                isLoggedIn = true,
                 isVaultUnlocked = true,
             ),
             UserState(
@@ -187,6 +228,7 @@ class UserStateExtensionsTest {
                         avatarColorHex = "avatarColorHex",
                         environment = Environment.Us,
                         isPremium = true,
+                        isLoggedIn = true,
                         isVaultUnlocked = true,
                         organizations = listOf(
                             Organization(
@@ -211,6 +253,7 @@ class UserStateExtensionsTest {
                 avatarColorHex = "avatarColorHex",
                 environment = Environment.Us,
                 isPremium = true,
+                isLoggedIn = true,
                 isVaultUnlocked = true,
                 organizations = emptyList(),
             )
@@ -244,6 +287,7 @@ class UserStateExtensionsTest {
                 avatarColorHex = "avatarColorHex",
                 environment = Environment.Us,
                 isPremium = true,
+                isLoggedIn = true,
                 isVaultUnlocked = true,
                 organizations = listOf(
                     Organization(

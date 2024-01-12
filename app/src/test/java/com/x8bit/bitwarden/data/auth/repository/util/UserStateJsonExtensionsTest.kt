@@ -104,6 +104,7 @@ class UserStateJsonExtensionsTest {
                         avatarColorHex = "activeAvatarColorHex",
                         environment = Environment.Eu,
                         isPremium = false,
+                        isLoggedIn = true,
                         isVaultUnlocked = true,
                         organizations = listOf(
                             Organization(
@@ -125,7 +126,10 @@ class UserStateJsonExtensionsTest {
                             every { avatarColorHex } returns "activeAvatarColorHex"
                             every { hasPremium } returns null
                         },
-                        tokens = mockk(),
+                        tokens = AccountJson.Tokens(
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
                         settings = AccountJson.Settings(
                             environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
                         ),
@@ -167,6 +171,7 @@ class UserStateJsonExtensionsTest {
                         avatarColorHex = "#ffecbc49",
                         environment = Environment.Eu,
                         isPremium = true,
+                        isLoggedIn = false,
                         isVaultUnlocked = false,
                         organizations = listOf(
                             Organization(
@@ -189,7 +194,10 @@ class UserStateJsonExtensionsTest {
                             every { avatarColorHex } returns null
                             every { hasPremium } returns true
                         },
-                        tokens = mockk(),
+                        tokens = AccountJson.Tokens(
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
                         settings = AccountJson.Settings(
                             environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
                         ),
