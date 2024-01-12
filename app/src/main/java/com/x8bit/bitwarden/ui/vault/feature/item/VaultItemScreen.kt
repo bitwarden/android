@@ -39,9 +39,11 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays the vault item screen.
@@ -53,7 +55,7 @@ fun VaultItemScreen(
     viewModel: VaultItemViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
     onNavigateBack: () -> Unit,
-    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToVaultAddEditItem: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -62,13 +64,27 @@ fun VaultItemScreen(
         when (event) {
             VaultItemEvent.NavigateBack -> onNavigateBack()
 
-            is VaultItemEvent.NavigateToEdit -> onNavigateToVaultEditItem(event.itemId)
+            is VaultItemEvent.NavigateToAddEdit -> {
+                // TODO Implement cloning in BIT-526
+                onNavigateToVaultAddEditItem(event.itemId)
+            }
 
             is VaultItemEvent.NavigateToPasswordHistory -> {
+                // TODO Implement password history in BIT-617
                 Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
             }
 
             is VaultItemEvent.NavigateToUri -> intentHandler.launchUri(event.uri.toUri())
+
+            is VaultItemEvent.NavigateToAttachments -> {
+                // TODO implement attachments in BIT-522
+                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+            }
+
+            is VaultItemEvent.NavigateToMoveToOrganization -> {
+                // TODO Implement move to organization in BIT-844
+                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+            }
 
             is VaultItemEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
@@ -101,7 +117,43 @@ fun VaultItemScreen(
                     { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
                 },
                 actions = {
-                    BitwardenOverflowActionItem()
+                    // TODO make action list dependent on item being in an organization BIT-1446
+                    BitwardenOverflowActionItem(
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.delete),
+                                onClick = remember(viewModel) {
+                                    { viewModel.trySendAction(VaultItemAction.Common.DeleteClick) }
+                                },
+                            ),
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.attachments),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.AttachmentsClick,
+                                        )
+                                    }
+                                },
+                            ),
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.clone),
+                                onClick = remember(viewModel) {
+                                    { viewModel.trySendAction(VaultItemAction.Common.CloneClick) }
+                                },
+                            ),
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.move_to_organization),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.MoveToOrganizationClick,
+                                        )
+                                    }
+                                },
+                            ),
+                        ),
+                    )
                 },
             )
         },

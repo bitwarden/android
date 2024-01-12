@@ -149,7 +149,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultItemAction.Common.EditClick)
-                assertEquals(VaultItemEvent.NavigateToEdit(VAULT_ITEM_ID), awaitItem())
+                assertEquals(
+                    VaultItemEvent.NavigateToAddEdit(
+                        itemId = VAULT_ITEM_ID,
+                        isClone = false,
+                    ),
+                    awaitItem(),
+                )
             }
         }
 
@@ -327,6 +333,57 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     mockCipherView.toViewState(isPremiumUser = true)
                 }
             }
+
+        @Test
+        fun `on DeleteClick should emit ShowToast`() = runTest {
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
+                assertEquals(
+                    VaultItemEvent.ShowToast("Not yet implemented.".asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `on AttachmentsClick should emit NavigateToAttachments`() = runTest {
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemAction.Common.AttachmentsClick)
+                assertEquals(
+                    VaultItemEvent.NavigateToAttachments(itemId = VAULT_ITEM_ID),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `on CloneClick should emit NavigateToAddEdit with isClone set to true`() = runTest {
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemAction.Common.CloneClick)
+                assertEquals(
+                    VaultItemEvent.NavigateToAddEdit(
+                        itemId = VAULT_ITEM_ID,
+                        isClone = true,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `on MoveToOrganizationClick should emit NavigateToMoveToOrganization`() = runTest {
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemAction.Common.MoveToOrganizationClick)
+                assertEquals(
+                    VaultItemEvent.NavigateToMoveToOrganization(itemId = VAULT_ITEM_ID),
+                    awaitItem(),
+                )
+            }
+        }
     }
 
     @Nested

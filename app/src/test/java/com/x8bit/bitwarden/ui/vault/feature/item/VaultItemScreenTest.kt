@@ -1,15 +1,18 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
@@ -64,16 +67,17 @@ class VaultItemScreenTest : BaseComposeTest() {
             VaultItemScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVaultEditItem = { onNavigateToVaultEditItemId = it },
+                onNavigateToVaultAddEditItem = { onNavigateToVaultEditItemId = it },
                 intentHandler = intentHandler,
             )
         }
     }
 
+    //region common
     @Test
     fun `NavigateToEdit event should invoke onNavigateToVaultEditItem`() {
         val id = "id1234"
-        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToEdit(id))
+        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToAddEdit(itemId = id, isClone = false))
         assertEquals(id, onNavigateToVaultEditItemId)
     }
 
@@ -545,6 +549,84 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `Delete option menu click should send DeleteClick action`() {
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+        // Click on the delete item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
+        }
+    }
+
+    @Test
+    fun `Attachments option menu click should send AttachmentsClick action`() {
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Attachments")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+        // Click on the attachments hint item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Attachments")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.AttachmentsClick)
+        }
+    }
+
+    @Test
+    fun `Clone option menu click should send CloneClick action`() {
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Clone")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+        // Click on the clone item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Clone")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.CloneClick)
+        }
+    }
+
+    @Test
+    fun `Move to organization option menu click should send MoveToOrganizationClick action`() {
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule.onNodeWithContentDescription("More").performClick()
+        // Click on the move to organization hint item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.MoveToOrganizationClick)
+        }
+    }
+    //endregion common
+
+    //region login
+    @Test
     fun `in login state, linked custom fields should be displayed according to state`() {
         val linkedFieldUserName =
             VaultItemState.ViewState.Content.Common.Custom.LinkedField(
@@ -947,7 +1029,9 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.assertScrollableNodeDoesNotExist("Password history: ")
         composeTestRule.assertScrollableNodeDoesNotExist("1")
     }
+    //endregion login
 
+    //region identity
     @Test
     fun `in identity state, identityName should be displayed according to state`() {
         val identityName = "the identity name"
@@ -1064,6 +1148,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule.assertScrollableNodeDoesNotExist(identityName)
     }
+    //endregion identity
 
     @Test
     fun `in card state, cardholderName should be displayed according to state`() {
