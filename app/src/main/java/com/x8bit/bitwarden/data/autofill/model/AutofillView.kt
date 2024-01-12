@@ -12,9 +12,24 @@ sealed class AutofillView {
     abstract val autofillId: AutofillId
 
     /**
+     * The package id for this view, if there is one. (ex: "com.x8bit.bitwarden")
+     */
+    abstract val idPackage: String?
+
+    /**
      * Whether the view is currently focused.
      */
     abstract val isFocused: Boolean
+
+    /**
+     * The web domain for this view, if there is one. (ex: "m.facebook.com")
+     */
+    abstract val webDomain: String?
+
+    /**
+     * The web scheme for this view, if there is one. (ex: "https")
+     */
+    abstract val webScheme: String?
 
     /**
      * A view that corresponds to the card data partition for autofill fields.
@@ -26,7 +41,10 @@ sealed class AutofillView {
          */
         data class ExpirationMonth(
             override val autofillId: AutofillId,
+            override val idPackage: String?,
             override val isFocused: Boolean,
+            override val webDomain: String?,
+            override val webScheme: String?,
         ) : Card()
 
         /**
@@ -34,7 +52,10 @@ sealed class AutofillView {
          */
         data class ExpirationYear(
             override val autofillId: AutofillId,
+            override val idPackage: String?,
             override val isFocused: Boolean,
+            override val webDomain: String?,
+            override val webScheme: String?,
         ) : Card()
 
         /**
@@ -42,7 +63,10 @@ sealed class AutofillView {
          */
         data class Number(
             override val autofillId: AutofillId,
+            override val idPackage: String?,
             override val isFocused: Boolean,
+            override val webDomain: String?,
+            override val webScheme: String?,
         ) : Card()
 
         /**
@@ -50,7 +74,10 @@ sealed class AutofillView {
          */
         data class SecurityCode(
             override val autofillId: AutofillId,
+            override val idPackage: String?,
             override val isFocused: Boolean,
+            override val webDomain: String?,
+            override val webScheme: String?,
         ) : Card()
     }
 
@@ -64,7 +91,10 @@ sealed class AutofillView {
          */
         data class EmailAddress(
             override val autofillId: AutofillId,
+            override val idPackage: String?,
             override val isFocused: Boolean,
+            override val webDomain: String?,
+            override val webScheme: String?,
         ) : Login()
 
         /**
@@ -72,7 +102,10 @@ sealed class AutofillView {
          */
         data class Password(
             override val autofillId: AutofillId,
+            override val idPackage: String?,
             override val isFocused: Boolean,
+            override val webDomain: String?,
+            override val webScheme: String?,
         ) : Login()
 
         /**
@@ -80,7 +113,10 @@ sealed class AutofillView {
          */
         data class Username(
             override val autofillId: AutofillId,
+            override val idPackage: String?,
             override val isFocused: Boolean,
+            override val webDomain: String?,
+            override val webScheme: String?,
         ) : Login()
     }
 }

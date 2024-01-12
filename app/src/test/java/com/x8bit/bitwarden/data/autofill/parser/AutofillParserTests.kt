@@ -6,11 +6,14 @@ import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
+import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -44,12 +47,15 @@ class AutofillParserTests {
     @BeforeEach
     fun setup() {
         mockkStatic(AssistStructure.ViewNode::toAutofillView)
+        mockkStatic(List<ViewNodeTraversalData>::buildUriOrNull)
+        every { any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure) } returns URI
         parser = AutofillParserImpl()
     }
 
     @AfterEach
     fun teardown() {
         unmockkStatic(AssistStructure.ViewNode::toAutofillView)
+        unmockkStatic(List<ViewNodeTraversalData>::buildUriOrNull)
     }
 
     @Test
@@ -82,6 +88,9 @@ class AutofillParserTests {
         val parentAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             autofillId = parentAutofillId,
             isFocused = true,
+            idPackage = null,
+            webDomain = null,
+            webScheme = null,
         )
         val parentViewNode: AssistStructure.ViewNode = mockk {
             every { this@mockk.autofillHints } returns arrayOf(parentAutofillHint)
@@ -99,6 +108,7 @@ class AutofillParserTests {
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = listOf(childAutofillId),
             partition = autofillPartition,
+            uri = URI,
         )
         every { assistStructure.windowNodeCount } returns 1
         every { assistStructure.getWindowNodeAt(0) } returns windowNode
@@ -108,6 +118,9 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(expected, actual)
+        verify(exactly = 1) {
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+        }
     }
 
     @Test
@@ -117,10 +130,16 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             autofillId = cardAutofillId,
             isFocused = true,
+            idPackage = null,
+            webDomain = null,
+            webScheme = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             autofillId = loginAutofillId,
             isFocused = false,
+            idPackage = null,
+            webDomain = null,
+            webScheme = null,
         )
         val autofillPartition = AutofillPartition.Card(
             views = listOf(cardAutofillView),
@@ -128,6 +147,7 @@ class AutofillParserTests {
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
             partition = autofillPartition,
+            uri = URI,
         )
         every { cardViewNode.toAutofillView() } returns cardAutofillView
         every { loginViewNode.toAutofillView() } returns loginAutofillView
@@ -137,6 +157,9 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(expected, actual)
+        verify(exactly = 1) {
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+        }
     }
 
     @Test
@@ -146,10 +169,16 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             autofillId = cardAutofillId,
             isFocused = false,
+            idPackage = null,
+            webDomain = null,
+            webScheme = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             autofillId = loginAutofillId,
             isFocused = true,
+            idPackage = null,
+            webDomain = null,
+            webScheme = null,
         )
         val autofillPartition = AutofillPartition.Login(
             views = listOf(loginAutofillView),
@@ -157,6 +186,7 @@ class AutofillParserTests {
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
             partition = autofillPartition,
+            uri = URI,
         )
         every { cardViewNode.toAutofillView() } returns cardAutofillView
         every { loginViewNode.toAutofillView() } returns loginAutofillView
@@ -166,6 +196,9 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(expected, actual)
+        verify(exactly = 1) {
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+        }
     }
 
     @Test
@@ -175,10 +208,16 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             autofillId = cardAutofillId,
             isFocused = true,
+            idPackage = null,
+            webDomain = null,
+            webScheme = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             autofillId = loginAutofillId,
             isFocused = true,
+            idPackage = null,
+            webDomain = null,
+            webScheme = null,
         )
         val autofillPartition = AutofillPartition.Card(
             views = listOf(cardAutofillView),
@@ -186,6 +225,7 @@ class AutofillParserTests {
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
             partition = autofillPartition,
+            uri = URI,
         )
         every { cardViewNode.toAutofillView() } returns cardAutofillView
         every { loginViewNode.toAutofillView() } returns loginAutofillView
@@ -195,6 +235,9 @@ class AutofillParserTests {
 
         // Verify
         assertEquals(expected, actual)
+        verify(exactly = 1) {
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+        }
     }
 
     /**
@@ -205,5 +248,9 @@ class AutofillParserTests {
         every { assistStructure.windowNodeCount } returns 2
         every { assistStructure.getWindowNodeAt(0) } returns cardWindowNode
         every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
+    }
+
+    companion object {
+        private const val URI: String = "androidapp://com.x8bit.bitwarden"
     }
 }

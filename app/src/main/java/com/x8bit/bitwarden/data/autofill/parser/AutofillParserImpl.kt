@@ -5,6 +5,8 @@ import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
+import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 
 /**
@@ -14,9 +16,9 @@ import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 class AutofillParserImpl : AutofillParser {
     override fun parse(assistStructure: AssistStructure): AutofillRequest {
         // Parse the `assistStructure` into internal models.
-        val traversalData = assistStructure.traverse()
+        val traversalDataList = assistStructure.traverse()
         // Flatten the autofill views for processing.
-        val autofillViews = traversalData
+        val autofillViews = traversalDataList
             .map { it.autofillViews }
             .flatten()
 
@@ -24,6 +26,10 @@ class AutofillParserImpl : AutofillParser {
         val focusedView = autofillViews
             .firstOrNull { it.isFocused }
             ?: return AutofillRequest.Unfillable
+
+        val uri = traversalDataList.buildUriOrNull(
+            assistStructure = assistStructure,
+        )
 
         // Choose the first focused partition of data for fulfillment.
         val partition = when (focusedView) {
@@ -40,13 +46,14 @@ class AutofillParserImpl : AutofillParser {
             }
         }
         // Flatten the ignorable autofill ids.
-        val ignoreAutofillIds = traversalData
+        val ignoreAutofillIds = traversalDataList
             .map { it.ignoreAutofillIds }
             .flatten()
 
         return AutofillRequest.Fillable(
             ignoreAutofillIds = ignoreAutofillIds,
             partition = partition,
+            uri = uri,
         )
     }
 }
@@ -92,11 +99,3 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
         ignoreAutofillIds = mutableIgnoreAutofillIdList,
     )
 }
-
-/**
- * A convenience data structure for view node traversal.
- */
-private data class ViewNodeTraversalData(
-    val autofillViews: List<AutofillView>,
-    val ignoreAutofillIds: List<AutofillId>,
-)
