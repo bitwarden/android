@@ -9,7 +9,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
@@ -69,6 +73,23 @@ fun AddSendScreen(
             { viewModel.trySendAction(AddSendAction.DismissDialogClick) }
         },
     )
+    var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+    if (shouldShowDeleteConfirmationDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete),
+            message = stringResource(id = R.string.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = remember(viewModel) {
+                {
+                    viewModel.trySendAction(AddSendAction.DeleteClick)
+                    shouldShowDeleteConfirmationDialog = false
+                }
+            },
+            onDismissClick = { shouldShowDeleteConfirmationDialog = false },
+            onDismissRequest = { shouldShowDeleteConfirmationDialog = false },
+        )
+    }
 
     BitwardenScaffold(
         modifier = Modifier
@@ -118,9 +139,7 @@ fun AddSendScreen(
                                 ),
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.delete),
-                                    onClick = remember(viewModel) {
-                                        { viewModel.trySendAction(AddSendAction.DeleteClick) }
-                                    },
+                                    onClick = { shouldShowDeleteConfirmationDialog = true },
                                 ),
                             ),
                         )

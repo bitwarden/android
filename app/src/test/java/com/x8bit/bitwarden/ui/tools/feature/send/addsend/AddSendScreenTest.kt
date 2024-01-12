@@ -181,7 +181,7 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on overflow remove Delete button click should send DeleteClick`() {
+    fun `on overflow Delete button click should Display delete confirmation dialog`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             addSendType = AddSendType.EditItem(sendItemId = "sendId"),
         )
@@ -192,6 +192,31 @@ class AddSendScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithText("Delete")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Are you sure you want to delete this Send?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on delete confirmation dialog yes click should send DeleteClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Delete")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Yes")
+            .assert(hasAnyAncestor(isDialog()))
             .performClick()
 
         verify(exactly = 1) {
