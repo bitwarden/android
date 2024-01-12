@@ -264,6 +264,7 @@ private val VAULT_TIMEOUT_MAP =
     mapOf(
         VaultTimeout.OneMinute to 1,
         VaultTimeout.FiveMinutes to 5,
+        VaultTimeout.FifteenMinutes to 15,
         VaultTimeout.ThirtyMinutes to 30,
         VaultTimeout.OneHour to 60,
         VaultTimeout.FourHours to 240,
