@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -10,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
@@ -55,10 +57,26 @@ class AppearanceScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on language selection dialog item click should send LanguageChange`() {
+    fun `on language selection dialog item click should send LanguageChange and show dialog`() {
+        // Clicking the Language row shows the language selection dialog
         composeTestRule.onNodeWithText("Language").performClick()
+        // Selecting a language dismisses this dialog and displays the confirmation
         composeTestRule
-            .onAllNodesWithText("English")
+            .onAllNodesWithText("Afrikaans")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule
+            .onAllNodesWithText("Afrikaans")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsNotDisplayed()
+
+        // Should show confirmation dialog
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        // Clicking "Ok" should dismiss confirmation dialog
+        composeTestRule.onAllNodesWithText("Ok")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         composeTestRule.assertNoDialogExists()
@@ -66,7 +84,7 @@ class AppearanceScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 AppearanceAction.LanguageChange(
-                    language = AppearanceState.Language.ENGLISH,
+                    language = AppLanguage.AFRIKAANS,
                 ),
             )
         }
@@ -133,7 +151,7 @@ class AppearanceScreenTest : BaseComposeTest() {
 }
 
 private val DEFAULT_STATE = AppearanceState(
-    language = AppearanceState.Language.DEFAULT,
+    language = AppLanguage.DEFAULT,
     showWebsiteIcons = false,
     theme = AppearanceState.Theme.DEFAULT,
 )

@@ -1,13 +1,40 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.runs
+import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AppearanceViewModelTest : BaseViewModelTest() {
+    private val mockSettingsRepository = mockk<SettingsRepository> {
+        every { appLanguage } returns AppLanguage.DEFAULT
+        every { appLanguage = AppLanguage.ENGLISH } just runs
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(AppCompatDelegate::setApplicationLocales)
+    }
+
+    @AfterEach
+    fun teardown() {
+        unmockkStatic(AppCompatDelegate::setApplicationLocales)
+    }
+
     @Test
     fun `initial state should be correct when not set`() {
         val viewModel = createViewModel(state = null)
@@ -31,20 +58,29 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on LanguageChange should update state`() = runTest {
-        val viewModel = createViewModel()
+    fun `on LanguageChange should update state and store language`() = runTest {
+        val viewModel = createViewModel(
+            settingsRepository = mockSettingsRepository,
+        )
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE,
                 awaitItem(),
             )
             viewModel.trySendAction(
-                AppearanceAction.LanguageChange(AppearanceState.Language.ENGLISH),
+                AppearanceAction.LanguageChange(AppLanguage.ENGLISH),
             )
             assertEquals(
-                DEFAULT_STATE.copy(language = AppearanceState.Language.ENGLISH),
+                DEFAULT_STATE.copy(
+                    language = AppLanguage.ENGLISH,
+                ),
                 awaitItem(),
             )
+        }
+        verify {
+            AppCompatDelegate.setApplicationLocales(any())
+            mockSettingsRepository.appLanguage
+            mockSettingsRepository.appLanguage = AppLanguage.ENGLISH
         }
     }
 
@@ -82,15 +118,17 @@ class AppearanceViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         state: AppearanceState? = null,
+        settingsRepository: SettingsRepository = mockSettingsRepository,
     ) = AppearanceViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
         },
+        settingsRepository = settingsRepository,
     )
 
     companion object {
         private val DEFAULT_STATE = AppearanceState(
-            language = AppearanceState.Language.DEFAULT,
+            language = AppLanguage.DEFAULT,
             showWebsiteIcons = false,
             theme = AppearanceState.Theme.DEFAULT,
         )

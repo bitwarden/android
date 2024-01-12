@@ -4,6 +4,7 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -17,6 +18,45 @@ class SettingsDiskSourceTest {
     private val settingsDiskSource = SettingsDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
     )
+
+    @Test
+    fun `appLanguage should pull from SharedPreferences`() {
+        val appLanguageKey = "bwPreferencesStorage:appLocale"
+        val expected = AppLanguage.AFRIKAANS
+
+        // Verify initial value is null and disk source matches shared preferences.
+        assertNull(fakeSharedPreferences.getString(appLanguageKey, null))
+        assertNull(settingsDiskSource.appLanguage)
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                appLanguageKey,
+                expected.localeName,
+            )
+            .apply()
+        val actual = settingsDiskSource.appLanguage
+        assertEquals(
+            expected,
+            actual,
+        )
+    }
+
+    @Test
+    fun `setting appLanguage should update SharedPreferences`() {
+        val appLanguageKey = "bwPreferencesStorage:appLocale"
+        val appLanguage = AppLanguage.ENGLISH
+        settingsDiskSource.appLanguage = appLanguage
+        val actual = fakeSharedPreferences.getString(
+            appLanguageKey,
+            AppLanguage.DEFAULT.localeName,
+        )
+        assertEquals(
+            appLanguage.localeName,
+            actual,
+        )
+    }
 
     @Test
     fun `getVaultTimeoutInMinutes when values are present should pull from SharedPreferences`() {
@@ -44,22 +84,23 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `getVaultTimeoutInMinutesFlow should react to changes in getOrganizations`() = runTest {
-        val mockUserId = "mockUserId"
-        val vaultTimeoutInMinutes = 360
-        settingsDiskSource.getVaultTimeoutInMinutesFlow(userId = mockUserId).test {
-            // The initial values of the Flow and the property are in sync
-            assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = mockUserId))
-            assertNull(awaitItem())
+    fun `getVaultTimeoutInMinutesFlow should react to changes in getVaultTimeoutInMinutes`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            val vaultTimeoutInMinutes = 360
+            settingsDiskSource.getVaultTimeoutInMinutesFlow(userId = mockUserId).test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = mockUserId))
+                assertNull(awaitItem())
 
-            // Updating the repository updates shared preferences
-            settingsDiskSource.storeVaultTimeoutInMinutes(
-                userId = mockUserId,
-                vaultTimeoutInMinutes = vaultTimeoutInMinutes,
-            )
-            assertEquals(vaultTimeoutInMinutes, awaitItem())
+                // Updating the repository updates shared preferences
+                settingsDiskSource.storeVaultTimeoutInMinutes(
+                    userId = mockUserId,
+                    vaultTimeoutInMinutes = vaultTimeoutInMinutes,
+                )
+                assertEquals(vaultTimeoutInMinutes, awaitItem())
+            }
         }
-    }
 
     @Test
     fun `storeVaultTimeoutInMinutes for non-null values should update SharedPreferences`() {
@@ -123,7 +164,7 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `getVaultTimeoutActionFlow should react to changes in getOrganizations`() = runTest {
+    fun `getVaultTimeoutActionFlow should react to changes in getVaultTimeoutAction`() = runTest {
         val mockUserId = "mockUserId"
         val vaultTimeoutAction = VaultTimeoutAction.LOCK
         settingsDiskSource.getVaultTimeoutActionFlow(userId = mockUserId).test {

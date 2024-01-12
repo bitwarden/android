@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -84,6 +85,28 @@ class SettingsRepositoryTest {
         assertEquals(
             VaultTimeoutAction.LOGOUT,
             fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+        )
+    }
+
+    @Test
+    fun `appLanguage should pull from and update SettingsDiskSource`() {
+        assertEquals(
+            AppLanguage.DEFAULT,
+            settingsRepository.appLanguage,
+        )
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.appLanguage = AppLanguage.ENGLISH
+        assertEquals(
+            AppLanguage.ENGLISH,
+            settingsRepository.appLanguage,
+        )
+
+        // Updates to the repository value change the disk source.
+        settingsRepository.appLanguage = AppLanguage.DUTCH
+        assertEquals(
+            AppLanguage.DUTCH,
+            fakeSettingsDiskSource.appLanguage,
         )
     }
 

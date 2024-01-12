@@ -2,12 +2,18 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Provides an API for observing and modifying settings state.
  */
 interface SettingsRepository {
+    /**
+     * The [AppLanguage] for the current user.
+     */
+    var appLanguage: AppLanguage
+
     /**
      * The [VaultTimeout] for the current user.
      */
