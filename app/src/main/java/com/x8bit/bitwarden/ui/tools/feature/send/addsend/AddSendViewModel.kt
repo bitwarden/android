@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -141,6 +142,7 @@ class AddSendViewModel @Inject constructor(
     private fun handleInternalAction(action: AddSendAction.Internal): Unit = when (action) {
         is AddSendAction.Internal.CreateSendResultReceive -> handleCreateSendResultReceive(action)
         is AddSendAction.Internal.UpdateSendResultReceive -> handleUpdateSendResultReceive(action)
+        is AddSendAction.Internal.DeleteSendResultReceive -> handleDeleteSendResultReceive(action)
         is AddSendAction.Internal.RemovePasswordResultReceive -> handleRemovePasswordResultReceive(
             action,
         )
@@ -202,6 +204,29 @@ class AddSendViewModel @Inject constructor(
                         message = result.sendView.toSendUrl(state.baseWebSendUrl),
                     ),
                 )
+            }
+        }
+    }
+
+    private fun handleDeleteSendResultReceive(
+        action: AddSendAction.Internal.DeleteSendResultReceive,
+    ) {
+        when (action.result) {
+            is DeleteSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is DeleteSendResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(AddSendEvent.NavigateBack)
+                sendEvent(AddSendEvent.ShowToast(message = R.string.send_deleted.asText()))
             }
         }
     }
@@ -315,25 +340,29 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleDeleteClick() {
-        // TODO Add deletion support (BIT-1435)
-        sendEvent(AddSendEvent.ShowToast("Not yet implemented".asText()))
+        onEdit {
+            mutableStateFlow.update {
+                it.copy(dialogState = AddSendState.DialogState.Loading(R.string.deleting.asText()))
+            }
+            viewModelScope.launch {
+                val result = vaultRepo.deleteSend(it.sendItemId)
+                sendAction(AddSendAction.Internal.DeleteSendResultReceive(result))
+            }
+        }
     }
 
     private fun handleRemovePasswordClick() {
-        when (val addSendType = state.addSendType) {
-            AddSendType.AddItem -> Unit
-            is AddSendType.EditItem -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = AddSendState.DialogState.Loading(
-                            message = R.string.removing_send_password.asText(),
-                        ),
-                    )
-                }
-                viewModelScope.launch {
-                    val result = vaultRepo.removePasswordSend(addSendType.sendItemId)
-                    sendAction(AddSendAction.Internal.RemovePasswordResultReceive(result))
-                }
+        onEdit {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AddSendState.DialogState.Loading(
+                        message = R.string.removing_send_password.asText(),
+                    ),
+                )
+            }
+            viewModelScope.launch {
+                val result = vaultRepo.removePasswordSend(it.sendItemId)
+                sendAction(AddSendAction.Internal.RemovePasswordResultReceive(result))
             }
         }
     }
@@ -491,6 +520,12 @@ class AddSendViewModel @Inject constructor(
         crossinline block: (AddSendState.ViewState.Content) -> Unit,
     ) {
         (state.viewState as? AddSendState.ViewState.Content)?.let(block)
+    }
+
+    private inline fun onEdit(
+        crossinline block: (AddSendType.EditItem) -> Unit,
+    ) {
+        (state.addSendType as? AddSendType.EditItem)?.let(block)
     }
 
     private inline fun updateContent(
@@ -824,6 +859,11 @@ sealed class AddSendAction {
          * Indicates a result for removing the password from a send has been received.
          */
         data class RemovePasswordResultReceive(val result: RemovePasswordSendResult) : Internal()
+
+        /**
+         * Indicates a result for deleting the send has been received.
+         */
+        data class DeleteSendResultReceive(val result: DeleteSendResult) : Internal()
 
         /**
          * Indicates that the send item data has been received.

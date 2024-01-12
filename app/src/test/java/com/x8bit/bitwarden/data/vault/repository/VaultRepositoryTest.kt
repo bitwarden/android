@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -1598,7 +1599,6 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val sendId = "sendId1234"
-            val mockSendView = createMockSendView(number = 1)
             coEvery {
                 sendsService.removeSendPassword(sendId = sendId)
             } returns Throwable("Fail").asFailure()
@@ -1649,6 +1649,34 @@ class VaultRepositoryTest {
             val result = vaultRepository.removePasswordSend(sendId = sendId)
 
             assertEquals(RemovePasswordSendResult.Success(mockSendView), result)
+        }
+
+    @Test
+    fun `deleteSend with sendsService deleteSend failure should return DeleteSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val sendId = "mockId-1"
+            coEvery {
+                sendsService.deleteSend(sendId = sendId)
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.deleteSend(sendId)
+
+            assertEquals(DeleteSendResult.Error, result)
+        }
+
+    @Test
+    fun `deleteSend with sendsService deleteSend success should return DeleteSendResult success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val sendId = "mockId-1"
+            coEvery { sendsService.deleteSend(sendId = sendId) } returns Unit.asSuccess()
+            coEvery { vaultDiskSource.deleteSend(userId, sendId) } just runs
+
+            val result = vaultRepository.deleteSend(sendId)
+
+            assertEquals(DeleteSendResult.Success, result)
         }
 
     //region Helper functions

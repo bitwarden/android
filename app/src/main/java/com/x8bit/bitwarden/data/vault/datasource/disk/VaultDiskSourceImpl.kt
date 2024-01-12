@@ -22,6 +22,7 @@ import kotlinx.serialization.json.Json
 /**
  * Default implementation of [VaultDiskSource].
  */
+@Suppress("TooManyFunctions")
 class VaultDiskSourceImpl(
     private val ciphersDao: CiphersDao,
     private val collectionsDao: CollectionsDao,
@@ -138,6 +139,10 @@ class VaultDiskSourceImpl(
                 ),
             ),
         )
+    }
+
+    override suspend fun deleteSend(userId: String, sendId: String) {
+        sendsDao.deleteSend(userId, sendId)
     }
 
     override fun getSends(

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Primary access point for disk information related to vault data.
  */
+@Suppress("TooManyFunctions")
 interface VaultDiskSource {
 
     /**
@@ -42,6 +43,11 @@ interface VaultDiskSource {
      * Saves a send to the data source for the given [userId].
      */
     suspend fun saveSend(userId: String, send: SyncResponseJson.Send)
+
+    /**
+     * Deletes a send from the data source for the given [userId] and [sendId].
+     */
+    suspend fun deleteSend(userId: String, sendId: String)
 
     /**
      * Retrieves all sends from the data source for a given [userId].

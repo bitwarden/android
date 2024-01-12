@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -157,4 +158,9 @@ interface VaultRepository : VaultLockManager {
      * Attempt to remove the password from a send.
      */
     suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult
+
+    /**
+     * Attempt to delete a send.
+     */
+    suspend fun deleteSend(sendId: String): DeleteSendResult
 }

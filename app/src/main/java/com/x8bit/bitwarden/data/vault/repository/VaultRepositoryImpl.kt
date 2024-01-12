@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -469,6 +470,17 @@ class VaultRepositoryImpl(
                     }
                 },
                 onFailure = { RemovePasswordSendResult.Error(errorMessage = null) },
+            )
+    }
+
+    override suspend fun deleteSend(sendId: String): DeleteSendResult {
+        val userId = requireNotNull(activeUserId)
+        return sendsService
+            .deleteSend(sendId)
+            .onSuccess { vaultDiskSource.deleteSend(userId, sendId) }
+            .fold(
+                onSuccess = { DeleteSendResult.Success },
+                onFailure = { DeleteSendResult.Error },
             )
     }
 

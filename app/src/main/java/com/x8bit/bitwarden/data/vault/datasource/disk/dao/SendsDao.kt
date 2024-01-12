@@ -30,6 +30,13 @@ interface SendsDao {
     ): Flow<List<SendEntity>>
 
     /**
+     * Deletes the specified send associated with the given [userId] and [sendId]. This will return
+     * the number of rows deleted by this query.
+     */
+    @Query("DELETE FROM sends WHERE user_id = :userId AND id = :sendId")
+    suspend fun deleteSend(userId: String, sendId: String): Int
+
+    /**
      * Deletes all the stored sends associated with the given [userId]. This will return the
      * number of rows deleted by this query.
      */

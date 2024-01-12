@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -37,6 +38,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
+@Suppress("LargeClass")
 class AddSendViewModelTest : BaseViewModelTest() {
 
     private val clock = Clock.fixed(
@@ -280,19 +282,6 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteClick should send ShowToast`() = runTest {
-        val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem("sendId")),
-            addSendType = AddSendType.EditItem("sendId"),
-        )
-
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.DeleteClick)
-            assertEquals(AddSendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
-        }
-    }
-
-    @Test
     fun `in add item state, RemovePasswordClick should do nothing`() = runTest {
         val viewModel = createViewModel()
 
@@ -413,6 +402,62 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `DeleteClick vaultRepository deleteSend Error should show error dialog`() = runTest {
+        val sendId = "mockId-1"
+        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+        val initialState = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = sendId),
+        )
+        val mockSendView = createMockSendView(number = 1)
+        every {
+            mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL)
+        } returns DEFAULT_VIEW_STATE
+        mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
+        val viewModel = createViewModel(
+            state = initialState,
+            addSendType = AddSendType.EditItem(sendItemId = sendId),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(AddSendAction.DeleteClick)
+            assertEquals(
+                initialState.copy(
+                    dialogState = AddSendState.DialogState.Loading(
+                        message = R.string.deleting.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialogState = AddSendState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `DeleteClick vaultRepository deleteSend Success should show toast`() = runTest {
+        val sendId = "mockId-1"
+        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem(sendItemId = sendId)),
+            addSendType = AddSendType.EditItem(sendItemId = sendId),
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddSendAction.DeleteClick)
+            assertEquals(AddSendEvent.NavigateBack, awaitItem())
+            assertEquals(AddSendEvent.ShowToast(R.string.send_deleted.asText()), awaitItem())
+        }
+    }
 
     @Test
     fun `ShareLinkClick should send ShowToast`() = runTest {
