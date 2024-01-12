@@ -64,6 +64,10 @@ class VaultDiskSourceImpl(
                 },
         )
 
+    override suspend fun deleteCipher(userId: String, cipherId: String) {
+        ciphersDao.deleteCipher(userId, cipherId)
+    }
+
     override suspend fun saveCollection(userId: String, collection: SyncResponseJson.Collection) {
         collectionsDao.insertCollection(
             collection = CollectionEntity(

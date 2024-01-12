@@ -20,6 +20,11 @@ interface VaultDiskSource {
     fun getCiphers(userId: String): Flow<List<SyncResponseJson.Cipher>>
 
     /**
+     * Deletes a cipher from the data source for the given [userId] and [cipherId].
+     */
+    suspend fun deleteCipher(userId: String, cipherId: String)
+
+    /**
      * Saves a collection to the data source for the given [userId].
      */
     suspend fun saveCollection(userId: String, collection: SyncResponseJson.Collection)

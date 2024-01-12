@@ -20,4 +20,9 @@ interface CiphersService {
         cipherId: String,
         body: CipherJsonRequest,
     ): Result<UpdateCipherResponseJson>
+
+    /**
+     * Attempt to delete a cipher.
+     */
+    suspend fun deleteCipher(cipherId: String): Result<Unit>
 }

@@ -37,6 +37,13 @@ interface CiphersDao {
     suspend fun deleteAllCiphers(userId: String): Int
 
     /**
+     * Deletes the specified cipher associated with the given [userId] and [cipherId]. This will
+     * return the number of rows deleted by this query.
+     */
+    @Query("DELETE FROM sends WHERE user_id = :userId AND id = :cipherId")
+    suspend fun deleteCipher(userId: String, cipherId: String): Int
+
+    /**
      * Deletes all the stored ciphers associated with the given [userId] and then add all new
      * [ciphers] to the database. This will return `true` if any changes were made to the database
      * and `false` otherwise.

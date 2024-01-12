@@ -9,6 +9,7 @@ class FakeCiphersDao : CiphersDao {
 
     val storedCiphers = mutableListOf<CipherEntity>()
 
+    var deleteCipherCalled: Boolean = false
     var deleteCiphersCalled: Boolean = false
     var insertCiphersCalled: Boolean = false
 
@@ -22,6 +23,14 @@ class FakeCiphersDao : CiphersDao {
         deleteCiphersCalled = true
         val count = storedCiphers.count { it.userId == userId }
         storedCiphers.removeAll { it.userId == userId }
+        ciphersFlow.tryEmit(storedCiphers.toList())
+        return count
+    }
+
+    override suspend fun deleteCipher(userId: String, cipherId: String): Int {
+        deleteCipherCalled = true
+        val count = storedCiphers.count { it.userId == userId && it.id == cipherId }
+        storedCiphers.removeAll { it.userId == userId && it.id == cipherId }
         ciphersFlow.tryEmit(storedCiphers.toList())
         return count
     }

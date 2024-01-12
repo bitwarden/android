@@ -83,6 +83,18 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `DeleteCipher should call deleteCipher`() = runTest {
+        assertFalse(ciphersDao.deleteCipherCalled)
+        ciphersDao.storedCiphers.add(CIPHER_ENTITY)
+        assertEquals(1, ciphersDao.storedCiphers.size)
+
+        vaultDiskSource.deleteCipher(USER_ID, CIPHER_1.id)
+
+        assertTrue(ciphersDao.deleteCipherCalled)
+        assertEquals(emptyList<CipherEntity>(), ciphersDao.storedCiphers)
+    }
+
+    @Test
     fun `saveCollection should call insertCollection`() = runTest {
         assertFalse(collectionsDao.insertCollectionCalled)
         assertEquals(0, collectionsDao.storedCollections.size)

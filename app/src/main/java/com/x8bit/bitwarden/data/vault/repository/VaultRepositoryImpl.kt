@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
@@ -345,6 +346,17 @@ class VaultRepositoryImpl(
                     vaultDiskSource.saveCipher(userId = userId, cipher = it)
                     CreateCipherResult.Success
                 },
+            )
+    }
+
+    override suspend fun deleteCipher(cipherId: String): DeleteCipherResult {
+        val userId = requireNotNull(activeUserId)
+        return ciphersService
+            .deleteCipher(cipherId)
+            .onSuccess { vaultDiskSource.deleteCipher(userId, cipherId) }
+            .fold(
+                onSuccess = { DeleteCipherResult.Success },
+                onFailure = { DeleteCipherResult.Error },
             )
     }
 

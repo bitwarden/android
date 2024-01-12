@@ -7,8 +7,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import retrofit2.create
 
 class CiphersServiceTest : BaseServiceTest() {
@@ -63,6 +63,14 @@ class CiphersServiceTest : BaseServiceTest() {
                 result.getOrThrow(),
             )
         }
+
+    @Test
+    fun `deleteCipher should execute the delete cipher API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val result = ciphersService.deleteCipher(cipherId = cipherId)
+        assertEquals(Unit, result.getOrThrow())
+    }
 }
 
 private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
