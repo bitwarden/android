@@ -54,10 +54,6 @@ namespace Bit.iOS
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
-            //LoadApplication(new App.App(null));
-            //iOSCoreHelpers.AppearanceAdjustments();
-            //ZXing.Net.Mobile.Forms.iOS.Platform.Init();
-
             ConnectToWatchIfNeededAsync().FireAndForget();
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
@@ -219,7 +215,11 @@ namespace Bit.iOS
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            _stateService?.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
+            if (_stateService != null && _deviceActionService != null)
+            {
+                _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
+            }
+
             _messagingService?.Send("slept");
             base.DidEnterBackground(uiApplication);
         }

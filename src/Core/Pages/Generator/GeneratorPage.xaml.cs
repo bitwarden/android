@@ -15,6 +15,7 @@ namespace Bit.App.Pages
     public partial class GeneratorPage : BaseContentPage, IThemeDirtablePage
     {
         private readonly IBroadcasterService _broadcasterService;
+        private readonly ILogger _logger;
 
         private GeneratorPageViewModel _vm;
         private readonly bool _fromTabPage;
@@ -26,6 +27,8 @@ namespace Bit.App.Pages
             _tabsPage = tabsPage;
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
+            _logger = ServiceContainer.Resolve<ILogger>();
+
             _vm = BindingContext as GeneratorPageViewModel;
             _vm.Page = this;
             _fromTabPage = fromTabPage;
@@ -35,26 +38,21 @@ namespace Bit.App.Pages
             _vm.EmailWebsite = emailWebsite;
             _vm.EditMode = editMode;
             _vm.IosExtension = appOptions?.IosExtension ?? false;
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            var isIos = Device.RuntimePlatform == Device.iOS;
+
             if (selectAction != null)
             {
-                if (isIos)
-                {
-                    ToolbarItems.Add(_closeItem);
-                }
+#if IOS
+                ToolbarItems.Add(_closeItem);
+#endif
                 ToolbarItems.Add(_selectItem);
             }
             else
             {
-                if (isIos)
-                {
-                    ToolbarItems.Add(_moreItem);
-                }
-                else
-                {
-                    ToolbarItems.Add(_historyItem);
-                }
+#if IOS
+                ToolbarItems.Add(_moreItem);
+#else
+                ToolbarItems.Add(_historyItem);
+#endif
             }
             _typePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             _passwordTypePicker.On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
@@ -71,22 +69,30 @@ namespace Bit.App.Pages
 
         protected async override void OnAppearing()
         {
-            base.OnAppearing();
-
-            lblPassword.IsVisible = true;
-
-            if (!_fromTabPage)
+            try
             {
-                await InitAsync();
-            }
+                base.OnAppearing();
 
-            _broadcasterService.Subscribe(nameof(GeneratorPage), (message) =>
-            {
-                if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
+                lblPassword.IsVisible = true;
+
+                if (!_fromTabPage)
                 {
-                    Device.BeginInvokeOnMainThread(() => _vm.RedrawPassword());
+                    await InitAsync();
                 }
-            });
+
+                _broadcasterService.Subscribe(nameof(GeneratorPage), (message) =>
+                {
+                    if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
+                    {
+                        MainThread.BeginInvokeOnMainThread(() => _vm.RedrawPassword());
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                throw;
+            }
         }
 
         protected override void OnDisappearing()
@@ -100,27 +106,35 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
-            // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-            if (Device.RuntimePlatform == Device.Android && _tabsPage != null)
+#if ANDROID
+            if (_tabsPage != null)
             {
                 _tabsPage.ResetToVaultPage();
                 return true;
             }
+#endif
             return base.OnBackButtonPressed();
         }
 
         private async void More_Clicked(object sender, EventArgs e)
         {
-            if (!DoOnce())
+            try
             {
-                return;
+                if (!DoOnce())
+                {
+                    return;
+                }
+                var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+                    null, AppResources.PasswordHistory);
+                if (selection == AppResources.PasswordHistory)
+                {
+                    var page = new GeneratorHistoryPage();
+                    await Navigation.PushModalAsync(new Microsoft.Maui.Controls.NavigationPage(page));
+                }
             }
-            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
-                null, AppResources.PasswordHistory);
-            if (selection == AppResources.PasswordHistory)
+            catch (Exception ex)
             {
-                var page = new GeneratorHistoryPage();
-                await Navigation.PushModalAsync(new Microsoft.Maui.Controls.NavigationPage(page));
+                _logger.Exception(ex);
             }
         }
 
@@ -144,7 +158,7 @@ namespace Bit.App.Pages
         {
             await base.UpdateOnThemeChanged();
 
-            await Device.InvokeOnMainThreadAsync(() =>
+            await MainThread.InvokeOnMainThreadAsync(() =>
             {
                 if (_vm != null)
                 {

@@ -14,6 +14,7 @@ namespace Bit.App.Pages
     {
         private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
         private readonly LazyResolve<IDeviceActionService> _deviceActionService = new LazyResolve<IDeviceActionService>();
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         protected int ShowModalAnimationDelay = 400;
         protected int ShowPageAnimationDelay = 100;
@@ -48,22 +49,38 @@ namespace Bit.App.Pages
 
         protected override async void OnNavigatedTo(NavigatedToEventArgs args)
         {
-            base.OnNavigatedTo(args);
-
-            if (IsThemeDirty)
+            try
             {
-                UpdateOnThemeChanged();
+                base.OnNavigatedTo(args);
+
+                if (IsThemeDirty)
+                {
+                    try
+                    {
+                        await UpdateOnThemeChanged();
+                    }
+                    catch (Exception ex)
+                    {
+                        Core.Services.LoggerHelper.LogEvenIfCantBeResolved(ex);
+                        // Don't rethrow on theme changed so the user can still continue on the app.
+                    }
+                }
+
+                await SaveActivityAsync();
+
+                if (ShouldCheckToPreventOnNavigatedToCalledTwice && _hasInitedOnNavigatedTo)
+                {
+                    return;
+                }
+                _hasInitedOnNavigatedTo = true;
+
+                await InitOnNavigatedToAsync();
             }
-
-            await SaveActivityAsync();
-
-            if (ShouldCheckToPreventOnNavigatedToCalledTwice && _hasInitedOnNavigatedTo)
+            catch (Exception ex)
             {
-                return;
+                Core.Services.LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
             }
-            _hasInitedOnNavigatedTo = true;
-
-            await InitOnNavigatedToAsync();
         }
 
         protected virtual Task InitOnNavigatedToAsync() => Task.CompletedTask;
@@ -116,29 +133,37 @@ namespace Bit.App.Pages
         {
             async Task DoWorkAsync()
             {
-                await workFunction.Invoke();
-                if (sourceView != null)
+                try
                 {
-                    if (targetView != null)
+                    await workFunction.Invoke();
+                    if (sourceView != null)
                     {
-                        targetView.Content = sourceView;
-                    }
-                    else
-                    {
-                        Content = sourceView;
+                        if (targetView != null)
+                        {
+                            targetView.Content = sourceView;
+                        }
+                        else
+                        {
+                            Content = sourceView;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    _logger.Value.Exception(ex);
+                    throw;
+                }
             }
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                await DoWorkAsync();
-                return;
-            }
+
+#if IOS
+            await DoWorkAsync();
+#else
             await Task.Run(async () =>
             {
                 await Task.Delay(fromModal ? ShowModalAnimationDelay : ShowPageAnimationDelay);
                 MainThread.BeginInvokeOnMainThread(async () => await DoWorkAsync());
             });
+#endif
         }
 
         protected void RequestFocus(InputView input)

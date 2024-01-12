@@ -1,9 +1,9 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 
@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly ILogger _logger;
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
 
@@ -39,6 +40,8 @@ namespace Bit.App.Pages
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _logger = ServiceContainer.Resolve<ILogger>();
+
             _vm = BindingContext as GroupingsPageViewModel;
             _vm.Page = this;
             _vm.MainPage = mainPage;
@@ -57,17 +60,14 @@ namespace Bit.App.Pages
                 _vm.VaultFilterDescription = vaultFilterSelection;
             }
 
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                _absLayout.Children.Remove(_fab);
-                ToolbarItems.Add(_addItem);
-            }
-            else
-            {
-                ToolbarItems.Add(_syncItem);
-                ToolbarItems.Add(_lockItem);
-                ToolbarItems.Add(_exitItem);
-            }
+#if IOS
+            _absLayout.Children.Remove(_fab);
+            ToolbarItems.Add(_addItem);
+#else
+            ToolbarItems.Add(_syncItem);
+            ToolbarItems.Add(_lockItem);
+            ToolbarItems.Add(_exitItem);
+#endif
             if (deleted || showTotp)
             {
                 _absLayout.Children.Remove(_fab);
@@ -81,107 +81,115 @@ namespace Bit.App.Pages
 
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
-            if (_syncService.SyncInProgress)
+            try
             {
-                IsBusy = true;
-            }
-
-            _accountAvatar?.OnAppearing();
-            if (_vm.MainPage)
-            {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-            }
-
-            _broadcasterService.Subscribe(_pageName, async (message) =>
-            {
-                try
+                base.OnAppearing();
+                if (_syncService.SyncInProgress)
                 {
-                    if (message.Command == "syncStarted")
+                    IsBusy = true;
+                }
+
+                _accountAvatar?.OnAppearing();
+                if (_vm.MainPage)
+                {
+                    _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                }
+
+                _broadcasterService.Subscribe(_pageName, async (message) =>
+                {
+                    try
                     {
-                        MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
-                    }
-                    else if (message.Command == "syncCompleted")
-                    {
-                        await Task.Delay(500);
-                        if (_vm.MainPage)
+                        if (message.Command == "syncStarted")
                         {
-                            _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+                            MainThread.BeginInvokeOnMainThread(() => IsBusy = true);
                         }
-                        MainThread.BeginInvokeOnMainThread(() =>
+                        else if (message.Command == "syncCompleted")
                         {
-                            IsBusy = false;
-                            if (_vm.LoadedOnce)
+                            await Task.Delay(500);
+                            if (_vm.MainPage)
                             {
-                                var task = _vm.LoadAsync();
+                                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
                             }
-                        });
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                IsBusy = false;
+                                if (_vm.LoadedOnce)
+                                {
+                                    var task = _vm.LoadAsync();
+                                }
+                            });
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                }
-            });
-
-            await LoadOnAppearedAsync(_mainLayout, false, async () =>
-            {
-                if (_previousPage == null)
-                {
-                    if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
+                    catch (Exception ex)
                     {
-                        try
-                        {
-                            await _vm.LoadAsync();
-                        }
-                        catch (Exception e) when (e.Message.Contains("No key."))
-                        {
-                            await Task.Delay(1000);
-                            await _vm.LoadAsync();
-                        }
+                        LoggerHelper.LogEvenIfCantBeResolved(ex);
                     }
-                    else
+                });
+
+                await LoadOnAppearedAsync(_mainLayout, false, async () =>
+                {
+                    if (_previousPage == null)
                     {
-                        await Task.Delay(5000);
-                        if (!_vm.Loaded)
+                        if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
                         {
-                            await _vm.LoadAsync();
+                            try
+                            {
+                                await _vm.LoadAsync();
+                            }
+                            catch (Exception e) when (e.Message.Contains("No key."))
+                            {
+                                await Task.Delay(1000);
+                                await _vm.LoadAsync();
+                            }
+                        }
+                        else
+                        {
+                            await Task.Delay(5000);
+                            if (!_vm.Loaded)
+                            {
+                                await _vm.LoadAsync();
+                            }
                         }
                     }
-                }
-                await ShowPreviousPageAsync();
-                AdjustToolbar();
-            }, _mainContent);
+                    await ShowPreviousPageAsync();
+                    AdjustToolbar();
+                }, _mainContent);
 
-            if (!_vm.MainPage)
-            {
-                return;
-            }
+                if (!_vm.MainPage)
+                {
+                    return;
+                }
 
-            // Push registration
-            var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync();
-            lastPushRegistration = lastPushRegistration.GetValueOrDefault(DateTime.MinValue);
-            if (DeviceInfo.Platform == DevicePlatform.iOS)
-            {
-                var pushPromptShow = await _stateService.GetPushInitialPromptShownAsync();
-                if (!pushPromptShow.GetValueOrDefault(false))
+                // Push registration
+                var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync();
+                lastPushRegistration = lastPushRegistration.GetValueOrDefault(DateTime.MinValue);
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
                 {
-                    await _stateService.SetPushInitialPromptShownAsync(true);
-                    await DisplayAlert(AppResources.EnableAutomaticSyncing, AppResources.PushNotificationAlert,
-                        AppResources.OkGotIt);
+                    var pushPromptShow = await _stateService.GetPushInitialPromptShownAsync();
+                    if (!pushPromptShow.GetValueOrDefault(false))
+                    {
+                        await _stateService.SetPushInitialPromptShownAsync(true);
+                        await DisplayAlert(AppResources.EnableAutomaticSyncing, AppResources.PushNotificationAlert,
+                            AppResources.OkGotIt);
+                    }
+                    if (!pushPromptShow.GetValueOrDefault(false) ||
+                        DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                    {
+                        await _pushNotificationService.RegisterAsync();
+                    }
                 }
-                if (!pushPromptShow.GetValueOrDefault(false) ||
-                    DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                else if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
-                    await _pushNotificationService.RegisterAsync();
+                    if (DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                    {
+                        await _pushNotificationService.RegisterAsync();
+                    }
                 }
             }
-            else if (DeviceInfo.Platform == DevicePlatform.Android)
+            catch (Exception ex)
             {
-                if (DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
-                {
-                    await _pushNotificationService.RegisterAsync();
-                }
+                _logger.Exception(ex);
+                throw;
             }
         }
 
@@ -195,14 +203,22 @@ namespace Bit.App.Pages
             return false;
         }
 
-        protected override async void OnDisappearing()
+        protected override void OnDisappearing()
         {
-            base.OnDisappearing();
-            IsBusy = false;
-            _vm.StopCiphersTotpTick().FireAndForget();
-            _broadcasterService.Unsubscribe(_pageName);
-            _vm.DisableRefreshing();
-            _accountAvatar?.OnDisappearing();
+            try
+            {
+                base.OnDisappearing();
+                IsBusy = false;
+                _vm.StopCiphersTotpTick().FireAndForget();
+                _broadcasterService.Unsubscribe(_pageName);
+                _vm.DisableRefreshing();
+                _accountAvatar?.OnDisappearing();
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                throw;
+            }
         }
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
@@ -264,45 +280,80 @@ namespace Bit.App.Pages
 
         private async void Search_Clicked(object sender, EventArgs e)
         {
-            await _accountListOverlay.HideAsync();
-            if (DoOnce())
+            try
             {
-                var page = new CiphersPage(_vm.Filter, _vm.MainPage ? null : _vm.PageTitle, deleted: _vm.Deleted);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await _accountListOverlay.HideAsync();
+                if (DoOnce())
+                {
+                    var page = new CiphersPage(_vm.Filter, _vm.MainPage ? null : _vm.PageTitle, deleted: _vm.Deleted);
+                    await Navigation.PushModalAsync(new NavigationPage(page));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
             }
         }
 
         private async void Sync_Clicked(object sender, EventArgs e)
         {
-            await _accountListOverlay.HideAsync();
-            await _vm.SyncAsync();
+            try
+            {
+                await _accountListOverlay.HideAsync();
+                await _vm.SyncAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         private async void Lock_Clicked(object sender, EventArgs e)
         {
-            await _accountListOverlay.HideAsync();
-            await _vaultTimeoutService.LockAsync(true, true);
+            try
+            {
+                await _accountListOverlay.HideAsync();
+                await _vaultTimeoutService.LockAsync(true, true);
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         private async void Exit_Clicked(object sender, EventArgs e)
         {
-            await _accountListOverlay.HideAsync();
-            await _vm.ExitAsync();
+            try
+            {
+                await _accountListOverlay.HideAsync();
+                await _vm.ExitAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
-            var skipAction = _accountListOverlay.IsVisible && DeviceInfo.Platform == DevicePlatform.Android;
-            await _accountListOverlay.HideAsync();
-            if (skipAction)
+            try
             {
-                // Account list in the process of closing via tapping on invisible FAB, skip this attempt
-                return;
+                var skipAction = _accountListOverlay.IsVisible && DeviceInfo.Platform == DevicePlatform.Android;
+                await _accountListOverlay.HideAsync();
+                if (skipAction)
+                {
+                    // Account list in the process of closing via tapping on invisible FAB, skip this attempt
+                    return;
+                }
+                if (!_vm.Deleted && DoOnce())
+                {
+                    var page = new CipherAddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId, _vm.GetVaultFilterOrgId());
+                    await Navigation.PushModalAsync(new NavigationPage(page));
+                }
             }
-            if (!_vm.Deleted && DoOnce())
+            catch (Exception ex)
             {
-                var page = new CipherAddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId, _vm.GetVaultFilterOrgId());
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                _logger.Exception(ex);
             }
         }
 

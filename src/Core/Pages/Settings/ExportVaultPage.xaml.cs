@@ -29,7 +29,7 @@ namespace Bit.App.Pages
             {
                 if (message.Command == "selectSaveFileResult")
                 {
-                    Device.BeginInvokeOnMainThread(() =>
+                    MainThread.BeginInvokeOnMainThread(() =>
                     {
                         var data = message.Data as Tuple<string, string>;
                         if (data == null)

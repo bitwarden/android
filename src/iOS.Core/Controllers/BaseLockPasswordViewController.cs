@@ -204,7 +204,18 @@ namespace Bit.iOS.Core.Controllers
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(500);
-                    NSRunLoop.Main.BeginInvokeOnMainThread(async () => await PromptBiometricAsync());
+                    NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
+                    {
+                        try
+                        {
+                            await PromptBiometricAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerHelper.LogEvenIfCantBeResolved(ex);
+                            throw;
+                        }
+                    });
                 });
             }
         }

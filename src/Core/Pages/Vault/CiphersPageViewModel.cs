@@ -109,52 +109,59 @@ namespace Bit.App.Pages
             var cts = new CancellationTokenSource();
             Task.Run(async () =>
             {
-                List<CipherView> ciphers = null;
-                var searchable = !string.IsNullOrWhiteSpace(searchText) && searchText.Length > 1;
-                var shouldShowAllWhenEmpty = ShowAllIfSearchTextEmpty && string.IsNullOrEmpty(searchText);
-                if (searchable || shouldShowAllWhenEmpty)
+                try
                 {
-                    if (timeout != null)
+                    List<CipherView> ciphers = null;
+                    var searchable = !string.IsNullOrWhiteSpace(searchText) && searchText.Length > 1;
+                    var shouldShowAllWhenEmpty = ShowAllIfSearchTextEmpty && string.IsNullOrEmpty(searchText);
+                    if (searchable || shouldShowAllWhenEmpty)
                     {
-                        await Task.Delay(timeout.Value);
-                    }
-                    if (searchText != (Page as CiphersPage).SearchBar.Text
-                        &&
-                        !shouldShowAllWhenEmpty)
-                    {
-                        return;
-                    }
+                        if (timeout != null)
+                        {
+                            await Task.Delay(timeout.Value);
+                        }
+                        if (searchText != (Page as CiphersPage).SearchBar.Text
+                            &&
+                            !shouldShowAllWhenEmpty)
+                        {
+                            return;
+                        }
 
-                    previousCts?.Cancel();
-                    try
-                    {
-                        var vaultFilteredCiphers = await GetAllCiphersAsync();
-                        if (!shouldShowAllWhenEmpty)
+                        previousCts?.Cancel();
+                        try
                         {
-                            ciphers = await _searchService.SearchCiphersAsync(searchText,
-                                Filter ?? (c => c.IsDeleted == Deleted), vaultFilteredCiphers, cts.Token);
+                            var vaultFilteredCiphers = await GetAllCiphersAsync();
+                            if (!shouldShowAllWhenEmpty)
+                            {
+                                ciphers = await _searchService.SearchCiphersAsync(searchText,
+                                    Filter ?? (c => c.IsDeleted == Deleted), vaultFilteredCiphers, cts.Token);
+                            }
+                            else
+                            {
+                                ciphers = vaultFilteredCiphers;
+                            }
+                            cts.Token.ThrowIfCancellationRequested();
                         }
-                        else
+                        catch (OperationCanceledException)
                         {
-                            ciphers = vaultFilteredCiphers;
+                            return;
                         }
-                        cts.Token.ThrowIfCancellationRequested();
                     }
-                    catch (OperationCanceledException)
+                    if (ciphers == null)
                     {
-                        return;
+                        ciphers = new List<CipherView>();
                     }
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        Ciphers.ResetWithRange(ciphers.Select(c => new CipherItemViewModel(c, _websiteIconsEnabled)).ToList());
+                        ShowNoData = !shouldShowAllWhenEmpty && searchable && Ciphers.Count == 0;
+                        ShowList = (searchable || shouldShowAllWhenEmpty) && !ShowNoData;
+                    });
                 }
-                if (ciphers == null)
+                catch (Exception ex)
                 {
-                    ciphers = new List<CipherView>();
+                    _logger.Exception(ex);
                 }
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    Ciphers.ResetWithRange(ciphers.Select(c => new CipherItemViewModel(c, _websiteIconsEnabled)).ToList());
-                    ShowNoData = !shouldShowAllWhenEmpty && searchable && Ciphers.Count == 0;
-                    ShowList = (searchable || shouldShowAllWhenEmpty) && !ShowNoData;
-                });
             }, cts.Token);
             _searchCancellationTokenSource = cts;
         }
