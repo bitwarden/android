@@ -104,9 +104,9 @@ class SettingsDiskSourceTest {
         val vaultTimeoutAction = VaultTimeoutAction.LOCK
         fakeSharedPreferences
             .edit()
-            .putInt(
+            .putString(
                 "${vaultTimeoutActionBaseKey}_$mockUserId",
-                vaultTimeoutAction.value,
+                "0",
             )
             .apply()
         val actual = settingsDiskSource.getVaultTimeoutAction(userId = mockUserId)
@@ -149,12 +149,12 @@ class SettingsDiskSourceTest {
             userId = mockUserId,
             vaultTimeoutAction = vaultTimeoutAction,
         )
-        val actual = fakeSharedPreferences.getInt(
+        val actual = fakeSharedPreferences.getString(
             "${vaultTimeoutActionBaseKey}_$mockUserId",
-            0,
+            null,
         )
         assertEquals(
-            vaultTimeoutAction.value,
+            "0",
             actual,
         )
     }
@@ -163,16 +163,14 @@ class SettingsDiskSourceTest {
     fun `storeVaultTimeoutAction for null values should clear SharedPreferences`() {
         val vaultTimeoutActionBaseKey = "bwPreferencesStorage:vaultTimeoutAction"
         val mockUserId = "mockUserId"
-        val previousValue = VaultTimeoutAction.LOCK
         val vaultTimeoutActionKey = "${vaultTimeoutActionBaseKey}_$mockUserId"
         fakeSharedPreferences.edit {
-            putInt(vaultTimeoutActionKey, previousValue.value)
+            putString(vaultTimeoutActionKey, "0")
         }
-        assertTrue(fakeSharedPreferences.contains(vaultTimeoutActionKey))
         settingsDiskSource.storeVaultTimeoutAction(
             userId = mockUserId,
             vaultTimeoutAction = null,
         )
-        assertFalse(fakeSharedPreferences.contains(vaultTimeoutActionKey))
+        assertNull(fakeSharedPreferences.getString(vaultTimeoutActionKey, null))
     }
 }

@@ -43,7 +43,7 @@ class SettingsDiskSourceImpl(
     }
 
     override fun getVaultTimeoutAction(userId: String): VaultTimeoutAction? =
-        getInt(key = "${VAULT_TIMEOUT_ACTION_KEY}_$userId")?.let { storedValue ->
+        getString(key = "${VAULT_TIMEOUT_ACTION_KEY}_$userId")?.let { storedValue ->
             VaultTimeoutAction.entries.firstOrNull { storedValue == it.value }
         }
 
@@ -55,7 +55,7 @@ class SettingsDiskSourceImpl(
         userId: String,
         vaultTimeoutAction: VaultTimeoutAction?,
     ) {
-        putInt(
+        putString(
             key = "${VAULT_TIMEOUT_ACTION_KEY}_$userId",
             value = vaultTimeoutAction?.value,
         )
