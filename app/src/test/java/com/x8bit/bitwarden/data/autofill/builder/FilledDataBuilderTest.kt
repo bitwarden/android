@@ -27,7 +27,10 @@ class FilledDataBuilderTest {
         val autofillId: AutofillId = mockk()
         val autofillView = AutofillView.Login.Username(
             autofillId = autofillId,
+            idPackage = null,
             isFocused = false,
+            webDomain = null,
+            webScheme = null,
         )
         val autofillPartition = AutofillPartition.Login(
             views = listOf(autofillView),
@@ -36,6 +39,7 @@ class FilledDataBuilderTest {
         val autofillRequest = AutofillRequest.Fillable(
             ignoreAutofillIds = ignoreAutofillIds,
             partition = autofillPartition,
+            uri = URI,
         )
         val filledItem = FilledItem(
             autofillId = autofillId,
@@ -67,7 +71,10 @@ class FilledDataBuilderTest {
         val autofillId: AutofillId = mockk()
         val autofillView = AutofillView.Card.Number(
             autofillId = autofillId,
+            idPackage = null,
             isFocused = false,
+            webDomain = null,
+            webScheme = null,
         )
         val autofillPartition = AutofillPartition.Card(
             views = listOf(autofillView),
@@ -76,6 +83,7 @@ class FilledDataBuilderTest {
         val autofillRequest = AutofillRequest.Fillable(
             ignoreAutofillIds = ignoreAutofillIds,
             partition = autofillPartition,
+            uri = URI,
         )
         val filledItem = FilledItem(
             autofillId = autofillId,
@@ -99,5 +107,9 @@ class FilledDataBuilderTest {
 
         // Verify
         assertEquals(expected, actual)
+    }
+
+    companion object {
+        private const val URI: String = "androidapp://com.x8bit.bitwarden"
     }
 }

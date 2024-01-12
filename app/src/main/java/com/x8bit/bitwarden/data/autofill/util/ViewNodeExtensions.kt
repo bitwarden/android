@@ -18,8 +18,11 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? = autofillId
             ?.let { supportedHint ->
                 buildAutofillView(
                     autofillId = nonNullAutofillId,
+                    idPackage = idPackage,
                     isFocused = isFocused,
                     hint = supportedHint,
+                    webDomain = webDomain,
+                    webScheme = webScheme,
                 )
             }
     }
@@ -27,58 +30,82 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? = autofillId
 /**
  * Convert the data into an [AutofillView] if the [hint] is supported.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 private fun buildAutofillView(
     autofillId: AutofillId,
+    idPackage: String?,
     isFocused: Boolean,
     hint: String,
+    webDomain: String?,
+    webScheme: String?,
 ): AutofillView? = when (hint) {
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> {
         AutofillView.Card.ExpirationMonth(
             autofillId = autofillId,
+            idPackage = idPackage,
             isFocused = isFocused,
+            webDomain = webDomain,
+            webScheme = webScheme,
         )
     }
 
     View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR -> {
         AutofillView.Card.ExpirationYear(
             autofillId = autofillId,
+            idPackage = idPackage,
             isFocused = isFocused,
+            webDomain = webDomain,
+            webScheme = webScheme,
         )
     }
 
     View.AUTOFILL_HINT_CREDIT_CARD_NUMBER -> {
         AutofillView.Card.Number(
             autofillId = autofillId,
+            idPackage = idPackage,
             isFocused = isFocused,
+            webDomain = webDomain,
+            webScheme = webScheme,
         )
     }
 
     View.AUTOFILL_HINT_CREDIT_CARD_SECURITY_CODE -> {
         AutofillView.Card.SecurityCode(
             autofillId = autofillId,
+            idPackage = idPackage,
             isFocused = isFocused,
+            webDomain = webDomain,
+            webScheme = webScheme,
         )
     }
 
     View.AUTOFILL_HINT_EMAIL_ADDRESS -> {
         AutofillView.Login.EmailAddress(
             autofillId = autofillId,
+            idPackage = idPackage,
             isFocused = isFocused,
+            webDomain = webDomain,
+            webScheme = webScheme,
         )
     }
 
     View.AUTOFILL_HINT_PASSWORD -> {
         AutofillView.Login.Password(
             autofillId = autofillId,
+            idPackage = idPackage,
             isFocused = isFocused,
+            webDomain = webDomain,
+            webScheme = webScheme,
         )
     }
 
     View.AUTOFILL_HINT_USERNAME -> {
         AutofillView.Login.Username(
             autofillId = autofillId,
+            idPackage = idPackage,
             isFocused = isFocused,
+            webDomain = webDomain,
+            webScheme = webScheme,
         )
     }
 

@@ -13,6 +13,7 @@ sealed class AutofillRequest {
     data class Fillable(
         val ignoreAutofillIds: List<AutofillId>,
         val partition: AutofillPartition,
+        val uri: String?,
     ) : AutofillRequest()
 
     /**
