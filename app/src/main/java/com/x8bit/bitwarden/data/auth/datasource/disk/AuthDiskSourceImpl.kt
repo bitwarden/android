@@ -19,6 +19,7 @@ private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnl
 private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
+private const val LAST_ACTIVE_TIME_KEY = "$BASE_KEY:lastActiveTime"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "$BASE_KEY:masterKeyEncryptedUserKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "$BASE_KEY:encPrivateKey"
 private const val ORGANIZATIONS_KEY = "$BASE_KEY:organizations"
@@ -65,6 +66,19 @@ class AuthDiskSourceImpl(
     override val userStateFlow: Flow<UserStateJson?>
         get() = mutableUserStateFlow
             .onSubscription { emit(userState) }
+
+    override fun getLastActiveTimeMillis(userId: String): Long? =
+        getLong(key = "${LAST_ACTIVE_TIME_KEY}_$userId")
+
+    override fun storeLastActiveTimeMillis(
+        userId: String,
+        lastActiveTimeMillis: Long?,
+    ) {
+        putLong(
+            key = "${LAST_ACTIVE_TIME_KEY}_$userId",
+            value = lastActiveTimeMillis,
+        )
+    }
 
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 

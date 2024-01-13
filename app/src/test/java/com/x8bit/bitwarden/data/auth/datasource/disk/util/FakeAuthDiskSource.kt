@@ -19,6 +19,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
+    private val storedLastActiveTimeMillis = mutableMapOf<String, Long?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
     private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
@@ -34,6 +35,16 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override val userStateFlow: Flow<UserStateJson?>
         get() = mutableUserStateFlow.onSubscription { emit(userState) }
+
+    override fun getLastActiveTimeMillis(userId: String): Long? =
+        storedLastActiveTimeMillis[userId]
+
+    override fun storeLastActiveTimeMillis(
+        userId: String,
+        lastActiveTimeMillis: Long?,
+    ) {
+        storedLastActiveTimeMillis[userId] = lastActiveTimeMillis
+    }
 
     override fun getUserKey(userId: String): String? = storedUserKeys[userId]
 
