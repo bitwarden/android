@@ -32,6 +32,25 @@ interface AuthDiskSource {
     val userStateFlow: Flow<UserStateJson?>
 
     /**
+     * Retrieves the "last active time" for the given [userId], in milliseconds.
+     *
+     * This time is intended to be derived from a call to
+     * [SystemClock.elapsedRealtime()](https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime())
+     */
+    fun getLastActiveTimeMillis(userId: String): Long?
+
+    /**
+     * Stores the [lastActiveTimeMillis] for the given [userId].
+     *
+     * This time is intended to be derived from a call to
+     * [SystemClock.elapsedRealtime()](https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime())
+     */
+    fun storeLastActiveTimeMillis(
+        userId: String,
+        lastActiveTimeMillis: Long?,
+    )
+
+    /**
      * Retrieves a user key using a [userId].
      */
     fun getUserKey(userId: String): String?

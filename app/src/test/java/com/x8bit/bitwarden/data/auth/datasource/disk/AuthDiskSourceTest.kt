@@ -16,7 +16,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class AuthDiskSourceTest {
@@ -114,6 +116,63 @@ class AuthDiskSourceTest {
             authDiskSource.userState = USER_STATE
             assertEquals(USER_STATE, awaitItem())
         }
+    }
+
+    @Test
+    fun `getLastActiveTimeMillis should pull from SharedPreferences`() {
+        val lastActiveTimeBaseKey = "bwPreferencesStorage:lastActiveTime"
+        val mockUserId = "mockUserId"
+        val mockLastActiveTime = 123456789L
+        fakeSharedPreferences
+            .edit()
+            .putLong(
+                "${lastActiveTimeBaseKey}_$mockUserId",
+                mockLastActiveTime,
+            )
+            .apply()
+        val actual = authDiskSource.getLastActiveTimeMillis(userId = mockUserId)
+        assertEquals(
+            mockLastActiveTime,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeLastActiveTimeMillis for non-null values should update SharedPreferences`() {
+        val lastActiveTimeBaseKey = "bwPreferencesStorage:lastActiveTime"
+        val mockUserId = "mockUserId"
+        val mockLastActiveTime = 123456789L
+        authDiskSource.storeLastActiveTimeMillis(
+            userId = mockUserId,
+            lastActiveTimeMillis = mockLastActiveTime,
+        )
+        val actual = fakeSharedPreferences
+            .getLong(
+                "${lastActiveTimeBaseKey}_$mockUserId",
+                0L,
+            )
+        assertEquals(
+            mockLastActiveTime,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeLastActiveTimeMillis for null values should clear SharedPreferences`() {
+        val lastActiveTimeBaseKey = "bwPreferencesStorage:lastActiveTime"
+        val mockUserId = "mockUserId"
+        val mockLastActiveTime = 123456789L
+        val lastActiveTimeKey = "${lastActiveTimeBaseKey}_$mockUserId"
+        fakeSharedPreferences
+            .edit()
+            .putLong(lastActiveTimeKey, mockLastActiveTime)
+            .apply()
+        assertTrue(fakeSharedPreferences.contains(lastActiveTimeKey))
+        authDiskSource.storeLastActiveTimeMillis(
+            userId = mockUserId,
+            lastActiveTimeMillis = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(lastActiveTimeKey))
     }
 
     @Test
