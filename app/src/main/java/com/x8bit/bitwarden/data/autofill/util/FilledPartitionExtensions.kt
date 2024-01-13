@@ -5,7 +5,6 @@ import android.os.Build
 import android.service.autofill.Dataset
 import android.service.autofill.Presentations
 import android.widget.RemoteViews
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.ui.autofill.buildAutofillRemoteViews
@@ -19,7 +18,7 @@ fun FilledPartition.buildDataset(
 ): Dataset {
     val remoteViewsPlaceholder = buildAutofillRemoteViews(
         packageName = autofillAppInfo.packageName,
-        title = autofillAppInfo.context.resources.getString(R.string.app_name),
+        title = autofillCipher.name,
     )
     val datasetBuilder = Dataset.Builder()
 

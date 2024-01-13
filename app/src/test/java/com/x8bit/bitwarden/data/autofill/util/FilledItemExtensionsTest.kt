@@ -4,6 +4,7 @@ import android.service.autofill.Dataset
 import android.service.autofill.Field
 import android.service.autofill.Presentations
 import android.view.autofill.AutofillId
+import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.data.util.mockBuilder
@@ -18,10 +19,12 @@ import org.junit.jupiter.api.Test
 
 class FilledItemExtensionsTest {
     private val autofillId: AutofillId = mockk()
+    private val autofillValue: AutofillValue = mockk()
     private val datasetBuilder: Dataset.Builder = mockk()
     private val field: Field = mockk()
     private val filledItem = FilledItem(
         autofillId = autofillId,
+        value = autofillValue,
     )
     private val presentations: Presentations = mockk()
     private val remoteViews: RemoteViews = mockk()
@@ -44,7 +47,7 @@ class FilledItemExtensionsTest {
         every {
             datasetBuilder.setValue(
                 autofillId,
-                null,
+                autofillValue,
                 remoteViews,
             )
         } returns datasetBuilder
@@ -59,7 +62,7 @@ class FilledItemExtensionsTest {
         verify(exactly = 1) {
             datasetBuilder.setValue(
                 autofillId,
-                null,
+                autofillValue,
                 remoteViews,
             )
         }
@@ -68,6 +71,7 @@ class FilledItemExtensionsTest {
     @Test
     fun `applyToDatasetPostTiramisu should use setField to set presentations`() {
         // Setup
+        mockBuilder<Field.Builder> { it.setValue(autofillValue) }
         mockBuilder<Field.Builder> { it.setPresentations(presentations) }
         every {
             datasetBuilder.setField(
@@ -84,6 +88,7 @@ class FilledItemExtensionsTest {
 
         // Verify
         verify(exactly = 1) {
+            anyConstructed<Field.Builder>().setValue(autofillValue)
             anyConstructed<Field.Builder>().setPresentations(presentations)
             datasetBuilder.setField(
                 autofillId,

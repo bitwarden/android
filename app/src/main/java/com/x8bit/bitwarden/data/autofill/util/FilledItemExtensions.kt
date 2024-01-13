@@ -19,6 +19,7 @@ fun FilledItem.applyToDatasetPostTiramisu(
     datasetBuilder.setField(
         autofillId,
         Field.Builder()
+            .setValue(value)
             .setPresentations(presentations)
             .build(),
     )
@@ -35,7 +36,7 @@ fun FilledItem.applyToDatasetPreTiramisu(
 ) {
     datasetBuilder.setValue(
         autofillId,
-        null,
+        value,
         remoteViews,
     )
 }
