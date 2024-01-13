@@ -77,6 +77,11 @@ The following is a list of all third-party dependencies included as part of the 
   - Purpose: Display and capture images for barcode scanning.
   - License: Apache 2.0
 
+- **AndroidX Lifecycle**
+  - https://developer.android.com/jetpack/androidx/releases/lifecycle
+  - Purpose: Lifecycle aware components and tooling.
+  - License: Apache 2.0
+
 - **AndroidX Security**
     - https://developer.android.com/jetpack/androidx/releases/security
     - Purpose: Safely manage keys and encrypt files and sharedpreferences.
