@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -23,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -103,11 +105,75 @@ class PushManagerTest {
             }
 
         @Nested
-        inner class MatchingUser {
+        inner class LoggedOutUserState {
+            @BeforeEach
+            fun setUp() {
+                val userId = "any user ID"
+                val account = mockk<AccountJson> {
+                    every { isLoggedIn } returns false
+                }
+                authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
+            }
+
+            @Test
+            fun `onMessageReceived logout does nothing`() = runTest {
+                pushManager.logoutFlow.test {
+                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
+                    expectNoEvents()
+                }
+            }
+
+            @Test
+            fun `onMessageReceived sync ciphers emits to fullSyncFlow`() = runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
+                    assertEquals(
+                        Unit,
+                        awaitItem(),
+                    )
+                }
+            }
+
+            @Test
+            fun `onMessageReceived sync org keys does nothing`() = runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
+                    expectNoEvents()
+                }
+            }
+
+            @Test
+            fun `onMessageReceived sync settings emits to fullSyncFlow`() = runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
+                    assertEquals(
+                        Unit,
+                        awaitItem(),
+                    )
+                }
+            }
+
+            @Test
+            fun `onMessageReceived sync vault emits to fullSyncFlow`() = runTest {
+                pushManager.fullSyncFlow.test {
+                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_JSON)
+                    assertEquals(
+                        Unit,
+                        awaitItem(),
+                    )
+                }
+            }
+        }
+
+        @Nested
+        inner class MatchingLoggedInUser {
             @BeforeEach
             fun setUp() {
                 val userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"
-                authDiskSource.userState = UserStateJson(userId, mapOf(userId to mockk()))
+                val account = mockk<AccountJson> {
+                    every { isLoggedIn } returns true
+                }
+                authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
             @Test
@@ -264,11 +330,14 @@ class PushManagerTest {
         }
 
         @Nested
-        inner class NonMatchingUser {
+        inner class NonMatchingLoggedInUser {
             @BeforeEach
             fun setUp() {
                 val userId = "bad user ID"
-                authDiskSource.userState = UserStateJson(userId, mapOf(userId to mockk()))
+                val account = mockk<AccountJson> {
+                    every { isLoggedIn } returns true
+                }
+                authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
             @Test
@@ -405,7 +474,10 @@ class PushManagerTest {
             @BeforeEach
             fun setUp() {
                 val userId = "any user ID"
-                authDiskSource.userState = UserStateJson(userId, mapOf(userId to mockk()))
+                val account = mockk<AccountJson> {
+                    every { isLoggedIn } returns true
+                }
+                authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
             @Test
@@ -468,6 +540,35 @@ class PushManagerTest {
     @Nested
     inner class PushNotificationRegistration {
         @Nested
+        inner class LoggedOutUserState {
+            @BeforeEach
+            fun setUp() {
+                val userId = "any user ID"
+                val account = mockk<AccountJson> {
+                    every { isLoggedIn } returns false
+                }
+                authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
+            }
+
+            @Test
+            fun `registerPushTokenIfNecessary should update registeredPushToken`() {
+                assertEquals(null, pushDiskSource.registeredPushToken)
+
+                val token = "token"
+                pushManager.registerPushTokenIfNecessary(token)
+
+                assertEquals(token, pushDiskSource.registeredPushToken)
+            }
+
+            @Test
+            fun `registerStoredPushTokenIfNecessary should do nothing`() {
+                pushManager.registerStoredPushTokenIfNecessary()
+
+                assertNull(pushDiskSource.registeredPushToken)
+            }
+        }
+
+        @Nested
         inner class NullUserState {
             @BeforeEach
             fun setUp() {
@@ -493,14 +594,17 @@ class PushManagerTest {
         }
 
         @Nested
-        inner class NonNullUserState {
+        inner class NonNullLoggedInUserState {
             private val existingToken = "existingToken"
             private val userId = "userId"
 
             @BeforeEach
             fun setUp() {
                 pushDiskSource.storeCurrentPushToken(userId, existingToken)
-                authDiskSource.userState = UserStateJson(userId, mapOf(userId to mockk()))
+                val account = mockk<AccountJson> {
+                    every { isLoggedIn } returns true
+                }
+                authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
             @Suppress("MaxLineLength")
