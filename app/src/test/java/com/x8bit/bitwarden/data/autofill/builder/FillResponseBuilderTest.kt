@@ -74,6 +74,7 @@ class FillResponseBuilderTest {
     fun `build should return null when filledPartitions contains no views`() {
         // Test
         val filledPartitions = FilledPartition(
+            autofillCipher = mockk(),
             filledItems = emptyList(),
         )
         val filledData = FilledData(

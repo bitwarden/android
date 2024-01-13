@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParserImpl
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
@@ -24,6 +26,9 @@ object AutofillModule {
     fun providesAutofillParser(): AutofillParser = AutofillParserImpl()
 
     @Provides
+    fun providesAutofillCipherProvider(): AutofillCipherProvider = AutofillCipherProviderImpl()
+
+    @Provides
     fun providesAutofillProcessor(
         dispatcherManager: DispatcherManager,
         filledDataBuilder: FilledDataBuilder,
@@ -38,7 +43,11 @@ object AutofillModule {
         )
 
     @Provides
-    fun providesFillDataBuilder(): FilledDataBuilder = FilledDataBuilderImpl()
+    fun providesFillDataBuilder(
+        autofillCipherProvider: AutofillCipherProvider,
+    ): FilledDataBuilder = FilledDataBuilderImpl(
+        autofillCipherProvider = autofillCipherProvider,
+    )
 
     @Provides
     fun providesFillResponseBuilder(): FillResponseBuilder = FillResponseBuilderImpl()

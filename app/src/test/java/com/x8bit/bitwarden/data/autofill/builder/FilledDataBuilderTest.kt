@@ -1,20 +1,33 @@
 package com.x8bit.bitwarden.data.autofill.builder
 
 import android.view.autofill.AutofillId
+import android.view.autofill.AutofillValue
+import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
+import com.x8bit.bitwarden.data.autofill.util.buildFilledItemOrNull
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class FilledDataBuilderTest {
     private lateinit var filledDataBuilder: FilledDataBuilder
+
+    private val autofillCipherProvider: AutofillCipherProvider = mockk()
 
     private val autofillId: AutofillId = mockk()
     private val autofillViewData = AutofillView.Data(
@@ -27,17 +40,45 @@ class FilledDataBuilderTest {
 
     @BeforeEach
     fun setup() {
-        filledDataBuilder = FilledDataBuilderImpl()
+        mockkStatic(AutofillValue::forText)
+        mockkStatic(AutofillView::buildFilledItemOrNull)
+        filledDataBuilder = FilledDataBuilderImpl(
+            autofillCipherProvider = autofillCipherProvider,
+        )
+    }
+
+    @AfterEach
+    fun teardown() {
+        unmockkStatic(AutofillValue::forText)
+        unmockkStatic(AutofillView::buildFilledItemOrNull)
     }
 
     @Test
     fun `build should return filled data and ignored AutofillIds when Login`() = runTest {
         // Setup
-        val autofillView = AutofillView.Login.Username(
+        val password = "Password"
+        val username = "johnDoe"
+        val autofillCipher = AutofillCipher.Login(
+            name = "Cipher One",
+            password = password,
+            username = username,
+            subtitle = "Subtitle",
+        )
+        val autofillViewEmail = AutofillView.Login.EmailAddress(
+            data = autofillViewData,
+        )
+        val autofillViewPassword = AutofillView.Login.Password(
+            data = autofillViewData,
+        )
+        val autofillViewUsername = AutofillView.Login.Username(
             data = autofillViewData,
         )
         val autofillPartition = AutofillPartition.Login(
-            views = listOf(autofillView),
+            views = listOf(
+                autofillViewEmail,
+                autofillViewPassword,
+                autofillViewUsername,
+            ),
         )
         val ignoreAutofillIds: List<AutofillId> = mockk()
         val autofillRequest = AutofillRequest.Fillable(
@@ -45,12 +86,15 @@ class FilledDataBuilderTest {
             partition = autofillPartition,
             uri = URI,
         )
-        val filledItem = FilledItem(
-            autofillId = autofillId,
-        )
+        val filledItemEmail: FilledItem = mockk()
+        val filledItemPassword: FilledItem = mockk()
+        val filledItemUsername: FilledItem = mockk()
         val filledPartition = FilledPartition(
+            autofillCipher = autofillCipher,
             filledItems = listOf(
-                filledItem,
+                filledItemEmail,
+                filledItemPassword,
+                filledItemUsername,
             ),
         )
         val expected = FilledData(
@@ -59,6 +103,14 @@ class FilledDataBuilderTest {
             ),
             ignoreAutofillIds = ignoreAutofillIds,
         )
+        coEvery {
+            autofillCipherProvider.getLoginAutofillCiphers(
+                uri = URI,
+            )
+        } returns listOf(autofillCipher)
+        every { autofillViewEmail.buildFilledItemOrNull(username) } returns filledItemEmail
+        every { autofillViewPassword.buildFilledItemOrNull(password) } returns filledItemPassword
+        every { autofillViewUsername.buildFilledItemOrNull(username) } returns filledItemUsername
 
         // Test
         val actual = filledDataBuilder.build(
@@ -67,16 +119,93 @@ class FilledDataBuilderTest {
 
         // Verify
         assertEquals(expected, actual)
+        coVerify(exactly = 1) {
+            autofillCipherProvider.getLoginAutofillCiphers(
+                uri = URI,
+            )
+        }
+        verify(exactly = 1) {
+            autofillViewEmail.buildFilledItemOrNull(username)
+            autofillViewPassword.buildFilledItemOrNull(password)
+            autofillViewUsername.buildFilledItemOrNull(username)
+        }
     }
+
+    @Test
+    fun `build should return no partitions and ignored AutofillIds when Login and no URI`() =
+        runTest {
+            // Setup
+            val autofillViewEmail = AutofillView.Login.EmailAddress(
+                data = autofillViewData,
+            )
+            val autofillViewPassword = AutofillView.Login.Password(
+                data = autofillViewData,
+            )
+            val autofillViewUsername = AutofillView.Login.Username(
+                data = autofillViewData,
+            )
+            val autofillPartition = AutofillPartition.Login(
+                views = listOf(
+                    autofillViewEmail,
+                    autofillViewPassword,
+                    autofillViewUsername,
+                ),
+            )
+            val ignoreAutofillIds: List<AutofillId> = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = ignoreAutofillIds,
+                partition = autofillPartition,
+                uri = null,
+            )
+            val expected = FilledData(
+                filledPartitions = emptyList(),
+                ignoreAutofillIds = ignoreAutofillIds,
+            )
+
+            // Test
+            val actual = filledDataBuilder.build(
+                autofillRequest = autofillRequest,
+            )
+
+            // Verify
+            assertEquals(expected, actual)
+        }
 
     @Test
     fun `build should return filled data and ignored AutofillIds when Card`() = runTest {
         // Setup
-        val autofillView = AutofillView.Card.Number(
+        val code = "123"
+        val expirationMonth = "January"
+        val expirationYear = "1999"
+        val number = "1234567890"
+        val autofillCipher = AutofillCipher.Card(
+            cardholderName = "John",
+            code = code,
+            expirationMonth = expirationMonth,
+            expirationYear = expirationYear,
+            name = "Cipher One",
+            number = number,
+            subtitle = "Subtitle",
+        )
+        val autofillViewCode = AutofillView.Card.SecurityCode(
+            data = autofillViewData,
+        )
+        val autofillViewExpirationMonth = AutofillView.Card.ExpirationMonth(
+            data = autofillViewData,
+        )
+        val autofillViewExpirationYear = AutofillView.Card.ExpirationYear(
+            data = autofillViewData,
+        )
+        val autofillViewNumber = AutofillView.Card.Number(
             data = autofillViewData,
         )
         val autofillPartition = AutofillPartition.Card(
-            views = listOf(autofillView),
+            views = listOf(
+                autofillViewCode,
+                autofillViewExpirationMonth,
+                autofillViewExpirationYear,
+                autofillViewNumber,
+            ),
         )
         val ignoreAutofillIds: List<AutofillId> = mockk()
         val autofillRequest = AutofillRequest.Fillable(
@@ -84,12 +213,17 @@ class FilledDataBuilderTest {
             partition = autofillPartition,
             uri = URI,
         )
-        val filledItem = FilledItem(
-            autofillId = autofillId,
-        )
+        val filledItemCode: FilledItem = mockk()
+        val filledItemExpirationMonth: FilledItem = mockk()
+        val filledItemExpirationYear: FilledItem = mockk()
+        val filledItemNumber: FilledItem = mockk()
         val filledPartition = FilledPartition(
+            autofillCipher = autofillCipher,
             filledItems = listOf(
-                filledItem,
+                filledItemCode,
+                filledItemExpirationMonth,
+                filledItemExpirationYear,
+                filledItemNumber,
             ),
         )
         val expected = FilledData(
@@ -98,6 +232,15 @@ class FilledDataBuilderTest {
             ),
             ignoreAutofillIds = ignoreAutofillIds,
         )
+        coEvery { autofillCipherProvider.getCardAutofillCiphers() } returns listOf(autofillCipher)
+        every { autofillViewCode.buildFilledItemOrNull(code) } returns filledItemCode
+        every {
+            autofillViewExpirationMonth.buildFilledItemOrNull(expirationMonth)
+        } returns filledItemExpirationMonth
+        every {
+            autofillViewExpirationYear.buildFilledItemOrNull(expirationYear)
+        } returns filledItemExpirationYear
+        every { autofillViewNumber.buildFilledItemOrNull(number) } returns filledItemNumber
 
         // Test
         val actual = filledDataBuilder.build(
@@ -106,6 +249,13 @@ class FilledDataBuilderTest {
 
         // Verify
         assertEquals(expected, actual)
+        coVerify(exactly = 1) {
+            autofillCipherProvider.getCardAutofillCiphers()
+            autofillViewCode.buildFilledItemOrNull(code)
+            autofillViewExpirationMonth.buildFilledItemOrNull(expirationMonth)
+            autofillViewExpirationYear.buildFilledItemOrNull(expirationYear)
+            autofillViewNumber.buildFilledItemOrNull(number)
+        }
     }
 
     companion object {

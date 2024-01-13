@@ -5,8 +5,8 @@ import android.content.res.Resources
 import android.service.autofill.Dataset
 import android.service.autofill.Presentations
 import android.widget.RemoteViews
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
+import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.util.mockBuilder
@@ -26,6 +26,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class FilledPartitionExtensionsTest {
+    private val autofillCipher: AutofillCipher = mockk {
+        every { this@mockk.name } returns CIPHER_NAME
+    }
     private val res: Resources = mockk()
     private val context: Context = mockk {
         every { this@mockk.resources } returns res
@@ -33,6 +36,7 @@ class FilledPartitionExtensionsTest {
     private val dataset: Dataset = mockk()
     private val filledItem: FilledItem = mockk()
     private val filledPartition = FilledPartition(
+        autofillCipher = autofillCipher,
         filledItems = listOf(
             filledItem,
         ),
@@ -67,12 +71,10 @@ class FilledPartitionExtensionsTest {
             packageName = PACKAGE_NAME,
             sdkInt = 34,
         )
-        val title = "Bitwarden"
-        every { res.getString(R.string.app_name) } returns title
         every {
             buildAutofillRemoteViews(
                 packageName = PACKAGE_NAME,
-                title = title,
+                title = CIPHER_NAME,
             )
         } returns remoteViews
         mockBuilder<Presentations.Builder> { it.setMenuPresentation(remoteViews) }
@@ -94,7 +96,7 @@ class FilledPartitionExtensionsTest {
         verify(exactly = 1) {
             buildAutofillRemoteViews(
                 packageName = PACKAGE_NAME,
-                title = title,
+                title = CIPHER_NAME,
             )
             anyConstructed<Presentations.Builder>().setMenuPresentation(remoteViews)
             anyConstructed<Presentations.Builder>().build()
@@ -114,12 +116,10 @@ class FilledPartitionExtensionsTest {
             packageName = PACKAGE_NAME,
             sdkInt = 18,
         )
-        val title = "Bitwarden"
-        every { res.getString(R.string.app_name) } returns title
         every {
             buildAutofillRemoteViews(
                 packageName = PACKAGE_NAME,
-                title = title,
+                title = CIPHER_NAME,
             )
         } returns remoteViews
         every {
@@ -139,7 +139,7 @@ class FilledPartitionExtensionsTest {
         verify(exactly = 1) {
             buildAutofillRemoteViews(
                 packageName = PACKAGE_NAME,
-                title = title,
+                title = CIPHER_NAME,
             )
             filledItem.applyToDatasetPreTiramisu(
                 datasetBuilder = any(),
@@ -150,6 +150,7 @@ class FilledPartitionExtensionsTest {
     }
 
     companion object {
+        private const val CIPHER_NAME: String = "Autofill Cipher"
         private const val PACKAGE_NAME: String = "com.x8bit.bitwarden"
     }
 }
