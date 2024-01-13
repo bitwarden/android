@@ -7,13 +7,13 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasProgressBarRangeInfo
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -230,15 +230,17 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsOff()
 
         composeTestRule
-            .onNodeWithContentDescription("Minimum numbers, 1")
-            .onChildren()
+            .onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "1")
+            .onSiblings()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithContentDescription("Minimum numbers, 1")
-            .onChildren()
+            .onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "1")
+            .onSiblings()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .assertIsDisplayed()
@@ -367,8 +369,9 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, decrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
 
-        composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "1")
+            .onSiblings()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -387,8 +390,9 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, incrementing the minimum numbers counter should send MinNumbersCounterChange action`() {
         val initialMinNumbers = 1
 
-        composeTestRule.onNodeWithContentDescription("Minimum numbers, 1")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "1")
+            .onSiblings()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -420,8 +424,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.onNodeWithContentDescription("Minimum numbers, $initialMinNumbers")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "$initialMinNumbers")
+            .onSiblings()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -447,8 +452,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.onNodeWithContentDescription("Minimum numbers, $initialMinNumbers")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "$initialMinNumbers")
+            .onSiblings()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -461,8 +467,9 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, decrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
 
-        composeTestRule.onNodeWithContentDescription("Minimum special, 1")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum special")
+            .assertTextEquals("Minimum special", "1")
+            .onSiblings()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -481,8 +488,9 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `in Passcode_Password state, incrementing the minimum special characters counter should send MinSpecialCharactersChange action`() {
         val initialSpecialChars = 1
 
-        composeTestRule.onNodeWithContentDescription("Minimum special, 1")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum special")
+            .assertTextEquals("Minimum special", "1")
+            .onSiblings()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -514,8 +522,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.onNodeWithContentDescription("Minimum special, $initialSpecialChars")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum special")
+            .assertTextEquals("Minimum special", "$initialSpecialChars")
+            .onSiblings()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -541,8 +550,9 @@ class GeneratorScreenTest : BaseComposeTest() {
             ),
         )
 
-        composeTestRule.onNodeWithContentDescription("Minimum special, $initialSpecialChars")
-            .onChildren()
+        composeTestRule.onNodeWithText("Minimum special")
+            .assertTextEquals("Minimum special", "$initialSpecialChars")
+            .onSiblings()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -595,8 +605,9 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         // Unicode for "minus" used for content description
         composeTestRule
-            .onNodeWithContentDescription("Number of words, $initialNumWords")
-            .onChildren()
+            .onNodeWithText("Number of words")
+            .assertTextEquals("Number of words", "$initialNumWords")
+            .onSiblings()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -629,8 +640,9 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         // Unicode for "minus" used for content description
         composeTestRule
-            .onNodeWithContentDescription("Number of words, $initialNumWords")
-            .onChildren()
+            .onNodeWithText("Number of words")
+            .assertTextEquals("Number of words", "$initialNumWords")
+            .onSiblings()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -656,8 +668,9 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         // Unicode for "minus" used for content description
         composeTestRule
-            .onNodeWithContentDescription("Number of words, $initialNumWords")
-            .onChildren()
+            .onNodeWithText("Number of words")
+            .assertTextEquals("Number of words", "$initialNumWords")
+            .onSiblings()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -681,8 +694,9 @@ class GeneratorScreenTest : BaseComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithContentDescription("Number of words, 3")
-            .onChildren()
+            .onNodeWithText("Number of words")
+            .assertTextEquals("Number of words", "3")
+            .onSiblings()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
