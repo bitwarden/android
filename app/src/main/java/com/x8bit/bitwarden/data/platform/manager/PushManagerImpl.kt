@@ -94,6 +94,11 @@ class PushManagerImpl @Inject constructor(
     override val syncSendUpsertFlow: SharedFlow<SyncSendUpsertData>
         get() = mutableSyncSendUpsertSharedFlow.asSharedFlow()
 
+    private val activeUserId: String?
+        get() = authDiskSource.userState?.activeUserId
+    private val isLoggedIn: Boolean
+        get() = authDiskSource.userState?.activeAccount?.isLoggedIn == true
+
     init {
         authDiskSource
             .userStateFlow
@@ -113,7 +118,7 @@ class PushManagerImpl @Inject constructor(
 
         if (authDiskSource.uniqueAppId == notification.contextId) return
 
-        val userId = authDiskSource.userState?.activeUserId
+        val userId = activeUserId
 
         when (val type = notification.notificationType) {
             NotificationType.AUTH_REQUEST,
@@ -130,7 +135,7 @@ class PushManagerImpl @Inject constructor(
             }
 
             NotificationType.LOG_OUT -> {
-                if (userId == null) return
+                if (!isLoggedIn) return
                 mutableLogoutSharedFlow.tryEmit(Unit)
             }
 
@@ -139,7 +144,7 @@ class PushManagerImpl @Inject constructor(
             -> {
                 val payload: NotificationPayload.SyncCipherNotification =
                     json.decodeFromJsonElement(notification.payload)
-                if (!payload.userMatchesNotification(userId)) return
+                if (!isLoggedIn || !payload.userMatchesNotification(userId)) return
                 mutableSyncCipherUpsertSharedFlow.tryEmit(
                     SyncCipherUpsertData(
                         cipherId = payload.id,
@@ -154,7 +159,7 @@ class PushManagerImpl @Inject constructor(
             -> {
                 val payload: NotificationPayload.SyncCipherNotification =
                     json.decodeFromJsonElement(notification.payload)
-                if (!payload.userMatchesNotification(userId)) return
+                if (!isLoggedIn || !payload.userMatchesNotification(userId)) return
                 mutableSyncCipherDeleteSharedFlow.tryEmit(
                     SyncCipherDeleteData(payload.id),
                 )
@@ -173,7 +178,7 @@ class PushManagerImpl @Inject constructor(
             -> {
                 val payload: NotificationPayload.SyncFolderNotification =
                     json.decodeFromJsonElement(notification.payload)
-                if (!payload.userMatchesNotification(userId)) return
+                if (!isLoggedIn || !payload.userMatchesNotification(userId)) return
                 mutableSyncFolderUpsertSharedFlow.tryEmit(
                     SyncFolderUpsertData(
                         folderId = payload.id,
@@ -186,7 +191,7 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_FOLDER_DELETE -> {
                 val payload: NotificationPayload.SyncFolderNotification =
                     json.decodeFromJsonElement(notification.payload)
-                if (!payload.userMatchesNotification(userId)) return
+                if (!isLoggedIn || !payload.userMatchesNotification(userId)) return
 
                 mutableSyncFolderDeleteSharedFlow.tryEmit(
                     SyncFolderDeleteData(payload.id),
@@ -194,7 +199,7 @@ class PushManagerImpl @Inject constructor(
             }
 
             NotificationType.SYNC_ORG_KEYS -> {
-                if (userId == null) return
+                if (!isLoggedIn) return
                 mutableSyncOrgKeysSharedFlow.tryEmit(Unit)
             }
 
@@ -203,7 +208,7 @@ class PushManagerImpl @Inject constructor(
             -> {
                 val payload: NotificationPayload.SyncSendNotification =
                     json.decodeFromJsonElement(notification.payload)
-                if (!payload.userMatchesNotification(userId)) return
+                if (!isLoggedIn || !payload.userMatchesNotification(userId)) return
                 mutableSyncSendUpsertSharedFlow.tryEmit(
                     SyncSendUpsertData(
                         sendId = payload.id,
@@ -216,7 +221,7 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_SEND_DELETE -> {
                 val payload: NotificationPayload.SyncSendNotification =
                     json.decodeFromJsonElement(notification.payload)
-                if (!payload.userMatchesNotification(userId)) return
+                if (!isLoggedIn || !payload.userMatchesNotification(userId)) return
                 mutableSyncSendDeleteSharedFlow.tryEmit(
                     SyncSendDeleteData(payload.id),
                 )
@@ -226,7 +231,9 @@ class PushManagerImpl @Inject constructor(
 
     override fun registerPushTokenIfNecessary(token: String) {
         pushDiskSource.registeredPushToken = token
-        val userId = authDiskSource.userState?.activeUserId ?: return
+
+        if (!isLoggedIn) return
+        val userId = activeUserId ?: return
         ioScope.launch {
             registerPushTokenIfNecessaryInternal(
                 userId = userId,
@@ -235,8 +242,10 @@ class PushManagerImpl @Inject constructor(
         }
     }
 
+    @Suppress("ReturnCount")
     override fun registerStoredPushTokenIfNecessary() {
-        val userId = authDiskSource.userState?.activeUserId ?: return
+        if (!isLoggedIn) return
+        val userId = activeUserId ?: return
 
         // If the last registered token is from less than a day before, skip this for now
         val lastRegistration = pushDiskSource.getLastPushTokenRegistrationDate(userId)?.toInstant()

@@ -1,14 +1,19 @@
 package com.x8bit.bitwarden.data.platform.manager.di
 
 import android.content.Context
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.PushManager
+import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -21,6 +26,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -72,4 +78,22 @@ object PlatformManagerModule {
             refreshAuthenticator = refreshAuthenticator,
             dispatcherManager = dispatcherManager,
         )
+
+    @Provides
+    @Singleton
+    fun providePushManager(
+        authDiskSource: AuthDiskSource,
+        pushDiskSource: PushDiskSource,
+        pushService: PushService,
+        dispatcherManager: DispatcherManager,
+        clock: Clock,
+        json: Json,
+    ): PushManager = PushManagerImpl(
+        authDiskSource = authDiskSource,
+        pushDiskSource = pushDiskSource,
+        pushService = pushService,
+        dispatcherManager = dispatcherManager,
+        clock = clock,
+        json = json,
+    )
 }
