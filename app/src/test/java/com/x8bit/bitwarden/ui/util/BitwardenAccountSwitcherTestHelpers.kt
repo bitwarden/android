@@ -25,7 +25,6 @@ fun ComposeContentTestRule.assertSwitcherIsDisplayed(
     accountSummaries: List<AccountSummary>,
     isAddAccountButtonVisible: Boolean = true,
 ) {
-    this.waitForIdle()
     accountSummaries.forEach { accountSummary ->
         this.onNodeWithText(accountSummary.email).assertIsDisplayed()
     }
@@ -44,7 +43,6 @@ fun ComposeContentTestRule.assertSwitcherIsDisplayed(
 fun ComposeContentTestRule.assertSwitcherIsNotDisplayed(
     accountSummaries: List<AccountSummary>,
 ) {
-    this.waitForIdle()
     accountSummaries.forEach { accountSummary ->
         this.onNodeWithText(accountSummary.email).assertDoesNotExist()
     }
@@ -58,7 +56,6 @@ fun ComposeContentTestRule.assertSwitcherIsNotDisplayed(
 fun ComposeContentTestRule.assertLockOrLogoutDialogIsDisplayed(
     accountSummary: AccountSummary,
 ) {
-    this.waitForIdle()
     this
         .onNode(isDialog())
         .assertIsDisplayed()
@@ -87,7 +84,6 @@ fun ComposeContentTestRule.assertLockOrLogoutDialogIsDisplayed(
 fun ComposeContentTestRule.assertLogoutConfirmationDialogIsDisplayed(
     accountSummary: AccountSummary,
 ) {
-    this.waitForIdle()
     this
         .onNode(isDialog())
         .assertIsDisplayed()
