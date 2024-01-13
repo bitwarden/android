@@ -53,10 +53,10 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.BitwardenReadOnlyTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
@@ -290,7 +290,7 @@ private fun GeneratedStringItem(
     onCopyClick: () -> Unit,
     onRegenerateClick: () -> Unit,
 ) {
-    BitwardenReadOnlyTextFieldWithActions(
+    BitwardenTextFieldWithActions(
         label = "",
         value = generatedText,
         singleLine = false,
@@ -310,6 +310,8 @@ private fun GeneratedStringItem(
                 onClick = onRegenerateClick,
             )
         },
+        onValueChange = {},
+        readOnly = true,
         textStyle = LocalNonMaterialTypography.current.sensitiveInfoSmall,
         shouldAddCustomLineBreaks = true,
         visualTransformation = nonLetterColorVisualTransformation(),

@@ -8,7 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -36,6 +39,9 @@ fun BitwardenTextFieldWithActions(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    textStyle: TextStyle? = null,
+    shouldAddCustomLineBreaks: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Text,
@@ -43,7 +49,9 @@ fun BitwardenTextFieldWithActions(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) { },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BitwardenTextField(
@@ -56,6 +64,9 @@ fun BitwardenTextFieldWithActions(
             onValueChange = onValueChange,
             keyboardType = keyboardType,
             trailingIconContent = trailingIconContent,
+            textStyle = textStyle,
+            shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
+            visualTransformation = visualTransformation,
         )
         BitwardenRowOfActions(actions)
     }
@@ -65,9 +76,10 @@ fun BitwardenTextFieldWithActions(
 @Composable
 private fun BitwardenTextFieldWithActions_preview() {
     BitwardenTheme {
-        BitwardenReadOnlyTextFieldWithActions(
+        BitwardenTextFieldWithActions(
             label = "Username",
             value = "user@example.com",
+            onValueChange = {},
             actions = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_tooltip),

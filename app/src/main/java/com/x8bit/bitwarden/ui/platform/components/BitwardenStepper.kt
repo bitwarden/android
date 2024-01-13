@@ -33,7 +33,7 @@ fun BitwardenStepper(
     if (clampedValue != value && clampedValue != null) {
         onValueChange(clampedValue)
     }
-    BitwardenReadOnlyTextFieldWithActions(
+    BitwardenTextFieldWithActions(
         label = label,
         // we use a space instead of empty string to make sure label is shown small and above
         // the input
@@ -68,6 +68,8 @@ fun BitwardenStepper(
                 isEnabled = isIncrementEnabled,
             )
         },
+        readOnly = true,
+        onValueChange = {},
         modifier = modifier,
     )
 }
