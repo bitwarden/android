@@ -3,7 +3,10 @@ package com.x8bit.bitwarden.ui.platform.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 
 /**
@@ -18,6 +21,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
  * @param range Range of valid values.
  * @param isIncrementEnabled whether or not the increment button should be enabled.
  * @param isDecrementEnabled whether or not the decrement button should be enabled.
+ * @param textFieldReadOnly whether or not the text field should be read only. The stepper
+ * increment and decrement buttons function regardless of this value.
  */
 @Composable
 fun BitwardenStepper(
@@ -28,6 +33,7 @@ fun BitwardenStepper(
     range: ClosedRange<Int> = 1..Int.MAX_VALUE,
     isIncrementEnabled: Boolean = true,
     isDecrementEnabled: Boolean = true,
+    textFieldReadOnly: Boolean = true,
 ) {
     val clampedValue = value?.coerceIn(range)
     if (clampedValue != value && clampedValue != null) {
@@ -35,11 +41,11 @@ fun BitwardenStepper(
     }
     BitwardenTextFieldWithActions(
         label = label,
-        // we use a space instead of empty string to make sure label is shown small and above
-        // the input
+        // We use the zero width character instead of an empty string to make sure label is shown
+        // small and above the input
         value = clampedValue
             ?.toString()
-            ?: " ",
+            ?: ZERO_WIDTH_CHARACTER,
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
@@ -68,8 +74,18 @@ fun BitwardenStepper(
                 isEnabled = isIncrementEnabled,
             )
         },
-        readOnly = true,
-        onValueChange = {},
+        readOnly = textFieldReadOnly,
+        keyboardType = KeyboardType.Number,
+        onValueChange = { newValue ->
+            onValueChange(
+                newValue
+                    // Make sure the placeholder is gone, since it will mess up the int conversion
+                    .replace(ZERO_WIDTH_CHARACTER, "")
+                    .orNullIfBlank()
+                    ?.let { it.toIntOrNull()?.coerceIn(range) ?: value }
+                    ?: range.start,
+            )
+        },
         modifier = modifier,
     )
 }

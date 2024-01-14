@@ -151,6 +151,7 @@ fun AddSendContent(
                     label = stringResource(id = R.string.text),
                     hint = stringResource(id = R.string.type_text_info),
                     value = type.input,
+                    singleLine = false,
                     onValueChange = addSendHandlers.onTextChange,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -325,6 +326,7 @@ private fun AddSendOptions(
                 onValueChange = addSendHandlers.onMaxAccessCountChange,
                 isDecrementEnabled = state.common.maxAccessCount != null,
                 range = 0..Int.MAX_VALUE,
+                textFieldReadOnly = false,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
