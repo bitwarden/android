@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_2
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
+import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -120,6 +121,9 @@ class AuthRepositoryTest {
             ),
         )
     }
+    private val userLogoutManager: UserLogoutManager = mockk {
+        every { logout(any()) } just runs
+    }
 
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
@@ -130,6 +134,7 @@ class AuthRepositoryTest {
         environmentRepository = fakeEnvironmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
+        userLogoutManager = userLogoutManager,
         dispatcherManager = dispatcherManager,
     )
 
@@ -147,6 +152,49 @@ class AuthRepositoryTest {
         unmockkStatic(
             GET_TOKEN_RESPONSE_EXTENSIONS_PATH,
             REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH,
+        )
+    }
+
+    @Test
+    fun `authStateFlow should react to user state changes`() {
+        assertEquals(
+            AuthState.Unauthenticated,
+            repository.authStateFlow.value,
+        )
+
+        // Update the active user updates the state
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        assertEquals(
+            AuthState.Authenticated(ACCESS_TOKEN),
+            repository.authStateFlow.value,
+        )
+
+        // Updating the non-active user does not update the state
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
+        assertEquals(
+            AuthState.Authenticated(ACCESS_TOKEN),
+            repository.authStateFlow.value,
+        )
+
+        // Clearing the tokens of the active state results in the Unauthenticated state
+        val updatedAccount = ACCOUNT_1.copy(
+            tokens = AccountJson.Tokens(
+                accessToken = null,
+                refreshToken = null,
+            ),
+        )
+        val updatedState = MULTI_USER_STATE.copy(
+            accounts = MULTI_USER_STATE
+                .accounts
+                .toMutableMap()
+                .apply {
+                    set(USER_ID_1, updatedAccount)
+                },
+        )
+        fakeAuthDiskSource.userState = updatedState
+        assertEquals(
+            AuthState.Unauthenticated,
+            repository.authStateFlow.value,
         )
     }
 
@@ -1043,251 +1091,26 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `logout for single account should clear the access token and stored data`() = runTest {
-        // First login:
-        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
-        coEvery {
-            accountsService.preLogin(email = EMAIL)
-        } returns Result.success(PRE_LOGIN_SUCCESS)
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                passwordHash = PASSWORD_HASH,
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        } returns Result.success(successResponse)
-        coEvery {
-            vaultRepository.unlockVault(
-                userId = USER_ID_1,
-                email = EMAIL,
-                kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key,
-                privateKey = successResponse.privateKey,
-                organizationKeys = ORGANIZATION_KEYS,
-                masterPassword = PASSWORD,
-            )
-        } returns VaultUnlockResult.Success
-        coEvery { vaultRepository.sync() } just runs
-        every {
-            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
-                previousUserState = null,
-                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-            )
-        } returns SINGLE_USER_STATE_1
-        fakeAuthDiskSource.apply {
-            storeUserKey(
-                userId = USER_ID_1,
-                userKey = PUBLIC_KEY,
-            )
-            storePrivateKey(
-                userId = USER_ID_1,
-                privateKey = PRIVATE_KEY,
-            )
-            storeUserAutoUnlockKey(
-                userId = USER_ID_1,
-                userAutoUnlockKey = USER_AUTO_UNLOCK_KEY,
-            )
-            storeOrganizationKeys(
-                userId = USER_ID_1,
-                organizationKeys = ORGANIZATION_KEYS,
-            )
-            storeOrganizations(
-                userId = USER_ID_1,
-                organizations = ORGANIZATIONS,
-            )
-        }
+    fun `logout for the active account should call logout on the UserLogoutManager and clear the user's in memory vault data`() {
+        val userId = USER_ID_1
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
 
-        repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        repository.logout(userId = userId)
 
-        assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-        assertEquals(SINGLE_USER_STATE_1, fakeAuthDiskSource.userState)
-
-        // Then call logout:
-        repository.authStateFlow.test {
-            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
-
-            repository.logout()
-
-            assertEquals(AuthState.Unauthenticated, awaitItem())
-            assertNull(fakeAuthDiskSource.userState)
-            fakeAuthDiskSource.assertPrivateKey(
-                userId = USER_ID_1,
-                privateKey = null,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = null,
-            )
-            fakeAuthDiskSource.assertUserAutoUnlockKey(
-                userId = USER_ID_1,
-                userAutoUnlockKey = null,
-            )
-            fakeAuthDiskSource.assertOrganizationKeys(
-                userId = USER_ID_1,
-                organizationKeys = null,
-            )
-            fakeAuthDiskSource.assertOrganizations(
-                userId = USER_ID_1,
-                organizations = null,
-            )
-            verify { settingsRepository.clearData(userId = USER_ID_1) }
-            verify { vaultRepository.deleteVaultData(userId = USER_ID_1) }
-            verify { vaultRepository.clearUnlockedData() }
-            verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
-        }
+        verify { userLogoutManager.logout(userId = userId) }
+        verify { vaultRepository.clearUnlockedData() }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `logout for multiple accounts should update current access token and stored keys`() =
-        runTest {
-            // First populate multiple user accounts
-            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+    fun `logout for an inactive account should call logout on the UserLogoutManager`() {
+        val userId = USER_ID_2
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
 
-            // Then login:
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
-            coEvery {
-                accountsService.preLogin(email = EMAIL)
-            } returns Result.success(PRE_LOGIN_SUCCESS)
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    passwordHash = PASSWORD_HASH,
-                    captchaToken = null,
-                    uniqueAppId = UNIQUE_APP_ID,
-                )
-            } returns Result.success(successResponse)
-            coEvery {
-                vaultRepository.unlockVault(
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key,
-                    privateKey = successResponse.privateKey,
-                    organizationKeys = null,
-                    masterPassword = PASSWORD,
-                )
-            } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.sync() } just runs
-            every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
-                    previousUserState = SINGLE_USER_STATE_2,
-                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-                )
-            } returns MULTI_USER_STATE
-            fakeAuthDiskSource.apply {
-                storeUserKey(
-                    userId = USER_ID_2,
-                    userKey = PUBLIC_KEY,
-                )
-                storePrivateKey(
-                    userId = USER_ID_2,
-                    privateKey = PRIVATE_KEY,
-                )
-                storeUserAutoUnlockKey(
-                    userId = USER_ID_2,
-                    userAutoUnlockKey = USER_AUTO_UNLOCK_KEY,
-                )
-                storeOrganizationKeys(
-                    userId = USER_ID_2,
-                    organizationKeys = ORGANIZATION_KEYS,
-                )
-            }
+        repository.logout(userId = userId)
 
-            repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-
-            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-            assertEquals(MULTI_USER_STATE, fakeAuthDiskSource.userState)
-
-            // Then call logout:
-            repository.authStateFlow.test {
-                assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
-
-                repository.logout()
-
-                assertEquals(AuthState.Authenticated(ACCESS_TOKEN_2), awaitItem())
-                assertEquals(SINGLE_USER_STATE_2, fakeAuthDiskSource.userState)
-                fakeAuthDiskSource.assertPrivateKey(
-                    userId = USER_ID_1,
-                    privateKey = null,
-                )
-                fakeAuthDiskSource.assertUserKey(
-                    userId = USER_ID_1,
-                    userKey = null,
-                )
-                fakeAuthDiskSource.assertUserAutoUnlockKey(
-                    userId = USER_ID_1,
-                    userAutoUnlockKey = null,
-                )
-                fakeAuthDiskSource.assertOrganizationKeys(
-                    userId = USER_ID_1,
-                    organizationKeys = null,
-                )
-                verify { settingsRepository.clearData(userId = USER_ID_1) }
-                verify { vaultRepository.deleteVaultData(userId = USER_ID_1) }
-                verify { vaultRepository.clearUnlockedData() }
-                verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_1) }
-            }
-        }
-
-    @Test
-    fun `logout for non-active accounts should leave the active user unchanged`() = runTest {
-        // First populate multiple user accounts and active user is #3
-        val initialUserState = MULTI_USER_STATE_2
-        val finalUserState = initialUserState.copy(
-            accounts = initialUserState.accounts.filter { it.key != USER_ID_2 },
-        )
-        fakeAuthDiskSource.userState = initialUserState
-        fakeAuthDiskSource.apply {
-            storeUserKey(
-                userId = USER_ID_2,
-                userKey = PUBLIC_KEY,
-            )
-            storePrivateKey(
-                userId = USER_ID_2,
-                privateKey = PRIVATE_KEY,
-            )
-            storeUserAutoUnlockKey(
-                userId = USER_ID_2,
-                userAutoUnlockKey = USER_AUTO_UNLOCK_KEY,
-            )
-            storeOrganizationKeys(
-                userId = USER_ID_2,
-                organizationKeys = ORGANIZATION_KEYS,
-            )
-        }
-
-        assertEquals(initialUserState, fakeAuthDiskSource.userState)
-
-        repository.authStateFlow.test {
-            assertEquals(AuthState.Authenticated(ACCESS_TOKEN_3), awaitItem())
-
-            repository.logout(USER_ID_2)
-
-            // The auth state does not actually change
-            expectNoEvents()
-            assertEquals(finalUserState, fakeAuthDiskSource.userState)
-            fakeAuthDiskSource.assertPrivateKey(
-                userId = USER_ID_2,
-                privateKey = null,
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_2,
-                userKey = null,
-            )
-            fakeAuthDiskSource.assertUserAutoUnlockKey(
-                userId = USER_ID_2,
-                userAutoUnlockKey = null,
-            )
-            fakeAuthDiskSource.assertOrganizationKeys(
-                userId = USER_ID_2,
-                organizationKeys = null,
-            )
-            verify { settingsRepository.clearData(userId = USER_ID_2) }
-            verify { vaultRepository.deleteVaultData(userId = USER_ID_2) }
-            verify(exactly = 0) { vaultRepository.clearUnlockedData() }
-            verify { vaultRepository.lockVaultIfNecessary(userId = USER_ID_2) }
-        }
+        verify { userLogoutManager.logout(userId = userId) }
+        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
     }
 
     @Test

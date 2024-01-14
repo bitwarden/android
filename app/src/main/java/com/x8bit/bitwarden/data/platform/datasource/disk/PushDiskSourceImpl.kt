@@ -26,6 +26,11 @@ class PushDiskSourceImpl(
             )
         }
 
+    override fun clearData(userId: String) {
+        storeCurrentPushToken(userId = userId, pushToken = null)
+        storeLastPushTokenRegistrationDate(userId = userId, registrationDate = null)
+    }
+
     override fun getCurrentPushToken(userId: String): String? {
         return getString("${CURRENT_PUSH_TOKEN_KEY}_$userId")
     }

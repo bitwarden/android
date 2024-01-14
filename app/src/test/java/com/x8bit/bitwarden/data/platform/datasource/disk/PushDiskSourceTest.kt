@@ -39,6 +39,24 @@ class PushDiskSourceTest {
     }
 
     @Test
+    fun `clearData should clear all necessary data for the given user`() {
+        val userId = "userId"
+        pushDiskSource.storeCurrentPushToken(
+            userId = userId,
+            pushToken = "pushToken",
+        )
+        pushDiskSource.storeLastPushTokenRegistrationDate(
+            userId = userId,
+            registrationDate = ZonedDateTime.now(),
+        )
+
+        pushDiskSource.clearData(userId = userId)
+
+        assertNull(pushDiskSource.getCurrentPushToken(userId = userId))
+        assertNull(pushDiskSource.getLastPushTokenRegistrationDate(userId = userId))
+    }
+
+    @Test
     fun `getCurrentPushToken should pull from SharedPreferences`() {
         val currentPushTokenBaseKey = "bwPreferencesStorage:pushCurrentToken"
         val mockUserId = "mockUserId"
