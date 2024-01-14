@@ -23,6 +23,8 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
     private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
+    private val storedPinProtectedUserKeys = mutableMapOf<String, String?>()
+    private val storedEncryptedPins = mutableMapOf<String, String?>()
     private val storedOrganizations =
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
@@ -41,6 +43,8 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedUserKeys.remove(userId)
         storedPrivateKeys.remove(userId)
         storedUserAutoUnlockKeys.remove(userId)
+        storedPinProtectedUserKeys.remove(userId)
+        storedEncryptedPins.remove(userId)
         storedOrganizations.remove(userId)
 
         storedOrganizationKeys.remove(userId)
@@ -74,6 +78,20 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storeUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?) {
         storedUserAutoUnlockKeys[userId] = userAutoUnlockKey
+    }
+
+    override fun getPinProtectedUserKey(userId: String): String? =
+        storedPinProtectedUserKeys[userId]
+
+    override fun storePinProtectedUserKey(userId: String, pinProtectedUserKey: String?) {
+        storedPinProtectedUserKeys[userId] = pinProtectedUserKey
+    }
+
+    override fun getEncryptedPin(userId: String): String? =
+        storedEncryptedPins[userId]
+
+    override fun storeEncryptedPin(userId: String, encryptedPin: String?) {
+        storedEncryptedPins[userId] = encryptedPin
     }
 
     override fun getOrganizationKeys(

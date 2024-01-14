@@ -22,6 +22,8 @@ private const val STATE_KEY = "$BASE_KEY:state"
 private const val LAST_ACTIVE_TIME_KEY = "$BASE_KEY:lastActiveTime"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "$BASE_KEY:masterKeyEncryptedUserKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "$BASE_KEY:encPrivateKey"
+private const val PIN_PROTECTED_USER_KEY_KEY = "$BASE_KEY:pinKeyEncryptedUserKey"
+private const val ENCRYPTED_PIN_KEY = "$BASE_KEY:protectedPin"
 private const val ORGANIZATIONS_KEY = "$BASE_KEY:organizations"
 private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 
@@ -73,6 +75,8 @@ class AuthDiskSourceImpl(
         storeLastActiveTimeMillis(userId = userId, lastActiveTimeMillis = null)
         storeUserKey(userId = userId, userKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
+        storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
+        storeEncryptedPin(userId = userId, encryptedPin = null)
         storePrivateKey(userId = userId, privateKey = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
@@ -124,6 +128,32 @@ class AuthDiskSourceImpl(
         putEncryptedString(
             key = "${USER_AUTO_UNLOCK_KEY_KEY}_$userId",
             value = userAutoUnlockKey,
+        )
+    }
+
+    override fun getPinProtectedUserKey(userId: String): String? =
+        getString(key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId")
+
+    override fun storePinProtectedUserKey(
+        userId: String,
+        pinProtectedUserKey: String?,
+    ) {
+        putString(
+            key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId",
+            value = pinProtectedUserKey,
+        )
+    }
+
+    override fun getEncryptedPin(userId: String): String? =
+        getString(key = "${ENCRYPTED_PIN_KEY}_$userId")
+
+    override fun storeEncryptedPin(
+        userId: String,
+        encryptedPin: String?,
+    ) {
+        putString(
+            key = "${ENCRYPTED_PIN_KEY}_$userId",
+            value = encryptedPin,
         )
     }
 

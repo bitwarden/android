@@ -325,6 +325,84 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getPinProtectedUserKey should pull from SharedPreferences`() {
+        val pinProtectedUserKeyBaseKey = "bwPreferencesStorage:pinKeyEncryptedUserKey"
+        val mockUserId = "mockUserId"
+        val mockPinProtectedUserKey = "mockPinProtectedUserKey"
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                "${pinProtectedUserKeyBaseKey}_$mockUserId",
+                mockPinProtectedUserKey,
+            )
+            .apply()
+        val actual = authDiskSource.getPinProtectedUserKey(userId = mockUserId)
+        assertEquals(
+            mockPinProtectedUserKey,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storePinProtectedUserKey should update SharedPreferences`() {
+        val pinProtectedUserKeyBaseKey = "bwPreferencesStorage:pinKeyEncryptedUserKey"
+        val mockUserId = "mockUserId"
+        val mockPinProtectedUserKey = "mockPinProtectedUserKey"
+        authDiskSource.storePinProtectedUserKey(
+            userId = mockUserId,
+            pinProtectedUserKey = mockPinProtectedUserKey,
+        )
+        val actual = fakeSharedPreferences
+            .getString(
+                "${pinProtectedUserKeyBaseKey}_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockPinProtectedUserKey,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getEncryptedPin should pull from SharedPreferences`() {
+        val encryptedPinBaseKey = "bwPreferencesStorage:protectedPin"
+        val mockUserId = "mockUserId"
+        val mockEncryptedPin = "mockEncryptedPin"
+        fakeSharedPreferences
+            .edit()
+            .putString(
+                "${encryptedPinBaseKey}_$mockUserId",
+                mockEncryptedPin,
+            )
+            .apply()
+        val actual = authDiskSource.getEncryptedPin(userId = mockUserId)
+        assertEquals(
+            mockEncryptedPin,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeEncryptedPin should update SharedPreferences`() {
+        val encryptedPinBaseKey = "bwPreferencesStorage:protectedPin"
+        val mockUserId = "mockUserId"
+        val mockEncryptedPin = "mockUserAutoUnlockKey"
+        authDiskSource.storeEncryptedPin(
+            userId = mockUserId,
+            encryptedPin = mockEncryptedPin,
+        )
+        val actual = fakeSharedPreferences
+            .getString(
+                "${encryptedPinBaseKey}_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockEncryptedPin,
+            actual,
+        )
+    }
+
+    @Test
     fun `getOrganizationKeys should pull from SharedPreferences`() {
         val organizationKeysBaseKey = "bwPreferencesStorage:encOrgKeys"
         val mockUserId = "mockUserId"
