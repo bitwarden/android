@@ -100,7 +100,6 @@ class VaultRepositoryTest {
         every { isVaultUnlocked(any()) } returns false
         every { isVaultUnlocking(any()) } returns false
         every { lockVault(any()) } just runs
-        every { lockVaultIfNecessary(any()) } just runs
         every { lockVaultForCurrentUser() } just runs
     }
 
@@ -550,13 +549,6 @@ class VaultRepositoryTest {
     fun `lockVaultForCurrentUser should delegate to the VaultLockManager`() {
         vaultRepository.lockVaultForCurrentUser()
         verify { vaultLockManager.lockVaultForCurrentUser() }
-    }
-
-    @Test
-    fun `lockVaultIfNecessary should delete to the VaultLockManager`() {
-        val userId = "userId"
-        vaultRepository.lockVaultIfNecessary(userId = userId)
-        verify { vaultLockManager.lockVaultIfNecessary(userId = userId) }
     }
 
     @Suppress("MaxLineLength")

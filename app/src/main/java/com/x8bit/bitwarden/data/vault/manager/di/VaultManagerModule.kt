@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -25,12 +27,16 @@ object VaultManagerModule {
         authDiskSource: AuthDiskSource,
         vaultSdkSource: VaultSdkSource,
         settingsRepository: SettingsRepository,
+        appForegroundManager: AppForegroundManager,
+        userLogoutManager: UserLogoutManager,
         dispatcherManager: DispatcherManager,
     ): VaultLockManager =
         VaultLockManagerImpl(
             authDiskSource = authDiskSource,
             vaultSdkSource = vaultSdkSource,
             settingsRepository = settingsRepository,
+            appForegroundManager = appForegroundManager,
+            userLogoutManager = userLogoutManager,
             dispatcherManager = dispatcherManager,
         )
 }
