@@ -31,11 +31,6 @@ interface VaultLockManager {
     fun lockVault(userId: String)
 
     /**
-     * Locks the vault for the user with the given [userId] only if necessary.
-     */
-    fun lockVaultIfNecessary(userId: String)
-
-    /**
      * Locks the vault for the current user if currently unlocked.
      */
     fun lockVaultForCurrentUser()

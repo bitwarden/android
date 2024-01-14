@@ -123,20 +123,14 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on VaultTimeoutTypeSelect should update the selection and emit ShowToast()`() = runTest {
+    fun `on VaultTimeoutTypeSelect should update the selection()`() = runTest {
         val settingsRepository = mockk<SettingsRepository>() {
             every { vaultTimeout = any() } just runs
         }
         val viewModel = createViewModel(settingsRepository = settingsRepository)
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(
-                AccountSecurityAction.VaultTimeoutTypeSelect(VaultTimeout.Type.FOUR_HOURS),
-            )
-            assertEquals(
-                AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
-                awaitItem(),
-            )
-        }
+        viewModel.trySendAction(
+            AccountSecurityAction.VaultTimeoutTypeSelect(VaultTimeout.Type.FOUR_HOURS),
+        )
         assertEquals(
             DEFAULT_STATE.copy(
                 vaultTimeout = VaultTimeout.FourHours,
@@ -147,22 +141,16 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on CustomVaultTimeoutSelect should update the selection and emit ShowToast()`() = runTest {
+    fun `on CustomVaultTimeoutSelect should update the selection()`() = runTest {
         val settingsRepository = mockk<SettingsRepository>() {
             every { vaultTimeout = any() } just runs
         }
         val viewModel = createViewModel(settingsRepository = settingsRepository)
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(
-                AccountSecurityAction.CustomVaultTimeoutSelect(
-                    customVaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 360),
-                ),
-            )
-            assertEquals(
-                AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
-                awaitItem(),
-            )
-        }
+        viewModel.trySendAction(
+            AccountSecurityAction.CustomVaultTimeoutSelect(
+                customVaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 360),
+            ),
+        )
         assertEquals(
             DEFAULT_STATE.copy(
                 vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 360),
@@ -180,15 +168,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             every { vaultTimeoutAction = any() } just runs
         }
         val viewModel = createViewModel(settingsRepository = settingsRepository)
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(
-                AccountSecurityAction.VaultTimeoutActionSelect(VaultTimeoutAction.LOGOUT),
-            )
-            assertEquals(
-                AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
-                awaitItem(),
-            )
-        }
+        viewModel.trySendAction(
+            AccountSecurityAction.VaultTimeoutActionSelect(VaultTimeoutAction.LOGOUT),
+        )
         assertEquals(
             DEFAULT_STATE.copy(
                 vaultTimeoutAction = VaultTimeoutAction.LOGOUT,

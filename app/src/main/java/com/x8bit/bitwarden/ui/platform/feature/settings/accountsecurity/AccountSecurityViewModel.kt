@@ -159,9 +159,6 @@ class AccountSecurityViewModel @Inject constructor(
             )
         }
         settingsRepository.vaultTimeout = vaultTimeout
-
-        // TODO: Finish implementing vault timeouts (BIT-1120)
-        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
     }
 
     private fun handleVaultTimeoutActionSelect(
@@ -174,9 +171,6 @@ class AccountSecurityViewModel @Inject constructor(
             )
         }
         settingsRepository.vaultTimeoutAction = vaultTimeoutAction
-
-        // TODO BIT-746: Finish implementing session timeout action
-        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
     }
 
     private fun handleTwoStepLoginClick() {

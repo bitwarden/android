@@ -130,6 +130,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [lastActiveTimeMillis] was stored successfully using the [userId].
+     */
+    fun assertLastActiveTimeMillis(userId: String, lastActiveTimeMillis: Long?) {
+        assertEquals(lastActiveTimeMillis, storedLastActiveTimeMillis[userId])
+    }
+
+    /**
      * Assert that the [userKey] was stored successfully using the [userId].
      */
     fun assertUserKey(userId: String, userKey: String?) {

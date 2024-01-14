@@ -184,22 +184,12 @@ class AuthRepositoryImpl constructor(
                 when (loginResponse) {
                     is CaptchaRequired -> LoginResult.CaptchaRequired(loginResponse.captchaKey)
                     is Success -> {
-                        activeUserId?.let { previousActiveUserId ->
-                            vaultRepository.lockVaultIfNecessary(userId = previousActiveUserId)
-                        }
                         val userStateJson = loginResponse.toUserState(
                             previousUserState = authDiskSource.userState,
                             environmentUrlData = environmentRepository
                                 .environment
                                 .environmentUrlData,
                         )
-                        // Check for existing organization keys for a soft-logout account.
-                        // We can separately unlock the vault for organization data after receiving
-                        // the sync response if this data is currently absent.
-                        val organizationKeys =
-                            authDiskSource.getOrganizationKeys(
-                                userId = userStateJson.activeUserId,
-                            )
                         vaultRepository.clearUnlockedData()
                         vaultRepository.unlockVault(
                             userId = userStateJson.activeUserId,
@@ -208,7 +198,9 @@ class AuthRepositoryImpl constructor(
                             userKey = loginResponse.key,
                             privateKey = loginResponse.privateKey,
                             masterPassword = password,
-                            organizationKeys = organizationKeys,
+                            // We can separately unlock the vault for organization data after
+                            // receiving the sync response if this data is currently absent.
+                            organizationKeys = null,
                         )
                         authDiskSource.userState = userStateJson
                         authDiskSource.storeUserKey(
@@ -286,8 +278,7 @@ class AuthRepositoryImpl constructor(
         // Switch to the new user
         authDiskSource.userState = currentUserState.copy(activeUserId = userId)
 
-        // Lock and clear data for the previous user
-        vaultRepository.lockVaultIfNecessary(previousActiveUserId)
+        // Clear data for the previous user
         vaultRepository.clearUnlockedData()
 
         // Clear any special circumstances
