@@ -125,6 +125,8 @@ class AuthRepositoryTest {
         every { logout(any()) } just runs
     }
 
+    private var elapsedRealtimeMillis = 123456789L
+
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
         identityService = identityService,
@@ -136,6 +138,7 @@ class AuthRepositoryTest {
         vaultRepository = vaultRepository,
         userLogoutManager = userLogoutManager,
         dispatcherManager = dispatcherManager,
+        elapsedRealtimeMillisProvider = { elapsedRealtimeMillis },
     )
 
     @BeforeEach
@@ -1218,6 +1221,21 @@ class AuthRepositoryTest {
         assertNull(repository.specialCircumstance)
         verify { vaultRepository.lockVaultIfNecessary(originalUserId) }
         verify { vaultRepository.clearUnlockedData() }
+    }
+
+    @Test
+    fun `updateLastActiveTime should update the last active time for the current user`() {
+        val userId = USER_ID_1
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        assertNull(fakeAuthDiskSource.getLastActiveTimeMillis(userId = userId))
+
+        repository.updateLastActiveTime()
+
+        assertEquals(
+            elapsedRealtimeMillis,
+            fakeAuthDiskSource.getLastActiveTimeMillis(userId = userId),
+        )
     }
 
     @Test

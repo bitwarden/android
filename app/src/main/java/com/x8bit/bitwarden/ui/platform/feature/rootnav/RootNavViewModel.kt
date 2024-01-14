@@ -19,7 +19,7 @@ private const val KEY_NAV_DESTINATION = "nav_state"
  */
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
-    authRepository: AuthRepository,
+    private val authRepository: AuthRepository,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
@@ -32,8 +32,13 @@ class RootNavViewModel @Inject constructor(
 
     override fun handleAction(action: RootNavAction) {
         when (action) {
+            is RootNavAction.BackStackUpdate -> handleBackStackUpdate()
             is RootNavAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
         }
+    }
+
+    private fun handleBackStackUpdate() {
+        authRepository.updateLastActiveTime()
     }
 
     private fun handleUserStateUpdateReceive(
@@ -92,6 +97,11 @@ sealed class RootNavState : Parcelable {
  * Models root level navigation actions.
  */
 sealed class RootNavAction {
+
+    /**
+     * Indicates the backstack has changed.
+     */
+    data object BackStackUpdate : RootNavAction()
 
     /**
      * Internal ViewModel actions.

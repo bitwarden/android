@@ -24,6 +24,8 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_GRAP
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -41,6 +43,15 @@ fun RootNavScreen(
     val isNotSplashScreen = state != RootNavState.Splash
     LaunchedEffect(isNotSplashScreen) {
         if (isNotSplashScreen) onSplashScreenRemoved()
+    }
+
+    LaunchedEffect(Unit) {
+        navController
+            .currentBackStackEntryFlow
+            .onEach {
+                viewModel.trySendAction(RootNavAction.BackStackUpdate)
+            }
+            .launchIn(this)
     }
 
     NavHost(
