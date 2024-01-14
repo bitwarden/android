@@ -88,6 +88,26 @@ interface AuthDiskSource {
     fun storeUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?)
 
     /**
+     * Retrieves a pin-protected user key for the given [userId].
+     */
+    fun getPinProtectedUserKey(userId: String): String?
+
+    /**
+     * Stores a pin-protected user key for the given [userId].
+     */
+    fun storePinProtectedUserKey(userId: String, pinProtectedUserKey: String?)
+
+    /**
+     * Retrieves an encrypted PIN for the given [userId].
+     */
+    fun getEncryptedPin(userId: String): String?
+
+    /**
+     * Stores an encrypted PIN for the given [userId].
+     */
+    fun storeEncryptedPin(userId: String, encryptedPin: String?)
+
+    /**
      * Gets the organization keys for the given [userId] in the form of a mapping from organization
      * ID to encrypted organization key.
      */
