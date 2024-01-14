@@ -9,11 +9,14 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -108,22 +111,99 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteSendClick should emit ShowToast`() = runTest {
-        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+    fun `DeleteSendClick with deleteSend error should display error dialog`() = runTest {
+        val sendId = "sendId1234"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { id } returns sendId
+        }
+        coEvery { vaultRepo.deleteSend(sendId) } returns DeleteSendResult.Error
+
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
             viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
-            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = SendState.DialogState.Loading(R.string.deleting.asText()),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = SendState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
         }
     }
 
     @Test
-    fun `RemovePasswordClick should emit ShowToast`() = runTest {
-        val sendItem = mockk<SendState.ViewState.Content.SendItem>()
+    fun `DeleteSendClick with deleteSend success should emit ShowToast`() = runTest {
+        val sendId = "sendId1234"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { id } returns sendId
+        }
+        coEvery { vaultRepo.deleteSend(sendId) } returns DeleteSendResult.Success
+
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.DeleteSendClick(sendItem))
+            assertEquals(SendEvent.ShowToast(R.string.send_deleted.asText()), awaitItem())
+        }
+    }
+
+    @Test
+    fun `RemovePasswordClick with removePasswordSend error should display error dialog`() =
+        runTest {
+            val sendId = "sendId1234"
+            val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+                every { id } returns sendId
+            }
+            coEvery {
+                vaultRepo.removePasswordSend(sendId)
+            } returns RemovePasswordSendResult.Error(errorMessage = null)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(SendAction.RemovePasswordClick(sendItem))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = SendState.DialogState.Loading(
+                            message = R.string.removing_send_password.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = SendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `RemovePasswordClick with removePasswordSend success should emit ShowToast`() = runTest {
+        val sendId = "sendId1234"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { id } returns sendId
+        }
+        coEvery {
+            vaultRepo.removePasswordSend(sendId)
+        } returns RemovePasswordSendResult.Success(mockk())
+
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.RemovePasswordClick(sendItem))
-            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(SendEvent.ShowToast(R.string.send_password_removed.asText()), awaitItem())
         }
     }
 
@@ -204,6 +284,20 @@ class SendViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(SendAction.TextTypeClick)
             assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
         }
+    }
+
+    @Test
+    fun `DismissDialog should clear the dialogState`() = runTest {
+        val initialState = DEFAULT_STATE.copy(
+            dialogState = SendState.DialogState.Error(
+                title = null,
+                message = "Test".asText(),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(SendAction.DismissDialog)
+        assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
     @Test
