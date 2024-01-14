@@ -5,6 +5,7 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -27,6 +28,18 @@ interface VaultSdkSource {
      * the associated vault.
      */
     fun clearCrypto(userId: String)
+
+    /**
+     * Derives a "pin key" from the given [pin] for the given [userId]. This can be used to later
+     * unlock their vault via a call to [initializeCrypto] with [InitUserCryptoMethod.Pin].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun derivePinKey(
+        userId: String,
+        pin: String,
+    ): Result<DerivePinKeyResponse>
 
     /**
      * Gets the user's encryption key, which can be used to later unlock their vault via a call to
