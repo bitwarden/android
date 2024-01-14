@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -36,6 +37,7 @@ object AuthRepositoryModule {
         environmentRepository: EnvironmentRepository,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
+        userLogoutManager: UserLogoutManager,
     ): AuthRepository = AuthRepositoryImpl(
         accountsService = accountsService,
         identityService = identityService,
@@ -46,5 +48,6 @@ object AuthRepositoryModule {
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
+        userLogoutManager = userLogoutManager,
     )
 }

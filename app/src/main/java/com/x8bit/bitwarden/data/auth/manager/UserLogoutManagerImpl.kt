@@ -1,0 +1,110 @@
+package com.x8bit.bitwarden.data.auth.manager
+
+import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
+import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+/**
+ * Primary implementation of [UserLogoutManager].
+ */
+@Suppress("LongParameterList")
+class UserLogoutManagerImpl(
+    private val authDiskSource: AuthDiskSource,
+    private val generatorDiskSource: GeneratorDiskSource,
+    private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
+    private val pushDiskSource: PushDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
+    private val vaultDiskSource: VaultDiskSource,
+    private val dispatcherManager: DispatcherManager,
+) : UserLogoutManager {
+    private val scope = CoroutineScope(dispatcherManager.unconfined)
+
+    override fun logout(userId: String) {
+        val currentUserState = authDiskSource.userState ?: return
+
+        // Remove the active user from the accounts map
+        val updatedAccounts = currentUserState
+            .accounts
+            .filterKeys { it != userId }
+
+        // Check if there is a new active user
+        if (updatedAccounts.isNotEmpty()) {
+            // If we logged out a non-active user, we want to leave the active user unchanged.
+            // If we logged out the active user, we want to set the active user to the first one
+            // in the list.
+            val updatedActiveUserId = currentUserState
+                .activeUserId
+                .takeUnless { it == userId }
+                ?: updatedAccounts.entries.first().key
+
+            // Update the user information and emit an updated token
+            authDiskSource.userState = currentUserState.copy(
+                activeUserId = updatedActiveUserId,
+                accounts = updatedAccounts,
+            )
+        } else {
+            // Update the user information and log out
+            authDiskSource.userState = null
+        }
+
+        clearData(userId = userId)
+    }
+
+    override fun softLogout(userId: String) {
+        val userState = authDiskSource.userState ?: return
+        val updatedAccount = userState
+            .accounts[userId]
+            // Clear the tokens for the current user if present
+            ?.copy(
+                tokens = AccountJson.Tokens(
+                    accessToken = null,
+                    refreshToken = null,
+                ),
+            )
+        authDiskSource.userState = userState
+            .copy(
+                accounts = userState
+                    .accounts
+                    .toMutableMap()
+                    .apply {
+                        updatedAccount?.let { set(userId, updatedAccount) }
+                    },
+            )
+
+        // Save any data that will still need to be retained after otherwise clearing all dat
+        val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
+        val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
+
+        clearData(userId = userId)
+
+        // Restore data that is still required
+        settingsDiskSource.apply {
+            storeVaultTimeoutInMinutes(
+                userId = userId,
+                vaultTimeoutInMinutes = vaultTimeoutInMinutes,
+            )
+            storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = vaultTimeoutAction,
+            )
+        }
+    }
+
+    private fun clearData(userId: String) {
+        authDiskSource.clearData(userId = userId)
+        generatorDiskSource.clearData(userId = userId)
+        pushDiskSource.clearData(userId = userId)
+        settingsDiskSource.clearData(userId = userId)
+        scope.launch {
+            passwordHistoryDiskSource.clearPasswordHistories(userId = userId)
+            vaultDiskSource.deleteVaultData(userId = userId)
+        }
+    }
+}

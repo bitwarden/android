@@ -13,6 +13,11 @@ interface PushDiskSource {
     var registeredPushToken: String?
 
     /**
+     * Clears all the data for the given user.
+     */
+    fun clearData(userId: String)
+
+    /**
      * Retrieves the last stored token for a user.
      */
     fun getCurrentPushToken(userId: String): String?

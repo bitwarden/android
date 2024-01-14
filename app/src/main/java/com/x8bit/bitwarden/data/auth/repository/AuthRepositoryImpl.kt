@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
+import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -65,6 +66,7 @@ class AuthRepositoryImpl constructor(
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
+    private val userLogoutManager: UserLogoutManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository {
     private val mutableSpecialCircumstanceStateFlow =
@@ -254,49 +256,9 @@ class AuthRepositoryImpl constructor(
     }
 
     override fun logout(userId: String) {
-        val currentUserState = authDiskSource.userState ?: return
         val wasActiveUser = userId == activeUserId
 
-        // Remove the active user from the accounts map
-        val updatedAccounts = currentUserState
-            .accounts
-            .filterKeys { it != userId }
-        authDiskSource.apply {
-            storeUserKey(userId = userId, userKey = null)
-            storePrivateKey(userId = userId, privateKey = null)
-            storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
-            storeOrganizationKeys(userId = userId, organizationKeys = null)
-            storeOrganizations(userId = userId, organizations = null)
-        }
-
-        // Check if there is a new active user
-        if (updatedAccounts.isNotEmpty()) {
-            // If we logged out a non-active user, we want to leave the active user unchanged.
-            // If we logged out the active user, we want to set the active user to the first one
-            // in the list.
-            val updatedActiveUserId = currentUserState
-                .activeUserId
-                .takeUnless { it == userId }
-                ?: updatedAccounts.entries.first().key
-
-            // Update the user information and emit an updated token
-            authDiskSource.userState = currentUserState.copy(
-                activeUserId = updatedActiveUserId,
-                accounts = updatedAccounts,
-            )
-        } else {
-            // Update the user information and log out
-            authDiskSource.userState = null
-        }
-
-        // Clear settings
-        settingsRepository.clearData(userId)
-
-        // Delete all the vault data
-        vaultRepository.deleteVaultData(userId)
-
-        // Lock the vault for the logged out user
-        vaultRepository.lockVaultIfNecessary(userId)
+        userLogoutManager.logout(userId = userId)
 
         // Clear the current vault data if the logged out user was the active one.
         if (wasActiveUser) vaultRepository.clearUnlockedData()
