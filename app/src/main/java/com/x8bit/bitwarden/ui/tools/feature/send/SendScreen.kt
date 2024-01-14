@@ -27,6 +27,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
@@ -77,6 +79,9 @@ fun SendScreen(
 
     SendDialogs(
         dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(SendAction.DismissDialog) }
+        },
     )
 
     val sendHandlers = remember(viewModel) { SendHandlers.create(viewModel) }
@@ -176,8 +181,17 @@ fun SendScreen(
 @Composable
 private fun SendDialogs(
     dialogState: SendState.DialogState?,
+    onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
+        is SendState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
         is SendState.DialogState.Loading -> BitwardenLoadingDialog(
             visibilityState = LoadingDialogState.Shown(dialogState.message),
         )

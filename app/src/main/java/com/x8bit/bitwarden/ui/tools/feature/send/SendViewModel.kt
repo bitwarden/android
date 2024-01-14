@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -23,6 +25,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -69,11 +72,62 @@ class SendViewModel @Inject constructor(
         SendAction.TextTypeClick -> handleTextTypeClick()
         is SendAction.DeleteSendClick -> handleDeleteSendClick(action)
         is SendAction.RemovePasswordClick -> handleRemovePasswordClick(action)
+        SendAction.DismissDialog -> handleDismissDialog()
         is SendAction.Internal -> handleInternalAction(action)
     }
 
     private fun handleInternalAction(action: SendAction.Internal): Unit = when (action) {
+        is SendAction.Internal.DeleteSendResultReceive -> handleDeleteSendResultReceive(action)
+        is SendAction.Internal.RemovePasswordSendResultReceive -> {
+            handleRemovePasswordSendResultReceive(action)
+        }
+
         is SendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
+    }
+
+    private fun handleDeleteSendResultReceive(action: SendAction.Internal.DeleteSendResultReceive) {
+        when (action.result) {
+            DeleteSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            DeleteSendResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(SendEvent.ShowToast(R.string.send_deleted.asText()))
+            }
+        }
+    }
+
+    private fun handleRemovePasswordSendResultReceive(
+        action: SendAction.Internal.RemovePasswordSendResultReceive,
+    ) {
+        when (val result = action.result) {
+            is RemovePasswordSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SendState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is RemovePasswordSendResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(SendEvent.ShowToast(message = R.string.send_password_removed.asText()))
+            }
+        }
     }
 
     private fun handleSendDataReceive(action: SendAction.Internal.SendDataReceive) {
@@ -189,13 +243,31 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleDeleteSendClick(action: SendAction.DeleteSendClick) {
-        // TODO: Navigate to the text type send list screen (BIT-1388)
-        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.Loading(R.string.deleting.asText()))
+        }
+        viewModelScope.launch {
+            val result = vaultRepo.deleteSend(action.sendItem.id)
+            sendAction(SendAction.Internal.DeleteSendResultReceive(result))
+        }
     }
 
     private fun handleRemovePasswordClick(action: SendAction.RemovePasswordClick) {
-        // TODO: Navigate to the text type send list screen (BIT-1388)
-        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SendState.DialogState.Loading(
+                    message = R.string.removing_send_password.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            val result = vaultRepo.removePasswordSend(action.sendItem.id)
+            sendAction(SendAction.Internal.RemovePasswordSendResultReceive(result))
+        }
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
     }
 }
 
@@ -282,6 +354,15 @@ data class SendState(
      * Represents the current state of any dialogs on the screen.
      */
     sealed class DialogState : Parcelable {
+
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
 
         /**
          * Represents a loading dialog with the given [message].
@@ -373,9 +454,26 @@ sealed class SendAction {
     ) : SendAction()
 
     /**
+     * Dismiss the currently displayed dialog.
+     */
+    data object DismissDialog : SendAction()
+
+    /**
      * Models actions that the [SendViewModel] itself will send.
      */
     sealed class Internal : SendAction() {
+        /**
+         * Indicates a result for deleting the send has been received.
+         */
+        data class DeleteSendResultReceive(val result: DeleteSendResult) : Internal()
+
+        /**
+         * Indicates a result for removing the password protection from a send has been received.
+         */
+        data class RemovePasswordSendResultReceive(
+            val result: RemovePasswordSendResult,
+        ) : Internal()
+
         /**
          * Indicates that the send data has been received.
          */

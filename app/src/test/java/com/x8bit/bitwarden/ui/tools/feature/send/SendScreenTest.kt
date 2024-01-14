@@ -590,6 +590,36 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `error dialog should be displayed according to state`() {
+        val errorMessage = "Failure"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SendState.DialogState.Error(
+                    title = null,
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SendAction.DismissDialog)
+        }
+    }
+
+    @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
