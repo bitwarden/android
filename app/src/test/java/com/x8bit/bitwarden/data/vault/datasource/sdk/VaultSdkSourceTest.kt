@@ -5,6 +5,7 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -58,6 +59,28 @@ class VaultSdkSourceTest {
         vaultSdkSource.clearCrypto(userId = userId)
 
         verify { sdkClientManager.destroyClient(userId = userId) }
+    }
+
+    @Test
+    fun `derivePinKey should call SDK and return a Result with the correct data`() = runBlocking {
+        val userId = "userId"
+        val pin = "pin"
+        val expectedResult = mockk<DerivePinKeyResponse>()
+        coEvery {
+            clientCrypto.derivePinKey(pin = pin)
+        } returns expectedResult
+        val result = vaultSdkSource.derivePinKey(
+            userId = userId,
+            pin = pin,
+        )
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        coVerify {
+            clientCrypto.derivePinKey(pin)
+        }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test

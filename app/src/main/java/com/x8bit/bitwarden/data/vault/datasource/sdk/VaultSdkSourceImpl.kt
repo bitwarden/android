@@ -5,6 +5,7 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -30,6 +31,16 @@ class VaultSdkSourceImpl(
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
     }
+
+    override suspend fun derivePinKey(
+        userId: String,
+        pin: String,
+    ): Result<DerivePinKeyResponse> =
+        runCatching {
+            getClient(userId = userId)
+                .crypto()
+                .derivePinKey(pin = pin)
+        }
 
     override suspend fun getUserEncryptionKey(
         userId: String,
