@@ -404,7 +404,8 @@ private fun SessionTimeoutActionRow(
     onVaultTimeoutActionSelect: (VaultTimeoutAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var shouldShowSelectionDialog by remember { mutableStateOf(false) }
+    var shouldShowSelectionDialog by rememberSaveable { mutableStateOf(false) }
+    var shouldShowLogoutActionConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(
         text = stringResource(id = R.string.session_timeout_action),
         onClick = { shouldShowSelectionDialog = true },
@@ -416,24 +417,48 @@ private fun SessionTimeoutActionRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
-    if (shouldShowSelectionDialog) {
-        BitwardenSelectionDialog(
-            title = stringResource(id = R.string.vault_timeout_action),
-            onDismissRequest = { shouldShowSelectionDialog = false },
-        ) {
-            val vaultTimeoutActionOptions = VaultTimeoutAction.entries
-            vaultTimeoutActionOptions.forEach { option ->
-                BitwardenSelectionRow(
-                    text = option.displayLabel,
-                    isSelected = option == selectedVaultTimeoutAction,
-                    onClick = {
-                        shouldShowSelectionDialog = false
-                        onVaultTimeoutActionSelect(
-                            vaultTimeoutActionOptions.first { it == option },
-                        )
-                    },
-                )
+    when {
+        shouldShowSelectionDialog -> {
+            BitwardenSelectionDialog(
+                title = stringResource(id = R.string.vault_timeout_action),
+                onDismissRequest = { shouldShowSelectionDialog = false },
+            ) {
+                val vaultTimeoutActionOptions = VaultTimeoutAction.entries
+                vaultTimeoutActionOptions.forEach { option ->
+                    BitwardenSelectionRow(
+                        text = option.displayLabel,
+                        isSelected = option == selectedVaultTimeoutAction,
+                        onClick = {
+                            shouldShowSelectionDialog = false
+                            val seletedAction = vaultTimeoutActionOptions.first { it == option }
+                            if (seletedAction == VaultTimeoutAction.LOGOUT) {
+                                shouldShowLogoutActionConfirmationDialog = true
+                            } else {
+                                onVaultTimeoutActionSelect(seletedAction)
+                            }
+                        },
+                    )
+                }
             }
+        }
+
+        shouldShowLogoutActionConfirmationDialog -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.warning),
+                message = stringResource(id = R.string.vault_timeout_log_out_confirmation),
+                confirmButtonText = stringResource(id = R.string.yes),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = {
+                    shouldShowLogoutActionConfirmationDialog = false
+                    onVaultTimeoutActionSelect(VaultTimeoutAction.LOGOUT)
+                },
+                onDismissClick = {
+                    shouldShowLogoutActionConfirmationDialog = false
+                },
+                onDismissRequest = {
+                    shouldShowLogoutActionConfirmationDialog = false
+                },
+            )
         }
     }
 }

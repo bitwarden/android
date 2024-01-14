@@ -484,7 +484,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on session timeout action dialog option click should close the dialog and send VaultTimeoutActionSelect`() {
+    fun `on session timeout action dialog Lock click should close the dialog and send VaultTimeoutActionSelect`() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
@@ -497,7 +497,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithText("Log out")
+            .onAllNodesWithText("Lock")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
@@ -505,11 +505,114 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 AccountSecurityAction.VaultTimeoutActionSelect(
-                    VaultTimeoutAction.LOGOUT,
+                    VaultTimeoutAction.LOCK,
                 ),
             )
         }
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on session timeout action dialog Logout click should open a confirmation dialog`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText("Session timeout action")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Warning")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                "Logging out will remove all access to your vault and requires online " +
+                    "authentication after the timeout period. Are you sure you want to use this " +
+                    "setting?",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on session timeout action Logout confirmation dialog cancel click should dismiss the dialog`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText("Session timeout action")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Warning")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on session timeout action Logout confirmation dialog Yes click should dismiss the dialog and send VaultTimeoutActionSelect`() {
+        composeTestRule.assertNoDialogExists()
+        composeTestRule
+            .onNodeWithText("Session timeout action")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Log out")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Warning")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.VaultTimeoutActionSelect(
+                    VaultTimeoutAction.LOGOUT,
+                ),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
