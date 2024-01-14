@@ -67,6 +67,17 @@ class AuthDiskSourceImpl(
         get() = mutableUserStateFlow
             .onSubscription { emit(userState) }
 
+    private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
+
+    override fun clearData(userId: String) {
+        storeLastActiveTimeMillis(userId = userId, lastActiveTimeMillis = null)
+        storeUserKey(userId = userId, userKey = null)
+        storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
+        storePrivateKey(userId = userId, privateKey = null)
+        storeOrganizationKeys(userId = userId, organizationKeys = null)
+        storeOrganizations(userId = userId, organizations = null)
+    }
+
     override fun getLastActiveTimeMillis(userId: String): Long? =
         getLong(key = "${LAST_ACTIVE_TIME_KEY}_$userId")
 
@@ -79,8 +90,6 @@ class AuthDiskSourceImpl(
             value = lastActiveTimeMillis,
         )
     }
-
-    private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     override fun getUserKey(userId: String): String? =
         getString(key = "${MASTER_KEY_ENCRYPTION_USER_KEY}_$userId")

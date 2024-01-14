@@ -19,6 +19,11 @@ class GeneratorDiskSourceImpl(
 ) : BaseDiskSource(sharedPreferences),
     GeneratorDiskSource {
 
+    override fun clearData(userId: String) {
+        storePasscodeGenerationOptions(userId = userId, options = null)
+        storeUsernameGenerationOptions(userId = userId, options = null)
+    }
+
     override fun getPasscodeGenerationOptions(userId: String): PasscodeGenerationOptions? {
         val key = getPasswordGenerationOptionsKey(userId)
         return getString(key)?.let { json.decodeFromString(it) }

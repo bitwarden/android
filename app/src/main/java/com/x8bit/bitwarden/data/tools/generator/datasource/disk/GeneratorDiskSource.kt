@@ -7,6 +7,10 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerat
  * Primary access point for disk information related to generation.
  */
 interface GeneratorDiskSource {
+    /**
+     * Clears all the settings data for the given user.
+     */
+    fun clearData(userId: String)
 
     /**
      * Retrieves a user's passcode generation options using a [userId].

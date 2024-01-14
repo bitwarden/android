@@ -24,6 +24,14 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override var appLanguage: AppLanguage? = null
 
+    override fun clearData(userId: String) {
+        storedVaultTimeoutActions.remove(userId)
+        storedVaultTimeoutInMinutes.remove(userId)
+
+        mutableVaultTimeoutActionsFlowMap.remove(userId)
+        mutableVaultTimeoutInMinutesFlowMap.remove(userId)
+    }
+
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
         storedVaultTimeoutInMinutes[userId]
 
