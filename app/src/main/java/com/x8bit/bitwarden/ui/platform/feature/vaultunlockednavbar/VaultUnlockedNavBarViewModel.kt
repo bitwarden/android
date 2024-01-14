@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -8,7 +9,9 @@ import javax.inject.Inject
  * Manages bottom tab navigation of the application.
  */
 @HiltViewModel
-class VaultUnlockedNavBarViewModel @Inject constructor() :
+class VaultUnlockedNavBarViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+) :
     BaseViewModel<Unit, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
         initialState = Unit,
     ) {
@@ -19,6 +22,7 @@ class VaultUnlockedNavBarViewModel @Inject constructor() :
             VaultUnlockedNavBarAction.SendTabClick -> handleSendTabClicked()
             VaultUnlockedNavBarAction.SettingsTabClick -> handleSettingsTabClicked()
             VaultUnlockedNavBarAction.VaultTabClick -> handleVaultTabClicked()
+            VaultUnlockedNavBarAction.BackStackUpdate -> handleBackStackUpdate()
         }
     }
     // #region BottomTabViewModel Action Handlers
@@ -49,6 +53,10 @@ class VaultUnlockedNavBarViewModel @Inject constructor() :
     private fun handleSettingsTabClicked() {
         sendEvent(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
     }
+
+    private fun handleBackStackUpdate() {
+        authRepository.updateLastActiveTime()
+    }
     // #endregion BottomTabViewModel Action Handlers
 }
 
@@ -75,6 +83,11 @@ sealed class VaultUnlockedNavBarAction {
      * click Settings tab.
      */
     data object SettingsTabClick : VaultUnlockedNavBarAction()
+
+    /**
+     * Indicates the backstack has changed.
+     */
+    data object BackStackUpdate : VaultUnlockedNavBarAction()
 }
 
 /**

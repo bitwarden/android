@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import android.os.SystemClock
 import com.bitwarden.core.HashPurpose
 import com.bitwarden.core.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -55,7 +56,7 @@ import javax.inject.Singleton
 /**
  * Default implementation of [AuthRepository].
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 @Singleton
 class AuthRepositoryImpl constructor(
     private val accountsService: AccountsService,
@@ -68,6 +69,7 @@ class AuthRepositoryImpl constructor(
     private val vaultRepository: VaultRepository,
     private val userLogoutManager: UserLogoutManager,
     dispatcherManager: DispatcherManager,
+    private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository {
     private val mutableSpecialCircumstanceStateFlow =
         MutableStateFlow<UserState.SpecialCircumstance?>(null)
@@ -292,6 +294,14 @@ class AuthRepositoryImpl constructor(
         specialCircumstance = null
 
         return SwitchAccountResult.AccountSwitched
+    }
+
+    override fun updateLastActiveTime() {
+        val userId = activeUserId ?: return
+        authDiskSource.storeLastActiveTimeMillis(
+            userId = userId,
+            lastActiveTimeMillis = elapsedRealtimeMillisProvider(),
+        )
     }
 
     @Suppress("ReturnCount", "LongMethod")

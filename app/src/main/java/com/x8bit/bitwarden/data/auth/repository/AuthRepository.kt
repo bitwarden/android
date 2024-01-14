@@ -73,6 +73,11 @@ interface AuthRepository : AuthenticatorProvider {
     fun switchAccount(userId: String): SwitchAccountResult
 
     /**
+     * Updates the "last active time" for the current user.
+     */
+    fun updateLastActiveTime()
+
+    /**
      * Attempt to register a new account with the given parameters.
      */
     suspend fun register(
