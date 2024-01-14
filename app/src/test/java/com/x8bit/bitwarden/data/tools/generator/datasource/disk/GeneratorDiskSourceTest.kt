@@ -26,6 +26,59 @@ class GeneratorDiskSourceTest {
     )
 
     @Test
+    fun `clearData should clear all necessary data for the given user`() {
+        val userId = "userId"
+
+        val passcodeOptions = PasscodeGenerationOptions(
+            length = 14,
+            allowAmbiguousChar = false,
+            hasNumbers = true,
+            minNumber = 0,
+            hasUppercase = true,
+            minUppercase = null,
+            hasLowercase = false,
+            minLowercase = null,
+            allowSpecial = false,
+            minSpecial = 1,
+            allowCapitalize = false,
+            allowIncludeNumber = false,
+            wordSeparator = "-",
+            numWords = 3,
+        )
+        val userNameOptions = UsernameGenerationOptions(
+            type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+            serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
+            capitalizeRandomWordUsername = true,
+            includeNumberRandomWordUsername = false,
+            plusAddressedEmail = "example+plus@gmail.com",
+            catchAllEmailDomain = "example.com",
+            firefoxRelayApiAccessToken = "access_token_firefox_relay",
+            simpleLoginApiKey = "api_key_simple_login",
+            duckDuckGoApiKey = "api_key_duck_duck_go",
+            fastMailApiKey = "api_key_fast_mail",
+            anonAddyApiAccessToken = "access_token_anon_addy",
+            anonAddyDomainName = "anonaddy.com",
+            forwardEmailApiAccessToken = "access_token_forward_email",
+            forwardEmailDomainName = "forwardemail.net",
+            emailWebsite = "email.example.com",
+        )
+
+        generatorDiskSource.storePasscodeGenerationOptions(
+            userId = userId,
+            options = passcodeOptions,
+        )
+        generatorDiskSource.storeUsernameGenerationOptions(
+            userId = userId,
+            options = userNameOptions,
+        )
+
+        generatorDiskSource.clearData(userId = userId)
+
+        assertNull(generatorDiskSource.getPasscodeGenerationOptions(userId = userId))
+        assertNull(generatorDiskSource.getUsernameGenerationOptions(userId = userId))
+    }
+
+    @Test
     fun `getPasscodeGenerationOptions should return correct options when available`() {
         val userId = "user123"
         val options = PasscodeGenerationOptions(

@@ -36,6 +36,17 @@ class FakeAuthDiskSource : AuthDiskSource {
     override val userStateFlow: Flow<UserStateJson?>
         get() = mutableUserStateFlow.onSubscription { emit(userState) }
 
+    override fun clearData(userId: String) {
+        storedLastActiveTimeMillis.remove(userId)
+        storedUserKeys.remove(userId)
+        storedPrivateKeys.remove(userId)
+        storedUserAutoUnlockKeys.remove(userId)
+        storedOrganizations.remove(userId)
+
+        storedOrganizationKeys.remove(userId)
+        mutableOrganizationsFlowMap.remove(userId)
+    }
+
     override fun getLastActiveTimeMillis(userId: String): Long? =
         storedLastActiveTimeMillis[userId]
 

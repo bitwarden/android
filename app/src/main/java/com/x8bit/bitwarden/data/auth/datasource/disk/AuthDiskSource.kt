@@ -32,6 +32,13 @@ interface AuthDiskSource {
     val userStateFlow: Flow<UserStateJson?>
 
     /**
+     * Clears all the settings data for the given user.
+     *
+     * Note that this does not include any data saved in the [userState].
+     */
+    fun clearData(userId: String)
+
+    /**
      * Retrieves the "last active time" for the given [userId], in milliseconds.
      *
      * This time is intended to be derived from a call to

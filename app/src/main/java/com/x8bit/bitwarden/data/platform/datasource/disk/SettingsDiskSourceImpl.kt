@@ -39,6 +39,11 @@ class SettingsDiskSourceImpl(
             )
         }
 
+    override fun clearData(userId: String) {
+        storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
+        storeVaultTimeoutAction(userId = userId, vaultTimeoutAction = null)
+    }
+
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
         getInt(key = "${VAULT_TIME_IN_MINUTES_KEY}_$userId")
 

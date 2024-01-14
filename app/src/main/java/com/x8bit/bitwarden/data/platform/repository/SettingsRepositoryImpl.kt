@@ -59,16 +59,7 @@ class SettingsRepositoryImpl(
         }
 
     override fun clearData(userId: String) {
-        settingsDiskSource.apply {
-            storeVaultTimeoutInMinutes(
-                userId = userId,
-                vaultTimeoutInMinutes = null,
-            )
-            storeVaultTimeoutAction(
-                userId = userId,
-                vaultTimeoutAction = null,
-            )
-        }
+        settingsDiskSource.clearData(userId = userId)
     }
 
     override fun setDefaultsIfNecessary(userId: String) {

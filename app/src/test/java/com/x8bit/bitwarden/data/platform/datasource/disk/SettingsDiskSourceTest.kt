@@ -59,6 +59,24 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `clearData should clear all necessary data for the given user`() {
+        val userId = "userId"
+        settingsDiskSource.storeVaultTimeoutInMinutes(
+            userId = userId,
+            vaultTimeoutInMinutes = 30,
+        )
+        settingsDiskSource.storeVaultTimeoutAction(
+            userId = userId,
+            vaultTimeoutAction = VaultTimeoutAction.LOCK,
+        )
+
+        settingsDiskSource.clearData(userId = userId)
+
+        assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
+        assertNull(settingsDiskSource.getVaultTimeoutAction(userId = userId))
+    }
+
+    @Test
     fun `getVaultTimeoutInMinutes when values are present should pull from SharedPreferences`() {
         val vaultTimeoutBaseKey = "bwPreferencesStorage:vaultTimeout"
         val mockUserId = "mockUserId"

@@ -14,6 +14,11 @@ interface SettingsDiskSource {
     var appLanguage: AppLanguage?
 
     /**
+     * Clears all the settings data for the given user.
+     */
+    fun clearData(userId: String)
+
+    /**
      * Gets the current vault timeout (in minutes) for the given [userId] (or `null` if the vault
      * should never time out).
      */

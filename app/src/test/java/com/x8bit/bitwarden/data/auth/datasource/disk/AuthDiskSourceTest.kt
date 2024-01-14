@@ -119,6 +119,39 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `clearData should clear all necessary data for the given user`() {
+        val userId = "userId"
+
+        authDiskSource.storeLastActiveTimeMillis(
+            userId = userId,
+            lastActiveTimeMillis = 123456789L,
+        )
+        authDiskSource.storeUserKey(userId = userId, userKey = "userKey")
+        authDiskSource.storeUserAutoUnlockKey(
+            userId = userId,
+            userAutoUnlockKey = "userAutoUnlockKey",
+        )
+        authDiskSource.storePrivateKey(userId = userId, privateKey = "privateKey")
+        authDiskSource.storeOrganizationKeys(
+            userId = userId,
+            organizationKeys = mapOf("organizationId" to "key"),
+        )
+        authDiskSource.storeOrganizations(
+            userId = userId,
+            organizations = listOf(createMockOrganization(1)),
+        )
+
+        authDiskSource.clearData(userId = userId)
+
+        assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
+        assertNull(authDiskSource.getUserKey(userId = userId))
+        assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
+        assertNull(authDiskSource.getPrivateKey(userId = userId))
+        assertNull(authDiskSource.getOrganizationKeys(userId = userId))
+        assertNull(authDiskSource.getOrganizations(userId = userId))
+    }
+
+    @Test
     fun `getLastActiveTimeMillis should pull from SharedPreferences`() {
         val lastActiveTimeBaseKey = "bwPreferencesStorage:lastActiveTime"
         val mockUserId = "mockUserId"
