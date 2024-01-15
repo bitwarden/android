@@ -639,6 +639,7 @@ class SendScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE: SendState = SendState(
     viewState = SendState.ViewState.Loading,
     dialogState = null,
+    isPullToRefreshSettingEnabled = false,
 )
 
 private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =

@@ -12,8 +12,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -55,8 +57,18 @@ fun SendScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val pullToRefreshState = rememberPullToRefreshState()
+        .takeIf { state.isPullToRefreshEnabled }
+    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
+        if (pullToRefreshState?.isRefreshing == true) {
+            viewModel.trySendAction(SendAction.RefreshPull)
+        }
+    }
+
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            is SendEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
+
             is SendEvent.NavigateNewSend -> onNavigateToAddSend()
 
             is SendEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
@@ -146,6 +158,7 @@ fun SendScreen(
                 }
             }
         },
+        pullToRefreshState = pullToRefreshState,
     ) { padding ->
         val modifier = Modifier
             .imePadding()
