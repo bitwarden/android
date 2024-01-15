@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.parser
 
 import android.app.assist.AssistStructure
+import android.service.autofill.FillContext
+import android.service.autofill.FillRequest
 import android.view.View
 import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
@@ -50,6 +52,12 @@ class AutofillParserTests {
     private val loginWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns loginViewNode
     }
+    private val fillContext: FillContext = mockk {
+        every { this@mockk.structure } returns assistStructure
+    }
+    private val fillRequest: FillRequest = mockk {
+        every { this@mockk.fillContexts } returns listOf(fillContext)
+    }
 
     @BeforeEach
     fun setup() {
@@ -66,13 +74,26 @@ class AutofillParserTests {
     }
 
     @Test
+    fun `parse should return Unfillable when no contexts`() {
+        // Setup
+        val expected = AutofillRequest.Unfillable
+        every { fillRequest.fillContexts } returns emptyList()
+
+        // Test
+        val actual = parser.parse(fillRequest)
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun `parse should return Unfillable when windowNodeCount is 0`() {
         // Setup
         val expected = AutofillRequest.Unfillable
         every { assistStructure.windowNodeCount } returns 0
 
         // Test
-        val actual = parser.parse(assistStructure)
+        val actual = parser.parse(fillRequest)
 
         // Verify
         assertEquals(expected, actual)
@@ -120,7 +141,7 @@ class AutofillParserTests {
         every { assistStructure.getWindowNodeAt(0) } returns windowNode
 
         // Test
-        val actual = parser.parse(assistStructure)
+        val actual = parser.parse(fillRequest)
 
         // Verify
         assertEquals(expected, actual)
@@ -157,7 +178,7 @@ class AutofillParserTests {
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
-        val actual = parser.parse(assistStructure)
+        val actual = parser.parse(fillRequest)
 
         // Verify
         assertEquals(expected, actual)
@@ -194,7 +215,7 @@ class AutofillParserTests {
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
-        val actual = parser.parse(assistStructure)
+        val actual = parser.parse(fillRequest)
 
         // Verify
         assertEquals(expected, actual)
@@ -231,7 +252,7 @@ class AutofillParserTests {
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
-        val actual = parser.parse(assistStructure)
+        val actual = parser.parse(fillRequest)
 
         // Verify
         assertEquals(expected, actual)

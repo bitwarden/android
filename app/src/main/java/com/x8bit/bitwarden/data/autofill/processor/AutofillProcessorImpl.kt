@@ -1,11 +1,10 @@
 package com.x8bit.bitwarden.data.autofill.processor
 
-import android.app.assist.AssistStructure
 import android.os.CancellationSignal
 import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
-import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
+import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
@@ -36,57 +35,49 @@ class AutofillProcessorImpl(
         fillCallback: FillCallback,
         request: FillRequest,
     ) {
-        // Attempt to get the most recent autofill context.
-        val assistStructure = request
-            .fillContexts
-            .lastOrNull()
-            ?.structure
-            ?: run {
-                // There is no data for us to process.
-                fillCallback.onSuccess(null)
-                return
-            }
-
         // Set the listener so that any long running work is cancelled when it is no longer needed.
         cancellationSignal.setOnCancelListener { scope.cancel() }
         // Process the OS data and handle invoking the callback with the result.
-        assistStructure.process(
+        process(
             autofillAppInfo = autofillAppInfo,
             fillCallback = fillCallback,
+            fillRequest = request,
         )
     }
 
     /**
-     * Process the [AssistStructure] and invoke the [FillCallback] with the response.
+     * Process the [fillRequest] and invoke the [FillCallback] with the response.
      */
-    private fun AssistStructure.process(
+    private fun process(
         autofillAppInfo: AutofillAppInfo,
         fillCallback: FillCallback,
+        fillRequest: FillRequest,
     ) {
-        scope.launch {
-            // Parse the OS data into an [AutofillRequest] for easier processing.
-            val fillResponse = when (val autofillRequest = parser.parse(this@process)) {
-                is AutofillRequest.Fillable -> {
+        // Parse the OS data into an [AutofillRequest] for easier processing.
+        when (val autofillRequest = parser.parse(fillRequest)) {
+            is AutofillRequest.Fillable -> {
+                scope.launch {
                     // Fulfill the [autofillRequest].
                     val filledData = filledDataBuilder.build(
                         autofillRequest = autofillRequest,
                     )
 
                     // Load the [filledData] into a [FillResponse].
-                    fillResponseBuilder.build(
+                    val response = fillResponseBuilder.build(
                         autofillAppInfo = autofillAppInfo,
                         filledData = filledData,
                     )
-                }
 
-                AutofillRequest.Unfillable -> {
-                    // If we are unable to fulfill the request, we should invoke the callback
-                    // with null. This effectively disables autofill for this view set and
-                    // allows the [AutofillService] to be unbound.
-                    null
+                    fillCallback.onSuccess(response)
                 }
             }
-            fillCallback.onSuccess(fillResponse)
+
+            AutofillRequest.Unfillable -> {
+                // If we are unable to fulfill the request, we should invoke the callback
+                // with null. This effectively disables autofill for this view set and
+                // allows the [AutofillService] to be unbound.
+                fillCallback.onSuccess(null)
+            }
         }
     }
 }
