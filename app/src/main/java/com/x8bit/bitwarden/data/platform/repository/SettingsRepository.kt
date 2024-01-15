@@ -15,6 +15,11 @@ interface SettingsRepository {
     var appLanguage: AppLanguage
 
     /**
+     * Is icon loading for login items disabled.
+     */
+    var isIconLoadingDisabled: Boolean
+
+    /**
      * The [VaultTimeout] for the current user.
      */
     var vaultTimeout: VaultTimeout

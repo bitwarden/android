@@ -23,6 +23,8 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     private val mockSettingsRepository = mockk<SettingsRepository> {
         every { appLanguage } returns AppLanguage.DEFAULT
         every { appLanguage = AppLanguage.ENGLISH } just runs
+        every { isIconLoadingDisabled } returns false
+        every { isIconLoadingDisabled = true } just runs
     }
 
     @BeforeEach
@@ -85,18 +87,25 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on ShowWebsiteIconsToggle should update value in state`() = runTest {
+    fun `on ShowWebsiteIconsToggle should update state and store the value`() = runTest {
         val viewModel = createViewModel()
+
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE,
                 awaitItem(),
             )
-            viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(true))
+
+            viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(false))
             assertEquals(
-                DEFAULT_STATE.copy(showWebsiteIcons = true),
+                DEFAULT_STATE.copy(showWebsiteIcons = false),
                 awaitItem(),
             )
+
+            // Since we negate the boolean in the ViewModel it should be true
+            verify {
+                mockSettingsRepository.isIconLoadingDisabled = true
+            }
         }
     }
 
@@ -129,7 +138,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     companion object {
         private val DEFAULT_STATE = AppearanceState(
             language = AppLanguage.DEFAULT,
-            showWebsiteIcons = false,
+            showWebsiteIcons = true,
             theme = AppearanceState.Theme.DEFAULT,
         )
     }

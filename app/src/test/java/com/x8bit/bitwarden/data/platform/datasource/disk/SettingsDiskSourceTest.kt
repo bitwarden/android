@@ -77,6 +77,36 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `isIconLoadingDisabled should pull from and update SharedPreferences`() {
+        val isIconLoadingDisabled = "bwPreferencesStorage:disableFavicon"
+        val expected = false
+
+        // Assert that the default value in disk source is null
+        assertNull(settingsDiskSource.isIconLoadingDisabled)
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences
+            .edit()
+            .putBoolean(
+                isIconLoadingDisabled,
+                expected,
+            )
+            .apply()
+        assertEquals(
+            expected,
+            settingsDiskSource.isIconLoadingDisabled,
+        )
+
+        // Updating the disk source updates the shared preferences
+        settingsDiskSource.isIconLoadingDisabled = true
+        assertTrue(
+            fakeSharedPreferences.getBoolean(
+                isIconLoadingDisabled, false,
+            ),
+        )
+    }
+
+    @Test
     fun `getVaultTimeoutInMinutes when values are present should pull from SharedPreferences`() {
         val vaultTimeoutBaseKey = "bwPreferencesStorage:vaultTimeout"
         val mockUserId = "mockUserId"

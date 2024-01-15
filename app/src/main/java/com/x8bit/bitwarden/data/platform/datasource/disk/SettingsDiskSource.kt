@@ -8,6 +8,12 @@ import kotlinx.coroutines.flow.Flow
  * Primary access point for general settings-related disk information.
  */
 interface SettingsDiskSource {
+
+    /**
+     * The currently persisted setting for getting login item icons (or `null` if not set).
+     */
+    var isIconLoadingDisabled: Boolean?
+
     /**
      * The currently persisted app language (or `null` if not set).
      */

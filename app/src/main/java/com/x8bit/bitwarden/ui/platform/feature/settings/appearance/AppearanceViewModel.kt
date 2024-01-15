@@ -28,7 +28,7 @@ class AppearanceViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: AppearanceState(
             language = settingsRepository.appLanguage,
-            showWebsiteIcons = false,
+            showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
             theme = AppearanceState.Theme.DEFAULT,
         ),
 ) {
@@ -54,8 +54,12 @@ class AppearanceViewModel @Inject constructor(
     }
 
     private fun handleShowWebsiteIconsToggled(action: AppearanceAction.ShowWebsiteIconsToggle) {
-        // TODO: BIT-541 add website icon support
-        mutableStateFlow.update { it.copy(showWebsiteIcons = action.showWebsiteIcons) }
+        mutableStateFlow.update {
+            it.copy(showWebsiteIcons = action.showWebsiteIcons)
+        }
+
+        // Negate the boolean to properly update the settings repository
+        settingsRepository.isIconLoadingDisabled = !action.showWebsiteIcons
     }
 
     private fun handleThemeChanged(action: AppearanceAction.ThemeChange) {
