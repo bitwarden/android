@@ -56,6 +56,7 @@ fun VaultItemScreen(
     intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
     onNavigateBack: () -> Unit,
     onNavigateToVaultAddEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToMoveToOrganization: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -82,8 +83,7 @@ fun VaultItemScreen(
             }
 
             is VaultItemEvent.NavigateToMoveToOrganization -> {
-                // TODO Implement move to organization in BIT-844
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+                onNavigateToMoveToOrganization(event.itemId)
             }
 
             is VaultItemEvent.ShowToast -> {
