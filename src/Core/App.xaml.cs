@@ -119,7 +119,7 @@ namespace Bit.App
             //Create new main window
             return new MainAppWindow(new NavigationPage(new HomePage(Options)));
         }
-#elif IOS
+#else
         //iOS doesn't use the CreateWindow override used in Android so we just set the Application.Current.MainPage directly
         public new static Page MainPage
         {
