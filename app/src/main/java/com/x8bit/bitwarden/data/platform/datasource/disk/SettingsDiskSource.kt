@@ -10,14 +10,19 @@ import kotlinx.coroutines.flow.Flow
 interface SettingsDiskSource {
 
     /**
+     * The currently persisted app language (or `null` if not set).
+     */
+    var appLanguage: AppLanguage?
+
+    /**
      * The currently persisted setting for getting login item icons (or `null` if not set).
      */
     var isIconLoadingDisabled: Boolean?
 
     /**
-     * The currently persisted app language (or `null` if not set).
+     * Emits updates that track [isIconLoadingDisabled].
      */
-    var appLanguage: AppLanguage?
+    val isIconLoadingDisabledFlow: Flow<Boolean?>
 
     /**
      * Clears all the settings data for the given user.

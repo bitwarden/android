@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 /**
  * Primary implementation of [SettingsRepository].
  */
+@Suppress("TooManyFunctions")
 class SettingsRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
@@ -36,6 +37,18 @@ class SettingsRepositoryImpl(
         set(value) {
             settingsDiskSource.isIconLoadingDisabled = value
         }
+
+    override val isIconLoadingDisabledFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .isIconLoadingDisabledFlow
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource
+                    .isIconLoadingDisabled
+                    ?: false,
+            )
 
     override var vaultTimeout: VaultTimeout
         get() = activeUserId
