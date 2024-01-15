@@ -553,61 +553,111 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultAndSyncForCurrentUser with VaultLockManager Success should unlock for the current user, sync, and return Success`() =
+    fun `unlockVaultWithMasterPasswordAndSync with missing user state should return InvalidStateError `() =
         runTest {
-            val userId = "mockId-1"
-            val mockSyncResponse = createMockSyncResponse(number = 1)
-            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-            coEvery {
-                vaultDiskSource.replaceVaultData(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    vault = mockSyncResponse,
-                )
-            } just runs
-            coEvery {
-                vaultSdkSource.decryptSendList(
-                    userId = userId,
-                    sendList = listOf(createMockSdkSend(number = 1)),
-                )
-            } returns listOf(createMockSendView(number = 1)).asSuccess()
+            fakeAuthDiskSource.userState = null
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(masterPassword = "")
+
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithMasterPasswordAndSync with missing user key should return InvalidStateError `() =
+        runTest {
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(masterPassword = "")
+            fakeAuthDiskSource.storeUserKey(
+                userId = "mockId-1",
+                userKey = null,
+            )
             fakeAuthDiskSource.storePrivateKey(
                 userId = "mockId-1",
                 privateKey = "mockPrivateKey-1",
             )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithMasterPasswordAndSync with missing private key should return InvalidStateError `() =
+        runTest {
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(masterPassword = "")
             fakeAuthDiskSource.storeUserKey(
                 userId = "mockId-1",
                 userKey = "mockKey-1",
             )
-            fakeAuthDiskSource.storeOrganizationKeys(
+            fakeAuthDiskSource.storePrivateKey(
                 userId = "mockId-1",
-                organizationKeys = createMockOrganizationKeys(number = 1),
+                privateKey = null,
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithMasterPasswordAndSync with VaultLockManager Success should unlock for the current user, sync, and return Success`() =
+        runTest {
+            val userId = "mockId-1"
             val mockVaultUnlockResult = VaultUnlockResult.Success
-            coEvery {
-                vaultLockManager.unlockVault(
-                    userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    email = "email",
-                    privateKey = "mockPrivateKey-1",
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = "mockPassword-1",
-                        userKey = "mockKey-1",
-                    ),
+            prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
-                    organizationKeys = createMockOrganizationKeys(number = 1),
-                )
-            } returns mockVaultUnlockResult
-
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(
+            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(
                 masterPassword = "mockPassword-1",
             )
 
@@ -634,61 +684,13 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultAndSyncForCurrentUser with VaultLockManager non-Success should unlock for the current user and return the error`() =
+    fun `unlockVaultWithMasterPasswordAndSync with VaultLockManager non-Success should unlock for the current user and return the error`() =
         runTest {
             val userId = "mockId-1"
-            val mockSyncResponse = createMockSyncResponse(number = 1)
-            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-            coEvery {
-                vaultDiskSource.replaceVaultData(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    vault = mockSyncResponse,
-                )
-            } just runs
-            coEvery {
-                vaultSdkSource.decryptSendList(
-                    userId = userId,
-                    sendList = listOf(createMockSdkSend(number = 1)),
-                )
-            } returns listOf(createMockSendView(number = 1)).asSuccess()
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.storeOrganizationKeys(
-                userId = "mockId-1",
-                organizationKeys = createMockOrganizationKeys(number = 1),
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
             val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
-            coEvery {
-                vaultLockManager.unlockVault(
-                    userId = userId,
-                    kdf = MOCK_PROFILE.toSdkParams(),
-                    email = "email",
-                    privateKey = "mockPrivateKey-1",
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = "mockPassword-1",
-                        userKey = "mockKey-1",
-                    ),
+            prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
-                    organizationKeys = createMockOrganizationKeys(number = 1),
-                )
-            } returns mockVaultUnlockResult
-
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(
+            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(
                 masterPassword = "mockPassword-1",
             )
 
@@ -708,6 +710,163 @@ class VaultRepositoryTest {
                         userKey = "mockKey-1",
                     ),
 
+                    organizationKeys = createMockOrganizationKeys(number = 1),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithPinAndSync with missing user state should return InvalidStateError `() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithPinAndSync with missing pin-protected user key should return InvalidStateError `() =
+        runTest {
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+            fakeAuthDiskSource.storePinProtectedUserKey(
+                userId = "mockId-1",
+                pinProtectedUserKey = null,
+            )
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockId-1",
+                privateKey = "mockPrivateKey-1",
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithPinAndSync with missing private key should return InvalidStateError `() =
+        runTest {
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+            fakeAuthDiskSource.storePinProtectedUserKey(
+                userId = "mockId-1",
+                pinProtectedUserKey = "mockKey-1",
+            )
+            fakeAuthDiskSource.storePrivateKey(
+                userId = "mockId-1",
+                privateKey = null,
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+                VaultUnlockResult.InvalidStateError,
+                result,
+            )
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithPinAndSync with VaultLockManager Success should unlock for the current user, sync, and return Success`() =
+        runTest {
+            val userId = "mockId-1"
+            val mockVaultUnlockResult = VaultUnlockResult.Success
+            prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
+
+            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+
+            assertEquals(
+                mockVaultUnlockResult,
+                result,
+            )
+            coVerify { syncService.sync() }
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.Pin(
+                        pin = "1234",
+                        pinProtectedUserKey = "mockKey-1",
+                    ),
+                    organizationKeys = createMockOrganizationKeys(number = 1),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithPinAndSync with VaultLockManager non-Success should unlock for the current user and return the error`() =
+        runTest {
+            val userId = "mockId-1"
+            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
+            prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
+
+            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+
+            assertEquals(
+                mockVaultUnlockResult,
+                result,
+            )
+            coVerify(exactly = 0) { syncService.sync() }
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.Pin(
+                        pin = "1234",
+                        pinProtectedUserKey = "mockKey-1",
+                    ),
                     organizationKeys = createMockOrganizationKeys(number = 1),
                 )
             }
@@ -831,104 +990,6 @@ class VaultRepositoryTest {
 
             vaultRepository.sync()
             coVerify(exactly = 1) { syncService.sync() }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVaultAndSyncForCurrentUser with missing user state should return InvalidStateError `() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "")
-
-            assertEquals(
-                VaultUnlockResult.InvalidStateError,
-                result,
-            )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVaultAndSyncForCurrentUser with missing user key should return InvalidStateError `() =
-        runTest {
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "")
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = null,
-            )
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            assertEquals(
-                VaultUnlockResult.InvalidStateError,
-                result,
-            )
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlockVaultAndSyncForCurrentUser with missing private key should return InvalidStateError `() =
-        runTest {
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
-            val result = vaultRepository.unlockVaultAndSyncForCurrentUser(masterPassword = "")
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = null,
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            assertEquals(
-                VaultUnlockResult.InvalidStateError,
-                result,
-            )
-
-            assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
-            )
         }
 
     @Test
@@ -1703,6 +1764,86 @@ class VaultRepositoryTest {
         }
 
     //region Helper functions
+
+    /**
+     * Prepares for an unlock call with the given [unlockResult].
+     */
+    private fun prepareStateForUnlocking(
+        unlockResult: VaultUnlockResult,
+        mockMasterPassword: String = "mockPassword-1",
+        mockPin: String = "1234",
+    ) {
+        val userId = "mockId-1"
+        val mockSyncResponse = createMockSyncResponse(number = 1)
+        coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(
+                userId = userId,
+                request = InitOrgCryptoRequest(
+                    organizationKeys = createMockOrganizationKeys(1),
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultDiskSource.replaceVaultData(
+                userId = userId,
+                vault = mockSyncResponse,
+            )
+        } just runs
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = userId,
+                sendList = listOf(createMockSdkSend(number = 1)),
+            )
+        } returns listOf(createMockSendView(number = 1)).asSuccess()
+        fakeAuthDiskSource.storePrivateKey(
+            userId = userId,
+            privateKey = "mockPrivateKey-1",
+        )
+        fakeAuthDiskSource.storeUserKey(
+            userId = userId,
+            userKey = "mockKey-1",
+        )
+        fakeAuthDiskSource.storePinProtectedUserKey(
+            userId = userId,
+            pinProtectedUserKey = "mockKey-1",
+        )
+        fakeAuthDiskSource.storeOrganizationKeys(
+            userId = userId,
+            organizationKeys = createMockOrganizationKeys(number = 1),
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Master password unlock
+        coEvery {
+            vaultLockManager.unlockVault(
+                userId = userId,
+                kdf = MOCK_PROFILE.toSdkParams(),
+                email = "email",
+                privateKey = "mockPrivateKey-1",
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = mockMasterPassword,
+                    userKey = "mockKey-1",
+                ),
+                organizationKeys = createMockOrganizationKeys(number = 1),
+            )
+        } returns unlockResult
+
+        // PIN unlock
+        coEvery {
+            vaultLockManager.unlockVault(
+                userId = userId,
+                kdf = MOCK_PROFILE.toSdkParams(),
+                email = "email",
+                privateKey = "mockPrivateKey-1",
+                initUserCryptoMethod = InitUserCryptoMethod.Pin(
+                    pin = mockPin,
+                    pinProtectedUserKey = "mockKey-1",
+                ),
+                organizationKeys = createMockOrganizationKeys(number = 1),
+            )
+        } returns unlockResult
+    }
 
     /**
      * Helper setup all flows required to properly subscribe to the

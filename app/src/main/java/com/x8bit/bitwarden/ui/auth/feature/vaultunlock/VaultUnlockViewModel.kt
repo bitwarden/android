@@ -127,7 +127,7 @@ class VaultUnlockViewModel @Inject constructor(
     private fun handleUnlockClick() {
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
-            val vaultUnlockResult = vaultRepo.unlockVaultAndSyncForCurrentUser(
+            val vaultUnlockResult = vaultRepo.unlockVaultWithMasterPasswordAndSync(
                 mutableStateFlow.value.passwordInput,
             )
             sendAction(VaultUnlockAction.Internal.ReceiveVaultUnlockResult(vaultUnlockResult))

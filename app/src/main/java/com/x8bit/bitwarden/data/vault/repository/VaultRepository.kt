@@ -108,9 +108,20 @@ interface VaultRepository : VaultLockManager {
     fun emitTotpCodeResult(totpCodeResult: TotpCodeResult)
 
     /**
-     * Attempt to unlock the vault and sync the vault data for the currently active user.
+     * Attempt to unlock the vault with the given [masterPassword] and syncs the vault data for the
+     * currently active user.
      */
-    suspend fun unlockVaultAndSyncForCurrentUser(masterPassword: String): VaultUnlockResult
+    suspend fun unlockVaultWithMasterPasswordAndSync(
+        masterPassword: String,
+    ): VaultUnlockResult
+
+    /**
+     * Attempt to unlock the vault with the given [pin] and syncs the vault data for the currently
+     * active user.
+     */
+    suspend fun unlockVaultWithPinAndSync(
+        pin: String,
+    ): VaultUnlockResult
 
     /**
      * Attempt to unlock the vault with the specified user information.
