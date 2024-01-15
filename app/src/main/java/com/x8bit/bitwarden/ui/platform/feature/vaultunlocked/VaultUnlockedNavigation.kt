@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCodeEntryScreen
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.vaultManualCodeEntryDestination
+import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMoveToOrganization
+import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -37,6 +39,7 @@ fun NavController.navigateToVaultUnlockedGraph(navOptions: NavOptions? = null) {
 /**
  * Add vault unlocked destinations to the root nav graph.
  */
+@Suppress("LongMethod")
 fun NavGraphBuilder.vaultUnlockedGraph(
     navController: NavController,
 ) {
@@ -68,10 +71,16 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateBack = { navController.popBackStack() },
         )
+        vaultMoveToOrganizationDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
         vaultItemDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToVaultEditItem = {
                 navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
+            },
+            onNavigateToMoveToOrganization = {
+                navController.navigateToVaultMoveToOrganization(it)
             },
         )
         vaultQrCodeScanDestination(

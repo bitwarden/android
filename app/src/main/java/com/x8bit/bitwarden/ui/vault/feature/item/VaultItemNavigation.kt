@@ -29,6 +29,7 @@ data class VaultItemArgs(val vaultItemId: String) {
 fun NavGraphBuilder.vaultItemDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToMoveToOrganization: (vaultItemId: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = VAULT_ITEM_ROUTE,
@@ -39,6 +40,7 @@ fun NavGraphBuilder.vaultItemDestination(
         VaultItemScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToVaultAddEditItem = onNavigateToVaultEditItem,
+            onNavigateToMoveToOrganization = onNavigateToMoveToOrganization,
         )
     }
 }
