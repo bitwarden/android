@@ -83,7 +83,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
             mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToSendScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
-                    route = "send",
+                    route = "send_graph",
                     navOptions = expectedNavOptions,
                 )
             }

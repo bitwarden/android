@@ -54,7 +54,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
 import com.x8bit.bitwarden.ui.tools.feature.send.SEND_GRAPH_ROUTE
-import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSend
+import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
@@ -89,7 +89,7 @@ fun VaultUnlockedNavBarScreen(
                 }
 
                 VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
-                    navigateToSend(navOptions)
+                    navigateToSendGraph(navOptions)
                 }
 
                 VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
