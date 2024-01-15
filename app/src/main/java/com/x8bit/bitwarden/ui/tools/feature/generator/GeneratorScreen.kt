@@ -84,6 +84,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun GeneratorScreen(
     viewModel: GeneratorViewModel = hiltViewModel(),
     onNavigateToPasswordHistory: () -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -1059,6 +1060,7 @@ private fun GeneratorPreview() {
     BitwardenTheme {
         GeneratorScreen(
             onNavigateToPasswordHistory = {},
+            onNavigateBack = {},
         )
     }
 }

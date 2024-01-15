@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
@@ -50,6 +51,7 @@ fun VaultAddEditScreen(
     permissionsManager: PermissionsManager =
         PermissionsManagerImpl(LocalContext.current as Activity),
     onNavigateToManualCodeEntryScreen: () -> Unit,
+    onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -63,6 +65,10 @@ fun VaultAddEditScreen(
 
             is VaultAddEditEvent.NavigateToManualCodeEntry -> {
                 onNavigateToManualCodeEntryScreen()
+            }
+
+            is VaultAddEditEvent.NavigateToGeneratorModal -> {
+                onNavigateToGeneratorModal(event.generatorMode)
             }
 
             is VaultAddEditEvent.ShowToast -> {

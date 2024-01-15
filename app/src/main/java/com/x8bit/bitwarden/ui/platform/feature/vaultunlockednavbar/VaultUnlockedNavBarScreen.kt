@@ -50,7 +50,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
-import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
+import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.SEND_GRAPH_ROUTE
@@ -345,7 +345,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val iconRes get() = R.drawable.ic_generator
         override val labelRes get() = R.string.generator
         override val contentDescriptionRes get() = R.string.generator
-        override val route get() = GENERATOR_ROUTE
+        override val route get() = GENERATOR_GRAPH_ROUTE
     }
 
     /**

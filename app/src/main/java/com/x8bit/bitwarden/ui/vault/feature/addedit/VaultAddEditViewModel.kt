@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -1316,6 +1317,13 @@ sealed class VaultAddEditEvent {
      * Navigate to the manual code entry screen.
      */
     data object NavigateToManualCodeEntry : VaultAddEditEvent()
+
+    /**
+     * Navigate to the generator modal.
+     */
+    data class NavigateToGeneratorModal(
+        val generatorMode: GeneratorMode.Modal,
+    ) : VaultAddEditEvent()
 }
 
 /**

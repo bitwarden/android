@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.SimpleLogin
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -50,6 +51,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val KEY_GENERATOR_MODE = "key_generator_mode"
 
 /**
  * ViewModel responsible for handling user interactions in the generator screen.
@@ -73,6 +75,7 @@ class GeneratorViewModel @Inject constructor(
         selectedType = Passcode(
             selectedType = Password(),
         ),
+        generatorMode = GeneratorArgs(savedStateHandle).type,
         currentEmailAddress =
         requireNotNull(authRepository.userStateFlow.value?.activeAccount?.email),
     ),
@@ -1409,6 +1412,7 @@ class GeneratorViewModel @Inject constructor(
 data class GeneratorState(
     val generatedText: String,
     val selectedType: MainType,
+    val generatorMode: GeneratorMode = GeneratorMode.Default,
     val currentEmailAddress: String,
 ) : Parcelable {
 
