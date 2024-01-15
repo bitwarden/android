@@ -284,7 +284,7 @@ class VaultRepositoryImpl(
     }
 
     @Suppress("ReturnCount")
-    override suspend fun unlockVaultAndSyncForCurrentUser(
+    override suspend fun unlockVaultWithMasterPasswordAndSync(
         masterPassword: String,
     ): VaultUnlockResult {
         val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
@@ -295,6 +295,27 @@ class VaultRepositoryImpl(
             initUserCryptoMethod = InitUserCryptoMethod.Password(
                 password = masterPassword,
                 userKey = userKey,
+            ),
+        )
+            .also {
+                if (it is VaultUnlockResult.Success) {
+                    sync()
+                }
+            }
+    }
+
+    @Suppress("ReturnCount")
+    override suspend fun unlockVaultWithPinAndSync(
+        pin: String,
+    ): VaultUnlockResult {
+        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+        val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
+            ?: return VaultUnlockResult.InvalidStateError
+        return unlockVaultForUser(
+            userId = userId,
+            initUserCryptoMethod = InitUserCryptoMethod.Pin(
+                pin = pin,
+                pinProtectedUserKey = pinProtectedUserKey,
             ),
         )
             .also {
