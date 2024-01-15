@@ -53,4 +53,20 @@ interface SettingsDiskSource {
         userId: String,
         vaultTimeoutAction: VaultTimeoutAction?,
     )
+
+    /**
+     * Gets the current state of the pull to refresh feature for the given [userId].
+     */
+    fun getPullToRefreshEnabled(userId: String): Boolean?
+
+    /**
+     * Emits updates that track [getPullToRefreshEnabled] for the given [userId]. This will replay
+     * the last known value, if any.
+     */
+    fun getPullToRefreshEnabledFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Stores the given [isPullToRefreshEnabled] for the given [userId].
+     */
+    fun storePullToRefreshEnabled(userId: String, isPullToRefreshEnabled: Boolean?)
 }

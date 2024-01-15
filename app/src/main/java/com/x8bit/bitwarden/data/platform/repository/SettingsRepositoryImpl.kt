@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -115,6 +116,29 @@ class SettingsRepositoryImpl(
             userId = userId,
             vaultTimeoutAction = vaultTimeoutAction,
         )
+    }
+
+    override fun getPullToRefreshEnabledFlow(): StateFlow<Boolean> {
+        val userId = activeUserId ?: return MutableStateFlow(false)
+        return settingsDiskSource
+            .getPullToRefreshEnabledFlow(userId = userId)
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource
+                    .getPullToRefreshEnabled(userId = userId)
+                    ?: false,
+            )
+    }
+
+    override fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean) {
+        activeUserId?.let {
+            settingsDiskSource.storePullToRefreshEnabled(
+                userId = it,
+                isPullToRefreshEnabled = isPullToRefreshEnabled,
+            )
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -19,13 +20,14 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class OtherViewModel @Inject constructor(
+    private val settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<OtherState, OtherEvent, OtherAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: OtherState(
             allowScreenCapture = false,
-            allowSyncOnRefresh = false,
+            allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
             clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
             lastSyncTime = "5/14/2023 4:52 PM",
         ),
@@ -44,7 +46,7 @@ class OtherViewModel @Inject constructor(
     }
 
     private fun handleAllowSyncToggled(action: OtherAction.AllowSyncToggle) {
-        // TODO BIT-461 hook up to pull-to-refresh feature
+        settingsRepo.storePullToRefreshEnabled(action.isSyncEnabled)
         mutableStateFlow.update { it.copy(allowSyncOnRefresh = action.isSyncEnabled) }
     }
 

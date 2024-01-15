@@ -11,6 +11,37 @@ abstract class BaseDiskSource(
     private val sharedPreferences: SharedPreferences,
 ) {
     /**
+     * Gets the [Boolean] for the given [key] from [SharedPreferences], or return the [default]
+     * value if that key is not present.
+     */
+    protected fun getBoolean(
+        key: String,
+        default: Boolean? = null,
+    ): Boolean? =
+        if (sharedPreferences.contains(key)) {
+            sharedPreferences.getBoolean(key, false)
+        } else {
+            // Make sure we can return a null value as a default if necessary
+            default
+        }
+
+    /**
+     * Puts the [value] in [SharedPreferences] for the given [key] (or removes the key when the
+     * value is `null`).
+     */
+    protected fun putBoolean(
+        key: String,
+        value: Boolean?,
+    ): Unit =
+        sharedPreferences.edit {
+            if (value != null) {
+                putBoolean(key, value)
+            } else {
+                remove(key)
+            }
+        }
+
+    /**
      * Gets the [Int] for the given [key] from [SharedPreferences], or return the [default] value
      * if that key is not present.
      */

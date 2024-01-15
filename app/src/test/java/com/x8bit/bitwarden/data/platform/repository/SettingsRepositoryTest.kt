@@ -2,11 +2,13 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -270,6 +272,38 @@ class SettingsRepositoryTest {
                 fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
             )
         }
+    }
+
+    @Test
+    fun `getPullToRefreshEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
+        val userId = "userId"
+        val userState = mockk<UserStateJson> {
+            every { activeUserId } returns userId
+        }
+        coEvery { authDiskSource.userState } returns userState
+        settingsRepository
+            .getPullToRefreshEnabledFlow()
+            .test {
+                assertFalse(awaitItem())
+                fakeSettingsDiskSource.storePullToRefreshEnabled(
+                    userId = userId,
+                    isPullToRefreshEnabled = true,
+                )
+                assertTrue(awaitItem())
+                fakeSettingsDiskSource.storePullToRefreshEnabled(
+                    userId = userId,
+                    isPullToRefreshEnabled = false,
+                )
+                assertFalse(awaitItem())
+            }
+    }
+
+    @Test
+    fun `storePullToRefreshEnabled should properly update SettingsDiskSource`() {
+        val userId = "userId"
+        every { authDiskSource.userState?.activeUserId } returns userId
+        settingsRepository.storePullToRefreshEnabled(true)
+        assertEquals(true, fakeSettingsDiskSource.getPullToRefreshEnabled(userId = userId))
     }
 }
 
