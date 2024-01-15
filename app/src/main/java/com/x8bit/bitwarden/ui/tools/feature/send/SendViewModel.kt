@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -40,6 +41,7 @@ class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
+    private val settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -47,10 +49,16 @@ class SendViewModel @Inject constructor(
         ?: SendState(
             viewState = SendState.ViewState.Loading,
             dialogState = null,
+            isPullToRefreshSettingEnabled = settingsRepo.getPullToRefreshEnabledFlow().value,
         ),
 ) {
 
     init {
+        settingsRepo
+            .getPullToRefreshEnabledFlow()
+            .map { SendAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
         vaultRepo
             .sendDataStateFlow
             .map { SendAction.Internal.SendDataReceive(it) }
@@ -73,16 +81,29 @@ class SendViewModel @Inject constructor(
         is SendAction.DeleteSendClick -> handleDeleteSendClick(action)
         is SendAction.RemovePasswordClick -> handleRemovePasswordClick(action)
         SendAction.DismissDialog -> handleDismissDialog()
+        SendAction.RefreshPull -> handleRefreshPull()
         is SendAction.Internal -> handleInternalAction(action)
     }
 
     private fun handleInternalAction(action: SendAction.Internal): Unit = when (action) {
+        is SendAction.Internal.PullToRefreshEnableReceive -> {
+            handlePullToRefreshEnableReceive(action)
+        }
+
         is SendAction.Internal.DeleteSendResultReceive -> handleDeleteSendResultReceive(action)
         is SendAction.Internal.RemovePasswordSendResultReceive -> {
             handleRemovePasswordSendResultReceive(action)
         }
 
         is SendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
+    }
+
+    private fun handlePullToRefreshEnableReceive(
+        action: SendAction.Internal.PullToRefreshEnableReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isPullToRefreshSettingEnabled = action.isPullToRefreshEnabled)
+        }
     }
 
     private fun handleDeleteSendResultReceive(action: SendAction.Internal.DeleteSendResultReceive) {
@@ -141,6 +162,7 @@ class SendViewModel @Inject constructor(
                         dialogState = null,
                     )
                 }
+                sendEvent(SendEvent.DismissPullToRefresh)
             }
 
             is DataState.Loaded -> {
@@ -155,6 +177,7 @@ class SendViewModel @Inject constructor(
                         dialogState = null,
                     )
                 }
+                sendEvent(SendEvent.DismissPullToRefresh)
             }
 
             DataState.Loading -> {
@@ -174,6 +197,7 @@ class SendViewModel @Inject constructor(
                         dialogState = null,
                     )
                 }
+                sendEvent(SendEvent.DismissPullToRefresh)
             }
 
             is DataState.Pending -> {
@@ -269,6 +293,12 @@ class SendViewModel @Inject constructor(
     private fun handleDismissDialog() {
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
+
+    private fun handleRefreshPull() {
+        // The Pull-To-Refresh composable is already in the refreshing state.
+        // We will reset that state when sendDataStateFlow emits later on.
+        vaultRepo.sync()
+    }
 }
 
 /**
@@ -278,12 +308,24 @@ class SendViewModel @Inject constructor(
 data class SendState(
     val viewState: ViewState,
     val dialogState: DialogState?,
+    private val isPullToRefreshSettingEnabled: Boolean,
 ) : Parcelable {
+
+    /**
+     * Indicates that the pull-to-refresh should be enabled in the UI.
+     */
+    val isPullToRefreshEnabled: Boolean
+        get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
      * Represents the specific view states for the send screen.
      */
     sealed class ViewState : Parcelable {
+        /**
+         * Indicates the pull-to-refresh feature should be available during the current state.
+         */
+        abstract val isPullToRefreshEnabled: Boolean
+
         /**
          * Indicates if the FAB should be displayed.
          */
@@ -298,6 +340,7 @@ data class SendState(
             val fileTypeCount: Int,
             val sendItems: List<SendItem>,
         ) : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
             override val shouldDisplayFab: Boolean get() = true
 
             /**
@@ -328,6 +371,7 @@ data class SendState(
          */
         @Parcelize
         data object Empty : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
             override val shouldDisplayFab: Boolean get() = true
         }
 
@@ -338,6 +382,7 @@ data class SendState(
         data class Error(
             val message: Text,
         ) : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
             override val shouldDisplayFab: Boolean get() = false
         }
 
@@ -346,6 +391,7 @@ data class SendState(
          */
         @Parcelize
         data object Loading : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = false
             override val shouldDisplayFab: Boolean get() = false
         }
     }
@@ -459,9 +505,19 @@ sealed class SendAction {
     data object DismissDialog : SendAction()
 
     /**
+     * User has triggered a pull to refresh.
+     */
+    data object RefreshPull : SendAction()
+
+    /**
      * Models actions that the [SendViewModel] itself will send.
      */
     sealed class Internal : SendAction() {
+        /**
+         * Indicates that the pull to refresh feature toggle has changed.
+         */
+        data class PullToRefreshEnableReceive(val isPullToRefreshEnabled: Boolean) : Internal()
+
         /**
          * Indicates a result for deleting the send has been received.
          */
@@ -487,6 +543,11 @@ sealed class SendAction {
  * Models events for the send screen.
  */
 sealed class SendEvent {
+    /**
+     * Dismisses the pull-to-refresh indicator.
+     */
+    data object DismissPullToRefresh : SendEvent()
+
     /**
      * Navigate to the new send screen.
      */
