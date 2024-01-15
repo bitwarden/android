@@ -835,7 +835,7 @@ data class SyncResponseJson(
         val id: String,
 
         @SerialName("text")
-        val text: Text,
+        val text: Text?,
 
         @SerialName("key")
         val key: String?,
