@@ -187,9 +187,19 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleUnlockWithPinToggle(action: AccountSecurityAction.UnlockWithPinToggle) {
-        // TODO BIT-974: Display alert
-        mutableStateFlow.update { it.copy(isUnlockWithPinEnabled = action.enabled) }
-        sendEvent(AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()))
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = action.isUnlockWithPinEnabled)
+        }
+
+        // TODO: Complete implementation (BIT-465)
+        when (action) {
+            AccountSecurityAction.UnlockWithPinToggle.PendingEnabled -> Unit
+            AccountSecurityAction.UnlockWithPinToggle.Disabled,
+            is AccountSecurityAction.UnlockWithPinToggle.Enabled,
+            -> {
+                sendEvent(AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()))
+            }
+        }
     }
 }
 
@@ -357,7 +367,35 @@ sealed class AccountSecurityAction {
     /**
      * User toggled the unlock with pin switch.
      */
-    data class UnlockWithPinToggle(
-        val enabled: Boolean,
-    ) : AccountSecurityAction()
+    sealed class UnlockWithPinToggle : AccountSecurityAction() {
+        /**
+         * Whether or not the action represents PIN unlocking being enabled.
+         */
+        abstract val isUnlockWithPinEnabled: Boolean
+
+        /**
+         * The toggle was disabled.
+         */
+        data object Disabled : UnlockWithPinToggle() {
+            override val isUnlockWithPinEnabled: Boolean get() = false
+        }
+
+        /**
+         * The toggle was enabled but the behavior is pending confirmation.
+         */
+        data object PendingEnabled : UnlockWithPinToggle() {
+            override val isUnlockWithPinEnabled: Boolean get() = true
+        }
+
+        /**
+         * The toggle was enabled and the user's [pin] and [shouldRequireMasterPasswordOnRestart]
+         * preference were confirmed.
+         */
+        data class Enabled(
+            val pin: String,
+            val shouldRequireMasterPasswordOnRestart: Boolean,
+        ) : UnlockWithPinToggle() {
+            override val isUnlockWithPinEnabled: Boolean get() = true
+        }
+    }
 }

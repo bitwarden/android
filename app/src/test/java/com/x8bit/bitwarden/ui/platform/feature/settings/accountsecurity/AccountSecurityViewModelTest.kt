@@ -208,21 +208,70 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithPinToggle should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(true))
+    fun `on UnlockWithPinToggle Disabled should set pin unlock to false and emit ShowToast`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                isUnlockWithPinEnabled = true,
+            )
+            val viewModel = createViewModel(initialState = initialState)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    AccountSecurityAction.UnlockWithPinToggle.Disabled,
+                )
+                assertEquals(
+                    AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()),
+                    awaitItem(),
+                )
+            }
             assertEquals(
-                AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()),
-                awaitItem(),
+                initialState.copy(isUnlockWithPinEnabled = false),
+                viewModel.stateFlow.value,
             )
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on UnlockWithPinToggle Enabled should set pin unlock to true`() {
+        val initialState = DEFAULT_STATE.copy(
+            isUnlockWithPinEnabled = false,
+        )
+        val viewModel = createViewModel(initialState = initialState)
+        viewModel.trySendAction(
+            AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
+        )
         assertEquals(
-            DEFAULT_STATE.copy(isUnlockWithPinEnabled = true),
+            initialState.copy(isUnlockWithPinEnabled = true),
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on UnlockWithPinToggle Enabled should set pin unlock to true and emit ShowToast`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                isUnlockWithPinEnabled = false,
+            )
+            val viewModel = createViewModel(initialState = initialState)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                        pin = "1234",
+                        shouldRequireMasterPasswordOnRestart = true,
+                    ),
+                )
+                assertEquals(
+                    AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()),
+                    awaitItem(),
+                )
+            }
+            assertEquals(
+                initialState.copy(isUnlockWithPinEnabled = true),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `on LogoutClick should show confirm log out dialog`() = runTest {
@@ -253,11 +302,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
+        initialState: AccountSecurityState = DEFAULT_STATE,
         authRepository: AuthRepository = mockk(relaxed = true),
         vaultRepository: VaultRepository = mockk(relaxed = true),
         settingsRepository: SettingsRepository = mockk(relaxed = true),
         savedStateHandle: SavedStateHandle = SavedStateHandle().apply {
-            set("state", DEFAULT_STATE)
+            set("state", initialState)
         },
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,

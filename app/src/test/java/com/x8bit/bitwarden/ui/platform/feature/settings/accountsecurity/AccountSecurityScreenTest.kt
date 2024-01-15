@@ -15,6 +15,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -114,12 +115,211 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on unlock with pin toggle should send UnlockWithPinToggle`() {
+    fun `on unlock with pin toggle when enabled should send UnlockWithPinToggle Disabled`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = true)
+        }
+
         composeTestRule
             .onNodeWithText("Unlock with PIN code")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(true)) }
+
+        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.Disabled) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on unlock with pin toggle when disabled should show the PIN input dialog and send UnlockWithPinToggle PendingEnabled`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = false)
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithText("Unlock with PIN code")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Enter your PIN code.")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                "Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if " +
+                    "you ever fully log out of the application.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.PendingEnabled) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PIN input dialog Cancel click should clear the dialog and send UnlockWithPinToggle Disabled`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = false)
+        }
+        composeTestRule
+            .onNodeWithText("Unlock with PIN code")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.Disabled) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PIN input dialog Submit click with empty pin should clear the dialog and send UnlockWithPinToggle Disabled`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = false)
+        }
+        composeTestRule
+            .onNodeWithText("Unlock with PIN code")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.Disabled) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PIN input dialog Submit click with non-empty pin should show a confirmation dialog and send UnlockWithPinToggle PendingEnabled`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = false)
+        }
+        composeTestRule
+            .onNodeWithText("Unlock with PIN code")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("1234")
+        composeTestRule
+            .onAllNodesWithText("Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Unlock with PIN code")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                "Do you want to require unlocking with your master password when the application " +
+                    "is restarted?",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.PendingEnabled) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PIN confirmation dialog No click should send UnlockWithPinToggle Enabled and close the dialog`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = false)
+        }
+        composeTestRule
+            .onNodeWithText("Unlock with PIN code")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onAllNodesWithText("PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("1234")
+        composeTestRule
+            .onAllNodesWithText("Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                    pin = "1234",
+                    shouldRequireMasterPasswordOnRestart = false,
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PIN confirmation dialog Yes click should send UnlockWithPinToggle Enabled and close the dialog`() {
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = false)
+        }
+        composeTestRule
+            .onNodeWithText("Unlock with PIN code")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onAllNodesWithText("PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("1234")
+        composeTestRule
+            .onAllNodesWithText("Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                    pin = "1234",
+                    shouldRequireMasterPasswordOnRestart = true,
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test

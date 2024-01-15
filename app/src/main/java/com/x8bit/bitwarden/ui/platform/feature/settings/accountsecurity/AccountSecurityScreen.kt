@@ -182,17 +182,15 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
-                label = stringResource(id = R.string.unlock_with_pin),
-                isChecked = state.isUnlockWithPinEnabled,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it)) }
+            UnlockWithPinRow(
+                isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
+                onUnlockWithPinToggleAction = remember(viewModel) {
+                    { viewModel.trySendAction(it) }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-
             Spacer(Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.session_timeout),
@@ -284,6 +282,113 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) }
                 },
                 modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun UnlockWithPinRow(
+    isUnlockWithPinEnabled: Boolean,
+    onUnlockWithPinToggleAction: (AccountSecurityAction.UnlockWithPinToggle) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowPinInputDialog by rememberSaveable { mutableStateOf(false) }
+    var shouldShowPinConfirmationDialog by rememberSaveable { mutableStateOf(false) }
+    var pin by rememberSaveable { mutableStateOf("") }
+    BitwardenWideSwitch(
+        label = stringResource(id = R.string.unlock_with_pin),
+        isChecked = isUnlockWithPinEnabled,
+        onCheckedChange = { isChecked ->
+            if (isChecked) {
+                onUnlockWithPinToggleAction(
+                    AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
+                )
+                shouldShowPinInputDialog = true
+            } else {
+                onUnlockWithPinToggleAction(
+                    AccountSecurityAction.UnlockWithPinToggle.Disabled,
+                )
+            }
+        },
+        modifier = modifier,
+    )
+
+    when {
+        shouldShowPinInputDialog -> {
+            PinInputDialog(
+                pin = pin,
+                onPinChange = { pin = it },
+                onCancelClick = {
+                    shouldShowPinInputDialog = false
+                    onUnlockWithPinToggleAction(
+                        AccountSecurityAction.UnlockWithPinToggle.Disabled,
+                    )
+                    pin = ""
+                },
+                onSubmitClick = {
+                    if (pin.isNotEmpty()) {
+                        shouldShowPinInputDialog = false
+                        shouldShowPinConfirmationDialog = true
+                        onUnlockWithPinToggleAction(
+                            AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
+                        )
+                    } else {
+                        shouldShowPinInputDialog = false
+                        onUnlockWithPinToggleAction(
+                            AccountSecurityAction.UnlockWithPinToggle.Disabled,
+                        )
+                    }
+                },
+                onDismissRequest = {
+                    shouldShowPinInputDialog = false
+                    onUnlockWithPinToggleAction(
+                        AccountSecurityAction.UnlockWithPinToggle.Disabled,
+                    )
+                    pin = ""
+                },
+            )
+        }
+
+        shouldShowPinConfirmationDialog -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.unlock_with_pin),
+                message = stringResource(id = R.string.pin_require_master_password_restart),
+                confirmButtonText = stringResource(id = R.string.yes),
+                dismissButtonText = stringResource(id = R.string.no),
+                onConfirmClick = {
+                    shouldShowPinConfirmationDialog = false
+                    onUnlockWithPinToggleAction(
+                        AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                            pin = pin,
+                            shouldRequireMasterPasswordOnRestart = true,
+                        ),
+                    )
+                    pin = ""
+                },
+                onDismissClick = {
+                    shouldShowPinConfirmationDialog = false
+                    onUnlockWithPinToggleAction(
+                        AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                            pin = pin,
+                            shouldRequireMasterPasswordOnRestart = false,
+                        ),
+                    )
+                    pin = ""
+                },
+                onDismissRequest = {
+                    // Dismissing the dialog is the same as requiring a master password
+                    // confirmation.
+                    shouldShowPinConfirmationDialog = false
+                    onUnlockWithPinToggleAction(
+                        AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                            pin = pin,
+                            shouldRequireMasterPasswordOnRestart = true,
+                        ),
+                    )
+                    pin = ""
+                },
             )
         }
     }
