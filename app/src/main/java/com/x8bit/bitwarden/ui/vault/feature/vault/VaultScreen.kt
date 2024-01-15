@@ -15,8 +15,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +61,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * The vault screen for the application.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun VaultScreen(
@@ -69,9 +73,18 @@ fun VaultScreen(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     intentHandler: IntentHandler = IntentHandler(LocalContext.current),
 ) {
+    val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
+    val pullToRefreshState = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled }
+    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
+        if (pullToRefreshState?.isRefreshing == true) {
+            viewModel.trySendAction(VaultAction.RefreshPull)
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            VaultEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
+
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
 
             VaultEvent.NavigateToVaultSearchScreen -> {
@@ -103,7 +116,8 @@ fun VaultScreen(
         }
     }
     VaultScreenScaffold(
-        state = viewModel.stateFlow.collectAsState().value,
+        state = state,
+        pullToRefreshState = pullToRefreshState,
         vaultFilterTypeSelect = remember(viewModel) {
             { viewModel.trySendAction(VaultAction.VaultFilterTypeSelect(it)) }
         },
@@ -181,6 +195,7 @@ fun VaultScreen(
 @Composable
 private fun VaultScreenScaffold(
     state: VaultState,
+    pullToRefreshState: PullToRefreshState?,
     vaultFilterTypeSelect: (VaultFilterType) -> Unit,
     addItemClickAction: () -> Unit,
     searchIconClickAction: () -> Unit,
@@ -311,6 +326,7 @@ private fun VaultScreenScaffold(
                 }
             }
         },
+        pullToRefreshState = pullToRefreshState,
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
         Box {

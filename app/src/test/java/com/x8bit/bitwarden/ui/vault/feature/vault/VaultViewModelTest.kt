@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -35,6 +36,8 @@ import org.junit.jupiter.api.Test
 @Suppress("LargeClass")
 class VaultViewModelTest : BaseViewModelTest() {
 
+    private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
+
     private val mutableUserStateFlow =
         MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
 
@@ -52,10 +55,14 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { switchAccount(any()) } answers { switchAccountResult }
         }
 
+    private val settingsRepository: SettingsRepository = mockk {
+        every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
+    }
+
     private val vaultRepository: VaultRepository =
         mockk {
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-            every { sync() } returns Unit
+            every { sync() } just runs
             every { lockVaultForCurrentUser() } just runs
             every { lockVault(any()) } just runs
         }
@@ -425,7 +432,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content and show a success Toast`() =
+    fun `vaultDataStateFlow Loaded with items when manually syncing with the sync button should update state to Content, show a success Toast, and dismiss pull to refresh`() =
         runTest {
             val expectedState = createMockVaultState(
                 viewState = VaultState.ViewState.Content(
@@ -461,6 +468,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowToast(R.string.syncing_complete.asText()),
                     awaitItem(),
                 )
+                assertEquals(VaultEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
@@ -485,7 +493,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems and show a success Toast`() =
+    fun `vaultDataStateFlow Loaded with empty items when manually syncing with the sync button should update state to NoItems, show a success Toast, and dismiss pull to refresh`() =
         runTest {
             val expectedState = createMockVaultState(
                 viewState = VaultState.ViewState.NoItems,
@@ -508,6 +516,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultEvent.ShowToast(R.string.syncing_complete.asText()),
                     awaitItem(),
                 )
+                assertEquals(VaultEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
@@ -998,9 +1007,35 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `RefreshPull should call vault repository sync`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(VaultAction.RefreshPull)
+
+        verify(exactly = 1) {
+            vaultRepository.sync()
+        }
+    }
+
+    @Test
+    fun `PullToRefreshEnableReceive should update isPullToRefreshEnabled`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultAction.Internal.PullToRefreshEnableReceive(isPullToRefreshEnabled = true),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(isPullToRefreshSettingEnabled = true),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
+            settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
         )
 }
@@ -1084,4 +1119,5 @@ private fun createMockVaultState(
         dialog = dialog,
         isSwitchingAccounts = false,
         isPremium = true,
+        isPullToRefreshSettingEnabled = false,
     )

@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -29,6 +30,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -41,6 +43,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
@@ -57,6 +60,7 @@ class VaultViewModel @Inject constructor(
             vaultFilterData = vaultFilterData,
             viewState = VaultState.ViewState.Loading,
             isPremium = userState.activeAccount.isPremium,
+            isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         )
     },
 ) {
@@ -67,6 +71,12 @@ class VaultViewModel @Inject constructor(
         get() = state.vaultFilterData?.selectedVaultFilterType ?: VaultFilterType.AllVaults
 
     init {
+        settingsRepository
+            .getPullToRefreshEnabledFlow()
+            .map { VaultAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         vaultRepository
             .vaultDataStateFlow
             .onEach { sendAction(VaultAction.Internal.VaultDataReceive(vaultData = it)) }
@@ -103,8 +113,8 @@ class VaultViewModel @Inject constructor(
             is VaultAction.VaultItemClick -> handleVaultItemClick(action)
             is VaultAction.TryAgainClick -> handleTryAgainClick()
             is VaultAction.DialogDismiss -> handleDialogDismiss()
-            is VaultAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
-            is VaultAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultAction.RefreshPull -> handleRefreshPull()
+            is VaultAction.Internal -> handleInternalAction(action)
         }
     }
 
@@ -228,6 +238,31 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    private fun handleRefreshPull() {
+        // The Pull-To-Refresh composable is already in the refreshing state.
+        // We will reset that state when sendDataStateFlow emits later on.
+        vaultRepository.sync()
+    }
+
+    private fun handleInternalAction(action: VaultAction.Internal) {
+        when (action) {
+            is VaultAction.Internal.PullToRefreshEnableReceive -> {
+                handlePullToRefreshEnableReceive(action)
+            }
+
+            is VaultAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
+            is VaultAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+        }
+    }
+
+    private fun handlePullToRefreshEnableReceive(
+        action: VaultAction.Internal.PullToRefreshEnableReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isPullToRefreshSettingEnabled = action.isPullToRefreshEnabled)
+        }
+    }
+
     private fun handleUserStateUpdateReceive(action: VaultAction.Internal.UserStateUpdateReceive) {
         // Leave the current data alone if there is no UserState; we are in the process of logging
         // out.
@@ -278,6 +313,7 @@ class VaultViewModel @Inject constructor(
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
         )
+        sendEvent(VaultEvent.DismissPullToRefresh)
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
@@ -297,6 +333,7 @@ class VaultViewModel @Inject constructor(
                 dialog = null,
             )
         }
+        sendEvent(VaultEvent.DismissPullToRefresh)
     }
 
     private fun vaultLoadingReceive() {
@@ -311,6 +348,7 @@ class VaultViewModel @Inject constructor(
             errorTitle = R.string.internet_connection_required_title.asText(),
             errorMessage = R.string.internet_connection_required_message.asText(),
         )
+        sendEvent(VaultEvent.DismissPullToRefresh)
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
@@ -351,12 +389,19 @@ data class VaultState(
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
     val isPremium: Boolean,
+    private val isPullToRefreshSettingEnabled: Boolean,
 ) : Parcelable {
 
     /**
      * The [Color] of the avatar.
      */
     val avatarColor: Color get() = avatarColorString.hexToColor()
+
+    /**
+     * Indicates that the pull-to-refresh should be enabled in the UI.
+     */
+    val isPullToRefreshEnabled: Boolean
+        get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
      * Represents the specific view states for the [VaultScreen].
@@ -376,12 +421,18 @@ data class VaultState(
         abstract val hasVaultFilter: Boolean
 
         /**
+         * Indicates the pull-to-refresh feature should be available during the current state.
+         */
+        abstract val isPullToRefreshEnabled: Boolean
+
+        /**
          * Loading state for the [VaultScreen], signifying that the content is being processed.
          */
         @Parcelize
         data object Loading : ViewState() {
             override val hasFab: Boolean get() = false
             override val hasVaultFilter: Boolean get() = false
+            override val isPullToRefreshEnabled: Boolean get() = false
         }
 
         /**
@@ -391,6 +442,7 @@ data class VaultState(
         data object NoItems : ViewState() {
             override val hasFab: Boolean get() = true
             override val hasVaultFilter: Boolean get() = true
+            override val isPullToRefreshEnabled: Boolean get() = true
         }
 
         /**
@@ -403,6 +455,7 @@ data class VaultState(
         ) : ViewState() {
             override val hasFab: Boolean get() = false
             override val hasVaultFilter: Boolean get() = false
+            override val isPullToRefreshEnabled: Boolean get() = true
         }
 
         /**
@@ -434,6 +487,7 @@ data class VaultState(
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val hasVaultFilter: Boolean get() = true
+            override val isPullToRefreshEnabled: Boolean get() = true
         }
 
         /**
@@ -598,6 +652,11 @@ data class VaultState(
  */
 sealed class VaultEvent {
     /**
+     * Dismisses the pull-to-refresh indicator.
+     */
+    data object DismissPullToRefresh : VaultEvent()
+
+    /**
      * Navigate to the Vault Search screen.
      */
     data object NavigateToVaultSearchScreen : VaultEvent()
@@ -648,6 +707,11 @@ sealed class VaultEvent {
  * Models actions for the [VaultScreen].
  */
 sealed class VaultAction {
+    /**
+     * User has triggered a pull to refresh.
+     */
+    data object RefreshPull : VaultAction()
+
     /**
      * Click the add an item button.
      * This can either be the floating action button or actual add an item button.
@@ -775,6 +839,11 @@ sealed class VaultAction {
      * Models actions that the [VaultViewModel] itself might send.
      */
     sealed class Internal : VaultAction() {
+
+        /**
+         * Indicates that the pull to refresh feature toggle has changed.
+         */
+        data class PullToRefreshEnableReceive(val isPullToRefreshEnabled: Boolean) : Internal()
 
         /**
          * Indicates a change in user state has been received.
