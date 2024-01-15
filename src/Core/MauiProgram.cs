@@ -1,6 +1,8 @@
 ﻿using Camera.MAUI;
 using CommunityToolkit.Maui;
+#if !UT
 using FFImageLoading.Maui;
+#endif
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
 using Microsoft.Maui.Handlers;
@@ -23,7 +25,9 @@ public static class MauiProgram
             .UseMauiCompatibility()
             .UseMauiCameraView()
             .UseSkiaSharp()
+#if !UT
             .UseFFImageLoading()
+#endif
             .ConfigureEffects(effects =>
             {
 #if ANDROID

@@ -22,6 +22,7 @@ using Microsoft.Maui.Networking;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using NetworkAccess = Microsoft.Maui.Networking.NetworkAccess;
 
 namespace Bit.App.Utilities
 {

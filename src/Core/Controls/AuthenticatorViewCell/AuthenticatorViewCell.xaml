@@ -5,7 +5,6 @@
                        xmlns:controls="clr-namespace:Bit.App.Controls"
                        xmlns:pages="clr-namespace:Bit.App.Pages"
                        xmlns:u="clr-namespace:Bit.App.Utilities"
-                       xmlns:ff="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
                        xmlns:core="clr-namespace:Bit.Core"
                        StyleClass="list-row, list-row-platform"
                        HorizontalOptions="FillAndExpand"
@@ -14,7 +13,6 @@
                        RowSpacing="0"
                        Padding="0,10,0,0"
                        RowDefinitions="*,*">
-
     <Grid.Resources>
         <u:IconGlyphConverter x:Key="iconGlyphConverter" />
         <u:InverseBoolConverter x:Key="inverseBool" />
@@ -30,7 +28,7 @@
         Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
         AutomationProperties.IsInAccessibleTree="False" />
 
-    <ff:CachedImage
+    <controls:CachedImage
         Grid.Column="0"
         BitmapOptimizations="True"
         ErrorPlaceholder="login.png"

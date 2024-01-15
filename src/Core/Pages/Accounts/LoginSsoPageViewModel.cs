@@ -14,6 +14,7 @@ using Bit.Core.Utilities;
 
 using Microsoft.Maui.Authentication;
 using Microsoft.Maui.Networking;
+using NetworkAccess = Microsoft.Maui.Networking.NetworkAccess;
 
 namespace Bit.App.Pages
 {

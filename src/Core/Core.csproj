@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
+    <!--When running Unit tests we'll have the custom constant "UT" added, so in this manner we can add the net8.0 target we need for UT -->
+    <TargetFrameworks Condition="$(CustomConstants.Contains(UT))">net8.0;net8.0-android;net8.0-ios</TargetFrameworks>
+    <TargetFrameworks Condition="!$(CustomConstants.Contains(UT))">net8.0-android;net8.0-ios</TargetFrameworks>
     <RootNamespace>Bit.Core</RootNamespace>
 
     <UseMaui>true</UseMaui>
@@ -41,10 +43,11 @@
 		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
-		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
 		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+		<!-- HACK: When running Unit Tests we cannot load FFImageLoading because it doesn't support "raw" net8.0 -->
+		<PackageReference Condition="!$(CustomConstants.Contains(UT))" Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
 	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
