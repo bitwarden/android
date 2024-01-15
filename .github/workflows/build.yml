@@ -153,17 +153,17 @@ jobs:
       # - name: Verify Format
       #   run: dotnet tool run dotnet-format --check
 
-      # - name: Run Core tests
-      #   run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx"
+      - name: Run Core tests
+        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx" /p:CustomConstants=UT
 
-      #- name: Report test results
-      #  uses: dorny/test-reporter@c9b3d0e2bd2a4e96aaf424dbaa31c46b42318226 # v1.6.0
-      #  if: always()
-      #  with:
-      #    name: Test Results
-      #    path: "**/test-results.trx"
-      #    reporter: dotnet-trx
-      #    fail-on-error: true
+      - name: Report test results
+       uses: dorny/test-reporter@c9b3d0e2bd2a4e96aaf424dbaa31c46b42318226 # v1.6.0
+       if: always()
+       with:
+         name: Test Results
+         path: "**/test-results.trx"
+         reporter: dotnet-trx
+         fail-on-error: true
 
       - name: Build Play Store publisher
         if: ${{ matrix.variant == 'prod' }}
