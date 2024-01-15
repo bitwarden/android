@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 
-private const val GENERATOR_GRAPH_ROUTE: String = "generator_graph"
+const val GENERATOR_GRAPH_ROUTE: String = "generator_graph"
 
 /**
  * Add generator destination to the root nav graph.

@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestinati
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
+import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
+import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorModal
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendDestination
@@ -70,6 +72,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToManualCodeEntryScreen()
             },
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
         )
         vaultMoveToOrganizationDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -90,7 +93,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateBack = { navController.popBackStack() },
         )
-
         vaultManualCodeEntryDestination(
             onNavigateToQrCodeScreen = {
                 navController.popBackStack()
@@ -102,5 +104,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         addSendDestination(onNavigateBack = { navController.popBackStack() })
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         foldersDestination(onNavigateBack = { navController.popBackStack() })
+        generatorModalDestination(onNavigateBack = { navController.popBackStack() })
     }
 }

@@ -53,6 +53,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             GeneratorScreen(
                 viewModel = viewModel,
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
+                onNavigateBack = {},
             )
         }
     }

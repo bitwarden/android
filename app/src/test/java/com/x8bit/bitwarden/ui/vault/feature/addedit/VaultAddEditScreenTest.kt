@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.FakePermissionManager
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
@@ -46,6 +47,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -56,6 +58,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateQrCodeScanScreenCalled = false
     private var onNavigateToManualCodeEntryScreenCalled = false
+    private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -78,6 +81,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 onNavigateToManualCodeEntryScreen = {
                     onNavigateToManualCodeEntryScreenCalled = true
                 },
+                onNavigateToGeneratorModal = { onNavigateToGeneratorModalType = it },
                 viewModel = viewModel,
                 permissionsManager = fakePermissionManager,
             )
@@ -102,6 +106,28 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `on NavigateToManualCodeEntry event should invoke NavigateToManualCodeEntry`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToManualCodeEntry)
         assertTrue(onNavigateToManualCodeEntryScreenCalled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on NavigateToGeneratorModal event in password mode should invoke NavigateToGeneratorModal with Password Generator Mode `() {
+        mutableEventFlow.tryEmit(
+            VaultAddEditEvent.NavigateToGeneratorModal(
+                generatorMode = GeneratorMode.Modal.Password,
+            ),
+        )
+        assertEquals(GeneratorMode.Modal.Password, onNavigateToGeneratorModalType)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on NavigateToGeneratorModal event in username mode should invoke NavigateToGeneratorModal with Username Generator Mode `() {
+        mutableEventFlow.tryEmit(
+            VaultAddEditEvent.NavigateToGeneratorModal(
+                generatorMode = GeneratorMode.Modal.Username,
+            ),
+        )
+        assertEquals(GeneratorMode.Modal.Username, onNavigateToGeneratorModalType)
     }
 
     @Test

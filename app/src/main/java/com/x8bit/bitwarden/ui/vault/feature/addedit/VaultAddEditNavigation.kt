@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 private const val ADD_TYPE: String = "add"
@@ -43,6 +44,7 @@ fun NavGraphBuilder.vaultAddEditDestination(
     onNavigateBack: () -> Unit,
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
+    onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = ADD_EDIT_ITEM_ROUTE,
@@ -54,6 +56,7 @@ fun NavGraphBuilder.vaultAddEditDestination(
             onNavigateBack = onNavigateBack,
             onNavigateToManualCodeEntryScreen = onNavigateToManualCodeEntryScreen,
             onNavigateToQrCodeScanScreen = onNavigateToQrCodeScanScreen,
+            onNavigateToGeneratorModal = onNavigateToGeneratorModal,
         )
     }
 }
