@@ -1070,6 +1070,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     ),
     viewState = VaultState.ViewState.Loading,
     isPremium = false,
+    isPullToRefreshSettingEnabled = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
