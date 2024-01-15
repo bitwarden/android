@@ -51,8 +51,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_ROUTE
-import com.x8bit.bitwarden.ui.tools.feature.generator.generatorDestination
-import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGenerator
+import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
+import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.SEND_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
@@ -93,7 +93,7 @@ fun VaultUnlockedNavBarScreen(
                 }
 
                 VaultUnlockedNavBarEvent.NavigateToGeneratorScreen -> {
-                    navigateToGenerator(navOptions)
+                    navigateToGeneratorGraph(navOptions)
                 }
 
                 VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
@@ -218,7 +218,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToAddSend = navigateToAddSend,
                 onNavigateToEditSend = onNavigateToEditSend,
             )
-            generatorDestination(
+            generatorGraph(
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },
             )
             settingsGraph(

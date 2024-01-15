@@ -103,7 +103,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
             mutableEventFlow.tryEmit(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
             runOnIdle {
                 fakeNavHostController.assertLastNavigation(
-                    route = "generator",
+                    route = "generator_graph",
                     navOptions = expectedNavOptions,
                 )
             }
