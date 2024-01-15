@@ -3,11 +3,13 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Provides an API for observing and modifying settings state.
  */
+@Suppress("TooManyFunctions")
 interface SettingsRepository {
     /**
      * The [AppLanguage] for the current user.
@@ -15,9 +17,14 @@ interface SettingsRepository {
     var appLanguage: AppLanguage
 
     /**
-     * Is icon loading for login items disabled.
+     * The current setting for getting login item icons.
      */
     var isIconLoadingDisabled: Boolean
+
+    /**
+     * Emits updates that track the [isIconLoadingDisabled] value.
+     */
+    val isIconLoadingDisabledFlow: Flow<Boolean>
 
     /**
      * The [VaultTimeout] for the current user.

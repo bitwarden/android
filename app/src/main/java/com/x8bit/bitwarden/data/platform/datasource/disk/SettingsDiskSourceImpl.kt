@@ -32,6 +32,9 @@ class SettingsDiskSourceImpl(
     private val mutablePullToRefreshEnabledFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableIsIconLoadingDisabledFlow =
+        bufferedMutableSharedFlow<Boolean?>()
+
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
             ?.let { storedValue ->
@@ -47,11 +50,13 @@ class SettingsDiskSourceImpl(
     override var isIconLoadingDisabled: Boolean?
         get() = getBoolean(key = DISABLE_ICON_LOADING_KEY)
         set(value) {
-            putBoolean(
-                key = DISABLE_ICON_LOADING_KEY,
-                value = value,
-            )
+            putBoolean(key = DISABLE_ICON_LOADING_KEY, value = value)
+            mutableIsIconLoadingDisabledFlow.tryEmit(value)
         }
+
+    override val isIconLoadingDisabledFlow: Flow<Boolean?>
+        get() = mutableIsIconLoadingDisabledFlow
+            .onSubscription { emit(getBoolean(DISABLE_ICON_LOADING_KEY)) }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)

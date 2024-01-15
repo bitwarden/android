@@ -22,14 +22,29 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutablePullToRefreshEnabledFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
+    private val mutableIsIconLoadingDisabled =
+        bufferedMutableSharedFlow<Boolean?>()
+
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
 
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
 
+    private var storedIsIconLoadingDisabled: Boolean? = null
+
     override var appLanguage: AppLanguage? = null
 
-    override var isIconLoadingDisabled: Boolean? = null
+    override var isIconLoadingDisabled: Boolean?
+        get() = storedIsIconLoadingDisabled
+        set(value) {
+            storedIsIconLoadingDisabled = value
+            mutableIsIconLoadingDisabled.tryEmit(value)
+        }
+
+    override val isIconLoadingDisabledFlow: Flow<Boolean?>
+        get() = mutableIsIconLoadingDisabled.onSubscription {
+            emit(isIconLoadingDisabled)
+        }
 
     override fun clearData(userId: String) {
         storedVaultTimeoutActions.remove(userId)
