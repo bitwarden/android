@@ -232,4 +232,65 @@ class SettingsDiskSourceTest {
         )
         assertNull(fakeSharedPreferences.getString(vaultTimeoutActionKey, null))
     }
+
+    @Test
+    fun `storePullToRefreshEnabled when values are present should pull from SharedPreferences`() {
+        val pullToRefreshBaseKey = "bwPreferencesStorage:syncOnRefresh"
+        val mockUserId = "mockUserId"
+        val pullToRefreshKey = "${pullToRefreshBaseKey}_$mockUserId"
+        fakeSharedPreferences
+            .edit()
+            .putBoolean(pullToRefreshKey, true)
+            .apply()
+        assertEquals(true, settingsDiskSource.getPullToRefreshEnabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `storePullToRefreshEnabled when values are absent should return null`() {
+        val mockUserId = "mockUserId"
+        assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `getPullToRefreshEnabledFlow should react to changes in getPullToRefreshEnabled`() =
+        runTest {
+            val mockUserId = "mockUserId"
+            settingsDiskSource.getPullToRefreshEnabledFlow(userId = mockUserId).test {
+                // The initial values of the Flow and the property are in sync
+                assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = mockUserId))
+                assertNull(awaitItem())
+
+                // Updating the disk source updates shared preferences
+                settingsDiskSource.storePullToRefreshEnabled(
+                    userId = mockUserId,
+                    isPullToRefreshEnabled = true,
+                )
+                assertEquals(true, awaitItem())
+            }
+        }
+
+    @Test
+    fun `storePullToRefreshEnabled for non-null values should update SharedPreferences`() {
+        val pullToRefreshBaseKey = "bwPreferencesStorage:syncOnRefresh"
+        val mockUserId = "mockUserId"
+        val pullToRefreshKey = "${pullToRefreshBaseKey}_$mockUserId"
+        settingsDiskSource.storePullToRefreshEnabled(
+            userId = mockUserId,
+            isPullToRefreshEnabled = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(pullToRefreshKey, false))
+    }
+
+    @Test
+    fun `storePullToRefreshEnabled for null values should clear SharedPreferences`() {
+        val pullToRefreshBaseKey = "bwPreferencesStorage:syncOnRefresh"
+        val mockUserId = "mockUserId"
+        val pullToRefreshKey = "${pullToRefreshBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(pullToRefreshKey, false) }
+        settingsDiskSource.storePullToRefreshEnabled(
+            userId = mockUserId,
+            isPullToRefreshEnabled = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(pullToRefreshKey))
+    }
 }

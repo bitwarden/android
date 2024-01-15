@@ -19,8 +19,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableVaultTimeoutInMinutesFlowMap =
         mutableMapOf<String, MutableSharedFlow<Int?>>()
 
+    private val mutablePullToRefreshEnabledFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
+
+    private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
 
     override var appLanguage: AppLanguage? = null
 
@@ -62,6 +67,18 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         getMutableVaultTimeoutActionsFlow(userId = userId).tryEmit(vaultTimeoutAction)
     }
 
+    override fun getPullToRefreshEnabled(userId: String): Boolean? =
+        storedPullToRefreshEnabled[userId]
+
+    override fun getPullToRefreshEnabledFlow(userId: String): Flow<Boolean?> =
+        getMutablePullToRefreshEnabledFlow(userId = userId)
+            .onSubscription { emit(getPullToRefreshEnabled(userId = userId)) }
+
+    override fun storePullToRefreshEnabled(userId: String, isPullToRefreshEnabled: Boolean?) {
+        storedPullToRefreshEnabled[userId] = isPullToRefreshEnabled
+        getMutablePullToRefreshEnabledFlow(userId = userId).tryEmit(isPullToRefreshEnabled)
+    }
+
     //region Private helper functions
 
     private fun getMutableVaultTimeoutActionsFlow(
@@ -75,6 +92,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         userId: String,
     ): MutableSharedFlow<Int?> =
         mutableVaultTimeoutInMinutesFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePullToRefreshEnabledFlow(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

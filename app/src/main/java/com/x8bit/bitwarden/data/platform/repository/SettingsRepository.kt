@@ -63,4 +63,14 @@ interface SettingsRepository {
      * Stores the given [VaultTimeoutAction] for the given [userId].
      */
     fun storeVaultTimeoutAction(userId: String, vaultTimeoutAction: VaultTimeoutAction?)
+
+    /**
+     * Gets updates for the pull to refresh enabled.
+     */
+    fun getPullToRefreshEnabledFlow(): StateFlow<Boolean>
+
+    /**
+     * Stores the given [isPullToRefreshEnabled] for the active user.
+     */
+    fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean)
 }

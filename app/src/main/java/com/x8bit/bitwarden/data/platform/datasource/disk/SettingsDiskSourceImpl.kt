@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 
 private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
+private const val PULL_TO_REFRESH_KEY = "$BASE_KEY:syncOnRefresh"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
 
@@ -26,6 +27,9 @@ class SettingsDiskSourceImpl(
 
     private val mutableVaultTimeoutInMinutesFlowMap =
         mutableMapOf<String, MutableSharedFlow<Int?>>()
+
+    private val mutablePullToRefreshEnabledFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
@@ -82,6 +86,18 @@ class SettingsDiskSourceImpl(
         getMutableVaultTimeoutActionFlow(userId = userId).tryEmit(vaultTimeoutAction)
     }
 
+    override fun getPullToRefreshEnabled(userId: String): Boolean? =
+        getBoolean(key = "${PULL_TO_REFRESH_KEY}_$userId")
+
+    override fun getPullToRefreshEnabledFlow(userId: String): Flow<Boolean?> =
+        getMutablePullToRefreshEnabledFlowMap(userId = userId)
+            .onSubscription { emit(getPullToRefreshEnabled(userId = userId)) }
+
+    override fun storePullToRefreshEnabled(userId: String, isPullToRefreshEnabled: Boolean?) {
+        putBoolean(key = "${PULL_TO_REFRESH_KEY}_$userId", value = isPullToRefreshEnabled)
+        getMutablePullToRefreshEnabledFlowMap(userId = userId).tryEmit(isPullToRefreshEnabled)
+    }
+
     private fun getMutableVaultTimeoutActionFlow(
         userId: String,
     ): MutableSharedFlow<VaultTimeoutAction?> =
@@ -93,6 +109,13 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Int?> =
         mutableVaultTimeoutInMinutesFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePullToRefreshEnabledFlowMap(
+        userId: String,
+    ): MutableSharedFlow<Boolean?> =
+        mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 }
