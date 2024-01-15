@@ -113,6 +113,19 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isIconLoadingDisabled should pull from and update SettingsDiskSource`() {
+        assertFalse(settingsRepository.isIconLoadingDisabled)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.isIconLoadingDisabled = true
+        assertTrue(settingsRepository.isIconLoadingDisabled)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.isIconLoadingDisabled = false
+        assertFalse(fakeSettingsDiskSource.isIconLoadingDisabled!!)
+    }
+
+    @Test
     fun `vaultTimeout should pull from and update SettingsDiskSource for the current user`() {
         every { authDiskSource.userState?.activeUserId } returns null
         assertEquals(

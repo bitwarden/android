@@ -31,6 +31,12 @@ class SettingsRepositoryImpl(
             settingsDiskSource.appLanguage = value
         }
 
+    override var isIconLoadingDisabled: Boolean
+        get() = settingsDiskSource.isIconLoadingDisabled ?: false
+        set(value) {
+            settingsDiskSource.isIconLoadingDisabled = value
+        }
+
     override var vaultTimeout: VaultTimeout
         get() = activeUserId
             ?.let {

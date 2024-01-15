@@ -29,6 +29,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override var appLanguage: AppLanguage? = null
 
+    override var isIconLoadingDisabled: Boolean? = null
+
     override fun clearData(userId: String) {
         storedVaultTimeoutActions.remove(userId)
         storedVaultTimeoutInMinutes.remove(userId)

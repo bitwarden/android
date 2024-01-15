@@ -13,6 +13,7 @@ private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
 private const val PULL_TO_REFRESH_KEY = "$BASE_KEY:syncOnRefresh"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
+private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -40,6 +41,15 @@ class SettingsDiskSourceImpl(
             putString(
                 key = APP_LANGUAGE_KEY,
                 value = value?.localeName,
+            )
+        }
+
+    override var isIconLoadingDisabled: Boolean?
+        get() = getBoolean(key = DISABLE_ICON_LOADING_KEY)
+        set(value) {
+            putBoolean(
+                key = DISABLE_ICON_LOADING_KEY,
+                value = value,
             )
         }
 
