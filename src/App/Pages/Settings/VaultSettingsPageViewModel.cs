@@ -40,7 +40,7 @@ namespace Bit.App.Pages
 
         private async Task GoToImportItemsAsync()
         {
-            var webVaultUrl = _environmentService.GetWebVaultUrl();
+            var webVaultUrl = _environmentService.GetWebVaultUrl() + "/#/tools/import";
             var body = string.Format(AppResources.YouCanImportDataToYourVaultOnX, webVaultUrl);
             if (await _platformUtilsService.ShowDialogAsync(body, AppResources.ContinueToWebApp, AppResources.Continue, AppResources.Cancel))
             {
