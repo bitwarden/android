@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.parser
 
 import android.app.assist.AssistStructure
+import android.service.autofill.FillRequest
 import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -14,7 +15,25 @@ import com.x8bit.bitwarden.data.autofill.util.toAutofillView
  * from the OS into domain models.
  */
 class AutofillParserImpl : AutofillParser {
-    override fun parse(assistStructure: AssistStructure): AutofillRequest {
+    override fun parse(fillRequest: FillRequest): AutofillRequest =
+        // Attempt to get the most recent autofill context.
+        fillRequest
+            .fillContexts
+            .lastOrNull()
+            ?.structure
+            ?.let { assistStructure ->
+                parseInternal(
+                    assistStructure = assistStructure,
+                )
+            }
+            ?: AutofillRequest.Unfillable
+
+    /**
+     * Parse the [AssistStructure] into an [AutofillRequest].
+     */
+    private fun parseInternal(
+        assistStructure: AssistStructure,
+    ): AutofillRequest {
         // Parse the `assistStructure` into internal models.
         val traversalDataList = assistStructure.traverse()
         // Flatten the autofill views for processing.

@@ -1,9 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.processor
 
-import android.app.assist.AssistStructure
 import android.os.CancellationSignal
 import android.service.autofill.FillCallback
-import android.service.autofill.FillContext
 import android.service.autofill.FillRequest
 import android.service.autofill.FillResponse
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
@@ -44,7 +42,6 @@ class AutofillProcessorTest {
         packageName = "com.x8bit.bitwarden",
         sdkInt = 42,
     )
-    private val assistStructure: AssistStructure = mockk()
     private val fillCallback: FillCallback = mockk()
 
     @BeforeEach
@@ -74,40 +71,12 @@ class AutofillProcessorTest {
     }
 
     @Test
-    fun `processFillRequest should invoke callback with null when no fillContexts`() {
-        // Setup
-        val fillRequest: FillRequest = mockk {
-            every { this@mockk.fillContexts } returns emptyList()
-        }
-        every { fillCallback.onSuccess(null) } just runs
-
-        // Test
-        autofillProcessor.processFillRequest(
-            autofillAppInfo = appInfo,
-            cancellationSignal = cancellationSignal,
-            fillCallback = fillCallback,
-            request = fillRequest,
-        )
-
-        // Verify
-        verify(exactly = 1) {
-            fillCallback.onSuccess(null)
-        }
-    }
-
-    @Test
     fun `processFillRequest should invoke callback with null when parse returns Unfillable`() {
         // Setup
         val autofillRequest = AutofillRequest.Unfillable
-        val lastFillContext: FillContext = mockk {
-            every { this@mockk.structure } returns assistStructure
-        }
-        val fillContexts: List<FillContext> = listOf(mockk(), lastFillContext)
-        val fillRequest: FillRequest = mockk {
-            every { this@mockk.fillContexts } returns fillContexts
-        }
+        val fillRequest: FillRequest = mockk()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { parser.parse(assistStructure) } returns autofillRequest
+        every { parser.parse(fillRequest) } returns autofillRequest
         every { fillCallback.onSuccess(null) } just runs
 
         // Test
@@ -121,7 +90,7 @@ class AutofillProcessorTest {
         // Verify
         verify(exactly = 1) {
             cancellationSignal.setOnCancelListener(any())
-            parser.parse(assistStructure)
+            parser.parse(fillRequest)
             fillCallback.onSuccess(null)
         }
     }
@@ -130,28 +99,20 @@ class AutofillProcessorTest {
     fun `processFillRequest should invoke callback with filled response when has filledItems`() =
         runTest {
             // Setup
-            val lastFillContext: FillContext = mockk {
-                every { this@mockk.structure } returns assistStructure
-            }
-            val fillContextList: List<FillContext> = listOf(mockk(), lastFillContext)
-            val fillRequest: FillRequest = mockk {
-                every { this@mockk.fillContexts } returns fillContextList
-            }
+            val fillRequest: FillRequest = mockk()
             val filledData = FilledData(
                 filledPartitions = listOf(mockk()),
                 ignoreAutofillIds = emptyList(),
             )
             val fillResponse: FillResponse = mockk()
-            val autofillRequest: AutofillRequest.Fillable = mockk {
-                every { this@mockk.ignoreAutofillIds } returns emptyList()
-            }
+            val autofillRequest: AutofillRequest.Fillable = mockk()
             coEvery {
                 filledDataBuilder.build(
                     autofillRequest = autofillRequest,
                 )
             } returns filledData
             every { cancellationSignal.setOnCancelListener(any()) } just runs
-            every { parser.parse(assistStructure) } returns autofillRequest
+            every { parser.parse(fillRequest) } returns autofillRequest
             every {
                 fillResponseBuilder.build(
                     autofillAppInfo = appInfo,
@@ -176,7 +137,7 @@ class AutofillProcessorTest {
             }
             verify(exactly = 1) {
                 cancellationSignal.setOnCancelListener(any())
-                parser.parse(assistStructure)
+                parser.parse(fillRequest)
                 fillResponseBuilder.build(
                     autofillAppInfo = appInfo,
                     filledData = filledData,
