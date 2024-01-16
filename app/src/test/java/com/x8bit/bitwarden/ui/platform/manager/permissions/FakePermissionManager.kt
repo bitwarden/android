@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.x8bit.bitwarden.ui.platform.manager.permissions
 
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.runtime.Composable
