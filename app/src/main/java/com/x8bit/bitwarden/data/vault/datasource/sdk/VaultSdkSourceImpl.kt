@@ -42,6 +42,16 @@ class VaultSdkSourceImpl(
                 .derivePinKey(pin = pin)
         }
 
+    override suspend fun derivePinProtectedUserKey(
+        userId: String,
+        encryptedPin: String,
+    ): Result<String> =
+        runCatching {
+            getClient(userId = userId)
+                .crypto()
+                .derivePinUserKey(encryptedPin = encryptedPin)
+        }
+
     override suspend fun getUserEncryptionKey(
         userId: String,
     ): Result<String> =
