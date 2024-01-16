@@ -94,8 +94,15 @@ interface AuthDiskSource {
 
     /**
      * Stores a pin-protected user key for the given [userId].
+     *
+     * When [inMemoryOnly] is `true`, the value will only be available via a call to
+     * [getPinProtectedUserKey] during the current app session.
      */
-    fun storePinProtectedUserKey(userId: String, pinProtectedUserKey: String?)
+    fun storePinProtectedUserKey(
+        userId: String,
+        pinProtectedUserKey: String?,
+        inMemoryOnly: Boolean = false,
+    )
 
     /**
      * Retrieves an encrypted PIN for the given [userId].

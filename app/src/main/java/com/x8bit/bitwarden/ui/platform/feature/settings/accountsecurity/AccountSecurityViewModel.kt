@@ -38,7 +38,7 @@ class AccountSecurityViewModel @Inject constructor(
             fingerprintPhrase = "fingerprint-placeholder".asText(),
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
-            isUnlockWithPinEnabled = false,
+            isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
         ),
@@ -194,9 +194,17 @@ class AccountSecurityViewModel @Inject constructor(
         // TODO: Complete implementation (BIT-465)
         when (action) {
             AccountSecurityAction.UnlockWithPinToggle.PendingEnabled -> Unit
-            AccountSecurityAction.UnlockWithPinToggle.Disabled,
-            is AccountSecurityAction.UnlockWithPinToggle.Enabled,
-            -> {
+            AccountSecurityAction.UnlockWithPinToggle.Disabled -> {
+                settingsRepository.clearUnlockPin()
+                sendEvent(AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()))
+            }
+
+            is AccountSecurityAction.UnlockWithPinToggle.Enabled -> {
+                settingsRepository.storeUnlockPin(
+                    pin = action.pin,
+                    shouldRequireMasterPasswordOnRestart =
+                    action.shouldRequireMasterPasswordOnRestart,
+                )
                 sendEvent(AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()))
             }
         }

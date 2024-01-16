@@ -1,15 +1,18 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.bitwarden.core.DerivePinKeyResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import io.mockk.coEvery
-import io.mockk.every
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,12 +22,14 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class SettingsRepositoryTest {
-    private val authDiskSource: AuthDiskSource = mockk()
+    private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
+    private val vaultSdkSource: VaultSdkSource = mockk()
 
     private val settingsRepository = SettingsRepositoryImpl(
-        authDiskSource = authDiskSource,
+        authDiskSource = fakeAuthDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
+        vaultSdkSource = vaultSdkSource,
         dispatcherManager = FakeDispatcherManager(),
     )
 
@@ -127,14 +132,14 @@ class SettingsRepositoryTest {
 
     @Test
     fun `vaultTimeout should pull from and update SettingsDiskSource for the current user`() {
-        every { authDiskSource.userState?.activeUserId } returns null
+        fakeAuthDiskSource.userState = null
         assertEquals(
             VaultTimeout.Never,
             settingsRepository.vaultTimeout,
         )
 
         val userId = "userId"
-        every { authDiskSource.userState?.activeUserId } returns userId
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Updates to the disk source change the repository value
         VAULT_TIMEOUT_MAP.forEach { (vaultTimeout, vaultTimeoutInMinutes) ->
@@ -160,14 +165,14 @@ class SettingsRepositoryTest {
 
     @Test
     fun `vaultTimeoutAction should pull from and update SettingsDiskSource`() {
-        every { authDiskSource.userState?.activeUserId } returns null
+        fakeAuthDiskSource.userState = null
         assertEquals(
             VaultTimeoutAction.LOCK,
             settingsRepository.vaultTimeoutAction,
         )
 
         val userId = "userId"
-        every { authDiskSource.userState?.activeUserId } returns userId
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Updates to the disk source change the repository value
         VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
@@ -287,13 +292,28 @@ class SettingsRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isUnlockWithPinEnabled should return a value that tracks the existence of an encrypted PIN for the current user`() {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAuthDiskSource.storeEncryptedPin(
+            userId = userId,
+            encryptedPin = null,
+        )
+        assertFalse(settingsRepository.isUnlockWithPinEnabled)
+
+        fakeAuthDiskSource.storeEncryptedPin(
+            userId = userId,
+            encryptedPin = "encryptedPin",
+        )
+        assertTrue(settingsRepository.isUnlockWithPinEnabled)
+    }
+
     @Test
     fun `getPullToRefreshEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
         val userId = "userId"
-        val userState = mockk<UserStateJson> {
-            every { activeUserId } returns userId
-        }
-        coEvery { authDiskSource.userState } returns userState
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .test {
@@ -314,11 +334,133 @@ class SettingsRepositoryTest {
     @Test
     fun `storePullToRefreshEnabled should properly update SettingsDiskSource`() {
         val userId = "userId"
-        every { authDiskSource.userState?.activeUserId } returns userId
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         settingsRepository.storePullToRefreshEnabled(true)
         assertEquals(true, fakeSettingsDiskSource.getPullToRefreshEnabled(userId = userId))
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `storeUnlockPin when the master password on restart is required should only save an encrypted PIN to disk`() {
+        val userId = "userId"
+        val pin = "1234"
+        val encryptedPin = "encryptedPin"
+        val pinProtectedUserKey = "pinProtectedUserKey"
+        val derivePinKeyResponse = DerivePinKeyResponse(
+            pinProtectedUserKey = pinProtectedUserKey,
+            encryptedPin = encryptedPin,
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.derivePinKey(
+                userId = userId,
+                pin = pin,
+            )
+        } returns derivePinKeyResponse.asSuccess()
+
+        settingsRepository.storeUnlockPin(
+            pin = pin,
+            shouldRequireMasterPasswordOnRestart = true,
+        )
+
+        fakeAuthDiskSource.apply {
+            assertEncryptedPin(
+                userId = userId,
+                encryptedPin = encryptedPin,
+            )
+            assertPinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+                inMemoryOnly = true,
+            )
+        }
+        coVerify {
+            vaultSdkSource.derivePinKey(
+                userId = userId,
+                pin = pin,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `storeUnlockPin when the master password on restart is not required should save all PIN data to disk`() {
+        val userId = "userId"
+        val pin = "1234"
+        val encryptedPin = "encryptedPin"
+        val pinProtectedUserKey = "pinProtectedUserKey"
+        val derivePinKeyResponse = DerivePinKeyResponse(
+            pinProtectedUserKey = pinProtectedUserKey,
+            encryptedPin = encryptedPin,
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.derivePinKey(
+                userId = userId,
+                pin = pin,
+            )
+        } returns derivePinKeyResponse.asSuccess()
+
+        settingsRepository.storeUnlockPin(
+            pin = pin,
+            shouldRequireMasterPasswordOnRestart = false,
+        )
+
+        fakeAuthDiskSource.apply {
+            assertEncryptedPin(
+                userId = userId,
+                encryptedPin = encryptedPin,
+            )
+            assertPinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+                inMemoryOnly = false,
+            )
+        }
+        coVerify {
+            vaultSdkSource.derivePinKey(
+                userId = userId,
+                pin = pin,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clearUnlockPin should clear any previously stored PIN-related values for the current user`() {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAuthDiskSource.apply {
+            storeEncryptedPin(
+                userId = userId,
+                encryptedPin = "encryptedPin",
+            )
+            storePinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = "pinProtectedUserKey",
+            )
+        }
+
+        settingsRepository.clearUnlockPin()
+
+        fakeAuthDiskSource.apply {
+            assertEncryptedPin(
+                userId = userId,
+                encryptedPin = null,
+            )
+            assertPinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = null,
+            )
+        }
+    }
 }
+
+private val MOCK_USER_STATE =
+    UserStateJson(
+        activeUserId = "userId",
+        accounts = mapOf("userId" to mockk()),
+    )
 
 /**
  * A list of all [VaultTimeoutAction].

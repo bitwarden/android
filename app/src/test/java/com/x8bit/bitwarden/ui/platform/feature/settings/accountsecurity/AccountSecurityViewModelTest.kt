@@ -22,9 +22,26 @@ import org.junit.jupiter.api.Test
 class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
-    fun `initial state should be correct`() {
-        val viewModel = createViewModel()
+    fun `initial state should be correct when saved state is set`() {
+        val viewModel = createViewModel(initialState = DEFAULT_STATE)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct when saved state is not set`() {
+        val settingsRepository: SettingsRepository = mockk {
+            every { isUnlockWithPinEnabled } returns true
+            every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
+            every { vaultTimeoutAction } returns VaultTimeoutAction.LOCK
+        }
+        val viewModel = createViewModel(
+            initialState = null,
+            settingsRepository = settingsRepository,
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(isUnlockWithPinEnabled = true),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -210,12 +227,18 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithPinToggle Disabled should set pin unlock to false and emit ShowToast`() =
+    fun `on UnlockWithPinToggle Disabled should set pin unlock to false, clear the PIN in settings, and emit ShowToast`() =
         runTest {
             val initialState = DEFAULT_STATE.copy(
                 isUnlockWithPinEnabled = true,
             )
-            val viewModel = createViewModel(initialState = initialState)
+            val settingsRepository: SettingsRepository = mockk() {
+                every { clearUnlockPin() } just runs
+            }
+            val viewModel = createViewModel(
+                initialState = initialState,
+                settingsRepository = settingsRepository,
+            )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(
                     AccountSecurityAction.UnlockWithPinToggle.Disabled,
@@ -229,11 +252,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 initialState.copy(isUnlockWithPinEnabled = false),
                 viewModel.stateFlow.value,
             )
+            verify { settingsRepository.clearUnlockPin() }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithPinToggle Enabled should set pin unlock to true`() {
+    fun `on UnlockWithPinToggle PendingEnabled should set pin unlock to true`() {
         val initialState = DEFAULT_STATE.copy(
             isUnlockWithPinEnabled = false,
         )
@@ -249,12 +273,18 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithPinToggle Enabled should set pin unlock to true and emit ShowToast`() =
+    fun `on UnlockWithPinToggle Enabled should set pin unlock to true, set the PIN in settings, and emit ShowToast`() =
         runTest {
             val initialState = DEFAULT_STATE.copy(
                 isUnlockWithPinEnabled = false,
             )
-            val viewModel = createViewModel(initialState = initialState)
+            val settingsRepository: SettingsRepository = mockk() {
+                every { storeUnlockPin(any(), any()) } just runs
+            }
+            val viewModel = createViewModel(
+                initialState = initialState,
+                settingsRepository = settingsRepository,
+            )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(
                     AccountSecurityAction.UnlockWithPinToggle.Enabled(
@@ -271,6 +301,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 initialState.copy(isUnlockWithPinEnabled = true),
                 viewModel.stateFlow.value,
             )
+            verify {
+                settingsRepository.storeUnlockPin(
+                    pin = "1234",
+                    shouldRequireMasterPasswordOnRestart = true,
+                )
+            }
         }
 
     @Test
@@ -302,7 +338,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        initialState: AccountSecurityState = DEFAULT_STATE,
+        initialState: AccountSecurityState? = DEFAULT_STATE,
         authRepository: AuthRepository = mockk(relaxed = true),
         vaultRepository: VaultRepository = mockk(relaxed = true),
         settingsRepository: SettingsRepository = mockk(relaxed = true),

@@ -23,7 +23,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
     private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
-    private val storedPinProtectedUserKeys = mutableMapOf<String, String?>()
+    private val storedPinProtectedUserKeys = mutableMapOf<String, Pair<String?, Boolean>>()
     private val storedEncryptedPins = mutableMapOf<String, String?>()
     private val storedOrganizations =
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
@@ -81,10 +81,14 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     override fun getPinProtectedUserKey(userId: String): String? =
-        storedPinProtectedUserKeys[userId]
+        storedPinProtectedUserKeys[userId]?.first
 
-    override fun storePinProtectedUserKey(userId: String, pinProtectedUserKey: String?) {
-        storedPinProtectedUserKeys[userId] = pinProtectedUserKey
+    override fun storePinProtectedUserKey(
+        userId: String,
+        pinProtectedUserKey: String?,
+        isInMemoryOnly: Boolean,
+    ) {
+        storedPinProtectedUserKeys[userId] = pinProtectedUserKey to isInMemoryOnly
     }
 
     override fun getEncryptedPin(userId: String): String? =
@@ -155,6 +159,24 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?) {
         assertEquals(userAutoUnlockKey, storedUserAutoUnlockKeys[userId])
+    }
+
+    /**
+     * Assert that the [encryptedPin] was stored successfully using the [userId].
+     */
+    fun assertEncryptedPin(userId: String, encryptedPin: String?) {
+        assertEquals(encryptedPin, storedEncryptedPins[userId])
+    }
+
+    /**
+     * Assert that the [pinProtectedUserKey] was stored successfully using the [userId].
+     */
+    fun assertPinProtectedUserKey(
+        userId: String,
+        pinProtectedUserKey: String?,
+        inMemoryOnly: Boolean = false,
+    ) {
+        assertEquals(pinProtectedUserKey to inMemoryOnly, storedPinProtectedUserKeys[userId])
     }
 
     /**
