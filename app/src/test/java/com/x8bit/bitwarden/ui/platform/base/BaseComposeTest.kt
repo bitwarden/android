@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.base
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import org.junit.Rule
 
@@ -18,12 +19,12 @@ abstract class BaseComposeTest : BaseRobolectricTest() {
      * with the [BitwardenTheme].
      */
     protected fun runTestWithTheme(
-        isDarkTheme: Boolean,
+        theme: AppTheme,
         test: @Composable () -> Unit,
     ) {
         composeTestRule.setContent {
             BitwardenTheme(
-                darkTheme = isDarkTheme,
+                theme = theme,
             ) {
                 test()
             }

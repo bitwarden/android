@@ -36,6 +36,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.x8bit.bitwarden.ui.platform.util.displayLabel
 
 /**
  * Displays the appearance screen.
@@ -161,8 +163,8 @@ private fun LanguageSelectionRow(
 
 @Composable
 private fun ThemeSelectionRow(
-    currentSelection: AppearanceState.Theme,
-    onThemeSelection: (AppearanceState.Theme) -> Unit,
+    currentSelection: AppTheme,
+    onThemeSelection: (AppTheme) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowThemeSelectionDialog by remember { mutableStateOf(false) }
@@ -174,7 +176,7 @@ private fun ThemeSelectionRow(
         modifier = modifier,
     ) {
         Text(
-            text = currentSelection.text(),
+            text = currentSelection.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -185,14 +187,14 @@ private fun ThemeSelectionRow(
             title = stringResource(id = R.string.theme),
             onDismissRequest = { shouldShowThemeSelectionDialog = false },
         ) {
-            AppearanceState.Theme.entries.forEach { option ->
+            AppTheme.entries.forEach { option ->
                 BitwardenSelectionRow(
-                    text = option.text,
+                    text = option.displayLabel,
                     isSelected = option == currentSelection,
                     onClick = {
                         shouldShowThemeSelectionDialog = false
                         onThemeSelection(
-                            AppearanceState.Theme.entries.first { it == option },
+                            AppTheme.entries.first { it == option },
                         )
                     },
                 )

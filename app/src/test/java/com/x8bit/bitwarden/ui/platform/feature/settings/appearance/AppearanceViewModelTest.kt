@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -22,9 +23,11 @@ import org.junit.jupiter.api.Test
 class AppearanceViewModelTest : BaseViewModelTest() {
     private val mockSettingsRepository = mockk<SettingsRepository> {
         every { appLanguage } returns AppLanguage.DEFAULT
+        every { appTheme } returns AppTheme.DEFAULT
         every { appLanguage = AppLanguage.ENGLISH } just runs
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabled = true } just runs
+        every { appTheme = AppTheme.DARK } just runs
     }
 
     @BeforeEach
@@ -45,7 +48,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when set`() {
-        val state = DEFAULT_STATE.copy(theme = AppearanceState.Theme.DARK)
+        val state = DEFAULT_STATE.copy(theme = AppTheme.DARK)
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
     }
@@ -110,18 +113,24 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on ThemeChange should update state`() = runTest {
+    fun `on ThemeChange should update state and set theme in SettingsRepository`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE,
                 awaitItem(),
             )
-            viewModel.trySendAction(AppearanceAction.ThemeChange(AppearanceState.Theme.DARK))
+
+            viewModel.trySendAction(AppearanceAction.ThemeChange(AppTheme.DARK))
             assertEquals(
-                DEFAULT_STATE.copy(theme = AppearanceState.Theme.DARK),
+                DEFAULT_STATE.copy(theme = AppTheme.DARK),
                 awaitItem(),
             )
+
+            verify {
+                mockSettingsRepository.appTheme
+                mockSettingsRepository.appTheme = AppTheme.DARK
+            }
         }
     }
 
@@ -139,7 +148,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         private val DEFAULT_STATE = AppearanceState(
             language = AppLanguage.DEFAULT,
             showWebsiteIcons = true,
-            theme = AppearanceState.Theme.DEFAULT,
+            theme = AppTheme.DEFAULT,
         )
     }
 }

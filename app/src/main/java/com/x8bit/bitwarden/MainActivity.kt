@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.getValue
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -37,7 +39,10 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setApplicationLocales(localeList)
         }
         setContent {
-            BitwardenTheme {
+            val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
+            BitwardenTheme(
+                theme = state.theme,
+            ) {
                 RootNavScreen(
                     onSplashScreenRemoved = { shouldShowSplashScreen = false },
                 )
@@ -47,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        mainViewModel.sendAction(
+        mainViewModel.trySendAction(
             action = MainAction.ReceiveNewIntent(
                 intent = intent,
             ),

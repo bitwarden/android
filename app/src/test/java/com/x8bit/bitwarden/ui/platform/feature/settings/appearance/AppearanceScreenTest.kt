@@ -12,6 +12,7 @@ import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
@@ -121,7 +122,7 @@ class AppearanceScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 AppearanceAction.ThemeChange(
-                    theme = AppearanceState.Theme.DARK,
+                    theme = AppTheme.DARK,
                 ),
             )
         }
@@ -153,5 +154,5 @@ class AppearanceScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = AppearanceState(
     language = AppLanguage.DEFAULT,
     showWebsiteIcons = false,
-    theme = AppearanceState.Theme.DEFAULT,
+    theme = AppTheme.DEFAULT,
 )

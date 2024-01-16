@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -128,6 +129,57 @@ class SettingsRepositoryTest {
         // Updates to the repository change the disk source value
         settingsRepository.isIconLoadingDisabled = false
         assertFalse(fakeSettingsDiskSource.isIconLoadingDisabled!!)
+    }
+
+    @Test
+    fun `appTheme should pull from and update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = null
+        assertEquals(
+            AppTheme.DEFAULT,
+            settingsRepository.appTheme,
+        )
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Updates to the disk source change the repository value
+        fakeSettingsDiskSource.appTheme = AppTheme.DARK
+        assertEquals(
+            AppTheme.DARK,
+            settingsRepository.appTheme,
+        )
+
+        // Updates to the repository value change the disk source
+        settingsRepository.appTheme = AppTheme.LIGHT
+        assertEquals(
+            AppTheme.LIGHT,
+            fakeSettingsDiskSource.appTheme,
+        )
+    }
+
+    @Test
+    fun `getAppThemeFlow should react to changes in SettingsDiskSource`() = runTest {
+        settingsRepository
+            .appThemeStateFlow
+            .test {
+                assertEquals(
+                    AppTheme.DEFAULT,
+                    awaitItem(),
+                )
+                fakeSettingsDiskSource.appTheme = AppTheme.DARK
+                assertEquals(
+                    AppTheme.DARK,
+                    awaitItem(),
+                )
+            }
+    }
+
+    @Test
+    fun `storeAppTheme should properly update SettingsDiskSource`() {
+        settingsRepository.appTheme = AppTheme.DARK
+        assertEquals(
+            AppTheme.DARK,
+            fakeSettingsDiskSource.appTheme,
+        )
     }
 
     @Test

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -42,7 +43,7 @@ fun BitwardenPlaceholderAccountActionItem(
 @Preview
 @Composable
 private fun BitwardenPlaceholderAccountActionItem_preview_light() {
-    BitwardenTheme(darkTheme = false) {
+    BitwardenTheme(theme = AppTheme.LIGHT) {
         BitwardenPlaceholderAccountActionItem(
             onClick = {},
         )
@@ -52,7 +53,7 @@ private fun BitwardenPlaceholderAccountActionItem_preview_light() {
 @Preview
 @Composable
 private fun BitwardenPlaceholderAccountActionItem_preview_dark() {
-    BitwardenTheme(darkTheme = true) {
+    BitwardenTheme(theme = AppTheme.DARK) {
         BitwardenPlaceholderAccountActionItem(
             onClick = {},
         )
