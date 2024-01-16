@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -35,6 +34,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
 
@@ -46,7 +47,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 @Composable
 fun AddSendScreen(
     viewModel: AddSendViewModel = hiltViewModel(),
-    intentHandler: IntentHandler = IntentHandler(LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -58,7 +59,7 @@ fun AddSendScreen(
         when (event) {
             is AddSendEvent.NavigateBack -> onNavigateBack()
             is AddSendEvent.ShowShareSheet -> {
-                intentHandler.shareText(event.message)
+                intentManager.shareText(event.message)
             }
 
             is AddSendEvent.ShowToast -> {

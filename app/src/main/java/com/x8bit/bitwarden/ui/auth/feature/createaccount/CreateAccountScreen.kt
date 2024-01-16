@@ -67,7 +67,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Ter
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
@@ -79,6 +78,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 
 /**
@@ -90,7 +91,7 @@ import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 fun CreateAccountScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
-    intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
     viewModel: CreateAccountViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsState()
@@ -98,11 +99,11 @@ fun CreateAccountScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             is NavigateToPrivacyPolicy -> {
-                intentHandler.launchUri("https://bitwarden.com/privacy/".toUri())
+                intentManager.launchUri("https://bitwarden.com/privacy/".toUri())
             }
 
             is NavigateToTerms -> {
-                intentHandler.launchUri("https://bitwarden.com/terms/".toUri())
+                intentManager.launchUri("https://bitwarden.com/terms/".toUri())
             }
 
             is CreateAccountEvent.NavigateBack -> onNavigateBack.invoke()
@@ -111,7 +112,7 @@ fun CreateAccountScreen(
             }
 
             is CreateAccountEvent.NavigateToCaptcha -> {
-                intentHandler.startCustomTabsActivity(uri = event.uri)
+                intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
             is CreateAccountEvent.NavigateToLogin -> {

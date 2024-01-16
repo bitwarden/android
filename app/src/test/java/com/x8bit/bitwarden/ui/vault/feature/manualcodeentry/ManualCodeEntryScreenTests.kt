@@ -17,7 +17,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import io.mockk.every
 import io.mockk.mockk
@@ -40,7 +40,7 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
         MutableStateFlow(ManualCodeEntryState(""))
 
     private val fakePermissionManager: FakePermissionManager = FakePermissionManager()
-    private val intentHandler = mockk<IntentHandler>(relaxed = true)
+    private val intentManager = mockk<IntentManager>(relaxed = true)
 
     private val viewModel = mockk<ManualCodeEntryViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
@@ -57,7 +57,7 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
                     onNavigateToScanQrCodeCalled = true
                 },
                 permissionsManager = fakePermissionManager,
-                intentHandler = intentHandler,
+                intentManager = intentManager,
             )
         }
     }
@@ -86,7 +86,7 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
         )
 
         val intentSlot = slot<Intent>()
-        verify { intentHandler.startActivity(capture(intentSlot)) }
+        verify { intentManager.startActivity(capture(intentSlot)) }
 
         assertEquals(
             uri,

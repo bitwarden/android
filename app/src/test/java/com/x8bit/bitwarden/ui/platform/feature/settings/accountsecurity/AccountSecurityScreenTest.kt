@@ -21,8 +21,8 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.just
@@ -41,7 +41,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToDeleteAccountCalled = false
 
-    private val intentHandler = mockk<IntentHandler> {
+    private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
     }
     private val mutableEventFlow = bufferedMutableSharedFlow<AccountSecurityEvent>()
@@ -58,7 +58,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
                 viewModel = viewModel,
-                intentHandler = intentHandler,
+                intentManager = intentManager,
             )
         }
     }
@@ -997,10 +997,10 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToFingerprintPhrase should call launchUri on intentHandler`() {
+    fun `on NavigateToFingerprintPhrase should call launchUri on intentManager`() {
         mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToFingerprintPhrase)
         verify {
-            intentHandler.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())
+            intentManager.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())
         }
     }
 

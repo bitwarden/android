@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.x8bit.bitwarden.ui.platform.manager.intent
 
 import android.content.Context
 import android.content.Intent
@@ -7,15 +7,15 @@ import androidx.browser.customtabs.CustomTabsIntent
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
- * A utility class for simplifying the handling of Android Intents within a given context.
+ * The default implementation of the [IntentManager] for simplifying the handling of Android
+ * Intents within a given context.
  */
 @OmitFromCoverage
-class IntentHandler(private val context: Context) {
+class IntentManagerImpl(
+    private val context: Context,
+) : IntentManager {
 
-    /**
-     * Starts an intent to exit the application.
-     */
-    fun exitApplication() {
+    override fun exitApplication() {
         // Note that we fire an explicit Intent rather than try to cast to an Activity and call
         // finish to avoid assumptions about what kind of context we have.
         val intent = Intent(Intent.ACTION_MAIN).apply {
@@ -24,27 +24,18 @@ class IntentHandler(private val context: Context) {
         startActivity(intent)
     }
 
-    /**
-     * Start an activity using the provided [Intent].
-     */
-    fun startActivity(intent: Intent) {
+    override fun startActivity(intent: Intent) {
         context.startActivity(intent)
     }
 
-    /**
-     * Start a Custom Tabs Activity using the provided [Uri].
-     */
-    fun startCustomTabsActivity(uri: Uri) {
+    override fun startCustomTabsActivity(uri: Uri) {
         CustomTabsIntent
             .Builder()
             .build()
             .launchUrl(context, uri)
     }
 
-    /**
-     * Start an activity to view the given [uri] in an external browser.
-     */
-    fun launchUri(uri: Uri) {
+    override fun launchUri(uri: Uri) {
         val newUri = if (uri.scheme == null) {
             uri.buildUpon().scheme("https").build()
         } else {
@@ -53,10 +44,7 @@ class IntentHandler(private val context: Context) {
         startActivity(Intent(Intent.ACTION_VIEW, newUri))
     }
 
-    /**
-     * Launches the share sheet with the given [text].
-     */
-    fun shareText(text: String) {
+    override fun shareText(text: String) {
         val sendIntent: Intent = Intent(Intent.ACTION_SEND).apply {
             putExtra(Intent.EXTRA_TEXT, text)
             type = "text/plain"

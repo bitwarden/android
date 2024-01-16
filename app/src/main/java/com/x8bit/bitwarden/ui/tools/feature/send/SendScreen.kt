@@ -28,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -40,6 +39,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 import kotlinx.collections.immutable.persistentListOf
 
@@ -53,7 +54,7 @@ fun SendScreen(
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
-    intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -74,11 +75,11 @@ fun SendScreen(
             is SendEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
 
             is SendEvent.NavigateToAboutSend -> {
-                intentHandler.launchUri("https://bitwarden.com/products/send".toUri())
+                intentManager.launchUri("https://bitwarden.com/products/send".toUri())
             }
 
             is SendEvent.ShowShareSheet -> {
-                intentHandler.shareText(event.url)
+                intentManager.shareText(event.url)
             }
 
             is SendEvent.ShowToast -> {

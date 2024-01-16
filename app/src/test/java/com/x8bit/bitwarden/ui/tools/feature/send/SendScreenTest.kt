@@ -20,8 +20,8 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
@@ -41,7 +41,7 @@ class SendScreenTest : BaseComposeTest() {
     private var onNavigateToNewSendCalled = false
     private var onNavigateToEditSendId: String? = null
 
-    private val intentHandler = mockk<IntentHandler> {
+    private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
         every { shareText(any()) } just runs
     }
@@ -59,7 +59,7 @@ class SendScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateToAddSend = { onNavigateToNewSendCalled = true },
                 onNavigateToEditSend = { onNavigateToEditSendId = it },
-                intentHandler = intentHandler,
+                intentManager = intentManager,
             )
         }
     }
@@ -78,19 +78,19 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToAboutSend should call launchUri on intentHandler`() {
+    fun `on NavigateToAboutSend should call launchUri on intentManager`() {
         mutableEventFlow.tryEmit(SendEvent.NavigateToAboutSend)
         verify {
-            intentHandler.launchUri("https://bitwarden.com/products/send".toUri())
+            intentManager.launchUri("https://bitwarden.com/products/send".toUri())
         }
     }
 
     @Test
-    fun `on ShowShareSheet should call shareText on IntentHandler`() {
+    fun `on ShowShareSheet should call shareText on IntentManager`() {
         val text = "sharable stuff"
         mutableEventFlow.tryEmit(SendEvent.ShowShareSheet(text))
         verify {
-            intentHandler.shareText(text)
+            intentManager.shareText(text)
         }
     }
 

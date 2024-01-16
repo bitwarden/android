@@ -39,7 +39,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenClickableText
@@ -52,6 +51,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenPlaceholderAccountAct
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -66,7 +67,7 @@ fun LoginScreen(
     onNavigateToEnterpriseSignOn: () -> Unit,
     onNavigateToLoginWithDevice: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
-    intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -74,7 +75,7 @@ fun LoginScreen(
         when (event) {
             LoginEvent.NavigateBack -> onNavigateBack()
             is LoginEvent.NavigateToCaptcha -> {
-                intentHandler.startCustomTabsActivity(uri = event.uri)
+                intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
             LoginEvent.NavigateToEnterpriseSignOn -> onNavigateToEnterpriseSignOn()

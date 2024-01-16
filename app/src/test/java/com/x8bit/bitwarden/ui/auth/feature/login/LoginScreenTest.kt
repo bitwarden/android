@@ -15,10 +15,10 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -41,7 +41,7 @@ import org.junit.Before
 import org.junit.Test
 
 class LoginScreenTest : BaseComposeTest() {
-    private val intentHandler = mockk<IntentHandler>(relaxed = true) {
+    private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } returns Unit
     }
     private var onNavigateBackCalled = false
@@ -62,7 +62,7 @@ class LoginScreenTest : BaseComposeTest() {
                 onNavigateToEnterpriseSignOn = { onNavigateToEnterpriseSignOnCalled = true },
                 onNavigateToLoginWithDevice = { onNavigateToLoginWithDeviceCalled = true },
                 viewModel = viewModel,
-                intentHandler = intentHandler,
+                intentManager = intentManager,
             )
         }
     }
@@ -262,10 +262,10 @@ class LoginScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha should call intentHandler startCustomTabsActivity`() {
+    fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
         mutableEventFlow.tryEmit(LoginEvent.NavigateToCaptcha(mockUri))
-        verify { intentHandler.startCustomTabsActivity(mockUri) }
+        verify { intentManager.startCustomTabsActivity(mockUri) }
     }
 
     @Test

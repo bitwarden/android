@@ -22,8 +22,8 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.util.isEditableText
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -44,7 +44,7 @@ class AddSendScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
 
-    private val intentHandler: IntentHandler = mockk {
+    private val intentManager: IntentManager = mockk {
         every { shareText(any()) } just runs
     }
     private val mutableEventFlow = bufferedMutableSharedFlow<AddSendEvent>()
@@ -59,7 +59,7 @@ class AddSendScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             AddSendScreen(
                 viewModel = viewModel,
-                intentHandler = intentHandler,
+                intentManager = intentManager,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }
@@ -72,11 +72,11 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on ShowShareSheet should call shareText on IntentHandler`() {
+    fun `on ShowShareSheet should call shareText on IntentManager`() {
         val text = "sharable stuff"
         mutableEventFlow.tryEmit(AddSendEvent.ShowShareSheet(text))
         verify {
-            intentHandler.shareText(text)
+            intentManager.shareText(text)
         }
     }
 

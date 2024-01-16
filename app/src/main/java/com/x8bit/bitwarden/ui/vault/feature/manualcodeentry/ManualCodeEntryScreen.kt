@@ -32,14 +32,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 
 /**
@@ -52,7 +53,7 @@ fun ManualCodeEntryScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScreen: () -> Unit,
     viewModel: ManualCodeEntryViewModel = hiltViewModel(),
-    intentHandler: IntentHandler = IntentHandler(LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
 ) {
     var shouldShowPermissionDialog by rememberSaveable { mutableStateOf(false) }
@@ -74,7 +75,7 @@ fun ManualCodeEntryScreen(
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 intent.data = Uri.parse("package:" + context.packageName)
 
-                intentHandler.startActivity(intent = intent)
+                intentManager.startActivity(intent = intent)
             }
 
             is ManualCodeEntryEvent.ShowToast -> {

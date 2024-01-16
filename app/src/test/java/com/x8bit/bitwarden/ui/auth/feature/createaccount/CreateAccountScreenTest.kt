@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -17,6 +16,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
@@ -26,71 +26,64 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 class CreateAccountScreenTest : BaseComposeTest() {
 
-    @Test
-    fun `app bar submit click should send SubmitClick action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(SubmitClick) } returns Unit
-        }
+    private var onNavigateBackCalled = false
+    private var onNavigateToLoginCalled = false
+
+    private val intentManager = mockk<IntentManager>(relaxed = true) {
+        every { startCustomTabsActivity(any()) } just runs
+        every { startActivity(any()) } just runs
+    }
+
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+    private val mutableEventFlow = bufferedMutableSharedFlow<CreateAccountEvent>()
+    private val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
+        every { stateFlow } returns mutableStateFlow
+        every { eventFlow } returns mutableEventFlow
+        every { trySendAction(any()) } just runs
+    }
+
+    @Before
+    fun setup() {
         composeTestRule.setContent {
             CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
+                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToLogin = { _, _ -> onNavigateToLoginCalled = true },
+                intentManager = intentManager,
                 viewModel = viewModel,
             )
         }
+    }
+
+    @Test
+    fun `app bar submit click should send SubmitClick action`() {
         composeTestRule.onNodeWithText("Submit").performClick()
         verify { viewModel.trySendAction(SubmitClick) }
     }
 
     @Test
     fun `close click should send CloseClick action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(CloseClick) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithContentDescription("Close").performClick()
         verify { viewModel.trySendAction(CloseClick) }
     }
 
     @Test
     fun `check data breaches click should send CheckDataBreachesToggle action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(CheckDataBreachesToggle(true)) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule
             .onNodeWithText("Check known data breaches for this password")
             .performScrollTo()
@@ -100,19 +93,6 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `accept policies should be toggled on or off according to the state`() {
-        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AcceptPoliciesToggle(true)) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule
             .onNodeWithText("By activating this switch you agree", substring = true)
             .assertIsOff()
@@ -126,18 +106,6 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `accept policies click should send AcceptPoliciesToggle action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AcceptPoliciesToggle(true)) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule
             .onNodeWithText("By activating this switch you agree", substring = true)
             .performScrollTo()
@@ -147,188 +115,61 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateBack event should invoke navigate back lambda`() {
-        var onNavigateBackCalled = false
-        val onNavigateBack = { onNavigateBackCalled = true }
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns flowOf(CreateAccountEvent.NavigateBack)
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = onNavigateBack,
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
+        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
     }
 
     @Test
     fun `NavigateToLogin event should invoke navigate login lambda`() {
-        var onNavigateToLoginCalled = false
-        val onNavigateToLogin = { _: String, _: String -> onNavigateToLoginCalled = true }
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns flowOf(
-                CreateAccountEvent.NavigateToLogin(
-                    email = "",
-                    captchaToken = "",
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = onNavigateToLogin,
-                viewModel = viewModel,
-            )
-        }
+        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToLogin(email = "", captchaToken = ""))
         assertTrue(onNavigateToLoginCalled)
     }
 
     @Test
-    fun `NavigateToCaptcha event should invoke intent handler`() {
+    fun `NavigateToCaptcha event should invoke intent manager`() {
         val mockUri = mockk<Uri>()
-        val intentHandler = mockk<IntentHandler>(relaxed = true) {
-            every { startCustomTabsActivity(mockUri) } returns Unit
-        }
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns flowOf(
-                CreateAccountEvent.NavigateToCaptcha(
-                    uri = mockUri,
-                ),
-            )
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-                intentHandler = intentHandler,
-            )
-        }
+        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToCaptcha(uri = mockUri))
         verify {
-            intentHandler.startCustomTabsActivity(mockUri)
+            intentManager.startCustomTabsActivity(mockUri)
         }
     }
 
     @Test
-    fun `NavigateToPrivacyPolicy event should invoke intent handler`() {
-        val expectedIntent =
-            Intent(Intent.ACTION_VIEW, Uri.parse("https://bitwarden.com/privacy/"))
-        val intentHandler = mockk<IntentHandler>(relaxed = true) {
-            every { startActivity(expectedIntent) } returns Unit
-        }
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns flowOf(CreateAccountEvent.NavigateToPrivacyPolicy)
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-                intentHandler = intentHandler,
-            )
-        }
+    fun `NavigateToPrivacyPolicy event should invoke intent manager`() {
+        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToPrivacyPolicy)
         verify {
-            intentHandler.launchUri("https://bitwarden.com/privacy/".toUri())
+            intentManager.launchUri("https://bitwarden.com/privacy/".toUri())
         }
     }
 
     @Test
-    fun `NavigateToTerms event should invoke intent handler`() {
-        val expectedIntent =
-            Intent(Intent.ACTION_VIEW, Uri.parse("https://bitwarden.com/terms/"))
-        val intentHandler = mockk<IntentHandler>(relaxed = true) {
-            every { startActivity(expectedIntent) } returns Unit
-        }
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns flowOf(CreateAccountEvent.NavigateToTerms)
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-                intentHandler = intentHandler,
-            )
-        }
+    fun `NavigateToTerms event should invoke intent manager`() {
+        mutableEventFlow.tryEmit(CreateAccountEvent.NavigateToTerms)
         verify {
-            intentHandler.launchUri("https://bitwarden.com/terms/".toUri())
+            intentManager.launchUri("https://bitwarden.com/terms/".toUri())
         }
     }
 
     @Test
     fun `email input change should send EmailInputChange action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(EmailInputChange("input")) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Email address").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(EmailInputChange(TEST_INPUT)) }
     }
 
     @Test
     fun `password input change should send PasswordInputChange action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(PasswordInputChange("input")) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Master password").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(PasswordInputChange(TEST_INPUT)) }
     }
 
     @Test
     fun `confirm password input change should send ConfirmPasswordInputChange action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(ConfirmPasswordInputChange("input")) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule.onNodeWithText("Re-type master password").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(ConfirmPasswordInputChange(TEST_INPUT)) }
     }
 
     @Test
     fun `password hint input change should send PasswordHintChange action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(PasswordHintChange("input")) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         composeTestRule
             .onNodeWithText("Master password hint (optional)")
             .performTextInput(TEST_INPUT)
@@ -337,25 +178,14 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking OK on the error dialog should send ErrorDialogDismiss action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(
-                DEFAULT_STATE.copy(
-                    dialog = CreateAccountDialog.Error(
-                        BasicDialogState.Shown(
-                            title = "title".asText(),
-                            message = "message".asText(),
-                        ),
+        mutableStateFlow.update {
+            it.copy(
+                dialog = CreateAccountDialog.Error(
+                    BasicDialogState.Shown(
+                        title = "title".asText(),
+                        message = "message".asText(),
                     ),
                 ),
-            )
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
             )
         }
         composeTestRule
@@ -367,19 +197,8 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking No on the HIBP dialog should send ErrorDialogDismiss action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(
-                DEFAULT_STATE.copy(dialog = CreateAccountDialog.HaveIBeenPwned),
-            )
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
+        mutableStateFlow.update {
+            it.copy(dialog = CreateAccountDialog.HaveIBeenPwned)
         }
         composeTestRule
             .onAllNodesWithText("No")
@@ -390,19 +209,8 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking Yes on the HIBP dialog should send ContinueWithBreachedPasswordClick action`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(
-                DEFAULT_STATE.copy(dialog = CreateAccountDialog.HaveIBeenPwned),
-            )
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
+        mutableStateFlow.update {
+            it.copy(dialog = CreateAccountDialog.HaveIBeenPwned)
         }
         composeTestRule
             .onAllNodesWithText("Yes")
@@ -413,25 +221,14 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `when BasicDialogState is Shown should show dialog`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(
-                DEFAULT_STATE.copy(
-                    dialog = CreateAccountDialog.Error(
-                        BasicDialogState.Shown(
-                            title = "title".asText(),
-                            message = "message".asText(),
-                        ),
+        mutableStateFlow.update {
+            it.copy(
+                dialog = CreateAccountDialog.Error(
+                    BasicDialogState.Shown(
+                        title = "title".asText(),
+                        message = "message".asText(),
                     ),
                 ),
-            )
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(CreateAccountAction.ErrorDialogDismiss) } returns Unit
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
             )
         }
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
@@ -439,18 +236,6 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `password strength should change as state changes`() {
-        val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
         mutableStateFlow.update {
             DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.WEAK_1)
         }
@@ -479,23 +264,10 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Test
     fun `toggling one password field visibility should toggle the other`() {
-        val viewModel = mockk<CreateAccountViewModel>(relaxed = true) {
-            every { stateFlow } returns MutableStateFlow(DEFAULT_STATE)
-            every { eventFlow } returns emptyFlow()
-        }
-        composeTestRule.setContent {
-            CreateAccountScreen(
-                onNavigateBack = {},
-                onNavigateToLogin = { _, _ -> },
-                viewModel = viewModel,
-            )
-        }
-
         // should start with 2 Show buttons:
         composeTestRule
             .onAllNodesWithContentDescription("Show")
-            .assertCountEquals(2)
-            .get(0)
+            .assertCountEquals(2)[0]
             .performClick()
 
         // after clicking there should be no Show buttons:
@@ -506,8 +278,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
         // and there should be 2 hide buttons now, and we'll click the second one:
         composeTestRule
             .onAllNodesWithContentDescription("Hide")
-            .assertCountEquals(2)
-            .get(1)
+            .assertCountEquals(2)[1]
             .performClick()
 
         // then there should be two show buttons again

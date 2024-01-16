@@ -18,9 +18,9 @@ import androidx.compose.ui.test.performScrollToNode
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -58,7 +58,7 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToVaultEditItemId: String? = null
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
-    private val intentHandler = mockk<IntentHandler>(relaxed = true)
+    private val intentManager = mockk<IntentManager>(relaxed = true)
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -77,7 +77,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
-                intentHandler = intentHandler,
+                intentManager = intentManager,
             )
         }
     }
@@ -618,9 +618,9 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateOutOfApp event should call exitApplication on the IntentHandler`() {
+    fun `NavigateOutOfApp event should call exitApplication on the IntentManager`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateOutOfApp)
-        verify { intentHandler.exitApplication() }
+        verify { intentManager.exitApplication() }
     }
 
     @Test

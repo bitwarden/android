@@ -11,43 +11,55 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import io.mockk.Runs
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 
 class AboutScreenTest : BaseComposeTest() {
+    private var haveCalledNavigateBack = false
+
     private val mutableStateFlow = MutableStateFlow(
         AboutState(
             version = "Version: 1.0.0 (1)".asText(),
             isSubmitCrashLogsEnabled = false,
         ),
     )
+    private val mutableEventFlow = bufferedMutableSharedFlow<AboutEvent>()
+    val viewModel: AboutViewModel = mockk {
+        every { stateFlow } returns mutableStateFlow
+        every { eventFlow } returns mutableEventFlow
+        every { trySendAction(any()) } just runs
+    }
 
-    @Test
-    fun `on back click should send BackClick`() {
-        val viewModel: AboutViewModel = mockk {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AboutAction.BackClick) } returns Unit
-        }
+    private val intentManager: IntentManager = mockk {
+        every { launchUri(any()) } just runs
+    }
+
+    @Before
+    fun setup() {
         composeTestRule.setContent {
             AboutScreen(
                 viewModel = viewModel,
-                onNavigateBack = { },
+                intentManager = intentManager,
+                onNavigateBack = { haveCalledNavigateBack = true },
             )
         }
+    }
+
+    @Test
+    fun `on back click should send BackClick`() {
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify { viewModel.trySendAction(AboutAction.BackClick) }
     }
@@ -55,17 +67,6 @@ class AboutScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on bitwarden help center click should display confirmation dialog and confirm click should emit HelpCenterClick`() {
-        val viewModel: AboutViewModel = mockk {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AboutAction.HelpCenterClick) } returns Unit
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Bitwarden Help Center").performClick()
         composeTestRule.onNode(isDialog()).assertExists()
@@ -82,17 +83,6 @@ class AboutScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on bitwarden web vault click should display confirmation dialog and confirm click should emit WebVaultClick`() {
-        val viewModel: AboutViewModel = mockk {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AboutAction.WebVaultClick) } returns Unit
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Bitwarden web vault").performClick()
         composeTestRule.onNode(isDialog()).assertExists()
@@ -109,17 +99,6 @@ class AboutScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on learn about organizations click should display confirmation dialog and confirm click should emit LearnAboutOrganizationsClick`() {
-        val viewModel: AboutViewModel = mockk {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AboutAction.LearnAboutOrganizationsClick) } returns Unit
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Learn about organizations").performClick()
         composeTestRule.onNode(isDialog()).assertExists()
@@ -135,97 +114,37 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Test
     fun `on NavigateBack should call onNavigateBack`() {
-        var haveCalledNavigateBack = false
-        val viewModel = mockk<AboutViewModel> {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns flowOf(AboutEvent.NavigateBack)
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { haveCalledNavigateBack = true },
-            )
-        }
+        mutableEventFlow.tryEmit(AboutEvent.NavigateBack)
         assertTrue(haveCalledNavigateBack)
     }
 
     @Test
-    fun `on NavigateToHelpCenter should call launchUri on IntentHandler`() {
-        val intentHandler = mockk<IntentHandler> {
-            every { launchUri(any()) } just Runs
-        }
-        val viewModel = mockk<AboutViewModel> {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns flowOf(AboutEvent.NavigateToHelpCenter)
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-                intentHandler = intentHandler,
-            )
-        }
+    fun `on NavigateToHelpCenter should call launchUri on IntentManager`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToHelpCenter)
         verify {
-            intentHandler.launchUri("https://bitwarden.com/help".toUri())
+            intentManager.launchUri("https://bitwarden.com/help".toUri())
         }
     }
 
     @Test
-    fun `on NavigateToLearnAboutOrganizations should call launchUri on IntentHandler`() {
-        val intentHandler = mockk<IntentHandler> {
-            every { launchUri(any()) } just Runs
-        }
-        val viewModel = mockk<AboutViewModel> {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns flowOf(AboutEvent.NavigateToLearnAboutOrganizations)
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-                intentHandler = intentHandler,
-            )
-        }
+    fun `on NavigateToLearnAboutOrganizations should call launchUri on IntentManager`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToLearnAboutOrganizations)
         verify {
-            intentHandler.launchUri("https://bitwarden.com/help/about-organizations".toUri())
+            intentManager.launchUri("https://bitwarden.com/help/about-organizations".toUri())
         }
     }
 
     @Test
-    fun `on NavigateToWebVault should call launchUri on IntentHandler`() {
-        val intentHandler = mockk<IntentHandler> {
-            every { launchUri(any()) } just Runs
-        }
-        val viewModel = mockk<AboutViewModel> {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns flowOf(AboutEvent.NavigateToWebVault)
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-                intentHandler = intentHandler,
-            )
-        }
+    fun `on NavigateToWebVault should call launchUri on IntentManager`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToWebVault)
         verify {
-            intentHandler.launchUri("https://vault.bitwarden.com".toUri())
+            intentManager.launchUri("https://vault.bitwarden.com".toUri())
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `on rate the app click should display confirmation dialog and confirm click should emit RateAppClick`() {
-        val viewModel: AboutViewModel = mockk {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AboutAction.RateAppClick) } returns Unit
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Rate the app").performClick()
         composeTestRule.onNode(isDialog()).assertExists()
@@ -242,17 +161,6 @@ class AboutScreenTest : BaseComposeTest() {
     @Test
     fun `on submit crash logs toggle should send SubmitCrashLogsClick`() {
         val enabled = true
-        val viewModel: AboutViewModel = mockk {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AboutAction.SubmitCrashLogsClick(enabled)) } returns Unit
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNodeWithText("Submit crash logs").performClick()
         verify {
             viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(enabled))
@@ -260,16 +168,6 @@ class AboutScreenTest : BaseComposeTest() {
     }
 
     fun `on submit crash logs should be toggled on or off according to the state`() {
-        val viewModel = mockk<AboutViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns mutableStateFlow
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNodeWithText("Submit crash logs").assertIsOff()
         mutableStateFlow.update { it.copy(isSubmitCrashLogsEnabled = true) }
         composeTestRule.onNodeWithText("Submit crash logs").assertIsOn()
@@ -277,17 +175,6 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Test
     fun `on version info click should send VersionClick`() {
-        val viewModel: AboutViewModel = mockk {
-            every { stateFlow } returns mutableStateFlow
-            every { eventFlow } returns emptyFlow()
-            every { trySendAction(AboutAction.VersionClick) } returns Unit
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNodeWithText("Version: 1.0.0 (1)").performClick()
         verify {
             viewModel.trySendAction(AboutAction.VersionClick)
@@ -296,16 +183,6 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Test
     fun `version should update according to the state`() = runTest {
-        val viewModel = mockk<AboutViewModel> {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns mutableStateFlow
-        }
-        composeTestRule.setContent {
-            AboutScreen(
-                viewModel = viewModel,
-                onNavigateBack = { },
-            )
-        }
         composeTestRule.onNodeWithText("Version: 1.0.0 (1)").assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(version = "Version: 1.1.0 (2)".asText()) }

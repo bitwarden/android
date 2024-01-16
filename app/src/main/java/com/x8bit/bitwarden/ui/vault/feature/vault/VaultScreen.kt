@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -53,6 +52,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
@@ -71,7 +72,7 @@ fun VaultScreen(
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
-    intentHandler: IntentHandler = IntentHandler(LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -107,7 +108,7 @@ fun VaultScreen(
                 onNavigateToVaultItemListingScreen(event.itemListingType)
             }
 
-            VaultEvent.NavigateOutOfApp -> intentHandler.exitApplication()
+            VaultEvent.NavigateOutOfApp -> intentManager.exitApplication()
             is VaultEvent.ShowToast -> {
                 Toast
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)

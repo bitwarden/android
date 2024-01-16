@@ -25,8 +25,8 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onFirstNodeWithTextAfterScroll
@@ -53,7 +53,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     private var onNavigateToVaultEditItemId: String? = null
     private var onNavigateToMoveToOrganizationItemId: String? = null
 
-    private val intentHandler = mockk<IntentHandler>()
+    private val intentManager = mockk<IntentManager>()
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -70,7 +70,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultAddEditItem = { onNavigateToVaultEditItemId = it },
                 onNavigateToMoveToOrganization = { onNavigateToMoveToOrganizationItemId = it },
-                intentHandler = intentHandler,
+                intentManager = intentManager,
             )
         }
     }
@@ -109,12 +109,12 @@ class VaultItemScreenTest : BaseComposeTest() {
     fun `NavigateToUri event should invoke launchUri`() {
         val uriString = "http://www.example.com"
         val uri = uriString.toUri()
-        every { intentHandler.launchUri(uri) } just runs
+        every { intentManager.launchUri(uri) } just runs
 
         mutableEventFlow.tryEmit(VaultItemEvent.NavigateToUri(uriString))
 
         verify(exactly = 1) {
-            intentHandler.launchUri(uri)
+            intentManager.launchUri(uri)
         }
     }
 
