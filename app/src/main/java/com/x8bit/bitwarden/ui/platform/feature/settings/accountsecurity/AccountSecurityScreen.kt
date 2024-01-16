@@ -34,7 +34,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
@@ -48,6 +47,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
@@ -66,7 +67,7 @@ fun AccountSecurityScreen(
     onNavigateBack: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
-    intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -78,7 +79,7 @@ fun AccountSecurityScreen(
             AccountSecurityEvent.NavigateToDeleteAccount -> onNavigateToDeleteAccount()
 
             AccountSecurityEvent.NavigateToFingerprintPhrase -> {
-                intentHandler.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())
+                intentManager.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())
             }
 
             is AccountSecurityEvent.ShowToast -> {

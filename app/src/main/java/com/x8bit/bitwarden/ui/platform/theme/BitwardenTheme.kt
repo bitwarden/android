@@ -22,6 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
 
@@ -69,6 +71,7 @@ fun BitwardenTheme(
         LocalNonMaterialColors provides nonMaterialColors,
         LocalNonMaterialTypography provides nonMaterialTypography,
         LocalPermissionsManager provides PermissionsManagerImpl(context as Activity),
+        LocalIntentManager provides IntentManagerImpl(context),
     ) {
         // Set overall theme based on color scheme and typography settings
         MaterialTheme(
@@ -156,7 +159,14 @@ private fun Int.toColor(context: Context): Color =
     Color(context.getColor(this))
 
 /**
- * Provides access to non material theme typography throughout the app.
+ * Provides access to the intent manager throughout the app.
+ */
+val LocalIntentManager: ProvidableCompositionLocal<IntentManager> = compositionLocalOf {
+    error("CompositionLocal LocalIntentManager not present")
+}
+
+/**
+ * Provides access to the permission manager throughout the app.
  */
 val LocalPermissionsManager: ProvidableCompositionLocal<PermissionsManager> = compositionLocalOf {
     error("CompositionLocal LocalPermissionsManager not present")

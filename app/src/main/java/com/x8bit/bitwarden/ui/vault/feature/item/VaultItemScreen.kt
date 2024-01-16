@@ -27,7 +27,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
@@ -40,6 +39,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
@@ -53,7 +54,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun VaultItemScreen(
     viewModel: VaultItemViewModel = hiltViewModel(),
-    intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
     onNavigateToVaultAddEditItem: (vaultItemId: String) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String) -> Unit,
@@ -75,7 +76,7 @@ fun VaultItemScreen(
                 Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
             }
 
-            is VaultItemEvent.NavigateToUri -> intentHandler.launchUri(event.uri.toUri())
+            is VaultItemEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())
 
             is VaultItemEvent.NavigateToAttachments -> {
                 // TODO implement attachments in BIT-522

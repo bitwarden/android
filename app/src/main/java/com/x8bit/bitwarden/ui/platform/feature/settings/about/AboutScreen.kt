@@ -41,14 +41,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 
 /**
  * Displays the about screen.
@@ -59,7 +60,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun AboutScreen(
     onNavigateBack: () -> Unit,
     viewModel: AboutViewModel = hiltViewModel(),
-    intentHandler: IntentHandler = IntentHandler(context = LocalContext.current),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -69,15 +70,15 @@ fun AboutScreen(
             AboutEvent.NavigateBack -> onNavigateBack.invoke()
 
             AboutEvent.NavigateToHelpCenter -> {
-                intentHandler.launchUri("https://bitwarden.com/help".toUri())
+                intentManager.launchUri("https://bitwarden.com/help".toUri())
             }
 
             AboutEvent.NavigateToLearnAboutOrganizations -> {
-                intentHandler.launchUri("https://bitwarden.com/help/about-organizations".toUri())
+                intentManager.launchUri("https://bitwarden.com/help/about-organizations".toUri())
             }
 
             AboutEvent.NavigateToWebVault -> {
-                intentHandler.launchUri("https://vault.bitwarden.com".toUri())
+                intentManager.launchUri("https://vault.bitwarden.com".toUri())
             }
 
             is AboutEvent.ShowToast -> {
