@@ -81,8 +81,8 @@ class FilledPartitionExtensionsTest {
         val inlinePresentation: InlinePresentation = mockk()
         every {
             buildAutofillRemoteViews(
-                packageName = PACKAGE_NAME,
-                title = CIPHER_NAME,
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
             )
         } returns remoteViews
         every {
@@ -110,8 +110,8 @@ class FilledPartitionExtensionsTest {
         assertEquals(dataset, actual)
         verify(exactly = 1) {
             buildAutofillRemoteViews(
-                packageName = PACKAGE_NAME,
-                title = CIPHER_NAME,
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
             )
             inlinePresentationSpec.createCipherInlinePresentationOrNull(
                 autofillAppInfo = autofillAppInfo,
@@ -137,11 +137,10 @@ class FilledPartitionExtensionsTest {
             packageName = PACKAGE_NAME,
             sdkInt = 18,
         )
-        val inlinePresentation: InlinePresentation = mockk()
         every {
             buildAutofillRemoteViews(
-                packageName = PACKAGE_NAME,
-                title = CIPHER_NAME,
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
             )
         } returns remoteViews
         every {
@@ -160,8 +159,8 @@ class FilledPartitionExtensionsTest {
         assertEquals(dataset, actual)
         verify(exactly = 1) {
             buildAutofillRemoteViews(
-                packageName = PACKAGE_NAME,
-                title = CIPHER_NAME,
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
             )
             filledItem.applyToDatasetPreTiramisu(
                 datasetBuilder = any(),
@@ -183,8 +182,8 @@ class FilledPartitionExtensionsTest {
         val inlinePresentation: InlinePresentation = mockk()
         every {
             buildAutofillRemoteViews(
-                packageName = PACKAGE_NAME,
-                title = CIPHER_NAME,
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
             )
         } returns remoteViews
         every {
@@ -210,8 +209,8 @@ class FilledPartitionExtensionsTest {
         assertEquals(dataset, actual)
         verify(exactly = 1) {
             buildAutofillRemoteViews(
-                packageName = PACKAGE_NAME,
-                title = CIPHER_NAME,
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
             )
             inlinePresentationSpec.createCipherInlinePresentationOrNull(
                 autofillAppInfo = autofillAppInfo,
