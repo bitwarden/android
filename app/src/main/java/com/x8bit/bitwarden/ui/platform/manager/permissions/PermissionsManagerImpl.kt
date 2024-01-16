@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.x8bit.bitwarden.ui.platform.manager.permissions
 
 import android.app.Activity
 import android.content.pm.PackageManager

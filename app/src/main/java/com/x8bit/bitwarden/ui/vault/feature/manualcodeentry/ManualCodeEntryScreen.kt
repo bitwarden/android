@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.manualcodeentry
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -34,14 +33,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.IntentHandler
-import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManager
-import com.x8bit.bitwarden.ui.platform.base.util.PermissionsManagerImpl
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 
 /**
  * The screen to manually add a totp code.
@@ -54,8 +53,7 @@ fun ManualCodeEntryScreen(
     onNavigateToQrCodeScreen: () -> Unit,
     viewModel: ManualCodeEntryViewModel = hiltViewModel(),
     intentHandler: IntentHandler = IntentHandler(LocalContext.current),
-    permissionsManager: PermissionsManager =
-        PermissionsManagerImpl(LocalContext.current as Activity),
+    permissionsManager: PermissionsManager = LocalPermissionsManager.current,
 ) {
     var shouldShowPermissionDialog by rememberSaveable { mutableStateOf(false) }
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
