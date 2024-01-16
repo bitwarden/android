@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
@@ -44,7 +45,7 @@ class EnvironmentDiskSourceTest {
         )
 
         // Update SharedPreferences updates the repository
-        fakeSharedPreferences.edit().putString(environmentKey, null).apply()
+        fakeSharedPreferences.edit { putString(environmentKey, null) }
         assertNull(environmentDiskSource.preAuthEnvironmentUrlData)
     }
 

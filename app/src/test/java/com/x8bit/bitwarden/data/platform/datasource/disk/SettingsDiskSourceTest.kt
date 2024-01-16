@@ -30,12 +30,12 @@ class SettingsDiskSourceTest {
 
         // Updating the shared preferences should update disk source.
         fakeSharedPreferences
-            .edit()
-            .putString(
-                appLanguageKey,
-                expected.localeName,
-            )
-            .apply()
+            .edit {
+                putString(
+                    appLanguageKey,
+                    expected.localeName,
+                )
+            }
         val actual = settingsDiskSource.appLanguage
         assertEquals(
             expected,
@@ -86,12 +86,12 @@ class SettingsDiskSourceTest {
 
         // Updating the shared preferences should update disk source.
         fakeSharedPreferences
-            .edit()
-            .putBoolean(
-                isIconLoadingDisabled,
-                expected,
-            )
-            .apply()
+            .edit {
+                putBoolean(
+                    isIconLoadingDisabled,
+                    expected,
+                )
+            }
         assertEquals(
             expected,
             settingsDiskSource.isIconLoadingDisabled,
@@ -112,12 +112,12 @@ class SettingsDiskSourceTest {
         val mockUserId = "mockUserId"
         val vaultTimeoutInMinutes = 360
         fakeSharedPreferences
-            .edit()
-            .putInt(
-                "${vaultTimeoutBaseKey}_$mockUserId",
-                vaultTimeoutInMinutes,
-            )
-            .apply()
+            .edit {
+                putInt(
+                    "${vaultTimeoutBaseKey}_$mockUserId",
+                    vaultTimeoutInMinutes,
+                )
+            }
         val actual = settingsDiskSource.getVaultTimeoutInMinutes(userId = mockUserId)
         assertEquals(
             vaultTimeoutInMinutes,
@@ -192,12 +192,12 @@ class SettingsDiskSourceTest {
         val mockUserId = "mockUserId"
         val vaultTimeoutAction = VaultTimeoutAction.LOCK
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${vaultTimeoutActionBaseKey}_$mockUserId",
-                "0",
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${vaultTimeoutActionBaseKey}_$mockUserId",
+                    "0",
+                )
+            }
         val actual = settingsDiskSource.getVaultTimeoutAction(userId = mockUserId)
         assertEquals(
             vaultTimeoutAction,
@@ -269,9 +269,9 @@ class SettingsDiskSourceTest {
         val mockUserId = "mockUserId"
         val pullToRefreshKey = "${pullToRefreshBaseKey}_$mockUserId"
         fakeSharedPreferences
-            .edit()
-            .putBoolean(pullToRefreshKey, true)
-            .apply()
+            .edit {
+                putBoolean(pullToRefreshKey, true)
+            }
         assertEquals(true, settingsDiskSource.getPullToRefreshEnabled(userId = mockUserId))
     }
 
