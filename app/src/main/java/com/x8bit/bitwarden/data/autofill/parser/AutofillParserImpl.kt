@@ -3,11 +3,14 @@ package com.x8bit.bitwarden.data.autofill.parser
 import android.app.assist.AssistStructure
 import android.service.autofill.FillRequest
 import android.view.autofill.AutofillId
+import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
+import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
+import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 
 /**
@@ -15,7 +18,10 @@ import com.x8bit.bitwarden.data.autofill.util.toAutofillView
  * from the OS into domain models.
  */
 class AutofillParserImpl : AutofillParser {
-    override fun parse(fillRequest: FillRequest): AutofillRequest =
+    override fun parse(
+        autofillAppInfo: AutofillAppInfo,
+        fillRequest: FillRequest,
+    ): AutofillRequest =
         // Attempt to get the most recent autofill context.
         fillRequest
             .fillContexts
@@ -24,6 +30,8 @@ class AutofillParserImpl : AutofillParser {
             ?.let { assistStructure ->
                 parseInternal(
                     assistStructure = assistStructure,
+                    autofillAppInfo = autofillAppInfo,
+                    fillRequest = fillRequest,
                 )
             }
             ?: AutofillRequest.Unfillable
@@ -33,6 +41,8 @@ class AutofillParserImpl : AutofillParser {
      */
     private fun parseInternal(
         assistStructure: AssistStructure,
+        autofillAppInfo: AutofillAppInfo,
+        fillRequest: FillRequest,
     ): AutofillRequest {
         // Parse the `assistStructure` into internal models.
         val traversalDataList = assistStructure.traverse()
@@ -69,8 +79,18 @@ class AutofillParserImpl : AutofillParser {
             .map { it.ignoreAutofillIds }
             .flatten()
 
+        val maxInlineSuggestionsCount = fillRequest.getMaxInlineSuggestionsCount(
+            autofillAppInfo = autofillAppInfo,
+        )
+
+        val inlinePresentationSpecs = fillRequest.getInlinePresentationSpecs(
+            autofillAppInfo = autofillAppInfo,
+        )
+
         return AutofillRequest.Fillable(
+            inlinePresentationSpecs = inlinePresentationSpecs,
             ignoreAutofillIds = ignoreAutofillIds,
+            maxInlineSuggestionsCount = maxInlineSuggestionsCount,
             partition = partition,
             uri = uri,
         )

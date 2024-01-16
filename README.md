@@ -67,6 +67,11 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Allows access to new APIs on older API versions.
     - License: Apache 2.0
 
+- **AndroidX Autofill**
+    - https://developer.android.com/jetpack/androidx/releases/autofill
+    - Purpose: Allows access to tools for building inline autofill UI.
+    - License: Apache 2.0
+
 - **AndroidX Browser**
     - https://developer.android.com/jetpack/androidx/releases/browser
     - Purpose: Displays webpages with the user's default browser.

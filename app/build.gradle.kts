@@ -149,6 +149,7 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.autofill)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)

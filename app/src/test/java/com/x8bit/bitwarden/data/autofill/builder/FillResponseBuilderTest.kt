@@ -60,6 +60,7 @@ class FillResponseBuilderTest {
         val filledData = FilledData(
             filledPartitions = emptyList(),
             ignoreAutofillIds = emptyList(),
+            vaultItemInlinePresentationSpec = null,
         )
         val actual = fillResponseBuilder.build(
             autofillAppInfo = appInfo,
@@ -76,12 +77,14 @@ class FillResponseBuilderTest {
         val filledPartitions = FilledPartition(
             autofillCipher = mockk(),
             filledItems = emptyList(),
+            inlinePresentationSpec = null,
         )
         val filledData = FilledData(
             filledPartitions = listOf(
                 filledPartitions,
             ),
             ignoreAutofillIds = emptyList(),
+            vaultItemInlinePresentationSpec = null,
         )
         val actual = fillResponseBuilder.build(
             autofillAppInfo = appInfo,
@@ -108,6 +111,7 @@ class FillResponseBuilderTest {
         val filledData = FilledData(
             filledPartitions = filledPartitions,
             ignoreAutofillIds = ignoreAutofillIds,
+            vaultItemInlinePresentationSpec = null,
         )
         every {
             filledPartitionOne.buildDataset(

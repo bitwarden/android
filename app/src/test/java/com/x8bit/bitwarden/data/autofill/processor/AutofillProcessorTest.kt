@@ -76,7 +76,12 @@ class AutofillProcessorTest {
         val autofillRequest = AutofillRequest.Unfillable
         val fillRequest: FillRequest = mockk()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { parser.parse(fillRequest) } returns autofillRequest
+        every {
+            parser.parse(
+                autofillAppInfo = appInfo,
+                fillRequest = fillRequest,
+            )
+        } returns autofillRequest
         every { fillCallback.onSuccess(null) } just runs
 
         // Test
@@ -90,7 +95,10 @@ class AutofillProcessorTest {
         // Verify
         verify(exactly = 1) {
             cancellationSignal.setOnCancelListener(any())
-            parser.parse(fillRequest)
+            parser.parse(
+                autofillAppInfo = appInfo,
+                fillRequest = fillRequest,
+            )
             fillCallback.onSuccess(null)
         }
     }
@@ -103,6 +111,7 @@ class AutofillProcessorTest {
             val filledData = FilledData(
                 filledPartitions = listOf(mockk()),
                 ignoreAutofillIds = emptyList(),
+                vaultItemInlinePresentationSpec = null,
             )
             val fillResponse: FillResponse = mockk()
             val autofillRequest: AutofillRequest.Fillable = mockk()
@@ -112,7 +121,12 @@ class AutofillProcessorTest {
                 )
             } returns filledData
             every { cancellationSignal.setOnCancelListener(any()) } just runs
-            every { parser.parse(fillRequest) } returns autofillRequest
+            every {
+                parser.parse(
+                    autofillAppInfo = appInfo,
+                    fillRequest = fillRequest,
+                )
+            } returns autofillRequest
             every {
                 fillResponseBuilder.build(
                     autofillAppInfo = appInfo,
@@ -137,7 +151,10 @@ class AutofillProcessorTest {
             }
             verify(exactly = 1) {
                 cancellationSignal.setOnCancelListener(any())
-                parser.parse(fillRequest)
+                parser.parse(
+                    autofillAppInfo = appInfo,
+                    fillRequest = fillRequest,
+                )
                 fillResponseBuilder.build(
                     autofillAppInfo = appInfo,
                     filledData = filledData,
