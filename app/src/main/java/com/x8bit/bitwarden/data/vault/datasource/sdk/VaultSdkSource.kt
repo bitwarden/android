@@ -42,6 +42,20 @@ interface VaultSdkSource {
     ): Result<DerivePinKeyResponse>
 
     /**
+     * Derives a pin-protected user key from the given [encryptedPin] for the given [userId]. This
+     * value must be derived from a previous call to [derivePinKey] with a plaintext PIN. This can
+     * be used to later unlock their vault via a call to [initializeCrypto] with
+     * [InitUserCryptoMethod.Pin].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun derivePinProtectedUserKey(
+        userId: String,
+        encryptedPin: String,
+    ): Result<String>
+
+    /**
      * Gets the user's encryption key, which can be used to later unlock their vault via a call to
      * [initializeCrypto] with [InitUserCryptoMethod.DecryptedKey].
      *

@@ -83,6 +83,30 @@ class VaultSdkSourceTest {
         verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `derivePinProtectedUserKey should call SDK and return a Result with the correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val encryptedPin = "encryptedPin"
+            val expectedResult = "pinProtectedUserKey"
+            coEvery {
+                clientCrypto.derivePinUserKey(encryptedPin = encryptedPin)
+            } returns expectedResult
+            val result = vaultSdkSource.derivePinProtectedUserKey(
+                userId = userId,
+                encryptedPin = encryptedPin,
+            )
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientCrypto.derivePinUserKey(encryptedPin = encryptedPin)
+            }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
+
     @Test
     fun `getUserEncryptionKey should call SDK and return a Result with correct data`() =
         runBlocking {
