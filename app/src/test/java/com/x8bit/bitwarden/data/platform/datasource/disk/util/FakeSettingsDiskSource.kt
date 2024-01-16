@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
@@ -12,6 +13,9 @@ import kotlinx.coroutines.flow.onSubscription
  * Fake, memory-based implementation of [SettingsDiskSource].
  */
 class FakeSettingsDiskSource : SettingsDiskSource {
+
+    private val mutableAppThemeFlow =
+        bufferedMutableSharedFlow<AppTheme>(replay = 1)
 
     private val mutableVaultTimeoutActionsFlowMap =
         mutableMapOf<String, MutableSharedFlow<VaultTimeoutAction?>>()
@@ -25,6 +29,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableIsIconLoadingDisabled =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
 
@@ -33,6 +38,18 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var storedIsIconLoadingDisabled: Boolean? = null
 
     override var appLanguage: AppLanguage? = null
+
+    override var appTheme: AppTheme
+        get() = storedAppTheme
+        set(value) {
+            storedAppTheme = value
+            mutableAppThemeFlow.tryEmit(value)
+        }
+
+    override val appThemeFlow: Flow<AppTheme>
+        get() = mutableAppThemeFlow.onSubscription {
+            emit(appTheme)
+        }
 
     override var isIconLoadingDisabled: Boolean?
         get() = storedIsIconLoadingDisabled

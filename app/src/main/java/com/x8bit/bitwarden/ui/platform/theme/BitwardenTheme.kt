@@ -24,19 +24,25 @@ import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
 
 /**
- * The overall application theme. This can be configured to support a [darkTheme] and
- * [dynamicColor].
+ * The overall application theme. This can be configured to support a [theme] and [dynamicColor].
  */
 @Composable
 fun BitwardenTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: AppTheme = AppTheme.DEFAULT,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
+    val darkTheme = when (theme) {
+        AppTheme.DEFAULT -> isSystemInDarkTheme()
+        AppTheme.DARK -> true
+        AppTheme.LIGHT -> false
+    }
+
     // Get the current scheme
     val context = LocalContext.current
     val colorScheme = when {

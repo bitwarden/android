@@ -4,12 +4,10 @@ import android.os.Parcelable
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.SavedStateHandle
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -29,7 +27,7 @@ class AppearanceViewModel @Inject constructor(
         ?: AppearanceState(
             language = settingsRepository.appLanguage,
             showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
-            theme = AppearanceState.Theme.DEFAULT,
+            theme = settingsRepository.appTheme,
         ),
 ) {
     override fun handleAction(action: AppearanceAction): Unit = when (action) {
@@ -63,8 +61,8 @@ class AppearanceViewModel @Inject constructor(
     }
 
     private fun handleThemeChanged(action: AppearanceAction.ThemeChange) {
-        // TODO: BIT-1327 add theme support
         mutableStateFlow.update { it.copy(theme = action.theme) }
+        settingsRepository.appTheme = action.theme
     }
 }
 
@@ -75,17 +73,8 @@ class AppearanceViewModel @Inject constructor(
 data class AppearanceState(
     val language: AppLanguage,
     val showWebsiteIcons: Boolean,
-    val theme: Theme,
-) : Parcelable {
-    /**
-     * Represents the theme options the user can set.
-     */
-    enum class Theme(val text: Text) {
-        DEFAULT(text = R.string.default_system.asText()),
-        DARK(text = R.string.dark.asText()),
-        LIGHT(text = R.string.light.asText()),
-    }
-}
+    val theme: AppTheme,
+) : Parcelable
 
 /**
  * Models events for the appearance screen.
@@ -124,6 +113,6 @@ sealed class AppearanceAction {
      * Indicates that the user selected a new theme.
      */
     data class ThemeChange(
-        val theme: AppearanceState.Theme,
+        val theme: AppTheme,
     ) : AppearanceAction()
 }

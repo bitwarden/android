@@ -5,11 +5,13 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companio
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 
 private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
+private const val APP_THEME_KEY = "$BASE_KEY:theme"
 private const val PULL_TO_REFRESH_KEY = "$BASE_KEY:syncOnRefresh"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
@@ -23,6 +25,9 @@ class SettingsDiskSourceImpl(
     val sharedPreferences: SharedPreferences,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     SettingsDiskSource {
+    private val mutableAppThemeFlow =
+        bufferedMutableSharedFlow<AppTheme>(replay = 1)
+
     private val mutableVaultTimeoutActionFlowMap =
         mutableMapOf<String, MutableSharedFlow<VaultTimeoutAction?>>()
 
@@ -46,6 +51,24 @@ class SettingsDiskSourceImpl(
                 value = value?.localeName,
             )
         }
+
+    override var appTheme: AppTheme
+        get() = getString(key = APP_THEME_KEY)
+            ?.let { storedValue ->
+                AppTheme.entries.firstOrNull { storedValue == it.value }
+            }
+            ?: AppTheme.DEFAULT
+        set(newValue) {
+            putString(
+                key = APP_THEME_KEY,
+                value = newValue.value,
+            )
+            mutableAppThemeFlow.tryEmit(appTheme)
+        }
+
+    override val appThemeFlow: Flow<AppTheme>
+        get() = mutableAppThemeFlow
+            .onSubscription { emit(appTheme) }
 
     override var isIconLoadingDisabled: Boolean?
         get() = getBoolean(key = DISABLE_ICON_LOADING_KEY)

@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.isLightOverlayRequired
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -25,7 +26,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a dark color in light mode should use the surface color`() =
-        runTestWithTheme(isDarkTheme = false) {
+        runTestWithTheme(theme = AppTheme.LIGHT) {
             assertEquals(
                 MaterialTheme.colorScheme.surface,
                 Color.Blue.toSafeOverlayColor(),
@@ -34,7 +35,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a dark color in dark mode should use the onSurface color`() =
-        runTestWithTheme(isDarkTheme = true) {
+        runTestWithTheme(theme = AppTheme.DARK) {
             assertEquals(
                 MaterialTheme.colorScheme.onSurface,
                 Color.Blue.toSafeOverlayColor(),
@@ -43,7 +44,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a light color in light mode should use the onSurface color`() =
-        runTestWithTheme(isDarkTheme = false) {
+        runTestWithTheme(theme = AppTheme.LIGHT) {
             assertEquals(
                 MaterialTheme.colorScheme.onSurface,
                 Color.Yellow.toSafeOverlayColor(),
@@ -52,7 +53,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a light color in dark mode should use the surface color`() =
-        runTestWithTheme(isDarkTheme = true) {
+        runTestWithTheme(theme = AppTheme.DARK) {
             assertEquals(
                 MaterialTheme.colorScheme.surface,
                 Color.Yellow.toSafeOverlayColor(),

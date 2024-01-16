@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,6 +35,17 @@ class SettingsRepositoryImpl(
         set(value) {
             settingsDiskSource.appLanguage = value
         }
+
+    override var appTheme: AppTheme by settingsDiskSource::appTheme
+
+    override val appThemeStateFlow: StateFlow<AppTheme>
+        get() = settingsDiskSource
+            .appThemeFlow
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource.appTheme,
+            )
 
     override var isIconLoadingDisabled: Boolean
         get() = settingsDiskSource.isIconLoadingDisabled ?: false

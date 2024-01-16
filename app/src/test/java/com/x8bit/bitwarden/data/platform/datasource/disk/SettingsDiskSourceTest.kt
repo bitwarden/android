@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -103,6 +104,70 @@ class SettingsDiskSourceTest {
             fakeSharedPreferences.getBoolean(
                 isIconLoadingDisabled, false,
             ),
+        )
+    }
+
+    @Test
+    fun `appTheme when values are present should pull from SharedPreferences`() {
+        val appThemeBaseKey = "bwPreferencesStorage:appTheme"
+        val appTheme = AppTheme.DEFAULT
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    appThemeBaseKey,
+                    appTheme.value,
+                )
+            }
+        val actual = settingsDiskSource.appTheme
+        assertEquals(
+            appTheme,
+            actual,
+        )
+    }
+
+    @Test
+    fun `appTheme when values are absent should return DEFAULT`() {
+        assertEquals(
+            AppTheme.DEFAULT,
+            settingsDiskSource.appTheme,
+        )
+    }
+
+    @Test
+    fun `getAppThemeFlow should react to changes in getAppTheme`() = runTest {
+        val appTheme = AppTheme.DARK
+        settingsDiskSource.appThemeFlow.test {
+            // The initial values of the Flow and the property are in sync
+            assertEquals(
+                AppTheme.DEFAULT,
+                settingsDiskSource.appTheme,
+            )
+            assertEquals(
+                AppTheme.DEFAULT,
+                awaitItem(),
+            )
+
+            // Updating the repository updates shared preferences
+            settingsDiskSource.appTheme = appTheme
+            assertEquals(
+                appTheme,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `storeAppTheme for should update SharedPreferences`() {
+        val appThemeBaseKey = "bwPreferencesStorage:theme"
+        val appTheme = AppTheme.DARK
+        settingsDiskSource.appTheme = appTheme
+        val actual = fakeSharedPreferences.getString(
+            appThemeBaseKey,
+            null,
+        )
+        assertEquals(
+            appTheme.value,
+            actual,
         )
     }
 

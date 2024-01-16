@@ -2,17 +2,29 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 
 /**
  * Primary access point for general settings-related disk information.
  */
+@Suppress("TooManyFunctions")
 interface SettingsDiskSource {
 
     /**
      * The currently persisted app language (or `null` if not set).
      */
     var appLanguage: AppLanguage?
+
+    /**
+     * The currently persisted app theme (or `null` if not set).
+     */
+    var appTheme: AppTheme
+
+    /**
+     * Emits updates that track [appTheme].
+     */
+    val appThemeFlow: Flow<AppTheme>
 
     /**
      * The currently persisted setting for getting login item icons (or `null` if not set).

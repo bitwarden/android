@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,6 +16,16 @@ interface SettingsRepository {
      * The [AppLanguage] for the current user.
      */
     var appLanguage: AppLanguage
+
+    /**
+     * The currently stored [AppTheme].
+     */
+    var appTheme: AppTheme
+
+    /**
+     * Tracks changes to the [AppTheme].
+     */
+    val appThemeStateFlow: StateFlow<AppTheme>
 
     /**
      * The current setting for getting login item icons.
