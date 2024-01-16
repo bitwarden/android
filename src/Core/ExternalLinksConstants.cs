@@ -14,6 +14,11 @@
         public const string WEB_VAULT_SETTINGS_FORMAT = "{0}/#/settings";
 
         /// <summary>
+        /// Link to go to individual vault import page. Requires to pass vault URL as parameter.
+        /// </summary>
+        public const string WEB_VAULT_TOOLS_IMPORT_FORMAT = "{0}/#/tools/import";
+
+        /// <summary>
         /// General website, not in the full format of a URL given that this is used as parameter of string resources to be shown to the user.
         /// </summary>
         public const string BITWARDEN_WEBSITE = "bitwarden.com";
