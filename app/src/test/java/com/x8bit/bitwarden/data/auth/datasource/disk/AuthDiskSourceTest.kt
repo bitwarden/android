@@ -127,6 +127,10 @@ class AuthDiskSourceTest {
             userId = userId,
             lastActiveTimeMillis = 123456789L,
         )
+        authDiskSource.storeInvalidUnlockAttempts(
+            userId = userId,
+            invalidUnlockAttempts = 1,
+        )
         authDiskSource.storeUserKey(userId = userId, userKey = "userKey")
         authDiskSource.storeUserAutoUnlockKey(
             userId = userId,
@@ -145,6 +149,7 @@ class AuthDiskSourceTest {
         authDiskSource.clearData(userId = userId)
 
         assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
+        assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
         assertNull(authDiskSource.getPrivateKey(userId = userId))
@@ -207,6 +212,63 @@ class AuthDiskSourceTest {
             lastActiveTimeMillis = null,
         )
         assertFalse(fakeSharedPreferences.contains(lastActiveTimeKey))
+    }
+
+    @Test
+    fun `getInvalidUnlockAttempts should pull from SharedPreferences`() {
+        val lastActiveTimeBaseKey = "bwPreferencesStorage:invalidUnlockAttempts"
+        val mockUserId = "mockUserId"
+        val mockInvalidUnlockAttempts = 4
+        fakeSharedPreferences
+            .edit {
+                putInt(
+                    "${lastActiveTimeBaseKey}_$mockUserId",
+                    mockInvalidUnlockAttempts,
+                )
+            }
+        val actual = authDiskSource.getInvalidUnlockAttempts(userId = mockUserId)
+        assertEquals(
+            mockInvalidUnlockAttempts,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeInvalidUnlockAttempts for non-null values should update SharedPreferences`() {
+        val invalidUnlockAttemptsBaseKey = "bwPreferencesStorage:invalidUnlockAttempts"
+        val mockUserId = "mockUserId"
+        val mockInvalidUnlockAttempts = 4
+        authDiskSource.storeInvalidUnlockAttempts(
+            userId = mockUserId,
+            invalidUnlockAttempts = mockInvalidUnlockAttempts,
+        )
+        val actual = fakeSharedPreferences
+            .getInt(
+                "${invalidUnlockAttemptsBaseKey}_$mockUserId",
+                0,
+            )
+        assertEquals(
+            mockInvalidUnlockAttempts,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeInvalidUnlockAttempts for null values should clear SharedPreferences`() {
+        val invalidUnlockAttemptsBaseKey = "bwPreferencesStorage:invalidUnlockAttempts"
+        val mockUserId = "mockUserId"
+        val mockInvalidUnlockAttempts = 4
+        val invalidUnlockAttemptsKey = "${invalidUnlockAttemptsBaseKey}_$mockUserId"
+        fakeSharedPreferences
+            .edit {
+                putInt(invalidUnlockAttemptsKey, mockInvalidUnlockAttempts)
+            }
+        assertTrue(fakeSharedPreferences.contains(invalidUnlockAttemptsKey))
+        authDiskSource.storeInvalidUnlockAttempts(
+            userId = mockUserId,
+            invalidUnlockAttempts = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(invalidUnlockAttemptsKey))
     }
 
     @Test
