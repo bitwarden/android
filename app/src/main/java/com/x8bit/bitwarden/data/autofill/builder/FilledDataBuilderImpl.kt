@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.builder
 
+import android.widget.inline.InlinePresentationSpec
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -19,6 +20,23 @@ class FilledDataBuilderImpl(
     override suspend fun build(autofillRequest: AutofillRequest.Fillable): FilledData {
         // TODO: determine whether or not the vault is locked (BIT-1296)
 
+        // Subtract one to make sure there is space for the vault item.
+        val maxCipherInlineSuggestionsCount = autofillRequest.maxInlineSuggestionsCount - 1
+        // Track the number of inline suggestions that have been added.
+        var inlineSuggestionsAdded = 0
+
+        // A function for managing the cipher InlinePresentationSpecs.
+        fun getCipherInlinePresentationOrNull(): InlinePresentationSpec? =
+            if (inlineSuggestionsAdded < maxCipherInlineSuggestionsCount) {
+                // Use getOrLastOrNull so if the list has run dry take the last spec.
+                autofillRequest
+                    .inlinePresentationSpecs
+                    .getOrLastOrNull(inlineSuggestionsAdded)
+            } else {
+                null
+            }
+                ?.also { inlineSuggestionsAdded += 1 }
+
         val filledPartitions = when (autofillRequest.partition) {
             is AutofillPartition.Card -> {
                 autofillCipherProvider
@@ -27,6 +45,7 @@ class FilledDataBuilderImpl(
                         fillCardPartition(
                             autofillCipher = autofillCipher,
                             autofillViews = autofillRequest.partition.views,
+                            inlinePresentationSpec = getCipherInlinePresentationOrNull(),
                         )
                     }
             }
@@ -43,6 +62,7 @@ class FilledDataBuilderImpl(
                                 fillLoginPartition(
                                     autofillCipher = autofillCipher,
                                     autofillViews = autofillRequest.partition.views,
+                                    inlinePresentationSpec = getCipherInlinePresentationOrNull(),
                                 )
                             }
                     }
@@ -50,9 +70,15 @@ class FilledDataBuilderImpl(
             }
         }
 
+        // Use getOrLastOrNull so if the list has run dry take the last spec.
+        val vaultItemInlinePresentationSpec = autofillRequest
+            .inlinePresentationSpecs
+            .getOrLastOrNull(inlineSuggestionsAdded)
+
         return FilledData(
             filledPartitions = filledPartitions,
             ignoreAutofillIds = autofillRequest.ignoreAutofillIds,
+            vaultItemInlinePresentationSpec = vaultItemInlinePresentationSpec,
         )
     }
 
@@ -63,6 +89,7 @@ class FilledDataBuilderImpl(
     private fun fillCardPartition(
         autofillCipher: AutofillCipher.Card,
         autofillViews: List<AutofillView.Card>,
+        inlinePresentationSpec: InlinePresentationSpec?,
     ): FilledPartition {
         val filledItems = autofillViews
             .map { autofillView ->
@@ -80,6 +107,7 @@ class FilledDataBuilderImpl(
         return FilledPartition(
             autofillCipher = autofillCipher,
             filledItems = filledItems,
+            inlinePresentationSpec = inlinePresentationSpec,
         )
     }
 
@@ -90,6 +118,7 @@ class FilledDataBuilderImpl(
     private fun fillLoginPartition(
         autofillCipher: AutofillCipher.Login,
         autofillViews: List<AutofillView.Login>,
+        inlinePresentationSpec: InlinePresentationSpec?,
     ): FilledPartition {
         val filledItems = autofillViews
             .map { autofillView ->
@@ -108,6 +137,15 @@ class FilledDataBuilderImpl(
         return FilledPartition(
             autofillCipher = autofillCipher,
             filledItems = filledItems,
+            inlinePresentationSpec = inlinePresentationSpec,
         )
     }
 }
+
+/**
+ * Get the item at the [index]. If that fails, return the last item in the list. If that also fails,
+ * return null.
+ */
+private fun <T> List<T>.getOrLastOrNull(index: Int): T? =
+    getOrNull(index)
+        ?: lastOrNull()

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.model
 
 import android.view.autofill.AutofillId
+import android.widget.inline.InlinePresentationSpec
 
 /**
  * The parsed autofill request.
@@ -12,6 +13,8 @@ sealed class AutofillRequest {
      */
     data class Fillable(
         val ignoreAutofillIds: List<AutofillId>,
+        val inlinePresentationSpecs: List<InlinePresentationSpec>,
+        val maxInlineSuggestionsCount: Int,
         val partition: AutofillPartition,
         val uri: String?,
     ) : AutofillRequest()

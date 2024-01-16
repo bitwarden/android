@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.builder
 
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
+import android.widget.inline.InlinePresentationSpec
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -83,6 +84,8 @@ class FilledDataBuilderTest {
         val ignoreAutofillIds: List<AutofillId> = mockk()
         val autofillRequest = AutofillRequest.Fillable(
             ignoreAutofillIds = ignoreAutofillIds,
+            inlinePresentationSpecs = emptyList(),
+            maxInlineSuggestionsCount = 0,
             partition = autofillPartition,
             uri = URI,
         )
@@ -96,12 +99,14 @@ class FilledDataBuilderTest {
                 filledItemPassword,
                 filledItemUsername,
             ),
+            inlinePresentationSpec = null,
         )
         val expected = FilledData(
             filledPartitions = listOf(
                 filledPartition,
             ),
             ignoreAutofillIds = ignoreAutofillIds,
+            vaultItemInlinePresentationSpec = null,
         )
         coEvery {
             autofillCipherProvider.getLoginAutofillCiphers(
@@ -154,12 +159,15 @@ class FilledDataBuilderTest {
             val ignoreAutofillIds: List<AutofillId> = mockk()
             val autofillRequest = AutofillRequest.Fillable(
                 ignoreAutofillIds = ignoreAutofillIds,
+                inlinePresentationSpecs = emptyList(),
+                maxInlineSuggestionsCount = 0,
                 partition = autofillPartition,
                 uri = null,
             )
             val expected = FilledData(
                 filledPartitions = emptyList(),
                 ignoreAutofillIds = ignoreAutofillIds,
+                vaultItemInlinePresentationSpec = null,
             )
 
             // Test
@@ -210,6 +218,8 @@ class FilledDataBuilderTest {
         val ignoreAutofillIds: List<AutofillId> = mockk()
         val autofillRequest = AutofillRequest.Fillable(
             ignoreAutofillIds = ignoreAutofillIds,
+            inlinePresentationSpecs = emptyList(),
+            maxInlineSuggestionsCount = 0,
             partition = autofillPartition,
             uri = URI,
         )
@@ -225,12 +235,14 @@ class FilledDataBuilderTest {
                 filledItemExpirationYear,
                 filledItemNumber,
             ),
+            inlinePresentationSpec = null,
         )
         val expected = FilledData(
             filledPartitions = listOf(
                 filledPartition,
             ),
             ignoreAutofillIds = ignoreAutofillIds,
+            vaultItemInlinePresentationSpec = null,
         )
         coEvery { autofillCipherProvider.getCardAutofillCiphers() } returns listOf(autofillCipher)
         every { autofillViewCode.buildFilledItemOrNull(code) } returns filledItemCode
@@ -257,6 +269,107 @@ class FilledDataBuilderTest {
             autofillViewNumber.buildFilledItemOrNull(number)
         }
     }
+
+    @Test
+    fun `build should return filled data with max count of inline specs with one spec repeated`() =
+        runTest {
+            // Setup
+            val password = "Password"
+            val username = "johnDoe"
+            val autofillCipher = AutofillCipher.Login(
+                name = "Cipher One",
+                password = password,
+                username = username,
+                subtitle = "Subtitle",
+            )
+            val autofillViewEmail = AutofillView.Login.EmailAddress(
+                data = autofillViewData,
+            )
+            val autofillViewPassword = AutofillView.Login.Password(
+                data = autofillViewData,
+            )
+            val autofillViewUsername = AutofillView.Login.Username(
+                data = autofillViewData,
+            )
+            val autofillPartition = AutofillPartition.Login(
+                views = listOf(
+                    autofillViewEmail,
+                    autofillViewPassword,
+                    autofillViewUsername,
+                ),
+            )
+            val inlinePresentationSpec: InlinePresentationSpec = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = emptyList(),
+                inlinePresentationSpecs = listOf(
+                    inlinePresentationSpec,
+                ),
+                maxInlineSuggestionsCount = 3,
+                partition = autofillPartition,
+                uri = URI,
+            )
+            val filledItemEmail: FilledItem = mockk()
+            val filledItemPassword: FilledItem = mockk()
+            val filledItemUsername: FilledItem = mockk()
+            val filledPartitionOne = FilledPartition(
+                autofillCipher = autofillCipher,
+                filledItems = listOf(
+                    filledItemEmail,
+                    filledItemPassword,
+                    filledItemUsername,
+                ),
+                inlinePresentationSpec = inlinePresentationSpec,
+            )
+            val filledPartitionTwo = filledPartitionOne.copy()
+            val filledPartitionThree = FilledPartition(
+                autofillCipher = autofillCipher,
+                filledItems = listOf(
+                    filledItemEmail,
+                    filledItemPassword,
+                    filledItemUsername,
+                ),
+                inlinePresentationSpec = null,
+            )
+            val expected = FilledData(
+                filledPartitions = listOf(
+                    filledPartitionOne,
+                    filledPartitionTwo,
+                    filledPartitionThree,
+                ),
+                ignoreAutofillIds = emptyList(),
+                vaultItemInlinePresentationSpec = inlinePresentationSpec,
+            )
+            coEvery {
+                autofillCipherProvider.getLoginAutofillCiphers(
+                    uri = URI,
+                )
+            } returns listOf(autofillCipher, autofillCipher, autofillCipher)
+            every { autofillViewEmail.buildFilledItemOrNull(username) } returns filledItemEmail
+            every {
+                autofillViewPassword.buildFilledItemOrNull(password)
+            } returns filledItemPassword
+            every {
+                autofillViewUsername.buildFilledItemOrNull(username)
+            } returns filledItemUsername
+
+            // Test
+            val actual = filledDataBuilder.build(
+                autofillRequest = autofillRequest,
+            )
+
+            // Verify
+            assertEquals(expected, actual)
+            coVerify(exactly = 1) {
+                autofillCipherProvider.getLoginAutofillCiphers(
+                    uri = URI,
+                )
+            }
+            verify(exactly = 3) {
+                autofillViewEmail.buildFilledItemOrNull(username)
+                autofillViewPassword.buildFilledItemOrNull(password)
+                autofillViewUsername.buildFilledItemOrNull(username)
+            }
+        }
 
     companion object {
         private const val URI: String = "androidapp://com.x8bit.bitwarden"

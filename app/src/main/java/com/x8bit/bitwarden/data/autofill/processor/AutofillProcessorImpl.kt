@@ -54,7 +54,11 @@ class AutofillProcessorImpl(
         fillRequest: FillRequest,
     ) {
         // Parse the OS data into an [AutofillRequest] for easier processing.
-        when (val autofillRequest = parser.parse(fillRequest)) {
+        val autofillRequest = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+        when (autofillRequest) {
             is AutofillRequest.Fillable -> {
                 scope.launch {
                     // Fulfill the [autofillRequest].

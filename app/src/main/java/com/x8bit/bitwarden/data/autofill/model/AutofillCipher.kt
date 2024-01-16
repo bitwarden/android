@@ -1,9 +1,17 @@
 package com.x8bit.bitwarden.data.autofill.model
 
+import androidx.annotation.DrawableRes
+import com.x8bit.bitwarden.R
+
 /**
  * A paired down model of the CipherView for use within the autofill feature.
  */
 sealed class AutofillCipher {
+    /**
+     * The icon res to represent this [AutofillCipher].
+     */
+    abstract val iconRes: Int
+
     /**
      * The name of the cipher.
      */
@@ -26,7 +34,10 @@ sealed class AutofillCipher {
         val expirationMonth: String,
         val expirationYear: String,
         val number: String,
-    ) : AutofillCipher()
+    ) : AutofillCipher() {
+        override val iconRes: Int
+            @DrawableRes get() = R.drawable.ic_card_item
+    }
 
     /**
      * The card [AutofillCipher] model. This contains all of the data for building fulfilling a
@@ -37,5 +48,8 @@ sealed class AutofillCipher {
         override val subtitle: String,
         val password: String,
         val username: String,
-    ) : AutofillCipher()
+    ) : AutofillCipher() {
+        override val iconRes: Int
+            @DrawableRes get() = R.drawable.ic_login_item
+    }
 }

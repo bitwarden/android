@@ -51,6 +51,9 @@
             android:exported="true"
             android:label="Bitwarden"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+            <meta-data
+                android:name="android.autofill"
+                android:resource="@xml/autofill_service_configuration" />
             <intent-filter>
                 <action android:name="android.service.autofill.AutofillService" />
             </intent-filter>

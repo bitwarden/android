@@ -3,14 +3,17 @@ package com.x8bit.bitwarden.data.autofill.util
 import android.content.Context
 import android.content.res.Resources
 import android.service.autofill.Dataset
+import android.service.autofill.InlinePresentation
 import android.service.autofill.Presentations
 import android.widget.RemoteViews
+import android.widget.inline.InlinePresentationSpec
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.util.mockBuilder
 import com.x8bit.bitwarden.ui.autofill.buildAutofillRemoteViews
+import com.x8bit.bitwarden.ui.autofill.util.createCipherInlinePresentationOrNull
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -35,11 +38,13 @@ class FilledPartitionExtensionsTest {
     }
     private val dataset: Dataset = mockk()
     private val filledItem: FilledItem = mockk()
+    private val inlinePresentationSpec: InlinePresentationSpec = mockk()
     private val filledPartition = FilledPartition(
         autofillCipher = autofillCipher,
         filledItems = listOf(
             filledItem,
         ),
+        inlinePresentationSpec = inlinePresentationSpec,
     )
     private val presentations: Presentations = mockk()
     private val remoteViews: RemoteViews = mockk()
@@ -51,6 +56,7 @@ class FilledPartitionExtensionsTest {
         mockkStatic(::buildAutofillRemoteViews)
         mockkStatic(FilledItem::applyToDatasetPostTiramisu)
         mockkStatic(FilledItem::applyToDatasetPreTiramisu)
+        mockkStatic(InlinePresentationSpec::createCipherInlinePresentationOrNull)
         every { anyConstructed<Dataset.Builder>().build() } returns dataset
     }
 
@@ -61,6 +67,7 @@ class FilledPartitionExtensionsTest {
         unmockkStatic(::buildAutofillRemoteViews)
         unmockkStatic(FilledItem::applyToDatasetPostTiramisu)
         unmockkStatic(FilledItem::applyToDatasetPreTiramisu)
+        unmockkStatic(InlinePresentationSpec::createCipherInlinePresentationOrNull)
     }
 
     @Test
@@ -71,12 +78,20 @@ class FilledPartitionExtensionsTest {
             packageName = PACKAGE_NAME,
             sdkInt = 34,
         )
+        val inlinePresentation: InlinePresentation = mockk()
         every {
             buildAutofillRemoteViews(
                 packageName = PACKAGE_NAME,
                 title = CIPHER_NAME,
             )
         } returns remoteViews
+        every {
+            inlinePresentationSpec.createCipherInlinePresentationOrNull(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+        } returns inlinePresentation
+        mockBuilder<Presentations.Builder> { it.setInlinePresentation(inlinePresentation) }
         mockBuilder<Presentations.Builder> { it.setMenuPresentation(remoteViews) }
         every {
             filledItem.applyToDatasetPostTiramisu(
@@ -98,6 +113,11 @@ class FilledPartitionExtensionsTest {
                 packageName = PACKAGE_NAME,
                 title = CIPHER_NAME,
             )
+            inlinePresentationSpec.createCipherInlinePresentationOrNull(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+            anyConstructed<Presentations.Builder>().setInlinePresentation(inlinePresentation)
             anyConstructed<Presentations.Builder>().setMenuPresentation(remoteViews)
             anyConstructed<Presentations.Builder>().build()
             filledItem.applyToDatasetPostTiramisu(
@@ -108,14 +128,16 @@ class FilledPartitionExtensionsTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `buildDataset should applyToDatasetPreTiramisu when sdkInt is less than 33`() {
+    fun `buildDataset should skip inline and applyToDatasetPreTiramisu when sdkInt is less than 30`() {
         // Setup
         val autofillAppInfo = AutofillAppInfo(
             context = context,
             packageName = PACKAGE_NAME,
             sdkInt = 18,
         )
+        val inlinePresentation: InlinePresentation = mockk()
         every {
             buildAutofillRemoteViews(
                 packageName = PACKAGE_NAME,
@@ -141,6 +163,61 @@ class FilledPartitionExtensionsTest {
                 packageName = PACKAGE_NAME,
                 title = CIPHER_NAME,
             )
+            filledItem.applyToDatasetPreTiramisu(
+                datasetBuilder = any(),
+                remoteViews = remoteViews,
+            )
+            anyConstructed<Dataset.Builder>().build()
+        }
+    }
+
+    @Suppress("Deprecation", "MaxLineLength")
+    @Test
+    fun `buildDataset should skip inline and applyToDatasetPreTiramisu when sdkInt is less than 33 but more than 29`() {
+        // Setup
+        val autofillAppInfo = AutofillAppInfo(
+            context = context,
+            packageName = PACKAGE_NAME,
+            sdkInt = 30,
+        )
+        val inlinePresentation: InlinePresentation = mockk()
+        every {
+            buildAutofillRemoteViews(
+                packageName = PACKAGE_NAME,
+                title = CIPHER_NAME,
+            )
+        } returns remoteViews
+        every {
+            inlinePresentationSpec.createCipherInlinePresentationOrNull(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+        } returns inlinePresentation
+        mockBuilder<Dataset.Builder> { it.setInlinePresentation(inlinePresentation) }
+        every {
+            filledItem.applyToDatasetPreTiramisu(
+                datasetBuilder = any(),
+                remoteViews = remoteViews,
+            )
+        } just runs
+
+        // Test
+        val actual = filledPartition.buildDataset(
+            autofillAppInfo = autofillAppInfo,
+        )
+
+        // Verify
+        assertEquals(dataset, actual)
+        verify(exactly = 1) {
+            buildAutofillRemoteViews(
+                packageName = PACKAGE_NAME,
+                title = CIPHER_NAME,
+            )
+            inlinePresentationSpec.createCipherInlinePresentationOrNull(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+            anyConstructed<Dataset.Builder>().setInlinePresentation(inlinePresentation)
             filledItem.applyToDatasetPreTiramisu(
                 datasetBuilder = any(),
                 remoteViews = remoteViews,

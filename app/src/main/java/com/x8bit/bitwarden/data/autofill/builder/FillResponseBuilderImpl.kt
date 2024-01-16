@@ -34,6 +34,9 @@ class FillResponseBuilderImpl : FillResponseBuilder {
                         fillResponseBuilder.addDataset(dataset)
                     }
                 }
+
+            // TODO: add vault item dataset (BIT-1296)
+
             fillResponseBuilder
                 .setIgnoredIds(*filledData.ignoreAutofillIds.toTypedArray())
                 .build()

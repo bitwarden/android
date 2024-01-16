@@ -5,11 +5,15 @@ import android.service.autofill.FillContext
 import android.service.autofill.FillRequest
 import android.view.View
 import android.view.autofill.AutofillId
+import android.widget.inline.InlinePresentationSpec
+import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
+import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
+import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
 import io.mockk.every
 import io.mockk.mockk
@@ -24,6 +28,7 @@ import org.junit.jupiter.api.Test
 class AutofillParserTests {
     private lateinit var parser: AutofillParser
 
+    private val autofillAppInfo: AutofillAppInfo = mockk()
     private val autofillViewData = AutofillView.Data(
         autofillId = mockk(),
         isFocused = true,
@@ -58,11 +63,26 @@ class AutofillParserTests {
     private val fillRequest: FillRequest = mockk {
         every { this@mockk.fillContexts } returns listOf(fillContext)
     }
+    private val inlinePresentationSpecs: List<InlinePresentationSpec> = mockk()
 
     @BeforeEach
     fun setup() {
         mockkStatic(AssistStructure.ViewNode::toAutofillView)
+        mockkStatic(
+            FillRequest::getMaxInlineSuggestionsCount,
+            FillRequest::getInlinePresentationSpecs,
+        )
         mockkStatic(List<ViewNodeTraversalData>::buildUriOrNull)
+        every {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+            )
+        } returns inlinePresentationSpecs
+        every {
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+            )
+        } returns MAX_INLINE_SUGGESTION_COUNT
         every { any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure) } returns URI
         parser = AutofillParserImpl()
     }
@@ -70,6 +90,10 @@ class AutofillParserTests {
     @AfterEach
     fun teardown() {
         unmockkStatic(AssistStructure.ViewNode::toAutofillView)
+        unmockkStatic(
+            FillRequest::getMaxInlineSuggestionsCount,
+            FillRequest::getInlinePresentationSpecs,
+        )
         unmockkStatic(List<ViewNodeTraversalData>::buildUriOrNull)
     }
 
@@ -80,7 +104,10 @@ class AutofillParserTests {
         every { fillRequest.fillContexts } returns emptyList()
 
         // Test
-        val actual = parser.parse(fillRequest)
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -93,7 +120,10 @@ class AutofillParserTests {
         every { assistStructure.windowNodeCount } returns 0
 
         // Test
-        val actual = parser.parse(fillRequest)
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
 
         // Verify
         assertEquals(expected, actual)
@@ -134,6 +164,8 @@ class AutofillParserTests {
         )
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = listOf(childAutofillId),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             partition = autofillPartition,
             uri = URI,
         )
@@ -141,11 +173,20 @@ class AutofillParserTests {
         every { assistStructure.getWindowNodeAt(0) } returns windowNode
 
         // Test
-        val actual = parser.parse(fillRequest)
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
 
         // Verify
         assertEquals(expected, actual)
         verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+            )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
     }
@@ -171,6 +212,8 @@ class AutofillParserTests {
         )
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             partition = autofillPartition,
             uri = URI,
         )
@@ -178,11 +221,20 @@ class AutofillParserTests {
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
-        val actual = parser.parse(fillRequest)
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
 
         // Verify
         assertEquals(expected, actual)
         verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+            )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
     }
@@ -208,6 +260,8 @@ class AutofillParserTests {
         )
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             partition = autofillPartition,
             uri = URI,
         )
@@ -215,11 +269,20 @@ class AutofillParserTests {
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
-        val actual = parser.parse(fillRequest)
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
 
         // Verify
         assertEquals(expected, actual)
         verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+            )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
     }
@@ -245,6 +308,8 @@ class AutofillParserTests {
         )
         val expected = AutofillRequest.Fillable(
             ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             partition = autofillPartition,
             uri = URI,
         )
@@ -252,11 +317,20 @@ class AutofillParserTests {
         every { loginViewNode.toAutofillView() } returns loginAutofillView
 
         // Test
-        val actual = parser.parse(fillRequest)
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
 
         // Verify
         assertEquals(expected, actual)
         verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+            )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
     }
@@ -270,8 +344,7 @@ class AutofillParserTests {
         every { assistStructure.getWindowNodeAt(0) } returns cardWindowNode
         every { assistStructure.getWindowNodeAt(1) } returns loginWindowNode
     }
-
-    companion object {
-        private const val URI: String = "androidapp://com.x8bit.bitwarden"
-    }
 }
+
+private const val MAX_INLINE_SUGGESTION_COUNT: Int = 42
+private const val URI: String = "androidapp://com.x8bit.bitwarden"
