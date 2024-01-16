@@ -12,7 +12,7 @@ data class AddSendHandlers(
     val onNamChange: (String) -> Unit,
     val onFileTypeSelect: () -> Unit,
     val onTextTypeSelect: () -> Unit,
-    val onChooseFileCLick: () -> Unit,
+    val onChooseFileClick: (hasPermission: Boolean) -> Unit,
     val onTextChange: (String) -> Unit,
     val onIsHideByDefaultToggle: (Boolean) -> Unit,
     val onMaxAccessCountChange: (Int) -> Unit,
@@ -36,7 +36,7 @@ data class AddSendHandlers(
                 onNamChange = { viewModel.trySendAction(AddSendAction.NameChange(it)) },
                 onFileTypeSelect = { viewModel.trySendAction(AddSendAction.FileTypeClick) },
                 onTextTypeSelect = { viewModel.trySendAction(AddSendAction.TextTypeClick) },
-                onChooseFileCLick = { viewModel.trySendAction(AddSendAction.ChooseFileClick) },
+                onChooseFileClick = { viewModel.trySendAction(AddSendAction.ChooseFileClick(it)) },
                 onTextChange = { viewModel.trySendAction(AddSendAction.TextChange(it)) },
                 onIsHideByDefaultToggle = {
                     viewModel.trySendAction(AddSendAction.HideByDefaultToggle(it))

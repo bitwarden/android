@@ -35,7 +35,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
 
@@ -48,6 +50,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 fun AddSendScreen(
     viewModel: AddSendViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -55,9 +58,22 @@ fun AddSendScreen(
     val context = LocalContext.current
     val resources = context.resources
 
+    val fileChooserLauncher = intentManager.launchActivityForResult { activityResult ->
+        intentManager.getFileDataFromIntent(activityResult)?.let {
+            viewModel.trySendAction(AddSendAction.FileChoose(it))
+        }
+    }
+
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is AddSendEvent.NavigateBack -> onNavigateBack()
+
+            is AddSendEvent.ShowChooserSheet -> {
+                fileChooserLauncher.launch(
+                    intentManager.createFileChooserIntent(event.withCameraOption),
+                )
+            }
+
             is AddSendEvent.ShowShareSheet -> {
                 intentManager.shareText(event.message)
             }
@@ -159,6 +175,7 @@ fun AddSendScreen(
                 state = viewState,
                 isAddMode = state.isAddMode,
                 addSendHandlers = remember(viewModel) { AddSendHandlers.create(viewModel) },
+                permissionsManager = permissionsManager,
                 modifier = modifier,
             )
 

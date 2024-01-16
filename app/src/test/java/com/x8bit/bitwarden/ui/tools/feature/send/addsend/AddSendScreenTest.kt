@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.util.isEditableText
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -44,7 +45,8 @@ class AddSendScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
 
-    private val intentManager: IntentManager = mockk {
+    private val permissionsManager = FakePermissionManager()
+    private val intentManager: IntentManager = mockk(relaxed = true) {
         every { shareText(any()) } just runs
     }
     private val mutableEventFlow = bufferedMutableSharedFlow<AddSendEvent>()
@@ -60,6 +62,7 @@ class AddSendScreenTest : BaseComposeTest() {
             AddSendScreen(
                 viewModel = viewModel,
                 intentManager = intentManager,
+                permissionsManager = permissionsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }
@@ -329,7 +332,8 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Choose file button click should send ChooseFileClick`() {
+    fun `Choose file button click with permission should send ChooseFileClick`() {
+        permissionsManager.checkPermissionResult = true
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 selectedType = AddSendState.ViewState.Content.SendType.File,
@@ -339,7 +343,32 @@ class AddSendScreenTest : BaseComposeTest() {
             .onNodeWithText("Choose file")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AddSendAction.ChooseFileClick) }
+        verify {
+            viewModel.trySendAction(
+                AddSendAction.ChooseFileClick(isCameraPermissionGranted = true),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Choose file button click without permission should request permission and send ChooseFileClick`() {
+        permissionsManager.checkPermissionResult = false
+        permissionsManager.getPermissionsResult = false
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                selectedType = AddSendState.ViewState.Content.SendType.File,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Choose file")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                AddSendAction.ChooseFileClick(isCameraPermissionGranted = false),
+            )
+        }
     }
 
     @Test

@@ -581,14 +581,21 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ChooseFileClick should emit ShowToast`() = runTest {
+    fun `FileChose should emit ShowToast`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.ChooseFileClick)
-            assertEquals(
-                AddSendEvent.ShowToast("Not Implemented: File Upload".asText()),
-                awaitItem(),
-            )
+            viewModel.trySendAction(AddSendAction.FileChoose(fileData = mockk()))
+            assertEquals(AddSendEvent.ShowToast("Not Yet Implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
+    fun `ChooseFileClick should emit ShowToast`() = runTest {
+        val arePermissionsGranted = true
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AddSendAction.ChooseFileClick(arePermissionsGranted))
+            assertEquals(AddSendEvent.ShowChooserSheet(arePermissionsGranted), awaitItem())
         }
     }
 

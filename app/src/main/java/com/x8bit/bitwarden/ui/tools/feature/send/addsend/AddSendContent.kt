@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
+import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -42,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
+import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
 
@@ -54,8 +56,13 @@ fun AddSendContent(
     state: AddSendState.ViewState.Content,
     isAddMode: Boolean,
     addSendHandlers: AddSendHandlers,
+    permissionsManager: PermissionsManager,
     modifier: Modifier = Modifier,
 ) {
+    val chooseFileCameraPermissionLauncher = permissionsManager.getLauncher { isGranted ->
+        addSendHandlers.onChooseFileClick(isGranted)
+    }
+
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
@@ -118,7 +125,13 @@ fun AddSendContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenFilledTonalButton(
                     label = stringResource(id = R.string.choose_file),
-                    onClick = addSendHandlers.onChooseFileCLick,
+                    onClick = {
+                        if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
+                            addSendHandlers.onChooseFileClick(true)
+                        } else {
+                            chooseFileCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
