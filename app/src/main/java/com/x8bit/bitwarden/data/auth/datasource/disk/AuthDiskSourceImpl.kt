@@ -40,6 +40,7 @@ class AuthDiskSourceImpl(
     sharedPreferences = sharedPreferences,
 ),
     AuthDiskSource {
+    private val inMemoryPinProtectedUserKeys = mutableMapOf<String, String?>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
 
@@ -132,12 +133,16 @@ class AuthDiskSourceImpl(
     }
 
     override fun getPinProtectedUserKey(userId: String): String? =
-        getString(key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId")
+        inMemoryPinProtectedUserKeys[userId]
+            ?: getString(key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId")
 
     override fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
+        inMemoryOnly: Boolean,
     ) {
+        inMemoryPinProtectedUserKeys[userId] = pinProtectedUserKey
+        if (inMemoryOnly) return
         putString(
             key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId",
             value = pinProtectedUserKey,

@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepositoryImpl
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,11 +40,13 @@ object PlatformRepositoryModule {
     fun provideSettingsRepository(
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
+        vaultSdkSource: VaultSdkSource,
         dispatcherManager: DispatcherManager,
     ): SettingsRepository =
         SettingsRepositoryImpl(
             authDiskSource = authDiskSource,
             settingsDiskSource = settingsDiskSource,
+            vaultSdkSource = vaultSdkSource,
             dispatcherManager = dispatcherManager,
         )
 }

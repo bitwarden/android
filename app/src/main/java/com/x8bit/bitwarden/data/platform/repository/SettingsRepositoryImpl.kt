@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 /**
  * Primary implementation of [SettingsRepository].
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.stateIn
 class SettingsRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
+    private val vaultSdkSource: VaultSdkSource,
     private val dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
@@ -77,6 +80,10 @@ class SettingsRepositoryImpl(
                 vaultTimeoutAction = value,
             )
         }
+    override val isUnlockWithPinEnabled: Boolean
+        get() = activeUserId
+            ?.let { authDiskSource.getEncryptedPin(userId = it) != null }
+            ?: false
 
     override fun clearData(userId: String) {
         settingsDiskSource.clearData(userId = userId)
@@ -156,6 +163,54 @@ class SettingsRepositoryImpl(
             settingsDiskSource.storePullToRefreshEnabled(
                 userId = it,
                 isPullToRefreshEnabled = isPullToRefreshEnabled,
+            )
+        }
+    }
+
+    override fun storeUnlockPin(
+        pin: String,
+        shouldRequireMasterPasswordOnRestart: Boolean,
+    ) {
+        val userId = activeUserId ?: return
+        unconfinedScope.launch {
+            vaultSdkSource
+                .derivePinKey(
+                    userId = userId,
+                    pin = pin,
+                )
+                .fold(
+                    onSuccess = { derivePinKeyResponse ->
+                        authDiskSource.apply {
+                            storeEncryptedPin(
+                                userId = userId,
+                                encryptedPin = derivePinKeyResponse.encryptedPin,
+                            )
+                            storePinProtectedUserKey(
+                                userId = userId,
+                                pinProtectedUserKey = derivePinKeyResponse.pinProtectedUserKey,
+                                inMemoryOnly = shouldRequireMasterPasswordOnRestart,
+                            )
+                        }
+                    },
+                    onFailure = {
+                        // PIN derivation should only fail when the user's vault is locked. This
+                        // should not be a concern when this method is actually called so we should
+                        // be able to safely ignore this.
+                    },
+                )
+        }
+    }
+
+    override fun clearUnlockPin() {
+        val userId = activeUserId ?: return
+        authDiskSource.apply {
+            storeEncryptedPin(
+                userId = userId,
+                encryptedPin = null,
+            )
+            authDiskSource.storePinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = null,
             )
         }
     }

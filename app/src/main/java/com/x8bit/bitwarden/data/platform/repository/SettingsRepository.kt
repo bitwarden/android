@@ -37,6 +37,11 @@ interface SettingsRepository {
     var vaultTimeoutAction: VaultTimeoutAction
 
     /**
+     * Whether or not PIN unlocking is enabled for the current user.
+     */
+    val isUnlockWithPinEnabled: Boolean
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
@@ -85,4 +90,21 @@ interface SettingsRepository {
      * Stores the given [isPullToRefreshEnabled] for the active user.
      */
     fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean)
+
+    /**
+     * Stores the given PIN, allowing it to be used to unlock the current user's vault.
+     *
+     * When [shouldRequireMasterPasswordOnRestart] is `true`, the user's master password is required
+     * on app startup but they may use their PIN to unlock their vault if it becomes locked while
+     * the app is still open.
+     */
+    fun storeUnlockPin(
+        pin: String,
+        shouldRequireMasterPasswordOnRestart: Boolean,
+    )
+
+    /**
+     * Clears any previously set unlock PIN for the current user.
+     */
+    fun clearUnlockPin()
 }
