@@ -20,6 +20,7 @@ private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val STATE_KEY = "$BASE_KEY:state"
 private const val LAST_ACTIVE_TIME_KEY = "$BASE_KEY:lastActiveTime"
+private const val INVALID_UNLOCK_ATTEMPTS_KEY = "$BASE_KEY:invalidUnlockAttempts"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "$BASE_KEY:masterKeyEncryptedUserKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "$BASE_KEY:encPrivateKey"
 private const val PIN_PROTECTED_USER_KEY_KEY = "$BASE_KEY:pinKeyEncryptedUserKey"
@@ -74,6 +75,7 @@ class AuthDiskSourceImpl(
 
     override fun clearData(userId: String) {
         storeLastActiveTimeMillis(userId = userId, lastActiveTimeMillis = null)
+        storeInvalidUnlockAttempts(userId = userId, invalidUnlockAttempts = null)
         storeUserKey(userId = userId, userKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
         storePinProtectedUserKey(userId = userId, pinProtectedUserKey = null)
@@ -93,6 +95,19 @@ class AuthDiskSourceImpl(
         putLong(
             key = "${LAST_ACTIVE_TIME_KEY}_$userId",
             value = lastActiveTimeMillis,
+        )
+    }
+
+    override fun getInvalidUnlockAttempts(userId: String): Int? =
+        getInt(key = "${INVALID_UNLOCK_ATTEMPTS_KEY}_$userId")
+
+    override fun storeInvalidUnlockAttempts(
+        userId: String,
+        invalidUnlockAttempts: Int?,
+    ) {
+        putInt(
+            key = "${INVALID_UNLOCK_ATTEMPTS_KEY}_$userId",
+            value = invalidUnlockAttempts,
         )
     }
 

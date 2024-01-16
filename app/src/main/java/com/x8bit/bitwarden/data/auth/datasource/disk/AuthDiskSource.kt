@@ -58,6 +58,19 @@ interface AuthDiskSource {
     )
 
     /**
+     * Retrieves the number of consecutive invalid lock attempts for the given [userId].
+     */
+    fun getInvalidUnlockAttempts(userId: String): Int?
+
+    /**
+     * Stores the number of consecutive invalid lock attempts for the given [userId].
+     */
+    fun storeInvalidUnlockAttempts(
+        userId: String,
+        invalidUnlockAttempts: Int?,
+    )
+
+    /**
      * Retrieves a user key using a [userId].
      */
     fun getUserKey(userId: String): String?
