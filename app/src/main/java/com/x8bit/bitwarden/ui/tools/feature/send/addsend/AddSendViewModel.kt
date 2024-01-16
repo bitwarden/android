@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
@@ -119,6 +120,7 @@ class AddSendViewModel @Inject constructor(
     override fun handleAction(action: AddSendAction): Unit = when (action) {
         AddSendAction.CopyLinkClick -> handleCopyLinkClick()
         AddSendAction.DeleteClick -> handleDeleteClick()
+        is AddSendAction.FileChoose -> handeFileChose(action)
         AddSendAction.RemovePasswordClick -> handleRemovePasswordClick()
         AddSendAction.ShareLinkClick -> handleShareLinkClick()
         is AddSendAction.CloseClick -> handleCloseClick()
@@ -129,7 +131,7 @@ class AddSendViewModel @Inject constructor(
         is AddSendAction.SaveClick -> handleSaveClick()
         is AddSendAction.FileTypeClick -> handleFileTypeClick()
         is AddSendAction.TextTypeClick -> handleTextTypeClick()
-        is AddSendAction.ChooseFileClick -> handleChooseFileClick()
+        is AddSendAction.ChooseFileClick -> handleChooseFileClick(action)
         is AddSendAction.NameChange -> handleNameChange(action)
         is AddSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
         is AddSendAction.TextChange -> handleTextChange(action)
@@ -354,6 +356,11 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
+    private fun handeFileChose(action: AddSendAction.FileChoose) {
+        // TODO: Process the chosen file (BIT-493)
+        sendEvent(AddSendEvent.ShowToast("Not Yet Implemented".asText()))
+    }
+
     private fun handleRemovePasswordClick() {
         onEdit {
             mutableStateFlow.update {
@@ -511,9 +518,8 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
-    private fun handleChooseFileClick() {
-        // TODO: allow for file upload: BIT-1085
-        sendEvent(AddSendEvent.ShowToast("Not Implemented: File Upload".asText()))
+    private fun handleChooseFileClick(action: AddSendAction.ChooseFileClick) {
+        sendEvent(AddSendEvent.ShowChooserSheet(action.isCameraPermissionGranted))
     }
 
     private fun handleMaxAccessCountChange(action: AddSendAction.MaxAccessCountChange) {
@@ -722,6 +728,11 @@ sealed class AddSendEvent {
     data object NavigateBack : AddSendEvent()
 
     /**
+     * Show file chooser sheet.
+     */
+    data class ShowChooserSheet(val withCameraOption: Boolean) : AddSendEvent()
+
+    /**
      * Show share sheet.
      */
     data class ShowShareSheet(val message: String) : AddSendEvent()
@@ -736,6 +747,11 @@ sealed class AddSendEvent {
  * Models actions for the new send screen.
  */
 sealed class AddSendAction {
+
+    /**
+     * User has chosen a file to be part of the send.
+     */
+    data class FileChoose(val fileData: IntentManager.FileData) : AddSendAction()
 
     /**
      * User clicked the remove password button.
@@ -805,7 +821,9 @@ sealed class AddSendAction {
     /**
      * User clicked the choose file button.
      */
-    data object ChooseFileClick : AddSendAction()
+    data class ChooseFileClick(
+        val isCameraPermissionGranted: Boolean,
+    ) : AddSendAction()
 
     /**
      * User toggled the "hide text by default" toggle.
