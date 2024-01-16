@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
+import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -56,7 +57,7 @@ class AuthDiskSourceTest {
         val testId = "testId"
 
         // Update preferences to hold test value
-        fakeSharedPreferences.edit().putString(rememberedUniqueAppIdKey, testId).apply()
+        fakeSharedPreferences.edit { putString(rememberedUniqueAppIdKey, testId) }
 
         assertEquals(testId, authDiskSource.uniqueAppId)
     }
@@ -77,7 +78,7 @@ class AuthDiskSourceTest {
         )
 
         // Update SharedPreferences updates the repository
-        fakeSharedPreferences.edit().putString(rememberedEmailKey, null).apply()
+        fakeSharedPreferences.edit { putString(rememberedEmailKey, null) }
         assertNull(authDiskSource.rememberedEmailAddress)
     }
 
@@ -101,7 +102,7 @@ class AuthDiskSourceTest {
         )
 
         // Update SharedPreferences updates the repository
-        fakeSharedPreferences.edit().putString(userStateKey, null).apply()
+        fakeSharedPreferences.edit { putString(userStateKey, null) }
         assertNull(authDiskSource.userState)
     }
 
@@ -157,12 +158,12 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockLastActiveTime = 123456789L
         fakeSharedPreferences
-            .edit()
-            .putLong(
-                "${lastActiveTimeBaseKey}_$mockUserId",
-                mockLastActiveTime,
-            )
-            .apply()
+            .edit {
+                putLong(
+                    "${lastActiveTimeBaseKey}_$mockUserId",
+                    mockLastActiveTime,
+                )
+            }
         val actual = authDiskSource.getLastActiveTimeMillis(userId = mockUserId)
         assertEquals(
             mockLastActiveTime,
@@ -197,9 +198,9 @@ class AuthDiskSourceTest {
         val mockLastActiveTime = 123456789L
         val lastActiveTimeKey = "${lastActiveTimeBaseKey}_$mockUserId"
         fakeSharedPreferences
-            .edit()
-            .putLong(lastActiveTimeKey, mockLastActiveTime)
-            .apply()
+            .edit {
+                putLong(lastActiveTimeKey, mockLastActiveTime)
+            }
         assertTrue(fakeSharedPreferences.contains(lastActiveTimeKey))
         authDiskSource.storeLastActiveTimeMillis(
             userId = mockUserId,
@@ -214,12 +215,12 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockUserKey = "mockUserKey"
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${userKeyBaseKey}_$mockUserId",
-                mockUserKey,
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${userKeyBaseKey}_$mockUserId",
+                    mockUserKey,
+                )
+            }
         val actual = authDiskSource.getUserKey(userId = mockUserId)
         assertEquals(
             mockUserKey,
@@ -253,12 +254,12 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockPrivateKey = "mockPrivateKey"
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${privateKeyBaseKey}_$mockUserId",
-                mockPrivateKey,
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${privateKeyBaseKey}_$mockUserId",
+                    mockPrivateKey,
+                )
+            }
         val actual = authDiskSource.getPrivateKey(userId = mockUserId)
         assertEquals(
             mockPrivateKey,
@@ -291,12 +292,12 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockUserAutoUnlockKey = "mockUserAutoUnlockKey"
         fakeEncryptedSharedPreferences
-            .edit()
-            .putString(
-                "${userAutoUnlockKeyBaseKey}_$mockUserId",
-                mockUserAutoUnlockKey,
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${userAutoUnlockKeyBaseKey}_$mockUserId",
+                    mockUserAutoUnlockKey,
+                )
+            }
         val actual = authDiskSource.getUserAutoUnlockKey(userId = mockUserId)
         assertEquals(
             mockUserAutoUnlockKey,
@@ -330,12 +331,12 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockPinProtectedUserKey = "mockPinProtectedUserKey"
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${pinProtectedUserKeyBaseKey}_$mockUserId",
-                mockPinProtectedUserKey,
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${pinProtectedUserKeyBaseKey}_$mockUserId",
+                    mockPinProtectedUserKey,
+                )
+            }
         val actual = authDiskSource.getPinProtectedUserKey(userId = mockUserId)
         assertEquals(
             mockPinProtectedUserKey,
@@ -369,12 +370,12 @@ class AuthDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockEncryptedPin = "mockEncryptedPin"
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${encryptedPinBaseKey}_$mockUserId",
-                mockEncryptedPin,
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${encryptedPinBaseKey}_$mockUserId",
+                    mockEncryptedPin,
+                )
+            }
         val actual = authDiskSource.getEncryptedPin(userId = mockUserId)
         assertEquals(
             mockEncryptedPin,
@@ -411,18 +412,18 @@ class AuthDiskSourceTest {
             "organizationId2" to "organizationKey2",
         )
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${organizationKeysBaseKey}_$mockUserId",
-                """
-                {
-                  "organizationId1": "organizationKey1",
-                  "organizationId2": "organizationKey2"
-                }
-                """
-                    .trimIndent(),
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${organizationKeysBaseKey}_$mockUserId",
+                    """
+                    {
+                      "organizationId1": "organizationKey1",
+                      "organizationId2": "organizationKey2"
+                    }
+                    """
+                        .trimIndent(),
+                )
+            }
         val actual = authDiskSource.getOrganizationKeys(userId = mockUserId)
         assertEquals(
             mockOrganizationKeys,
@@ -470,12 +471,12 @@ class AuthDiskSourceTest {
         )
         val mockOrganizationsMap = mockOrganizations.associateBy { it.id }
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${organizationsBaseKey}_$mockUserId",
-                json.encodeToString(mockOrganizationsMap),
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${organizationsBaseKey}_$mockUserId",
+                    json.encodeToString(mockOrganizationsMap),
+                )
+            }
         val actual = authDiskSource.getOrganizations(userId = mockUserId)
         assertEquals(
             mockOrganizations,

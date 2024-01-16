@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
+import androidx.core.content.edit
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
@@ -99,7 +100,7 @@ class GeneratorDiskSourceTest {
         )
 
         val key = "bwPreferencesStorage_passwordGenerationOptions_$userId"
-        fakeSharedPreferences.edit().putString(key, json.encodeToString(options)).apply()
+        fakeSharedPreferences.edit { putString(key, json.encodeToString(options)) }
 
         val result = generatorDiskSource.getPasscodeGenerationOptions(userId)
 
@@ -166,7 +167,7 @@ class GeneratorDiskSourceTest {
         )
 
         val key = "bwPreferencesStorage_usernameGenerationOptions_$userId"
-        fakeSharedPreferences.edit().putString(key, json.encodeToString(options)).apply()
+        fakeSharedPreferences.edit { putString(key, json.encodeToString(options)) }
 
         val result = generatorDiskSource.getUsernameGenerationOptions(userId)
 

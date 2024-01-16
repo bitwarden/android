@@ -34,7 +34,7 @@ class PushDiskSourceTest {
         )
 
         // Update SharedPreferences updates the repository
-        fakeSharedPreferences.edit().putString(registeredPushTokenKey, null).apply()
+        fakeSharedPreferences.edit { putString(registeredPushTokenKey, null) }
         assertNull(pushDiskSource.registeredPushToken)
     }
 
@@ -62,12 +62,12 @@ class PushDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockCurrentPushToken = "abcd"
         fakeSharedPreferences
-            .edit()
-            .putString(
-                "${currentPushTokenBaseKey}_$mockUserId",
-                mockCurrentPushToken,
-            )
-            .apply()
+            .edit {
+                putString(
+                    "${currentPushTokenBaseKey}_$mockUserId",
+                    mockCurrentPushToken,
+                )
+            }
         val actual = pushDiskSource.getCurrentPushToken(userId = mockUserId)
         assertEquals(
             mockCurrentPushToken,
@@ -101,12 +101,12 @@ class PushDiskSourceTest {
         val mockUserId = "mockUserId"
         val mockLastPushTokenRegistration = ZonedDateTime.parse("2024-01-06T22:27:45.904314Z")
         fakeSharedPreferences
-            .edit()
-            .putLong(
-                "${lastPushTokenBaseKey}_$mockUserId",
-                getBinaryLongFromZoneDateTime(mockLastPushTokenRegistration),
-            )
-            .apply()
+            .edit {
+                putLong(
+                    "${lastPushTokenBaseKey}_$mockUserId",
+                    getBinaryLongFromZoneDateTime(mockLastPushTokenRegistration),
+                )
+            }
         val actual = pushDiskSource.getLastPushTokenRegistrationDate(userId = mockUserId)!!
         assertEquals(
             mockLastPushTokenRegistration,
