@@ -20,8 +20,8 @@ fun FilledPartition.buildDataset(
     autofillAppInfo: AutofillAppInfo,
 ): Dataset {
     val remoteViewsPlaceholder = buildAutofillRemoteViews(
-        packageName = autofillAppInfo.packageName,
-        title = autofillCipher.name,
+        autofillAppInfo = autofillAppInfo,
+        autofillCipher = autofillCipher,
     )
     val datasetBuilder = Dataset.Builder()
 
