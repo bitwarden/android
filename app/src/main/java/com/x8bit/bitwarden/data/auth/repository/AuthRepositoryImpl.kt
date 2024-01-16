@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -113,6 +114,7 @@ class AuthRepositoryImpl constructor(
                 vaultState = vaultState,
                 userOrganizationsList = userOrganizationsList,
                 specialCircumstance = specialCircumstance,
+                vaultUnlockTypeProvider = ::getVaultUnlockType,
             )
     }
         .stateIn(
@@ -124,6 +126,7 @@ class AuthRepositoryImpl constructor(
                     vaultState = vaultRepository.vaultStateFlow.value,
                     userOrganizationsList = authDiskSource.userOrganizationsList,
                     specialCircumstance = mutableSpecialCircumstanceStateFlow.value,
+                    vaultUnlockTypeProvider = ::getVaultUnlockType,
                 ),
         )
 
@@ -401,4 +404,17 @@ class AuthRepositoryImpl constructor(
             },
         )
     }
+
+    private fun getVaultUnlockType(
+        userId: String,
+    ): VaultUnlockType =
+        when {
+            authDiskSource.getPinProtectedUserKey(userId = userId) != null -> {
+                VaultUnlockType.PIN
+            }
+
+            else -> {
+                VaultUnlockType.MASTER_PASSWORD
+            }
+        }
 }

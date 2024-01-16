@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
@@ -47,6 +48,7 @@ fun UserStateJson.toUserState(
     vaultState: VaultState,
     userOrganizationsList: List<UserOrganizations>,
     specialCircumstance: UserState.SpecialCircumstance?,
+    vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
@@ -72,6 +74,7 @@ fun UserStateJson.toUserState(
                         .find { it.userId == userId }
                         ?.organizations
                         .orEmpty(),
+                    vaultUnlockType = vaultUnlockTypeProvider(userId),
                 )
             },
         specialCircumstance = specialCircumstance,

@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -50,7 +52,8 @@ class VaultUnlockViewModel @Inject constructor(
             email = activeAccountSummary.email,
             dialog = null,
             environmentUrl = environmentRepo.environment.label,
-            passwordInput = "",
+            input = "",
+            vaultUnlockType = userState.activeAccount.vaultUnlockType,
         )
     },
 ) {
@@ -79,7 +82,7 @@ class VaultUnlockViewModel @Inject constructor(
             VaultUnlockAction.AddAccountClick -> handleAddAccountClick()
             VaultUnlockAction.DismissDialog -> handleDismissDialog()
             VaultUnlockAction.ConfirmLogoutClick -> handleConfirmLogoutClick()
-            is VaultUnlockAction.PasswordInputChanged -> handlePasswordInputChanged(action)
+            is VaultUnlockAction.InputChanged -> handleInputChanged(action)
             is VaultUnlockAction.LockAccountClick -> handleLockAccountClick(action)
             is VaultUnlockAction.LogoutAccountClick -> handleLogoutAccountClick(action)
             is VaultUnlockAction.SwitchAccountClick -> handleSwitchAccountClick(action)
@@ -106,9 +109,9 @@ class VaultUnlockViewModel @Inject constructor(
         authRepository.logout()
     }
 
-    private fun handlePasswordInputChanged(action: VaultUnlockAction.PasswordInputChanged) {
+    private fun handleInputChanged(action: VaultUnlockAction.InputChanged) {
         mutableStateFlow.update {
-            it.copy(passwordInput = action.passwordInput)
+            it.copy(input = action.input)
         }
     }
 
@@ -127,9 +130,19 @@ class VaultUnlockViewModel @Inject constructor(
     private fun handleUnlockClick() {
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
-            val vaultUnlockResult = vaultRepo.unlockVaultWithMasterPasswordAndSync(
-                mutableStateFlow.value.passwordInput,
-            )
+            val vaultUnlockResult = when (state.vaultUnlockType) {
+                VaultUnlockType.MASTER_PASSWORD -> {
+                    vaultRepo.unlockVaultWithMasterPasswordAndSync(
+                        mutableStateFlow.value.input,
+                    )
+                }
+
+                VaultUnlockType.PIN -> {
+                    vaultRepo.unlockVaultWithPinAndSync(
+                        mutableStateFlow.value.input,
+                    )
+                }
+            }
             sendAction(VaultUnlockAction.Internal.ReceiveVaultUnlockResult(vaultUnlockResult))
         }
     }
@@ -142,7 +155,7 @@ class VaultUnlockViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                            R.string.invalid_master_password.asText(),
+                            state.vaultUnlockType.unlockScreenErrorMessage,
                         ),
                     )
                 }
@@ -185,6 +198,7 @@ class VaultUnlockViewModel @Inject constructor(
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
                 email = activeAccountSummary.email,
+                vaultUnlockType = userState.activeAccount.vaultUnlockType,
             )
         }
     }
@@ -201,7 +215,8 @@ data class VaultUnlockState(
     val email: String,
     val environmentUrl: String,
     val dialog: VaultUnlockDialog?,
-    val passwordInput: String,
+    val input: String,
+    val vaultUnlockType: VaultUnlockType,
 ) : Parcelable {
 
     /**
@@ -261,10 +276,10 @@ sealed class VaultUnlockAction {
     data object ConfirmLogoutClick : VaultUnlockAction()
 
     /**
-     * The user has modified the password input.
+     * The user has modified the input.
      */
-    data class PasswordInputChanged(
-        val passwordInput: String,
+    data class InputChanged(
+        val input: String,
     ) : VaultUnlockAction()
 
     /**

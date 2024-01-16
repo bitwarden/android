@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -111,6 +112,81 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         composeTestRule.assertLockOrLogoutDialogIsDisplayed(
             accountSummary = ACTIVE_ACCOUNT_SUMMARY,
         )
+    }
+
+    @Test
+    fun `title should change according to state`() {
+        mutableStateFlow.update {
+            it.copy(vaultUnlockType = VaultUnlockType.MASTER_PASSWORD)
+        }
+
+        composeTestRule
+            .onNodeWithText("Verify master password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Verify PIN")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(vaultUnlockType = VaultUnlockType.PIN)
+        }
+
+        composeTestRule
+            .onNodeWithText("Verify master password")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Verify PIN")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `message should change according to state`() {
+        mutableStateFlow.update {
+            it.copy(vaultUnlockType = VaultUnlockType.MASTER_PASSWORD)
+        }
+
+        composeTestRule
+            .onNodeWithText("Your vault is locked. Verify your master password to continue.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Your vault is locked. Verify your PIN code to continue.")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(vaultUnlockType = VaultUnlockType.PIN)
+        }
+
+        composeTestRule
+            .onNodeWithText("Your vault is locked. Verify your master password to continue.")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Your vault is locked. Verify your PIN code to continue.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `input label should change according to state`() {
+        mutableStateFlow.update {
+            it.copy(vaultUnlockType = VaultUnlockType.MASTER_PASSWORD)
+        }
+
+        composeTestRule
+            .onNodeWithText("Master password")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("PIN")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(vaultUnlockType = VaultUnlockType.PIN)
+        }
+
+        composeTestRule
+            .onNodeWithText("Master password")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("PIN")
+            .assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
@@ -235,15 +311,15 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `password input state change should update unlock button enabled`() {
+    fun `input state change should update unlock button enabled`() {
         composeTestRule.onNodeWithText("Unlock").performScrollTo().assertIsNotEnabled()
-        mutableStateFlow.update { it.copy(passwordInput = "a") }
+        mutableStateFlow.update { it.copy(input = "a") }
         composeTestRule.onNodeWithText("Unlock").performScrollTo().assertIsEnabled()
     }
 
     @Test
     fun `unlock click should send UnlockClick action`() {
-        mutableStateFlow.update { it.copy(passwordInput = "abdc1234") }
+        mutableStateFlow.update { it.copy(input = "abdc1234") }
         composeTestRule
             .onNodeWithText("Unlock")
             .performScrollTo()
@@ -252,14 +328,14 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `master password change should send PasswordInputChanged action`() {
+    fun `input change should send InputChanged action`() {
         val input = "abcd1234"
         composeTestRule
             .onNodeWithText("Master password")
             .performScrollTo()
             .performTextInput(input)
         verify {
-            viewModel.trySendAction(VaultUnlockAction.PasswordInputChanged(input))
+            viewModel.trySendAction(VaultUnlockAction.InputChanged(input))
         }
     }
 }
@@ -300,5 +376,6 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     email = "bit@bitwarden.com",
     environmentUrl = DEFAULT_ENVIRONMENT_URL,
     initials = "AU",
-    passwordInput = "",
+    input = "",
+    vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )

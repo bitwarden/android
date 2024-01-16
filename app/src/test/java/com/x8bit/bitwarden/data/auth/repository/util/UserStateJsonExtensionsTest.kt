@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import io.mockk.every
@@ -112,6 +113,7 @@ class UserStateJsonExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        vaultUnlockType = VaultUnlockType.PIN,
                     ),
                 ),
             ),
@@ -153,6 +155,7 @@ class UserStateJsonExtensionsTest {
                         ),
                     ),
                     specialCircumstance = null,
+                    vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                 ),
         )
     }
@@ -179,6 +182,7 @@ class UserStateJsonExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                     ),
                 ),
                 specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
@@ -221,6 +225,7 @@ class UserStateJsonExtensionsTest {
                         ),
                     ),
                     specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 ),
         )
     }

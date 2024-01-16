@@ -30,6 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenKeyboardType
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -116,7 +120,7 @@ fun VaultUnlockScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.verify_master_password),
+                title = state.vaultUnlockType.unlockScreenTitle(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
                 actions = {
@@ -145,18 +149,19 @@ fun VaultUnlockScreen(
                     .verticalScroll(rememberScrollState()),
             ) {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.master_password),
-                    value = state.passwordInput,
+                    label = state.vaultUnlockType.unlockScreenInputLabel(),
+                    value = state.input,
                     onValueChange = remember(viewModel) {
-                        { viewModel.trySendAction(VaultUnlockAction.PasswordInputChanged(it)) }
+                        { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) }
                     },
+                    keyboardType = state.vaultUnlockType.unlockScreenKeyboardType,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = stringResource(id = R.string.vault_locked_master_password),
+                    text = state.vaultUnlockType.unlockScreenMessage(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
@@ -182,7 +187,7 @@ fun VaultUnlockScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
                     },
-                    isEnabled = state.passwordInput.isNotEmpty(),
+                    isEnabled = state.input.isNotEmpty(),
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
