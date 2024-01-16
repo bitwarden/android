@@ -26,7 +26,7 @@ androidxSplash = "1.1.0-alpha02"
 androidXAppCompat = "1.6.1"
 # Once the app and SDK reach a critical point of completeness we should begin fixing the version
 # here (BIT-311).
-bitwardenSdk = "0.4.0-20240111.141006-33"
+bitwardenSdk = "0.4.0-20240115.154650-43"
 crashlytics = "2.9.9"
 detekt = "1.23.1"
 firebaseBom = "32.7.0"

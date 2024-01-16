@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import android.os.SystemClock
-import com.bitwarden.core.HashPurpose
-import com.bitwarden.core.Kdf
+import com.bitwarden.crypto.HashPurpose
+import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired

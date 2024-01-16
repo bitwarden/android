@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.Kdf
+import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.flow.StateFlow
