@@ -7,10 +7,12 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
  * Primary implementation of [PermissionsManager].
  */
+@OmitFromCoverage
 class PermissionsManagerImpl(
     private val activity: Activity,
 ) : PermissionsManager {
@@ -21,7 +23,16 @@ class PermissionsManagerImpl(
     ): ManagedActivityResultLauncher<String, Boolean> =
         rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission(),
-            onResult,
+            onResult = onResult,
+        )
+
+    @Composable
+    override fun getPermissionsLauncher(
+        onResult: (Map<String, Boolean>) -> Unit,
+    ): ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestMultiplePermissions(),
+            onResult = onResult,
         )
 
     override fun checkPermission(permission: String): Boolean =
@@ -29,6 +40,9 @@ class PermissionsManagerImpl(
             activity,
             permission,
         ) == PackageManager.PERMISSION_GRANTED
+
+    override fun checkPermissions(permissions: Array<String>): Boolean =
+        permissions.map { checkPermission(it) }.all { isGranted -> isGranted }
 
     override fun shouldShouldRequestPermissionRationale(
         permission: String,
