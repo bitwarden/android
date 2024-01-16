@@ -300,6 +300,7 @@ class VaultRepositoryImpl(
             .also {
                 if (it is VaultUnlockResult.Success) {
                     sync()
+                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
                 }
             }
     }
@@ -515,6 +516,33 @@ class VaultRepositoryImpl(
                 onSuccess = { DeleteSendResult.Success },
                 onFailure = { DeleteSendResult.Error },
             )
+    }
+
+    /**
+     * Checks if the given [userId] has an associated encrypted PIN key but not a pin-protected user
+     * key. This indicates a scenario in which a user has requested PIN unlocking but requires
+     * master-password unlocking on app restart. This function may then be called after such an
+     * unlock to derive a pin-protected user key and store it in memory for use for any subsequent
+     * unlocks during this current app session.
+     *
+     * If the user's vault has not yet been unlocked, this call will do nothing.
+     */
+    private suspend fun deriveTemporaryPinProtectedUserKeyIfNecessary(userId: String) {
+        val encryptedPin = authDiskSource.getEncryptedPin(userId = userId) ?: return
+        val existingPinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
+        if (existingPinProtectedUserKey != null) return
+        vaultSdkSource
+            .derivePinProtectedUserKey(
+                userId = userId,
+                encryptedPin = encryptedPin,
+            )
+            .onSuccess { pinProtectedUserKey ->
+                authDiskSource.storePinProtectedUserKey(
+                    userId = userId,
+                    pinProtectedUserKey = pinProtectedUserKey,
+                    inMemoryOnly = true,
+                )
+            }
     }
 
     private fun storeProfileData(

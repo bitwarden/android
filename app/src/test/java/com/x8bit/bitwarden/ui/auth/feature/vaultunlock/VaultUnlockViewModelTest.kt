@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -52,7 +53,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when set`() {
         val state = DEFAULT_STATE.copy(
-            passwordInput = "pass",
+            input = "pass",
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
@@ -199,9 +200,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `on PasswordInputChanged should update the password input state`() = runTest {
         val viewModel = createViewModel()
         val password = "abcd1234"
-        viewModel.trySendAction(VaultUnlockAction.PasswordInputChanged(passwordInput = password))
+        viewModel.trySendAction(VaultUnlockAction.InputChanged(input = password))
         assertEquals(
-            DEFAULT_STATE.copy(passwordInput = password),
+            DEFAULT_STATE.copy(input = password),
             viewModel.stateFlow.value,
         )
     }
@@ -247,9 +248,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on UnlockClick should display error dialog on AuthenticationError`() = runTest {
+    fun `on UnlockClick for password unlock should display error dialog on AuthenticationError`() {
         val password = "abcd1234"
-        val initialState = DEFAULT_STATE.copy(passwordInput = password)
+        val initialState = DEFAULT_STATE.copy(
+            input = password,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
         val viewModel = createViewModel(state = initialState)
         coEvery {
             vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
@@ -270,9 +274,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on UnlockClick should display error dialog on GenericError`() = runTest {
+    fun `on UnlockClick for password unlock should display error dialog on GenericError`() {
         val password = "abcd1234"
-        val initialState = DEFAULT_STATE.copy(passwordInput = password)
+        val initialState = DEFAULT_STATE.copy(
+            input = password,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
         val viewModel = createViewModel(state = initialState)
         coEvery {
             vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
@@ -293,9 +300,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on UnlockClick should display error dialog on InvalidStateError`() = runTest {
+    fun `on UnlockClick for password unlock should display error dialog on InvalidStateError`() {
         val password = "abcd1234"
-        val initialState = DEFAULT_STATE.copy(passwordInput = password)
+        val initialState = DEFAULT_STATE.copy(
+            input = password,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
         val viewModel = createViewModel(state = initialState)
         coEvery {
             vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
@@ -316,9 +326,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on UnlockClick should display clear dialog on success`() = runTest {
+    fun `on UnlockClick for password unlock should clear dialog on success`() {
         val password = "abcd1234"
-        val initialState = DEFAULT_STATE.copy(passwordInput = password)
+        val initialState = DEFAULT_STATE.copy(
+            input = password,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
         val viewModel = createViewModel(state = initialState)
         coEvery {
             vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
@@ -331,6 +344,106 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         coVerify {
             vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+        }
+    }
+
+    @Test
+    fun `on UnlockClick for PIN unlock should display error dialog on AuthenticationError`() {
+        val pin = "1234"
+        val initialState = DEFAULT_STATE.copy(
+            input = pin,
+            vaultUnlockType = VaultUnlockType.PIN,
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        } returns VaultUnlockResult.AuthenticationError
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    R.string.invalid_pin.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        }
+    }
+
+    @Test
+    fun `on UnlockClick for PIN unlock should display error dialog on GenericError`() {
+        val pin = "1234"
+        val initialState = DEFAULT_STATE.copy(
+            input = pin,
+            vaultUnlockType = VaultUnlockType.PIN,
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        } returns VaultUnlockResult.GenericError
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        }
+    }
+
+    @Test
+    fun `on UnlockClick for PIN unlock should display error dialog on InvalidStateError`() {
+        val pin = "1234"
+        val initialState = DEFAULT_STATE.copy(
+            input = pin,
+            vaultUnlockType = VaultUnlockType.PIN,
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        } returns VaultUnlockResult.InvalidStateError
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        }
+    }
+
+    @Test
+    fun `on UnlockClick for PIN unlock should clear dialog on success`() {
+        val pin = "1234"
+        val initialState = DEFAULT_STATE.copy(
+            input = pin,
+            vaultUnlockType = VaultUnlockType.PIN,
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        } returns VaultUnlockResult.Success
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
         }
     }
 
@@ -364,7 +477,8 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     initials = "AU",
     dialog = null,
     environmentUrl = Environment.Us.label,
-    passwordInput = "",
+    input = "",
+    vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )
 
 private val DEFAULT_USER_STATE = UserState(

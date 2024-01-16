@@ -191,12 +191,10 @@ class AccountSecurityViewModel @Inject constructor(
             it.copy(isUnlockWithPinEnabled = action.isUnlockWithPinEnabled)
         }
 
-        // TODO: Complete implementation (BIT-465)
         when (action) {
             AccountSecurityAction.UnlockWithPinToggle.PendingEnabled -> Unit
             AccountSecurityAction.UnlockWithPinToggle.Disabled -> {
                 settingsRepository.clearUnlockPin()
-                sendEvent(AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()))
             }
 
             is AccountSecurityAction.UnlockWithPinToggle.Enabled -> {
@@ -205,7 +203,6 @@ class AccountSecurityViewModel @Inject constructor(
                     shouldRequireMasterPasswordOnRestart =
                     action.shouldRequireMasterPasswordOnRestart,
                 )
-                sendEvent(AccountSecurityEvent.ShowToast("Handle unlock with pin.".asText()))
             }
         }
     }

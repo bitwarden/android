@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -201,7 +202,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `userStateFlow should update according to changes in its underyling data sources`() {
+    fun `userStateFlow should update according to changes in its underlying data sources`() {
         fakeAuthDiskSource.userState = null
         assertEquals(
             null,
@@ -215,16 +216,28 @@ class AuthRepositoryTest {
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
                 specialCircumstance = null,
+                vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
             repository.userStateFlow.value,
         )
 
-        fakeAuthDiskSource.userState = MULTI_USER_STATE
+        fakeAuthDiskSource.apply {
+            storePinProtectedUserKey(
+                userId = USER_ID_1,
+                pinProtectedUserKey = "pinProtectedUseKey",
+            )
+            storePinProtectedUserKey(
+                userId = USER_ID_2,
+                pinProtectedUserKey = "pinProtectedUseKey",
+            )
+            userState = MULTI_USER_STATE
+        }
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
                 specialCircumstance = null,
+                vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
             repository.userStateFlow.value,
         )
@@ -239,19 +252,31 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userOrganizationsList = emptyList(),
                 specialCircumstance = null,
+                vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
             repository.userStateFlow.value,
         )
 
-        fakeAuthDiskSource.storeOrganizations(
-            userId = USER_ID_1,
-            organizations = ORGANIZATIONS,
-        )
+        fakeAuthDiskSource.apply {
+            storePinProtectedUserKey(
+                userId = USER_ID_1,
+                pinProtectedUserKey = null,
+            )
+            storePinProtectedUserKey(
+                userId = USER_ID_2,
+                pinProtectedUserKey = null,
+            )
+            storeOrganizations(
+                userId = USER_ID_1,
+                organizations = ORGANIZATIONS,
+            )
+        }
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
                 userOrganizationsList = USER_ORGANIZATIONS,
                 specialCircumstance = null,
+                vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
             repository.userStateFlow.value,
         )
@@ -280,6 +305,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             specialCircumstance = null,
+            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         mutableVaultStateFlow.value = VAULT_STATE
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -1054,6 +1080,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             specialCircumstance = null,
+            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -1084,6 +1111,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             specialCircumstance = null,
+            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -1112,6 +1140,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             specialCircumstance = null,
+            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         assertEquals(

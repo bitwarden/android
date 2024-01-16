@@ -46,6 +46,7 @@ data class UserState(
      * authentication to view their vault.
      * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
      * @property organizations List of [Organization]s the user is associated with, if any.
+     * @property vaultUnlockType The mechanism by which the user's vault may be unlocked.
      */
     data class Account(
         val userId: String,
@@ -57,6 +58,7 @@ data class UserState(
         val isLoggedIn: Boolean,
         val isVaultUnlocked: Boolean,
         val organizations: List<Organization>,
+        val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
     )
 
     /**
