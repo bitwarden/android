@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.util
 
-import com.bitwarden.core.Kdf
+import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 
 /**

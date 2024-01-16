@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.data.vault.repository
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
-import com.bitwarden.core.Kdf
 import com.bitwarden.core.SendView
+import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult

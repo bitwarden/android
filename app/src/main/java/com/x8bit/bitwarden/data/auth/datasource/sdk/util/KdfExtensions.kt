@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk.util
 
-import com.bitwarden.core.Kdf
+import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.ARGON2_ID
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256

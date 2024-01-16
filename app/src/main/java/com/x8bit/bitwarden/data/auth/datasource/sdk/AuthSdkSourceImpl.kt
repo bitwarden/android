@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
-import com.bitwarden.core.HashPurpose
-import com.bitwarden.core.Kdf
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.crypto.HashPurpose
+import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.ClientAuth
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toPasswordStrengthOrNull

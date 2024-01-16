@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
-import com.bitwarden.core.HashPurpose
-import com.bitwarden.core.Kdf
 import com.bitwarden.core.RegisterKeyResponse
-import com.bitwarden.core.RsaKeyPair
+import com.bitwarden.crypto.HashPurpose
+import com.bitwarden.crypto.Kdf
+import com.bitwarden.crypto.RsaKeyPair
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
