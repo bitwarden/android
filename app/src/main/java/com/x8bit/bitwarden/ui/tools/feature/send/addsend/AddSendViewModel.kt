@@ -452,7 +452,10 @@ class AddSendViewModel @Inject constructor(
             viewModelScope.launch {
                 when (val addSendType = state.addSendType) {
                     AddSendType.AddItem -> {
-                        val result = vaultRepo.createSend(content.toSendView(clock))
+                        val result = vaultRepo.createSend(
+                            sendView = content.toSendView(clock),
+                            fileUri = null,
+                        )
                         sendAction(AddSendAction.Internal.CreateSendResultReceive(result))
                     }
 

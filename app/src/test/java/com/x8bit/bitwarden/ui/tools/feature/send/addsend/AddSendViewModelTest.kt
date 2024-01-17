@@ -120,7 +120,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 every { toSendUrl(DEFAULT_ENVIRONMENT_URL) } returns sendUrl
             }
             coEvery {
-                vaultRepository.createSend(mockSendView)
+                vaultRepository.createSend(sendView = mockSendView, fileUri = null)
             } returns CreateSendResult.Success(sendView = resultSendView)
             val viewModel = createViewModel(initialState)
 
@@ -131,7 +131,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             }
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
-                vaultRepository.createSend(mockSendView)
+                vaultRepository.createSend(sendView = mockSendView, fileUri = null)
             }
         }
 
@@ -143,7 +143,9 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(viewState = viewState)
         val mockSendView = mockk<SendView>()
         every { viewState.toSendView(clock) } returns mockSendView
-        coEvery { vaultRepository.createSend(mockSendView) } returns CreateSendResult.Error
+        coEvery {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        } returns CreateSendResult.Error
         val viewModel = createViewModel(initialState)
 
         viewModel.stateFlow.test {
@@ -168,7 +170,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             )
         }
         coVerify(exactly = 1) {
-            vaultRepository.createSend(mockSendView)
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
         }
     }
 

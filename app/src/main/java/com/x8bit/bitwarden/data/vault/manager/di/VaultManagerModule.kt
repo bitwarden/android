@@ -1,16 +1,20 @@
 package com.x8bit.bitwarden.data.vault.manager.di
 
+import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManagerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -20,6 +24,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object VaultManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideFileManager(
+        @ApplicationContext context: Context,
+    ): FileManager = FileManagerImpl(context)
 
     @Provides
     @Singleton

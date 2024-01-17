@@ -8,11 +8,20 @@ import org.junit.jupiter.api.Test
 
 class VaultSdkSendExtensionsTest {
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `toEncryptedNetworkSend should convert a SDK-based Send to network-based Send`() {
+    fun `toEncryptedNetworkSend should convert a SDK-based Send to network-based Send with file length`() {
         val sdkSend = createMockSdkSend(number = 1)
-        val networkSend = sdkSend.toEncryptedNetworkSend()
+        val networkSend = sdkSend.toEncryptedNetworkSend(fileLength = 1)
         assertEquals(createMockSendJsonRequest(number = 1), networkSend)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toEncryptedNetworkSend should convert a SDK-based Send to network-based Send without file length`() {
+        val sdkSend = createMockSdkSend(number = 1)
+        val networkSend = sdkSend.toEncryptedNetworkSend(fileLength = null)
+        assertEquals(createMockSendJsonRequest(number = 1).copy(fileLength = null), networkSend)
     }
 
     @Test

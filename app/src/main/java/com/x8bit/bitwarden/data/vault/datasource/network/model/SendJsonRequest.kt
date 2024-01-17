@@ -16,6 +16,7 @@ import java.time.ZonedDateTime
  * @property expirationDate The date in which the send will expire (nullable).
  * @property deletionDate The date in which the send will be deleted.
  * @property file The file associated with this send (nullable).
+ * @property fileLength The length of the file in bytes (nullable).
  * @property text The text associated with this send (nullable).
  * @property password The password protecting this send (nullable).
  * @property isDisabled Indicate if this send is disabled.
@@ -45,6 +46,9 @@ data class SendJsonRequest(
     @SerialName("deletionDate")
     @Contextual
     val deletionDate: ZonedDateTime,
+
+    @SerialName("fileLength")
+    val fileLength: Int?,
 
     @SerialName("file")
     val file: SyncResponseJson.Send.File?,

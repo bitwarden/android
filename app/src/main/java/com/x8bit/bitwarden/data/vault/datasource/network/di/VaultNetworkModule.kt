@@ -13,6 +13,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import retrofit2.create
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -37,9 +38,17 @@ object VaultNetworkModule {
     fun provideSendsService(
         retrofits: Retrofits,
         json: Json,
+        clock: Clock,
     ): SendsService = SendsServiceImpl(
+        azureApi = retrofits
+            .staticRetrofitBuilder
+            // This URL will be overridden dynamically
+            .baseUrl("https://www.bitwaredn.com")
+            .build()
+            .create(),
         sendsApi = retrofits.authenticatedApiRetrofit.create(),
         json = json,
+        clock = clock,
     )
 
     @Provides
