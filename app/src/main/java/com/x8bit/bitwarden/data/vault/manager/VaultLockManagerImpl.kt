@@ -43,6 +43,11 @@ private const val SECONDS_PER_MINUTE = 60
 private const val MILLISECONDS_PER_SECOND = 1000
 
 /**
+ * The number of times a user may fail to unlock before they are automatically logged out.
+ */
+private const val MAXIMUM_INVALID_UNLOCK_ATTEMPTS = 5
+
+/**
  * Primary implementation [VaultLockManager].
  */
 @Suppress("TooManyFunctions", "LongParameterList")
@@ -130,13 +135,19 @@ class VaultLockManagerImpl(
                         }
                     }
                     .fold(
-                        onFailure = { VaultUnlockResult.GenericError },
+                        onFailure = {
+                            incrementInvalidUnlockCount(userId = userId)
+                            VaultUnlockResult.GenericError
+                        },
                         onSuccess = { initializeCryptoResult ->
                             initializeCryptoResult
                                 .toVaultUnlockResult()
                                 .also {
                                     if (it is VaultUnlockResult.Success) {
+                                        clearInvalidUnlockCount(userId = userId)
                                         setVaultToUnlocked(userId = userId)
+                                    } else {
+                                        incrementInvalidUnlockCount(userId = userId)
                                     }
                                 }
                         },
@@ -145,6 +156,31 @@ class VaultLockManagerImpl(
         }
             .onCompletion { setVaultToNotUnlocking(userId = userId) }
             .first()
+
+    /**
+     * Increments the stored invalid unlock count for the given [userId] and automatically logs out
+     * if this new value is greater than [MAXIMUM_INVALID_UNLOCK_ATTEMPTS].
+     */
+    private fun incrementInvalidUnlockCount(userId: String) {
+        val previousInvalidUnlockAttempts =
+            authDiskSource.getInvalidUnlockAttempts(userId = userId) ?: 0
+        val invalidUnlockAttempts = previousInvalidUnlockAttempts + 1
+        authDiskSource.storeInvalidUnlockAttempts(
+            userId = userId,
+            invalidUnlockAttempts = invalidUnlockAttempts,
+        )
+
+        if (invalidUnlockAttempts >= MAXIMUM_INVALID_UNLOCK_ATTEMPTS) {
+            userLogoutManager.logout(userId)
+        }
+    }
+
+    private fun clearInvalidUnlockCount(userId: String) {
+        authDiskSource.storeInvalidUnlockAttempts(
+            userId = userId,
+            invalidUnlockAttempts = null,
+        )
+    }
 
     private fun setVaultToUnlocked(userId: String) {
         mutableVaultStateStateFlow.update {
