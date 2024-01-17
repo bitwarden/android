@@ -4,11 +4,6 @@
     <TargetFrameworks>net8.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <RootNamespace>Bit.Core.Test</RootNamespace>
-
-    <!-- Uncomment this to load the referenced projects into this one. I've added the restriction so it doesn't mess up with the restore.
-    This is useful when working with the test project.
-    <CustomConstants>UT</CustomConstants>
-    -->
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
