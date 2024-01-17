@@ -1,8 +1,8 @@
-﻿using Bit.App.Models;
+﻿using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Microsoft.Maui.Platform;
 
 namespace Bit.App.Pages
 {
@@ -42,6 +42,21 @@ namespace Bit.App.Pages
             {
                  ToolbarItems.Remove(_accountAvatar);
             }
+        }
+
+        public bool PerformNavigationOnAccountChangedOnLoad { get; internal set; }
+
+        void HomePage_Loaded(System.Object sender, System.EventArgs e)
+        {
+#if ANDROID
+            // WORKAROUND: This is needed to fix the navigation when coming back from autofill when Accessibility Services is enabled
+            // See App.xaml.cs -> CreateWindow(...) for more info.
+            if (PerformNavigationOnAccountChangedOnLoad && ServiceContainer.TryResolve<IAccountsManager>(out var accountsManager))
+            {
+                PerformNavigationOnAccountChangedOnLoad = false;
+                accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
+            }
+#endif
         }
 
         public async Task DismissRegisterPageAndLogInAsync(string email)

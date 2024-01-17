@@ -9,6 +9,7 @@
     x:DataType="pages:HomeViewModel"
     HideSoftInputOnTapped="True"
     x:Name="_page"
+    Loaded="HomePage_Loaded"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
         <pages:HomeViewModel />
