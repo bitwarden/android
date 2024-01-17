@@ -268,26 +268,27 @@ class GeneratorRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `generatePlusAddressedEmail should return Success with generated email when SDK call is successful`() = runTest {
-        val userId = "testUserId"
-        val request = UsernameGeneratorRequest.Subaddress(
-            type = AppendType.Random,
-            email = "user@example.com",
-        )
-        val generatedEmail = "user+generated@example.com"
+    fun `generatePlusAddressedEmail should return Success with generated email when SDK call is successful`() =
+        runTest {
+            val userId = "testUserId"
+            val request = UsernameGeneratorRequest.Subaddress(
+                type = AppendType.Random,
+                email = "user@example.com",
+            )
+            val generatedEmail = "user+generated@example.com"
 
-        coEvery { authDiskSource.userState?.activeUserId } returns userId
-        coEvery { generatorSdkSource.generatePlusAddressedEmail(request) } returns
-            Result.success(generatedEmail)
+            coEvery { authDiskSource.userState?.activeUserId } returns userId
+            coEvery { generatorSdkSource.generatePlusAddressedEmail(request) } returns
+                Result.success(generatedEmail)
 
-        val result = repository.generatePlusAddressedEmail(request)
+            val result = repository.generatePlusAddressedEmail(request)
 
-        assertEquals(
-            generatedEmail,
-            (result as GeneratedPlusAddressedUsernameResult.Success).generatedEmailAddress,
-        )
-        coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
-    }
+            assertEquals(
+                generatedEmail,
+                (result as GeneratedPlusAddressedUsernameResult.Success).generatedEmailAddress,
+            )
+            coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -309,25 +310,25 @@ class GeneratorRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `generateCatchAllEmail should return Success with generated email when SDK call is successful`() = runTest {
-        val userId = "testUserId"
-        val request = UsernameGeneratorRequest.Catchall(
-            type = AppendType.Random,
-            domain = "domain",
-        )
-        val generatedEmail = "user@domain"
+    fun `generateCatchAllEmail should return Success with generated email when SDK call is successful`() =
+        runTest {
+            val request = UsernameGeneratorRequest.Catchall(
+                type = AppendType.Random,
+                domain = "domain",
+            )
+            val generatedEmail = "user@domain"
 
-        coEvery { generatorSdkSource.generateCatchAllEmail(request) } returns
-            Result.success(generatedEmail)
+            coEvery { generatorSdkSource.generateCatchAllEmail(request) } returns
+                Result.success(generatedEmail)
 
-        val result = repository.generateCatchAllEmail(request)
+            val result = repository.generateCatchAllEmail(request)
 
-        assertEquals(
-            generatedEmail,
-            (result as GeneratedCatchAllUsernameResult.Success).generatedEmailAddress,
-        )
-        coVerify { generatorSdkSource.generateCatchAllEmail(request) }
-    }
+            assertEquals(
+                generatedEmail,
+                (result as GeneratedCatchAllUsernameResult.Success).generatedEmailAddress,
+            )
+            coVerify { generatorSdkSource.generateCatchAllEmail(request) }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -349,25 +350,25 @@ class GeneratorRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `generateRandomWord should return Success with generated email when SDK call is successful`() = runTest {
-        val userId = "testUserId"
-        val request = UsernameGeneratorRequest.Word(
-            capitalize = false,
-            includeNumber = false,
-        )
-        val generatedEmail = "user"
+    fun `generateRandomWord should return Success with generated email when SDK call is successful`() =
+        runTest {
+            val request = UsernameGeneratorRequest.Word(
+                capitalize = false,
+                includeNumber = false,
+            )
+            val generatedEmail = "user"
 
-        coEvery { generatorSdkSource.generateRandomWord(request) } returns
-            Result.success(generatedEmail)
+            coEvery { generatorSdkSource.generateRandomWord(request) } returns
+                Result.success(generatedEmail)
 
-        val result = repository.generateRandomWordUsername(request)
+            val result = repository.generateRandomWordUsername(request)
 
-        assertEquals(
-            generatedEmail,
-            (result as GeneratedRandomWordUsernameResult.Success).generatedUsername,
-        )
-        coVerify { generatorSdkSource.generateRandomWord(request) }
-    }
+            assertEquals(
+                generatedEmail,
+                (result as GeneratedRandomWordUsernameResult.Success).generatedUsername,
+            )
+            coVerify { generatorSdkSource.generateRandomWord(request) }
+        }
 
     @Test
     fun `generateRandomWord should return InvalidRequest on SDK failure`() = runTest {
@@ -758,55 +759,55 @@ class GeneratorRepositoryTest {
                 generatorDiskSource.storeUsernameGenerationOptions(any(), any())
             }
         }
+}
 
-    private val USER_STATE = UserStateJson(
-        activeUserId = "activeUserId",
-        accounts = mapOf(
-            "activeUserId" to AccountJson(
-                profile = AccountJson.Profile(
-                    userId = "activeUserId",
-                    email = "email",
-                    isEmailVerified = true,
-                    name = "name",
-                    stamp = "stamp",
-                    organizationId = "organizationId",
-                    avatarColorHex = "avatarColorHex",
-                    hasPremium = true,
-                    forcePasswordResetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
-                    kdfType = KdfTypeJson.ARGON2_ID,
-                    kdfIterations = 600000,
-                    kdfMemory = 16,
-                    kdfParallelism = 4,
-                    userDecryptionOptions = UserDecryptionOptionsJson(
-                        hasMasterPassword = true,
-                        trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(
-                            encryptedPrivateKey = "encryptedPrivateKey",
-                            encryptedUserKey = "encryptedUserKey",
-                            hasAdminApproval = true,
-                            hasLoginApprovingDevice = true,
-                            hasManageResetPasswordPermission = true,
-                        ),
-                        keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
-                            keyConnectorUrl = "keyConnectorUrl",
-                        ),
+private val USER_STATE = UserStateJson(
+    activeUserId = "activeUserId",
+    accounts = mapOf(
+        "activeUserId" to AccountJson(
+            profile = AccountJson.Profile(
+                userId = "activeUserId",
+                email = "email",
+                isEmailVerified = true,
+                name = "name",
+                stamp = "stamp",
+                organizationId = "organizationId",
+                avatarColorHex = "avatarColorHex",
+                hasPremium = true,
+                forcePasswordResetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                kdfType = KdfTypeJson.ARGON2_ID,
+                kdfIterations = 600000,
+                kdfMemory = 16,
+                kdfParallelism = 4,
+                userDecryptionOptions = UserDecryptionOptionsJson(
+                    hasMasterPassword = true,
+                    trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(
+                        encryptedPrivateKey = "encryptedPrivateKey",
+                        encryptedUserKey = "encryptedUserKey",
+                        hasAdminApproval = true,
+                        hasLoginApprovingDevice = true,
+                        hasManageResetPasswordPermission = true,
                     ),
-                ),
-                tokens = AccountJson.Tokens(
-                    accessToken = "accessToken",
-                    refreshToken = "refreshToken",
-                ),
-                settings = AccountJson.Settings(
-                    environmentUrlData = EnvironmentUrlDataJson(
-                        base = "base",
-                        api = "api",
-                        identity = "identity",
-                        icon = "icon",
-                        notifications = "notifications",
-                        webVault = "webVault",
-                        events = "events",
+                    keyConnectorUserDecryptionOptions = KeyConnectorUserDecryptionOptionsJson(
+                        keyConnectorUrl = "keyConnectorUrl",
                     ),
                 ),
             ),
+            tokens = AccountJson.Tokens(
+                accessToken = "accessToken",
+                refreshToken = "refreshToken",
+            ),
+            settings = AccountJson.Settings(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "base",
+                    api = "api",
+                    identity = "identity",
+                    icon = "icon",
+                    notifications = "notifications",
+                    webVault = "webVault",
+                    events = "events",
+                ),
+            ),
         ),
-    )
-}
+    ),
+)

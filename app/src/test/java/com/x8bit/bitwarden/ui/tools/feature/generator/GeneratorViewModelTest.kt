@@ -73,7 +73,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     private val randomWordSavedStateHandle = createSavedStateHandleWithState(initialRandomWordState)
 
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
-    private val authRepository = mockk<AuthRepository>() {
+    private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
     }
 
@@ -1399,37 +1399,34 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel = createViewModel(usernameSavedStateHandle)
         }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `EmailTextChange should update email correctly`() =
-            runTest {
-                val newEmail = "test@example.com"
-                val newGeneratedEmail = "email+abcd1234@address.com"
-                viewModel.actionChannel.trySend(
-                    GeneratorAction
+        fun `EmailTextChange should update email correctly`() = runTest {
+            val newEmail = "test@example.com"
+            viewModel.actionChannel.trySend(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .PlusAddressedEmail
+                    .EmailTextChange(
+                        email = newEmail,
+                    ),
+            )
+
+            val expectedState = defaultPlusAddressedEmailState.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    selectedType = GeneratorState
                         .MainType
                         .Username
                         .UsernameType
-                        .PlusAddressedEmail
-                        .EmailTextChange(
+                        .PlusAddressedEmail(
                             email = newEmail,
                         ),
-                )
+                ),
+            )
 
-                val expectedState = defaultPlusAddressedEmailState.copy(
-                    selectedType = GeneratorState.MainType.Username(
-                        selectedType = GeneratorState
-                            .MainType
-                            .Username
-                            .UsernameType
-                            .PlusAddressedEmail(
-                                email = newEmail,
-                            ),
-                    ),
-                )
-
-                assertEquals(expectedState, viewModel.stateFlow.value)
-            }
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
     }
 
     @Nested
