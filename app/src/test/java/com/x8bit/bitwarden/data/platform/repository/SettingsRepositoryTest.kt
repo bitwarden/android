@@ -35,27 +35,6 @@ class SettingsRepositoryTest {
     )
 
     @Test
-    fun `clearData should clear all necessary data for the given user`() {
-        val userId = "userId"
-
-        fakeSettingsDiskSource.apply {
-            storeVaultTimeoutInMinutes(
-                userId = userId,
-                vaultTimeoutInMinutes = 30,
-            )
-            storeVaultTimeoutAction(
-                userId = userId,
-                vaultTimeoutAction = VaultTimeoutAction.LOCK,
-            )
-        }
-
-        settingsRepository.clearData(userId = userId)
-
-        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
-        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId))
-    }
-
-    @Test
     fun `setDefaultsIfNecessary should set default values for the given user if necessary`() {
         val userId = "userId"
         assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId))

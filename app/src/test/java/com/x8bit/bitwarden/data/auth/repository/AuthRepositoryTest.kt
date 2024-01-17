@@ -92,7 +92,6 @@ class AuthRepositoryTest {
                 environment = Environment.Us
             }
     private val settingsRepository: SettingsRepository = mockk() {
-        every { clearData(any()) } just runs
         every { setDefaultsIfNecessary(any()) } just runs
     }
     private val authSdkSource = mockk<AuthSdkSource> {
