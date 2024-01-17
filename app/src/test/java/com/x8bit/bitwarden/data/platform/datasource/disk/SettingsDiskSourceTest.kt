@@ -70,11 +70,21 @@ class SettingsDiskSourceTest {
             userId = userId,
             vaultTimeoutAction = VaultTimeoutAction.LOCK,
         )
+        settingsDiskSource.storePullToRefreshEnabled(
+            userId = userId,
+            isPullToRefreshEnabled = true,
+        )
+        settingsDiskSource.storeInlineAutofillEnabled(
+            userId = userId,
+            isInlineAutofillEnabled = true,
+        )
 
         settingsDiskSource.clearData(userId = userId)
 
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
         assertNull(settingsDiskSource.getVaultTimeoutAction(userId = userId))
+        assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = userId))
+        assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = userId))
     }
 
     @Test
@@ -329,7 +339,7 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `storePullToRefreshEnabled when values are present should pull from SharedPreferences`() {
+    fun `getPullToRefreshEnabled when values are present should pull from SharedPreferences`() {
         val pullToRefreshBaseKey = "bwPreferencesStorage:syncOnRefresh"
         val mockUserId = "mockUserId"
         val pullToRefreshKey = "${pullToRefreshBaseKey}_$mockUserId"
@@ -341,7 +351,7 @@ class SettingsDiskSourceTest {
     }
 
     @Test
-    fun `storePullToRefreshEnabled when values are absent should return null`() {
+    fun `getPullToRefreshEnabled when values are absent should return null`() {
         val mockUserId = "mockUserId"
         assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = mockUserId))
     }
@@ -387,5 +397,48 @@ class SettingsDiskSourceTest {
             isPullToRefreshEnabled = null,
         )
         assertFalse(fakeSharedPreferences.contains(pullToRefreshKey))
+    }
+
+    @Test
+    fun `getInlineAutofillEnabled when values are present should pull from SharedPreferences`() {
+        val inlineAutofillEnabledBaseKey = "bwPreferencesStorage:inlineAutofillEnabled"
+        val mockUserId = "mockUserId"
+        val inlineAutofillEnabledKey = "${inlineAutofillEnabledBaseKey}_$mockUserId"
+        fakeSharedPreferences
+            .edit {
+                putBoolean(inlineAutofillEnabledKey, true)
+            }
+        assertEquals(true, settingsDiskSource.getInlineAutofillEnabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `getInlineAutofillEnabled when values are absent should return null`() {
+        val mockUserId = "mockUserId"
+        assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `storeInlineAutofillEnabled for non-null values should update SharedPreferences`() {
+        val inlineAutofillEnabledBaseKey = "bwPreferencesStorage:inlineAutofillEnabled"
+        val mockUserId = "mockUserId"
+        val inlineAutofillEnabledKey = "${inlineAutofillEnabledBaseKey}_$mockUserId"
+        settingsDiskSource.storeInlineAutofillEnabled(
+            userId = mockUserId,
+            isInlineAutofillEnabled = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(inlineAutofillEnabledKey, false))
+    }
+
+    @Test
+    fun `storeInlineAutofillEnabled for null values should clear SharedPreferences`() {
+        val inlineAutofillEnabledBaseKey = "bwPreferencesStorage:inlineAutofillEnabled"
+        val mockUserId = "mockUserId"
+        val inlineAutofillEnabledKey = "${inlineAutofillEnabledBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(inlineAutofillEnabledKey, false) }
+        settingsDiskSource.storeInlineAutofillEnabled(
+            userId = mockUserId,
+            isInlineAutofillEnabled = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(inlineAutofillEnabledKey))
     }
 }
