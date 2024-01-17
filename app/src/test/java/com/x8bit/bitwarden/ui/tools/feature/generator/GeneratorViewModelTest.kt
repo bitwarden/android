@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -12,10 +13,12 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwar
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -28,11 +31,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class GeneratorViewModelTest : BaseViewModelTest() {
 
     private val initialPasscodeState = createPasswordState()
     private val initialPasscodeSavedStateHandle =
         createSavedStateHandleWithState(initialPasscodeState)
+
+    private val initialUsernameModeState = createUsernameModeState()
 
     private val initialPassphraseState = createPassphraseState()
     private val passphraseSavedStateHandle = createSavedStateHandleWithState(initialPassphraseState)
@@ -88,6 +94,35 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct when there is a saved state`() {
         val viewModel = createViewModel(state = initialPasscodeState)
         assertEquals(initialPasscodeState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `CloseClick should emit NavigateBack event`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.actionChannel.trySend(GeneratorAction.CloseClick)
+
+        viewModel.eventFlow.test {
+            val event = awaitItem()
+            assertEquals(GeneratorEvent.NavigateBack, event)
+        }
+    }
+
+    @Test
+    fun `SelectClick should emit the NavigateBack event with GeneratorResult`() = runTest {
+        turbineScope {
+            val viewModel = createViewModel(state = initialUsernameModeState)
+            val eventTurbine = viewModel
+                .eventFlow
+                .testIn(backgroundScope)
+            val generatorResultTurbine = fakeGeneratorRepository
+                .generatorResultFlow
+                .testIn(backgroundScope)
+
+            viewModel.actionChannel.trySend(GeneratorAction.SelectClick)
+
+            assertEquals(GeneratorEvent.NavigateBack, eventTurbine.awaitItem())
+            assertEquals(GeneratorResult.Username("username"), generatorResultTurbine.awaitItem())
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -1545,6 +1580,21 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     wordSeparator = wordSeparator,
                     capitalize = capitalize,
                     includeNumber = includeNumber,
+                ),
+            ),
+            currentEmailAddress = "currentEmail",
+        )
+
+    private fun createUsernameModeState(
+        generatedText: String = "username",
+        email: String = "currentEmail",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            generatorMode = GeneratorMode.Modal.Username,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                    email = email,
                 ),
             ),
             currentEmailAddress = "currentEmail",

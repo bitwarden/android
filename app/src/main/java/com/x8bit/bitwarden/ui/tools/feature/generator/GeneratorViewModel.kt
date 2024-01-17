@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassph
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -71,10 +72,12 @@ class GeneratorViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: GeneratorState(
-        generatedText = PLACEHOLDER_GENERATED_TEXT,
-        selectedType = Passcode(
-            selectedType = Password(),
-        ),
+        generatedText = "",
+        selectedType = when (GeneratorArgs(savedStateHandle).type) {
+            GeneratorMode.Modal.Username -> Username()
+            GeneratorMode.Modal.Password -> Passcode()
+            GeneratorMode.Default -> Passcode(selectedType = Password())
+        },
         generatorMode = GeneratorArgs(savedStateHandle).type,
         currentEmailAddress =
         requireNotNull(authRepository.userStateFlow.value?.activeAccount?.email),
@@ -98,6 +101,14 @@ class GeneratorViewModel @Inject constructor(
         when (action) {
             is GeneratorAction.PasswordHistoryClick -> {
                 handlePasswordHistoryClick()
+            }
+
+            is GeneratorAction.CloseClick -> {
+                handleCloseClick()
+            }
+
+            is GeneratorAction.SelectClick -> {
+                handleSelectClick()
             }
 
             is GeneratorAction.RegenerateClick -> {
@@ -196,6 +207,27 @@ class GeneratorViewModel @Inject constructor(
 
     private fun handlePasswordHistoryClick() {
         sendEvent(GeneratorEvent.NavigateToPasswordHistory)
+    }
+
+    private fun handleCloseClick() {
+        sendEvent(GeneratorEvent.NavigateBack)
+    }
+
+    private fun handleSelectClick() {
+        when (state.selectedType) {
+            is Passcode -> {
+                generatorRepository.emitGeneratorResult(
+                    GeneratorResult.Password(state.generatedText),
+                )
+            }
+
+            is Username -> {
+                generatorRepository.emitGeneratorResult(
+                    GeneratorResult.Username(state.generatedText),
+                )
+            }
+        }
+        sendEvent(GeneratorEvent.NavigateBack)
     }
 
     //endregion Top Level Handlers
@@ -1394,10 +1426,6 @@ class GeneratorViewModel @Inject constructor(
     }
 
     //endregion Utility Functions
-
-    companion object {
-        private const val PLACEHOLDER_GENERATED_TEXT = "Placeholder"
-    }
 }
 
 /**
@@ -1790,6 +1818,16 @@ sealed class GeneratorAction {
      * Indicates that the overflow option for password history has been clicked.
      */
     data object PasswordHistoryClick : GeneratorAction()
+
+    /**
+     * Indicates the user has selected a generated string from the modal generator
+     */
+    data object SelectClick : GeneratorAction()
+
+    /**
+     * Indicates the user has clicked the close button.
+     */
+    data object CloseClick : GeneratorAction()
 
     /**
      * Represents the action to regenerate a new passcode or username.
@@ -2186,6 +2224,11 @@ sealed class GeneratorEvent {
      * Navigates to the Password History screen.
      */
     data object NavigateToPasswordHistory : GeneratorEvent()
+
+    /**
+     * Navigate back to previous screen.
+     */
+    data object NavigateBack : GeneratorEvent()
 
     /**
      * Displays the message in a snackbar.
