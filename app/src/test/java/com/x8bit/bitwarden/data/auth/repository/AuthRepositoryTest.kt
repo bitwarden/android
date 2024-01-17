@@ -11,7 +11,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
@@ -91,7 +90,7 @@ class AuthRepositoryTest {
             .apply {
                 environment = Environment.Us
             }
-    private val settingsRepository: SettingsRepository = mockk() {
+    private val settingsRepository: SettingsRepository = mockk {
         every { setDefaultsIfNecessary(any()) } just runs
     }
     private val authSdkSource = mockk<AuthSdkSource> {
@@ -710,7 +709,7 @@ class AuthRepositoryTest {
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = PBKDF2_SHA256,
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
@@ -759,7 +758,7 @@ class AuthRepositoryTest {
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = PBKDF2_SHA256,
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
@@ -791,7 +790,7 @@ class AuthRepositoryTest {
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = PBKDF2_SHA256,
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
@@ -823,7 +822,7 @@ class AuthRepositoryTest {
                             publicKey = PUBLIC_KEY,
                             encryptedPrivateKey = PRIVATE_KEY,
                         ),
-                        kdfType = PBKDF2_SHA256,
+                        kdfType = KdfTypeJson.PBKDF2_SHA256,
                         kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                     ),
                 )
@@ -863,7 +862,7 @@ class AuthRepositoryTest {
                             publicKey = PUBLIC_KEY,
                             encryptedPrivateKey = PRIVATE_KEY,
                         ),
-                        kdfType = PBKDF2_SHA256,
+                        kdfType = KdfTypeJson.PBKDF2_SHA256,
                         kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                     ),
                 )
@@ -902,7 +901,7 @@ class AuthRepositoryTest {
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = PBKDF2_SHA256,
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
@@ -933,7 +932,7 @@ class AuthRepositoryTest {
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = PBKDF2_SHA256,
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
@@ -964,7 +963,7 @@ class AuthRepositoryTest {
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = PBKDF2_SHA256,
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
@@ -1000,7 +999,7 @@ class AuthRepositoryTest {
                         publicKey = PUBLIC_KEY,
                         encryptedPrivateKey = PRIVATE_KEY,
                     ),
-                    kdfType = PBKDF2_SHA256,
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
@@ -1104,7 +1103,6 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     @Test
     fun `switchAccount when the given userId does not correspond to a saved account should do nothing`() {
-        val originalUserId = USER_ID_1
         val invalidId = "invalidId"
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
@@ -1133,7 +1131,6 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     @Test
     fun `switchAccount when the userId is valid should update the current UserState, clear the previously unlocked data, and reset the special circumstance`() {
-        val originalUserId = USER_ID_1
         val updatedUserId = USER_ID_2
         val originalUserState = MULTI_USER_STATE.toUserState(
             vaultState = VAULT_STATE,
@@ -1276,7 +1273,6 @@ class AuthRepositoryTest {
         private const val PASSWORD_HASH = "passwordHash"
         private const val ACCESS_TOKEN = "accessToken"
         private const val ACCESS_TOKEN_2 = "accessToken2"
-        private const val ACCESS_TOKEN_3 = "accessToken3"
         private const val REFRESH_TOKEN = "refreshToken"
         private const val REFRESH_TOKEN_2 = "refreshToken2"
         private const val CAPTCHA_KEY = "captcha"
@@ -1284,11 +1280,8 @@ class AuthRepositoryTest {
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"
         private const val PUBLIC_KEY = "PublicKey"
         private const val PRIVATE_KEY = "privateKey"
-        private const val USER_AUTO_UNLOCK_KEY = "userAutoUnlockKey"
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
-        private const val USER_ID_3 = "3816ef34-0747-4133-9b7a-ba35d3768a68"
-        private val ORGANIZATION_KEYS = mapOf("organizationId1" to "organizationKey1")
         private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
@@ -1365,31 +1358,6 @@ class AuthRepositoryTest {
                 environmentUrlData = null,
             ),
         )
-        private val ACCOUNT_3 = AccountJson(
-            profile = AccountJson.Profile(
-                userId = USER_ID_3,
-                email = "test3@bitwarden.com",
-                isEmailVerified = true,
-                name = "Bitwarden Tester 3",
-                hasPremium = false,
-                stamp = null,
-                organizationId = null,
-                avatarColorHex = null,
-                forcePasswordResetReason = null,
-                kdfType = KdfTypeJson.PBKDF2_SHA256,
-                kdfIterations = 400000,
-                kdfMemory = null,
-                kdfParallelism = null,
-                userDecryptionOptions = null,
-            ),
-            tokens = AccountJson.Tokens(
-                accessToken = ACCESS_TOKEN_3,
-                refreshToken = "refreshToken",
-            ),
-            settings = AccountJson.Settings(
-                environmentUrlData = null,
-            ),
-        )
         private val SINGLE_USER_STATE_1 = UserStateJson(
             activeUserId = USER_ID_1,
             accounts = mapOf(
@@ -1407,14 +1375,6 @@ class AuthRepositoryTest {
             accounts = mapOf(
                 USER_ID_1 to ACCOUNT_1,
                 USER_ID_2 to ACCOUNT_2,
-            ),
-        )
-        private val MULTI_USER_STATE_2 = UserStateJson(
-            activeUserId = USER_ID_3,
-            accounts = mapOf(
-                USER_ID_1 to ACCOUNT_1,
-                USER_ID_2 to ACCOUNT_2,
-                USER_ID_3 to ACCOUNT_3,
             ),
         )
         private val USER_ORGANIZATIONS = listOf(
