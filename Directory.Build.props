@@ -1,5 +1,7 @@
 <Project>
  <PropertyGroup>
    <MauiVersion>8.0.4-nightly.*</MauiVersion>
+   <!-- Uncomment this when Unit Testing-->
+   <!-- <CustomConstants>UT</CustomConstants> -->
  </PropertyGroup>
 </Project>
