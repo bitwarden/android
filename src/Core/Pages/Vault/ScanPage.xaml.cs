@@ -54,6 +54,13 @@ namespace Bit.App.Pages
         {
             if (_cameraView == null) { return; }
 
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                // Reduce the size of the camera view to improve performance, scale it up to fill the space
+                _cameraView.WidthRequest = _cameraView.HeightRequest = 150;
+                _cameraView.Scale = 4;
+            }
+
             ViewModel.StartCameraCommand?.Execute(this);
 
             _pageIsActive = true;
