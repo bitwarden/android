@@ -772,7 +772,7 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto success for a Never VaultTimeout should return Success and save the auto-unlock key`() =
+    fun `unlockVault with initializeCrypto success for a Never VaultTimeout should return Success, save the auto-unlock key, and clear invalid unlock attempts`() =
         runTest {
             val userId = "userId"
             val kdf = MOCK_PROFILE.toSdkParams()
@@ -813,10 +813,16 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultStateFlow.value,
             )
             mutableVaultTimeoutStateFlow.value = VaultTimeout.Never
-            fakeAuthDiskSource.storeUserAutoUnlockKey(
-                userId = userId,
-                userAutoUnlockKey = null,
-            )
+            fakeAuthDiskSource.apply {
+                storeUserAutoUnlockKey(
+                    userId = userId,
+                    userAutoUnlockKey = null,
+                )
+                storeInvalidUnlockAttempts(
+                    userId = userId,
+                    invalidUnlockAttempts = 4,
+                )
+            }
 
             val result = vaultLockManager.unlockVault(
                 userId = userId,
@@ -839,10 +845,16 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultStateFlow.value,
             )
 
-            fakeAuthDiskSource.assertUserAutoUnlockKey(
-                userId = userId,
-                userAutoUnlockKey = userAutoUnlockKey,
-            )
+            fakeAuthDiskSource.apply {
+                assertUserAutoUnlockKey(
+                    userId = userId,
+                    userAutoUnlockKey = userAutoUnlockKey,
+                )
+                assertInvalidUnlockAttempts(
+                    userId = userId,
+                    invalidUnlockAttempts = null,
+                )
+            }
             coVerify(exactly = 1) {
                 vaultSdkSource.initializeCrypto(
                     userId = userId,
@@ -870,7 +882,7 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto authentication failure for users should return AuthenticationError`() =
+    fun `unlockVault with initializeCrypto authentication failure for users should return AuthenticationError and increment invalid unlock attempts`() =
         runTest {
             val userId = "userId"
             val kdf = MOCK_PROFILE.toSdkParams()
@@ -901,6 +913,11 @@ class VaultLockManagerTest {
                 ),
                 vaultLockManager.vaultStateFlow.value,
             )
+            fakeAuthDiskSource.storeInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 1,
+            )
+
             val result = vaultLockManager.unlockVault(
                 userId = userId,
                 kdf = kdf,
@@ -921,6 +938,10 @@ class VaultLockManagerTest {
                 ),
                 vaultLockManager.vaultStateFlow.value,
             )
+            fakeAuthDiskSource.assertInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 2,
+            )
             coVerify(exactly = 1) {
                 vaultSdkSource.initializeCrypto(
                     userId = userId,
@@ -939,7 +960,7 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto authentication failure for orgs should return AuthenticationError`() =
+    fun `unlockVault with initializeCrypto authentication failure for orgs should return AuthenticationError and increment invalid unlock attempts`() =
         runTest {
             val userId = "userId"
             val kdf = MOCK_PROFILE.toSdkParams()
@@ -976,6 +997,10 @@ class VaultLockManagerTest {
                 ),
                 vaultLockManager.vaultStateFlow.value,
             )
+            fakeAuthDiskSource.storeInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 1,
+            )
 
             val result = vaultLockManager.unlockVault(
                 userId = userId,
@@ -996,6 +1021,10 @@ class VaultLockManagerTest {
                     unlockingVaultUserIds = emptySet(),
                 ),
                 vaultLockManager.vaultStateFlow.value,
+            )
+            fakeAuthDiskSource.assertInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 2,
             )
             coVerify(exactly = 1) {
                 vaultSdkSource.initializeCrypto(
@@ -1019,8 +1048,9 @@ class VaultLockManagerTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto failure for users should return GenericError`() =
+    fun `unlockVault with initializeCrypto failure for users should return GenericError and increment invalid unlock attempts`() =
         runTest {
             val userId = "userId"
             val kdf = MOCK_PROFILE.toSdkParams()
@@ -1049,6 +1079,10 @@ class VaultLockManagerTest {
                     unlockingVaultUserIds = emptySet(),
                 ),
                 vaultLockManager.vaultStateFlow.value,
+            )
+            fakeAuthDiskSource.storeInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 1,
             )
 
             val result = vaultLockManager.unlockVault(
@@ -1071,6 +1105,10 @@ class VaultLockManagerTest {
                 ),
                 vaultLockManager.vaultStateFlow.value,
             )
+            fakeAuthDiskSource.assertInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 2,
+            )
             coVerify(exactly = 1) {
                 vaultSdkSource.initializeCrypto(
                     userId = userId,
@@ -1087,8 +1125,9 @@ class VaultLockManagerTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVault with initializeCrypto failure for orgs should return GenericError`() =
+    fun `unlockVault with initializeCrypto failure for orgs should return GenericError and increment invalid unlock attempts`() =
         runTest {
             val userId = "userId"
             val kdf = MOCK_PROFILE.toSdkParams()
@@ -1124,6 +1163,10 @@ class VaultLockManagerTest {
                 ),
                 vaultLockManager.vaultStateFlow.value,
             )
+            fakeAuthDiskSource.storeInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 1,
+            )
 
             val result = vaultLockManager.unlockVault(
                 userId = userId,
@@ -1136,6 +1179,101 @@ class VaultLockManagerTest {
                 privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
+
+            assertEquals(VaultUnlockResult.GenericError, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+            fakeAuthDiskSource.assertInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 2,
+            )
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeCrypto(
+                    userId = userId,
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVault error when reaching the maximum number of invalid unlock attempts should log out the user`() =
+        runTest {
+            val userId = "userId"
+            val kdf = MOCK_PROFILE.toSdkParams()
+            val email = MOCK_PROFILE.email
+            val masterPassword = "drowssap"
+            val userKey = "12345"
+            val privateKey = "54321"
+            val organizationKeys = mapOf("orgId1" to "orgKey1")
+            coEvery {
+                vaultSdkSource.initializeCrypto(
+                    userId = userId,
+                    request = InitUserCryptoRequest(
+                        kdfParams = kdf,
+                        email = email,
+                        privateKey = privateKey,
+                        method = InitUserCryptoMethod.Password(
+                            password = masterPassword,
+                            userKey = userKey,
+                        ),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
+                )
+            } returns Throwable("Fail").asFailure()
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultLockManager.vaultStateFlow.value,
+            )
+            fakeAuthDiskSource.storeInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 4,
+            )
+
+            val result = vaultLockManager.unlockVault(
+                userId = userId,
+                kdf = kdf,
+                email = email,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = masterPassword,
+                    userKey = userKey,
+                ),
+                privateKey = privateKey,
+                organizationKeys = organizationKeys,
+            )
+
+            fakeAuthDiskSource.assertInvalidUnlockAttempts(
+                userId = userId,
+                invalidUnlockAttempts = 5,
+            )
+            verify { userLogoutManager.logout(userId = userId) }
 
             assertEquals(VaultUnlockResult.GenericError, result)
             assertEquals(

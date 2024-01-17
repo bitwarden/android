@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -24,6 +25,8 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -33,6 +36,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val environmentRepository = FakeEnvironmentRepository()
     private val authRepository = mockk<AuthRepository>() {
+        every { activeUserId } answers { mutableUserStateFlow.value?.activeUserId }
         every { userStateFlow } returns mutableUserStateFlow
         every { specialCircumstance } returns null
         every { specialCircumstance = any() } just runs
@@ -348,6 +352,43 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on UnlockClick for password unlock should clear dialog when user has changed`() {
+        val password = "abcd1234"
+        val initialState = DEFAULT_STATE.copy(
+            input = password,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
+        val resultFlow = bufferedMutableSharedFlow<VaultUnlockResult>()
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+        } coAnswers { resultFlow.first() }
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading),
+            viewModel.stateFlow.value,
+        )
+
+        val updatedUserId = "updatedUserId"
+        mutableUserStateFlow.update {
+            it?.copy(
+                activeUserId = updatedUserId,
+                accounts = listOf(DEFAULT_ACCOUNT.copy(userId = updatedUserId)),
+            )
+        }
+        resultFlow.tryEmit(VaultUnlockResult.GenericError)
+
+        assertEquals(
+            initialState.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+        }
+    }
+
+    @Test
     fun `on UnlockClick for PIN unlock should display error dialog on AuthenticationError`() {
         val pin = "1234"
         val initialState = DEFAULT_STATE.copy(
@@ -447,6 +488,43 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `on UnlockClick for PIN unlock should clear dialog when user has changed`() {
+        val pin = "1234"
+        val initialState = DEFAULT_STATE.copy(
+            input = pin,
+            vaultUnlockType = VaultUnlockType.PIN,
+        )
+        val resultFlow = bufferedMutableSharedFlow<VaultUnlockResult>()
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        } coAnswers { resultFlow.first() }
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading),
+            viewModel.stateFlow.value,
+        )
+
+        val updatedUserId = "updatedUserId"
+        mutableUserStateFlow.update {
+            it?.copy(
+                activeUserId = updatedUserId,
+                accounts = listOf(DEFAULT_ACCOUNT.copy(userId = updatedUserId)),
+            )
+        }
+        resultFlow.tryEmit(VaultUnlockResult.GenericError)
+
+        assertEquals(
+            initialState.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithPinAndSync(pin)
+        }
+    }
+
     private fun createViewModel(
         state: VaultUnlockState? = DEFAULT_STATE,
         environmentRepo: EnvironmentRepository = environmentRepository,
@@ -481,19 +559,19 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )
 
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    organizations = emptyList(),
+)
+
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
-    accounts = listOf(
-        UserState.Account(
-            userId = "activeUserId",
-            name = "Active User",
-            email = "active@bitwarden.com",
-            environment = Environment.Us,
-            avatarColorHex = "#aa00aa",
-            isPremium = true,
-            isLoggedIn = true,
-            isVaultUnlocked = true,
-            organizations = emptyList(),
-        ),
-    ),
+    accounts = listOf(DEFAULT_ACCOUNT),
 )

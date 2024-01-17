@@ -128,6 +128,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleUnlockClick() {
+        val activeUserId = authRepository.activeUserId ?: return
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
             val vaultUnlockResult = when (state.vaultUnlockType) {
@@ -143,13 +144,25 @@ class VaultUnlockViewModel @Inject constructor(
                     )
                 }
             }
-            sendAction(VaultUnlockAction.Internal.ReceiveVaultUnlockResult(vaultUnlockResult))
+            sendAction(
+                VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
+                    userId = activeUserId,
+                    vaultUnlockResult = vaultUnlockResult,
+                ),
+            )
         }
     }
 
     private fun handleReceiveVaultUnlockResult(
         action: VaultUnlockAction.Internal.ReceiveVaultUnlockResult,
     ) {
+        if (action.userId != authRepository.activeUserId) {
+            // The active user has automatically switched before receiving the event. Ignore any
+            // results and just clear any loading dialog.
+            mutableStateFlow.update { it.copy(dialog = null) }
+            return
+        }
+
         when (action.vaultUnlockResult) {
             VaultUnlockResult.AuthenticationError -> {
                 mutableStateFlow.update {
@@ -318,6 +331,7 @@ sealed class VaultUnlockAction {
          * Indicates a vault unlock result has been received.
          */
         data class ReceiveVaultUnlockResult(
+            val userId: String,
             val vaultUnlockResult: VaultUnlockResult,
         ) : Internal()
 
