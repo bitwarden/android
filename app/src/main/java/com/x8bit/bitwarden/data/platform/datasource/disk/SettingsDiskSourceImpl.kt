@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.onSubscription
 private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
 private const val APP_THEME_KEY = "$BASE_KEY:theme"
 private const val PULL_TO_REFRESH_KEY = "$BASE_KEY:syncOnRefresh"
+private const val INLINE_AUTOFILL_ENABLED_KEY = "$BASE_KEY:inlineAutofillEnabled"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
@@ -84,6 +85,8 @@ class SettingsDiskSourceImpl(
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
         storeVaultTimeoutAction(userId = userId, vaultTimeoutAction = null)
+        storePullToRefreshEnabled(userId = userId, isPullToRefreshEnabled = null)
+        storeInlineAutofillEnabled(userId = userId, isInlineAutofillEnabled = null)
     }
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
@@ -134,6 +137,19 @@ class SettingsDiskSourceImpl(
     override fun storePullToRefreshEnabled(userId: String, isPullToRefreshEnabled: Boolean?) {
         putBoolean(key = "${PULL_TO_REFRESH_KEY}_$userId", value = isPullToRefreshEnabled)
         getMutablePullToRefreshEnabledFlowMap(userId = userId).tryEmit(isPullToRefreshEnabled)
+    }
+
+    override fun getInlineAutofillEnabled(userId: String): Boolean? =
+        getBoolean(key = "${INLINE_AUTOFILL_ENABLED_KEY}_$userId")
+
+    override fun storeInlineAutofillEnabled(
+        userId: String,
+        isInlineAutofillEnabled: Boolean?,
+    ) {
+        putBoolean(
+            key = "${INLINE_AUTOFILL_ENABLED_KEY}_$userId",
+            value = isInlineAutofillEnabled,
+        )
     }
 
     private fun getMutableVaultTimeoutActionFlow(

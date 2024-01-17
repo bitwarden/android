@@ -34,6 +34,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
 
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
+    private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
 
     private var storedIsIconLoadingDisabled: Boolean? = null
 
@@ -66,6 +67,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun clearData(userId: String) {
         storedVaultTimeoutActions.remove(userId)
         storedVaultTimeoutInMinutes.remove(userId)
+        storedPullToRefreshEnabled.remove(userId)
+        storedInlineAutofillEnabled.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
@@ -111,6 +114,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun storePullToRefreshEnabled(userId: String, isPullToRefreshEnabled: Boolean?) {
         storedPullToRefreshEnabled[userId] = isPullToRefreshEnabled
         getMutablePullToRefreshEnabledFlow(userId = userId).tryEmit(isPullToRefreshEnabled)
+    }
+
+    override fun getInlineAutofillEnabled(userId: String): Boolean? =
+        storedInlineAutofillEnabled[userId]
+
+    override fun storeInlineAutofillEnabled(
+        userId: String,
+        isInlineAutofillEnabled: Boolean?,
+    ) {
+        storedInlineAutofillEnabled[userId] = isInlineAutofillEnabled
     }
 
     //region Private helper functions

@@ -92,4 +92,14 @@ interface SettingsDiskSource {
      * Stores the given [isPullToRefreshEnabled] for the given [userId].
      */
     fun storePullToRefreshEnabled(userId: String, isPullToRefreshEnabled: Boolean?)
+
+    /**
+     * Gets the value determining if inline autofill is enabled for the given [userId].
+     */
+    fun getInlineAutofillEnabled(userId: String): Boolean?
+
+    /**
+     * Stores the given [isInlineAutofillEnabled] value for the given [userId].
+     */
+    fun storeInlineAutofillEnabled(userId: String, isInlineAutofillEnabled: Boolean?)
 }
