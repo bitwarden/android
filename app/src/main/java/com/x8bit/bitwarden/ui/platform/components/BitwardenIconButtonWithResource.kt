@@ -19,15 +19,17 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param iconRes Icon to display on the button.
  * @param onClick Callback for when the icon button is clicked.
  * @param isEnabled Whether or not the button should be enabled.
+ * @param modifier A [Modifier] for the composable.
  */
 @Composable
 fun BitwardenIconButtonWithResource(
     iconRes: IconResource,
     onClick: () -> Unit,
     isEnabled: Boolean = true,
+    modifier: Modifier = Modifier,
 ) {
     FilledIconButton(
-        modifier = Modifier.semantics(mergeDescendants = true) {},
+        modifier = modifier.semantics(mergeDescendants = true) {},
         onClick = onClick,
         colors = IconButtonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
