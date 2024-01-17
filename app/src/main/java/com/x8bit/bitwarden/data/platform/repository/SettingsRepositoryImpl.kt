@@ -97,10 +97,6 @@ class SettingsRepositoryImpl(
             ?.let { authDiskSource.getEncryptedPin(userId = it) != null }
             ?: false
 
-    override fun clearData(userId: String) {
-        settingsDiskSource.clearData(userId = userId)
-    }
-
     override fun setDefaultsIfNecessary(userId: String) {
         // Set Vault Settings defaults
         if (!isVaultTimeoutActionSet(userId = userId)) {
