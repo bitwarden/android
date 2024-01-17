@@ -27,6 +27,7 @@ import androidx.compose.ui.text.AnnotatedString
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -56,6 +57,85 @@ class GeneratorScreenTest : BaseComposeTest() {
                 onNavigateBack = {},
             )
         }
+    }
+
+    @Test
+    fun `ModalAppBar should be displayed for Password Mode`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Password))
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Select")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `ModalAppBar should be displayed for Username Mode`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText(text = "Select")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on close click should send CloseClick`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.CloseClick)
+        }
+    }
+
+    @Test
+    fun `on select click should send SelectClick`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+
+        composeTestRule
+            .onNodeWithText(text = "Select")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(GeneratorAction.SelectClick)
+        }
+    }
+
+    @Test
+    fun `DefaultAppBar should be displayed for Default Mode`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Default))
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `MainTypeOption select control should be hidden for password mode`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Password))
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "What would you like to generate?, Password")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `MainTypeOption select control should be hidden for username mode`() {
+        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "What would you like to generate?, Password")
+            .assertDoesNotExist()
     }
 
     @Test

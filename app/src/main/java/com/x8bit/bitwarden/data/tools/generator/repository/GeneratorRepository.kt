@@ -13,8 +13,10 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassph
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -26,6 +28,16 @@ interface GeneratorRepository {
      * Retrieve all stored password history items for the current user.
      */
     val passwordHistoryStateFlow: StateFlow<LocalDataState<List<PasswordHistoryView>>>
+
+    /**
+     * Flow that represents the modal generated text.
+     */
+    val generatorResultFlow: Flow<GeneratorResult>
+
+    /**
+     * Emits the modal generator result flow to listeners.
+     */
+    fun emitGeneratorResult(generatorResult: GeneratorResult)
 
     /**
      * Attempt to generate a password based on specifications in [passwordGeneratorRequest].

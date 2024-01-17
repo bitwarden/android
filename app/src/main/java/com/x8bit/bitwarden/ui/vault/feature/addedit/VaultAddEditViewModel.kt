@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -53,6 +55,7 @@ class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
+    private val generatorRepository: GeneratorRepository,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -92,6 +95,14 @@ class VaultAddEditViewModel @Inject constructor(
         vaultRepository
             .totpCodeFlow
             .map { VaultAddEditAction.Internal.TotpCodeReceive(totpResult = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        generatorRepository
+            .generatorResultFlow
+            .map {
+                VaultAddEditAction.Internal.GeneratorResultReceive(generatorResult = it)
+            }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -415,13 +426,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleLoginOpenUsernameGeneratorClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = VaultAddEditEvent.ShowToast(
-                    message = "Open Username Generator".asText(),
-                ),
-            )
-        }
+        sendEvent(event = VaultAddEditEvent.NavigateToGeneratorModal(GeneratorMode.Modal.Username))
     }
 
     private fun handleLoginPasswordCheckerClick() {
@@ -435,13 +440,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleLoginOpenPasswordGeneratorClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = VaultAddEditEvent.ShowToast(
-                    message = "Open Password Generator".asText(),
-                ),
-            )
-        }
+        sendEvent(event = VaultAddEditEvent.NavigateToGeneratorModal(GeneratorMode.Modal.Password))
     }
 
     private fun handleLoginSetupTotpClick(
@@ -756,6 +755,9 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
             is VaultAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultAddEditAction.Internal.GeneratorResultReceive -> {
+                handleGeneratorResultReceive(action)
+            }
         }
     }
 
@@ -886,6 +888,27 @@ class VaultAddEditViewModel @Inject constructor(
                         dialog = VaultAddEditState.DialogState.Error(
                             R.string.authenticator_key_read_error.asText(),
                         ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleGeneratorResultReceive(
+        action: VaultAddEditAction.Internal.GeneratorResultReceive,
+    ) {
+        when (action.generatorResult) {
+            is GeneratorResult.Password -> {
+                updateLoginContent { loginType ->
+                    loginType.copy(
+                        password = action.generatorResult.password,
+                    )
+                }
+            }
+            is GeneratorResult.Username -> {
+                updateLoginContent { loginType ->
+                    loginType.copy(
+                        username = action.generatorResult.username,
                     )
                 }
             }
@@ -1696,6 +1719,13 @@ sealed class VaultAddEditAction {
          * Indicates that the vault totp code result has been received.
          */
         data class TotpCodeReceive(val totpResult: TotpCodeResult) : Internal()
+
+        /**
+         * Indicates that the vault totp code result has been received.
+         */
+        data class GeneratorResultReceive(
+            val generatorResult: GeneratorResult,
+        ) : Internal()
 
         /**
          * Indicates that the vault item data has been received.

@@ -23,6 +23,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -55,8 +56,10 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
@@ -72,6 +75,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -101,6 +105,8 @@ fun GeneratorScreen(
                     duration = SnackbarDuration.Short,
                 )
             }
+
+            GeneratorEvent.NavigateBack -> onNavigateBack.invoke()
         }
     }
 
@@ -162,31 +168,36 @@ fun GeneratorScreen(
         RandomWordHandlers.create(viewModel = viewModel)
     }
 
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = when (state.generatorMode) {
+        GeneratorMode.Default -> {
+            TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        }
+
+        else -> TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    }
 
     BitwardenScaffold(
         topBar = {
-            BitwardenMediumTopAppBar(
-                title = stringResource(id = R.string.generator),
-                scrollBehavior = scrollBehavior,
-                actions = {
-                    BitwardenOverflowActionItem(
-                        menuItemDataList = persistentListOf(
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.password_history),
-                                onClick = remember(viewModel) {
-                                    {
-                                        viewModel.trySendAction(
-                                            GeneratorAction.PasswordHistoryClick,
-                                        )
-                                    }
-                                },
-                            ),
-                        ),
+            when (state.generatorMode) {
+                GeneratorMode.Modal.Username, GeneratorMode.Modal.Password ->
+                    ModalAppBar(
+                        scrollBehavior = scrollBehavior,
+                        onCloseClick = remember(viewModel) {
+                            { viewModel.trySendAction(GeneratorAction.CloseClick) }
+                        },
+                        onSelectClick = remember(viewModel) {
+                            { viewModel.trySendAction(GeneratorAction.SelectClick) }
+                        },
                     )
-                },
-            )
+
+                GeneratorMode.Default ->
+                    DefaultAppBar(
+                        scrollBehavior = scrollBehavior,
+                        onPasswordHistoryClick = remember(viewModel) {
+                            { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
+                        },
+                    )
+            }
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -210,6 +221,54 @@ fun GeneratorScreen(
         )
     }
 }
+
+//region Top App Bar Composables
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DefaultAppBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    onPasswordHistoryClick: () -> Unit,
+) {
+    BitwardenMediumTopAppBar(
+        title = stringResource(id = R.string.generator),
+        scrollBehavior = scrollBehavior,
+        actions = {
+            BitwardenOverflowActionItem(
+                menuItemDataList = persistentListOf(
+                    OverflowMenuItemData(
+                        text = stringResource(id = R.string.password_history),
+                        onClick = onPasswordHistoryClick,
+                    ),
+                ),
+            )
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ModalAppBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    onCloseClick: () -> Unit,
+    onSelectClick: () -> Unit,
+) {
+    BitwardenTopAppBar(
+        title = stringResource(id = R.string.generator),
+        navigationIcon = painterResource(id = R.drawable.ic_close),
+        navigationIconContentDescription = stringResource(id = R.string.close),
+        onNavigationIconClick = onCloseClick,
+        scrollBehavior = scrollBehavior,
+        actions = {
+            BitwardenTextButton(
+                label = stringResource(id = R.string.select),
+                onClick = onSelectClick,
+            )
+        },
+    )
+}
+
+//endregion Top App Bar Composables
 
 //region ScrollContent and Static Items
 
@@ -242,13 +301,14 @@ private fun ScrollContent(
             onRegenerateClick = onRegenerateClick,
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        MainStateOptionsItem(
-            selectedType = state.selectedType,
-            possibleMainStates = state.typeOptions,
-            onMainStateOptionClicked = onMainStateOptionClicked,
-        )
+        if (state.generatorMode == GeneratorMode.Default) {
+            Spacer(modifier = Modifier.height(8.dp))
+            MainStateOptionsItem(
+                selectedType = state.selectedType,
+                possibleMainStates = state.typeOptions,
+                onMainStateOptionClicked = onMainStateOptionClicked,
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

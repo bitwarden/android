@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -14,6 +16,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -61,6 +64,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { getVaultItemStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableVaultItemFlow
         every { totpCodeFlow } returns totpTestCodeFlow
     }
+
+    private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
 
     @BeforeEach
     fun setup() {
@@ -570,7 +575,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `OpenUsernameGeneratorClick should emit ShowToast with 'Open Username Generator' message`() =
+        fun `OpenUsernameGeneratorClick should emit NavigateToGeneratorModal with username GeneratorMode`() =
             runTest {
                 val viewModel = createAddVaultItemViewModel()
 
@@ -579,7 +584,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick,
                     )
                     assertEquals(
-                        VaultAddEditEvent.ShowToast("Open Username Generator".asText()),
+                        VaultAddEditEvent.NavigateToGeneratorModal(GeneratorMode.Modal.Username),
                         awaitItem(),
                     )
                 }
@@ -606,7 +611,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `OpenPasswordGeneratorClick should emit ShowToast with 'Open Password Generator' message`() =
+        fun `OpenPasswordGeneratorClick should emit NavigateToGeneratorModal with with password GeneratorMode`() =
             runTest {
                 val viewModel = createAddVaultItemViewModel()
 
@@ -616,7 +621,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         .trySend(VaultAddEditAction.ItemType.LoginType.OpenPasswordGeneratorClick)
 
                     assertEquals(
-                        VaultAddEditEvent.ShowToast("Open Password Generator".asText()),
+                        VaultAddEditEvent.NavigateToGeneratorModal(GeneratorMode.Modal.Password),
                         awaitItem(),
                     )
                 }
@@ -1186,6 +1191,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 savedStateHandle = secureNotesInitialSavedStateHandle,
                 clipboardManager = clipboardManager,
                 vaultRepository = vaultRepository,
+                generatorRepository = generatorRepository,
             )
         }
 
@@ -1487,11 +1493,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         savedStateHandle: SavedStateHandle = loginInitialSavedStateHandle,
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         vaultRepo: VaultRepository = vaultRepository,
+        generatorRepo: GeneratorRepository = generatorRepository,
     ): VaultAddEditViewModel =
         VaultAddEditViewModel(
             savedStateHandle = savedStateHandle,
             clipboardManager = bitwardenClipboardManager,
             vaultRepository = vaultRepo,
+            generatorRepository = generatorRepo,
         )
 
     /**
