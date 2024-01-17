@@ -1589,7 +1589,7 @@ class VaultRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `createSend with TEXT and sendsService createSend failure should return CreateSendResult failure`() =
+    fun `createSend with TEXT and sendsService createTextSend failure should return CreateSendResult failure`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
@@ -1598,7 +1598,7 @@ class VaultRepositoryTest {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
             coEvery {
-                sendsService.createSend(
+                sendsService.createTextSend(
                     body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
                         .copy(fileLength = null),
                 )
@@ -1611,7 +1611,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `createSend with TEXT and sendsService createSend success should return CreateSendResult success`() =
+    fun `createSend with TEXT and sendsService createTextSend success should return CreateSendResult success`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
@@ -1623,7 +1623,7 @@ class VaultRepositoryTest {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
             coEvery {
-                sendsService.createSend(
+                sendsService.createTextSend(
                     body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
                         .copy(fileLength = null),
                 )

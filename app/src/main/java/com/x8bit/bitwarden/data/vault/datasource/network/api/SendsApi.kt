@@ -18,10 +18,10 @@ import retrofit2.http.Path
 interface SendsApi {
 
     /**
-     * Create a send.
+     * Create a text send.
      */
     @POST("sends")
-    suspend fun createSend(@Body body: SendJsonRequest): Result<SyncResponseJson.Send>
+    suspend fun createTextSend(@Body body: SendJsonRequest): Result<SyncResponseJson.Send>
 
     /**
      * Create a file send.

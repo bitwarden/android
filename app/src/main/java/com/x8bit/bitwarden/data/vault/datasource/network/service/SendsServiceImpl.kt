@@ -27,8 +27,8 @@ class SendsServiceImpl(
     private val clock: Clock,
     private val json: Json,
 ) : SendsService {
-    override suspend fun createSend(body: SendJsonRequest): Result<SyncResponseJson.Send> =
-        sendsApi.createSend(body = body)
+    override suspend fun createTextSend(body: SendJsonRequest): Result<SyncResponseJson.Send> =
+        sendsApi.createTextSend(body = body)
 
     override suspend fun createFileSend(body: SendJsonRequest): Result<SendFileResponseJson> =
         sendsApi.createFileSend(body = body)

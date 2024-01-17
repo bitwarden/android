@@ -64,9 +64,9 @@ class SendsServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `createSend should return the correct response`() = runTest {
+    fun `createTextSend should return the correct response`() = runTest {
         server.enqueue(MockResponse().setBody(CREATE_UPDATE_SEND_SUCCESS_JSON))
-        val result = sendsService.createSend(
+        val result = sendsService.createTextSend(
             body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT),
         )
         assertEquals(
