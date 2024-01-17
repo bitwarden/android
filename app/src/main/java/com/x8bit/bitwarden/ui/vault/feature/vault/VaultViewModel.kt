@@ -283,6 +283,7 @@ class VaultViewModel @Inject constructor(
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
                 vaultFilterData = vaultFilterData,
+                isPremium = userState.activeAccount.isPremium,
             )
         }
     }
