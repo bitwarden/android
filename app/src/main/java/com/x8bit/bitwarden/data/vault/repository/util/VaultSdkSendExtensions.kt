@@ -13,7 +13,7 @@ import java.time.ZonedDateTime
 /**
  * Converts a Bitwarden SDK [Send] object to a corresponding [SyncResponseJson.Send] object.
  */
-fun Send.toEncryptedNetworkSend(): SendJsonRequest =
+fun Send.toEncryptedNetworkSend(fileLength: Int? = null): SendJsonRequest =
     SendJsonRequest(
         type = type.toNetworkSendType(),
         name = name,
@@ -22,6 +22,7 @@ fun Send.toEncryptedNetworkSend(): SendJsonRequest =
         maxAccessCount = maxAccessCount?.toInt(),
         expirationDate = expirationDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
         deletionDate = ZonedDateTime.ofInstant(deletionDate, ZoneOffset.UTC),
+        fileLength = fileLength,
         file = file?.toNetworkSendFile(),
         text = text?.toNetworkSendText(),
         password = password,

@@ -9,7 +9,10 @@ import java.time.ZonedDateTime
 /**
  * Create a mock [Send] with a given [number].
  */
-fun createMockSdkSend(number: Int): Send =
+fun createMockSdkSend(
+    number: Int,
+    type: SendType = SendType.FILE,
+): Send =
     Send(
         id = "mockId-$number",
         accessId = "mockAccessId-$number",
@@ -17,7 +20,7 @@ fun createMockSdkSend(number: Int): Send =
         notes = "mockNotes-$number",
         key = "mockKey-$number",
         password = "mockPassword-$number",
-        type = SendType.FILE,
+        type = type,
         file = createMockSdkFile(number = number),
         text = createMockSdkText(number = number),
         maxAccessCount = 1u,

@@ -17,6 +17,7 @@ fun createMockSendJsonRequest(
         maxAccessCount = 1,
         expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+        fileLength = 1,
         file = createMockFile(number),
         text = createMockText(number),
         password = "mockPassword-$number",

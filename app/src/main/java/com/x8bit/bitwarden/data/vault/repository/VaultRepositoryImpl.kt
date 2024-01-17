@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import android.net.Uri
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -27,6 +30,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -80,6 +84,7 @@ class VaultRepositoryImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
+    private val fileManager: FileManager,
     private val vaultLockManager: VaultLockManager,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
@@ -415,14 +420,50 @@ class VaultRepositoryImpl(
             )
     }
 
-    override suspend fun createSend(sendView: SendView): CreateSendResult {
+    override suspend fun createSend(
+        sendView: SendView,
+        fileUri: Uri?,
+    ): CreateSendResult {
         val userId = requireNotNull(activeUserId)
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
                 sendView = sendView,
             )
-            .flatMap { send -> sendsService.createSend(body = send.toEncryptedNetworkSend()) }
+            .flatMap { send ->
+                when (send.type) {
+                    SendType.TEXT -> {
+                        sendsService.createSend(body = send.toEncryptedNetworkSend())
+                    }
+
+                    SendType.FILE -> {
+                        val uri = fileUri ?: return@flatMap IllegalArgumentException(
+                            "File URI must be present to create a File Send.",
+                        )
+                            .asFailure()
+                        vaultSdkSource
+                            .encryptBuffer(
+                                userId = userId,
+                                send = send,
+                                fileBuffer = fileManager.uriToByteArray(fileUri = uri),
+                            )
+                            .flatMap { encryptedFile ->
+                                sendsService
+                                    .createFileSend(
+                                        body = send.toEncryptedNetworkSend(
+                                            fileLength = encryptedFile.size,
+                                        ),
+                                    )
+                                    .flatMap { sendFileResponse ->
+                                        sendsService.uploadFile(
+                                            sendFileResponse = sendFileResponse,
+                                            encryptedFile = encryptedFile,
+                                        )
+                                    }
+                            }
+                    }
+                }
+            }
             .onSuccess {
                 // Save the send immediately, regardless of whether the decrypt succeeds
                 vaultDiskSource.saveSend(userId = userId, send = it)

@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import android.net.Uri
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -159,9 +161,10 @@ interface VaultRepository : VaultLockManager {
     ): UpdateCipherResult
 
     /**
-     * Attempt to create a send.
+     * Attempt to create a send. The [fileUri] _must_ be present when the given [SendView] has a
+     * [SendView.type] of [SendType.FILE].
      */
-    suspend fun createSend(sendView: SendView): CreateSendResult
+    suspend fun createSend(sendView: SendView, fileUri: Uri?): CreateSendResult
 
     /**
      * Attempt to update a send.

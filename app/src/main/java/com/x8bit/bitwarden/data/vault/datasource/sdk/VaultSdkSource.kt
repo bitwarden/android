@@ -170,6 +170,19 @@ interface VaultSdkSource {
     ): Result<Send>
 
     /**
+     * Encrypts a [ByteArray] file buffer for the user with the given [userId], returning an
+     * encrypted [ByteArray] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun encryptBuffer(
+        userId: String,
+        send: Send,
+        fileBuffer: ByteArray,
+    ): Result<ByteArray>
+
+    /**
      * Decrypts a [Send] for the user with the given [userId], returning a [SendView] wrapped in a
      * [Result].
      *
