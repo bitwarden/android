@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
@@ -32,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
  * providing flexibility in the layout definition.
+ * @param textFieldTestTag The test tag to be used on the text field.
  */
 @Composable
 fun BitwardenTextFieldWithActions(
@@ -47,6 +49,7 @@ fun BitwardenTextFieldWithActions(
     keyboardType: KeyboardType = KeyboardType.Text,
     trailingIconContent: (@Composable () -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
+    textFieldTestTag: String? = null,
 ) {
     Row(
         modifier = modifier
@@ -56,6 +59,7 @@ fun BitwardenTextFieldWithActions(
     ) {
         BitwardenTextField(
             modifier = Modifier
+                .semantics { textFieldTestTag?.let { testTag = it } }
                 .weight(1f),
             label = label,
             value = value,

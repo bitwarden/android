@@ -31,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -39,6 +40,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -272,6 +275,7 @@ private fun ModalAppBar(
 
 //region ScrollContent and Static Items
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 private fun ScrollContent(
@@ -291,6 +295,7 @@ private fun ScrollContent(
 ) {
     Column(
         modifier = modifier
+            .semantics { testTagsAsResourceId = true }
             .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
     ) {
@@ -353,6 +358,7 @@ private fun GeneratedStringItem(
 ) {
     BitwardenTextFieldWithActions(
         label = "",
+        textFieldTestTag = "GeneratedPasswordLabel",
         value = generatedText,
         singleLine = false,
         actions = {
@@ -362,6 +368,7 @@ private fun GeneratedStringItem(
                     contentDescription = stringResource(id = R.string.copy),
                 ),
                 onClick = onCopyClick,
+                modifier = Modifier.semantics { testTag = "CopyValueButton" },
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
@@ -369,6 +376,7 @@ private fun GeneratedStringItem(
                     contentDescription = stringResource(id = R.string.generate_password),
                 ),
                 onClick = onRegenerateClick,
+                modifier = Modifier.semantics { testTag = "RegenerateValueButton" },
             )
         },
         onValueChange = {},
@@ -399,7 +407,8 @@ private fun MainStateOptionsItem(
         },
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .semantics { testTag = "GeneratorTypePicker" },
     )
 }
 
@@ -452,7 +461,8 @@ private fun PasscodeOptionsItem(
         },
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .semantics { testTag = "PasswordTypePicker" },
     )
 }
 
@@ -460,6 +470,7 @@ private fun PasscodeOptionsItem(
 
 //region PasswordType Composables
 
+@Suppress("LongMethod")
 @Composable
 private fun ColumnScope.PasswordTypeContent(
     passwordTypeState: GeneratorState.MainType.Passcode.PasscodeType.Password,
@@ -855,7 +866,8 @@ private fun UsernameOptionsItem(
         },
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .semantics { testTag = "PasswordTypePicker" },
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
