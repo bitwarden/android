@@ -88,6 +88,7 @@ namespace Bit.Droid.Autofill
             "com.mmbox.browser",
             "com.mmbox.xbrowser",
             "com.mycompany.app.soulbrowser",
+            "com.nationaledtech.spinbrowser",
             "com.naver.whale",
             "com.neeva.app",
             "com.opera.browser",
@@ -119,7 +120,7 @@ namespace Bit.Droid.Autofill
             "mark.via.gp",
             "net.dezor.browser",
             "net.slions.fulguris.full.download",
-            "net.slions.fulguris.full.download.debug",            
+            "net.slions.fulguris.full.download.debug",
             "net.slions.fulguris.full.playstore",
             "net.slions.fulguris.full.playstore.debug",
             "org.adblockplus.browser",
@@ -190,7 +191,7 @@ namespace Bit.Droid.Autofill
                 inlinePresentationSpecs = inlineSuggestionsRequest?.InlinePresentationSpecs;
                 inlinePresentationSpecsCount = inlinePresentationSpecs?.Count ?? 0;
             }
-            
+
             // Build response
             var responseBuilder = new FillResponse.Builder();
             if (items != null && items.Count > 0)
@@ -217,7 +218,7 @@ namespace Bit.Droid.Autofill
                             inlinePresentationSpec = inlinePresentationSpecs[inlinePresentationSpecsCount - 1];
                         }
                     }
-                    var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, items[i], 
+                    var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, items[i],
                         true, inlinePresentationSpec);
                     if (dataset != null)
                     {
@@ -239,13 +240,13 @@ namespace Bit.Droid.Autofill
                 filledItem.Subtitle,
                 filledItem.Icon,
                 context);
-            
+
             var inlinePresentation = BuildInlinePresentation(
-                inlinePresentationSpec, 
-                filledItem.Name, 
-                filledItem.Subtitle, 
-                filledItem.Icon, 
-                null, 
+                inlinePresentationSpec,
+                filledItem.Name,
+                filledItem.Subtitle,
+                filledItem.Icon,
+                null,
                 context);
 
             var datasetBuilder = new Dataset.Builder(overlayPresentation);
@@ -301,11 +302,11 @@ namespace Bit.Droid.Autofill
                 context);
 
             var inlinePresentation = BuildInlinePresentation(
-                inlinePresentationSpecs?.Last(), 
-                AppResources.Bitwarden, 
-                locked ? AppResources.VaultIsLocked : AppResources.MyVault, 
-                Resource.Drawable.icon, 
-                pendingIntent, 
+                inlinePresentationSpecs?.Last(),
+                AppResources.Bitwarden,
+                locked ? AppResources.VaultIsLocked : AppResources.MyVault,
+                Resource.Drawable.icon,
+                pendingIntent,
                 context);
 
             var datasetBuilder = new Dataset.Builder(overlayPresentation);
@@ -402,7 +403,7 @@ namespace Bit.Droid.Autofill
             return contentBuilder.Build().JavaCast<InlineSuggestionUi.Content>()?.Slice;
         }
 
-        public static void AddSaveInfo(Parser parser, FillRequest fillRequest, FillResponse.Builder responseBuilder, 
+        public static void AddSaveInfo(Parser parser, FillRequest fillRequest, FillResponse.Builder responseBuilder,
             FieldCollection fields)
         {
             // Docs state that password fields cannot be reliably saved in Compat mode since they will show as

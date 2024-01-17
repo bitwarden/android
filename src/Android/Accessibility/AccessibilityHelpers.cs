@@ -66,6 +66,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.mmbox.browser", "search_box"),
             new Browser("com.mmbox.xbrowser", "search_box"),
             new Browser("com.mycompany.app.soulbrowser", "edit_text"),
+            new Browser("com.nationaledtech.spinbrowser", "mozac_browser_toolbar_url_view"),
             new Browser("com.naver.whale", "url_bar"),
             new Browser("com.neeva.app", "full_url_text_view"),
             new Browser("com.opera.browser", "url_field"),
@@ -528,7 +529,7 @@ namespace Bit.Droid.Accessibility
             return nodes;
         }
 
-        public static AccessibilityNodeInfo GetUsernameEditText(string uriString, 
+        public static AccessibilityNodeInfo GetUsernameEditText(string uriString,
             IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
             string uriAuthority = null;
@@ -621,7 +622,7 @@ namespace Bit.Droid.Accessibility
             // no match found, attempt to establish username field based on password field
             return GetUsernameEditTextIfPasswordExists(allEditTexts);
         }
-        
+
         private static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
             IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
@@ -670,7 +671,7 @@ namespace Bit.Droid.Accessibility
                 {
                     return true;
                 }
-                
+
                 var appOpsMgr = (AppOpsManager)Application.Context.GetSystemService(Context.AppOpsService);
                 var mode = appOpsMgr.CheckOpNoThrow("android:system_alert_window", Process.MyUid(),
                     Application.Context.PackageName);
@@ -678,7 +679,7 @@ namespace Bit.Droid.Accessibility
                 {
                     return true;
                 }
-                
+
                 try
                 {
                     var wm = Application.Context.GetSystemService(Context.WindowService)
@@ -694,10 +695,10 @@ namespace Bit.Droid.Accessibility
                     return true;
                 }
                 catch { }
-                
+
                 return false;
             }
-            
+
             // older android versions are always true
             return true;
         }
@@ -738,7 +739,7 @@ namespace Bit.Droid.Accessibility
             return layoutParams;
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityService service, AccessibilityNodeInfo anchorView, 
+        public static Point GetOverlayAnchorPosition(AccessibilityService service, AccessibilityNodeInfo anchorView,
             int overlayViewHeight, bool isOverlayAboveAnchor)
         {
             var anchorViewRect = new Rect();
@@ -746,7 +747,7 @@ namespace Bit.Droid.Accessibility
             var anchorViewX = anchorViewRect.Left;
             var anchorViewY = isOverlayAboveAnchor ? anchorViewRect.Top : anchorViewRect.Bottom;
             anchorViewRect.Dispose();
-            
+
             if (isOverlayAboveAnchor)
             {
                 anchorViewY -= overlayViewHeight;
@@ -756,8 +757,8 @@ namespace Bit.Droid.Accessibility
             return new Point(anchorViewX, anchorViewY);
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityService service, AccessibilityNodeInfo anchorNode, 
-            AccessibilityNodeInfo root, IEnumerable<AccessibilityWindowInfo> windows, int overlayViewHeight, 
+        public static Point GetOverlayAnchorPosition(AccessibilityService service, AccessibilityNodeInfo anchorNode,
+            AccessibilityNodeInfo root, IEnumerable<AccessibilityWindowInfo> windows, int overlayViewHeight,
             bool isOverlayAboveAnchor)
         {
             Point point = null;
@@ -809,7 +810,7 @@ namespace Bit.Droid.Accessibility
                         point.X = -1;
                         point.Y = -1;
                     }
-                } 
+                }
                 else if (point.Y > (maxY - overlayViewHeight))
                 {
                     if (isOverlayAboveAnchor)
@@ -824,7 +825,7 @@ namespace Bit.Droid.Accessibility
                         point.X = 0;
                         point.Y = -1;
                     }
-                } 
+                }
                 else if (isOverlayAboveAnchor && point.Y < (maxY - (overlayViewHeight * 2) - GetNodeHeight(anchorNode)))
                 {
                     // This else block forces the overlay to return to bottom alignment as soon as space is available
@@ -873,11 +874,11 @@ namespace Bit.Droid.Accessibility
             }
             return inputMethodWindowHeight;
         }
-        
+
         public static bool IsAutofillServicePromptVisible(IEnumerable<AccessibilityWindowInfo> windows)
         {
             // Autofill framework not available until API 26
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O) 
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
                 return windows?.Any(w => w.Title?.ToLower().Contains("autofill") ?? false) ?? false;
             }
