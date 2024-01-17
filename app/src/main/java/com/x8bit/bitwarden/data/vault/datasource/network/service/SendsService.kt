@@ -10,9 +10,9 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendRespons
  */
 interface SendsService {
     /**
-     * Attempt to create a send.
+     * Attempt to create a text send.
      */
-    suspend fun createSend(
+    suspend fun createTextSend(
         body: SendJsonRequest,
     ): Result<SyncResponseJson.Send>
 

@@ -433,7 +433,7 @@ class VaultRepositoryImpl(
             .flatMap { send ->
                 when (send.type) {
                     SendType.TEXT -> {
-                        sendsService.createSend(body = send.toEncryptedNetworkSend())
+                        sendsService.createTextSend(body = send.toEncryptedNetworkSend())
                     }
 
                     SendType.FILE -> {
