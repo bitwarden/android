@@ -29,6 +29,7 @@ class AutoFillScreenTest : BaseComposeTest() {
 
     private var isSystemSettingsRequestSuccess = false
     private var onNavigateBackCalled = false
+    private var onNavigateToBlockAutoFillScreenCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<AutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -45,6 +46,7 @@ class AutoFillScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             AutoFillScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
             )
@@ -233,6 +235,21 @@ class AutoFillScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on block auto fill click should send BlockAutoFillClick`() {
+        composeTestRule
+            .onNodeWithText("Block auto-fill")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) }
+    }
+
+    @Test
+    fun `on NavigateToBlockAutoFill should call onNavigateToBlockAutoFillScreen`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToBlockAutoFill)
+        assertTrue(onNavigateToBlockAutoFillScreenCalled)
     }
 }
 

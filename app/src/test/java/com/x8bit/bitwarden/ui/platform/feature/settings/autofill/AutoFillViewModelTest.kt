@@ -153,6 +153,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `on BlockAutoFillClick should emit NavigateToBlockAutoFill`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AutoFillAction.BlockAutoFillClick)
+            assertEquals(AutoFillEvent.NavigateToBlockAutoFill, awaitItem())
+        }
+    }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
