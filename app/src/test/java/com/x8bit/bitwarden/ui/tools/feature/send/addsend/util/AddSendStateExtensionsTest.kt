@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
 
-import com.bitwarden.core.SendFileView
 import com.bitwarden.core.SendType
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFileView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,17 +21,23 @@ class AddSendStateExtensionsTest {
             key = null,
             accessCount = 0U,
             text = null,
-            file = SendFileView(
-                id = "",
-                fileName = "",
-                size = "",
-                sizeName = "",
+            file = createMockFileView(number = 1).copy(
+                id = null,
+                size = null,
+                sizeName = null,
             ),
             hasPassword = false,
         )
 
         val result = DEFAULT_VIEW_STATE
-            .copy(selectedType = AddSendState.ViewState.Content.SendType.File)
+            .copy(
+                selectedType = AddSendState.ViewState.Content.SendType.File(
+                    name = "mockFileName-1",
+                    displaySize = "mockSizeName-1",
+                    sizeBytes = 1,
+                    uri = null,
+                ),
+            )
             .toSendView(FIXED_CLOCK)
 
         assertEquals(sendView, result)

@@ -21,7 +21,12 @@ class SendViewExtensionsTest {
             baseWebSendUrl = "www.test.com/",
         )
 
-        assertEquals(DEFAULT_STATE, result)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                common = DEFAULT_COMMON.copy(originalSendView = sendView),
+            ),
+            result,
+        )
     }
 
     @Test
@@ -33,7 +38,13 @@ class SendViewExtensionsTest {
             baseWebSendUrl = "www.test.com/",
         )
 
-        assertEquals(DEFAULT_STATE.copy(selectedType = DEFAULT_TEXT_TYPE), result)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                common = DEFAULT_COMMON.copy(originalSendView = sendView),
+                selectedType = DEFAULT_TEXT_TYPE,
+            ),
+            result,
+        )
     }
 }
 
@@ -70,7 +81,12 @@ private val DEFAULT_TEXT_TYPE: AddSendState.ViewState.Content.SendType.Text =
     )
 
 private val DEFAULT_FILE_TYPE: AddSendState.ViewState.Content.SendType.File =
-    AddSendState.ViewState.Content.SendType.File
+    AddSendState.ViewState.Content.SendType.File(
+        name = "mockFileName-1",
+        displaySize = "mockSizeName-1",
+        sizeBytes = null,
+        uri = null,
+    )
 
 private val DEFAULT_STATE: AddSendState.ViewState.Content =
     AddSendState.ViewState.Content(

@@ -4,6 +4,7 @@ import com.bitwarden.core.SendFileView
 import com.bitwarden.core.SendTextView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
 import java.time.Clock
 
@@ -14,12 +15,12 @@ fun AddSendState.ViewState.Content.toSendView(
     clock: Clock,
 ): SendView =
     SendView(
-        id = null,
-        accessId = null,
+        id = common.originalSendView?.id,
+        accessId = common.originalSendView?.accessId,
         name = common.name,
-        notes = common.noteInput,
-        key = null,
-        newPassword = common.passwordInput.takeUnless { it.isBlank() },
+        notes = common.noteInput.orNullIfBlank(),
+        key = common.originalSendView?.key,
+        newPassword = common.passwordInput.orNullIfBlank(),
         hasPassword = false,
         type = selectedType.toSendType(),
         file = toSendFileView(),
@@ -35,18 +36,17 @@ fun AddSendState.ViewState.Content.toSendView(
 
 private fun AddSendState.ViewState.Content.SendType.toSendType(): SendType =
     when (this) {
-        AddSendState.ViewState.Content.SendType.File -> SendType.FILE
+        is AddSendState.ViewState.Content.SendType.File -> SendType.FILE
         is AddSendState.ViewState.Content.SendType.Text -> SendType.TEXT
     }
 
 private fun AddSendState.ViewState.Content.toSendFileView(): SendFileView? =
     (this.selectedType as? AddSendState.ViewState.Content.SendType.File)?.let {
-        // TODO: Add support for these properties in order to save a file (BIT-1085)
         SendFileView(
-            id = "",
-            fileName = "",
-            size = "",
-            sizeName = "",
+            id = null,
+            fileName = it.name.orEmpty(),
+            size = null,
+            sizeName = null,
         )
     }
 

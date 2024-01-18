@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.ZonedDateTime
@@ -39,6 +41,11 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+
+/**
+ * The maximum size an upload-able file is allowed to be (100 MiB).
+ */
+private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 
 /**
  * View model for the new send screen.
@@ -53,6 +60,7 @@ class AddSendViewModel @Inject constructor(
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
+    // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val addSendType = AddSendArgs(savedStateHandle).sendAddType
         AddSendState(
@@ -93,10 +101,6 @@ class AddSendViewModel @Inject constructor(
 ) {
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-
         when (val addSendType = state.addSendType) {
             AddSendType.AddItem -> Unit
             is AddSendType.EditItem -> {
@@ -357,8 +361,13 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handeFileChose(action: AddSendAction.FileChoose) {
-        // TODO: Process the chosen file (BIT-493)
-        sendEvent(AddSendEvent.ShowToast("Not Yet Implemented".asText()))
+        updateFileContent {
+            it.copy(
+                uri = action.fileData.uri,
+                name = action.fileData.fileName,
+                sizeBytes = action.fileData.sizeBytes,
+            )
+        }
     }
 
     private fun handleRemovePasswordClick() {
@@ -427,6 +436,7 @@ class AddSendViewModel @Inject constructor(
         updateCommonContent { it.copy(expirationDate = null) }
     }
 
+    @Suppress("LongMethod")
     private fun handleSaveClick() {
         onContent { content ->
             if (content.common.name.isBlank()) {
@@ -442,6 +452,34 @@ class AddSendViewModel @Inject constructor(
                 }
                 return@onContent
             }
+            if (content.isFileType) {
+                val fileType = content.selectedType as AddSendState.ViewState.Content.SendType.File
+                if (fileType.name.isNullOrBlank()) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = AddSendState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.validation_field_required.asText(
+                                    R.string.file.asText(),
+                                ),
+                            ),
+                        )
+                    }
+                    return@onContent
+                }
+                if ((fileType.sizeBytes ?: 0) > MAX_FILE_SIZE_BYTES) {
+                    // Must be under 100 MB
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = AddSendState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.max_file_size.asText(),
+                            ),
+                        )
+                    }
+                    return@onContent
+                }
+            }
             mutableStateFlow.update {
                 it.copy(
                     dialogState = AddSendState.DialogState.Loading(
@@ -452,9 +490,12 @@ class AddSendViewModel @Inject constructor(
             viewModelScope.launch {
                 when (val addSendType = state.addSendType) {
                     AddSendType.AddItem -> {
+                        val fileType = content
+                            .selectedType
+                            as? AddSendState.ViewState.Content.SendType.File
                         val result = vaultRepo.createSend(
                             sendView = content.toSendView(clock),
-                            fileUri = null,
+                            fileUri = fileType?.uri,
                         )
                         sendAction(AddSendAction.Internal.CreateSendResultReceive(result))
                     }
@@ -494,7 +535,14 @@ class AddSendViewModel @Inject constructor(
             return
         }
         updateContent {
-            it.copy(selectedType = AddSendState.ViewState.Content.SendType.File)
+            it.copy(
+                selectedType = AddSendState.ViewState.Content.SendType.File(
+                    uri = null,
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                ),
+            )
         }
     }
 
@@ -658,6 +706,8 @@ data class AddSendState(
              */
             @Parcelize
             data class Common(
+                @IgnoredOnParcel
+                val originalSendView: SendView? = null,
                 val name: String,
                 val currentAccessCount: Int?,
                 val maxAccessCount: Int?,
@@ -683,7 +733,12 @@ data class AddSendState(
                  * Sending a file.
                  */
                 @Parcelize
-                data object File : SendType()
+                data class File(
+                    val uri: Uri?,
+                    val name: String?,
+                    val displaySize: String?,
+                    val sizeBytes: Long?,
+                ) : SendType()
 
                 /**
                  * Sending text.

@@ -336,7 +336,12 @@ class AddSendScreenTest : BaseComposeTest() {
         permissionsManager.checkPermissionResult = true
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
-                selectedType = AddSendState.ViewState.Content.SendType.File,
+                selectedType = AddSendState.ViewState.Content.SendType.File(
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                    uri = null,
+                ),
             ),
         )
         composeTestRule
@@ -357,7 +362,12 @@ class AddSendScreenTest : BaseComposeTest() {
         permissionsManager.getPermissionsResult = false
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
-                selectedType = AddSendState.ViewState.Content.SendType.File,
+                selectedType = AddSendState.ViewState.Content.SendType.File(
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                    uri = null,
+                ),
             ),
         )
         composeTestRule
