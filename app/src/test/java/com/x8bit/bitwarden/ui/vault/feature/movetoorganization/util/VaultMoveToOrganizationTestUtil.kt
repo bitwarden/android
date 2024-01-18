@@ -3,56 +3,31 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.VaultMoveToOrganizationState
 
 /**
- * Creates a list of mock organizations.
+ * Creates a list of mock [VaultMoveToOrganizationState.ViewState.Content.Organization].
  */
 fun createMockOrganizationList():
     List<VaultMoveToOrganizationState.ViewState.Content.Organization> =
     listOf(
-        VaultMoveToOrganizationState.ViewState.Content.Organization(
-            id = "1",
-            name = "Organization 1",
-            collections = listOf(
-                VaultMoveToOrganizationState.ViewState.Content.Collection(
-                    id = "1",
-                    name = "Collection 1",
-                    isSelected = true,
-                ),
-                VaultMoveToOrganizationState.ViewState.Content.Collection(
-                    id = "2",
-                    name = "Collection 2",
-                    isSelected = false,
-                ),
-                VaultMoveToOrganizationState.ViewState.Content.Collection(
-                    id = "3",
-                    name = "Collection 3",
-                    isSelected = false,
-                ),
+        createMockOrganization(number = 1),
+        createMockOrganization(number = 2, isCollectionSelected = false),
+        createMockOrganization(number = 3, isCollectionSelected = false),
+    )
+
+/**
+ * Creates a [VaultMoveToOrganizationState.ViewState.Content.Organization] with a given number.
+ */
+fun createMockOrganization(
+    number: Int,
+    isCollectionSelected: Boolean = true,
+): VaultMoveToOrganizationState.ViewState.Content.Organization =
+    VaultMoveToOrganizationState.ViewState.Content.Organization(
+        id = "mockOrganizationId-$number",
+        name = "mockOrganizationName-$number",
+        collections = listOf(
+            VaultMoveToOrganizationState.ViewState.Content.Collection(
+                id = "mockId-$number",
+                name = "mockName-$number",
+                isSelected = isCollectionSelected,
             ),
-        ),
-        VaultMoveToOrganizationState.ViewState.Content.Organization(
-            id = "2",
-            name = "Organization 2",
-            collections = listOf(
-                VaultMoveToOrganizationState.ViewState.Content.Collection(
-                    id = "1",
-                    name = "Collection 1",
-                    isSelected = true,
-                ),
-                VaultMoveToOrganizationState.ViewState.Content.Collection(
-                    id = "2",
-                    name = "Collection 2",
-                    isSelected = false,
-                ),
-                VaultMoveToOrganizationState.ViewState.Content.Collection(
-                    id = "3",
-                    name = "Collection 3",
-                    isSelected = false,
-                ),
-            ),
-        ),
-        VaultMoveToOrganizationState.ViewState.Content.Organization(
-            id = "3",
-            name = "Organization 3",
-            collections = emptyList(),
         ),
     )

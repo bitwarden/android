@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -58,6 +59,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -1998,6 +2000,111 @@ class VaultRepositoryTest {
             val result = vaultRepository.deleteSend(sendId)
 
             assertEquals(DeleteSendResult.Success, result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `shareCipher with cipherService shareCipher success should return ShareCipherResultSuccess`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            coEvery {
+                ciphersService.shareCipher(
+                    cipherId = "mockId-1",
+                    body = ShareCipherJsonRequest(
+                        cipher = createMockCipherJsonRequest(number = 1),
+                        collectionIds = listOf("mockId-1"),
+                    ),
+                )
+            } returns createMockCipher(number = 1).asSuccess()
+            coEvery { vaultDiskSource.saveCipher(userId, createMockCipher(number = 1)) } just runs
+
+            val result = vaultRepository.shareCipher(
+                cipherId = "mockId-1",
+                cipherView = createMockCipherView(number = 1),
+                collectionIds = listOf("mockId-1"),
+            )
+
+            assertEquals(
+                ShareCipherResult.Success,
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `shareCipher with cipherService shareCipher failure should return ShareCipherResultError`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            coEvery {
+                ciphersService.shareCipher(
+                    cipherId = "mockId-1",
+                    body = ShareCipherJsonRequest(
+                        cipher = createMockCipherJsonRequest(number = 1),
+                        collectionIds = listOf("mockId-1"),
+                    ),
+                )
+            } returns Throwable("Fail").asFailure()
+            coEvery { vaultDiskSource.saveCipher(userId, createMockCipher(number = 1)) } just runs
+
+            val result = vaultRepository.shareCipher(
+                cipherId = "mockId-1",
+                cipherView = createMockCipherView(number = 1),
+                collectionIds = listOf("mockId-1"),
+            )
+
+            assertEquals(
+                ShareCipherResult.Error(errorMessage = null),
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `shareCipher with cipherService encryptCipher failure should return ShareCipherResultError`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns Throwable("Fail").asFailure()
+            coEvery {
+                ciphersService.shareCipher(
+                    cipherId = "mockId-1",
+                    body = ShareCipherJsonRequest(
+                        cipher = createMockCipherJsonRequest(number = 1),
+                        collectionIds = listOf("mockId-1"),
+                    ),
+                )
+            } returns createMockCipher(number = 1).asSuccess()
+            coEvery { vaultDiskSource.saveCipher(userId, createMockCipher(number = 1)) } just runs
+
+            val result = vaultRepository.shareCipher(
+                cipherId = "mockId-1",
+                cipherView = createMockCipherView(number = 1),
+                collectionIds = listOf("mockId-1"),
+            )
+
+            assertEquals(
+                ShareCipherResult.Error(errorMessage = null),
+                result,
+            )
         }
 
     //region Helper functions

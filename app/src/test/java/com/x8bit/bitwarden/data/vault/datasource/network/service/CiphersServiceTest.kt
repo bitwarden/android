@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
@@ -70,6 +71,27 @@ class CiphersServiceTest : BaseServiceTest() {
         val cipherId = "cipherId"
         val result = ciphersService.deleteCipher(cipherId = cipherId)
         assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
+    fun `shareCipher should execute the share cipher API`() = runTest {
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON),
+        )
+
+        val result = ciphersService.shareCipher(
+            cipherId = "mockId-1",
+            body = ShareCipherJsonRequest(
+                cipher = createMockCipherJsonRequest(number = 1),
+                collectionIds = listOf("mockId-1"),
+            ),
+        )
+        assertEquals(
+            createMockCipher(number = 1),
+            result.getOrThrow(),
+        )
     }
 }
 
