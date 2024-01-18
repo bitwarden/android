@@ -2,13 +2,24 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AutoFillViewModelTest : BaseViewModelTest() {
+
+    private val settingsRepository: SettingsRepository = mockk() {
+        every { isInlineAutofillEnabled } returns true
+        every { isInlineAutofillEnabled = any() } just runs
+    }
 
     @Test
     fun `initial state should be correct when not set`() {
@@ -103,16 +114,14 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on UseInlineAutofillClick should emit ShowToast`() = runTest {
+    fun `on UseInlineAutofillClick should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(true))
-            assertEquals(AutoFillEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
-        }
+        viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(false))
         assertEquals(
-            DEFAULT_STATE.copy(isUseInlineAutoFillEnabled = true),
+            DEFAULT_STATE.copy(isUseInlineAutoFillEnabled = false),
             viewModel.stateFlow.value,
         )
+        verify { settingsRepository.isInlineAutofillEnabled = false }
     }
 
     @Test
@@ -133,6 +142,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        settingsRepository = settingsRepository,
     )
 }
 
@@ -142,6 +152,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isCopyTotpAutomaticallyEnabled = false,
     isUseAccessibilityEnabled = false,
     isUseDrawOverEnabled = false,
-    isUseInlineAutoFillEnabled = false,
+    isUseInlineAutoFillEnabled = true,
     uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
 )

@@ -53,6 +53,11 @@ interface SettingsRepository {
     val isUnlockWithPinEnabled: Boolean
 
     /**
+     * Whether or not inline autofill is enabled for the current user.
+     */
+    var isInlineAutofillEnabled: Boolean
+
+    /**
      * Sets default values for various settings for the given [userId] if necessary. This is
      * typically used when logging into a new account.
      */

@@ -342,6 +342,21 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isInlineAutofillEnabled should pull from and update SettingsDiskSource`() {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertTrue(settingsRepository.isInlineAutofillEnabled)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.isIconLoadingDisabled = false
+        assertFalse(settingsRepository.isUnlockWithPinEnabled)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.isInlineAutofillEnabled = true
+        assertTrue(fakeSettingsDiskSource.getInlineAutofillEnabled(userId = userId)!!)
+    }
+
+    @Test
     fun `getPullToRefreshEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
         val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
