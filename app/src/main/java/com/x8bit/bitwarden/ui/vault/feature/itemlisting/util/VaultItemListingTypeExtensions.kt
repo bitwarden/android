@@ -8,16 +8,16 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
  */
 fun VaultItemListingType.toItemListingType(): VaultItemListingState.ItemListingType =
     when (this) {
-        is VaultItemListingType.Card -> VaultItemListingState.ItemListingType.Card
+        is VaultItemListingType.Card -> VaultItemListingState.ItemListingType.Vault.Card
         is VaultItemListingType.Folder -> {
-            VaultItemListingState.ItemListingType.Folder(folderId = folderId)
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = folderId)
         }
 
-        is VaultItemListingType.Identity -> VaultItemListingState.ItemListingType.Identity
-        is VaultItemListingType.Login -> VaultItemListingState.ItemListingType.Login
-        is VaultItemListingType.SecureNote -> VaultItemListingState.ItemListingType.SecureNote
-        is VaultItemListingType.Trash -> VaultItemListingState.ItemListingType.Trash
+        is VaultItemListingType.Identity -> VaultItemListingState.ItemListingType.Vault.Identity
+        is VaultItemListingType.Login -> VaultItemListingState.ItemListingType.Vault.Login
+        is VaultItemListingType.SecureNote -> VaultItemListingState.ItemListingType.Vault.SecureNote
+        is VaultItemListingType.Trash -> VaultItemListingState.ItemListingType.Vault.Trash
         is VaultItemListingType.Collection -> {
-            VaultItemListingState.ItemListingType.Collection(collectionId = collectionId)
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = collectionId)
         }
     }

@@ -27,13 +27,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to true,
-            VaultItemListingState.ItemListingType.Card to false,
-            VaultItemListingState.ItemListingType.SecureNote to false,
-            VaultItemListingState.ItemListingType.Identity to false,
-            VaultItemListingState.ItemListingType.Trash to false,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Login to true,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -56,13 +56,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to false,
-            VaultItemListingState.ItemListingType.Card to false,
-            VaultItemListingState.ItemListingType.SecureNote to false,
-            VaultItemListingState.ItemListingType.Identity to false,
-            VaultItemListingState.ItemListingType.Trash to true,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -85,13 +85,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to false,
-            VaultItemListingState.ItemListingType.Card to true,
-            VaultItemListingState.ItemListingType.SecureNote to false,
-            VaultItemListingState.ItemListingType.Identity to false,
-            VaultItemListingState.ItemListingType.Trash to false,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to true,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -114,13 +114,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to false,
-            VaultItemListingState.ItemListingType.Card to false,
-            VaultItemListingState.ItemListingType.SecureNote to false,
-            VaultItemListingState.ItemListingType.Identity to false,
-            VaultItemListingState.ItemListingType.Trash to true,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -143,13 +143,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to false,
-            VaultItemListingState.ItemListingType.Card to false,
-            VaultItemListingState.ItemListingType.SecureNote to false,
-            VaultItemListingState.ItemListingType.Identity to true,
-            VaultItemListingState.ItemListingType.Trash to false,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to true,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -172,13 +172,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to false,
-            VaultItemListingState.ItemListingType.Card to false,
-            VaultItemListingState.ItemListingType.SecureNote to false,
-            VaultItemListingState.ItemListingType.Identity to false,
-            VaultItemListingState.ItemListingType.Trash to true,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -201,13 +201,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to false,
-            VaultItemListingState.ItemListingType.Card to false,
-            VaultItemListingState.ItemListingType.SecureNote to true,
-            VaultItemListingState.ItemListingType.Identity to false,
-            VaultItemListingState.ItemListingType.Trash to false,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to true,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to true,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -230,13 +230,13 @@ class VaultItemListingDataExtensionsTest {
         )
 
         mapOf(
-            VaultItemListingState.ItemListingType.Login to false,
-            VaultItemListingState.ItemListingType.Card to false,
-            VaultItemListingState.ItemListingType.SecureNote to false,
-            VaultItemListingState.ItemListingType.Identity to false,
-            VaultItemListingState.ItemListingType.Trash to true,
-            VaultItemListingState.ItemListingType.Folder(folderId = "mockId-1") to false,
-            VaultItemListingState.ItemListingType.Collection(collectionId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
         )
             .forEach { (type, expected) ->
                 val result = cipherView.determineListingPredicate(
@@ -324,7 +324,7 @@ class VaultItemListingDataExtensionsTest {
             createMockCollectionView(number = 3),
         )
 
-        val result = VaultItemListingState.ItemListingType.Folder(
+        val result = VaultItemListingState.ItemListingType.Vault.Folder(
             folderId = "mockId-1",
             folderName = "wrong name",
         )
@@ -334,7 +334,7 @@ class VaultItemListingDataExtensionsTest {
             )
 
         assertEquals(
-            VaultItemListingState.ItemListingType.Folder(
+            VaultItemListingState.ItemListingType.Vault.Folder(
                 folderId = "mockId-1",
                 folderName = "mockName-1",
             ),
@@ -355,7 +355,7 @@ class VaultItemListingDataExtensionsTest {
             createMockCollectionView(number = 3),
         )
 
-        val result = VaultItemListingState.ItemListingType.Collection(
+        val result = VaultItemListingState.ItemListingType.Vault.Collection(
             collectionId = "mockId-1",
             collectionName = "wrong name",
         )
@@ -365,7 +365,7 @@ class VaultItemListingDataExtensionsTest {
             )
 
         assertEquals(
-            VaultItemListingState.ItemListingType.Collection(
+            VaultItemListingState.ItemListingType.Vault.Collection(
                 collectionId = "mockId-1",
                 collectionName = "mockName-1",
             ),
@@ -387,14 +387,14 @@ class VaultItemListingDataExtensionsTest {
             createMockCollectionView(number = 3),
         )
 
-        val result = VaultItemListingState.ItemListingType.Login
+        val result = VaultItemListingState.ItemListingType.Vault.Login
             .updateWithAdditionalDataIfNecessary(
                 folderList = folderViewList,
                 collectionList = collectionViewList,
             )
 
         assertEquals(
-            VaultItemListingState.ItemListingType.Login,
+            VaultItemListingState.ItemListingType.Vault.Login,
             result,
         )
     }

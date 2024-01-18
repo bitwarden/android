@@ -18,31 +18,31 @@ fun CipherView.determineListingPredicate(
     itemListingType: VaultItemListingState.ItemListingType,
 ): Boolean =
     when (itemListingType) {
-        is VaultItemListingState.ItemListingType.Card -> {
+        is VaultItemListingState.ItemListingType.Vault.Card -> {
             type == CipherType.CARD && deletedDate == null
         }
 
-        is VaultItemListingState.ItemListingType.Collection -> {
+        is VaultItemListingState.ItemListingType.Vault.Collection -> {
             itemListingType.collectionId in this.collectionIds && deletedDate == null
         }
 
-        is VaultItemListingState.ItemListingType.Folder -> {
+        is VaultItemListingState.ItemListingType.Vault.Folder -> {
             folderId == itemListingType.folderId && deletedDate == null
         }
 
-        is VaultItemListingState.ItemListingType.Identity -> {
+        is VaultItemListingState.ItemListingType.Vault.Identity -> {
             type == CipherType.IDENTITY && deletedDate == null
         }
 
-        is VaultItemListingState.ItemListingType.Login -> {
+        is VaultItemListingState.ItemListingType.Vault.Login -> {
             type == CipherType.LOGIN && deletedDate == null
         }
 
-        is VaultItemListingState.ItemListingType.SecureNote -> {
+        is VaultItemListingState.ItemListingType.Vault.SecureNote -> {
             type == CipherType.SECURE_NOTE && deletedDate == null
         }
 
-        is VaultItemListingState.ItemListingType.Trash -> {
+        is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
         }
     }
@@ -71,25 +71,25 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
     collectionList: List<CollectionView>,
 ): VaultItemListingState.ItemListingType =
     when (this) {
-        is VaultItemListingState.ItemListingType.Card -> this
-        is VaultItemListingState.ItemListingType.Collection -> copy(
+        is VaultItemListingState.ItemListingType.Vault.Card -> this
+        is VaultItemListingState.ItemListingType.Vault.Collection -> copy(
             collectionName = collectionList
                 .find { it.id == collectionId }
                 ?.name
                 .orEmpty(),
         )
 
-        is VaultItemListingState.ItemListingType.Folder -> copy(
+        is VaultItemListingState.ItemListingType.Vault.Folder -> copy(
             folderName = folderList
                 .find { it.id == folderId }
                 ?.name
                 .orEmpty(),
         )
 
-        is VaultItemListingState.ItemListingType.Identity -> this
-        is VaultItemListingState.ItemListingType.Login -> this
-        is VaultItemListingState.ItemListingType.SecureNote -> this
-        is VaultItemListingState.ItemListingType.Trash -> this
+        is VaultItemListingState.ItemListingType.Vault.Identity -> this
+        is VaultItemListingState.ItemListingType.Vault.Login -> this
+        is VaultItemListingState.ItemListingType.Vault.SecureNote -> this
+        is VaultItemListingState.ItemListingType.Vault.Trash -> this
     }
 
 private fun List<CipherView>.toDisplayItemList(

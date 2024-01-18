@@ -25,14 +25,14 @@ fun VaultItemListingEmpty(
     modifier: Modifier = Modifier,
 ) {
     when (itemListingType) {
-        is VaultItemListingState.ItemListingType.Folder -> {
+        is VaultItemListingState.ItemListingType.Vault.Folder -> {
             GenericNoItems(
                 modifier = modifier,
                 text = stringResource(id = R.string.no_items_folder),
             )
         }
 
-        is VaultItemListingState.ItemListingType.Trash -> {
+        is VaultItemListingState.ItemListingType.Vault.Trash -> {
             GenericNoItems(
                 modifier = modifier,
                 text = stringResource(id = R.string.no_items_trash),
