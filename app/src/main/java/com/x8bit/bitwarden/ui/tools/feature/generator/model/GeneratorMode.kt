@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.model
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 /**
  * A sealed class representing the mode in which the generator displays.

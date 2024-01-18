@@ -28,8 +28,6 @@ import kotlinx.parcelize.Parcelize
  * Represents a Bitwarden-styled loading dialog that shows text and a circular progress indicator.
  *
  * @param visibilityState the [LoadingDialogState] used to populate the dialog.
- * @param onDismissRequest called when the user has requested to dismiss the dialog, whether by
- *  * tapping "OK", tapping outside the dialog, or pressing the back button
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

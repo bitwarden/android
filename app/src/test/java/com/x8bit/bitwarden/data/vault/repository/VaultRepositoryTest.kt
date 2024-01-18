@@ -688,7 +688,7 @@ class VaultRepositoryTest {
                 storePinProtectedUserKey(
                     userId = userId,
                     pinProtectedUserKey = null,
-                    isInMemoryOnly = true,
+                    inMemoryOnly = true,
                 )
             }
 
@@ -741,7 +741,7 @@ class VaultRepositoryTest {
                 storePinProtectedUserKey(
                     userId = userId,
                     pinProtectedUserKey = null,
-                    isInMemoryOnly = true,
+                    inMemoryOnly = true,
                 )
             }
 

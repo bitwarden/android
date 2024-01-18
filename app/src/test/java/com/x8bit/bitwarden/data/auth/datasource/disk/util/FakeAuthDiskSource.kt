@@ -98,9 +98,9 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun storePinProtectedUserKey(
         userId: String,
         pinProtectedUserKey: String?,
-        isInMemoryOnly: Boolean,
+        inMemoryOnly: Boolean,
     ) {
-        storedPinProtectedUserKeys[userId] = pinProtectedUserKey to isInMemoryOnly
+        storedPinProtectedUserKeys[userId] = pinProtectedUserKey to inMemoryOnly
     }
 
     override fun getEncryptedPin(userId: String): String? =
