@@ -15,6 +15,7 @@ data class VaultItemListingHandlers(
     val refreshClick: () -> Unit,
     val syncClick: () -> Unit,
     val lockClick: () -> Unit,
+    val overflowItemClick: (action: VaultItemListingsAction) -> Unit,
 ) {
     companion object {
         /**
@@ -36,6 +37,7 @@ data class VaultItemListingHandlers(
                 refreshClick = { viewModel.trySendAction(VaultItemListingsAction.RefreshClick) },
                 syncClick = { viewModel.trySendAction(VaultItemListingsAction.SyncClick) },
                 lockClick = { viewModel.trySendAction(VaultItemListingsAction.LockClick) },
+                overflowItemClick = { viewModel.trySendAction(it) },
             )
     }
 }

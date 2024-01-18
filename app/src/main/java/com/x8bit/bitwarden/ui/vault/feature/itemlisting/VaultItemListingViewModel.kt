@@ -4,10 +4,12 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -34,6 +36,7 @@ import javax.inject.Inject
 @Suppress("MagicNumber", "TooManyFunctions")
 class VaultItemListingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
@@ -43,6 +46,7 @@ class VaultItemListingViewModel @Inject constructor(
             .vaultItemListingType
             .toItemListingType(),
         viewState = VaultItemListingState.ViewState.Loading,
+        baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
         baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
         isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
         dialogState = null,
@@ -70,15 +74,43 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.ItemClick -> handleItemClick(action)
             is VaultItemListingsAction.AddVaultItemClick -> handleAddVaultItemClick()
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
+            is VaultItemListingsAction.CopySendUrlClick -> handleCopySendUrlClick(action)
+            is VaultItemListingsAction.DeleteSendClick -> handleDeleteSendClick(action)
+            is VaultItemListingsAction.ShareSendUrlClick -> handleShareSendUrlClick(action)
+            is VaultItemListingsAction.RemoveSendPasswordClick -> {
+                handleRemoveSendPasswordClick(action)
+            }
+
             is VaultItemListingsAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
-            is VaultItemListingsAction.Internal.IconLoadingSettingReceive ->
+            is VaultItemListingsAction.Internal.IconLoadingSettingReceive -> {
                 handleIconsSettingReceived(action)
+            }
         }
     }
 
     //region VaultItemListing Handlers
     private fun handleRefreshClick() {
         vaultRepository.sync()
+    }
+
+    private fun handleCopySendUrlClick(action: VaultItemListingsAction.CopySendUrlClick) {
+        clipboardManager.setText(text = action.sendUrl)
+    }
+
+    private fun handleDeleteSendClick(action: VaultItemListingsAction.DeleteSendClick) {
+        // TODO: Implement deletion (BIT-1411)
+        sendEvent(VaultItemListingEvent.ShowToast("Not yet implemented".asText()))
+    }
+
+    private fun handleShareSendUrlClick(action: VaultItemListingsAction.ShareSendUrlClick) {
+        sendEvent(VaultItemListingEvent.ShowShareSheet(action.sendUrl))
+    }
+
+    private fun handleRemoveSendPasswordClick(
+        action: VaultItemListingsAction.RemoveSendPasswordClick,
+    ) {
+        // TODO: Implement password removal (BIT-1411)
+        sendEvent(VaultItemListingEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handleAddVaultItemClick() {
@@ -233,7 +265,7 @@ class VaultItemListingViewModel @Inject constructor(
                             .filter { sendView ->
                                 sendView.determineListingPredicate(listingType)
                             }
-                            .toViewState()
+                            .toViewState(baseWebSendUrl = state.baseWebSendUrl)
                     }
                 },
                 dialogState = currentState.dialogState.takeUnless { clearDialogState },
@@ -248,6 +280,7 @@ class VaultItemListingViewModel @Inject constructor(
 data class VaultItemListingState(
     val itemListingType: ItemListingType,
     val viewState: ViewState,
+    val baseWebSendUrl: String,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
@@ -309,13 +342,26 @@ data class VaultItemListingState(
      * @property title title of the item.
      * @property subtitle subtitle of the item (nullable).
      * @property iconData data for the icon to be displayed (nullable).
+     * @property overflowOptions list of options for the item's overflow menu.
      */
     data class DisplayItem(
         val id: String,
         val title: String,
         val subtitle: String?,
         val iconData: IconData,
-    )
+        val overflowOptions: List<OverflowItem>,
+    ) {
+        /**
+         * Represents a single option to be displayed in an [DisplayItem]s overflow menu.
+         *
+         * @property title the display title of the option.
+         * @property action the action to be sent back to the view model when the option is clicks.
+         */
+        data class OverflowItem(
+            val title: Text,
+            val action: VaultItemListingsAction,
+        )
+    }
 
     /**
      * Represents different types of item listing.
@@ -471,6 +517,11 @@ sealed class VaultItemListingEvent {
     data object NavigateToVaultSearchScreen : VaultItemListingEvent()
 
     /**
+     * Show a share sheet with the given content.
+     */
+    data class ShowShareSheet(val content: String) : VaultItemListingEvent()
+
+    /**
      * Show a toast with the given message.
      *
      * @property text the text to display.
@@ -519,6 +570,26 @@ sealed class VaultItemListingsAction {
      * @property id the id of the item that has been clicked.
      */
     data class ItemClick(val id: String) : VaultItemListingsAction()
+
+    /**
+     * Click on the copy send URL overflow option.
+     */
+    data class CopySendUrlClick(val sendUrl: String) : VaultItemListingsAction()
+
+    /**
+     * Click on the share send URL overflow option.
+     */
+    data class ShareSendUrlClick(val sendUrl: String) : VaultItemListingsAction()
+
+    /**
+     * Click on the remove password send overflow option.
+     */
+    data class RemoveSendPasswordClick(val sendId: String) : VaultItemListingsAction()
+
+    /**
+     * Click on the delete send overflow option.
+     */
+    data class DeleteSendClick(val sendId: String) : VaultItemListingsAction()
 
     /**
      * Models actions that the [VaultItemListingViewModel] itself might send.

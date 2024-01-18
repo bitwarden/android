@@ -12,6 +12,7 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -19,13 +20,18 @@ import androidx.compose.ui.test.performScrollToNode
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -42,6 +48,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToEditSendItemId: String? = null
     private var onNavigateToVaultItemId: String? = null
 
+    private val intentManager: IntentManager = mockk {
+        every { shareText(any()) } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<VaultItemListingViewModel>(relaxed = true) {
@@ -54,6 +63,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             VaultItemListingScreen(
                 viewModel = viewModel,
+                intentManager = intentManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItem = { onNavigateToVaultItemId = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
@@ -111,6 +121,15 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .onNodeWithText("Try again")
             .performClick()
         verify { viewModel.trySendAction(VaultItemListingsAction.RefreshClick) }
+    }
+
+    @Test
+    fun `ShowShareSheet event should call shareText in intentManager`() {
+        val content = "content"
+        mutableEventFlow.tryEmit(VaultItemListingEvent.ShowShareSheet(content = content))
+        verify {
+            intentManager.shareText(content)
+        }
     }
 
     @Test
@@ -477,6 +496,114 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `on send item overflow click should display dialog`() {
+        val number = 1
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(createDisplayItem(number = number)),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNode(isDialog())
+            .onChildren()
+            .filterToOne(hasText("mockTitle-$number"))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on send item overflow option click should emit the appropriate action`() {
+        val number = 1
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(createDisplayItem(number = number)),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Edit")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ItemClick(id = "mockId-$number"),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Copy link")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.CopySendUrlClick(sendUrl = "www.test.com"),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Share link")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ShareSendUrlClick(sendUrl = "www.test.com"),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Remove password")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.RemoveSendPasswordClick(sendId = "mockId-$number"),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Delete")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DeleteSendClick(sendId = "mockId-$number"),
+            )
+        }
+    }
+
+    @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
@@ -500,6 +627,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = VaultItemListingState(
     itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
     viewState = VaultItemListingState.ViewState.Loading,
+    baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
     isIconLoadingDisabled = false,
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
     dialogState = null,
@@ -511,4 +639,26 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         title = "mockTitle-$number",
         subtitle = "mockSubtitle-$number",
         iconData = IconData.Local(R.drawable.ic_card_item),
+        overflowOptions = listOf(
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.edit.asText(),
+                action = VaultItemListingsAction.ItemClick(id = "mockId-$number"),
+            ),
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.copy_link.asText(),
+                action = VaultItemListingsAction.CopySendUrlClick(sendUrl = "www.test.com"),
+            ),
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.share_link.asText(),
+                action = VaultItemListingsAction.ShareSendUrlClick(sendUrl = "www.test.com"),
+            ),
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.remove_password.asText(),
+                action = VaultItemListingsAction.RemoveSendPasswordClick(sendId = "mockId-$number"),
+            ),
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.delete.asText(),
+                action = VaultItemListingsAction.DeleteSendClick(sendId = "mockId-$number"),
+            ),
+        ),
     )

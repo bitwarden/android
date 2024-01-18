@@ -30,6 +30,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import kotlinx.collections.immutable.persistentListOf
 
@@ -43,6 +45,7 @@ fun VaultItemListingScreen(
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
+    intentManager: IntentManager = LocalIntentManager.current,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsState()
@@ -54,6 +57,10 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToVaultItem -> {
                 onNavigateToVaultItem(event.id)
+            }
+
+            is VaultItemListingEvent.ShowShareSheet -> {
+                intentManager.shareText(event.content)
             }
 
             is VaultItemListingEvent.ShowToast -> {
@@ -168,6 +175,7 @@ private fun VaultItemListingScaffold(
                 VaultItemListingContent(
                     state = state.viewState,
                     vaultItemClick = vaultItemListingHandlers.itemClick,
+                    onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,
                     modifier = modifier,
                 )
             }

@@ -4,11 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -18,7 +20,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockItemListingDisplayItem
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
@@ -36,6 +38,8 @@ import org.junit.jupiter.api.Test
 
 class VaultItemListingViewModelTest : BaseViewModelTest() {
 
+    private val clipboardManager: BitwardenClipboardManager = mockk()
+
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
@@ -48,7 +52,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
-    private val settingsRepository: SettingsRepository = mockk() {
+    private val settingsRepository: SettingsRepository = mockk {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
     }
@@ -164,6 +168,59 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `CopySendUrlClick should call setText on clipboardManager`() {
+        val sendUrl = "www.test.com"
+        every { clipboardManager.setText(sendUrl) } just runs
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.actionChannel.trySend(VaultItemListingsAction.CopySendUrlClick(sendUrl = sendUrl))
+        verify(exactly = 1) {
+            clipboardManager.setText(text = sendUrl)
+        }
+    }
+
+    @Test
+    fun `DeleteSendClick should emit ShowToast`() = runTest {
+        val sendId = "sendId"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.DeleteSendClick(sendId = sendId),
+            )
+            assertEquals(
+                VaultItemListingEvent.ShowToast("Not yet implemented".asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ShareSendUrlClick should emit ShowShareSheet`() = runTest {
+        val sendUrl = "www.test.com"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.ShareSendUrlClick(sendUrl = sendUrl),
+            )
+            assertEquals(VaultItemListingEvent.ShowShareSheet(sendUrl), awaitItem())
+        }
+    }
+
+    @Test
+    fun `RemoveSendPasswordClick should emit ShowToast`() = runTest {
+        val sendId = "sendId"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.RemoveSendPasswordClick(sendId = sendId),
+            )
+            assertEquals(
+                VaultItemListingEvent.ShowToast("Not yet implemented".asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() =
         runTest {
             setupMockUri()
@@ -190,7 +247,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.Content(
                         displayItemList = listOf(
-                            createMockItemListingDisplayItem(number = 1),
+                            createMockDisplayItemForCipher(number = 1),
                         ),
                     ),
                 ),
@@ -273,7 +330,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
-                        createMockItemListingDisplayItem(number = 1),
+                        createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
             ),
@@ -365,7 +422,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
-                        createMockItemListingDisplayItem(number = 1),
+                        createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
             ),
@@ -464,7 +521,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
-                        createMockItemListingDisplayItem(number = 1),
+                        createMockDisplayItemForCipher(number = 1),
                     ),
                 ),
             ),
@@ -577,6 +634,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     ): VaultItemListingViewModel =
         VaultItemListingViewModel(
             savedStateHandle = savedStateHandle,
+            clipboardManager = clipboardManager,
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
@@ -590,6 +648,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         VaultItemListingState(
             itemListingType = itemListingType,
             viewState = viewState,
+            baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             dialogState = null,

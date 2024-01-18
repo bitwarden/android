@@ -8,8 +8,11 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 
 /**
@@ -87,9 +90,13 @@ fun List<CipherView>.toViewState(
 /**
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
  */
-fun List<SendView>.toViewState(): VaultItemListingState.ViewState =
+fun List<SendView>.toViewState(
+    baseWebSendUrl: String,
+): VaultItemListingState.ViewState =
     if (isNotEmpty()) {
-        VaultItemListingState.ViewState.Content(displayItemList = toDisplayItemList())
+        VaultItemListingState.ViewState.Content(
+            displayItemList = toDisplayItemList(baseWebSendUrl = baseWebSendUrl),
+        )
     } else {
         VaultItemListingState.ViewState.NoItems
     }
@@ -134,8 +141,10 @@ private fun List<CipherView>.toDisplayItemList(
         )
     }
 
-private fun List<SendView>.toDisplayItemList(): List<VaultItemListingState.DisplayItem> =
-    this.map { it.toDisplayItem() }
+private fun List<SendView>.toDisplayItemList(
+    baseWebSendUrl: String,
+): List<VaultItemListingState.DisplayItem> =
+    this.map { it.toDisplayItem(baseWebSendUrl = baseWebSendUrl) }
 
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
@@ -149,6 +158,7 @@ private fun CipherView.toDisplayItem(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
+        overflowOptions = emptyList(),
     )
 
 private fun CipherView.toIconData(
@@ -169,7 +179,9 @@ private fun CipherView.toIconData(
     }
 }
 
-private fun SendView.toDisplayItem(): VaultItemListingState.DisplayItem =
+private fun SendView.toDisplayItem(
+    baseWebSendUrl: String,
+): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = name,
@@ -179,6 +191,33 @@ private fun SendView.toDisplayItem(): VaultItemListingState.DisplayItem =
                 SendType.TEXT -> R.drawable.ic_send_text
                 SendType.FILE -> R.drawable.ic_send_file
             },
+        ),
+        overflowOptions = listOfNotNull(
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.edit.asText(),
+                action = VaultItemListingsAction.ItemClick(id = id.orEmpty()),
+            ),
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.copy_link.asText(),
+                action = VaultItemListingsAction.CopySendUrlClick(
+                    sendUrl = toSendUrl(baseWebSendUrl),
+                ),
+            ),
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.share_link.asText(),
+                action = VaultItemListingsAction.ShareSendUrlClick(
+                    sendUrl = toSendUrl(baseWebSendUrl),
+                ),
+            ),
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.remove_password.asText(),
+                action = VaultItemListingsAction.RemoveSendPasswordClick(sendId = id.orEmpty()),
+            )
+                .takeIf { hasPassword },
+            VaultItemListingState.DisplayItem.OverflowItem(
+                title = R.string.delete.asText(),
+                action = VaultItemListingsAction.DeleteSendClick(sendId = id.orEmpty()),
+            ),
         ),
     )
 
