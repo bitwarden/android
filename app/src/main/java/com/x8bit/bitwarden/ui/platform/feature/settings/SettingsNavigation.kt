@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.navigate
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.appearanceDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.navigateToAppearance
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.autoFillDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.blockAutoFillDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.navigateToBlockAutoFillScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
@@ -51,12 +53,16 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
         )
         appearanceDestination(onNavigateBack = { navController.popBackStack() })
-        autoFillDestination(onNavigateBack = { navController.popBackStack() })
+        autoFillDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
+        )
         otherDestination(onNavigateBack = { navController.popBackStack() })
         vaultSettingsDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToFolders = onNavigateToFolders,
         )
+        blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
     }
 }
 

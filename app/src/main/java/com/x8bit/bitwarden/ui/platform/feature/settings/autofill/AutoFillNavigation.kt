@@ -12,11 +12,15 @@ private const val AUTO_FILL_ROUTE = "settings_auto_fill"
  */
 fun NavGraphBuilder.autoFillDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToBlockAutoFillScreen: () -> Unit,
 ) {
     composableWithPushTransitions(
         route = AUTO_FILL_ROUTE,
     ) {
-        AutoFillScreen(onNavigateBack = onNavigateBack)
+        AutoFillScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToBlockAutoFillScreen = onNavigateToBlockAutoFillScreen,
+        )
     }
 }
 

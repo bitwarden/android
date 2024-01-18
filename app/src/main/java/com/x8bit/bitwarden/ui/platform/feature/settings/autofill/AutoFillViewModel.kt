@@ -57,6 +57,7 @@ class AutoFillViewModel @Inject constructor(
         AutoFillAction.BackClick -> handleBackClick()
         is AutoFillAction.CopyTotpAutomaticallyClick -> handleCopyTotpAutomaticallyClick(action)
         is AutoFillAction.UriDetectionMethodSelect -> handleUriDetectionMethodSelect(action)
+        AutoFillAction.BlockAutoFillClick -> handleBlockAutoFillClick()
         is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
         is AutoFillAction.Internal.AutofillEnabledUpdateReceive -> {
             handleAutofillEnabledUpdateReceive(action)
@@ -109,6 +110,10 @@ class AutoFillViewModel @Inject constructor(
             it.copy(isAutoFillServicesEnabled = action.isAutofillEnabled)
         }
     }
+
+    private fun handleBlockAutoFillClick() {
+        sendEvent(AutoFillEvent.NavigateToBlockAutoFill)
+    }
 }
 
 /**
@@ -149,6 +154,11 @@ sealed class AutoFillEvent {
      * Navigates to the system autofill settings selection screen.
      */
     data object NavigateToAutofillSettings : AutoFillEvent()
+
+    /**
+     * Navigate to block auto fill screen.
+     */
+    data object NavigateToBlockAutoFill : AutoFillEvent()
 
     /**
      * Displays a toast with the given [Text].
@@ -194,6 +204,11 @@ sealed class AutoFillAction {
     data class UriDetectionMethodSelect(
         val uriDetectionMethod: AutoFillState.UriDetectionMethod,
     ) : AutoFillAction()
+
+    /**
+     * User clicked block auto fill button.
+     */
+    data object BlockAutoFillClick : AutoFillAction()
 
     /**
      * User clicked use inline autofill button.

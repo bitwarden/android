@@ -53,6 +53,7 @@ fun AutoFillScreen(
     onNavigateBack: () -> Unit,
     viewModel: AutoFillViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    onNavigateToBlockAutoFillScreen: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -70,6 +71,9 @@ fun AutoFillScreen(
 
             is AutoFillEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
+            }
+            AutoFillEvent.NavigateToBlockAutoFill -> {
+                onNavigateToBlockAutoFillScreen()
             }
         }
     }
@@ -169,6 +173,16 @@ fun AutoFillScreen(
                 onDetectionSelect = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.UriDetectionMethodSelect(it)) }
                 },
+            )
+            BitwardenTextRow(
+                text = stringResource(id = R.string.block_auto_fill),
+                description = stringResource(
+                    id = R.string.auto_fill_will_not_be_offered_for_these_ur_is,
+                ),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(AutoFillAction.BlockAutoFillClick) }
+                },
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
