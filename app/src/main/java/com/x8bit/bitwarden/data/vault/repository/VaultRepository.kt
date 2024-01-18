@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
@@ -168,6 +169,15 @@ interface VaultRepository : VaultLockManager {
         cipherId: String,
         cipherView: CipherView,
     ): UpdateCipherResult
+
+    /**
+     * Attempt to share a cipher to the collections with the given collectionIds.
+     */
+    suspend fun shareCipher(
+        cipherId: String,
+        cipherView: CipherView,
+        collectionIds: List<String>,
+    ): ShareCipherResult
 
     /**
      * Attempt to create a send. The [fileUri] _must_ be present when the given [SendView] has a

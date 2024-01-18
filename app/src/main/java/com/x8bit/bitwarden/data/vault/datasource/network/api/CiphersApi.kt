@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,6 +27,15 @@ interface CiphersApi {
     suspend fun updateCipher(
         @Path("cipherId") cipherId: String,
         @Body body: CipherJsonRequest,
+    ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Shares a cipher.
+     */
+    @PUT("ciphers/{cipherId}/share")
+    suspend fun shareCipher(
+        @Path("cipherId") cipherId: String,
+        @Body body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
 
     /**

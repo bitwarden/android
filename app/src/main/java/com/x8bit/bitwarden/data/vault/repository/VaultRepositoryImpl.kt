@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoadin
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
@@ -38,6 +39,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
@@ -77,7 +79,7 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 1000L
 /**
  * Default implementation of [VaultRepository].
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 class VaultRepositoryImpl(
     private val syncService: SyncService,
     private val ciphersService: CiphersService,
@@ -419,6 +421,35 @@ class VaultRepositoryImpl(
                             UpdateCipherResult.Success
                         }
                     }
+                },
+            )
+    }
+
+    override suspend fun shareCipher(
+        cipherId: String,
+        cipherView: CipherView,
+        collectionIds: List<String>,
+    ): ShareCipherResult {
+        val userId = requireNotNull(activeUserId)
+        return vaultSdkSource
+            .encryptCipher(
+                userId = userId,
+                cipherView = cipherView,
+            )
+            .flatMap { cipher ->
+                ciphersService.shareCipher(
+                    cipherId = cipherId,
+                    body = ShareCipherJsonRequest(
+                        cipher = cipher.toEncryptedNetworkCipher(),
+                        collectionIds = collectionIds,
+                    ),
+                )
+            }
+            .fold(
+                onFailure = { ShareCipherResult.Error(errorMessage = null) },
+                onSuccess = {
+                    vaultDiskSource.saveCipher(userId = userId, cipher = it)
+                    ShareCipherResult.Success
                 },
             )
     }

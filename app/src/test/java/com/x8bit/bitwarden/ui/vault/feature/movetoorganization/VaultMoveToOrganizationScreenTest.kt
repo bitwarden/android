@@ -84,11 +84,11 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     @Test
     fun `selecting an organization should send OrganizationSelect action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Organization, Organization 1")
+            .onNodeWithContentDescriptionAfterScroll(label = "Organization, mockOrganizationName-1")
             .performClick()
         // Choose the option from the menu
         composeTestRule
-            .onAllNodesWithText(text = "Organization 2")
+            .onAllNodesWithText(text = "mockOrganizationName-2")
             .onLast()
             .performScrollTo()
             .performClick()
@@ -97,22 +97,12 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 VaultMoveToOrganizationAction.OrganizationSelect(
                     VaultMoveToOrganizationState.ViewState.Content.Organization(
-                        id = "2",
-                        name = "Organization 2",
+                        id = "mockOrganizationId-2",
+                        name = "mockOrganizationName-2",
                         collections = listOf(
                             VaultMoveToOrganizationState.ViewState.Content.Collection(
-                                id = "1",
-                                name = "Collection 1",
-                                isSelected = true,
-                            ),
-                            VaultMoveToOrganizationState.ViewState.Content.Collection(
-                                id = "2",
-                                name = "Collection 2",
-                                isSelected = false,
-                            ),
-                            VaultMoveToOrganizationState.ViewState.Content.Collection(
-                                id = "3",
-                                name = "Collection 3",
+                                id = "mockId-2",
+                                name = "mockName-2",
                                 isSelected = false,
                             ),
                         ),
@@ -125,36 +115,36 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     @Test
     fun `the organization option field should display according to state`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Organization, Organization 1")
+            .onNodeWithContentDescriptionAfterScroll(label = "Organization, mockOrganizationName-1")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 viewState = VaultMoveToOrganizationState.ViewState.Content(
                     organizations = createMockOrganizationList(),
-                    selectedOrganizationId = "2",
+                    selectedOrganizationId = "mockOrganizationId-2",
                 ),
             )
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Organization, Organization 2")
+            .onNodeWithContentDescriptionAfterScroll(label = "Organization, mockOrganizationName-2")
             .assertIsDisplayed()
     }
 
     @Test
     fun `selecting a collection should send CollectionSelect action`() {
         composeTestRule
-            .onNodeWithText(text = "Collection 2")
+            .onNodeWithText(text = "mockName-1")
             .performClick()
 
         verify {
             viewModel.trySendAction(
                 VaultMoveToOrganizationAction.CollectionSelect(
                     VaultMoveToOrganizationState.ViewState.Content.Collection(
-                        id = "2",
-                        name = "Collection 2",
-                        isSelected = false,
+                        id = "mockId-1",
+                        name = "mockName-1",
+                        isSelected = true,
                     ),
                 ),
             )
@@ -164,14 +154,8 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     @Test
     fun `the collection list should display according to state`() {
         composeTestRule
-            .onNodeWithText("Collection 1")
+            .onNodeWithText("mockName-1")
             .assertIsOn()
-        composeTestRule
-            .onNodeWithText("Collection 2")
-            .assertIsOff()
-        composeTestRule
-            .onNodeWithText("Collection 3")
-            .assertIsOff()
 
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -180,31 +164,27 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
                         .map { organization ->
                             organization.copy(
                                 collections =
-                                if (organization.id == "1") {
+                                if (organization.id == "mockOrganizationId-1") {
                                     organization
                                         .collections
                                         .map { collection ->
-                                            collection.copy(isSelected = collection.id != "1")
+                                            collection.copy(
+                                                isSelected = collection.id != "mockId-1",
+                                            )
                                         }
                                 } else {
                                     organization.collections
                                 },
                             )
                         },
-                    selectedOrganizationId = "1",
+                    selectedOrganizationId = "mockOrganizationId-1",
                 ),
             )
         }
 
         composeTestRule
-            .onNodeWithText("Collection 1")
+            .onNodeWithText("mockName-1")
             .assertIsOff()
-        composeTestRule
-            .onNodeWithText("Collection 2")
-            .assertIsOn()
-        composeTestRule
-            .onNodeWithText("Collection 3")
-            .assertIsOn()
     }
 
     @Test
@@ -251,7 +231,7 @@ private fun createVaultMoveToOrganizationState(): VaultMoveToOrganizationState =
         vaultItemId = "mockId",
         viewState = VaultMoveToOrganizationState.ViewState.Content(
             organizations = createMockOrganizationList(),
-            selectedOrganizationId = "1",
+            selectedOrganizationId = "mockOrganizationId-1",
         ),
         dialogState = null,
     )

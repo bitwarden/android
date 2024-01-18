@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenErr
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import kotlinx.serialization.json.Json
@@ -34,6 +35,15 @@ class CiphersServiceImpl constructor(
                     )
                     ?: throw throwable
             }
+
+    override suspend fun shareCipher(
+        cipherId: String,
+        body: ShareCipherJsonRequest,
+    ): Result<SyncResponseJson.Cipher> =
+        ciphersApi.shareCipher(
+            cipherId = cipherId,
+            body = body,
+        )
 
     override suspend fun deleteCipher(cipherId: String): Result<Unit> =
         ciphersApi.deleteCipher(cipherId = cipherId)
