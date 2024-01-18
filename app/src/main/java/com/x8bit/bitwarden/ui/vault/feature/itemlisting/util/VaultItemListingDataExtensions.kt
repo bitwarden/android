@@ -5,6 +5,8 @@ import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.SendType
+import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
@@ -15,7 +17,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
  * [VaultItemListingState.ItemListingType].
  */
 fun CipherView.determineListingPredicate(
-    itemListingType: VaultItemListingState.ItemListingType,
+    itemListingType: VaultItemListingState.ItemListingType.Vault,
 ): Boolean =
     when (itemListingType) {
         is VaultItemListingState.ItemListingType.Vault.Card -> {
@@ -48,6 +50,23 @@ fun CipherView.determineListingPredicate(
     }
 
 /**
+ * Determines a predicate to filter a list of [CipherView] based on the
+ * [VaultItemListingState.ItemListingType].
+ */
+fun SendView.determineListingPredicate(
+    itemListingType: VaultItemListingState.ItemListingType.Send,
+): Boolean =
+    when (itemListingType) {
+        is VaultItemListingState.ItemListingType.Send.SendFile -> {
+            type == SendType.FILE
+        }
+
+        is VaultItemListingState.ItemListingType.Send.SendText -> {
+            type == SendType.TEXT
+        }
+    }
+
+/**
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
  */
 fun List<CipherView>.toViewState(
@@ -61,6 +80,16 @@ fun List<CipherView>.toViewState(
                 isIconLoadingDisabled = isIconLoadingDisabled,
             ),
         )
+    } else {
+        VaultItemListingState.ViewState.NoItems
+    }
+
+/**
+ * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
+ */
+fun List<SendView>.toViewState(): VaultItemListingState.ViewState =
+    if (isNotEmpty()) {
+        VaultItemListingState.ViewState.Content(displayItemList = toDisplayItemList())
     } else {
         VaultItemListingState.ViewState.NoItems
     }
@@ -90,6 +119,8 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Vault.Login -> this
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> this
         is VaultItemListingState.ItemListingType.Vault.Trash -> this
+        is VaultItemListingState.ItemListingType.Send.SendFile -> this
+        is VaultItemListingState.ItemListingType.Send.SendText -> this
     }
 
 private fun List<CipherView>.toDisplayItemList(
@@ -102,6 +133,9 @@ private fun List<CipherView>.toDisplayItemList(
             isIconLoadingDisabled = isIconLoadingDisabled,
         )
     }
+
+private fun List<SendView>.toDisplayItemList(): List<VaultItemListingState.DisplayItem> =
+    this.map { it.toDisplayItem() }
 
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
@@ -134,6 +168,19 @@ private fun CipherView.toIconData(
         }
     }
 }
+
+private fun SendView.toDisplayItem(): VaultItemListingState.DisplayItem =
+    VaultItemListingState.DisplayItem(
+        id = id.orEmpty(),
+        title = name,
+        subtitle = deletionDate.toString(),
+        iconData = IconData.Local(
+            iconRes = when (type) {
+                SendType.TEXT -> R.drawable.ic_send_text
+                SendType.FILE -> R.drawable.ic_send_file
+            },
+        ),
+    )
 
 @Suppress("MagicNumber")
 private val CipherView.subtitle: String?

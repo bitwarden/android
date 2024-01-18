@@ -39,6 +39,8 @@ import org.junit.Test
 class SendScreenTest : BaseComposeTest() {
 
     private var onNavigateToNewSendCalled = false
+    private var onNavigateToSendFilesListCalled = false
+    private var onNavigateToSendTextListCalled = false
     private var onNavigateToEditSendId: String? = null
 
     private val intentManager = mockk<IntentManager> {
@@ -59,6 +61,8 @@ class SendScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateToAddSend = { onNavigateToNewSendCalled = true },
                 onNavigateToEditSend = { onNavigateToEditSendId = it },
+                onNavigateToSendFilesList = { onNavigateToSendFilesListCalled = true },
+                onNavigateToSendTextList = { onNavigateToSendTextListCalled = true },
                 intentManager = intentManager,
             )
         }
@@ -75,6 +79,18 @@ class SendScreenTest : BaseComposeTest() {
         val sendId = "sendId1234"
         mutableEventFlow.tryEmit(SendEvent.NavigateToEditSend(sendId))
         assertEquals(sendId, onNavigateToEditSendId)
+    }
+
+    @Test
+    fun `on NavigateToFileSends should call onNavigateToSendFilesList`() {
+        mutableEventFlow.tryEmit(SendEvent.NavigateToFileSends)
+        assertTrue(onNavigateToSendFilesListCalled)
+    }
+
+    @Test
+    fun `on NavigateToTextSends should call onNavigateToSendTextList`() {
+        mutableEventFlow.tryEmit(SendEvent.NavigateToTextSends)
+        assertTrue(onNavigateToSendTextListCalled)
     }
 
     @Test

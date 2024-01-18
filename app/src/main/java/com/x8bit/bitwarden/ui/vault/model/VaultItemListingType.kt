@@ -43,4 +43,14 @@ sealed class VaultItemListingType {
      * @param collectionId the ID of the collection.
      */
     data class Collection(val collectionId: String) : VaultItemListingType()
+
+    /**
+     * A Send File listing.
+     */
+    data object SendFile : VaultItemListingType()
+
+    /**
+     * A Send Text listing.
+     */
+    data object SendText : VaultItemListingType()
 }

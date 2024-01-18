@@ -31,6 +31,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
+    private var onNavigateToAddSendScreenCalled = false
+    private var onNavigateToEditSendItemId: String? = null
     private var onNavigateToVaultItemId: String? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
@@ -48,6 +50,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItem = { onNavigateToVaultItemId = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
+                onNavigateToAddSendItem = { onNavigateToAddSendScreenCalled = true },
+                onNavigateToEditSendItem = { onNavigateToEditSendItemId = it },
             )
         }
     }
@@ -106,6 +110,19 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `NavigateToAdd VaultItem event should call NavigateToVaultAddItemScreen`() {
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddVaultItem)
         assertTrue(onNavigateToVaultAddItemScreenCalled)
+    }
+
+    @Test
+    fun `NavigateToAddSendItem should call onNavigateToAddSendScreen`() {
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddSendItem)
+        assertTrue(onNavigateToAddSendScreenCalled)
+    }
+
+    @Test
+    fun `NavigateToSendItem event should call onNavigateToEditSendItemId`() {
+        val sendId = "sendId"
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToSendItem(sendId))
+        assertEquals(sendId, onNavigateToEditSendItemId)
     }
 
     @Test

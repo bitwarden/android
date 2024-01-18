@@ -257,13 +257,11 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleFileTypeClick() {
-        // TODO: Navigate to the file type send list screen (BIT-1388)
-        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+        sendEvent(SendEvent.NavigateToFileSends)
     }
 
     private fun handleTextTypeClick() {
-        // TODO: Navigate to the text type send list screen (BIT-1388)
-        sendEvent(SendEvent.ShowToast("Not yet implemented".asText()))
+        sendEvent(SendEvent.NavigateToTextSends)
     }
 
     private fun handleDeleteSendClick(action: SendAction.DeleteSendClick) {
@@ -562,6 +560,16 @@ sealed class SendEvent {
      * Navigate to the about send screen.
      */
     data object NavigateToAboutSend : SendEvent()
+
+    /**
+     * Navigate to the send file list screen.
+     */
+    data object NavigateToFileSends : SendEvent()
+
+    /**
+     * Navigate to the send text screen.
+     */
+    data object NavigateToTextSends : SendEvent()
 
     /**
      * Show a share sheet with the given content.

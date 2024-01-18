@@ -20,4 +20,7 @@ fun VaultItemListingType.toItemListingType(): VaultItemListingState.ItemListingT
         is VaultItemListingType.Collection -> {
             VaultItemListingState.ItemListingType.Vault.Collection(collectionId = collectionId)
         }
+
+        is VaultItemListingType.SendFile -> VaultItemListingState.ItemListingType.Send.SendFile
+        is VaultItemListingType.SendText -> VaultItemListingState.ItemListingType.Send.SendText
     }
