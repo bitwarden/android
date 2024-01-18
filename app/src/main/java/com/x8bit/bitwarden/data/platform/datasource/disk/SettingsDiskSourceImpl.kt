@@ -9,11 +9,14 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
 private const val APP_THEME_KEY = "$BASE_KEY:theme"
 private const val PULL_TO_REFRESH_KEY = "$BASE_KEY:syncOnRefresh"
 private const val INLINE_AUTOFILL_ENABLED_KEY = "$BASE_KEY:inlineAutofillEnabled"
+private const val BLOCKED_AUTOFILL_URIS_KEY = "$BASE_KEY:autofillBlacklistedUris"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
@@ -24,6 +27,7 @@ private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
 @Suppress("TooManyFunctions")
 class SettingsDiskSourceImpl(
     val sharedPreferences: SharedPreferences,
+    private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     SettingsDiskSource {
     private val mutableAppThemeFlow =
@@ -87,6 +91,7 @@ class SettingsDiskSourceImpl(
         storeVaultTimeoutAction(userId = userId, vaultTimeoutAction = null)
         storePullToRefreshEnabled(userId = userId, isPullToRefreshEnabled = null)
         storeInlineAutofillEnabled(userId = userId, isInlineAutofillEnabled = null)
+        storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
     }
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
@@ -149,6 +154,21 @@ class SettingsDiskSourceImpl(
         putBoolean(
             key = "${INLINE_AUTOFILL_ENABLED_KEY}_$userId",
             value = isInlineAutofillEnabled,
+        )
+    }
+
+    override fun getBlockedAutofillUris(userId: String): List<String>? =
+        getString(key = "${BLOCKED_AUTOFILL_URIS_KEY}_$userId")?.let {
+            json.decodeFromString(it)
+        }
+
+    override fun storeBlockedAutofillUris(
+        userId: String,
+        blockedAutofillUris: List<String>?,
+    ) {
+        putString(
+            key = "${BLOCKED_AUTOFILL_URIS_KEY}_$userId",
+            value = blockedAutofillUris?.let { json.encodeToString(it) },
         )
     }
 

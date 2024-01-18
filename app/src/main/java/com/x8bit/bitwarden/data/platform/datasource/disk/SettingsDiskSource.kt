@@ -102,4 +102,17 @@ interface SettingsDiskSource {
      * Stores the given [isInlineAutofillEnabled] value for the given [userId].
      */
     fun storeInlineAutofillEnabled(userId: String, isInlineAutofillEnabled: Boolean?)
+
+    /**
+     * Gets a list of blocked autofill URI's for the given [userId].
+     */
+    fun getBlockedAutofillUris(userId: String): List<String>?
+
+    /**
+     * Stores the list of [blockedAutofillUris] for the given [userId].
+     */
+    fun storeBlockedAutofillUris(
+        userId: String,
+        blockedAutofillUris: List<String>?,
+    )
 }
