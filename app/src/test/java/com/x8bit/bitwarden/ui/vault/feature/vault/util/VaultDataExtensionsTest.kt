@@ -328,7 +328,7 @@ class VaultDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_settings)
+        val expected = IconData.Local(iconRes = R.drawable.ic_android)
 
         assertEquals(expected, actual)
     }
@@ -347,7 +347,7 @@ class VaultDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             )
 
-        val expected = IconData.Local(iconRes = R.drawable.ic_settings)
+        val expected = IconData.Local(iconRes = R.drawable.ic_ios)
 
         assertEquals(expected, actual)
     }

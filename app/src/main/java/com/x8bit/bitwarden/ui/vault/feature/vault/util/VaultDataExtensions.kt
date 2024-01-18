@@ -102,11 +102,11 @@ fun List<LoginUriView>?.toLoginIconData(
         ?: return localIconData
 
     if (uri.startsWith(ANDROID_URI)) {
-        return IconData.Local(R.drawable.ic_settings)
+        return IconData.Local(R.drawable.ic_android)
     }
 
     if (uri.startsWith(IOS_URI)) {
-        return IconData.Local(R.drawable.ic_settings)
+        return IconData.Local(R.drawable.ic_ios)
     }
 
     if (isIconLoadingDisabled) {
