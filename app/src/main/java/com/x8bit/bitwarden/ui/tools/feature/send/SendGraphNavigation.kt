@@ -4,6 +4,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToSendItemListing
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.sendItemListingDestination
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
 const val SEND_GRAPH_ROUTE: String = "send_graph"
 
@@ -11,6 +14,7 @@ const val SEND_GRAPH_ROUTE: String = "send_graph"
  * Add send destination to the nav graph.
  */
 fun NavGraphBuilder.sendGraph(
+    navController: NavController,
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
 ) {
@@ -21,6 +25,17 @@ fun NavGraphBuilder.sendGraph(
         sendDestination(
             onNavigateToAddSend = onNavigateToAddSend,
             onNavigateToEditSend = onNavigateToEditSend,
+            onNavigateToSendFilesList = {
+                navController.navigateToSendItemListing(VaultItemListingType.SendFile)
+            },
+            onNavigateToSendTextList = {
+                navController.navigateToSendItemListing(VaultItemListingType.SendText)
+            },
+        )
+        sendItemListingDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToAddSendItem = onNavigateToAddSend,
+            onNavigateToEditSendItem = onNavigateToEditSend,
         )
     }
 }

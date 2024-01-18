@@ -35,6 +35,8 @@ fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItem: (id: String) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToAddSendItem: () -> Unit,
+    onNavigateToEditSendItem: (sendId: String) -> Unit,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -53,6 +55,14 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
                 onNavigateToVaultAddItemScreen()
+            }
+
+            is VaultItemListingEvent.NavigateToAddSendItem -> {
+                onNavigateToAddSendItem()
+            }
+
+            is VaultItemListingEvent.NavigateToSendItem -> {
+                onNavigateToEditSendItem(event.id)
             }
 
             is VaultItemListingEvent.NavigateToVaultSearchScreen -> {

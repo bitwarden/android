@@ -13,6 +13,8 @@ const val SEND_ROUTE: String = "send"
 fun NavGraphBuilder.sendDestination(
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToSendFilesList: () -> Unit,
+    onNavigateToSendTextList: () -> Unit,
 ) {
     composableWithRootPushTransitions(
         route = SEND_ROUTE,
@@ -20,6 +22,8 @@ fun NavGraphBuilder.sendDestination(
         SendScreen(
             onNavigateToAddSend = onNavigateToAddSend,
             onNavigateToEditSend = onNavigateToEditSend,
+            onNavigateToSendFilesList = onNavigateToSendFilesList,
+            onNavigateToSendTextList = onNavigateToSendTextList,
         )
     }
 }

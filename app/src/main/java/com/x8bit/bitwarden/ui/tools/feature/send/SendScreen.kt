@@ -53,6 +53,8 @@ import kotlinx.collections.immutable.persistentListOf
 fun SendScreen(
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToSendFilesList: () -> Unit,
+    onNavigateToSendTextList: () -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -87,6 +89,9 @@ fun SendScreen(
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
                     .show()
             }
+
+            SendEvent.NavigateToFileSends -> onNavigateToSendFilesList()
+            SendEvent.NavigateToTextSends -> onNavigateToSendTextList()
         }
     }
 

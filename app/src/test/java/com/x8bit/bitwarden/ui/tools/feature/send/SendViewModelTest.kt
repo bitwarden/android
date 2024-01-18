@@ -275,20 +275,20 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `FileTypeClick should emit ShowToast`() = runTest {
+    fun `FileTypeClick should emit NavigateToFileSends`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.FileTypeClick)
-            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(SendEvent.NavigateToFileSends, awaitItem())
         }
     }
 
     @Test
-    fun `TextTypeClick should emit ShowToast`() = runTest {
+    fun `TextTypeClick should emit NavigateToTextSends`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.TextTypeClick)
-            assertEquals(SendEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(SendEvent.NavigateToTextSends, awaitItem())
         }
     }
 

@@ -84,7 +84,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemClick should emit NavigateToVaultItem`() = runTest {
+    fun `ItemClick for vault item should emit NavigateToVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultItemListingsAction.ItemClick(id = "mock"))
@@ -93,11 +93,33 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddVaultItemClick should emit NavigateToAddVaultItem`() = runTest {
+    fun `ItemClick for send item should emit NavigateToSendItem`() = runTest {
+        val viewModel = createVaultItemListingViewModel(
+            createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
+        )
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(VaultItemListingsAction.ItemClick(id = "mock"))
+            assertEquals(VaultItemListingEvent.NavigateToSendItem(id = "mock"), awaitItem())
+        }
+    }
+
+    @Test
+    fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultItemListingsAction.AddVaultItemClick)
             assertEquals(VaultItemListingEvent.NavigateToAddVaultItem, awaitItem())
+        }
+    }
+
+    @Test
+    fun `AddVaultItemClick for send item should emit NavigateToAddVaultItem`() = runTest {
+        val viewModel = createVaultItemListingViewModel(
+            createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendText),
+        )
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(VaultItemListingsAction.AddVaultItemClick)
+            assertEquals(VaultItemListingEvent.NavigateToAddSendItem, awaitItem())
         }
     }
 
@@ -489,6 +511,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 is VaultItemListingType.Login -> "login"
                 is VaultItemListingType.SecureNote -> "secure_note"
                 is VaultItemListingType.Trash -> "trash"
+                is VaultItemListingType.SendFile -> "send_file"
+                is VaultItemListingType.SendText -> "send_text"
             },
         )
         set(
@@ -501,6 +525,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 is VaultItemListingType.Login -> null
                 is VaultItemListingType.SecureNote -> null
                 is VaultItemListingType.Trash -> null
+                is VaultItemListingType.SendFile -> null
+                is VaultItemListingType.SendText -> null
             },
         )
     }

@@ -215,6 +215,7 @@ private fun VaultUnlockedNavBarScaffold(
                 },
             )
             sendGraph(
+                navController = navController,
                 onNavigateToAddSend = navigateToAddSend,
                 onNavigateToEditSend = onNavigateToEditSend,
             )

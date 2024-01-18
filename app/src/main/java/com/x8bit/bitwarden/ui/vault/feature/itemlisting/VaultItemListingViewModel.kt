@@ -77,17 +77,29 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleAddVaultItemClick() {
-        sendEvent(
-            event = VaultItemListingEvent.NavigateToAddVaultItem,
-        )
+        val event = when (state.itemListingType) {
+            is VaultItemListingState.ItemListingType.Vault -> {
+                VaultItemListingEvent.NavigateToAddVaultItem
+            }
+
+            is VaultItemListingState.ItemListingType.Send -> {
+                VaultItemListingEvent.NavigateToAddSendItem
+            }
+        }
+        sendEvent(event)
     }
 
     private fun handleItemClick(action: VaultItemListingsAction.ItemClick) {
-        sendEvent(
-            event = VaultItemListingEvent.NavigateToVaultItem(
-                id = action.id,
-            ),
-        )
+        val event = when (state.itemListingType) {
+            is VaultItemListingState.ItemListingType.Vault -> {
+                VaultItemListingEvent.NavigateToVaultItem(id = action.id)
+            }
+
+            is VaultItemListingState.ItemListingType.Send -> {
+                VaultItemListingEvent.NavigateToSendItem(id = action.id)
+            }
+        }
+        sendEvent(event)
     }
 
     private fun handleBackClick() {
@@ -180,15 +192,28 @@ class VaultItemListingViewModel @Inject constructor(
                         collectionList = vaultData
                             .collectionViewList,
                     ),
-                viewState = vaultData
-                    .cipherViewList
-                    .filter { cipherView ->
-                        cipherView.determineListingPredicate(currentState.itemListingType)
+                viewState = when (val listingType = currentState.itemListingType) {
+                    is VaultItemListingState.ItemListingType.Vault -> {
+                        vaultData
+                            .cipherViewList
+                            .filter { cipherView ->
+                                cipherView.determineListingPredicate(listingType)
+                            }
+                            .toViewState(
+                                baseIconUrl = state.baseIconUrl,
+                                isIconLoadingDisabled = state.isIconLoadingDisabled,
+                            )
                     }
-                    .toViewState(
-                        baseIconUrl = state.baseIconUrl,
-                        isIconLoadingDisabled = state.isIconLoadingDisabled,
-                    ),
+
+                    is VaultItemListingState.ItemListingType.Send -> {
+                        vaultData
+                            .sendViewList
+                            .filter { sendView ->
+                                sendView.determineListingPredicate(listingType)
+                            }
+                            .toViewState()
+                    }
+                },
             )
         }
     }
@@ -344,6 +369,27 @@ data class VaultItemListingState(
                 override val hasFab: Boolean get() = false
             }
         }
+
+        /**
+         * Represents different types of vault item listings.
+         */
+        sealed class Send : ItemListingType() {
+            /**
+             * A Send File item listing.
+             */
+            data object SendFile : Send() {
+                override val titleText: Text get() = R.string.file.asText()
+                override val hasFab: Boolean get() = true
+            }
+
+            /**
+             * A Send Text item listing.
+             */
+            data object SendText : Send() {
+                override val titleText: Text get() = R.string.text.asText()
+                override val hasFab: Boolean get() = true
+            }
+        }
     }
 }
 
@@ -361,6 +407,18 @@ sealed class VaultItemListingEvent {
      * Navigates to the VaultAddItemScreen.
      */
     data object NavigateToAddVaultItem : VaultItemListingEvent()
+
+    /**
+     * Navigates to the AddSendItemScreen.
+     */
+    data object NavigateToAddSendItem : VaultItemListingEvent()
+
+    /**
+     * Navigates to the AddSendScreen.
+     *
+     * @property id the id of the send to navigate to.
+     */
+    data class NavigateToSendItem(val id: String) : VaultItemListingEvent()
 
     /**
      * Navigates to the VaultItemScreen.
