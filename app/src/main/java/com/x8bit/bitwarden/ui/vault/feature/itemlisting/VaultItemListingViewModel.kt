@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
+import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -22,6 +23,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 /**
@@ -43,6 +45,7 @@ class VaultItemListingViewModel @Inject constructor(
         viewState = VaultItemListingState.ViewState.Loading,
         baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
         isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+        dialogState = null,
     ),
 ) {
 
@@ -61,6 +64,8 @@ class VaultItemListingViewModel @Inject constructor(
     override fun handleAction(action: VaultItemListingsAction) {
         when (action) {
             is VaultItemListingsAction.BackClick -> handleBackClick()
+            is VaultItemListingsAction.LockClick -> handleLockClick()
+            is VaultItemListingsAction.SyncClick -> handleSyncClick()
             is VaultItemListingsAction.SearchIconClick -> handleSearchIconClick()
             is VaultItemListingsAction.ItemClick -> handleItemClick(action)
             is VaultItemListingsAction.AddVaultItemClick -> handleAddVaultItemClick()
@@ -108,6 +113,21 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    private fun handleLockClick() {
+        vaultRepository.lockVaultForCurrentUser()
+    }
+
+    private fun handleSyncClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = R.string.syncing.asText(),
+                ),
+            )
+        }
+        vaultRepository.sync()
+    }
+
     private fun handleSearchIconClick() {
         sendEvent(
             event = VaultItemListingEvent.NavigateToVaultSearchScreen,
@@ -134,27 +154,28 @@ class VaultItemListingViewModel @Inject constructor(
         }
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
-            updateStateWithVaultData(vaultData)
+            updateStateWithVaultData(vaultData, clearDialogState = false)
         }
     }
     //endregion VaultItemListing Handlers
 
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
         if (vaultData.data != null) {
-            updateStateWithVaultData(vaultData = vaultData.data)
+            updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
         } else {
             mutableStateFlow.update {
                 it.copy(
                     viewState = VaultItemListingState.ViewState.Error(
                         message = R.string.generic_error_message.asText(),
                     ),
+                    dialogState = null,
                 )
             }
         }
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
-        updateStateWithVaultData(vaultData = vaultData.data)
+        updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
     }
 
     private fun vaultLoadingReceive() {
@@ -163,7 +184,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
         if (vaultData.data != null) {
-            updateStateWithVaultData(vaultData = vaultData.data)
+            updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
         } else {
             mutableStateFlow.update { currentState ->
                 currentState.copy(
@@ -172,16 +193,17 @@ class VaultItemListingViewModel @Inject constructor(
                             .asText()
                             .concat(R.string.internet_connection_required_message.asText()),
                     ),
+                    dialogState = null,
                 )
             }
         }
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
-        updateStateWithVaultData(vaultData = vaultData.data)
+        updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = false)
     }
 
-    private fun updateStateWithVaultData(vaultData: VaultData) {
+    private fun updateStateWithVaultData(vaultData: VaultData, clearDialogState: Boolean) {
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 itemListingType = currentState
@@ -214,6 +236,7 @@ class VaultItemListingViewModel @Inject constructor(
                             .toViewState()
                     }
                 },
+                dialogState = currentState.dialogState.takeUnless { clearDialogState },
             )
         }
     }
@@ -227,7 +250,22 @@ data class VaultItemListingState(
     val viewState: ViewState,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
+    val dialogState: DialogState?,
 ) {
+
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+    }
 
     /**
      * Represents the specific view states for the [VaultItemListingScreen].
@@ -449,6 +487,16 @@ sealed class VaultItemListingsAction {
      * Click the refresh button.
      */
     data object RefreshClick : VaultItemListingsAction()
+
+    /**
+     * Click the lock button.
+     */
+    data object LockClick : VaultItemListingsAction()
+
+    /**
+     * Click the refresh button.
+     */
+    data object SyncClick : VaultItemListingsAction()
 
     /**
      * Click the back button.

@@ -11,6 +11,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -22,10 +23,15 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays the vault item listing screen.
@@ -39,6 +45,7 @@ fun VaultItemListingScreen(
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
+    val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
     val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
@@ -73,24 +80,30 @@ fun VaultItemListingScreen(
             }
         }
     }
+
+    VaultItemListingDialogs(
+        dialogState = state.dialogState,
+    )
+
     VaultItemListingScaffold(
-        state = viewModel.stateFlow.collectAsState().value,
-        backClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.BackClick) }
-        },
-        searchIconClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.SearchIconClick) }
-        },
-        addVaultItemClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick) }
-        },
-        vaultItemClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.ItemClick(it)) }
-        },
-        refreshClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemListingsAction.RefreshClick) }
+        state = state,
+        vaultItemListingHandlers = remember(viewModel) {
+            VaultItemListingHandlers.create(viewModel)
         },
     )
+}
+
+@Composable
+private fun VaultItemListingDialogs(
+    dialogState: VaultItemListingState.DialogState?,
+) {
+    when (dialogState) {
+        is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(dialogState.message),
+        )
+
+        null -> Unit
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,11 +111,7 @@ fun VaultItemListingScreen(
 @Composable
 private fun VaultItemListingScaffold(
     state: VaultItemListingState,
-    backClick: () -> Unit,
-    searchIconClick: () -> Unit,
-    addVaultItemClick: () -> Unit,
-    vaultItemClick: (id: String) -> Unit,
-    refreshClick: () -> Unit,
+    vaultItemListingHandlers: VaultItemListingHandlers,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -115,13 +124,24 @@ private fun VaultItemListingScaffold(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
-                onNavigationIconClick = backClick,
+                onNavigationIconClick = vaultItemListingHandlers.backClick,
                 actions = {
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = R.string.search_vault),
-                        onClick = searchIconClick,
+                        onClick = vaultItemListingHandlers.searchIconClick,
                     )
-                    BitwardenOverflowActionItem()
+                    BitwardenOverflowActionItem(
+                        menuItemDataList = persistentListOf(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.sync),
+                                onClick = vaultItemListingHandlers.syncClick,
+                            ),
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.lock),
+                                onClick = vaultItemListingHandlers.lockClick,
+                            ),
+                        ),
+                    )
                 },
             )
         },
@@ -129,7 +149,7 @@ private fun VaultItemListingScaffold(
             if (state.itemListingType.hasFab) {
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    onClick = addVaultItemClick,
+                    onClick = vaultItemListingHandlers.addVaultItemClick,
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_plus),
@@ -147,7 +167,7 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.Content -> {
                 VaultItemListingContent(
                     state = state.viewState,
-                    vaultItemClick = vaultItemClick,
+                    vaultItemClick = vaultItemListingHandlers.itemClick,
                     modifier = modifier,
                 )
             }
@@ -155,7 +175,7 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.NoItems -> {
                 VaultItemListingEmpty(
                     itemListingType = state.itemListingType,
-                    addItemClickAction = addVaultItemClick,
+                    addItemClickAction = vaultItemListingHandlers.addVaultItemClick,
                     modifier = modifier,
                 )
             }
@@ -163,7 +183,7 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.Error -> {
                 BitwardenErrorContent(
                     message = state.viewState.message(),
-                    onTryAgainClick = refreshClick,
+                    onTryAgainClick = vaultItemListingHandlers.refreshClick,
                     modifier = modifier,
                 )
             }

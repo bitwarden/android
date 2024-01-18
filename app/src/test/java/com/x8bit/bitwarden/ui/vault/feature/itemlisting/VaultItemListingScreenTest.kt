@@ -1,10 +1,17 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.isPopup
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -420,6 +427,74 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .onNodeWithText(text = "mockName")
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `on overflow item click should display menu`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Sync")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .isDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Lock")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .isDisplayed()
+    }
+
+    @Test
+    fun `on sync click should send SyncClick`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Sync")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemListingsAction.SyncClick)
+        }
+    }
+
+    @Test
+    fun `on lock click should send LockClick`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Lock")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemListingsAction.LockClick)
+        }
+    }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        val loadingMessage = "syncing"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = loadingMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
 }
 
 private val DEFAULT_STATE = VaultItemListingState(
@@ -427,6 +502,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     viewState = VaultItemListingState.ViewState.Loading,
     isIconLoadingDisabled = false,
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+    dialogState = null,
 )
 
 private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =

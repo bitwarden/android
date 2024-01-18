@@ -21,8 +21,10 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockItemListingDisplayItem
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +40,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-        every { sync() } returns Unit
+        every { sync() } just runs
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -80,6 +82,37 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultItemListingsAction.SearchIconClick)
             assertEquals(VaultItemListingEvent.NavigateToVaultSearchScreen, awaitItem())
+        }
+    }
+
+    @Test
+    fun `LockClick should call lockVaultForCurrentUser`() {
+        every { vaultRepository.lockVaultForCurrentUser() } just runs
+        val viewModel = createVaultItemListingViewModel()
+
+        viewModel.trySendAction(VaultItemListingsAction.LockClick)
+
+        verify(exactly = 1) {
+            vaultRepository.lockVaultForCurrentUser()
+        }
+    }
+
+    @Test
+    fun `SyncClick should display the loading dialog and call sync`() {
+        val viewModel = createVaultItemListingViewModel()
+
+        viewModel.trySendAction(VaultItemListingsAction.SyncClick)
+
+        assertEquals(
+            initialState.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = R.string.syncing.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            vaultRepository.sync()
         }
     }
 
@@ -559,5 +592,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewState = viewState,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+            dialogState = null,
         )
 }
