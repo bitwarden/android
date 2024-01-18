@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -15,9 +16,11 @@ import org.junit.jupiter.api.Test
 
 class SettingsDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
+    private val json = PlatformNetworkModule.providesJson()
 
     private val settingsDiskSource = SettingsDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
+        json = json,
     )
 
     @Test
@@ -78,6 +81,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isInlineAutofillEnabled = true,
         )
+        settingsDiskSource.storeBlockedAutofillUris(
+            userId = userId,
+            blockedAutofillUris = listOf("www.example.com"),
+        )
 
         settingsDiskSource.clearData(userId = userId)
 
@@ -85,6 +92,7 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getVaultTimeoutAction(userId = userId))
         assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = userId))
         assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = userId))
+        assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
     }
 
     @Test
@@ -440,5 +448,63 @@ class SettingsDiskSourceTest {
             isInlineAutofillEnabled = null,
         )
         assertFalse(fakeSharedPreferences.contains(inlineAutofillEnabledKey))
+    }
+
+    @Test
+    fun `getBlockedAutofillUris should pull from SharedPreferences`() {
+        val blockedAutofillUrisBaseKey = "bwPreferencesStorage:autofillBlacklistedUris"
+        val mockUserId = "mockUserId"
+        val mockBlockedAutofillUris = listOf(
+            "https://www.example1.com",
+            "https://www.example2.com",
+        )
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    "${blockedAutofillUrisBaseKey}_$mockUserId",
+                    """
+                    [
+                      "https://www.example1.com",
+                      "https://www.example2.com"
+                    ]
+                    """
+                        .trimIndent(),
+                )
+            }
+        val actual = settingsDiskSource.getBlockedAutofillUris(userId = mockUserId)
+        assertEquals(
+            mockBlockedAutofillUris,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeBlockedAutofillUris should update SharedPreferences`() {
+        val blockedAutofillUrisBaseKey = "bwPreferencesStorage:autofillBlacklistedUris"
+        val mockUserId = "mockUserId"
+        val mockBlockedAutofillUris = listOf(
+            "https://www.example1.com",
+            "https://www.example2.com",
+        )
+        settingsDiskSource.storeBlockedAutofillUris(
+            userId = mockUserId,
+            blockedAutofillUris = mockBlockedAutofillUris,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "${blockedAutofillUrisBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.parseToJsonElement(
+                """
+                [
+                  "https://www.example1.com",
+                  "https://www.example2.com"
+                ]
+                """
+                    .trimIndent(),
+            ),
+            json.parseToJsonElement(requireNotNull(actual)),
+        )
     }
 }

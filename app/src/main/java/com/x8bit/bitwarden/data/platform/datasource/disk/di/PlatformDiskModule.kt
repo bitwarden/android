@@ -46,8 +46,10 @@ object PlatformDiskModule {
     @Singleton
     fun provideSettingsDiskSource(
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        json: Json,
     ): SettingsDiskSource =
         SettingsDiskSourceImpl(
             sharedPreferences = sharedPreferences,
+            json = json,
         )
 }

@@ -357,6 +357,39 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `blockedAutofillUris should pull from and update SettingsDiskSource`() {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertEquals(
+            emptyList<String>(),
+            settingsRepository.blockedAutofillUris,
+        )
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.storeBlockedAutofillUris(
+            userId = userId,
+            blockedAutofillUris = listOf(
+                "https://www.example1.com",
+                "https://www.example2.com",
+            ),
+        )
+        assertEquals(
+            listOf(
+                "https://www.example1.com",
+                "https://www.example2.com",
+            ),
+            settingsRepository.blockedAutofillUris,
+        )
+
+        // Updates to the repository change the disk source value
+        settingsRepository.blockedAutofillUris = emptyList()
+        assertEquals(
+            emptyList<String>(),
+            fakeSettingsDiskSource.getBlockedAutofillUris(userId = userId),
+        )
+    }
+
+    @Test
     fun `getPullToRefreshEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
         val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE

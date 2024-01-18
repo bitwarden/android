@@ -109,6 +109,18 @@ class SettingsRepositoryImpl(
             )
         }
 
+    override var blockedAutofillUris: List<String>
+        get() = activeUserId
+            ?.let { settingsDiskSource.getBlockedAutofillUris(userId = it) }
+            ?: emptyList()
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeBlockedAutofillUris(
+                userId = userId,
+                blockedAutofillUris = value,
+            )
+        }
+
     override fun setDefaultsIfNecessary(userId: String) {
         // Set Vault Settings defaults
         if (!isVaultTimeoutActionSet(userId = userId)) {
