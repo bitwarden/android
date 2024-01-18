@@ -879,7 +879,7 @@ private fun UsernameOptionsItem(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .semantics { testTag = "PasswordTypePicker" },
+            .semantics { testTag = "UsernameTypePicker" },
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
@@ -918,8 +918,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = stringResource(id = R.string.api_access_token),
                 value = usernameTypeState.selectedServiceType.apiAccessToken,
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
+                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
                     .fillMaxWidth(),
             )
 
@@ -931,6 +933,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .semantics { testTag = "AnonAddyDomainNameEntry" }
                     .fillMaxWidth(),
             )
         }
@@ -940,8 +943,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = stringResource(id = R.string.api_key_required_parenthesis),
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onDuckDuckGoApiKeyTextChange,
+                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
                     .fillMaxWidth(),
             )
         }
@@ -951,8 +956,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = stringResource(id = R.string.api_key_required_parenthesis),
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onFastMailApiKeyTextChange,
+                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
                     .fillMaxWidth(),
             )
         }
@@ -962,8 +969,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = stringResource(id = R.string.api_access_token),
                 value = usernameTypeState.selectedServiceType.apiAccessToken,
                 onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
+                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
                     .fillMaxWidth(),
             )
         }
@@ -973,8 +982,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = stringResource(id = R.string.api_key_required_parenthesis),
                 value = usernameTypeState.selectedServiceType.apiKey,
                 onValueChange = forwardedEmailAliasHandlers.onSimpleLoginApiKeyTextChange,
+                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
                     .fillMaxWidth(),
             )
         }
@@ -985,8 +996,10 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 label = "",
                 value = obfuscatedTextField,
                 onValueChange = { obfuscatedTextField = it },
+                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
                     .fillMaxWidth(),
             )
         }
@@ -1014,6 +1027,7 @@ private fun ServiceTypeOptionsItem(
         },
         modifier = Modifier
             .padding(horizontal = 16.dp)
+            .semantics { testTag = "ServiceTypePicker" }
             .fillMaxWidth(),
     )
 }
@@ -1046,6 +1060,7 @@ private fun PlusAddressedEmailTextInputItem(
         },
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "PlusAddressedEmailEntry" }
             .padding(horizontal = 16.dp),
     )
 }
@@ -1080,6 +1095,7 @@ private fun CatchAllEmailTextInputItem(
         },
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "CatchAllEmailDomainEntry" }
             .padding(horizontal = 16.dp),
     )
 }
@@ -1117,6 +1133,7 @@ private fun RandomWordCapitalizeToggleItem(
         onCheckedChange = onRandomWordCapitalizeToggleChange,
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "CapitalizeRandomWordUsernameToggle" }
             .padding(horizontal = 16.dp),
     )
 }
@@ -1132,6 +1149,7 @@ private fun RandomWordIncludeNumberToggleItem(
         onCheckedChange = onRandomWordIncludeNumberToggleChange,
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "IncludeNumberRandomWordUsernameToggle" }
             .padding(horizontal = 16.dp),
     )
 }
