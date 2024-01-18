@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.SendView
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
@@ -271,6 +273,63 @@ class AddSendViewModelTest : BaseViewModelTest() {
                     message = R.string.validation_field_required.asText(
                         R.string.name.asText(),
                     ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick with file missing should show error dialog`() {
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(name = "test"),
+                selectedType = AddSendState.ViewState.Content.SendType.File(
+                    uri = null,
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(AddSendAction.SaveClick)
+
+        assertEquals(
+            initialState.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.validation_field_required.asText(R.string.file.asText()),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SaveClick with file too large should show error dialog`() {
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON_STATE.copy(name = "test"),
+                selectedType = AddSendState.ViewState.Content.SendType.File(
+                    uri = mockk(),
+                    name = "test.png",
+                    displaySize = null,
+                    // Max size is 104857600
+                    sizeBytes = 104857601,
+                ),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(AddSendAction.SaveClick)
+
+        assertEquals(
+            initialState.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.max_file_size.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -584,11 +643,41 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `FileChose should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.FileChoose(fileData = mockk()))
-            assertEquals(AddSendEvent.ShowToast("Not Yet Implemented".asText()), awaitItem())
-        }
+        val initialState = DEFAULT_STATE.copy(
+            viewState = DEFAULT_VIEW_STATE.copy(
+                selectedType = AddSendState.ViewState.Content.SendType.File(
+                    uri = null,
+                    name = null,
+                    displaySize = null,
+                    sizeBytes = null,
+                ),
+            ),
+        )
+        val fileName = "test.png"
+        val uri = mockk<Uri>()
+        val size = 50L
+        val fileData = IntentManager.FileData(
+            fileName = fileName,
+            uri = uri,
+            sizeBytes = size,
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(AddSendAction.FileChoose(fileData = fileData))
+
+        assertEquals(
+            initialState.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    selectedType = AddSendState.ViewState.Content.SendType.File(
+                        uri = uri,
+                        name = fileName,
+                        displaySize = null,
+                        sizeBytes = size,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -606,7 +695,12 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val premiumUserState = DEFAULT_STATE.copy(isPremiumUser = true)
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            selectedType = AddSendState.ViewState.Content.SendType.File,
+            selectedType = AddSendState.ViewState.Content.SendType.File(
+                name = null,
+                displaySize = null,
+                sizeBytes = null,
+                uri = null,
+            ),
         )
         // Make sure we are a premium user
         mutableUserStateFlow.tryEmit(

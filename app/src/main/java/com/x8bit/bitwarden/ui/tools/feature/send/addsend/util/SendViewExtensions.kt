@@ -16,6 +16,7 @@ fun SendView.toViewState(
 ): AddSendState.ViewState.Content =
     AddSendState.ViewState.Content(
         common = AddSendState.ViewState.Content.Common(
+            originalSendView = this,
             name = this.name,
             currentAccessCount = this.accessCount.toInt(),
             maxAccessCount = this.maxAccessCount?.toInt(),
@@ -38,6 +39,14 @@ fun SendView.toViewState(
                 )
             }
 
-            SendType.FILE -> AddSendState.ViewState.Content.SendType.File
+            SendType.FILE -> {
+                val fileView = requireNotNull(this.file)
+                AddSendState.ViewState.Content.SendType.File(
+                    uri = null,
+                    name = fileView.fileName,
+                    displaySize = fileView.sizeName,
+                    sizeBytes = null,
+                )
+            }
         },
     )
