@@ -20,9 +20,11 @@ class VaultItemListingTypeExtensionsTest {
 
         assertEquals(
             listOf(
-                VaultItemListingState.ItemListingType.Folder(folderId = "mock"),
-                VaultItemListingState.ItemListingType.Trash,
-                VaultItemListingState.ItemListingType.Collection(collectionId = "collectionId"),
+                VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mock"),
+                VaultItemListingState.ItemListingType.Vault.Trash,
+                VaultItemListingState.ItemListingType.Vault.Collection(
+                    collectionId = "collectionId",
+                ),
             ),
             result,
         )

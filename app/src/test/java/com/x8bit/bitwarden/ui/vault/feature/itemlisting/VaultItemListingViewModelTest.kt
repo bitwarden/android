@@ -525,7 +525,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     private fun createVaultItemListingState(
-        itemListingType: VaultItemListingState.ItemListingType = VaultItemListingState.ItemListingType.Login,
+        itemListingType: VaultItemListingState.ItemListingType = VaultItemListingState.ItemListingType.Vault.Login,
         viewState: VaultItemListingState.ViewState = VaultItemListingState.ViewState.Loading,
     ): VaultItemListingState =
         VaultItemListingState(

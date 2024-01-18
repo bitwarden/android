@@ -270,87 +270,79 @@ data class VaultItemListingState(
         abstract val hasFab: Boolean
 
         /**
-         * A Login item listing.
+         * Represents different types of vault item listings.
          */
-        data object Login : ItemListingType() {
-            override val titleText: Text
-                get() = R.string.logins.asText()
-            override val hasFab: Boolean
-                get() = true
-        }
+        sealed class Vault : ItemListingType() {
 
-        /**
-         * A Card item listing.
-         */
-        data object Card : ItemListingType() {
-            override val titleText: Text
-                get() = R.string.cards.asText()
-            override val hasFab: Boolean
-                get() = true
-        }
+            /**
+             * A Login item listing.
+             */
+            data object Login : Vault() {
+                override val titleText: Text get() = R.string.logins.asText()
+                override val hasFab: Boolean get() = true
+            }
 
-        /**
-         * An Identity item listing.
-         */
-        data object Identity : ItemListingType() {
-            override val titleText: Text
-                get() = R.string.identities.asText()
-            override val hasFab: Boolean
-                get() = true
-        }
+            /**
+             * A Card item listing.
+             */
+            data object Card : Vault() {
+                override val titleText: Text get() = R.string.cards.asText()
+                override val hasFab: Boolean get() = true
+            }
 
-        /**
-         * A Secure Note item listing.
-         */
-        data object SecureNote : ItemListingType() {
-            override val titleText: Text
-                get() = R.string.secure_notes.asText()
-            override val hasFab: Boolean
-                get() = true
-        }
+            /**
+             * An Identity item listing.
+             */
+            data object Identity : Vault() {
+                override val titleText: Text get() = R.string.identities.asText()
+                override val hasFab: Boolean get() = true
+            }
 
-        /**
-         * A Secure Trash item listing.
-         */
-        data object Trash : ItemListingType() {
-            override val titleText: Text
-                get() = R.string.trash.asText()
-            override val hasFab: Boolean
-                get() = false
-        }
+            /**
+             * A Secure Note item listing.
+             */
+            data object SecureNote : Vault() {
+                override val titleText: Text get() = R.string.secure_notes.asText()
+                override val hasFab: Boolean get() = true
+            }
 
-        /**
-         * A Folder item listing.
-         *
-         * @property folderId the id of the folder.
-         * @property folderName the name of the folder.
-         */
-        data class Folder(
-            val folderId: String?,
-            // The folderName will always initially be an empty string
-            val folderName: String = "",
-        ) : ItemListingType() {
-            override val titleText: Text
-                get() = folderName.asText()
-            override val hasFab: Boolean
-                get() = false
-        }
+            /**
+             * A Secure Trash item listing.
+             */
+            data object Trash : Vault() {
+                override val titleText: Text get() = R.string.trash.asText()
+                override val hasFab: Boolean get() = false
+            }
 
-        /**
-         * A Collection item listing.
-         *
-         * @property collectionId the ID of the collection.
-         * @property collectionName the name of the collection.
-         */
-        data class Collection(
-            val collectionId: String,
-            // The collectionName will always initially be an empty string
-            val collectionName: String = "",
-        ) : ItemListingType() {
-            override val titleText: Text
-                get() = collectionName.asText()
-            override val hasFab: Boolean
-                get() = false
+            /**
+             * A Folder item listing.
+             *
+             * @property folderId the id of the folder.
+             * @property folderName the name of the folder.
+             */
+            data class Folder(
+                val folderId: String?,
+                // The folderName will always initially be an empty string
+                val folderName: String = "",
+            ) : Vault() {
+                override val titleText: Text get() = folderName.asText()
+                override val hasFab: Boolean get() = false
+            }
+
+            /**
+             * A Collection item listing.
+             *
+             * @property collectionId the ID of the collection.
+             * @property collectionName the name of the collection.
+             */
+            data class Collection(
+                val collectionId: String,
+                // The collectionName will always initially be an empty string
+                val collectionName: String = "",
+            ) : Vault() {
+                override val titleText: Text get() = collectionName.asText()
+                override val hasFab: Boolean get() = false
+            }
         }
     }
 }

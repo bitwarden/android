@@ -168,14 +168,18 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Trash)
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Trash)
         }
         composeTestRule
             .onNodeWithText(text = "Add an Item")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Folder(folderId = null))
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                    folderId = null,
+                ),
+            )
         }
         composeTestRule
             .onNodeWithText(text = "Add an Item")
@@ -192,14 +196,18 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Trash)
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Trash)
         }
         composeTestRule
             .onNodeWithText(text = "There are no items in the trash.")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Folder(folderId = null))
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                    folderId = null,
+                ),
+            )
         }
         composeTestRule
             .onNodeWithText(text = "There are no items in this folder.")
@@ -215,7 +223,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Trash)
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Trash)
         }
 
         composeTestRule
@@ -223,7 +231,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Folder(folderId = null))
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                    folderId = null,
+                ),
+            )
         }
 
         composeTestRule
@@ -352,28 +364,28 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.SecureNote)
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.SecureNote)
         }
         composeTestRule
             .onNodeWithText(text = "Secure notes")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Card)
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Card)
         }
         composeTestRule
             .onNodeWithText(text = "Cards")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Identity)
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Identity)
         }
         composeTestRule
             .onNodeWithText(text = "Identities")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Trash)
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Trash)
         }
         composeTestRule
             .onNodeWithText(text = "Trash")
@@ -381,7 +393,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                itemListingType = VaultItemListingState.ItemListingType.Folder(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
                     folderId = "mockId",
                     folderName = "mockName",
                 ),
@@ -394,7 +406,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 }
 
 private val DEFAULT_STATE = VaultItemListingState(
-    itemListingType = VaultItemListingState.ItemListingType.Login,
+    itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
     viewState = VaultItemListingState.ViewState.Loading,
     isIconLoadingDisabled = false,
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
