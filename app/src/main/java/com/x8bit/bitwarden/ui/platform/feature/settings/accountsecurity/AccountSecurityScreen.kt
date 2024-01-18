@@ -139,13 +139,10 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
-                label = stringResource(
-                    id = R.string.use_this_device_to_approve_login_requests_made_from_other_devices,
-                ),
-                isChecked = state.isApproveLoginRequestsEnabled,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.LoginRequestToggle(it)) }
+            ApprovePasswordlessLoginsRow(
+                isApproveLoginRequestsEnabled = state.isApproveLoginRequestsEnabled,
+                onApprovePasswordlessLoginsAction = remember(viewModel) {
+                    { viewModel.trySendAction(it) }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -616,4 +613,62 @@ private fun FingerPrintPhraseDialog(
         },
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
     )
+}
+
+@Composable
+private fun ApprovePasswordlessLoginsRow(
+    isApproveLoginRequestsEnabled: Boolean,
+    @Suppress("MaxLineLength")
+    onApprovePasswordlessLoginsAction: (AccountSecurityAction.ApprovePasswordlessLoginsToggle) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowConfirmationDialog by remember { mutableStateOf(false) }
+    BitwardenWideSwitch(
+        label = stringResource(
+            id = R.string.use_this_device_to_approve_login_requests_made_from_other_devices,
+        ),
+        isChecked = isApproveLoginRequestsEnabled,
+        onCheckedChange = { isChecked ->
+            if (isChecked) {
+                onApprovePasswordlessLoginsAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled,
+                )
+                shouldShowConfirmationDialog = true
+            } else {
+                onApprovePasswordlessLoginsAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
+                )
+            }
+        },
+        modifier = modifier,
+    )
+
+    if (shouldShowConfirmationDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.approve_login_requests),
+            message = stringResource(
+                id = R.string.use_this_device_to_approve_login_requests_made_from_other_devices,
+            ),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.no),
+            onConfirmClick = {
+                onApprovePasswordlessLoginsAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
+                )
+                shouldShowConfirmationDialog = false
+            },
+            onDismissClick = {
+                onApprovePasswordlessLoginsAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
+                )
+                shouldShowConfirmationDialog = false
+            },
+            onDismissRequest = {
+                onApprovePasswordlessLoginsAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
+                )
+                shouldShowConfirmationDialog = false
+            },
+        )
+    }
 }

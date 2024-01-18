@@ -63,6 +63,11 @@ interface SettingsRepository {
     var blockedAutofillUris: List<String>
 
     /**
+     * Whether or not approving passwordless logins is enabled for the current user.
+     */
+    var isApprovePasswordlessLoginsEnabled: Boolean
+
+    /**
      * Sets default values for various settings for the given [userId] if necessary. This is
      * typically used when logging into a new account.
      */

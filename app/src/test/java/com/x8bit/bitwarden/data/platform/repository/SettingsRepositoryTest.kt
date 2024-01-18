@@ -533,6 +533,32 @@ class SettingsRepositoryTest {
             )
         }
     }
+
+    @Test
+    fun `isApprovePasswordlessLoginsEnabled should properly update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = null
+        assertFalse(settingsRepository.isApprovePasswordlessLoginsEnabled)
+
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Updates to the disk source change the repository value
+        fakeSettingsDiskSource.storeApprovePasswordlessLoginsEnabled(
+            userId = userId,
+            isApprovePasswordlessLoginsEnabled = true,
+        )
+        assertEquals(
+            true,
+            settingsRepository.isApprovePasswordlessLoginsEnabled,
+        )
+
+        // Updates to the repository value change the disk source
+        settingsRepository.isApprovePasswordlessLoginsEnabled = false
+        assertEquals(
+            false,
+            fakeSettingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId),
+        )
+    }
 }
 
 private val MOCK_USER_STATE =

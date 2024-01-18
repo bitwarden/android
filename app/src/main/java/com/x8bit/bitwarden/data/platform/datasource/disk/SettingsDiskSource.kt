@@ -115,4 +115,17 @@ interface SettingsDiskSource {
         userId: String,
         blockedAutofillUris: List<String>?,
     )
+
+    /**
+     * Gets whether or not the given [userId] has enabled approving passwordless logins.
+     */
+    fun getApprovePasswordlessLoginsEnabled(userId: String): Boolean?
+
+    /**
+     * Stores whether or not [isApprovePasswordlessLoginsEnabled] for the given [userId].
+     */
+    fun storeApprovePasswordlessLoginsEnabled(
+        userId: String,
+        isApprovePasswordlessLoginsEnabled: Boolean?,
+    )
 }

@@ -69,13 +69,102 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on approve login requests toggle should send LoginRequestToggle`() {
+    fun `on approve login requests toggle on should send PendingEnabled action and display dialog`() {
+        composeTestRule.assertNoDialogExists()
+
         composeTestRule
             .onNodeWithText("Use this device to approve login requests made from other devices")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AccountSecurityAction.LoginRequestToggle(true)) }
+
+        composeTestRule
+            .onAllNodesWithText("Approve login requests")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                "Use this device to approve login requests made from other devices",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled,
+            )
+        }
+    }
+
+    @Test
+    fun `on approve login requests toggle off should send Disabled action`() {
+        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
+
+        composeTestRule
+            .onNodeWithText("Use this device to approve login requests made from other devices")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
+            )
+        }
+    }
+
+    @Test
+    fun `on approve login requests confirm Yes should send Enabled action and hide dialog`() {
+        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
+
+        composeTestRule
+            .onNodeWithText("Use this device to approve login requests made from other devices")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
+            )
+        }
+    }
+
+    @Test
+    fun `on approve login requests confirm No should send Disabled action and hide dialog`() {
+        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
+
+        composeTestRule
+            .onNodeWithText("Use this device to approve login requests made from other devices")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
+            )
+        }
     }
 
     @Test
