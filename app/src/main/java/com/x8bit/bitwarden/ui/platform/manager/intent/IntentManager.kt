@@ -27,6 +27,12 @@ interface IntentManager {
     fun startCustomTabsActivity(uri: Uri)
 
     /**
+     * Attempts to start the system autofill settings activity. The return value indicates whether
+     * or not this was successful.
+     */
+    fun startSystemAutofillSettingsActivity(): Boolean
+
+    /**
      * Start an activity to view the given [uri] in an external browser.
      */
     fun launchUri(uri: Uri)

@@ -68,6 +68,16 @@ interface SettingsRepository {
     var isApprovePasswordlessLoginsEnabled: Boolean
 
     /**
+     * Emits updates whenever there is a change in the app's status for supporting autofill.
+     */
+    val isAutofillEnabledStateFlow: StateFlow<Boolean>
+
+    /**
+     * Disables autofill if it is currently enabled.
+     */
+    fun disableAutofill()
+
+    /**
      * Sets default values for various settings for the given [userId] if necessary. This is
      * typically used when logging into a new account.
      */

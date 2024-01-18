@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.di
 
+import android.content.Context
+import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
@@ -14,7 +16,9 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 /**
  * Provides dependencies within the autofill package.
@@ -22,6 +26,13 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object AutofillModule {
+
+    @Singleton
+    @Provides
+    fun providesAutofillManager(
+        @ApplicationContext context: Context,
+    ): AutofillManager = context.getSystemService(AutofillManager::class.java)
+
     @Provides
     fun providesAutofillParser(): AutofillParser = AutofillParserImpl()
 

@@ -10,15 +10,19 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AutoFillViewModelTest : BaseViewModelTest() {
 
+    private val mutableIsAutofillEnabledStateFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk() {
         every { isInlineAutofillEnabled } returns true
         every { isInlineAutofillEnabled = any() } just runs
+        every { isAutofillEnabledStateFlow } returns mutableIsAutofillEnabledStateFlow
+        every { disableAutofill() } just runs
     }
 
     @Test
@@ -29,12 +33,33 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when set`() {
+        mutableIsAutofillEnabledStateFlow.value = true
         val state = DEFAULT_STATE.copy(
             isAutoFillServicesEnabled = true,
             uriDetectionMethod = AutoFillState.UriDetectionMethod.REGULAR_EXPRESSION,
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `changes in autofill enabled status should update the state`() {
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        mutableIsAutofillEnabledStateFlow.value = true
+
+        assertEquals(
+            DEFAULT_STATE.copy(isAutoFillServicesEnabled = true),
+            viewModel.stateFlow.value,
+        )
+
+        mutableIsAutofillEnabledStateFlow.value = false
+
+        assertEquals(
+            DEFAULT_STATE.copy(isAutoFillServicesEnabled = false),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -51,14 +76,30 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on AutoFillServicesClick should emit ShowToast`() = runTest {
+    fun `on AutoFillServicesClick with false should disable autofill`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(AutoFillAction.AutoFillServicesClick(false))
+        verify {
+            settingsRepository.disableAutofill()
+        }
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `on AutoFillServicesClick with true should emit NavigateToAutofillSettings`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(AutoFillAction.AutoFillServicesClick(true))
-            assertEquals(AutoFillEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
+            assertEquals(
+                AutoFillEvent.NavigateToAutofillSettings,
+                awaitItem(),
+            )
         }
         assertEquals(
-            DEFAULT_STATE.copy(isAutoFillServicesEnabled = true),
+            DEFAULT_STATE,
             viewModel.stateFlow.value,
         )
     }

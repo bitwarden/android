@@ -1,12 +1,14 @@
 package com.x8bit.bitwarden.ui.platform.manager.intent
 
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -78,6 +80,18 @@ class IntentManagerImpl(
             .build()
             .launchUrl(context, uri)
     }
+
+    override fun startSystemAutofillSettingsActivity(): Boolean =
+        try {
+            val intent = Intent(Settings.ACTION_REQUEST_SET_AUTOFILL_SERVICE)
+                .apply {
+                    data = Uri.parse("package:${context.packageName}")
+                }
+            context.startActivity(intent)
+            true
+        } catch (e: ActivityNotFoundException) {
+            false
+        }
 
     override fun launchUri(uri: Uri) {
         val newUri = if (uri.scheme == null) {
