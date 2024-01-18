@@ -14,7 +14,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
-import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -386,24 +385,25 @@ class AuthRepositoryImpl constructor(
                 onSuccess = { BreachCountResult.Success(it) },
             )
 
-    @Suppress("MagicNumber")
     override suspend fun getPasswordStrength(
         email: String,
         password: String,
-    ): PasswordStrengthResult {
-        // TODO: Replace with SDK call (BIT-964)
-        // Ex: return authSdkSource.passwordStrength(email, password)
-        val length = password.length
-        return PasswordStrengthResult.Success(
-            passwordStrength = when {
-                length <= 3 -> PasswordStrength.LEVEL_0
-                length <= 6 -> PasswordStrength.LEVEL_1
-                length <= 9 -> PasswordStrength.LEVEL_2
-                length <= 11 -> PasswordStrength.LEVEL_3
-                else -> PasswordStrength.LEVEL_4
-            },
-        )
-    }
+    ): PasswordStrengthResult =
+        authSdkSource
+            .passwordStrength(
+                email = email,
+                password = password,
+            )
+            .fold(
+                onSuccess = {
+                    PasswordStrengthResult.Success(
+                        passwordStrength = it,
+                    )
+                },
+                onFailure = {
+                    PasswordStrengthResult.Error
+                },
+            )
 
     private fun getVaultUnlockType(
         userId: String,
