@@ -66,7 +66,7 @@
       <CodesignProvision>Automatic:AppStore</CodesignProvision>
       <CodesignKey>iPhone Distribution</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
-	  <!--<UseInterpreter>true</UseInterpreter>-->
+	  <UseInterpreter>true</UseInterpreter>
 	  <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
 	</PropertyGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
