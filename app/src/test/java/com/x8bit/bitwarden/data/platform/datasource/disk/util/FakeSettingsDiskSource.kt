@@ -39,6 +39,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     private var storedIsIconLoadingDisabled: Boolean? = null
 
+    private val storedApprovePasswordLoginsEnabled = mutableMapOf<String, Boolean?>()
+
     override var appLanguage: AppLanguage? = null
 
     override var appTheme: AppTheme
@@ -136,6 +138,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         blockedAutofillUris: List<String>?,
     ) {
         storedBlockedAutofillUris[userId] = blockedAutofillUris
+    }
+
+    override fun getApprovePasswordlessLoginsEnabled(userId: String): Boolean? =
+        storedApprovePasswordLoginsEnabled[userId]
+
+    override fun storeApprovePasswordlessLoginsEnabled(
+        userId: String,
+        isApprovePasswordlessLoginsEnabled: Boolean?,
+    ) {
+        storedApprovePasswordLoginsEnabled[userId] = isApprovePasswordlessLoginsEnabled
     }
 
     //region Private helper functions

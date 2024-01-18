@@ -20,6 +20,7 @@ private const val BLOCKED_AUTOFILL_URIS_KEY = "$BASE_KEY:autofillBlacklistedUris
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
+private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "$BASE_KEY:approvePasswordlessLogins"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -92,6 +93,10 @@ class SettingsDiskSourceImpl(
         storePullToRefreshEnabled(userId = userId, isPullToRefreshEnabled = null)
         storeInlineAutofillEnabled(userId = userId, isInlineAutofillEnabled = null)
         storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
+        storeApprovePasswordlessLoginsEnabled(
+            userId = userId,
+            isApprovePasswordlessLoginsEnabled = null,
+        )
     }
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
@@ -192,4 +197,18 @@ class SettingsDiskSourceImpl(
         mutablePullToRefreshEnabledFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
+
+    override fun getApprovePasswordlessLoginsEnabled(userId: String): Boolean? {
+        return getBoolean(key = "${APPROVE_PASSWORDLESS_LOGINS_KEY}_$userId")
+    }
+
+    override fun storeApprovePasswordlessLoginsEnabled(
+        userId: String,
+        isApprovePasswordlessLoginsEnabled: Boolean?,
+    ) {
+        putBoolean(
+            key = "${APPROVE_PASSWORDLESS_LOGINS_KEY}_$userId",
+            value = isApprovePasswordlessLoginsEnabled,
+        )
+    }
 }

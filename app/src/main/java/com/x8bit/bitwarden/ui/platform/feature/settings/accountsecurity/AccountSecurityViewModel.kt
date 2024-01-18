@@ -36,7 +36,7 @@ class AccountSecurityViewModel @Inject constructor(
         ?: AccountSecurityState(
             dialog = null,
             fingerprintPhrase = "fingerprint-placeholder".asText(),
-            isApproveLoginRequestsEnabled = false,
+            isApproveLoginRequestsEnabled = settingsRepository.isApprovePasswordlessLoginsEnabled,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             vaultTimeout = settingsRepository.vaultTimeout,
@@ -59,7 +59,6 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityAction.DismissDialog -> handleDismissDialog()
         AccountSecurityAction.FingerPrintLearnMoreClick -> handleFingerPrintLearnMoreClick()
         AccountSecurityAction.LockNowClick -> handleLockNowClick()
-        is AccountSecurityAction.LoginRequestToggle -> handleLoginRequestToggle(action)
         AccountSecurityAction.LogoutClick -> handleLogoutClick()
         AccountSecurityAction.PendingLoginRequestsClick -> handlePendingLoginRequestsClick()
         is AccountSecurityAction.VaultTimeoutTypeSelect -> handleVaultTimeoutTypeSelect(action)
@@ -74,6 +73,10 @@ class AccountSecurityViewModel @Inject constructor(
         }
 
         is AccountSecurityAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
+
+        is AccountSecurityAction.ApprovePasswordlessLoginsToggle -> {
+            handleApprovePasswordlessLoginsToggle(action)
+        }
     }
 
     private fun handleAccountFingerprintPhraseClick() {
@@ -108,9 +111,25 @@ class AccountSecurityViewModel @Inject constructor(
         vaultRepository.lockVaultForCurrentUser()
     }
 
-    private fun handleLoginRequestToggle(action: AccountSecurityAction.LoginRequestToggle) {
-        // TODO BIT-466: Persist pending login requests state
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = action.enabled) }
+    private fun handleApprovePasswordlessLoginsToggle(
+        action: AccountSecurityAction.ApprovePasswordlessLoginsToggle,
+    ) {
+        when (action) {
+            AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled -> {
+                settingsRepository.isApprovePasswordlessLoginsEnabled = false
+                mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
+            }
+
+            AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled -> {
+                settingsRepository.isApprovePasswordlessLoginsEnabled = true
+                mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
+            }
+
+            AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled -> {
+                mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
+            }
+        }
+        // TODO Add permission prompt - BIT-1360
         sendEvent(AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()))
     }
 
@@ -320,13 +339,6 @@ sealed class AccountSecurityAction {
     data object LockNowClick : AccountSecurityAction()
 
     /**
-     * User toggled the login request switch.
-     */
-    data class LoginRequestToggle(
-        val enabled: Boolean,
-    ) : AccountSecurityAction()
-
-    /**
      * User clicked log out.
      */
     data object LogoutClick : AccountSecurityAction()
@@ -368,6 +380,26 @@ sealed class AccountSecurityAction {
     data class UnlockWithBiometricToggle(
         val enabled: Boolean,
     ) : AccountSecurityAction()
+
+    /**
+     * User toggled the approve passwordless logins switch.
+     */
+    sealed class ApprovePasswordlessLoginsToggle : AccountSecurityAction() {
+        /**
+         * The toggle was enabled and confirmed.
+         */
+        data object Enabled : ApprovePasswordlessLoginsToggle()
+
+        /**
+         * The toggle was enabled but not yet confirmed.
+         */
+        data object PendingEnabled : ApprovePasswordlessLoginsToggle()
+
+        /**
+         * The toggle was disabled.
+         */
+        data object Disabled : ApprovePasswordlessLoginsToggle()
+    }
 
     /**
      * User toggled the unlock with pin switch.

@@ -16,6 +16,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -33,6 +34,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             every { isUnlockWithPinEnabled } returns true
             every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
             every { vaultTimeoutAction } returns VaultTimeoutAction.LOCK
+            every { isApprovePasswordlessLoginsEnabled } returns false
         }
         val viewModel = createViewModel(
             initialState = null,
@@ -110,21 +112,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(vaultRepository = vaultRepository)
         viewModel.trySendAction(AccountSecurityAction.LockNowClick)
         verify { vaultRepository.lockVaultForCurrentUser() }
-    }
-
-    @Test
-    fun `on LoginRequestToggle should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AccountSecurityAction.LoginRequestToggle(true))
-            assertEquals(
-                AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()),
-                awaitItem(),
-            )
-        }
-        viewModel.stateFlow.test {
-            assertTrue(awaitItem().isApproveLoginRequestsEnabled)
-        }
     }
 
     @Test
@@ -322,6 +309,71 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(AccountSecurityAction.DismissDialog)
         assertEquals(DEFAULT_STATE.copy(dialog = null), viewModel.stateFlow.value)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ApprovePasswordlessLoginsToggle enabled should update settings, set isApprovePasswordlessLoginsEnabled to true, and display toast`() =
+        runTest {
+            val settingsRepository = mockk<SettingsRepository> {
+                every { isApprovePasswordlessLoginsEnabled = true } just runs
+            }
+            val viewModel = createViewModel(
+                settingsRepository = settingsRepository,
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
+                )
+                assertEquals(
+                    AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()),
+                    awaitItem(),
+                )
+                verify(exactly = 1) { settingsRepository.isApprovePasswordlessLoginsEnabled = true }
+            }
+            assertTrue(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ApprovePasswordlessLoginsToggle pending enabled should set isApprovePasswordlessLoginsEnabled to true and display toast`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled,
+                )
+                assertEquals(
+                    AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()),
+                    awaitItem(),
+                )
+            }
+            assertTrue(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ApprovePasswordlessLoginsToggle disabled should update settings, set isApprovePasswordlessLoginsEnabled to false, and display toast`() =
+        runTest {
+            val settingsRepository = mockk<SettingsRepository> {
+                every { isApprovePasswordlessLoginsEnabled = false } just runs
+            }
+            val viewModel = createViewModel(
+                settingsRepository = settingsRepository,
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
+                )
+                assertEquals(
+                    AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()),
+                    awaitItem(),
+                )
+                verify(exactly = 1) {
+                    settingsRepository.isApprovePasswordlessLoginsEnabled = false
+                }
+            }
+            assertFalse(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
+        }
 
     private fun createViewModel(
         initialState: AccountSecurityState? = DEFAULT_STATE,
