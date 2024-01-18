@@ -1,19 +1,28 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import android.net.Uri
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
+import com.bitwarden.core.LoginUriView
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+
+private const val ANDROID_URI = "androidapp://"
+private const val IOS_URI = "iosapp://"
 
 /**
  * Transforms [VaultData] into [VaultState.ViewState] using the given [vaultFilterType].
  */
 fun VaultData.toViewState(
     isPremium: Boolean,
+    isIconLoadingDisabled: Boolean,
+    baseIconUrl: String,
     vaultFilterType: VaultFilterType,
 ): VaultState.ViewState {
     val filteredCipherViewList = cipherViewList.toFilteredList(vaultFilterType)
@@ -36,7 +45,12 @@ fun VaultData.toViewState(
                 .count { it.type == CipherType.SECURE_NOTE },
             favoriteItems = filteredCipherViewList
                 .filter { it.favorite }
-                .mapNotNull { it.toVaultItemOrNull() },
+                .mapNotNull {
+                    it.toVaultItemOrNull(
+                        isIconLoadingDisabled = isIconLoadingDisabled,
+                        baseIconUrl = baseIconUrl,
+                    )
+                },
             folderItems = filteredFolderViewList.map { folderView ->
                 VaultState.ViewState.FolderItem(
                     id = folderView.id,
@@ -47,7 +61,12 @@ fun VaultData.toViewState(
             },
             noFolderItems = filteredCipherViewList
                 .filter { it.folderId.isNullOrBlank() }
-                .mapNotNull { it.toVaultItemOrNull() },
+                .mapNotNull {
+                    it.toVaultItemOrNull(
+                        isIconLoadingDisabled = isIconLoadingDisabled,
+                        baseIconUrl = baseIconUrl,
+                    )
+                },
             collectionItems = filteredCollectionViewList
                 .filter { it.id != null }
                 .map { collectionView ->
@@ -68,16 +87,65 @@ fun VaultData.toViewState(
 }
 
 /**
+ * Method to build the icon data for login item icons.
+ */
+@Suppress("ReturnCount")
+fun List<LoginUriView>?.toLoginIconData(
+    isIconLoadingDisabled: Boolean,
+    baseIconUrl: String,
+): IconData {
+    val localIconData = IconData.Local(R.drawable.ic_login_item)
+
+    var uri = this
+        ?.map { it.uri }
+        ?.firstOrNull { uri -> uri?.contains(".") == true }
+        ?: return localIconData
+
+    if (uri.startsWith(ANDROID_URI)) {
+        return IconData.Local(R.drawable.ic_settings)
+    }
+
+    if (uri.startsWith(IOS_URI)) {
+        return IconData.Local(R.drawable.ic_settings)
+    }
+
+    if (isIconLoadingDisabled) {
+        return localIconData
+    }
+
+    if (!uri.contains("://")) {
+        uri = "http://$uri"
+    }
+
+    val iconUri = Uri.parse(uri)
+    val hostname = iconUri.host
+
+    val url = "$baseIconUrl/$hostname/icon.png"
+
+    return IconData.Network(
+        uri = url,
+        fallbackIconRes = R.drawable.ic_login_item,
+    )
+}
+
+/**
  * Transforms a [CipherView] into a [VaultState.ViewState.VaultItem].
  */
 @Suppress("MagicNumber")
-private fun CipherView.toVaultItemOrNull(): VaultState.ViewState.VaultItem? {
+private fun CipherView.toVaultItemOrNull(
+    isIconLoadingDisabled: Boolean,
+    baseIconUrl: String,
+): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {
         CipherType.LOGIN -> VaultState.ViewState.VaultItem.Login(
             id = id,
             name = name.asText(),
             username = login?.username?.asText(),
+            startIcon = login?.uris.toLoginIconData(
+                isIconLoadingDisabled = isIconLoadingDisabled,
+                baseIconUrl = baseIconUrl,
+            ),
         )
 
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(

@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumsta
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -31,12 +32,15 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class VaultViewModelTest : BaseViewModelTest() {
 
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
+    private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
 
     private val mutableUserStateFlow =
         MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
@@ -57,6 +61,8 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private val settingsRepository: SettingsRepository = mockk {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
+        every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
+        every { isIconLoadingDisabled } returns false
     }
 
     private val vaultRepository: VaultRepository =
@@ -357,6 +363,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewState = vaultData.toViewState(
                 isPremium = true,
                 vaultFilterType = VaultFilterType.AllVaults,
+                isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
+                baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
             ),
         )
             .copy(
@@ -378,6 +386,8 @@ class VaultViewModelTest : BaseViewModelTest() {
                 viewState = vaultData.toViewState(
                     isPremium = true,
                     vaultFilterType = VaultFilterType.MyVault,
+                    isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
+                    baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1032,6 +1042,16 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `icon loading state updates should update isIconLoadingDisabled`() {
+        val viewModel = createViewModel()
+
+        assertFalse(viewModel.stateFlow.value.isIconLoadingDisabled)
+
+        mutableIsIconLoadingDisabledFlow.value = true
+        assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
+    }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1120,4 +1140,6 @@ private fun createMockVaultState(
         isSwitchingAccounts = false,
         isPremium = true,
         isPullToRefreshSettingEnabled = false,
+        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+        isIconLoadingDisabled = false,
     )

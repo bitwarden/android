@@ -16,6 +16,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -1071,6 +1073,8 @@ private val DEFAULT_STATE: VaultState = VaultState(
     viewState = VaultState.ViewState.Loading,
     isPremium = false,
     isPullToRefreshSettingEnabled = false,
+    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+    isIconLoadingDisabled = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

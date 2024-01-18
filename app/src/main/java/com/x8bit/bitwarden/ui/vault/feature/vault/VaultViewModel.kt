@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -10,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -43,8 +44,8 @@ import javax.inject.Inject
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -59,8 +60,10 @@ class VaultViewModel @Inject constructor(
             accountSummaries = accountSummaries,
             vaultFilterData = vaultFilterData,
             viewState = VaultState.ViewState.Loading,
+            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPremium = userState.activeAccount.isPremium,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
+            baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
         )
     },
 ) {
@@ -74,6 +77,12 @@ class VaultViewModel @Inject constructor(
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { VaultAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isIconLoadingDisabledFlow
+            .map { VaultAction.Internal.IconLoadingSettingReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -116,6 +125,16 @@ class VaultViewModel @Inject constructor(
             is VaultAction.RefreshPull -> handleRefreshPull()
             is VaultAction.Internal -> handleInternalAction(action)
         }
+    }
+
+    private fun handleIconLoadingSettingReceive(
+        action: VaultAction.Internal.IconLoadingSettingReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isIconLoadingDisabled = action.isIconLoadingDisabled)
+        }
+
+        updateViewState(vaultRepository.vaultDataStateFlow.value)
     }
 
     //region VaultAction Handlers
@@ -252,6 +271,9 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
             is VaultAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultAction.Internal.IconLoadingSettingReceive -> handleIconLoadingSettingReceive(
+                action,
+            )
         }
     }
 
@@ -308,8 +330,10 @@ class VaultViewModel @Inject constructor(
 
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
         mutableStateFlow.updateToErrorStateOrDialog(
+            baseIconUrl = state.baseIconUrl,
             vaultData = vaultData.data,
             vaultFilterType = vaultFilterTypeOrDefault,
+            isIconLoadingDisabled = state.isIconLoadingDisabled,
             isPremium = state.isPremium,
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
@@ -328,6 +352,8 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 viewState = vaultData.data.toViewState(
+                    baseIconUrl = state.baseIconUrl,
+                    isIconLoadingDisabled = state.isIconLoadingDisabled,
                     isPremium = state.isPremium,
                     vaultFilterType = vaultFilterTypeOrDefault,
                 ),
@@ -343,10 +369,12 @@ class VaultViewModel @Inject constructor(
 
     private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
         mutableStateFlow.updateToErrorStateOrDialog(
+            baseIconUrl = state.baseIconUrl,
             vaultData = vaultData.data,
             vaultFilterType = vaultFilterTypeOrDefault,
             isPremium = state.isPremium,
             errorTitle = R.string.internet_connection_required_title.asText(),
+            isIconLoadingDisabled = state.isIconLoadingDisabled,
             errorMessage = R.string.internet_connection_required_message.asText(),
         )
         sendEvent(VaultEvent.DismissPullToRefresh)
@@ -357,6 +385,8 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 viewState = vaultData.data.toViewState(
+                    baseIconUrl = state.baseIconUrl,
+                    isIconLoadingDisabled = state.isIconLoadingDisabled,
                     isPremium = state.isPremium,
                     vaultFilterType = vaultFilterTypeOrDefault,
                 ),
@@ -391,6 +421,8 @@ data class VaultState(
     val isSwitchingAccounts: Boolean = false,
     val isPremium: Boolean,
     private val isPullToRefreshSettingEnabled: Boolean,
+    val baseIconUrl: String,
+    val isIconLoadingDisabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -536,8 +568,7 @@ data class VaultState(
              */
             abstract val name: Text
 
-            @get:DrawableRes
-            abstract val startIcon: Int
+            abstract val startIcon: IconData
 
             /**
              * An optional supporting label for the vault item that provides additional information.
@@ -555,9 +586,9 @@ data class VaultState(
             data class Login(
                 override val id: String,
                 override val name: Text,
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
                 val username: Text?,
             ) : VaultItem() {
-                override val startIcon: Int get() = R.drawable.ic_login_item
                 override val supportingLabel: Text? get() = username
             }
 
@@ -571,10 +602,10 @@ data class VaultState(
             data class Card(
                 override val id: String,
                 override val name: Text,
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_card_item),
                 val brand: Text? = null,
                 val lastFourDigits: Text? = null,
             ) : VaultItem() {
-                override val startIcon: Int get() = R.drawable.ic_card_item
                 override val supportingLabel: Text?
                     get() = when {
                         brand != null && lastFourDigits != null -> brand
@@ -597,9 +628,9 @@ data class VaultState(
             data class Identity(
                 override val id: String,
                 override val name: Text,
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_identity_item),
                 val firstName: Text?,
             ) : VaultItem() {
-                override val startIcon: Int get() = R.drawable.ic_identity_item
                 override val supportingLabel: Text? get() = firstName
             }
 
@@ -611,8 +642,8 @@ data class VaultState(
             data class SecureNote(
                 override val id: String,
                 override val name: Text,
+                override val startIcon: IconData = IconData.Local(R.drawable.ic_secure_note_item),
             ) : VaultItem() {
-                override val startIcon: Int get() = R.drawable.ic_secure_note_item
                 override val supportingLabel: Text? get() = null
             }
         }
@@ -842,6 +873,13 @@ sealed class VaultAction {
     sealed class Internal : VaultAction() {
 
         /**
+         * Indicates that the icon loading setting has been changed.
+         */
+        data class IconLoadingSettingReceive(
+            val isIconLoadingDisabled: Boolean,
+        ) : Internal()
+
+        /**
          * Indicates that the pull to refresh feature toggle has changed.
          */
         data class PullToRefreshEnableReceive(val isPullToRefreshEnabled: Boolean) : Internal()
@@ -862,9 +900,12 @@ sealed class VaultAction {
     }
 }
 
+@Suppress("LongParameterList")
 private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
+    baseIconUrl: String,
     vaultData: VaultData?,
     vaultFilterType: VaultFilterType,
+    isIconLoadingDisabled: Boolean,
     isPremium: Boolean,
     errorTitle: Text,
     errorMessage: Text,
@@ -873,8 +914,10 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
         if (vaultData != null) {
             it.copy(
                 viewState = vaultData.toViewState(
+                    baseIconUrl = baseIconUrl,
                     isPremium = isPremium,
                     vaultFilterType = vaultFilterType,
+                    isIconLoadingDisabled = isIconLoadingDisabled,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

@@ -1,10 +1,17 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
+import android.net.Uri
 import com.bitwarden.core.CipherType
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -244,6 +251,11 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     fun `toViewState should transform a list of CipherViews into a ViewState`() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
         val cipherViewList = listOf(
             createMockCipherView(
                 number = 1,
@@ -267,7 +279,10 @@ class VaultItemListingDataExtensionsTest {
             ),
         )
 
-        val result = cipherViewList.toViewState()
+        val result = cipherViewList.toViewState(
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+        )
 
         assertEquals(
             VaultItemListingState.ViewState.Content(
@@ -292,6 +307,8 @@ class VaultItemListingDataExtensionsTest {
             ),
             result,
         )
+
+        unmockkStatic(Uri::class)
     }
 
     @Test

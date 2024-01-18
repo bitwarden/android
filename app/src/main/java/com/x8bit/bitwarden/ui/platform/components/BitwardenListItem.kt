@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.PersistentList
@@ -52,7 +53,7 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun BitwardenListItem(
     label: String,
-    startIcon: Painter,
+    startIcon: IconData,
     onClick: () -> Unit,
     selectionDataList: PersistentList<SelectionItemData>,
     modifier: Modifier = Modifier,
@@ -73,8 +74,8 @@ fun BitwardenListItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Icon(
-            painter = startIcon,
+        BitwardenIcon(
+            iconData = startIcon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(24.dp),
@@ -159,7 +160,7 @@ private fun BitwardenListItem_preview() {
         BitwardenListItem(
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
-            startIcon = painterResource(id = R.drawable.ic_send_text),
+            startIcon = IconData.Local(R.drawable.ic_send_text),
             onClick = {},
             selectionDataList = persistentListOf(),
         )

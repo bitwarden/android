@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
@@ -40,7 +41,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 fun SendListItem(
     label: String,
     supportingLabel: String,
-    startIcon: Painter,
+    startIcon: IconData,
     trailingLabelIcons: List<SendStatusIcon>,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -111,7 +112,7 @@ private fun SendListItem_preview() {
         SendListItem(
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
-            startIcon = painterResource(id = R.drawable.ic_send_text),
+            startIcon = IconData.Local(R.drawable.ic_send_text),
             trailingLabelIcons = emptyList(),
             onClick = {},
             onCopyClick = {},

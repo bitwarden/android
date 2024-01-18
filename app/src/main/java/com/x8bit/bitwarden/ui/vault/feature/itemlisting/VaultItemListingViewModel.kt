@@ -1,16 +1,19 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
-import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPredicate
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
@@ -30,16 +33,25 @@ import javax.inject.Inject
 class VaultItemListingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val vaultRepository: VaultRepository,
+    private val environmentRepository: EnvironmentRepository,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = VaultItemListingState(
         itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
             .vaultItemListingType
             .toItemListingType(),
         viewState = VaultItemListingState.ViewState.Loading,
+        baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+        isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
     ),
 ) {
 
     init {
+        settingsRepository
+            .isIconLoadingDisabledFlow
+            .onEach { sendAction(VaultItemListingsAction.Internal.IconLoadingSettingReceive(it)) }
+            .launchIn(viewModelScope)
+
         vaultRepository
             .vaultDataStateFlow
             .onEach { sendAction(VaultItemListingsAction.Internal.VaultDataReceive(it)) }
@@ -54,6 +66,8 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.AddVaultItemClick -> handleAddVaultItemClick()
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
             is VaultItemListingsAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultItemListingsAction.Internal.IconLoadingSettingReceive ->
+                handleIconsSettingReceived(action)
         }
     }
 
@@ -97,6 +111,18 @@ class VaultItemListingViewModel @Inject constructor(
             is DataState.Loading -> vaultLoadingReceive()
             is DataState.NoNetwork -> vaultNoNetworkReceive(vaultData = vaultData)
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
+        }
+    }
+
+    private fun handleIconsSettingReceived(
+        action: VaultItemListingsAction.Internal.IconLoadingSettingReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isIconLoadingDisabled = action.isIconLoadingDisabled)
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateStateWithVaultData(vaultData)
         }
     }
     //endregion VaultItemListing Handlers
@@ -159,7 +185,10 @@ class VaultItemListingViewModel @Inject constructor(
                     .filter { cipherView ->
                         cipherView.determineListingPredicate(currentState.itemListingType)
                     }
-                    .toViewState(),
+                    .toViewState(
+                        baseIconUrl = state.baseIconUrl,
+                        isIconLoadingDisabled = state.isIconLoadingDisabled,
+                    ),
             )
         }
     }
@@ -171,6 +200,8 @@ class VaultItemListingViewModel @Inject constructor(
 data class VaultItemListingState(
     val itemListingType: ItemListingType,
     val viewState: ViewState,
+    val baseIconUrl: String,
+    val isIconLoadingDisabled: Boolean,
 ) {
 
     /**
@@ -214,16 +245,13 @@ data class VaultItemListingState(
      * @property id the id of the item.
      * @property title title of the item.
      * @property subtitle subtitle of the item (nullable).
-     * @property uri uri for the icon to be displayed (nullable).
-     * @property iconRes the icon to be displayed.
+     * @property iconData data for the icon to be displayed (nullable).
      */
     data class DisplayItem(
         val id: String,
         val title: String,
         val subtitle: String?,
-        val uri: String?,
-        @DrawableRes
-        val iconRes: Int,
+        val iconData: IconData,
     )
 
     /**
@@ -398,6 +426,13 @@ sealed class VaultItemListingsAction {
      * Models actions that the [VaultItemListingViewModel] itself might send.
      */
     sealed class Internal : VaultItemListingsAction() {
+
+        /**
+         * Indicates the icon setting was received.
+         */
+        data class IconLoadingSettingReceive(
+            val isIconLoadingDisabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates vault data was received.

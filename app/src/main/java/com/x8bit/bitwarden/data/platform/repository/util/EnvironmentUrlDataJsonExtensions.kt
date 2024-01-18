@@ -6,6 +6,7 @@ import java.net.URI
 
 private const val DEFAULT_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private const val DEFAULT_WEB_SEND_URL: String = "https://send.bitwarden.com/#"
+private const val DEFAULT_ICON_URL: String = "https://icons.bitwarden.net/"
 
 /**
  * Returns the base web vault URL. This will check for a custom [EnvironmentUrlDataJson.webVault]
@@ -36,6 +37,17 @@ val EnvironmentUrlDataJson.baseWebSendUrl: String
             .baseWebVaultUrlOrNull
             ?.let { "$it/#/send/" }
             ?: DEFAULT_WEB_SEND_URL
+
+/**
+ * Returns a base icon url based on the environment or the default value if values are missing.
+ */
+val EnvironmentUrlDataJson.baseIconUrl: String
+    get() =
+        this
+            .icon
+            .takeIf { !it.isNullOrBlank() }
+            ?: base.takeIf { it.isNotBlank() }?.let { "$it/icons" }
+            ?: DEFAULT_ICON_URL
 
 /**
  * Returns the appropriate pre-defined labels for environments matching the known US/EU values.

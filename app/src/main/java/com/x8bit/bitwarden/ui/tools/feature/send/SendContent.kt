@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 
 /**
@@ -75,7 +76,7 @@ fun SendContent(
 
         items(state.sendItems) {
             SendListItem(
-                startIcon = painterResource(id = it.type.iconRes),
+                startIcon = IconData.Local(it.type.iconRes),
                 label = it.name,
                 supportingLabel = it.deletionDate,
                 trailingLabelIcons = it.iconList,

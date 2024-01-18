@@ -1,9 +1,14 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -17,10 +22,14 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockItemListi
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class VaultItemListingViewModelTest : BaseViewModelTest() {
@@ -30,6 +39,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
         every { sync() } returns Unit
+    }
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environment } returns Environment.Us
+        every { environmentStateFlow } returns mockk()
+    }
+
+    private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
+    private val settingsRepository: SettingsRepository = mockk() {
+        every { isIconLoadingDisabled } returns false
+        every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
     }
     private val initialState = createVaultItemListingState()
     private val initialSavedStateHandle = createSavedStateHandleWithVaultItemListingType(
@@ -92,6 +111,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() =
         runTest {
+            setupMockUri()
+
             mutableVaultDataStateFlow.tryEmit(
                 value = DataState.Loaded(
                     data = VaultData(
@@ -178,6 +199,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Pending with data should update state to Content`() = runTest {
+        setupMockUri()
+
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
@@ -267,6 +290,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Error with data should update state to Content`() = runTest {
+        setupMockUri()
+
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Error(
                 data = VaultData(
@@ -291,6 +316,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+
+        unmockkStatic(Uri::class)
     }
 
     @Test
@@ -363,6 +390,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow NoNetwork with data should update state to Content`() = runTest {
+        setupMockUri()
+
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.NoNetwork(
                 data = VaultData(
@@ -386,6 +415,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+
+        unmockkStatic(Uri::class)
     }
 
     @Test
@@ -434,6 +465,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `icon loading state updates should update isIconLoadingDisabled`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+
+        assertFalse(viewModel.stateFlow.value.isIconLoadingDisabled)
+
+        mutableIsIconLoadingDisabledFlow.value = true
+        assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
+    }
+
     @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(
         vaultItemListingType: VaultItemListingType,
@@ -464,6 +505,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    private fun setupMockUri() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+    }
+
     private fun createVaultItemListingViewModel(
         savedStateHandle: SavedStateHandle = initialSavedStateHandle,
         vaultRepository: VaultRepository = this.vaultRepository,
@@ -471,6 +519,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         VaultItemListingViewModel(
             savedStateHandle = savedStateHandle,
             vaultRepository = vaultRepository,
+            environmentRepository = environmentRepository,
+            settingsRepository = settingsRepository,
         )
 
     @Suppress("MaxLineLength")
@@ -481,5 +531,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         VaultItemListingState(
             itemListingType = itemListingType,
             viewState = viewState,
+            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
         )
 }

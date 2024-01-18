@@ -85,7 +85,7 @@ fun createMockLoginView(number: Int): LoginView =
  */
 fun createMockUriView(number: Int): LoginUriView =
     LoginUriView(
-        uri = "mockUri-$number",
+        uri = "www.mockuri$number.com",
         match = UriMatchType.HOST,
     )
 

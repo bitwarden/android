@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import com.bitwarden.core.CipherType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 
 /**
@@ -17,8 +18,10 @@ fun createMockItemListingDisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 subtitle = "mockUsername-$number",
-                iconRes = R.drawable.ic_login_item,
-                uri = "mockUri-$number",
+                iconData = IconData.Network(
+                    "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                    fallbackIconRes = R.drawable.ic_login_item,
+                ),
             )
         }
 
@@ -27,8 +30,7 @@ fun createMockItemListingDisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 subtitle = null,
-                iconRes = R.drawable.ic_secure_note_item,
-                uri = null,
+                iconData = IconData.Local(R.drawable.ic_secure_note_item),
             )
         }
 
@@ -37,8 +39,7 @@ fun createMockItemListingDisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 subtitle = "er-$number",
-                iconRes = R.drawable.ic_card_item,
-                uri = null,
+                iconData = IconData.Local(R.drawable.ic_card_item),
             )
         }
 
@@ -47,8 +48,7 @@ fun createMockItemListingDisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
                 subtitle = "mockFirstName-${number}mockLastName-$number",
-                iconRes = R.drawable.ic_identity_item,
-                uri = null,
+                iconData = IconData.Local(R.drawable.ic_identity_item),
             )
         }
     }
