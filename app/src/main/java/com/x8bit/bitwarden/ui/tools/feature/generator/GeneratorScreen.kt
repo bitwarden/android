@@ -568,6 +568,7 @@ private fun PasswordLengthSliderItem(
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
+                .semantics { testTag = "PasswordLengthLabel" }
                 .wrapContentWidth()
                 // We want the width to be no wider than the label + 16dp on either side
                 .width(labelTextWidth + 16.dp + 16.dp),
@@ -585,7 +586,9 @@ private fun PasswordLengthSliderItem(
             valueRange =
             PASSWORD_LENGTH_SLIDER_MIN.toFloat()..PASSWORD_LENGTH_SLIDER_MAX.toFloat(),
             steps = PASSWORD_LENGTH_SLIDER_MAX - 1,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .semantics { testTag = "PasswordLengthSlider" }
+                .weight(1f),
         )
     }
 }
@@ -601,6 +604,7 @@ private fun PasswordCapitalLettersToggleItem(
         onCheckedChange = onPasswordToggleCapitalLettersChange,
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "UppercaseAtoZToggle" }
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.uppercase_ato_z),
     )
@@ -617,6 +621,7 @@ private fun PasswordLowercaseLettersToggleItem(
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "LowercaseAtoZToggle" }
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.lowercase_ato_z),
     )
@@ -633,6 +638,7 @@ private fun PasswordNumbersToggleItem(
         onCheckedChange = onPasswordToggleNumbersChange,
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "NumbersZeroToNineToggle" }
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.numbers_zero_to_nine),
     )
@@ -649,6 +655,7 @@ private fun PasswordSpecialCharactersToggleItem(
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "SpecialCharactersToggle" }
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.special_characters),
     )
@@ -664,7 +671,9 @@ private fun PasswordMinNumbersCounterItem(
         value = minNumbers,
         range = PASSWORD_COUNTER_MIN..PASSWORD_COUNTER_MAX,
         onValueChange = onPasswordMinNumbersCounterChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .semantics { testTag = "MinNumberValueLabel" }
+            .padding(horizontal = 16.dp),
     )
 }
 
@@ -678,7 +687,9 @@ private fun PasswordMinSpecialCharactersCounterItem(
         value = minSpecial,
         range = PASSWORD_COUNTER_MIN..PASSWORD_COUNTER_MAX,
         onValueChange = onPasswordMinSpecialCharactersChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .semantics { testTag = "MinSpecialValueLabel" }
+            .padding(horizontal = 16.dp),
     )
 }
 
@@ -693,6 +704,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
         modifier = Modifier
             .fillMaxWidth()
+            .semantics { testTag = "AvoidAmbiguousCharsToggle" }
             .padding(horizontal = 16.dp),
     )
 }
