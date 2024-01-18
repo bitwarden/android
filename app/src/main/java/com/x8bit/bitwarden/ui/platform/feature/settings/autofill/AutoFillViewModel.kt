@@ -31,8 +31,6 @@ class AutoFillViewModel @Inject constructor(
             isAskToAddLoginEnabled = false,
             isAutoFillServicesEnabled = false,
             isCopyTotpAutomaticallyEnabled = false,
-            isUseAccessibilityEnabled = false,
-            isUseDrawOverEnabled = false,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
             uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
         ),
@@ -50,8 +48,6 @@ class AutoFillViewModel @Inject constructor(
         AutoFillAction.BackClick -> handleBackClick()
         is AutoFillAction.CopyTotpAutomaticallyClick -> handleCopyTotpAutomaticallyClick(action)
         is AutoFillAction.UriDetectionMethodSelect -> handleUriDetectionMethodSelect(action)
-        is AutoFillAction.UseAccessibilityClick -> handleUseAccessibilityClick(action)
-        is AutoFillAction.UseDrawOverClick -> handleUseDrawOverClick(action)
         is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
     }
 
@@ -79,18 +75,6 @@ class AutoFillViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isCopyTotpAutomaticallyEnabled = action.isEnabled) }
     }
 
-    private fun handleUseAccessibilityClick(action: AutoFillAction.UseAccessibilityClick) {
-        // TODO BIT-843: Persist selection
-        sendEvent(AutoFillEvent.ShowToast("Not yet implemented.".asText()))
-        mutableStateFlow.update { it.copy(isUseAccessibilityEnabled = action.isEnabled) }
-    }
-
-    private fun handleUseDrawOverClick(action: AutoFillAction.UseDrawOverClick) {
-        // TODO BIT-835: Persist selection
-        sendEvent(AutoFillEvent.ShowToast("Not yet implemented.".asText()))
-        mutableStateFlow.update { it.copy(isUseDrawOverEnabled = action.isEnabled) }
-    }
-
     private fun handleUseInlineAutofillClick(action: AutoFillAction.UseInlineAutofillClick) {
         settingsRepository.isInlineAutofillEnabled = action.isEnabled
         mutableStateFlow.update { it.copy(isUseInlineAutoFillEnabled = action.isEnabled) }
@@ -113,8 +97,6 @@ data class AutoFillState(
     val isAskToAddLoginEnabled: Boolean,
     val isAutoFillServicesEnabled: Boolean,
     val isCopyTotpAutomaticallyEnabled: Boolean,
-    val isUseAccessibilityEnabled: Boolean,
-    val isUseDrawOverEnabled: Boolean,
     val isUseInlineAutoFillEnabled: Boolean,
     val uriDetectionMethod: UriDetectionMethod,
 ) : Parcelable {
@@ -184,20 +166,6 @@ sealed class AutoFillAction {
      */
     data class UriDetectionMethodSelect(
         val uriDetectionMethod: AutoFillState.UriDetectionMethod,
-    ) : AutoFillAction()
-
-    /**
-     * User clicked use accessibility button.
-     */
-    data class UseAccessibilityClick(
-        val isEnabled: Boolean,
-    ) : AutoFillAction()
-
-    /**
-     * User clicked use draw-over button.
-     */
-    data class UseDrawOverClick(
-        val isEnabled: Boolean,
     ) : AutoFillAction()
 
     /**

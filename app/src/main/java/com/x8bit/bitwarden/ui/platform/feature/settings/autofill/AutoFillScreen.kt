@@ -112,29 +112,6 @@ fun AutoFillScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
-                label = stringResource(id = R.string.accessibility),
-                description = stringResource(id = R.string.accessibility_description4),
-                isChecked = state.isUseAccessibilityEnabled,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(AutoFillAction.UseAccessibilityClick(it)) }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-            BitwardenWideSwitch(
-                label = stringResource(id = R.string.draw_over),
-                description = stringResource(id = R.string.draw_over_description3),
-                isChecked = state.isUseDrawOverEnabled,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(AutoFillAction.UseDrawOverClick(it)) }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.additional_options),
