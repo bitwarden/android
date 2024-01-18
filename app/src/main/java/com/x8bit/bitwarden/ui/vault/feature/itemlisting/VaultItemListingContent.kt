@@ -10,7 +10,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
-import com.x8bit.bitwarden.ui.vault.feature.vault.VaultEntryListItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
+import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * Content view for the [VaultItemListingScreen].
@@ -19,6 +21,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultEntryListItem
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
     vaultItemClick: (id: String) -> Unit,
+    onOverflowItemClick: (action: VaultItemListingsAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -34,11 +37,20 @@ fun VaultItemListingContent(
             )
         }
         items(state.displayItemList) {
-            VaultEntryListItem(
+            BitwardenListItem(
                 startIcon = it.iconData,
                 label = it.title,
                 supportingLabel = it.subtitle,
                 onClick = { vaultItemClick(it.id) },
+                selectionDataList = it
+                    .overflowOptions
+                    .map { option ->
+                        SelectionItemData(
+                            text = option.title(),
+                            onClick = { onOverflowItemClick(option.action) },
+                        )
+                    }
+                    .toPersistentList(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

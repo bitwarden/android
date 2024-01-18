@@ -2,11 +2,14 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import android.net.Uri
 import com.bitwarden.core.CipherType
+import com.bitwarden.core.SendType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import io.mockk.every
 import io.mockk.mockk
@@ -250,6 +253,44 @@ class VaultItemListingDataExtensionsTest {
     }
 
     @Test
+    fun `determineListingPredicate should return the correct predicate for File sendView`() {
+        val sendView = createMockSendView(number = 1, type = SendType.FILE)
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Send.SendFile to true,
+            VaultItemListingState.ItemListingType.Send.SendText to false,
+        )
+            .forEach { (type, expected) ->
+                val result = sendView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    fun `determineListingPredicate should return the correct predicate for Text sendView`() {
+        val sendView = createMockSendView(number = 1, type = SendType.TEXT)
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Send.SendFile to false,
+            VaultItemListingState.ItemListingType.Send.SendText to true,
+        )
+            .forEach { (type, expected) ->
+                val result = sendView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
     fun `toViewState should transform a list of CipherViews into a ViewState`() {
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
@@ -287,19 +328,19 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(
             VaultItemListingState.ViewState.Content(
                 displayItemList = listOf(
-                    createMockItemListingDisplayItem(
+                    createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherType.LOGIN,
                     ),
-                    createMockItemListingDisplayItem(
+                    createMockDisplayItemForCipher(
                         number = 2,
                         cipherType = CipherType.CARD,
                     ),
-                    createMockItemListingDisplayItem(
+                    createMockDisplayItemForCipher(
                         number = 3,
                         cipherType = CipherType.SECURE_NOTE,
                     ),
-                    createMockItemListingDisplayItem(
+                    createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherType.IDENTITY,
                     ),
@@ -309,6 +350,28 @@ class VaultItemListingDataExtensionsTest {
         )
 
         unmockkStatic(Uri::class)
+    }
+
+    @Test
+    fun `toViewState should transform a list of SendViews into a ViewState`() {
+        val sendViewList = listOf(
+            createMockSendView(number = 1, type = SendType.FILE),
+            createMockSendView(number = 2, type = SendType.TEXT),
+        )
+
+        val result = sendViewList.toViewState(
+            baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(
+                    createMockDisplayItemForSend(number = 1, sendType = SendType.FILE),
+                    createMockDisplayItemForSend(number = 2, sendType = SendType.TEXT),
+                ),
+            ),
+            result,
+        )
     }
 
     @Test
