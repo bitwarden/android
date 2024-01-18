@@ -5,6 +5,13 @@ namespace Bit.Core.Services
 {
     public class Fido2AuthenticatorService : IFido2AuthenticatorService
     {
+        private ICipherService _cipherService;
+        
+        public Fido2AuthenticatorService(ICipherService cipherService)
+        {
+            _cipherService = cipherService;
+        }
+        
         public Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams)
         {
             throw new NotAllowedError();
