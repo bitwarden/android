@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
@@ -37,6 +40,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 
 /**
  * Displays the auto-fill screen.
@@ -47,18 +52,36 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 fun AutoFillScreen(
     onNavigateBack: () -> Unit,
     viewModel: AutoFillViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
     val resources = context.resources
+    var shouldShowAutofillFallbackDialog by rememberSaveable { mutableStateOf(false) }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AutoFillEvent.NavigateBack -> onNavigateBack.invoke()
+
+            AutoFillEvent.NavigateToAutofillSettings -> {
+                val isSuccess = intentManager.startSystemAutofillSettingsActivity()
+
+                shouldShowAutofillFallbackDialog = !isSuccess
+            }
 
             is AutoFillEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    if (shouldShowAutofillFallbackDialog) {
+        BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = null,
+                message = R.string.bitwarden_autofill_go_to_settings.asText(),
+            ),
+            onDismissRequest = { shouldShowAutofillFallbackDialog = false },
+        )
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())

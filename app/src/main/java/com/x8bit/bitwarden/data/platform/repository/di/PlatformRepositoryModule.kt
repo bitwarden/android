@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.platform.repository.di
 
+import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
@@ -38,12 +40,16 @@ object PlatformRepositoryModule {
     @Provides
     @Singleton
     fun provideSettingsRepository(
+        autofillManager: AutofillManager,
+        appForegroundManager: AppForegroundManager,
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
         vaultSdkSource: VaultSdkSource,
         dispatcherManager: DispatcherManager,
     ): SettingsRepository =
         SettingsRepositoryImpl(
+            autofillManager = autofillManager,
+            appForegroundManager = appForegroundManager,
             authDiskSource = authDiskSource,
             settingsDiskSource = settingsDiskSource,
             vaultSdkSource = vaultSdkSource,

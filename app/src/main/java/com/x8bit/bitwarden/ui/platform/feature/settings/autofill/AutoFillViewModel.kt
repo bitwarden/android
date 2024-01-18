@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -29,7 +30,7 @@ class AutoFillViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: AutoFillState(
             isAskToAddLoginEnabled = false,
-            isAutoFillServicesEnabled = false,
+            isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
             isCopyTotpAutomaticallyEnabled = false,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
             uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
@@ -40,6 +41,14 @@ class AutoFillViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
+
+        settingsRepository
+            .isAutofillEnabledStateFlow
+            .map {
+                AutoFillAction.Internal.AutofillEnabledUpdateReceive(isAutofillEnabled = it)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AutoFillAction): Unit = when (action) {
@@ -49,6 +58,9 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.CopyTotpAutomaticallyClick -> handleCopyTotpAutomaticallyClick(action)
         is AutoFillAction.UriDetectionMethodSelect -> handleUriDetectionMethodSelect(action)
         is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
+        is AutoFillAction.Internal.AutofillEnabledUpdateReceive -> {
+            handleAutofillEnabledUpdateReceive(action)
+        }
     }
 
     private fun handleAskToAddLoginClick(action: AutoFillAction.AskToAddLoginClick) {
@@ -58,9 +70,11 @@ class AutoFillViewModel @Inject constructor(
     }
 
     private fun handleAutoFillServicesClick(action: AutoFillAction.AutoFillServicesClick) {
-        // TODO BIT-828: Persist selection
-        sendEvent(AutoFillEvent.ShowToast("Not yet implemented.".asText()))
-        mutableStateFlow.update { it.copy(isAutoFillServicesEnabled = action.isEnabled) }
+        if (action.isEnabled) {
+            sendEvent(AutoFillEvent.NavigateToAutofillSettings)
+        } else {
+            settingsRepository.disableAutofill()
+        }
     }
 
     private fun handleBackClick() {
@@ -85,6 +99,14 @@ class AutoFillViewModel @Inject constructor(
         sendEvent(AutoFillEvent.ShowToast("Not yet implemented.".asText()))
         mutableStateFlow.update {
             it.copy(uriDetectionMethod = action.uriDetectionMethod)
+        }
+    }
+
+    private fun handleAutofillEnabledUpdateReceive(
+        action: AutoFillAction.Internal.AutofillEnabledUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isAutoFillServicesEnabled = action.isAutofillEnabled)
         }
     }
 }
@@ -122,6 +144,11 @@ sealed class AutoFillEvent {
      * Navigate back.
      */
     data object NavigateBack : AutoFillEvent()
+
+    /**
+     * Navigates to the system autofill settings selection screen.
+     */
+    data object NavigateToAutofillSettings : AutoFillEvent()
 
     /**
      * Displays a toast with the given [Text].
@@ -174,4 +201,17 @@ sealed class AutoFillAction {
     data class UseInlineAutofillClick(
         val isEnabled: Boolean,
     ) : AutoFillAction()
+
+    /**
+     * Internal actions.
+     */
+    sealed class Internal : AutoFillAction() {
+
+        /**
+         * An update for changes in the [isAutofillEnabled] value.
+         */
+        data class AutofillEnabledUpdateReceive(
+            val isAutofillEnabled: Boolean,
+        ) : Internal()
+    }
 }

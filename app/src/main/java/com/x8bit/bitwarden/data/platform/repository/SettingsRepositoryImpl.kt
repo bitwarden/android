@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -12,7 +14,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -21,6 +26,8 @@ import kotlinx.coroutines.launch
  */
 @Suppress("TooManyFunctions")
 class SettingsRepositoryImpl(
+    private val autofillManager: AutofillManager,
+    private val appForegroundManager: AppForegroundManager,
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -29,6 +36,13 @@ class SettingsRepositoryImpl(
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
+    private val isAutofillEnabledAndSupported: Boolean
+        get() = autofillManager.isEnabled &&
+            autofillManager.hasEnabledAutofillServices() &&
+            autofillManager.isAutofillSupported
+
+    private val mutableIsAutofillEnabledStateFlow = MutableStateFlow(isAutofillEnabledAndSupported)
 
     override var appLanguage: AppLanguage
         get() = settingsDiskSource.appLanguage ?: AppLanguage.DEFAULT
@@ -134,6 +148,20 @@ class SettingsRepositoryImpl(
                 isApprovePasswordlessLoginsEnabled = value,
             )
         }
+    override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
+        mutableIsAutofillEnabledStateFlow.asStateFlow()
+
+    init {
+        observeAutofillEnabledChanges()
+    }
+
+    override fun disableAutofill() {
+        autofillManager.disableAutofillServices()
+
+        // Manually indicate that autofill is no longer supported without needing a foreground state
+        // change.
+        mutableIsAutofillEnabledStateFlow.value = false
+    }
 
     override fun setDefaultsIfNecessary(userId: String) {
         // Set Vault Settings defaults
@@ -259,6 +287,15 @@ class SettingsRepositoryImpl(
                 pinProtectedUserKey = null,
             )
         }
+    }
+
+    private fun observeAutofillEnabledChanges() {
+        appForegroundManager
+            .appForegroundStateFlow
+            .onEach {
+                mutableIsAutofillEnabledStateFlow.value = isAutofillEnabledAndSupported
+            }
+            .launchIn(unconfinedScope)
     }
 }
 
