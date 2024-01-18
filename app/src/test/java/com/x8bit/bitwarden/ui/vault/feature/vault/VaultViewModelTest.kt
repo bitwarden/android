@@ -67,6 +67,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository =
         mockk {
+            every { vaultFilterType = any() } returns Unit
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
             every { sync() } just runs
             every { lockVaultForCurrentUser() } just runs
@@ -392,6 +393,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+        verify { vaultRepository.vaultFilterType = VaultFilterType.MyVault }
     }
 
     @Test

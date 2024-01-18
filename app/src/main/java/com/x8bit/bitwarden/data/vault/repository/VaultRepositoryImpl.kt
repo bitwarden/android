@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionLi
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -109,6 +110,8 @@ class VaultRepositoryImpl(
 
     private val mutableCollectionsStateFlow =
         MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
+
+    override var vaultFilterType: VaultFilterType = VaultFilterType.AllVaults
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
         combine(
