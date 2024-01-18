@@ -170,6 +170,39 @@ class EnvironmentUrlsDataJsonExtensionsTest {
             (null as EnvironmentUrlDataJson?).toEnvironmentUrlsOrDefault(),
         )
     }
+
+    @Test
+    fun `toIconBaseurl should return icon if value is present`() {
+        assertEquals(
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseIconUrl,
+            "icon",
+        )
+    }
+
+    @Test
+    fun `toIconBaseurl should return base value if icon is null`() {
+        assertEquals(
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+                .copy(icon = null)
+                .baseIconUrl,
+            "base/icons",
+        )
+    }
+
+    @Test
+    fun `toIconBaseurl should return default url if base is empty and icon is null`() {
+        val expectedUrl = "https://icons.bitwarden.net/"
+
+        assertEquals(
+            expectedUrl,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+                .copy(
+                    base = "",
+                    icon = null,
+                )
+                .baseIconUrl,
+        )
+    }
 }
 
 private val DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA = EnvironmentUrlDataJson(

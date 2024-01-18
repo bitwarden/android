@@ -10,9 +10,12 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.mockk
@@ -393,6 +396,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = VaultItemListingState(
     itemListingType = VaultItemListingState.ItemListingType.Login,
     viewState = VaultItemListingState.ViewState.Loading,
+    isIconLoadingDisabled = false,
+    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
 )
 
 private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
@@ -400,6 +405,5 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         id = "mockId-$number",
         title = "mockTitle-$number",
         subtitle = "mockSubtitle-$number",
-        uri = "mockUri-$number",
-        iconRes = R.drawable.ic_card_item,
+        iconData = IconData.Local(R.drawable.ic_card_item),
     )

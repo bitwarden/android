@@ -3,13 +3,12 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 
@@ -24,7 +23,7 @@ import kotlinx.collections.immutable.persistentListOf
  */
 @Composable
 fun VaultEntryListItem(
-    startIcon: Painter,
+    startIcon: IconData,
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -54,7 +53,7 @@ fun VaultEntryListItem(
 private fun VaultEntryListItem_preview() {
     BitwardenTheme {
         VaultEntryListItem(
-            startIcon = painterResource(id = R.drawable.ic_login_item),
+            startIcon = IconData.Local(R.drawable.ic_login_item),
             label = "Example Login",
             supportingLabel = "Username",
             onClick = {},

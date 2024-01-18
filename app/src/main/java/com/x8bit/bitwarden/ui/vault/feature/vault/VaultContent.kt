@@ -82,7 +82,7 @@ fun VaultContent(
 
             items(state.favoriteItems) { favoriteItem ->
                 VaultEntryListItem(
-                    startIcon = painterResource(id = favoriteItem.startIcon),
+                    startIcon = favoriteItem.startIcon,
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultItemClick(favoriteItem) },
@@ -234,8 +234,9 @@ fun VaultContent(
                 )
             }
             items(state.noFolderItems) { noFolderItem ->
+
                 VaultEntryListItem(
-                    startIcon = painterResource(id = noFolderItem.startIcon),
+                    startIcon = noFolderItem.startIcon,
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultItemClick(noFolderItem) },
