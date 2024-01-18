@@ -1205,59 +1205,50 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `getPasswordStrength should be based on password length`() = runTest {
-        // TODO: Replace with SDK call (BIT-964)
+    fun `getPasswordStrength returns expected results for various strength levels`() = runTest {
+        coEvery {
+            authSdkSource.passwordStrength(any(), eq("level_0"))
+        } returns Result.success(LEVEL_0)
+
+        coEvery {
+            authSdkSource.passwordStrength(any(), eq("level_1"))
+        } returns Result.success(LEVEL_1)
+
+        coEvery {
+            authSdkSource.passwordStrength(any(), eq("level_2"))
+        } returns Result.success(LEVEL_2)
+
+        coEvery {
+            authSdkSource.passwordStrength(any(), eq("level_3"))
+        } returns Result.success(LEVEL_3)
+
+        coEvery {
+            authSdkSource.passwordStrength(any(), eq("level_4"))
+        } returns Result.success(LEVEL_4)
+
         assertEquals(
             PasswordStrengthResult.Success(LEVEL_0),
-            repository.getPasswordStrength(EMAIL, "1"),
-        )
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_0),
-            repository.getPasswordStrength(EMAIL, "12"),
-        )
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_0),
-            repository.getPasswordStrength(EMAIL, "123"),
+            repository.getPasswordStrength(EMAIL, "level_0"),
         )
 
         assertEquals(
             PasswordStrengthResult.Success(LEVEL_1),
-            repository.getPasswordStrength(EMAIL, "1234"),
-        )
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_1),
-            repository.getPasswordStrength(EMAIL, "12345"),
-        )
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_1),
-            repository.getPasswordStrength(EMAIL, "123456"),
+            repository.getPasswordStrength(EMAIL, "level_1"),
         )
 
         assertEquals(
             PasswordStrengthResult.Success(LEVEL_2),
-            repository.getPasswordStrength(EMAIL, "1234567"),
-        )
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_2),
-            repository.getPasswordStrength(EMAIL, "12345678"),
-        )
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_2),
-            repository.getPasswordStrength(EMAIL, "123456789"),
+            repository.getPasswordStrength(EMAIL, "level_2"),
         )
 
         assertEquals(
             PasswordStrengthResult.Success(LEVEL_3),
-            repository.getPasswordStrength(EMAIL, "123456789a"),
-        )
-        assertEquals(
-            PasswordStrengthResult.Success(LEVEL_3),
-            repository.getPasswordStrength(EMAIL, "123456789ab"),
+            repository.getPasswordStrength(EMAIL, "level_3"),
         )
 
         assertEquals(
             PasswordStrengthResult.Success(LEVEL_4),
-            repository.getPasswordStrength(EMAIL, "123456789abc"),
+            repository.getPasswordStrength(EMAIL, "level_4"),
         )
     }
 
