@@ -88,32 +88,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `on UseAccessibilityClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AutoFillAction.UseAccessibilityClick(true))
-            assertEquals(AutoFillEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
-        }
-        assertEquals(
-            DEFAULT_STATE.copy(isUseAccessibilityEnabled = true),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `on UseDrawOverClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AutoFillAction.UseDrawOverClick(true))
-            assertEquals(AutoFillEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
-        }
-        assertEquals(
-            DEFAULT_STATE.copy(isUseDrawOverEnabled = true),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
     fun `on UseInlineAutofillClick should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(false))
@@ -150,8 +124,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAskToAddLoginEnabled = false,
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
-    isUseAccessibilityEnabled = false,
-    isUseDrawOverEnabled = false,
     isUseInlineAutoFillEnabled = true,
     uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
 )

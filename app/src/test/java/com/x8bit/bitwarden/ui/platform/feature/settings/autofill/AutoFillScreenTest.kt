@@ -88,50 +88,6 @@ class AutoFillScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on use accessibility toggle should send UseAccessibilityClick`() {
-        composeTestRule
-            .onNodeWithText("Use accessibility")
-            .performScrollTo()
-            .performClick()
-        verify { viewModel.trySendAction(AutoFillAction.UseAccessibilityClick(true)) }
-    }
-
-    @Test
-    fun `use accessibility should be toggled on or off according to state`() {
-        composeTestRule
-            .onNodeWithText("Use accessibility")
-            .performScrollTo()
-            .assertIsOff()
-        mutableStateFlow.update { it.copy(isUseAccessibilityEnabled = true) }
-        composeTestRule
-            .onNodeWithText("Use accessibility")
-            .performScrollTo()
-            .assertIsOn()
-    }
-
-    @Test
-    fun `on use draw over toggle should send UseDrawOverClick`() {
-        composeTestRule
-            .onNodeWithText("Use draw-over")
-            .performScrollTo()
-            .performClick()
-        verify { viewModel.trySendAction(AutoFillAction.UseDrawOverClick(true)) }
-    }
-
-    @Test
-    fun `use draw-over should be toggled on or off according to state`() {
-        composeTestRule
-            .onNodeWithText("Use draw-over")
-            .performScrollTo()
-            .assertIsOff()
-        mutableStateFlow.update { it.copy(isUseDrawOverEnabled = true) }
-        composeTestRule
-            .onNodeWithText("Use draw-over")
-            .performScrollTo()
-            .assertIsOn()
-    }
-
-    @Test
     fun `on copy TOTP automatically toggle should send CopyTotpAutomaticallyClick`() {
         composeTestRule
             .onNodeWithText("Copy TOTP automatically")
@@ -224,8 +180,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAskToAddLoginEnabled = false,
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
-    isUseAccessibilityEnabled = false,
-    isUseDrawOverEnabled = false,
     isUseInlineAutoFillEnabled = false,
     uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
 )
