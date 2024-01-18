@@ -74,6 +74,8 @@ class VaultViewModel @Inject constructor(
         get() = state.vaultFilterData?.selectedVaultFilterType ?: VaultFilterType.AllVaults
 
     init {
+        // Reset the current vault filter type for the current user
+        vaultRepository.vaultFilterType = vaultFilterTypeOrDefault
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .map { VaultAction.Internal.PullToRefreshEnableReceive(it) }
@@ -223,6 +225,8 @@ class VaultViewModel @Inject constructor(
 
     private fun handleVaultFilterTypeSelect(action: VaultAction.VaultFilterTypeSelect) {
         // Update the current filter
+        vaultRepository.vaultFilterType = action.vaultFilterType
+
         mutableStateFlow.update {
             it.copy(
                 vaultFilterData = it.vaultFilterData?.copy(

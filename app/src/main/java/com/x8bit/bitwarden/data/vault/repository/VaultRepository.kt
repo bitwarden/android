@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -28,6 +29,14 @@ import kotlinx.coroutines.flow.StateFlow
  */
 @Suppress("TooManyFunctions")
 interface VaultRepository : VaultLockManager {
+
+    /**
+     * The [VaultFilterType] for the current user.
+     *
+     * Note that this does not affect the data provided by the repository and can be used by
+     * the UI for consistent filtering across screens.
+     */
+    var vaultFilterType: VaultFilterType
 
     /**
      * Flow that represents the current vault data.
