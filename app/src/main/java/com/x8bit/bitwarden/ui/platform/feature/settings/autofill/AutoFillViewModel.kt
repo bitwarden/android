@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -23,6 +24,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class AutoFillViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<AutoFillState, AutoFillEvent, AutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: AutoFillState(
@@ -31,7 +33,7 @@ class AutoFillViewModel @Inject constructor(
             isCopyTotpAutomaticallyEnabled = false,
             isUseAccessibilityEnabled = false,
             isUseDrawOverEnabled = false,
-            isUseInlineAutoFillEnabled = false,
+            isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
             uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
         ),
 ) {
@@ -90,8 +92,7 @@ class AutoFillViewModel @Inject constructor(
     }
 
     private fun handleUseInlineAutofillClick(action: AutoFillAction.UseInlineAutofillClick) {
-        // TODO BIT-833: Persist selection
-        sendEvent(AutoFillEvent.ShowToast("Not yet implemented.".asText()))
+        settingsRepository.isInlineAutofillEnabled = action.isEnabled
         mutableStateFlow.update { it.copy(isUseInlineAutoFillEnabled = action.isEnabled) }
     }
 

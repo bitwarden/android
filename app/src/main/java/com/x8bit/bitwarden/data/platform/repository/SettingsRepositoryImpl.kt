@@ -97,6 +97,18 @@ class SettingsRepositoryImpl(
             ?.let { authDiskSource.getEncryptedPin(userId = it) != null }
             ?: false
 
+    override var isInlineAutofillEnabled: Boolean
+        get() = activeUserId
+            ?.let { settingsDiskSource.getInlineAutofillEnabled(userId = it) }
+            ?: true
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeInlineAutofillEnabled(
+                userId = userId,
+                isInlineAutofillEnabled = value,
+            )
+        }
+
     override fun setDefaultsIfNecessary(userId: String) {
         // Set Vault Settings defaults
         if (!isVaultTimeoutActionSet(userId = userId)) {
