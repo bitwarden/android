@@ -23,11 +23,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,7 +47,7 @@ import kotlinx.collections.immutable.persistentListOf
  * Displays the password history screen
  */
 @Suppress("LongMethod")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun PasswordHistoryScreen(
     onNavigateBack: () -> Unit,
@@ -66,6 +70,7 @@ fun PasswordHistoryScreen(
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
+            .semantics { testTagsAsResourceId = true }
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
@@ -80,6 +85,7 @@ fun PasswordHistoryScreen(
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
+                                testTag = "ClearPasswordList",
                                 text = stringResource(id = R.string.clear),
                                 onClick = remember(viewModel) {
                                     {
@@ -158,7 +164,7 @@ private fun PasswordHistoryContent(
     modifier: Modifier = Modifier,
     onPasswordCopyClick: (PasswordHistoryState.GeneratedPassword) -> Unit,
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier.semantics { testTag = "GeneratedPasswordRow" }) {
         items(state.passwords) { password ->
             PasswordHistoryListItem(
                 label = password.password,
@@ -204,6 +210,7 @@ private fun PasswordHistoryEmpty(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
+            modifier = Modifier.semantics { testTag = "NoPasswordsDisplayedLabel" },
             text = stringResource(id = R.string.no_passwords_to_list),
             style = MaterialTheme.typography.bodyMedium,
         )
