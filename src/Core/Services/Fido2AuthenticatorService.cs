@@ -49,6 +49,17 @@ namespace Bit.Core.Services
                 CipherIds = cipherOptions.Select((cipher) => cipher.Id).ToArray(),
                 UserVerification = assertionParams.RequireUserVerification
             });
+            var selectedCipherId = response.CipherId;
+            var userVerified = response.UserVerified;
+            var selectedCipher = cipherOptions.FirstOrDefault((c) => c.Id == selectedCipherId);
+
+            if (selectedCipher == null) {
+                _logService.Info(
+                    "[Fido2Authenticator] Aborting because the selected credential could not be found."
+                );
+
+                throw new NotAllowedError();
+            }
             
             // TODO: IMPLEMENT this
             return new Fido2AuthenticatorGetAssertionResult
