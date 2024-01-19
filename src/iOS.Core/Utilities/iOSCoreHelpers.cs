@@ -29,8 +29,6 @@ namespace Bit.iOS.Core.Utilities
         {
             var builder = Bit.Core.MauiProgram.ConfigureMauiAppBuilder(ConfigureMAUIEffects, handlers =>
                 {
-                    // WORKAROUND: This is needed to make TapGestureRecognizer work on extensions.
-                    handlers.AddHandler(typeof(Window), typeof(Handlers.CustomWindowHandler));
                     ConfigureMAUIHandlers(handlers);
                 })
                 .UseMauiEmbedding<Application>();

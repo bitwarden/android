@@ -137,22 +137,15 @@ namespace Bit.iOS.ShareExtension
             }
         }
 
-#if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
-
         private void NavigateToPage(ContentPage page)
         {
             var navigationPage = new NavigationPage(page);
-
-            var window = new Window(navigationPage);
-            window.ToHandler(MauiContextSingleton.Instance.MauiContext);
 
             _currentModalController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             _presentingOnNavigationPage = true;
             PresentViewController(_currentModalController, true, null);
         }
-
-#endif
 
         public void DismissLockAndContinue()
         {
