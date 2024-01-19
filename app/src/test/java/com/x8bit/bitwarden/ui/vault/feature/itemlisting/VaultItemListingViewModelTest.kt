@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -189,89 +190,105 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CopySendUrlClick should call setText on clipboardManager`() {
+    fun `OverflowOptionClick Send EditClick should emit NavigateToSendItem`() = runTest {
+        val sendId = "sendId"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.SendAction.EditClick(sendId = sendId),
+                ),
+            )
+            assertEquals(VaultItemListingEvent.NavigateToSendItem(sendId), awaitItem())
+        }
+    }
+
+    @Test
+    fun `OverflowOptionClick Send CopyUrlClick should call setText on clipboardManager`() {
         val sendUrl = "www.test.com"
         every { clipboardManager.setText(sendUrl) } just runs
         val viewModel = createVaultItemListingViewModel()
-        viewModel.actionChannel.trySend(VaultItemListingsAction.CopySendUrlClick(sendUrl = sendUrl))
+        viewModel.actionChannel.trySend(
+            VaultItemListingsAction.OverflowOptionClick(
+                ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl),
+            ),
+        )
         verify(exactly = 1) {
             clipboardManager.setText(text = sendUrl)
         }
     }
 
     @Test
-    fun `DeleteSendClick should display delete confirmation dialog`() {
-        val sendId = "sendId"
-        val viewModel = createVaultItemListingViewModel()
-        viewModel.trySendAction(VaultItemListingsAction.DeleteSendClick(sendId))
-        assertEquals(
-            initialState.copy(
-                dialogState = VaultItemListingState.DialogState.DeleteSendConfirmation(
-                    sendId = sendId,
-                ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
+    fun `OverflowOptionClick Send DeleteClick with deleteSend error should display error dialog`() =
+        runTest {
+            val sendId = "sendId1234"
+            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
 
-    @Test
-    fun `DeleteSendConfirmClick with deleteSend error should display error dialog`() = runTest {
-        val sendId = "sendId1234"
-        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
-
-        val viewModel = createVaultItemListingViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(VaultItemListingsAction.DeleteSendConfirmClick(sendId))
-            assertEquals(
-                initialState.copy(
-                    dialogState = VaultItemListingState.DialogState.Loading(
-                        message = R.string.deleting.asText(),
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.actionChannel.trySend(
+                    VaultItemListingsAction.OverflowOptionClick(
+                        ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
                     ),
-                ),
-                awaitItem(),
-            )
-            assertEquals(
-                initialState.copy(
-                    dialogState = VaultItemListingState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = VaultItemListingState.DialogState.Loading(
+                            message = R.string.deleting.asText(),
+                        ),
                     ),
-                ),
-                awaitItem(),
-            )
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
-    fun `DeleteSendConfirmClick with deleteSend success should emit ShowToast`() = runTest {
-        val sendId = "sendId1234"
-        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
+    fun `OverflowOptionClick Send DeleteClick with deleteSend success should emit ShowToast`() =
+        runTest {
+            val sendId = "sendId1234"
+            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
 
-        val viewModel = createVaultItemListingViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultItemListingsAction.DeleteSendConfirmClick(sendId))
-            assertEquals(
-                VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()),
-                awaitItem(),
-            )
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(
+                    VaultItemListingsAction.OverflowOptionClick(
+                        ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
+                    ),
+                )
+                assertEquals(
+                    VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
-    fun `ShareSendUrlClick should emit ShowShareSheet`() = runTest {
+    fun `OverflowOptionClick Send ShareUrlClick should emit ShowShareSheet`() = runTest {
         val sendUrl = "www.test.com"
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(
-                VaultItemListingsAction.ShareSendUrlClick(sendUrl = sendUrl),
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = sendUrl),
+                ),
             )
             assertEquals(VaultItemListingEvent.ShowShareSheet(sendUrl), awaitItem())
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `RemovePasswordClick with removePasswordSend error should display error dialog`() =
+    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend error should display error dialog`() =
         runTest {
             val sendId = "sendId1234"
             coEvery {
@@ -281,7 +298,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.stateFlow.test {
                 assertEquals(initialState, awaitItem())
-                viewModel.trySendAction(VaultItemListingsAction.RemoveSendPasswordClick(sendId))
+                viewModel.actionChannel.trySend(
+                    VaultItemListingsAction.OverflowOptionClick(
+                        ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId),
+                    ),
+                )
                 assertEquals(
                     initialState.copy(
                         dialogState = VaultItemListingState.DialogState.Loading(
@@ -302,22 +323,28 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `RemovePasswordClick with removePasswordSend success should emit ShowToast`() = runTest {
-        val sendId = "sendId1234"
-        coEvery {
-            vaultRepository.removePasswordSend(sendId)
-        } returns RemovePasswordSendResult.Success(mockk())
+    fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend success should emit ShowToast`() =
+        runTest {
+            val sendId = "sendId1234"
+            coEvery {
+                vaultRepository.removePasswordSend(sendId)
+            } returns RemovePasswordSendResult.Success(mockk())
 
-        val viewModel = createVaultItemListingViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultItemListingsAction.RemoveSendPasswordClick(sendId))
-            assertEquals(
-                VaultItemListingEvent.ShowToast(R.string.send_password_removed.asText()),
-                awaitItem(),
-            )
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(
+                    VaultItemListingsAction.OverflowOptionClick(
+                        ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId),
+                    ),
+                )
+                assertEquals(
+                    VaultItemListingEvent.ShowToast(R.string.send_password_removed.asText()),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
     fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() =

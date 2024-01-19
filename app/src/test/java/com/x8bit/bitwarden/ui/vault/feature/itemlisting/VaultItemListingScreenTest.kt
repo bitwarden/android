@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
 import io.mockk.just
@@ -544,7 +545,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(
-                VaultItemListingsAction.ItemClick(id = "mockId-$number"),
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.SendAction.EditClick(
+                        sendId = "mockId-$number",
+                    ),
+                ),
             )
         }
 
@@ -558,7 +563,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(
-                VaultItemListingsAction.CopySendUrlClick(sendUrl = "www.test.com"),
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.SendAction.CopyUrlClick(
+                        sendUrl = "www.test.com",
+                    ),
+                ),
             )
         }
 
@@ -572,7 +581,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(
-                VaultItemListingsAction.ShareSendUrlClick(sendUrl = "www.test.com"),
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.SendAction.ShareUrlClick(
+                        sendUrl = "www.test.com",
+                    ),
+                ),
             )
         }
 
@@ -586,9 +599,29 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(
-                VaultItemListingsAction.RemoveSendPasswordClick(sendId = "mockId-$number"),
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.SendAction.RemovePasswordClick(
+                        sendId = "mockId-$number",
+                    ),
+                ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on send item delete overflow option click should display delete confirmation dialog and emits DeleteSendConfirmClick on confirmation`() {
+        val sendId = "mockId-1"
+        val message = "Are you sure you want to delete this Send?"
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(createDisplayItem(number = 1)),
+                ),
+            )
+        }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(message).assertDoesNotExist()
 
         composeTestRule
             .onNodeWithContentDescription("Options")
@@ -598,28 +631,6 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .onNodeWithText("Delete")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
-        verify(exactly = 1) {
-            viewModel.trySendAction(
-                VaultItemListingsAction.DeleteSendClick(sendId = "mockId-$number"),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `delete send confirmation dialog should be displayed according to state and emits DeleteSendConfirmClick on confirmation`() {
-        val sendId = "sendId"
-        val message = "Are you sure you want to delete this Send?"
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        composeTestRule.onNodeWithText(message).assertDoesNotExist()
-
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = VaultItemListingState.DialogState.DeleteSendConfirmation(
-                    sendId = sendId,
-                ),
-            )
-        }
 
         composeTestRule
             .onNodeWithText(message)
@@ -631,7 +642,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(VaultItemListingsAction.DeleteSendConfirmClick(sendId))
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
+                ),
+            )
         }
     }
 
@@ -716,25 +731,10 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
             ),
         ),
         overflowOptions = listOf(
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.edit.asText(),
-                action = VaultItemListingsAction.ItemClick(id = "mockId-$number"),
-            ),
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.copy_link.asText(),
-                action = VaultItemListingsAction.CopySendUrlClick(sendUrl = "www.test.com"),
-            ),
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.share_link.asText(),
-                action = VaultItemListingsAction.ShareSendUrlClick(sendUrl = "www.test.com"),
-            ),
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.remove_password.asText(),
-                action = VaultItemListingsAction.RemoveSendPasswordClick(sendId = "mockId-$number"),
-            ),
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.delete.asText(),
-                action = VaultItemListingsAction.DeleteSendClick(sendId = "mockId-$number"),
-            ),
+            ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
+            ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = "www.test.com"),
+            ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = "www.test.com"),
+            ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
+            ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
         ),
     )
