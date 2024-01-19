@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
@@ -43,6 +44,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
+        every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
         every { sync() } just runs
     }
@@ -648,6 +650,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         VaultItemListingState(
             itemListingType = itemListingType,
             viewState = viewState,
+            vaultFilterType = vaultRepository.vaultFilterType,
             baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,

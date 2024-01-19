@@ -170,8 +170,11 @@ private fun CipherView.toVaultItemOrNull(
     }
 }
 
+/**
+ * Filters out all [CipherView]s that are not part of the given [VaultFilterType].
+ */
 @JvmName("toFilteredCipherList")
-private fun List<CipherView>.toFilteredList(
+fun List<CipherView>.toFilteredList(
     vaultFilterType: VaultFilterType,
 ): List<CipherView> =
     this
@@ -187,8 +190,11 @@ private fun List<CipherView>.toFilteredList(
             }
         }
 
+/**
+ * Filters out all [FolderView]s that are not part of the given [VaultFilterType].
+ */
 @JvmName("toFilteredFolderList")
-private fun List<FolderView>.toFilteredList(
+fun List<FolderView>.toFilteredList(
     vaultFilterType: VaultFilterType,
 ): List<FolderView> =
     this
@@ -203,8 +209,11 @@ private fun List<FolderView>.toFilteredList(
             }
         }
 
+/**
+ * Filters out all [CollectionView]s that are not part of the given [VaultFilterType].
+ */
 @JvmName("toFilteredCollectionList")
-private fun List<CollectionView>.toFilteredList(
+fun List<CollectionView>.toFilteredList(
     vaultFilterType: VaultFilterType,
 ): List<CollectionView> =
     this

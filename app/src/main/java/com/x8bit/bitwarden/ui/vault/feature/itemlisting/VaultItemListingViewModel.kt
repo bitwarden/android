@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPre
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -46,6 +48,7 @@ class VaultItemListingViewModel @Inject constructor(
             .vaultItemListingType
             .toItemListingType(),
         viewState = VaultItemListingState.ViewState.Loading,
+        vaultFilterType = vaultRepository.vaultFilterType,
         baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
         baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
         isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
@@ -242,9 +245,11 @@ class VaultItemListingViewModel @Inject constructor(
                     .itemListingType
                     .updateWithAdditionalDataIfNecessary(
                         folderList = vaultData
-                            .folderViewList,
+                            .folderViewList
+                            .toFilteredList(state.vaultFilterType),
                         collectionList = vaultData
-                            .collectionViewList,
+                            .collectionViewList
+                            .toFilteredList(state.vaultFilterType),
                     ),
                 viewState = when (val listingType = currentState.itemListingType) {
                     is VaultItemListingState.ItemListingType.Vault -> {
@@ -253,6 +258,7 @@ class VaultItemListingViewModel @Inject constructor(
                             .filter { cipherView ->
                                 cipherView.determineListingPredicate(listingType)
                             }
+                            .toFilteredList(state.vaultFilterType)
                             .toViewState(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
@@ -280,6 +286,7 @@ class VaultItemListingViewModel @Inject constructor(
 data class VaultItemListingState(
     val itemListingType: ItemListingType,
     val viewState: ViewState,
+    val vaultFilterType: VaultFilterType,
     val baseWebSendUrl: String,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
