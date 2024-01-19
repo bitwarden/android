@@ -36,6 +36,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param description An optional description label to be displayed below the [label].
  * @param contentDescription A description of the switch's UI for accessibility purposes.
  * @param readOnly Disables the click functionality without modifying the other UI characteristics.
+ * @param enabled Whether or not this switch is enabled. This is similar to setting [readOnly] but
+ * comes with some additional visual changes.
  */
 @Composable
 fun BitwardenWideSwitch(
@@ -46,6 +48,7 @@ fun BitwardenWideSwitch(
     description: String? = null,
     contentDescription: String? = null,
     readOnly: Boolean = false,
+    enabled: Boolean = true,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -56,7 +59,7 @@ fun BitwardenWideSwitch(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
                 onClick = { onCheckedChange?.invoke(!isChecked) },
-                enabled = !readOnly,
+                enabled = !readOnly && enabled,
             )
             .semantics(mergeDescendants = true) {
                 toggleableState = ToggleableState(isChecked)
@@ -72,13 +75,21 @@ fun BitwardenWideSwitch(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (enabled) {
+                    MaterialTheme.colorScheme.onSurface
+                } else {
+                    MaterialTheme.colorScheme.outline
+                },
             )
             description?.let {
                 Text(
                     text = it,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (enabled) {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    } else {
+                        MaterialTheme.colorScheme.outline
+                    },
                 )
             }
         }
