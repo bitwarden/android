@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.components.model
 
+import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import kotlinx.parcelize.Parcelize
 
 /**
  * Data class representing the resources required for an icon.
@@ -23,11 +25,12 @@ data class IconResource(
  * @property iconRes Resource for the icon.
  * @property contentDescription The icon's content description.
  */
+@Parcelize
 data class IconRes(
     @DrawableRes
     val iconRes: Int,
     val contentDescription: Text,
-)
+) : Parcelable
 
 /**
  * A helper method to convert a list of [IconRes] to a list of [IconResource].

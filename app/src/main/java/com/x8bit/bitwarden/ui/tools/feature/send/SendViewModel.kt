@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -350,7 +350,7 @@ data class SendState(
                 val name: String,
                 val deletionDate: String,
                 val type: Type,
-                val iconList: List<SendStatusIcon>,
+                val iconList: List<IconRes>,
                 val shareUrl: String,
                 val hasPassword: Boolean,
             ) : Parcelable {
