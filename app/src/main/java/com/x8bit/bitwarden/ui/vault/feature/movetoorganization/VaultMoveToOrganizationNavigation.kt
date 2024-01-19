@@ -49,8 +49,8 @@ fun NavController.navigateToVaultMoveToOrganization(
     vaultItemId: String,
     navOptions: NavOptions? = null,
 ) {
-   navigate(
-       route = "$VAULT_MOVE_TO_ORGANIZATION_PREFIX/$vaultItemId",
-       navOptions = navOptions,
-   )
+    navigate(
+        route = "$VAULT_MOVE_TO_ORGANIZATION_PREFIX/$vaultItemId",
+        navOptions = navOptions,
+    )
 }

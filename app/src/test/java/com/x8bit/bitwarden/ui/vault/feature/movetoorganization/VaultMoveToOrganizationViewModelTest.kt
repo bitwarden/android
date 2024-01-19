@@ -180,7 +180,8 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                         organizations = createMockOrganizationList(),
                         selectedOrganizationId = "mockOrganizationId-1",
                         cipherToMove = createMockCipherView(number = 1),
-                    ), dialogState = null,
+                    ),
+                    dialogState = null,
                 ),
                 awaitItem(),
             )

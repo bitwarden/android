@@ -72,6 +72,7 @@ fun AutoFillScreen(
             is AutoFillEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
+
             AutoFillEvent.NavigateToBlockAutoFill -> {
                 onNavigateToBlockAutoFillScreen()
             }

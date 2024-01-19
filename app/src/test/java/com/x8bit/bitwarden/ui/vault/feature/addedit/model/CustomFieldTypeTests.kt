@@ -76,7 +76,11 @@ class CustomFieldTypeTests {
         val type = CustomFieldType.LINKED
 
         val expected =
-            VaultAddEditState.Custom.LinkedField(TEST_ID, "test", VaultLinkedFieldType.CARDHOLDER_NAME)
+            VaultAddEditState.Custom.LinkedField(
+                TEST_ID,
+                "test",
+                VaultLinkedFieldType.CARDHOLDER_NAME,
+            )
         val actual = type.toCustomField(
             name = name,
             itemType = VaultAddEditState.ViewState.Content.ItemType.Card(),

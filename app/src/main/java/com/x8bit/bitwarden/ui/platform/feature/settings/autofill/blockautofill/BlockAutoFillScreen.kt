@@ -60,7 +60,7 @@ fun BlockAutoFillScreen(
         },
     ) { innerPadding ->
         Column(
-           modifier = Modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),

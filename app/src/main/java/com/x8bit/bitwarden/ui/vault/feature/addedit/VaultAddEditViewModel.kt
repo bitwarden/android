@@ -905,6 +905,7 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                 }
             }
+
             is GeneratorResult.Username -> {
                 updateLoginContent { loginType ->
                     loginType.copy(
