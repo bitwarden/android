@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
-import com.bitwarden.core.ForwarderServiceType
-import com.bitwarden.core.UsernameGeneratorRequest
+import com.bitwarden.generators.ForwarderServiceType
+import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 
 /**

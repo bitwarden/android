@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
-import com.bitwarden.core.PassphraseGeneratorRequest
-import com.bitwarden.core.PasswordGeneratorRequest
-import com.bitwarden.core.UsernameGeneratorRequest
+import com.bitwarden.generators.PassphraseGeneratorRequest
+import com.bitwarden.generators.PasswordGeneratorRequest
+import com.bitwarden.generators.UsernameGeneratorRequest
 
 /**
  * Source of password generation functionality from the Bitwarden SDK.

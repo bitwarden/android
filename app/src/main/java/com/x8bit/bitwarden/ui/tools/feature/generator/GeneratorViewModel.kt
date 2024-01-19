@@ -5,10 +5,10 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.AppendType
-import com.bitwarden.core.PassphraseGeneratorRequest
-import com.bitwarden.core.PasswordGeneratorRequest
-import com.bitwarden.core.UsernameGeneratorRequest
+import com.bitwarden.generators.AppendType
+import com.bitwarden.generators.PassphraseGeneratorRequest
+import com.bitwarden.generators.PasswordGeneratorRequest
+import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager

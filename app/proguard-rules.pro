@@ -4,9 +4,7 @@
 
 # We need to access the SDK using JNA and this makes it very easy to obfuscate away the SDK unless
 # we keep it here.
--keep class com.bitwarden.core.** { *; }
--keep class com.bitwarden.crypto** { *; }
--keep class com.bitwarden.sdk.** { *; }
+-keep class com.bitwarden.** { *; }
 
 ################################################################################
 # Bitwarden Models
