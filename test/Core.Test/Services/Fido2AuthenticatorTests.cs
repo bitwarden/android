@@ -76,7 +76,44 @@ namespace Bit.Core.Test.Services
                 (pickCredentialParams) => pickCredentialParams.CipherIds.SequenceEqual(ciphers.Select((cipher) => cipher.Id)) && pickCredentialParams.UserVerification == aParams.RequireUserVerification
             ));
         }
-        
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task GetAssertionAsync_AsksForDiscoverableCredentials_ParamsDoesNotContainsAllowedCredentialsList(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
+        {
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [ 
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            aParams.RpId = "bitwarden.com";
+            aParams.AllowCredentialDescriptorList = null;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+
+            await sutProvider.Sut.GetAssertionAsync(aParams);
+
+            await sutProvider.GetDependency<IFido2UserInterface>().Received().PickCredentialAsync(Arg.Is<Fido2PickCredentialParams>(
+                (pickCredentialParams) => pickCredentialParams.CipherIds.SequenceEqual(discoverableCiphers.Select((cipher) => cipher.Id)) && pickCredentialParams.UserVerification == aParams.RequireUserVerification
+            ));
+        }
+
+    //   it("should only ask for discoverable credentials matched by rpId when params does not contains allowedCredentials list", async () => {
+    //     params.allowCredentialDescriptorList = undefined;
+    //     const discoverableCiphers = ciphers.filter((c) => c.login.fido2Credentials[0].discoverable);
+    //     userInterfaceSession.pickCredential.mockResolvedValue({
+    //       cipherId: discoverableCiphers[0].id,
+    //       userVerified: false,
+    //     });
+
+    //     await authenticator.getAssertion(params, tab);
+
+    //     expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith({
+    //       cipherIds: [discoverableCiphers[0].id],
+    //       userVerification: false,
+    //     });
+    //   });
+
         #endregion
 
         private byte[] RandomBytes(int length)

@@ -34,8 +34,7 @@ namespace Bit.Core.Services
                     assertionParams.RpId
                 );
             } else {
-                cipherOptions = new List<CipherView>();
-                // cipherOptions = await this.findCredentialsByRp(params.rpId);
+                cipherOptions = await FindCredentialsByRp(assertionParams.RpId);
             }
 
             if (cipherOptions.Count == 0) {
@@ -82,8 +81,20 @@ namespace Bit.Core.Services
             !cipher.IsDeleted &&
             cipher.Type == CipherType.Login &&
             cipher.Login.HasFido2Credentials &&
-            cipher.Login.Fido2Credentials[0].RpId == rpId &&
-            ids.Contains(cipher.Login.Fido2Credentials[0].CredentialId)
+            cipher.Login.MainFido2Credential.RpId == rpId &&
+            ids.Contains(cipher.Login.MainFido2Credential.CredentialId)
+        );
+    }
+
+    private async Task<List<CipherView>> FindCredentialsByRp(string rpId)
+    {
+        var ciphers = await _cipherService.GetAllDecryptedAsync();
+        return ciphers.FindAll((cipher) =>
+            !cipher.IsDeleted &&
+            cipher.Type == CipherType.Login &&
+            cipher.Login.HasFido2Credentials &&
+            cipher.Login.MainFido2Credential.RpId == rpId &&
+            cipher.Login.MainFido2Credential.IsDiscoverable
         );
     }
 
