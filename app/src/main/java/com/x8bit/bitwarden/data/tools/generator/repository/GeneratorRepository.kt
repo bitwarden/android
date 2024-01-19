@@ -2,10 +2,10 @@
 
 package com.x8bit.bitwarden.data.tools.generator.repository
 
-import com.bitwarden.core.PassphraseGeneratorRequest
-import com.bitwarden.core.PasswordGeneratorRequest
 import com.bitwarden.core.PasswordHistoryView
-import com.bitwarden.core.UsernameGeneratorRequest
+import com.bitwarden.generators.PassphraseGeneratorRequest
+import com.bitwarden.generators.PasswordGeneratorRequest
+import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult

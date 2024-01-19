@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
-import com.bitwarden.core.AppendType
-import com.bitwarden.core.ForwarderServiceType
-import com.bitwarden.core.PassphraseGeneratorRequest
-import com.bitwarden.core.PasswordGeneratorRequest
-import com.bitwarden.core.UsernameGeneratorRequest
+import com.bitwarden.generators.AppendType
+import com.bitwarden.generators.ForwarderServiceType
+import com.bitwarden.generators.PassphraseGeneratorRequest
+import com.bitwarden.generators.PasswordGeneratorRequest
+import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.sdk.ClientGenerators
 import io.mockk.coEvery
 import io.mockk.coVerify

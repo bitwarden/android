@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
-import com.bitwarden.core.ForwarderServiceType
+import com.bitwarden.generators.ForwarderServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
