@@ -86,6 +86,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
             is VaultItemListingsAction.CopySendUrlClick -> handleCopySendUrlClick(action)
             is VaultItemListingsAction.DeleteSendClick -> handleDeleteSendClick(action)
+            is VaultItemListingsAction.DeleteSendConfirmClick -> {
+                handleDeleteSendConfirmClick(action)
+            }
+
             is VaultItemListingsAction.ShareSendUrlClick -> handleShareSendUrlClick(action)
             is VaultItemListingsAction.RemoveSendPasswordClick -> {
                 handleRemoveSendPasswordClick(action)
@@ -105,6 +109,18 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleDeleteSendClick(action: VaultItemListingsAction.DeleteSendClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.DeleteSendConfirmation(
+                    sendId = action.sendId,
+                ),
+            )
+        }
+    }
+
+    private fun handleDeleteSendConfirmClick(
+        action: VaultItemListingsAction.DeleteSendConfirmClick,
+    ) {
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Loading(
@@ -394,6 +410,14 @@ data class VaultItemListingState(
      * Represents the current state of any dialogs on the screen.
      */
     sealed class DialogState : Parcelable {
+
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class DeleteSendConfirmation(
+            val sendId: String,
+        ) : DialogState()
 
         /**
          * Represents a dismissible dialog with the given error [message].
@@ -709,6 +733,11 @@ sealed class VaultItemListingsAction {
      * Click on the delete send overflow option.
      */
     data class DeleteSendClick(val sendId: String) : VaultItemListingsAction()
+
+    /**
+     * Click on the delete send confirmation button.
+     */
+    data class DeleteSendConfirmClick(val sendId: String) : VaultItemListingsAction()
 
     /**
      * Models actions that the [VaultItemListingViewModel] itself might send.

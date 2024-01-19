@@ -200,14 +200,29 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteSendClick with deleteSend error should display error dialog`() = runTest {
+    fun `DeleteSendClick should display delete confirmation dialog`() {
+        val sendId = "sendId"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.trySendAction(VaultItemListingsAction.DeleteSendClick(sendId))
+        assertEquals(
+            initialState.copy(
+                dialogState = VaultItemListingState.DialogState.DeleteSendConfirmation(
+                    sendId = sendId,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `DeleteSendConfirmClick with deleteSend error should display error dialog`() = runTest {
         val sendId = "sendId1234"
         coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
 
         val viewModel = createVaultItemListingViewModel()
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(VaultItemListingsAction.DeleteSendClick(sendId))
+            viewModel.trySendAction(VaultItemListingsAction.DeleteSendConfirmClick(sendId))
             assertEquals(
                 initialState.copy(
                     dialogState = VaultItemListingState.DialogState.Loading(
@@ -229,13 +244,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteSendClick with deleteSend success should emit ShowToast`() = runTest {
+    fun `DeleteSendConfirmClick with deleteSend success should emit ShowToast`() = runTest {
         val sendId = "sendId1234"
         coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
 
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultItemListingsAction.DeleteSendClick(sendId))
+            viewModel.trySendAction(VaultItemListingsAction.DeleteSendConfirmClick(sendId))
             assertEquals(
                 VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()),
                 awaitItem(),
