@@ -15,10 +15,10 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -43,7 +43,7 @@ fun SendListItem(
     label: String,
     supportingLabel: String,
     startIcon: IconData,
-    trailingLabelIcons: List<SendStatusIcon>,
+    trailingLabelIcons: List<IconRes>,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
     onCopyClick: () -> Unit,

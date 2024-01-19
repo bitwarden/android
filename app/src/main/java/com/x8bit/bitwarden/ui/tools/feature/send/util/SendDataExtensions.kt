@@ -5,8 +5,6 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
-import java.time.Instant
 
 private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
 
@@ -38,21 +36,7 @@ private fun List<SendView>.toSendContent(
                         SendType.TEXT -> SendState.ViewState.Content.SendItem.Type.TEXT
                         SendType.FILE -> SendState.ViewState.Content.SendItem.Type.FILE
                     },
-                    iconList = listOfNotNull(
-                        SendStatusIcon.DISABLED.takeIf { sendView.disabled },
-                        SendStatusIcon.PASSWORD.takeIf { sendView.hasPassword },
-                        SendStatusIcon.MAX_ACCESS_COUNT_REACHED.takeIf {
-                            sendView.maxAccessCount?.let { maxCount ->
-                                sendView.accessCount >= maxCount
-                            } == true
-                        },
-                        SendStatusIcon.EXPIRED.takeIf {
-                            sendView.expirationDate?.isBefore(Instant.now()) == true
-                        },
-                        SendStatusIcon.PENDING_DELETE.takeIf {
-                            sendView.deletionDate.isBefore(Instant.now())
-                        },
-                    ),
+                    iconList = sendView.toLabelIcons(),
                     shareUrl = sendView.toSendUrl(baseWebSendUrl),
                     hasPassword = sendView.hasPassword,
                 )

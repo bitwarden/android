@@ -10,8 +10,7 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
-import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
@@ -207,23 +206,7 @@ private fun SendView.toDisplayItem(
                 SendType.FILE -> R.drawable.ic_send_file
             },
         ),
-        extraIconList = listOfNotNull(
-            SendStatusIcon.DISABLED
-                .takeIf { disabled }
-                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
-            SendStatusIcon.PASSWORD
-                .takeIf { hasPassword }
-                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
-            SendStatusIcon.MAX_ACCESS_COUNT_REACHED
-                .takeIf { maxAccessCount?.let { maxCount -> accessCount >= maxCount } == true }
-                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
-            SendStatusIcon.EXPIRED
-                .takeIf { expirationDate?.isBefore(clock.instant()) == true }
-                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
-            SendStatusIcon.PENDING_DELETE
-                .takeIf { deletionDate.isBefore(clock.instant()) }
-                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
-        ),
+        extraIconList = toLabelIcons(clock = clock),
         overflowOptions = listOfNotNull(
             VaultItemListingState.DisplayItem.OverflowItem(
                 title = R.string.edit.asText(),

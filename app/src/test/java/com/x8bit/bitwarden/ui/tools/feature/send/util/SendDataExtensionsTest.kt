@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.util
 import com.bitwarden.core.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import io.mockk.every
@@ -52,6 +53,8 @@ class SendDataExtensionsTest {
         val sendData = SendData(list)
         every { textSendView.toSendUrl(DEFAULT_BASE_URL) } returns textSendViewUrl2
         every { fileSendView.toSendUrl(DEFAULT_BASE_URL) } returns textSendViewUrl1
+        every { textSendView.toLabelIcons(any()) } returns DEFAULT_SEND_STATUS_ICONS
+        every { fileSendView.toLabelIcons(any()) } returns DEFAULT_SEND_STATUS_ICONS
 
         val result = sendData.toViewState(DEFAULT_BASE_URL)
 
@@ -65,12 +68,7 @@ class SendDataExtensionsTest {
                         name = "mockName-1",
                         deletionDate = "Oct 27, 2023, 12:00 PM",
                         type = SendState.ViewState.Content.SendItem.Type.FILE,
-                        iconList = listOf(
-                            SendStatusIcon.PASSWORD,
-                            SendStatusIcon.MAX_ACCESS_COUNT_REACHED,
-                            SendStatusIcon.EXPIRED,
-                            SendStatusIcon.PENDING_DELETE,
-                        ),
+                        iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
                         hasPassword = true,
                     ),
@@ -79,12 +77,7 @@ class SendDataExtensionsTest {
                         name = "mockName-2",
                         deletionDate = "Oct 27, 2023, 12:00 PM",
                         type = SendState.ViewState.Content.SendItem.Type.TEXT,
-                        iconList = listOf(
-                            SendStatusIcon.PASSWORD,
-                            SendStatusIcon.MAX_ACCESS_COUNT_REACHED,
-                            SendStatusIcon.EXPIRED,
-                            SendStatusIcon.PENDING_DELETE,
-                        ),
+                        iconList = DEFAULT_SEND_STATUS_ICONS,
                         shareUrl = "www.test.com/#/send/mockAccessId-2/mockKey-2",
                         hasPassword = true,
                     ),
@@ -99,3 +92,26 @@ private const val SEND_VIEW_EXTENSIONS_PATH: String =
     "com.x8bit.bitwarden.ui.tools.feature.send.util.SendViewExtensionsKt"
 
 private const val DEFAULT_BASE_URL: String = "www.test.com/"
+
+private val DEFAULT_SEND_STATUS_ICONS: List<IconRes> = listOf(
+    IconRes(
+        iconRes = SendStatusIcon.DISABLED.iconRes,
+        contentDescription = SendStatusIcon.DISABLED.contentDescription,
+    ),
+    IconRes(
+        iconRes = SendStatusIcon.PASSWORD.iconRes,
+        contentDescription = SendStatusIcon.PASSWORD.contentDescription,
+    ),
+    IconRes(
+        iconRes = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.iconRes,
+        contentDescription = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.contentDescription,
+    ),
+    IconRes(
+        iconRes = SendStatusIcon.EXPIRED.iconRes,
+        contentDescription = SendStatusIcon.EXPIRED.contentDescription,
+    ),
+    IconRes(
+        iconRes = SendStatusIcon.PENDING_DELETE.iconRes,
+        contentDescription = SendStatusIcon.PENDING_DELETE.contentDescription,
+    ),
+)
