@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPredicate
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
@@ -28,6 +29,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 /**
@@ -38,6 +40,7 @@ import javax.inject.Inject
 @Suppress("MagicNumber", "TooManyFunctions")
 class VaultItemListingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
@@ -271,7 +274,10 @@ class VaultItemListingViewModel @Inject constructor(
                             .filter { sendView ->
                                 sendView.determineListingPredicate(listingType)
                             }
-                            .toViewState(baseWebSendUrl = state.baseWebSendUrl)
+                            .toViewState(
+                                baseWebSendUrl = state.baseWebSendUrl,
+                                clock = clock,
+                            )
                     }
                 },
                 dialogState = currentState.dialogState.takeUnless { clearDialogState },
@@ -356,6 +362,7 @@ data class VaultItemListingState(
         val title: String,
         val subtitle: String?,
         val iconData: IconData,
+        val extraIconList: List<IconRes>,
         val overflowOptions: List<OverflowItem>,
     ) {
         /**

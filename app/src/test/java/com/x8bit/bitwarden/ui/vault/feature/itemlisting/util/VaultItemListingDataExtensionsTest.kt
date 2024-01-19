@@ -17,8 +17,16 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class VaultItemListingDataExtensionsTest {
+
+    private val clock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
 
     @Test
     @Suppress("MaxLineLength")
@@ -361,6 +369,7 @@ class VaultItemListingDataExtensionsTest {
 
         val result = sendViewList.toViewState(
             baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
+            clock = clock,
         )
 
         assertEquals(

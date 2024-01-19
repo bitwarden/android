@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -42,6 +43,10 @@ fun VaultItemListingContent(
                 label = it.title,
                 supportingLabel = it.subtitle,
                 onClick = { vaultItemClick(it.id) },
+                trailingLabelIcons = it
+                    .extraIconList
+                    .toIconResources()
+                    .toPersistentList(),
                 selectionDataList = it
                     .overflowOptions
                     .map { option ->

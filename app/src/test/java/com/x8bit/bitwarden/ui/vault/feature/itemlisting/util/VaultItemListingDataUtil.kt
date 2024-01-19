@@ -5,6 +5,7 @@ import com.bitwarden.core.SendType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
 
@@ -25,6 +26,7 @@ fun createMockDisplayItemForCipher(
                     "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                     fallbackIconRes = R.drawable.ic_login_item,
                 ),
+                extraIconList = emptyList(),
                 overflowOptions = emptyList(),
             )
         }
@@ -35,6 +37,7 @@ fun createMockDisplayItemForCipher(
                 title = "mockName-$number",
                 subtitle = null,
                 iconData = IconData.Local(R.drawable.ic_secure_note_item),
+                extraIconList = emptyList(),
                 overflowOptions = emptyList(),
             )
         }
@@ -45,6 +48,7 @@ fun createMockDisplayItemForCipher(
                 title = "mockName-$number",
                 subtitle = "er-$number",
                 iconData = IconData.Local(R.drawable.ic_card_item),
+                extraIconList = emptyList(),
                 overflowOptions = emptyList(),
             )
         }
@@ -55,6 +59,7 @@ fun createMockDisplayItemForCipher(
                 title = "mockName-$number",
                 subtitle = "mockFirstName-${number}mockLastName-$number",
                 iconData = IconData.Local(R.drawable.ic_identity_item),
+                extraIconList = emptyList(),
                 overflowOptions = emptyList(),
             )
         }
@@ -75,6 +80,16 @@ fun createMockDisplayItemForSend(
                 title = "mockName-$number",
                 subtitle = "2023-10-27T12:00:00Z",
                 iconData = IconData.Local(R.drawable.ic_send_file),
+                extraIconList = listOf(
+                    IconRes(
+                        iconRes = R.drawable.ic_send_password,
+                        contentDescription = R.string.password.asText(),
+                    ),
+                    IconRes(
+                        iconRes = R.drawable.ic_send_max_access_count_reached,
+                        contentDescription = R.string.maximum_access_count_reached.asText(),
+                    ),
+                ),
                 overflowOptions = listOfNotNull(
                     VaultItemListingState.DisplayItem.OverflowItem(
                         title = R.string.edit.asText(),
@@ -112,6 +127,16 @@ fun createMockDisplayItemForSend(
                 title = "mockName-$number",
                 subtitle = "2023-10-27T12:00:00Z",
                 iconData = IconData.Local(R.drawable.ic_send_text),
+                extraIconList = listOf(
+                    IconRes(
+                        iconRes = R.drawable.ic_send_password,
+                        contentDescription = R.string.password.asText(),
+                    ),
+                    IconRes(
+                        iconRes = R.drawable.ic_send_max_access_count_reached,
+                        contentDescription = R.string.maximum_access_count_reached.asText(),
+                    ),
+                ),
                 overflowOptions = listOfNotNull(
                     VaultItemListingState.DisplayItem.OverflowItem(
                         title = R.string.edit.asText(),
