@@ -30,6 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import android.Manifest
+import android.os.Build
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -48,9 +50,11 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
+import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.LocalTime
@@ -68,6 +72,7 @@ fun AccountSecurityScreen(
     onNavigateToDeleteAccount: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    permissionsManager: PermissionsManager = LocalPermissionsManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -75,6 +80,10 @@ fun AccountSecurityScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AccountSecurityEvent.NavigateBack -> onNavigateBack()
+
+            AccountSecurityEvent.NavigateToApplicationDataSettings -> {
+                intentManager.startApplicationDetailsSettingsActivity()
+            }
 
             AccountSecurityEvent.NavigateToDeleteAccount -> onNavigateToDeleteAccount()
 
@@ -143,6 +152,10 @@ fun AccountSecurityScreen(
                 isApproveLoginRequestsEnabled = state.isApproveLoginRequestsEnabled,
                 onApprovePasswordlessLoginsAction = remember(viewModel) {
                     { viewModel.trySendAction(it) }
+                },
+                permissionsManager = permissionsManager,
+                onPushNotificationConfirm = remember(viewModel) {
+                    { viewModel.trySendAction(AccountSecurityAction.PushNotificationConfirm) }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -615,14 +628,18 @@ private fun FingerPrintPhraseDialog(
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun ApprovePasswordlessLoginsRow(
     isApproveLoginRequestsEnabled: Boolean,
     @Suppress("MaxLineLength")
     onApprovePasswordlessLoginsAction: (AccountSecurityAction.ApprovePasswordlessLoginsToggle) -> Unit,
+    onPushNotificationConfirm: () -> Unit,
+    permissionsManager: PermissionsManager,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowConfirmationDialog by remember { mutableStateOf(false) }
+    var shouldShowPermissionDialog by remember { mutableStateOf(false) }
     BitwardenWideSwitch(
         label = stringResource(
             id = R.string.use_this_device_to_approve_login_requests_made_from_other_devices,
@@ -656,6 +673,12 @@ private fun ApprovePasswordlessLoginsRow(
                     AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
                 )
                 shouldShowConfirmationDialog = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    @Suppress("MaxLineLength")
+                    if (!permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+                        shouldShowPermissionDialog = true
+                    }
+                }
             },
             onDismissClick = {
                 onApprovePasswordlessLoginsAction(
@@ -668,6 +691,27 @@ private fun ApprovePasswordlessLoginsRow(
                     AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
                 )
                 shouldShowConfirmationDialog = false
+            },
+        )
+    }
+
+    if (shouldShowPermissionDialog) {
+        BitwardenTwoButtonDialog(
+            title = null,
+            message = stringResource(
+                id = R.string.receive_push_notifications_for_new_login_requests,
+            ),
+            confirmButtonText = stringResource(id = R.string.settings),
+            dismissButtonText = stringResource(id = R.string.no_thanks),
+            onConfirmClick = {
+                shouldShowPermissionDialog = false
+                onPushNotificationConfirm()
+            },
+            onDismissClick = {
+                shouldShowPermissionDialog = false
+            },
+            onDismissRequest = {
+                shouldShowPermissionDialog = false
             },
         )
     }

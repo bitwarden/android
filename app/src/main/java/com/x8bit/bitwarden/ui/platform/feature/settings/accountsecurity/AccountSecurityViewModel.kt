@@ -77,6 +77,10 @@ class AccountSecurityViewModel @Inject constructor(
         is AccountSecurityAction.ApprovePasswordlessLoginsToggle -> {
             handleApprovePasswordlessLoginsToggle(action)
         }
+
+        is AccountSecurityAction.PushNotificationConfirm -> {
+            handlePushNotificationConfirm()
+        }
     }
 
     private fun handleAccountFingerprintPhraseClick() {
@@ -129,8 +133,10 @@ class AccountSecurityViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
             }
         }
-        // TODO Add permission prompt - BIT-1360
-        sendEvent(AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()))
+    }
+
+    private fun handlePushNotificationConfirm() {
+        sendEvent(AccountSecurityEvent.NavigateToApplicationDataSettings)
     }
 
     private fun handleLogoutClick() {
@@ -276,6 +282,11 @@ sealed class AccountSecurityEvent {
     data object NavigateBack : AccountSecurityEvent()
 
     /**
+     * Navigate to the application's settings screen.
+     */
+    data object NavigateToApplicationDataSettings : AccountSecurityEvent()
+
+    /**
      * Navigate to the delete account screen.
      */
     data object NavigateToDeleteAccount : AccountSecurityEvent()
@@ -380,6 +391,11 @@ sealed class AccountSecurityAction {
     data class UnlockWithBiometricToggle(
         val enabled: Boolean,
     ) : AccountSecurityAction()
+
+    /**
+     * User confirmed the push notification permission prompt.
+     */
+    data object PushNotificationConfirm : AccountSecurityAction()
 
     /**
      * User toggled the approve passwordless logins switch.

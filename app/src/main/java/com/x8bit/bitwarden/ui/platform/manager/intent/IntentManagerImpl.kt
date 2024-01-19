@@ -93,6 +93,12 @@ class IntentManagerImpl(
             false
         }
 
+    override fun startApplicationDetailsSettingsActivity() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = Uri.parse("package:" + context.packageName)
+        startActivity(intent = intent)
+    }
+
     override fun launchUri(uri: Uri) {
         val newUri = if (uri.scheme == null) {
             uri.buildUpon().scheme("https").build()
