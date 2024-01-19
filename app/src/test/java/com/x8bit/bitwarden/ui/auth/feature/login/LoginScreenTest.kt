@@ -204,6 +204,17 @@ class LoginScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `log in with device button visibility should update according to state`() {
+        val buttonText = "Log in with device"
+        composeTestRule.onNodeWithText(buttonText).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(shouldShowLoginWithDevice = true)
+        }
+        composeTestRule.onNodeWithText(buttonText).assertIsDisplayed()
+    }
+
+    @Test
     fun `close button click should send CloseButtonClick action`() {
         composeTestRule.onNodeWithContentDescription("Close").performClick()
         verify {
@@ -302,4 +313,5 @@ private val DEFAULT_STATE =
         loadingDialogState = LoadingDialogState.Hidden,
         errorDialogState = BasicDialogState.Hidden,
         accountSummaries = emptyList(),
+        shouldShowLoginWithDevice = false,
     )

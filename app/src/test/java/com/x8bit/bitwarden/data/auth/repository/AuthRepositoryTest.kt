@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
@@ -28,6 +29,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -76,6 +78,7 @@ class AuthRepositoryTest {
 
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val accountsService: AccountsService = mockk()
+    private val devicesService: DevicesService = mockk()
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
     private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
@@ -127,6 +130,7 @@ class AuthRepositoryTest {
 
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
+        devicesService = devicesService,
         identityService = identityService,
         haveIBeenPwnedService = haveIBeenPwnedService,
         authSdkSource = authSdkSource,
@@ -1171,6 +1175,35 @@ class AuthRepositoryTest {
             elapsedRealtimeMillis,
             fakeAuthDiskSource.getLastActiveTimeMillis(userId = userId),
         )
+    }
+
+    @Test
+    fun `getIsKnownDevice should return failure when service returns failure`() = runTest {
+        coEvery {
+            devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.getIsKnownDevice(EMAIL)
+
+        coVerify(exactly = 1) {
+            devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
+        }
+        assertEquals(KnownDeviceResult.Error, result)
+    }
+
+    @Test
+    fun `getIsKnownDevice should return success when service returns success`() = runTest {
+        val isKnownDevice = true
+        coEvery {
+            devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
+        } returns isKnownDevice.asSuccess()
+
+        val result = repository.getIsKnownDevice(EMAIL)
+
+        coVerify(exactly = 1) {
+            devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
+        }
+        assertEquals(KnownDeviceResult.Success(isKnownDevice), result)
     }
 
     @Test
