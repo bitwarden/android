@@ -5,6 +5,7 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.DateTime
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
@@ -14,6 +15,7 @@ import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
+import com.bitwarden.core.TotpResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
@@ -250,6 +252,19 @@ class VaultSdkSourceImpl(
             .vault()
             .passwordHistory()
             .decryptList(passwordHistoryList)
+    }
+
+    override suspend fun generateTotp(
+        userId: String,
+        totp: String,
+        time: DateTime,
+    ): Result<TotpResponse> = runCatching {
+        getClient(userId = userId)
+            .vault()
+            .generateTotp(
+                key = totp,
+                time = time,
+            )
     }
 
     private fun getClient(

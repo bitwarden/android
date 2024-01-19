@@ -5,6 +5,7 @@ import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.DateTime
 import com.bitwarden.core.DerivePinKeyResponse
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
@@ -14,6 +15,7 @@ import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
+import com.bitwarden.core.TotpResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientCrypto
@@ -31,6 +33,7 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -614,6 +617,34 @@ class VaultSdkSourceTest {
                     list = mockPasswordHistoryList,
                 )
             }
+            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
+
+    @Test
+    fun `generateTotp should call SDK and return a Result with correct data`() =
+        runTest {
+            val userId = "userId"
+            val totpResponse = TotpResponse("TestCode", 30u)
+            coEvery { clientVault.generateTotp(any(), any()) } returns totpResponse
+
+            val time = DateTime.now()
+            val result = vaultSdkSource.generateTotp(
+                userId = userId,
+                totp = "Totp",
+                time = time,
+            )
+
+            assertEquals(
+                Result.success(totpResponse),
+                result,
+            )
+            coVerify {
+                clientVault.generateTotp(
+                    key = "Totp",
+                    time = time,
+                )
+            }
+
             verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 }
