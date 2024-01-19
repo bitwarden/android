@@ -4,12 +4,14 @@ import android.net.Uri
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.DateTime
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
+import com.bitwarden.core.TotpResponse
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -57,6 +59,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
@@ -2106,6 +2109,28 @@ class VaultRepositoryTest {
                 result,
             )
         }
+
+    @Test
+    fun `generateTotp should return a success result on getting a code`() = runTest {
+        val totpResponse = TotpResponse("Testcode", 30u)
+        coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns Result.success(
+            totpResponse,
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val result = vaultRepository.generateTotp(
+            totpCode = "testCode",
+            time = DateTime.now(),
+        )
+
+        assertEquals(
+            GenerateTotpResult.Success(
+                code = totpResponse.code,
+                periodSeconds = totpResponse.period.toInt(),
+            ),
+            result,
+        )
+    }
 
     //region Helper functions
 

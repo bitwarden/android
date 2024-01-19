@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.repository
 import android.net.Uri
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.DateTime
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
@@ -197,6 +199,11 @@ interface VaultRepository : VaultLockManager {
      * Attempt to remove the password from a send.
      */
     suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult
+
+    /**
+     * Attempt to get the verification code and the period.
+     */
+    suspend fun generateTotp(totpCode: String, time: DateTime): GenerateTotpResult
 
     /**
      * Attempt to delete a send.
