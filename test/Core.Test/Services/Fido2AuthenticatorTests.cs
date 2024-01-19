@@ -73,13 +73,13 @@ namespace Bit.Core.Test.Services
             await sutProvider.Sut.GetAssertionAsync(aParams);
 
             await sutProvider.GetDependency<IFido2UserInterface>().Received().PickCredentialAsync(Arg.Is<Fido2PickCredentialParams>(
-                (pickCredentialParams) => pickCredentialParams.CipherIds.SequenceEqual(ciphers.Select((cipher) => cipher.Id)) && pickCredentialParams.UserVerification == aParams.RequireUserVerification
+                (pickCredentialParams) => pickCredentialParams.CipherIds.SequenceEqual(ciphers.Select((cipher) => cipher.Id))
             ));
         }
 
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
-        public async Task GetAssertionAsync_AsksForDiscoverableCredentials_ParamsDoesNotContainsAllowedCredentialsList(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
+        public async Task GetAssertionAsync_AsksForDiscoverableCredentials_ParamsDoesNotContainAllowedCredentialsList(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
         {
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
             List<CipherView> ciphers = [ 
@@ -94,25 +94,56 @@ namespace Bit.Core.Test.Services
             await sutProvider.Sut.GetAssertionAsync(aParams);
 
             await sutProvider.GetDependency<IFido2UserInterface>().Received().PickCredentialAsync(Arg.Is<Fido2PickCredentialParams>(
-                (pickCredentialParams) => pickCredentialParams.CipherIds.SequenceEqual(discoverableCiphers.Select((cipher) => cipher.Id)) && pickCredentialParams.UserVerification == aParams.RequireUserVerification
+                (pickCredentialParams) => pickCredentialParams.CipherIds.SequenceEqual(discoverableCiphers.Select((cipher) => cipher.Id))
             ));
         }
 
-    //   it("should only ask for discoverable credentials matched by rpId when params does not contains allowedCredentials list", async () => {
-    //     params.allowCredentialDescriptorList = undefined;
-    //     const discoverableCiphers = ciphers.filter((c) => c.login.fido2Credentials[0].discoverable);
-    //     userInterfaceSession.pickCredential.mockResolvedValue({
-    //       cipherId: discoverableCiphers[0].id,
-    //       userVerified: false,
-    //     });
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        // Spec: Prompt the user to select a public key credential source `selectedCredential` from `credentialOptions`.
+        //       If requireUserVerification is true, the authorization gesture MUST include user verification.
+        private async Task GetAssertionAsync_RequestsUserVerification_ParamsRequireUserVerification(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [ 
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            aParams.RpId = "bitwarden.com";
+            aParams.AllowCredentialDescriptorList = null;
+            aParams.RequireUserVerification = true;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
 
-    //     await authenticator.getAssertion(params, tab);
+            await sutProvider.Sut.GetAssertionAsync(aParams);
 
-    //     expect(userInterfaceSession.pickCredential).toHaveBeenCalledWith({
-    //       cipherIds: [discoverableCiphers[0].id],
-    //       userVerification: false,
-    //     });
-    //   });
+            await sutProvider.GetDependency<IFido2UserInterface>().Received().PickCredentialAsync(Arg.Is<Fido2PickCredentialParams>(
+                (pickCredentialParams) => pickCredentialParams.UserVerification == true
+            ));
+        }
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        // Spec: Prompt the user to select a public key credential source `selectedCredential` from `credentialOptions`.
+        //       If requireUserPresence is true, the authorization gesture MUST include a test of user presence.
+        // Comment: User presence in implied by the UI returning a credential.
+        public async Task GetAssertionAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [ 
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            aParams.RpId = "bitwarden.com";
+            aParams.AllowCredentialDescriptorList = null;
+            aParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+
+            await sutProvider.Sut.GetAssertionAsync(aParams);
+
+            await sutProvider.GetDependency<IFido2UserInterface>().Received().PickCredentialAsync(Arg.Is<Fido2PickCredentialParams>(
+                (pickCredentialParams) => pickCredentialParams.UserVerification == false
+            ));
+        }
 
         #endregion
 
