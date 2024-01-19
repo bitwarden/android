@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
@@ -129,6 +131,12 @@ class AutoFillScreenTest : BaseComposeTest() {
 
     @Test
     fun `on use inline auto fill toggle should send UseInlineAutofillClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                isAutoFillServicesEnabled = true,
+                isUseInlineAutoFillEnabled = false,
+            )
+        }
         composeTestRule
             .onNodeWithText("Use inline autofill")
             .performScrollTo()
@@ -147,6 +155,35 @@ class AutoFillScreenTest : BaseComposeTest() {
             .onNodeWithText("Use inline autofill")
             .performScrollTo()
             .assertIsOn()
+    }
+
+    @Test
+    fun `use inline autofill should be disabled or enabled according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                isAutoFillServicesEnabled = true,
+                isUseInlineAutoFillEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Use inline autofill")
+            .performScrollTo()
+            .assertIsOn()
+            .assertIsEnabled()
+
+        mutableStateFlow.update {
+            it.copy(
+                isAutoFillServicesEnabled = false,
+                isUseInlineAutoFillEnabled = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Use inline autofill")
+            .performScrollTo()
+            .assertIsOn()
+            .assertIsNotEnabled()
     }
 
     @Test

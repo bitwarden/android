@@ -135,6 +135,7 @@ fun AutoFillScreen(
                 onCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(it)) }
                 },
+                enabled = state.canInteractWithInlineAutofillToggle,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),

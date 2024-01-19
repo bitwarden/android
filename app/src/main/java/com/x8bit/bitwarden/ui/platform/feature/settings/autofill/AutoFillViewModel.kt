@@ -127,6 +127,14 @@ data class AutoFillState(
     val isUseInlineAutoFillEnabled: Boolean,
     val uriDetectionMethod: UriDetectionMethod,
 ) : Parcelable {
+
+    /**
+     * Whether or not the toggle controlling the [isUseInlineAutoFillEnabled] value can be
+     * interacted with.
+     */
+    val canInteractWithInlineAutofillToggle: Boolean
+        get() = isAutoFillServicesEnabled
+
     /**
      * A representation of the URI detection methods.
      */
