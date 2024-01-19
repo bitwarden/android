@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.model
 
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.Account
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Represents the overall "user state" of the current active user as well as any users that may be
@@ -10,11 +11,14 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
  * @property activeUserId The ID of the current active user.
  * @property accounts A mapping between user IDs and the [Account] information associated with
  * that user.
+ * @property hasPendingAccountAddition Returns `true` if there is an additional account that is
+ * pending login/registration in order to have multiple accounts available.
  * @property specialCircumstance A special circumstance (if any) that may be present.
  */
 data class UserState(
     val activeUserId: String,
     val accounts: List<Account>,
+    val hasPendingAccountAddition: Boolean = false,
     val specialCircumstance: SpecialCircumstance? = null,
 ) {
     init {
@@ -26,12 +30,6 @@ data class UserState(
      */
     val activeAccount: Account
         get() = accounts.first { it.userId == activeUserId }
-
-    /**
-     * Returns `true` if a new user is in the process of being added, `false` otherwise.
-     */
-    val hasPendingAccountAddition: Boolean
-        get() = specialCircumstance == SpecialCircumstance.PendingAccountAddition
 
     /**
      * Basic account information about a given user.
@@ -65,11 +63,12 @@ data class UserState(
      * Represents a special account-related circumstance.
      */
     sealed class SpecialCircumstance {
-
         /**
-         * There is an additional account that is pending login/registration in order to have
-         * multiple accounts available.
+         * The app was launched in order to create/share a new Send using the given [data].
          */
-        data object PendingAccountAddition : SpecialCircumstance()
+        data class ShareNewSend(
+            val data: IntentManager.ShareData,
+            val shouldFinishWhenComplete: Boolean,
+        ) : SpecialCircumstance()
     }
 }

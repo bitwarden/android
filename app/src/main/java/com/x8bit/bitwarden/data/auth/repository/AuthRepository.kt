@@ -49,6 +49,15 @@ interface AuthRepository : AuthenticatorProvider {
     var specialCircumstance: UserState.SpecialCircumstance?
 
     /**
+     * Tracks whether there is an additional account that is pending login/registration in order to
+     * have multiple accounts available.
+     *
+     * This allows a direct view into and modification of [UserState.hasPendingAccountAddition].
+     * Note that this call has no effect when there is no [UserState] information available.
+     */
+    var hasPendingAccountAddition: Boolean
+
+    /**
      * Attempt to delete the current account and logout them out upon success.
      */
     suspend fun deleteAccount(password: String): DeleteAccountResult

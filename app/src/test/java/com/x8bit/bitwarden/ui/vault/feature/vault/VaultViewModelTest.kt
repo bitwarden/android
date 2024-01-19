@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.model.UserState.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -53,8 +52,8 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository =
         mockk {
             every { userStateFlow } returns mutableUserStateFlow
-            every { specialCircumstance } returns null
-            every { specialCircumstance = any() } just runs
+            every { hasPendingAccountAddition } returns false
+            every { hasPendingAccountAddition = any() } just runs
             every { logout(any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
         }
@@ -289,11 +288,11 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on AddAccountClick should update the SpecialCircumstance of the AuthRepository to PendingAccountAddition`() {
+    fun `on AddAccountClick should set hasPendingAccountAddition to true on the AuthRepository`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.AddAccountClick)
         verify {
-            authRepository.specialCircumstance = SpecialCircumstance.PendingAccountAddition
+            authRepository.hasPendingAccountAddition = true
         }
     }
 

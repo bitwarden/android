@@ -68,6 +68,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -217,6 +218,7 @@ class AuthRepositoryTest {
             SINGLE_USER_STATE_1.toUserState(
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
+                hasPendingAccountAddition = false,
                 specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
@@ -238,6 +240,7 @@ class AuthRepositoryTest {
             MULTI_USER_STATE.toUserState(
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
+                hasPendingAccountAddition = false,
                 specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
@@ -253,6 +256,7 @@ class AuthRepositoryTest {
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
                 userOrganizationsList = emptyList(),
+                hasPendingAccountAddition = false,
                 specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
@@ -277,6 +281,7 @@ class AuthRepositoryTest {
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
                 userOrganizationsList = USER_ORGANIZATIONS,
+                hasPendingAccountAddition = false,
                 specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
@@ -306,6 +311,7 @@ class AuthRepositoryTest {
         val initialUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
+            hasPendingAccountAddition = false,
             specialCircumstance = null,
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
@@ -316,11 +322,12 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
 
-        repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+        val mockSpecialCircumstance: UserState.SpecialCircumstance = mockk()
+        repository.specialCircumstance = mockSpecialCircumstance
 
         assertEquals(
             initialUserState.copy(
-                specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
+                specialCircumstance = mockSpecialCircumstance,
             ),
             repository.userStateFlow.value,
         )
@@ -595,7 +602,7 @@ class AuthRepositoryTest {
         runTest {
             // Ensure the initial state for User 2 with a account addition
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
-            repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+            repository.hasPendingAccountAddition = true
 
             // Set up login for User 1
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
@@ -665,7 +672,7 @@ class AuthRepositoryTest {
                 MULTI_USER_STATE,
                 fakeAuthDiskSource.userState,
             )
-            assertNull(repository.specialCircumstance)
+            assertFalse(repository.hasPendingAccountAddition)
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
             verify { vaultRepository.clearUnlockedData() }
         }
@@ -1076,11 +1083,12 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `switchAccount when the given userId is the same as the current activeUserId should only clear any special circumstances`() {
+    fun `switchAccount when the given userId is the same as the current activeUserId should reset any pending account additions`() {
         val originalUserId = USER_ID_1
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
+            hasPendingAccountAddition = false,
             specialCircumstance = null,
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
@@ -1089,7 +1097,7 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
-        repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+        repository.hasPendingAccountAddition = true
 
         assertEquals(
             SwitchAccountResult.NoChange,
@@ -1100,7 +1108,7 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
-        assertNull(repository.specialCircumstance)
+        assertFalse(repository.hasPendingAccountAddition)
         verify(exactly = 0) { vaultRepository.clearUnlockedData() }
     }
 
@@ -1111,6 +1119,7 @@ class AuthRepositoryTest {
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
+            hasPendingAccountAddition = false,
             specialCircumstance = null,
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
@@ -1134,11 +1143,12 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `switchAccount when the userId is valid should update the current UserState, clear the previously unlocked data, and reset the special circumstance`() {
+    fun `switchAccount when the userId is valid should update the current UserState, clear the previously unlocked data, and reset any pending account additions`() {
         val updatedUserId = USER_ID_2
         val originalUserState = MULTI_USER_STATE.toUserState(
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
+            hasPendingAccountAddition = false,
             specialCircumstance = null,
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
@@ -1147,7 +1157,7 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
-        repository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+        repository.hasPendingAccountAddition = true
 
         assertEquals(
             SwitchAccountResult.AccountSwitched,
@@ -1158,7 +1168,7 @@ class AuthRepositoryTest {
             originalUserState.copy(activeUserId = updatedUserId),
             repository.userStateFlow.value,
         )
-        assertNull(repository.specialCircumstance)
+        assertFalse(repository.hasPendingAccountAddition)
         verify { vaultRepository.clearUnlockedData() }
     }
 

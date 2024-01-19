@@ -31,6 +31,13 @@ class MainActivity : AppCompatActivity() {
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
+
+        mainViewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = intent,
+            ),
+        )
+
         // Within the app the language will change dynamically and will be managed
         // by the OS, but we need to ensure we properly set the language when
         // upgrading from older versions that handle this differently.

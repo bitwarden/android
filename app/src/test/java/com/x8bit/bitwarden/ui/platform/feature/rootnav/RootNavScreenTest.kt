@@ -89,5 +89,14 @@ class RootNavScreenTest : BaseComposeTest() {
                 navOptions = expectedNavOptions,
             )
         }
+
+        // Make sure navigating to vault unlocked works as expected:
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForNewSend
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_unlocked_for_new_send_graph",
+                navOptions = expectedNavOptions,
+            )
+        }
     }
 }

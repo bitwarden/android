@@ -122,6 +122,31 @@ class IntentManagerImpl(
         return if (uri != null) getLocalFileData(uri) else getCameraFileData()
     }
 
+    @Suppress("ReturnCount")
+    override fun getShareDataFromIntent(intent: Intent): IntentManager.ShareData? {
+        if (intent.action != Intent.ACTION_SEND) return null
+        return if (intent.type?.contains("text/") == true) {
+            val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
+            val title = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return null
+            IntentManager.ShareData.TextSend(
+                subject = subject,
+                text = title,
+            )
+        } else {
+            getFileDataFromIntent(
+                ActivityResult(
+                    Activity.RESULT_OK,
+                    intent,
+                ),
+            )
+                ?.let {
+                    IntentManager.ShareData.FileSend(
+                        fileData = it,
+                    )
+                }
+        }
+    }
+
     override fun createFileChooserIntent(withCameraIntents: Boolean): Intent {
         val chooserIntent = Intent.createChooser(
             Intent(Intent.ACTION_OPEN_DOCUMENT)

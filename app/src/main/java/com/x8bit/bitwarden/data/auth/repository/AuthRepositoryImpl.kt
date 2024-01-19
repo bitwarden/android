@@ -73,6 +73,7 @@ class AuthRepositoryImpl(
     dispatcherManager: DispatcherManager,
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository {
+    private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow<Boolean>(false)
     private val mutableSpecialCircumstanceStateFlow =
         MutableStateFlow<UserState.SpecialCircumstance?>(null)
 
@@ -107,12 +108,20 @@ class AuthRepositoryImpl(
         authDiskSource.userStateFlow,
         authDiskSource.userOrganizationsListFlow,
         vaultRepository.vaultStateFlow,
+        mutableHasPendingAccountAdditionStateFlow,
         mutableSpecialCircumstanceStateFlow,
-    ) { userStateJson, userOrganizationsList, vaultState, specialCircumstance ->
+    ) {
+            userStateJson,
+            userOrganizationsList,
+            vaultState,
+            hasPendingAccountAddition,
+            specialCircumstance,
+        ->
         userStateJson
             ?.toUserState(
                 vaultState = vaultState,
                 userOrganizationsList = userOrganizationsList,
+                hasPendingAccountAddition = hasPendingAccountAddition,
                 specialCircumstance = specialCircumstance,
                 vaultUnlockTypeProvider = ::getVaultUnlockType,
             )
@@ -125,6 +134,7 @@ class AuthRepositoryImpl(
                 ?.toUserState(
                     vaultState = vaultRepository.vaultStateFlow.value,
                     userOrganizationsList = authDiskSource.userOrganizationsList,
+                    hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
                     specialCircumstance = mutableSpecialCircumstanceStateFlow.value,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                 ),
@@ -139,6 +149,9 @@ class AuthRepositoryImpl(
 
     override var specialCircumstance: UserState.SpecialCircumstance?
         by mutableSpecialCircumstanceStateFlow::value
+
+    override var hasPendingAccountAddition: Boolean
+        by mutableHasPendingAccountAdditionStateFlow::value
 
     override suspend fun deleteAccount(password: String): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
@@ -218,7 +231,7 @@ class AuthRepositoryImpl(
                             userId = userStateJson.activeUserId,
                         )
                         vaultRepository.sync()
-                        specialCircumstance = null
+                        hasPendingAccountAddition = false
                         LoginResult.Success
                     }
 
@@ -268,8 +281,8 @@ class AuthRepositoryImpl(
         val previousActiveUserId = currentUserState.activeUserId
 
         if (userId == previousActiveUserId) {
-            // No switching to do but clear any special circumstances
-            specialCircumstance = null
+            // No switching to do but clear any pending account additions
+            hasPendingAccountAddition = false
             return SwitchAccountResult.NoChange
         }
 
@@ -284,8 +297,8 @@ class AuthRepositoryImpl(
         // Clear data for the previous user
         vaultRepository.clearUnlockedData()
 
-        // Clear any special circumstances
-        specialCircumstance = null
+        // Clear any pending account additions
+        hasPendingAccountAddition = false
 
         return SwitchAccountResult.AccountSwitched
     }
