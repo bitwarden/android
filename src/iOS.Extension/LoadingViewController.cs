@@ -479,15 +479,22 @@ namespace Bit.iOS.Extension
         {
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if (await IsAuthed())
+                try
                 {
-                    var stateService = ServiceContainer.Resolve<IStateService>("stateService");
-                    await AppHelpers.LogOutAsync(await stateService.GetActiveUserIdAsync());
-                    var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-                    if (deviceActionService.SystemMajorVersion() >= 12)
+                    if (await IsAuthed())
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                        await AppHelpers.LogOutAsync(await stateService.GetActiveUserIdAsync());
+                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        {
+                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    throw;
                 }
             });
         }

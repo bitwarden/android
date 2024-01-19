@@ -116,9 +116,13 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
             }
 
-            ILogger logger = null;
-            if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
+            ILogger? logger = null;
+            if (ServiceContainer.TryResolve<ILogger>(out var resolvedLogger))
             {
+                logger = resolvedLogger;
+            }
+            else
+            { 
 #if DEBUG
                 logger = DebugLogger.Instance;
 #else
@@ -129,6 +133,12 @@ namespace Bit.iOS.Core.Utilities
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);
             var appGroupContainer = new NSFileManager().GetContainerUrl(AppGroupId);
+            if (appGroupContainer?.Path is null)
+            {
+                var nreAppGroupContainer = new NullReferenceException("appGroupContainer or its Path is null when registering local services");
+                logger!.Exception(nreAppGroupContainer);
+                throw nreAppGroupContainer;
+            }
             var liteDbStorage = new LiteDbStorageService(
                 Path.Combine(appGroupContainer.Path, "Library", "bitwarden.db"));
             var localizeService = new LocalizeService();
@@ -187,14 +197,14 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<ILogger>()));
         }
 
-        public static void Bootstrap(Func<Task> postBootstrapFunc = null)
+        public static void Bootstrap(Func<Task>? postBootstrapFunc = null)
         {
             var locale = ServiceContainer.Resolve<IStateService>().GetLocale();
             (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService)
-                .Init(locale != null ? new System.Globalization.CultureInfo(locale) : null);
+                ?.Init(locale != null ? new System.Globalization.CultureInfo(locale) : null);
             ServiceContainer.Resolve<IAuthService>("authService").Init();
             (ServiceContainer.
-                Resolve<IPlatformUtilsService>("platformUtilsService") as MobilePlatformUtilsService).Init();
+                Resolve<IPlatformUtilsService>("platformUtilsService") as MobilePlatformUtilsService)?.Init();
 
             var accountsManager = new AccountsManager(
                 ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
@@ -231,20 +241,31 @@ namespace Bit.iOS.Core.Utilities
                 if (message.Command == "showDialog")
                 {
                     var details = message.Data as DialogDetails;
+                    if (details is null)
+                    {
+                        return;
+                    }
                     var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                         AppResources.Ok : details.ConfirmText;
 
                     NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
                     {
-                        var result = await deviceActionService.DisplayAlertAsync(details.Title, details.Text,
-                           details.CancelText, confirmText);
-                        var confirmed = result == details.ConfirmText;
-                        messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                        try
+                        {
+                            var result = await deviceActionService.DisplayAlertAsync(details.Title, details.Text,
+                               details.CancelText, confirmText);
+                            var confirmed = result == details.ConfirmText;
+                            messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerHelper.LogEvenIfCantBeResolved(ex);
+                        }
                     });
                 }
-                else if (message.Command == "listenYubiKeyOTP")
+                else if (message.Command == "listenYubiKeyOTP" && message.Data is bool listen)
                 {
-                    ListenYubiKey((bool)message.Data, deviceActionService, nfcSession, nfcDelegate);
+                    ListenYubiKey(listen, deviceActionService, nfcSession, nfcDelegate);
                 }
             });
         }
@@ -268,29 +289,36 @@ namespace Bit.iOS.Core.Utilities
             }
         }
 
-        private static async Task BootstrapAsync(Func<Task> postBootstrapFunc = null)
+        private static async Task BootstrapAsync(Func<Task>? postBootstrapFunc = null)
         {
-            await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
-
-            InitializeAppSetup();
-            // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
-            var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
-                ServiceContainer.Resolve<IApiService>("apiService"),
-                ServiceContainer.Resolve<IMessagingService>("messagingService"),
-                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
-                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"),
-                ServiceContainer.Resolve<ILogger>("logger"));
-            ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
-
-            var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
-                ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
-                ServiceContainer.Resolve<ICryptoService>("cryptoService"),
-                ServiceContainer.Resolve<IUserVerificationService>());
-            ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
-
-            if (postBootstrapFunc != null)
+            try
             {
-                await postBootstrapFunc.Invoke();
+                await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+
+                InitializeAppSetup();
+                // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
+                var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
+                    ServiceContainer.Resolve<IApiService>("apiService"),
+                    ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                    ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                    ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"),
+                    ServiceContainer.Resolve<ILogger>("logger"));
+                ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
+
+                var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
+                    ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
+                    ServiceContainer.Resolve<ICryptoService>("cryptoService"),
+                    ServiceContainer.Resolve<IUserVerificationService>());
+                ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
+                if (postBootstrapFunc != null)
+                {
+                    await postBootstrapFunc.Invoke();
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

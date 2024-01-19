@@ -274,13 +274,21 @@ namespace Bit.iOS.ShareExtension
         {
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if (await IsAuthed())
+                try
                 {
-                    await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
-                    if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                    if (await IsAuthed())
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
+                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        {
+                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    throw;
                 }
             });
         }

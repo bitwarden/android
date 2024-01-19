@@ -1,6 +1,7 @@
 ﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
@@ -89,16 +90,30 @@ namespace Bit.App.Pages
 
         private async Task StartTwoFactorAsync()
         {
-            RestoreAppOptionsFromCopy();
-            var page = new TwoFactorPage(true, _appOptions, _vm.OrgIdentifier);
-            await Navigation.PushModalAsync(new NavigationPage(page));
+            try
+            {
+                RestoreAppOptionsFromCopy();
+                var page = new TwoFactorPage(true, _appOptions, _vm.OrgIdentifier);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         private async Task StartSetPasswordAsync()
         {
-            RestoreAppOptionsFromCopy();
-            var page = new SetPasswordPage(_appOptions, _vm.OrgIdentifier);
-            await Navigation.PushModalAsync(new NavigationPage(page));
+            try
+            {
+                RestoreAppOptionsFromCopy();
+                var page = new SetPasswordPage(_appOptions, _vm.OrgIdentifier);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         private async Task UpdateTempPasswordAsync()
@@ -115,16 +130,23 @@ namespace Bit.App.Pages
 
         private async Task SsoAuthSuccessAsync()
         {
-            RestoreAppOptionsFromCopy();
-            await AppHelpers.ClearPreviousPage();
+            try
+            {
+                RestoreAppOptionsFromCopy();
+                await AppHelpers.ClearPreviousPage();
 
-            if (await _vaultTimeoutService.IsLockedAsync())
-            {
-                App.MainPage = new NavigationPage(new LockPage(_appOptions));
+                if (await _vaultTimeoutService.IsLockedAsync())
+                {
+                    App.MainPage = new NavigationPage(new LockPage(_appOptions));
+                }
+                else
+                {
+                    App.MainPage = new TabsPage(_appOptions, null);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                App.MainPage = new TabsPage(_appOptions, null);
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
     }

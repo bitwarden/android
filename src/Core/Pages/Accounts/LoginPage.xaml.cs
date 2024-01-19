@@ -3,6 +3,7 @@ using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
@@ -74,7 +75,7 @@ namespace Bit.App.Pages
             {
                 if (message.Command == Constants.ClearSensitiveFields)
                 {
-                    MainThread.BeginInvokeOnMainThread(_vm.ResetPasswordField);
+                    MainThread.BeginInvokeOnMainThread(() => _vm?.ResetPasswordField());
                 }
             });
             _mainContent.Content = _mainLayout;
@@ -188,12 +189,20 @@ namespace Bit.App.Pages
 
         private async Task LogInSuccessAsync()
         {
-            if (AppHelpers.SetAlternateMainPage(_appOptions))
+            try
             {
-                return;
+                if (AppHelpers.SetAlternateMainPage(_appOptions))
+                {
+                    return;
+                }
+                var previousPage = await AppHelpers.ClearPreviousPage();
+                App.MainPage = new TabsPage(_appOptions, previousPage);
             }
-            var previousPage = await AppHelpers.ClearPreviousPage();
-            App.MainPage = new TabsPage(_appOptions, previousPage);
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
+            }
         }
 
         private async Task UpdateTempPasswordAsync()
