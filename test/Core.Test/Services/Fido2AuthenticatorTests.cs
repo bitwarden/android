@@ -5,6 +5,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Services;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
+using Bit.Core.Enums;
 using Bit.Core.Test.AutoFixture;
 using Bit.Core.Utilities.Fido2;
 using Bit.Test.Common.AutoFixture;
@@ -14,6 +15,7 @@ using NSubstitute.ExceptionExtensions;
 using Xunit;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bit.Core.Test.Services
 {
@@ -33,30 +35,48 @@ namespace Bit.Core.Test.Services
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         public async Task GetAssertionAsync_Throws_CredentialExistsButRpIdDoesNotMatch(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
         {
-            var credentialId = RandomBytes(32);
+            var credentialId = Guid.NewGuid();
             aParams.RpId = "bitwarden.com";
             aParams.AllowCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
-                    Id = credentialId,
+                    Id = credentialId.ToByteArray(),
                     Type = "public-key"
                 }
             ];
-            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(new List<CipherView> {
-                new CipherView {
-                    Login = new LoginView {
-                        Fido2Credentials = new List<Fido2CredentialView> {
-                            new Fido2CredentialView {
-                                CredentialId = CoreHelpers.Base64UrlEncode(credentialId),
-                                RpId = "mismatch-rpid"
-                            }
-                        }
-                    }
-                }
-            });
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns([
+                CreateCipherView(credentialId.ToString(), "mismatch-rpid", false),
+            ]);
 
             var exception = await Assert.ThrowsAsync<NotAllowedError>(() => sutProvider.Sut.GetAssertionAsync(aParams));
         }
 
+        #endregion
+
+        #region vault contains credential
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task GetAssertionAsync_AsksForAllCredentials_ParamsContainsAllowedCredentialsList(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
+        {
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [ 
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            aParams.RpId = "bitwarden.com";
+            aParams.AllowCredentialDescriptorList = credentialIds.Select((credentialId) => new PublicKeyCredentialDescriptor {
+                Id = credentialId.ToByteArray(),
+                Type = "public-key"
+            }).ToArray();
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+
+            await sutProvider.Sut.GetAssertionAsync(aParams);
+
+            await sutProvider.GetDependency<IFido2UserInterface>().Received().PickCredentialAsync(Arg.Is<Fido2PickCredentialParams>(
+                (pickCredentialParams) => pickCredentialParams.CipherIds.SequenceEqual(ciphers.Select((cipher) => cipher.Id)) && pickCredentialParams.UserVerification == aParams.RequireUserVerification
+            ));
+        }
+        
         #endregion
 
         private byte[] RandomBytes(int length)
@@ -64,6 +84,23 @@ namespace Bit.Core.Test.Services
             var bytes = new byte[length];
             new Random().NextBytes(bytes);
             return bytes;
+        }
+
+        #nullable enable
+        private CipherView CreateCipherView(string? credentialId, string? rpId, bool? discoverable)
+        {
+            return new CipherView {
+                Type = CipherType.Login,
+                Login = new LoginView {
+                    Fido2Credentials = new List<Fido2CredentialView> {
+                        new Fido2CredentialView {
+                            CredentialId = credentialId ?? Guid.NewGuid().ToString(),
+                            RpId = rpId ?? "bitwarden.com",
+                            Discoverable = discoverable.HasValue ? discoverable.ToString() : "true"
+                        }
+                    }
+                }
+            };
         }
     }
 }

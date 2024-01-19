@@ -29,7 +29,7 @@ namespace Bit.Core.Models.View
 
         public override string SubTitle => UserName;
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
-        public bool IsDiscoverable => !string.IsNullOrWhiteSpace(Discoverable);
+        public bool IsDiscoverable => bool.TryParse(Discoverable, out var isDiscoverable) && isDiscoverable;
         public bool CanLaunch => !string.IsNullOrEmpty(RpId);
         public string LaunchUri => $"https://{RpId}";
 
