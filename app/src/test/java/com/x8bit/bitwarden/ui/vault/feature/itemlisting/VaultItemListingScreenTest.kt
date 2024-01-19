@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -627,6 +628,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = VaultItemListingState(
     itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
     viewState = VaultItemListingState.ViewState.Loading,
+    vaultFilterType = VaultFilterType.AllVaults,
     baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
     isIconLoadingDisabled = false,
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
