@@ -114,15 +114,17 @@ fun BitwardenListItem(
             }
         }
 
-        IconButton(
-            onClick = { shouldShowDialog = true },
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_more_horizontal),
-                contentDescription = stringResource(id = R.string.options),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp),
-            )
+        if (selectionDataList.isNotEmpty()) {
+            IconButton(
+                onClick = { shouldShowDialog = true },
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_more_horizontal),
+                    contentDescription = stringResource(id = R.string.options),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
         }
     }
 
