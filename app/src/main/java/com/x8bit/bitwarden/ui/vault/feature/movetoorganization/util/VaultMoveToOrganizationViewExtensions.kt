@@ -26,6 +26,7 @@ fun Triple<CipherView?, List<CollectionView>, UserState?>.toViewState():
         (currentCipher == null) -> {
             VaultMoveToOrganizationState.ViewState.Error(R.string.generic_error_message.asText())
         }
+
         (userOrganizations?.isNotEmpty() == true) -> {
             VaultMoveToOrganizationState.ViewState.Content(
                 selectedOrganizationId = currentCipher
@@ -58,6 +59,7 @@ fun Triple<CipherView?, List<CollectionView>, UserState?>.toViewState():
                 cipherToMove = currentCipher,
             )
         }
+
         else -> VaultMoveToOrganizationState.ViewState.Empty
     }
 }

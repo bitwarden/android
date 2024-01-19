@@ -40,6 +40,7 @@ fun CipherView.toViewState(): VaultAddEditState.ViewState =
                 expirationYear = card?.expYear.orEmpty(),
                 securityCode = card?.code.orEmpty(),
             )
+
             CipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity(
                 selectedTitle = identity?.title.toTitleOrDefault(),
                 firstName = identity?.firstName.orEmpty(),
