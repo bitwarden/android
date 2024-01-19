@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -92,6 +93,9 @@ fun VaultItemListingScreen(
 
     VaultItemListingDialogs(
         dialogState = state.dialogState,
+        onDeleteSendConfirm = remember(viewModel) {
+            { viewModel.trySendAction(VaultItemListingsAction.DeleteSendConfirmClick(it)) }
+        },
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick) }
         },
@@ -108,9 +112,20 @@ fun VaultItemListingScreen(
 @Composable
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
+    onDeleteSendConfirm: (sendId: String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
+        is VaultItemListingState.DialogState.DeleteSendConfirmation -> BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete),
+            message = stringResource(id = R.string.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = { onDeleteSendConfirm(dialogState.sendId) },
+            onDismissClick = onDismissRequest,
+            onDismissRequest = onDismissRequest,
+        )
+
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = dialogState.title,

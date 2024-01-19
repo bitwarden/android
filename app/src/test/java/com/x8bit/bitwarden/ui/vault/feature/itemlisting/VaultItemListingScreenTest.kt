@@ -605,6 +605,36 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `delete send confirmation dialog should be displayed according to state and emits DeleteSendConfirmClick on confirmation`() {
+        val sendId = "sendId"
+        val message = "Are you sure you want to delete this Send?"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(message).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.DeleteSendConfirmation(
+                    sendId = sendId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(message)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onNodeWithText("Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.DeleteSendConfirmClick(sendId))
+        }
+    }
+
     @Test
     fun `error dialog should be displayed according to state`() {
         val errorMessage = "Fail"
