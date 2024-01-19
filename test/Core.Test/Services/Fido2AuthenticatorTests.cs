@@ -182,17 +182,27 @@ namespace Bit.Core.Test.Services
             await Assert.ThrowsAsync<NotAllowedError>(() => sutProvider.Sut.GetAssertionAsync(aParams));
         }
 
-    //   it("should throw error if user verification fails and cipher requires reprompt", async () => {
-    //     ciphers[0].reprompt = CipherRepromptType.Password;
-    //     userInterfaceSession.pickCredential.mockResolvedValue({
-    //       cipherId: ciphers[0].id,
-    //       userVerified: false,
-    //     });
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
+        public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationForCipherWithReprompt(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [ 
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            ciphers[0].Reprompt = CipherRepromptType.Password;
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            aParams.RpId = "bitwarden.com";
+            aParams.AllowCredentialDescriptorList = null;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+            sutProvider.GetDependency<IFido2UserInterface>().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>()).Returns(new Fido2PickCredentialResult {
+                CipherId = ciphers[0].Id,
+                UserVerified = false
+            });
 
-    //     const result = async () => await authenticator.getAssertion(params, tab);
-
-    //     await expect(result).rejects.toThrowError(Fido2AuthenticatorErrorCode.NotAllowed);
-    //   });
+            await Assert.ThrowsAsync<NotAllowedError>(() => sutProvider.Sut.GetAssertionAsync(aParams));
+        }
 
         #endregion
 
