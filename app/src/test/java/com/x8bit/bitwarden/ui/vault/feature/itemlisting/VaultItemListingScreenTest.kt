@@ -606,6 +606,27 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `error dialog should be displayed according to state`() {
+        val errorMessage = "Fail"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Error(
+                    title = null,
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()

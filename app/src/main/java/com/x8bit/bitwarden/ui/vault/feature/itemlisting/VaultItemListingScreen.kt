@@ -21,6 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
@@ -90,6 +92,9 @@ fun VaultItemListingScreen(
 
     VaultItemListingDialogs(
         dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick) }
+        },
     )
 
     VaultItemListingScaffold(
@@ -103,8 +108,17 @@ fun VaultItemListingScreen(
 @Composable
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
+    onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
+        is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
             visibilityState = LoadingDialogState.Shown(dialogState.message),
         )
