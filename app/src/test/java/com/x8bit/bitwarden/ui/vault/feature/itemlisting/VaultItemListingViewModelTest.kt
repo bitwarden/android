@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -23,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -40,6 +43,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
+@Suppress("LargeClass")
 class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     private val clock: Clock = Clock.fixed(
@@ -88,6 +92,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(VaultItemListingsAction.BackClick)
             assertEquals(VaultItemListingEvent.NavigateBack, awaitItem())
         }
+    }
+
+    @Test
+    fun `DismissDialogClick should clear the dialog state`() {
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.actionChannel.trySend(VaultItemListingsAction.DismissDialogClick)
+        assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
     @Test
@@ -189,15 +200,44 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteSendClick should emit ShowToast`() = runTest {
-        val sendId = "sendId"
+    fun `DeleteSendClick with deleteSend error should display error dialog`() = runTest {
+        val sendId = "sendId1234"
+        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+
         val viewModel = createVaultItemListingViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
-                VaultItemListingsAction.DeleteSendClick(sendId = sendId),
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(VaultItemListingsAction.DeleteSendClick(sendId))
+            assertEquals(
+                initialState.copy(
+                    dialogState = VaultItemListingState.DialogState.Loading(
+                        message = R.string.deleting.asText(),
+                    ),
+                ),
+                awaitItem(),
             )
             assertEquals(
-                VaultItemListingEvent.ShowToast("Not yet implemented".asText()),
+                initialState.copy(
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `DeleteSendClick with deleteSend success should emit ShowToast`() = runTest {
+        val sendId = "sendId1234"
+        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
+
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultItemListingsAction.DeleteSendClick(sendId))
+            assertEquals(
+                VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()),
                 awaitItem(),
             )
         }
@@ -216,15 +256,49 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `RemoveSendPasswordClick should emit ShowToast`() = runTest {
-        val sendId = "sendId"
+    fun `RemovePasswordClick with removePasswordSend error should display error dialog`() =
+        runTest {
+            val sendId = "sendId1234"
+            coEvery {
+                vaultRepository.removePasswordSend(sendId)
+            } returns RemovePasswordSendResult.Error(errorMessage = null)
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(VaultItemListingsAction.RemoveSendPasswordClick(sendId))
+                assertEquals(
+                    initialState.copy(
+                        dialogState = VaultItemListingState.DialogState.Loading(
+                            message = R.string.removing_send_password.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `RemovePasswordClick with removePasswordSend success should emit ShowToast`() = runTest {
+        val sendId = "sendId1234"
+        coEvery {
+            vaultRepository.removePasswordSend(sendId)
+        } returns RemovePasswordSendResult.Success(mockk())
+
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
-                VaultItemListingsAction.RemoveSendPasswordClick(sendId = sendId),
-            )
+            viewModel.trySendAction(VaultItemListingsAction.RemoveSendPasswordClick(sendId))
             assertEquals(
-                VaultItemListingEvent.ShowToast("Not yet implemented".asText()),
+                VaultItemListingEvent.ShowToast(R.string.send_password_removed.asText()),
                 awaitItem(),
             )
         }

@@ -11,6 +11,8 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -28,6 +30,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
@@ -73,6 +76,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     override fun handleAction(action: VaultItemListingsAction) {
         when (action) {
+            is VaultItemListingsAction.DismissDialogClick -> handleDismissDialogClick()
             is VaultItemListingsAction.BackClick -> handleBackClick()
             is VaultItemListingsAction.LockClick -> handleLockClick()
             is VaultItemListingsAction.SyncClick -> handleSyncClick()
@@ -87,10 +91,7 @@ class VaultItemListingViewModel @Inject constructor(
                 handleRemoveSendPasswordClick(action)
             }
 
-            is VaultItemListingsAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
-            is VaultItemListingsAction.Internal.IconLoadingSettingReceive -> {
-                handleIconsSettingReceived(action)
-            }
+            is VaultItemListingsAction.Internal -> handleInternalAction(action)
         }
     }
 
@@ -104,8 +105,17 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleDeleteSendClick(action: VaultItemListingsAction.DeleteSendClick) {
-        // TODO: Implement deletion (BIT-1411)
-        sendEvent(VaultItemListingEvent.ShowToast("Not yet implemented".asText()))
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = R.string.deleting.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            val result = vaultRepository.deleteSend(action.sendId)
+            sendAction(VaultItemListingsAction.Internal.DeleteSendResultReceive(result))
+        }
     }
 
     private fun handleShareSendUrlClick(action: VaultItemListingsAction.ShareSendUrlClick) {
@@ -115,8 +125,17 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleRemoveSendPasswordClick(
         action: VaultItemListingsAction.RemoveSendPasswordClick,
     ) {
-        // TODO: Implement password removal (BIT-1411)
-        sendEvent(VaultItemListingEvent.ShowToast("Not yet implemented".asText()))
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Loading(
+                    message = R.string.removing_send_password.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            val result = vaultRepository.removePasswordSend(action.sendId)
+            sendAction(VaultItemListingsAction.Internal.RemovePasswordSendResultReceive(result))
+        }
     }
 
     private fun handleAddVaultItemClick() {
@@ -145,6 +164,10 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(event)
     }
 
+    private fun handleDismissDialogClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
     private fun handleBackClick() {
         sendEvent(
             event = VaultItemListingEvent.NavigateBack,
@@ -170,6 +193,74 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(
             event = VaultItemListingEvent.NavigateToVaultSearchScreen,
         )
+    }
+
+    private fun handleInternalAction(action: VaultItemListingsAction.Internal) {
+        when (action) {
+            is VaultItemListingsAction.Internal.DeleteSendResultReceive -> {
+                handleDeleteSendResultReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.RemovePasswordSendResultReceive -> {
+                handleRemovePasswordSendResultReceive(action)
+            }
+
+            is VaultItemListingsAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VaultItemListingsAction.Internal.IconLoadingSettingReceive -> {
+                handleIconsSettingReceived(action)
+            }
+        }
+    }
+
+    private fun handleDeleteSendResultReceive(
+        action: VaultItemListingsAction.Internal.DeleteSendResultReceive,
+    ) {
+        when (action.result) {
+            DeleteSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            DeleteSendResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(VaultItemListingEvent.ShowToast(R.string.send_deleted.asText()))
+            }
+        }
+    }
+
+    private fun handleRemovePasswordSendResultReceive(
+        action: VaultItemListingsAction.Internal.RemovePasswordSendResultReceive,
+    ) {
+        when (val result = action.result) {
+            is RemovePasswordSendResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = result
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is RemovePasswordSendResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    VaultItemListingEvent.ShowToast(
+                        text = R.string.send_password_removed.asText(),
+                    ),
+                )
+            }
+        }
     }
 
     private fun handleVaultDataReceive(
@@ -303,6 +394,15 @@ data class VaultItemListingState(
      * Represents the current state of any dialogs on the screen.
      */
     sealed class DialogState : Parcelable {
+
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
 
         /**
          * Represents a loading dialog with the given [message].
@@ -549,6 +649,11 @@ sealed class VaultItemListingEvent {
 sealed class VaultItemListingsAction {
 
     /**
+     * Click to dismiss the dialog.
+     */
+    data object DismissDialogClick : VaultItemListingsAction()
+
+    /**
      * Click the refresh button.
      */
     data object RefreshClick : VaultItemListingsAction()
@@ -609,6 +714,18 @@ sealed class VaultItemListingsAction {
      * Models actions that the [VaultItemListingViewModel] itself might send.
      */
     sealed class Internal : VaultItemListingsAction() {
+
+        /**
+         * Indicates a result for deleting the send has been received.
+         */
+        data class DeleteSendResultReceive(val result: DeleteSendResult) : Internal()
+
+        /**
+         * Indicates a result for removing the password protection from a send has been received.
+         */
+        data class RemovePasswordSendResultReceive(
+            val result: RemovePasswordSendResult,
+        ) : Internal()
 
         /**
          * Indicates the icon setting was received.
