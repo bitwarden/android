@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * A Composable function that displays a row send item.
@@ -56,12 +57,14 @@ fun SendListItem(
         label = label,
         supportingLabel = supportingLabel,
         startIcon = startIcon,
-        trailingLabelIcons = trailingLabelIcons.map {
-            IconResource(
-                iconPainter = painterResource(it.iconRes),
-                contentDescription = it.contentDescription(),
-            )
-        },
+        trailingLabelIcons = trailingLabelIcons
+            .map {
+                IconResource(
+                    iconPainter = painterResource(it.iconRes),
+                    contentDescription = it.contentDescription(),
+                )
+            }
+            .toPersistentList(),
         onClick = onClick,
         selectionDataList = persistentListOfNotNull(
             SelectionItemData(
