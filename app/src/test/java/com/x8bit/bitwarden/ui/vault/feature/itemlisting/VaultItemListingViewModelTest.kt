@@ -36,8 +36,16 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class VaultItemListingViewModelTest : BaseViewModelTest() {
+
+    private val clock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
 
     private val clipboardManager: BitwardenClipboardManager = mockk()
 
@@ -636,6 +644,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     ): VaultItemListingViewModel =
         VaultItemListingViewModel(
             savedStateHandle = savedStateHandle,
+            clock = clock,
             clipboardManager = clipboardManager,
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,

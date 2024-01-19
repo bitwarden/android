@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -641,6 +642,28 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         title = "mockTitle-$number",
         subtitle = "mockSubtitle-$number",
         iconData = IconData.Local(R.drawable.ic_card_item),
+        extraIconList = listOf(
+            IconRes(
+                iconRes = R.drawable.ic_send_disabled,
+                contentDescription = R.string.disabled.asText(),
+            ),
+            IconRes(
+                iconRes = R.drawable.ic_send_password,
+                contentDescription = R.string.password.asText(),
+            ),
+            IconRes(
+                iconRes = R.drawable.ic_send_max_access_count_reached,
+                contentDescription = R.string.maximum_access_count_reached.asText(),
+            ),
+            IconRes(
+                iconRes = R.drawable.ic_send_expired,
+                contentDescription = R.string.expired.asText(),
+            ),
+            IconRes(
+                iconRes = R.drawable.ic_send_pending_delete,
+                contentDescription = R.string.pending_delete.asText(),
+            ),
+        ),
         overflowOptions = listOf(
             VaultItemListingState.DisplayItem.OverflowItem(
                 title = R.string.edit.asText(),

@@ -10,10 +10,13 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import java.time.Clock
 
 /**
  * Determines a predicate to filter a list of [CipherView] based on the
@@ -92,10 +95,14 @@ fun List<CipherView>.toViewState(
  */
 fun List<SendView>.toViewState(
     baseWebSendUrl: String,
+    clock: Clock,
 ): VaultItemListingState.ViewState =
     if (isNotEmpty()) {
         VaultItemListingState.ViewState.Content(
-            displayItemList = toDisplayItemList(baseWebSendUrl = baseWebSendUrl),
+            displayItemList = toDisplayItemList(
+                baseWebSendUrl = baseWebSendUrl,
+                clock = clock,
+            ),
         )
     } else {
         VaultItemListingState.ViewState.NoItems
@@ -143,8 +150,14 @@ private fun List<CipherView>.toDisplayItemList(
 
 private fun List<SendView>.toDisplayItemList(
     baseWebSendUrl: String,
+    clock: Clock,
 ): List<VaultItemListingState.DisplayItem> =
-    this.map { it.toDisplayItem(baseWebSendUrl = baseWebSendUrl) }
+    this.map {
+        it.toDisplayItem(
+            baseWebSendUrl = baseWebSendUrl,
+            clock = clock,
+        )
+    }
 
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
@@ -158,6 +171,7 @@ private fun CipherView.toDisplayItem(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
+        extraIconList = emptyList(),
         overflowOptions = emptyList(),
     )
 
@@ -181,6 +195,7 @@ private fun CipherView.toIconData(
 
 private fun SendView.toDisplayItem(
     baseWebSendUrl: String,
+    clock: Clock,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -191,6 +206,23 @@ private fun SendView.toDisplayItem(
                 SendType.TEXT -> R.drawable.ic_send_text
                 SendType.FILE -> R.drawable.ic_send_file
             },
+        ),
+        extraIconList = listOfNotNull(
+            SendStatusIcon.DISABLED
+                .takeIf { disabled }
+                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
+            SendStatusIcon.PASSWORD
+                .takeIf { hasPassword }
+                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
+            SendStatusIcon.MAX_ACCESS_COUNT_REACHED
+                .takeIf { maxAccessCount?.let { maxCount -> accessCount >= maxCount } == true }
+                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
+            SendStatusIcon.EXPIRED
+                .takeIf { expirationDate?.isBefore(clock.instant()) == true }
+                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
+            SendStatusIcon.PENDING_DELETE
+                .takeIf { deletionDate.isBefore(clock.instant()) }
+                ?.let { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) },
         ),
         overflowOptions = listOfNotNull(
             VaultItemListingState.DisplayItem.OverflowItem(
