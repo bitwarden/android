@@ -8,6 +8,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
@@ -45,10 +46,11 @@ class LoginViewModel @Inject constructor(
             isLoginButtonEnabled = false,
             passwordInput = "",
             environmentLabel = environmentRepository.environment.label,
-            loadingDialogState = LoadingDialogState.Hidden,
+            loadingDialogState = LoadingDialogState.Shown(R.string.loading.asText()),
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = LoginArgs(savedStateHandle).captchaToken,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
+            shouldShowLoginWithDevice = false,
         ),
 ) {
 
@@ -66,6 +68,14 @@ class LoginViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            trySendAction(
+                LoginAction.Internal.ReceiveKnownDeviceResult(
+                    knownDeviceResult = authRepository.getIsKnownDevice(state.emailAddress),
+                ),
+            )
+        }
     }
 
     override fun handleAction(action: LoginAction) {
@@ -89,6 +99,10 @@ class LoginViewModel @Inject constructor(
             is LoginAction.Internal.ReceiveLoginResult -> {
                 handleReceiveLoginResult(action = action)
             }
+
+            is LoginAction.Internal.ReceiveKnownDeviceResult -> {
+                handleKnownDeviceResultReceived(action)
+            }
         }
     }
 
@@ -107,6 +121,30 @@ class LoginViewModel @Inject constructor(
 
     private fun handleSwitchAccountClicked(action: LoginAction.SwitchAccountClick) {
         authRepository.switchAccount(userId = action.accountSummary.userId)
+    }
+
+    private fun handleKnownDeviceResultReceived(
+        action: LoginAction.Internal.ReceiveKnownDeviceResult,
+    ) {
+        when (action.knownDeviceResult) {
+            is KnownDeviceResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        loadingDialogState = LoadingDialogState.Hidden,
+                        shouldShowLoginWithDevice = action.knownDeviceResult.isKnownDevice,
+                    )
+                }
+            }
+
+            is KnownDeviceResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        loadingDialogState = LoadingDialogState.Hidden,
+                        shouldShowLoginWithDevice = false,
+                    )
+                }
+            }
+        }
     }
 
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
@@ -235,6 +273,7 @@ data class LoginState(
     val loadingDialogState: LoadingDialogState,
     val errorDialogState: BasicDialogState,
     val accountSummaries: List<AccountSummary>,
+    val shouldShowLoginWithDevice: Boolean,
 ) : Parcelable
 
 /**
@@ -350,6 +389,13 @@ sealed class LoginAction {
          */
         data class ReceiveCaptchaToken(
             val tokenResult: CaptchaCallbackTokenResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a [KnownDeviceResult] has been received and state should be updated.
+         */
+        data class ReceiveKnownDeviceResult(
+            val knownDeviceResult: KnownDeviceResult,
         ) : Internal()
 
         /**

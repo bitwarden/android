@@ -244,17 +244,18 @@ private fun LoginScreenContent(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // TODO BIT-808: Hide button for first-time users
-            BitwardenOutlinedButtonWithIcon(
-                label = stringResource(id = R.string.log_in_with_device),
-                icon = painterResource(id = R.drawable.ic_device),
-                onClick = onLoginWithDeviceClick,
-                modifier = Modifier
-                    .semantics { testTag = "LogInWithAnotherDeviceButton" }
-                    .fillMaxWidth(),
-            )
+            if (state.shouldShowLoginWithDevice) {
+                BitwardenOutlinedButtonWithIcon(
+                    label = stringResource(id = R.string.log_in_with_device),
+                    icon = painterResource(id = R.drawable.ic_device),
+                    onClick = onLoginWithDeviceClick,
+                    modifier = Modifier
+                        .semantics { testTag = "LogInWithAnotherDeviceButton" }
+                        .fillMaxWidth(),
+                )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
             BitwardenOutlinedButtonWithIcon(
                 label = stringResource(id = R.string.log_in_sso),

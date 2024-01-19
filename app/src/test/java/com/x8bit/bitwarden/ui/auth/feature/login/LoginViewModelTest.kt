@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -45,6 +46,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk(relaxed = true) {
+        coEvery {
+            getIsKnownDevice("test@gmail.com")
+        } returns KnownDeviceResult.Success(false)
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { userStateFlow } returns mutableUserStateFlow
         every { logout(any()) } just runs
@@ -147,6 +151,33 @@ class LoginViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
+        }
+    }
+
+    @Test
+    fun `should set shouldShowLoginWithDevice when isKnownDevice returns true`() = runTest {
+        val expectedState = DEFAULT_STATE.copy(
+            shouldShowLoginWithDevice = true,
+        )
+        coEvery {
+            authRepository.getIsKnownDevice("test@gmail.com")
+        } returns KnownDeviceResult.Success(true)
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(expectedState, awaitItem())
+        }
+    }
+
+    @Test
+    fun `should have default state when isKnownDevice returns error`() = runTest {
+        coEvery {
+            authRepository.getIsKnownDevice("test@gmail.com")
+        } returns KnownDeviceResult.Error
+        val viewModel = createViewModel()
+
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
 
@@ -434,6 +465,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             errorDialogState = BasicDialogState.Hidden,
             captchaToken = null,
             accountSummaries = emptyList(),
+            shouldShowLoginWithDevice = false,
         )
 
         private const val LOGIN_RESULT_PATH =

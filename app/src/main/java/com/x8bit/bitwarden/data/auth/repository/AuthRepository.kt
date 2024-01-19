@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -92,6 +93,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
+
+    /**
+     * Get a [Boolean] indicating whether this is a known device.
+     */
+    suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult
 
     /**
      * Attempts to get the number of times the given [password] has been breached.

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -42,7 +44,6 @@ import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,8 +59,9 @@ import javax.inject.Singleton
  */
 @Suppress("LongParameterList", "TooManyFunctions")
 @Singleton
-class AuthRepositoryImpl constructor(
+class AuthRepositoryImpl(
     private val accountsService: AccountsService,
+    private val devicesService: DevicesService,
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
     private val identityService: IdentityService,
     private val authSdkSource: AuthSdkSource,
@@ -101,7 +103,6 @@ class AuthRepositoryImpl constructor(
             initialValue = AuthState.Uninitialized,
         )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override val userStateFlow: StateFlow<UserState?> = combine(
         authDiskSource.userStateFlow,
         authDiskSource.userOrganizationsListFlow,
@@ -376,6 +377,17 @@ class AuthRepositoryImpl constructor(
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         mutableCaptchaTokenFlow.tryEmit(tokenResult)
     }
+
+    override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
+        devicesService
+            .getIsKnownDevice(
+                emailAddress = emailAddress,
+                deviceId = authDiskSource.uniqueAppId,
+            )
+            .fold(
+                onFailure = { KnownDeviceResult.Error },
+                onSuccess = { KnownDeviceResult.Success(it) },
+            )
 
     override suspend fun getPasswordBreachCount(password: String): BreachCountResult =
         haveIBeenPwnedService
