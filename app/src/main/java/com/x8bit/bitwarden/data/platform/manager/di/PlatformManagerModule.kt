@@ -31,7 +31,7 @@ import java.time.Clock
 import javax.inject.Singleton
 
 /**
- * Provides repositories in the auth package.
+ * Provides managers in the platform package.
  */
 @Module
 @InstallIn(SingletonComponent::class)

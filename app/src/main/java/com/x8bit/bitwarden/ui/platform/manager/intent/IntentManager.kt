@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 /**
  * A manager class for simplifying the handling of Android Intents within a given context.
  */
+@Suppress("TooManyFunctions")
 interface IntentManager {
 
     /**
@@ -62,6 +63,11 @@ interface IntentManager {
     fun getFileDataFromIntent(activityResult: ActivityResult): FileData?
 
     /**
+     * Processes the [intent] and attempts to derive [ShareData] information from it.
+     */
+    fun getShareDataFromIntent(intent: Intent): ShareData?
+
+    /**
      * Creates an intent for choosing a file saved to disk.
      */
     fun createFileChooserIntent(withCameraIntents: Boolean): Intent
@@ -74,4 +80,24 @@ interface IntentManager {
         val uri: Uri,
         val sizeBytes: Long,
     )
+
+    /**
+     * Represents data for a share request coming from outside the app.
+     */
+    sealed class ShareData {
+        /**
+         * The data required to create a new Text Send.
+         */
+        data class TextSend(
+            val subject: String?,
+            val text: String,
+        ) : ShareData()
+
+        /**
+         * The data required to create a new File Send.
+         */
+        data class FileSend(
+            val fileData: IntentManager.FileData,
+        ) : ShareData()
+    }
 }

@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<MainState, Unit, MainAction>(
     MainState(
@@ -37,6 +40,7 @@ class MainViewModel @Inject constructor(
     override fun handleAction(action: MainAction) {
         when (action) {
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
+            is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
         }
     }
@@ -45,13 +49,37 @@ class MainViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(theme = action.theme) }
     }
 
+    private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
+        val shareData = intentManager.getShareDataFromIntent(action.intent)
+        when {
+            shareData != null -> {
+                authRepository.specialCircumstance =
+                    UserState.SpecialCircumstance.ShareNewSend(
+                        data = shareData,
+                        shouldFinishWhenComplete = true,
+                    )
+            }
+        }
+    }
+
     private fun handleNewIntentReceived(action: MainAction.ReceiveNewIntent) {
         val captchaCallbackTokenResult = action.intent.getCaptchaCallbackTokenResult()
+        val shareData = intentManager.getShareDataFromIntent(action.intent)
         when {
             captchaCallbackTokenResult != null -> {
                 authRepository.setCaptchaCallbackTokenResult(
                     tokenResult = captchaCallbackTokenResult,
                 )
+            }
+
+            shareData != null -> {
+                authRepository.specialCircumstance =
+                    UserState.SpecialCircumstance.ShareNewSend(
+                        data = shareData,
+                        // Allow users back into the already-running app when completing the
+                        // Send task.
+                        shouldFinishWhenComplete = false,
+                    )
             }
 
             else -> Unit
@@ -71,6 +99,11 @@ data class MainState(
  * Models actions for the [MainActivity].
  */
 sealed class MainAction {
+    /**
+     * Receive first Intent by the application.
+     */
+    data class ReceiveFirstIntent(val intent: Intent) : MainAction()
+
     /**
      * Receive Intent by the application.
      */

@@ -51,9 +51,18 @@ class RootNavViewModel @Inject constructor(
                 userState.hasPendingAccountAddition -> RootNavState.Auth
 
             userState.activeAccount.isVaultUnlocked -> {
-                RootNavState.VaultUnlocked(
-                    activeUserId = userState.activeAccount.userId,
-                )
+                when (userState.specialCircumstance) {
+                    is UserState.SpecialCircumstance.ShareNewSend -> {
+                        RootNavState.VaultUnlockedForNewSend
+                    }
+
+                    null,
+                    -> {
+                        RootNavState.VaultUnlocked(
+                            activeUserId = userState.activeAccount.userId,
+                        )
+                    }
+                }
             }
 
             else -> RootNavState.VaultLocked
@@ -91,6 +100,12 @@ sealed class RootNavState : Parcelable {
     data class VaultUnlocked(
         val activeUserId: String,
     ) : RootNavState()
+
+    /**
+     * App should show the new send screen for an unlocked user.
+     */
+    @Parcelize
+    data object VaultUnlockedForNewSend : RootNavState()
 }
 
 /**

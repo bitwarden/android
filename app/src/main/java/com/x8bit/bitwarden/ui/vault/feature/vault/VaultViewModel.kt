@@ -205,7 +205,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleAddAccountClick() {
-        authRepository.specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition
+        authRepository.hasPendingAccountAddition = true
     }
 
     private fun handleSyncClick() {

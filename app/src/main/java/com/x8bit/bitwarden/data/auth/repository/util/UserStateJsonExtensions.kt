@@ -47,6 +47,7 @@ fun UserStateJson.toUpdatedUserStateJson(
 fun UserStateJson.toUserState(
     vaultState: VaultState,
     userOrganizationsList: List<UserOrganizations>,
+    hasPendingAccountAddition: Boolean,
     specialCircumstance: UserState.SpecialCircumstance?,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
 ): UserState =
@@ -77,5 +78,6 @@ fun UserStateJson.toUserState(
                     vaultUnlockType = vaultUnlockTypeProvider(userId),
                 )
             },
+        hasPendingAccountAddition = hasPendingAccountAddition,
         specialCircumstance = specialCircumstance,
     )

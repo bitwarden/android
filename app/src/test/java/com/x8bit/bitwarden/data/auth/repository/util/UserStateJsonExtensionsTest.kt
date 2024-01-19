@@ -154,6 +154,7 @@ class UserStateJsonExtensionsTest {
                             ),
                         ),
                     ),
+                    hasPendingAccountAddition = false,
                     specialCircumstance = null,
                     vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                 ),
@@ -185,7 +186,8 @@ class UserStateJsonExtensionsTest {
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                     ),
                 ),
-                specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
+                hasPendingAccountAddition = true,
+                specialCircumstance = MOCK_SPECIAL_CIRCUMSTANCE,
             ),
             UserStateJson(
                 activeUserId = "activeUserId",
@@ -224,9 +226,12 @@ class UserStateJsonExtensionsTest {
                             ),
                         ),
                     ),
-                    specialCircumstance = UserState.SpecialCircumstance.PendingAccountAddition,
+                    hasPendingAccountAddition = true,
+                    specialCircumstance = MOCK_SPECIAL_CIRCUMSTANCE,
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 ),
         )
     }
 }
+
+private val MOCK_SPECIAL_CIRCUMSTANCE: UserState.SpecialCircumstance = mockk()

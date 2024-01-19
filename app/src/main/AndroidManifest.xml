@@ -26,7 +26,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstancePerTask"
             android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -43,6 +43,15 @@
                 <data
                     android:host="captcha-callback"
                     android:scheme="bitwarden" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/*" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
+                <data android:mimeType="text/*" />
             </intent-filter>
         </activity>
 
