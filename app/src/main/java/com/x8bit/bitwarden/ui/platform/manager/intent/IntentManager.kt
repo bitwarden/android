@@ -33,6 +33,11 @@ interface IntentManager {
     fun startSystemAutofillSettingsActivity(): Boolean
 
     /**
+     * Starts the application's settings activity.
+     */
+    fun startApplicationDetailsSettingsActivity()
+
+    /**
      * Start an activity to view the given [uri] in an external browser.
      */
     fun launchUri(uri: Uri)

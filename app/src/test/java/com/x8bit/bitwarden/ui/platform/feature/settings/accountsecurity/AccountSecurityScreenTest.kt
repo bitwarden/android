@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.just
@@ -43,7 +44,10 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
+        every { startActivity(any()) } just runs
+        every { startApplicationDetailsSettingsActivity() } just runs
     }
+    private val permissionsManager = FakePermissionManager()
     private val mutableEventFlow = bufferedMutableSharedFlow<AccountSecurityEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<AccountSecurityViewModel>(relaxed = true) {
@@ -59,6 +63,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
+                permissionsManager = permissionsManager,
             )
         }
     }
@@ -121,8 +126,10 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on approve login requests confirm Yes should send Enabled action and hide dialog`() {
+    fun `on approve login requests confirm Yes should send Enabled action and hide dialog when permission already granted`() {
+        permissionsManager.checkPermissionResult = true
         mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
 
         composeTestRule
@@ -136,6 +143,42 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on approve login requests confirm Yes should send Enabled action and show permission dialog when permission not granted`() {
+        permissionsManager.checkPermissionResult = false
+        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
+
+        composeTestRule
+            .onNodeWithText("Use this device to approve login requests made from other devices")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Receive push notifications for new login requests")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("No thanks")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Settings")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
 
         verify {
             viewModel.trySendAction(
@@ -176,6 +219,63 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Use this device to approve login requests made from other devices")
             .assertIsOn()
+    }
+
+    @Test
+    fun `on push permission dialog No thanks should hide dialog`() {
+        permissionsManager.checkPermissionResult = false
+        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
+
+        composeTestRule
+            .onNodeWithText("Use this device to approve login requests made from other devices")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("No thanks")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `on push permission dialog Settings should hide dialog and send confirm action`() {
+        permissionsManager.checkPermissionResult = false
+        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
+
+        composeTestRule
+            .onNodeWithText("Use this device to approve login requests made from other devices")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Settings")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(AccountSecurityAction.PushNotificationConfirm)
+        }
+    }
+
+    @Test
+    fun `on NavigateToApplicationDataSettings should launch the correct intent`() {
+        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToApplicationDataSettings)
+
+        verify { intentManager.startApplicationDetailsSettingsActivity() }
     }
 
     @Test

@@ -312,7 +312,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ApprovePasswordlessLoginsToggle enabled should update settings, set isApprovePasswordlessLoginsEnabled to true, and display toast`() =
+    fun `on ApprovePasswordlessLoginsToggle enabled should update settings and set isApprovePasswordlessLoginsEnabled to true`() =
         runTest {
             val settingsRepository = mockk<SettingsRepository> {
                 every { isApprovePasswordlessLoginsEnabled = true } just runs
@@ -324,10 +324,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
                 )
-                assertEquals(
-                    AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()),
-                    awaitItem(),
-                )
+                expectNoEvents()
                 verify(exactly = 1) { settingsRepository.isApprovePasswordlessLoginsEnabled = true }
             }
             assertTrue(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
@@ -335,24 +332,21 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ApprovePasswordlessLoginsToggle pending enabled should set isApprovePasswordlessLoginsEnabled to true and display toast`() =
+    fun `on ApprovePasswordlessLoginsToggle pending enabled should set isApprovePasswordlessLoginsEnabled to true`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(
                     AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled,
                 )
-                assertEquals(
-                    AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()),
-                    awaitItem(),
-                )
+                expectNoEvents()
             }
             assertTrue(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ApprovePasswordlessLoginsToggle disabled should update settings, set isApprovePasswordlessLoginsEnabled to false, and display toast`() =
+    fun `on ApprovePasswordlessLoginsToggle disabled should update settings and set isApprovePasswordlessLoginsEnabled to false`() =
         runTest {
             val settingsRepository = mockk<SettingsRepository> {
                 every { isApprovePasswordlessLoginsEnabled = false } just runs
@@ -364,15 +358,25 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
                 )
-                assertEquals(
-                    AccountSecurityEvent.ShowToast("Handle Login requests on this device.".asText()),
-                    awaitItem(),
-                )
+                expectNoEvents()
                 verify(exactly = 1) {
                     settingsRepository.isApprovePasswordlessLoginsEnabled = false
                 }
             }
             assertFalse(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
+        }
+
+    @Test
+    fun `on PushNotificationConfirm should send NavigateToApplicationDataSettings event`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AccountSecurityAction.PushNotificationConfirm)
+                assertEquals(
+                    AccountSecurityEvent.NavigateToApplicationDataSettings,
+                    awaitItem(),
+                )
+            }
         }
 
     private fun createViewModel(
