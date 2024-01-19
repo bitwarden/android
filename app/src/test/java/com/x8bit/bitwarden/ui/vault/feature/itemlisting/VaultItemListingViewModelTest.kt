@@ -66,10 +66,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { environmentStateFlow } returns mockk()
     }
 
+    private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
     private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
     private val settingsRepository: SettingsRepository = mockk {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
+        every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
     }
     private val initialState = createVaultItemListingState()
     private val initialSavedStateHandle = createSavedStateHandleWithVaultItemListingType(
@@ -350,24 +352,26 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() =
         runTest {
             setupMockUri()
-
-            mutableVaultDataStateFlow.tryEmit(
-                value = DataState.Loaded(
-                    data = VaultData(
-                        cipherViewList = listOf(
-                            createMockCipherView(
-                                number = 1,
-                                isDeleted = false,
-                            ),
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(
+                        createMockCipherView(
+                            number = 1,
+                            isDeleted = false,
                         ),
-                        folderViewList = listOf(createMockFolderView(number = 1)),
-                        collectionViewList = listOf(createMockCollectionView(number = 1)),
-                        sendViewList = listOf(createMockSendView(number = 1)),
                     ),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             )
 
             val viewModel = createVaultItemListingViewModel()
+
+            viewModel.eventFlow.test {
+                mutableVaultDataStateFlow.tryEmit(value = dataState)
+                assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+            }
 
             assertEquals(
                 createVaultItemListingState(
@@ -384,17 +388,19 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems`() =
         runTest {
-            mutableVaultDataStateFlow.tryEmit(
-                value = DataState.Loaded(
-                    data = VaultData(
-                        cipherViewList = emptyList(),
-                        folderViewList = emptyList(),
-                        collectionViewList = emptyList(),
-                        sendViewList = emptyList(),
-                    ),
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
+            viewModel.eventFlow.test {
+                mutableVaultDataStateFlow.tryEmit(value = dataState)
+                assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+            }
             assertEquals(
                 createVaultItemListingState(viewState = VaultItemListingState.ViewState.NoItems),
                 viewModel.stateFlow.value,
@@ -404,17 +410,20 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `vaultDataStateFlow Loaded with trash items should update ViewState to NoItems`() =
         runTest {
-            mutableVaultDataStateFlow.tryEmit(
-                value = DataState.Loaded(
-                    data = VaultData(
-                        cipherViewList = listOf(createMockCipherView(number = 1)),
-                        folderViewList = listOf(createMockFolderView(number = 1)),
-                        collectionViewList = listOf(createMockCollectionView(number = 1)),
-                        sendViewList = listOf(createMockSendView(number = 1)),
-                    ),
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
+
+            viewModel.eventFlow.test {
+                mutableVaultDataStateFlow.tryEmit(value = dataState)
+                assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+            }
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems,
@@ -508,14 +517,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Error without data should update state to Error`() = runTest {
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.Error(
-                error = IllegalStateException(),
-            ),
+        val dataState = DataState.Error<VaultData>(
+            error = IllegalStateException(),
         )
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Error(
@@ -530,20 +541,22 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow Error with data should update state to Content`() = runTest {
         setupMockUri()
 
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.Error(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-                error = IllegalStateException(),
+        val dataState = DataState.Error(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
             ),
+            error = IllegalStateException(),
         )
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
@@ -560,20 +573,22 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Error with empty data should update state to NoItems`() = runTest {
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.Error(
-                data = VaultData(
-                    cipherViewList = emptyList(),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
-                ),
-                error = IllegalStateException(),
+        val dataState = DataState.Error(
+            data = VaultData(
+                cipherViewList = emptyList(),
+                folderViewList = emptyList(),
+                collectionViewList = emptyList(),
+                sendViewList = emptyList(),
             ),
+            error = IllegalStateException(),
         )
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems,
@@ -584,20 +599,22 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow Error with trash data should update state to NoItems`() = runTest {
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.Error(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-                error = IllegalStateException(),
+        val dataState = DataState.Error(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
             ),
+            error = IllegalStateException(),
         )
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems,
@@ -608,12 +625,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow NoNetwork without data should update state to Error`() = runTest {
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.NoNetwork(),
-        )
+        val dataState = DataState.NoNetwork<VaultData>()
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Error(
@@ -630,19 +649,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow NoNetwork with data should update state to Content`() = runTest {
         setupMockUri()
 
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.NoNetwork(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
+        val dataState = DataState.NoNetwork(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
             ),
         )
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
@@ -659,19 +680,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow NoNetwork with empty data should update state to NoItems`() = runTest {
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.NoNetwork(
-                data = VaultData(
-                    cipherViewList = emptyList(),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
-                ),
+        val dataState = DataState.NoNetwork(
+            data = VaultData(
+                cipherViewList = emptyList(),
+                folderViewList = emptyList(),
+                collectionViewList = emptyList(),
+                sendViewList = emptyList(),
             ),
         )
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems,
@@ -682,19 +705,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `vaultDataStateFlow NoNetwork with trash data should update state to NoItems`() = runTest {
-        mutableVaultDataStateFlow.tryEmit(
-            value = DataState.NoNetwork(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
+        val dataState = DataState.NoNetwork(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
             ),
         )
 
         val viewModel = createVaultItemListingViewModel()
 
+        viewModel.eventFlow.test {
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
+        }
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems,
@@ -711,6 +736,33 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         mutableIsIconLoadingDisabledFlow.value = true
         assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
+    }
+
+    @Test
+    fun `RefreshPull should call vault repository sync`() {
+        val viewModel = createVaultItemListingViewModel()
+
+        viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
+
+        verify(exactly = 1) {
+            vaultRepository.sync()
+        }
+    }
+
+    @Test
+    fun `PullToRefreshEnableReceive should update isPullToRefreshEnabled`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.Internal.PullToRefreshEnableReceive(
+                isPullToRefreshEnabled = true,
+            ),
+        )
+
+        assertEquals(
+            initialState.copy(isPullToRefreshSettingEnabled = true),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Suppress("CyclomaticComplexMethod")
@@ -779,6 +831,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+            isPullToRefreshSettingEnabled = false,
             dialogState = null,
         )
 }

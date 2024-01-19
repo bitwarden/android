@@ -699,6 +699,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
     isIconLoadingDisabled = false,
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+    isPullToRefreshSettingEnabled = false,
     dialogState = null,
 )
 
