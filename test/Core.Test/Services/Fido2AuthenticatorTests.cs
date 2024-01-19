@@ -64,6 +64,7 @@ namespace Bit.Core.Test.Services
                 CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
             ];
             aParams.RpId = "bitwarden.com";
+            aParams.RequireUserVerification = false;
             aParams.AllowCredentialDescriptorList = credentialIds.Select((credentialId) => new PublicKeyCredentialDescriptor {
                 Id = credentialId.ToByteArray(),
                 Type = "public-key"
@@ -92,6 +93,7 @@ namespace Bit.Core.Test.Services
             ];
             var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
             aParams.RpId = "bitwarden.com";
+            aParams.RequireUserVerification = false;
             aParams.AllowCredentialDescriptorList = null;
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
             sutProvider.GetDependency<IFido2UserInterface>().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>()).Returns(new Fido2PickCredentialResult {
@@ -123,7 +125,7 @@ namespace Bit.Core.Test.Services
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
             sutProvider.GetDependency<IFido2UserInterface>().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>()).Returns(new Fido2PickCredentialResult {
                 CipherId = discoverableCiphers[0].Id,
-                UserVerified = false
+                UserVerified = true
             });
 
             await sutProvider.Sut.GetAssertionAsync(aParams);
@@ -136,7 +138,7 @@ namespace Bit.Core.Test.Services
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         // Spec: Prompt the user to select a public key credential source `selectedCredential` from `credentialOptions`.
-        //       If requireUserPresence is true, the authorization gesture MUST include a test of user presence.
+        //       If `requireUserPresence` is true, the authorization gesture MUST include a test of user presence.
         // Comment: User presence in implied by the UI returning a credential.
         public async Task GetAssertionAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
@@ -185,6 +187,28 @@ namespace Bit.Core.Test.Services
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
+        public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationWhenRequired(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [ 
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            aParams.RequireUserVerification = true;
+            aParams.RpId = "bitwarden.com";
+            aParams.AllowCredentialDescriptorList = null;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+            sutProvider.GetDependency<IFido2UserInterface>().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>()).Returns(new Fido2PickCredentialResult {
+                CipherId = discoverableCiphers[0].Id,
+                UserVerified = false
+            });
+
+            await Assert.ThrowsAsync<NotAllowedError>(() => sutProvider.Sut.GetAssertionAsync(aParams));
+        }
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
         public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationForCipherWithReprompt(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
             List<CipherView> ciphers = [ 
@@ -197,7 +221,7 @@ namespace Bit.Core.Test.Services
             aParams.AllowCredentialDescriptorList = null;
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
             sutProvider.GetDependency<IFido2UserInterface>().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>()).Returns(new Fido2PickCredentialResult {
-                CipherId = ciphers[0].Id,
+                CipherId = discoverableCiphers[0].Id,
                 UserVerified = false
             });
 
@@ -219,6 +243,7 @@ namespace Bit.Core.Test.Services
             return new CipherView {
                 Type = CipherType.Login,
                 Id = Guid.NewGuid().ToString(),
+                Reprompt = CipherRepromptType.None,
                 Login = new LoginView {
                     Fido2Credentials = new List<Fido2CredentialView> {
                         new Fido2CredentialView {

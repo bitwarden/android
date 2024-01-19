@@ -60,6 +60,24 @@ namespace Bit.Core.Services
 
                 throw new NotAllowedError();
             }
+
+            if (!userVerified && (assertionParams.RequireUserVerification || selectedCipher.Reprompt != CipherRepromptType.None)) {
+                _logService.Info(
+                    "[Fido2Authenticator] Aborting because user verification was unsuccessful."
+                );
+
+                throw new NotAllowedError();
+            }
+
+            // if (
+            //     !userVerified &&
+            //     (params.requireUserVerification || selectedCipher.reprompt !== CipherRepromptType.None)
+            // ) {
+            //     this.logService?.warning(
+            //     `[Fido2Authenticator] Aborting because user verification was unsuccessful.`,
+            //     );
+            //     throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed);
+            // }
             
             // TODO: IMPLEMENT this
             return new Fido2AuthenticatorGetAssertionResult
