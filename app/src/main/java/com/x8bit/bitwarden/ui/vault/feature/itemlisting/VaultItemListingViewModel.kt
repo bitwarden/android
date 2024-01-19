@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -59,11 +60,18 @@ class VaultItemListingViewModel @Inject constructor(
         baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
         baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
         isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+        isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         dialogState = null,
     ),
 ) {
 
     init {
+        settingsRepository
+            .getPullToRefreshEnabledFlow()
+            .map { VaultItemListingsAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         settingsRepository
             .isIconLoadingDisabledFlow
             .onEach { sendAction(VaultItemListingsAction.Internal.IconLoadingSettingReceive(it)) }
@@ -86,12 +94,19 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.ItemClick -> handleItemClick(action)
             is VaultItemListingsAction.AddVaultItemClick -> handleAddVaultItemClick()
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
+            is VaultItemListingsAction.RefreshPull -> handleRefreshPull()
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
         }
     }
 
     //region VaultItemListing Handlers
     private fun handleRefreshClick() {
+        vaultRepository.sync()
+    }
+
+    private fun handleRefreshPull() {
+        // The Pull-To-Refresh composable is already in the refreshing state.
+        // We will reset that state when sendDataStateFlow emits later on.
         vaultRepository.sync()
     }
 
@@ -222,6 +237,10 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleInternalAction(action: VaultItemListingsAction.Internal) {
         when (action) {
+            is VaultItemListingsAction.Internal.PullToRefreshEnableReceive -> {
+                handlePullToRefreshEnableReceive(action)
+            }
+
             is VaultItemListingsAction.Internal.DeleteSendResultReceive -> {
                 handleDeleteSendResultReceive(action)
             }
@@ -234,6 +253,14 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.IconLoadingSettingReceive -> {
                 handleIconsSettingReceived(action)
             }
+        }
+    }
+
+    private fun handlePullToRefreshEnableReceive(
+        action: VaultItemListingsAction.Internal.PullToRefreshEnableReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isPullToRefreshSettingEnabled = action.isPullToRefreshEnabled)
         }
     }
 
@@ -326,10 +353,12 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
         }
+        sendEvent(VaultItemListingEvent.DismissPullToRefresh)
     }
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
+        sendEvent(VaultItemListingEvent.DismissPullToRefresh)
     }
 
     private fun vaultLoadingReceive() {
@@ -351,6 +380,7 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
         }
+        sendEvent(VaultItemListingEvent.DismissPullToRefresh)
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
@@ -413,7 +443,14 @@ data class VaultItemListingState(
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
+    private val isPullToRefreshSettingEnabled: Boolean,
 ) {
+
+    /**
+     * Indicates that the pull-to-refresh should be enabled in the UI.
+     */
+    val isPullToRefreshEnabled: Boolean
+        get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
      * Represents the current state of any dialogs on the screen.
@@ -442,17 +479,25 @@ data class VaultItemListingState(
      * Represents the specific view states for the [VaultItemListingScreen].
      */
     sealed class ViewState {
+        /**
+         * Indicates the pull-to-refresh feature should be available during the current state.
+         */
+        abstract val isPullToRefreshEnabled: Boolean
 
         /**
          * Loading state for the [VaultItemListingScreen],
          * signifying that the content is being processed.
          */
-        data object Loading : ViewState()
+        data object Loading : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = false
+        }
 
         /**
          * Represents a state where the [VaultItemListingScreen] has no items to display.
          */
-        data object NoItems : ViewState()
+        data object NoItems : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
+        }
 
         /**
          * Content state for the [VaultItemListingScreen] showing the actual content or items.
@@ -461,7 +506,9 @@ data class VaultItemListingState(
          */
         data class Content(
             val displayItemList: List<DisplayItem>,
-        ) : ViewState()
+        ) : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
+        }
 
         /**
          * Represents an error state for the [VaultItemListingScreen].
@@ -470,7 +517,9 @@ data class VaultItemListingState(
          */
         data class Error(
             val message: Text,
-        ) : ViewState()
+        ) : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
+        }
     }
 
     /**
@@ -609,6 +658,10 @@ data class VaultItemListingState(
  * Models events for the [VaultItemListingScreen].
  */
 sealed class VaultItemListingEvent {
+    /**
+     * Dismisses the pull-to-refresh indicator.
+     */
+    data object DismissPullToRefresh : VaultItemListingEvent()
 
     /**
      * Navigates to the Create Account screen.
@@ -712,9 +765,18 @@ sealed class VaultItemListingsAction {
     data class ItemClick(val id: String) : VaultItemListingsAction()
 
     /**
+     * User has triggered a pull to refresh.
+     */
+    data object RefreshPull : VaultItemListingsAction()
+
+    /**
      * Models actions that the [VaultItemListingViewModel] itself might send.
      */
     sealed class Internal : VaultItemListingsAction() {
+        /**
+         * Indicates that the pull to refresh feature toggle has changed.
+         */
+        data class PullToRefreshEnableReceive(val isPullToRefreshEnabled: Boolean) : Internal()
 
         /**
          * Indicates a result for deleting the send has been received.
