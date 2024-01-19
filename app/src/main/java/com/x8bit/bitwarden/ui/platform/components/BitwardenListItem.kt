@@ -33,7 +33,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -55,10 +55,10 @@ fun BitwardenListItem(
     label: String,
     startIcon: IconData,
     onClick: () -> Unit,
-    selectionDataList: PersistentList<SelectionItemData>,
+    selectionDataList: ImmutableList<SelectionItemData>,
     modifier: Modifier = Modifier,
     supportingLabel: String? = null,
-    trailingLabelIcons: List<IconResource> = emptyList(),
+    trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     Row(
