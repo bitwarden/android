@@ -8,12 +8,10 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
-import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import java.time.Clock
 
@@ -207,33 +205,7 @@ private fun SendView.toDisplayItem(
             },
         ),
         extraIconList = toLabelIcons(clock = clock),
-        overflowOptions = listOfNotNull(
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.edit.asText(),
-                action = VaultItemListingsAction.ItemClick(id = id.orEmpty()),
-            ),
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.copy_link.asText(),
-                action = VaultItemListingsAction.CopySendUrlClick(
-                    sendUrl = toSendUrl(baseWebSendUrl),
-                ),
-            ),
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.share_link.asText(),
-                action = VaultItemListingsAction.ShareSendUrlClick(
-                    sendUrl = toSendUrl(baseWebSendUrl),
-                ),
-            ),
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.remove_password.asText(),
-                action = VaultItemListingsAction.RemoveSendPasswordClick(sendId = id.orEmpty()),
-            )
-                .takeIf { hasPassword },
-            VaultItemListingState.DisplayItem.OverflowItem(
-                title = R.string.delete.asText(),
-                action = VaultItemListingsAction.DeleteSendClick(sendId = id.orEmpty()),
-            ),
-        ),
+        overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
     )
 
 @Suppress("MagicNumber")

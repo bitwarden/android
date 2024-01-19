@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.send.util
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -60,6 +61,49 @@ class SendViewExtensionsTest {
         assertEquals(emptyList<IconRes>(), result)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toOverflowActions should return overflow options with remove password when there is a password`() {
+        val baseWebSendUrl = "www.test.com"
+        val sendView = createMockSendView(number = 1).copy(
+            // Make sure there is a password for the remove password action
+            hasPassword = true,
+        )
+
+        val result = sendView.toOverflowActions(baseWebSendUrl = baseWebSendUrl)
+
+        assertEquals(ALL_SEND_OVERFLOW_OPTIONS, result)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toOverflowActions should return overflow options without Remove Password when there is no password`() {
+        val baseWebSendUrl = "www.test.com"
+        val sendView = createMockSendView(number = 1).copy(
+            // Make sure there is no password for the remove password action
+            hasPassword = false,
+        )
+
+        val result = sendView.toOverflowActions(baseWebSendUrl = baseWebSendUrl)
+
+        assertEquals(
+            ALL_SEND_OVERFLOW_OPTIONS.filter {
+                it !is ListingItemOverflowAction.SendAction.RemovePasswordClick
+            },
+            result,
+        )
+    }
+
+    @Test
+    fun `toOverflowActions should return no overflow options when the id is null`() {
+        val baseWebSendUrl = "www.test.com"
+        val sendView = createMockSendView(number = 1).copy(id = null)
+
+        val result = sendView.toOverflowActions(baseWebSendUrl = baseWebSendUrl)
+
+        assertEquals(emptyList<ListingItemOverflowAction>(), result)
+    }
+
     @Test
     fun `toSendUrl should create an appropriate url`() {
         val sendView = createMockSendView(number = 1)
@@ -92,3 +136,16 @@ private val ALL_SEND_STATUS_ICONS: List<IconRes> = listOf(
         contentDescription = SendStatusIcon.PENDING_DELETE.contentDescription,
     ),
 )
+
+private val ALL_SEND_OVERFLOW_OPTIONS: List<ListingItemOverflowAction> =
+    listOf(
+        ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-1"),
+        ListingItemOverflowAction.SendAction.CopyUrlClick(
+            sendUrl = "www.test.commockAccessId-1/mockKey-1",
+        ),
+        ListingItemOverflowAction.SendAction.ShareUrlClick(
+            sendUrl = "www.test.commockAccessId-1/mockKey-1",
+        ),
+        ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-1"),
+        ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-1"),
+    )

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers
 
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingViewModel
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 
 /**
  * A collection of handler functions for managing actions within the context of viewing a list of
@@ -15,7 +16,7 @@ data class VaultItemListingHandlers(
     val refreshClick: () -> Unit,
     val syncClick: () -> Unit,
     val lockClick: () -> Unit,
-    val overflowItemClick: (action: VaultItemListingsAction) -> Unit,
+    val overflowItemClick: (action: ListingItemOverflowAction) -> Unit,
 ) {
     companion object {
         /**
@@ -37,7 +38,9 @@ data class VaultItemListingHandlers(
                 refreshClick = { viewModel.trySendAction(VaultItemListingsAction.RefreshClick) },
                 syncClick = { viewModel.trySendAction(VaultItemListingsAction.SyncClick) },
                 lockClick = { viewModel.trySendAction(VaultItemListingsAction.LockClick) },
-                overflowItemClick = { viewModel.trySendAction(it) },
+                overflowItemClick = {
+                    viewModel.trySendAction(VaultItemListingsAction.OverflowOptionClick(it))
+                },
             )
     }
 }

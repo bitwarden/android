@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 
 /**
  * Create a mock [VaultItemListingState.DisplayItem] with a given [number].
@@ -90,33 +90,16 @@ fun createMockDisplayItemForSend(
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                     ),
                 ),
-                overflowOptions = listOfNotNull(
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.edit.asText(),
-                        action = VaultItemListingsAction.ItemClick(id = "mockId-$number"),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
                     ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.copy_link.asText(),
-                        action = VaultItemListingsAction.CopySendUrlClick(
-                            sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                        ),
+                    ListingItemOverflowAction.SendAction.ShareUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
                     ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.share_link.asText(),
-                        action = VaultItemListingsAction.ShareSendUrlClick(
-                            sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                        ),
-                    ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.remove_password.asText(),
-                        action = VaultItemListingsAction.RemoveSendPasswordClick(
-                            sendId = "mockId-$number",
-                        ),
-                    ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.delete.asText(),
-                        action = VaultItemListingsAction.DeleteSendClick(sendId = "mockId-$number"),
-                    ),
+                    ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
+                    ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
             )
         }
@@ -137,33 +120,16 @@ fun createMockDisplayItemForSend(
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                     ),
                 ),
-                overflowOptions = listOfNotNull(
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.edit.asText(),
-                        action = VaultItemListingsAction.ItemClick(id = "mockId-$number"),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
                     ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.copy_link.asText(),
-                        action = VaultItemListingsAction.CopySendUrlClick(
-                            sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                        ),
+                    ListingItemOverflowAction.SendAction.ShareUrlClick(
+                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
                     ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.share_link.asText(),
-                        action = VaultItemListingsAction.ShareSendUrlClick(
-                            sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
-                        ),
-                    ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.remove_password.asText(),
-                        action = VaultItemListingsAction.RemoveSendPasswordClick(
-                            sendId = "mockId-$number",
-                        ),
-                    ),
-                    VaultItemListingState.DisplayItem.OverflowItem(
-                        title = R.string.delete.asText(),
-                        action = VaultItemListingsAction.DeleteSendClick(sendId = "mockId-$number"),
-                    ),
+                    ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
+                    ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
             )
         }
