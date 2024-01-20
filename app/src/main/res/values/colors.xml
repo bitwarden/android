@@ -33,6 +33,7 @@
     <color name="on_error_container">@color/red_410002</color>
     <color name="surface_dim">@color/grey_DBD9DD</color>
     <color name="surface">@color/grey_FBF8FD</color>
+    <color name="surface_variant">@color/grey_DDE3EA</color>
     <color name="surface_bright">@color/grey_FBF8FD</color>
     <color name="surface_container_lowest">@color/white_FFFFFF</color>
     <color name="surface_container_low">@color/white_F5F3F7</color>
@@ -82,6 +83,7 @@
     <color name="dark_on_error_container">@color/red_FFDAD6</color>
     <color name="dark_surface_dim">@color/grey_131316</color>
     <color name="dark_surface">@color/grey_131316</color>
+    <color name="dark_surface_variant">@color/grey_45464F</color>
     <color name="dark_surface_bright">@color/grey_39393C</color>
     <color name="dark_surface_container_lowest">@color/grey_0D0E11</color>
     <color name="dark_surface_container_low">@color/grey_1B1B1F</color>
