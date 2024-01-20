@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -47,6 +49,18 @@ class EnterpriseSignOnViewModel @Inject constructor(
     private fun handleLogInClicked() {
         // TODO BIT-816: submit request for single sign on
         sendEvent(EnterpriseSignOnEvent.ShowToast("Not yet implemented."))
+
+        if (state.orgIdentifierInput.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        R.string.validation_field_required.asText(
+                            R.string.org_identifier.asText(),
+                        ),
+                    ),
+                )
+            }
+        }
     }
 
     private fun handleOrgIdentifierInputChanged(
