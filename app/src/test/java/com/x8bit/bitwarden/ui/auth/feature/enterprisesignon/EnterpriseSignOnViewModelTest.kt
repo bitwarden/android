@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import kotlinx.coroutines.test.runTest
@@ -67,9 +68,31 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        R.string.validation_field_required.asText(
+                        message = R.string.validation_field_required.asText(
                             R.string.org_identifier.asText(),
                         ),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+            assertEquals(
+                EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LogInClick with no Internet should emit ShowToast and show error dialog`() = runTest {
+        val viewModel = createViewModel(isNetworkConnected = false)
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -141,7 +164,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         savedStateHandle: SavedStateHandle = SavedStateHandle(
             initialState = mapOf("state" to initialState),
         ),
+        isNetworkConnected: Boolean = true,
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(
+        networkConnectionManager = FakeNetworkConnectionManager(isNetworkConnected),
         savedStateHandle = savedStateHandle,
     )
 

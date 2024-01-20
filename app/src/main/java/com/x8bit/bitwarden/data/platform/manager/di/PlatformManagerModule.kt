@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.di
 
+import android.app.Application
 import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -12,6 +13,8 @@ import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
@@ -78,6 +81,14 @@ object PlatformManagerModule {
             refreshAuthenticator = refreshAuthenticator,
             dispatcherManager = dispatcherManager,
         )
+
+    @Provides
+    @Singleton
+    fun provideNetworkConnectionManager(
+        application: Application,
+    ): NetworkConnectionManager = NetworkConnectionManagerImpl(
+        context = application.applicationContext,
+    )
 
     @Provides
     @Singleton

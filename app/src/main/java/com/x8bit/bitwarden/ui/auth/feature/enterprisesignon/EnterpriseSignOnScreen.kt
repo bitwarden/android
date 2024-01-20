@@ -68,7 +68,7 @@ fun EnterpriseSignOnScreen(
         is EnterpriseSignOnState.DialogState.Error -> {
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = dialog.title ?: R.string.an_error_has_occurred.asText(),
                     message = dialog.message,
                 ),
                 onDismissRequest = remember(viewModel) {
