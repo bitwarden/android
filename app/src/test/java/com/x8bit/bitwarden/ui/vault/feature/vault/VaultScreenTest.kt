@@ -60,6 +60,7 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToVaultEditItemId: String? = null
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
+    private var onNavigateToVerificationCodeScreen = false
     private val intentManager = mockk<IntentManager>(relaxed = true)
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
@@ -79,6 +80,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
+                onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 intentManager = intentManager,
             )
         }
@@ -531,6 +533,30 @@ class VaultScreenTest : BaseComposeTest() {
             .performClick()
 
         verify { viewModel.trySendAction(VaultAction.TryAgainClick) }
+    }
+
+    @Test
+    fun `verification code click should call VerificationCodesClick `() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    totpItemsCount = 3,
+                ),
+                isPremium = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Verification codes")
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAction.VerificationCodesClick) }
+    }
+
+    @Test
+    fun `NavigateToVerificationCodeScreen event should call onNavigateToVerificationCodeScreen`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToVerificationCodeScreen)
+        assertTrue(onNavigateToVerificationCodeScreen)
     }
 
     @Test
