@@ -36,7 +36,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
@@ -70,6 +69,7 @@ fun VaultScreen(
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
+    onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -96,8 +96,7 @@ fun VaultScreen(
             }
 
             is VaultEvent.NavigateToVerificationCodeScreen -> {
-                // TODO Add Verification codes detail screen (BIT-1338)
-                showNotYetImplementedToast(context = context)
+                onNavigateToVerificationCodeScreen()
             }
 
             is VaultEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.itemId)

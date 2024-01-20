@@ -11,8 +11,10 @@ const val VAULT_ROUTE: String = "vault"
 /**
  * Add vault destination to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultDestination(
     onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
@@ -26,6 +28,7 @@ fun NavGraphBuilder.vaultDestination(
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultItemListingScreen = onNavigateToVaultItemListingScreen,
+            onNavigateToVerificationCodeScreen = onNavigateToVerificationCodeScreen,
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         )
     }

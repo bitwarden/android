@@ -6,6 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
+import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
+import com.x8bit.bitwarden.ui.vault.feature.verificationcode.vaultVerificationCodeDestination
 
 const val VAULT_GRAPH_ROUTE: String = "vault_graph"
 
@@ -28,12 +30,21 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultItemListingScreen = { navController.navigateToVaultItemListing(it) },
+            onNavigateToVerificationCodeScreen = {
+                navController.navigateToVerificationCodeScreen()
+            },
+
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
+        )
+
+        vaultVerificationCodeDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
         )
     }
 }
