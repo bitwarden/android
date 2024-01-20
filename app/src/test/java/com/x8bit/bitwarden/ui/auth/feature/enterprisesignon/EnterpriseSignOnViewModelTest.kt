@@ -45,42 +45,59 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with valid organization should emit ShowToast`() = runTest {
-        val state = DEFAULT_STATE.copy(orgIdentifierInput = "Test")
-        val viewModel = createViewModel(state)
-        viewModel.eventFlow.test {
+    fun `LogInClick with valid organization should emit ShowToast, show a loading dialog, and then hide the dialog`() =
+        runTest {
+            val state = DEFAULT_STATE.copy(orgIdentifierInput = "Test")
+            val viewModel = createViewModel(state)
             viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
-            assertEquals(state, viewModel.stateFlow.value)
-            assertEquals(
-                EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
-                awaitItem(),
-            )
+            viewModel.eventFlow.test {
+                assertEquals(
+                    EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
+                    awaitItem(),
+                )
+            }
+            viewModel.stateFlow.test {
+                assertEquals(
+                    state.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    state.copy(dialogState = null),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with invalid organization should emit ShowToast and show error dialog`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = EnterpriseSignOnState.DialogState.Error(
-                        message = R.string.validation_field_required.asText(
-                            R.string.org_identifier.asText(),
+    fun `LogInClick with invalid organization should emit ShowToast and show error dialog`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            message = R.string.validation_field_required.asText(
+                                R.string.org_identifier.asText(),
+                            ),
                         ),
                     ),
-                ),
-                viewModel.stateFlow.value,
-            )
-            assertEquals(
-                EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
-                awaitItem(),
-            )
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(
+                    EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
