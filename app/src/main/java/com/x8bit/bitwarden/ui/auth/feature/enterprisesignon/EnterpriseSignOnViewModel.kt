@@ -2,13 +2,16 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -74,6 +77,22 @@ class EnterpriseSignOnViewModel @Inject constructor(
                     ),
                 )
             }
+            return
+        }
+
+        viewModelScope.launch {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Loading(
+                        R.string.logging_in.asText(),
+                    ),
+                )
+            }
+            // TODO The delay and hide are temporary until the actual SSO flow is implemented (see
+            //  BIT-816)
+            @Suppress("MagicNumber")
+            delay(2000)
+            mutableStateFlow.update { it.copy(dialogState = null) }
         }
     }
 
