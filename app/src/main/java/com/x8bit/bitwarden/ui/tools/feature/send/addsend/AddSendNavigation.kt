@@ -17,10 +17,8 @@ private const val EDIT_ITEM_ID: String = "edit_send_id"
 private const val ADD_SEND_ITEM_PREFIX: String = "add_send_item"
 private const val ADD_SEND_ITEM_TYPE: String = "add_send_item_type"
 
-private const val ADD_SEND_ROUTE: String =
+const val ADD_SEND_ROUTE: String =
     "$ADD_SEND_ITEM_PREFIX/{$ADD_SEND_ITEM_TYPE}?$EDIT_ITEM_ID={$EDIT_ITEM_ID}"
-
-const val ADD_SEND_AS_ROOT_ROUTE: String = ADD_SEND_ITEM_PREFIX
 
 /**
  * Class to retrieve send add & edit arguments from the [SavedStateHandle].
@@ -30,10 +28,9 @@ data class AddSendArgs(
     val sendAddType: AddSendType,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
-        sendAddType = when (savedStateHandle.get<String>(ADD_SEND_ITEM_TYPE)) {
+        sendAddType = when (requireNotNull(savedStateHandle.get<String>(ADD_SEND_ITEM_TYPE))) {
             ADD_TYPE -> AddSendType.AddItem
             EDIT_TYPE -> AddSendType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
-            null -> AddSendType.AddItem
             else -> throw IllegalStateException("Unknown VaultAddEditType.")
         },
     )
@@ -41,28 +38,22 @@ data class AddSendArgs(
 
 /**
  * Add the new send screen to the nav graph.
+ *
+ * The [defaultType] will be relevant in cases where the Add Send screen needs to be added as a
+ * start destination of a graph.
  */
 fun NavGraphBuilder.addSendDestination(
     onNavigateBack: () -> Unit,
+    defaultType: AddSendType = AddSendType.AddItem,
 ) {
     composableWithSlideTransitions(
         route = ADD_SEND_ROUTE,
         arguments = listOf(
-            navArgument(ADD_SEND_ITEM_TYPE) { type = NavType.StringType },
+            navArgument(ADD_SEND_ITEM_TYPE) {
+                type = NavType.StringType
+                defaultValue = defaultType.toTypeString()
+            },
         ),
-    ) {
-        AddSendScreen(onNavigateBack = onNavigateBack)
-    }
-}
-
-/**
- * Add the new send screen to the nav graph as a root destination for a nested graph.
- */
-fun NavGraphBuilder.addSendAsRootDestination(
-    onNavigateBack: () -> Unit,
-) {
-    composableWithSlideTransitions(
-        route = ADD_SEND_AS_ROOT_ROUTE,
     ) {
         AddSendScreen(onNavigateBack = onNavigateBack)
     }
