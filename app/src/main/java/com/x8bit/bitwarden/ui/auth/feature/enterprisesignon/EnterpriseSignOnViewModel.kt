@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -18,6 +19,7 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class EnterpriseSignOnViewModel @Inject constructor(
+    private val networkConnectionManager: NetworkConnectionManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnterpriseSignOnState, EnterpriseSignOnEvent, EnterpriseSignOnAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -50,11 +52,23 @@ class EnterpriseSignOnViewModel @Inject constructor(
         // TODO BIT-816: submit request for single sign on
         sendEvent(EnterpriseSignOnEvent.ShowToast("Not yet implemented."))
 
+        if (!networkConnectionManager.isNetworkConnected) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
+                    ),
+                )
+            }
+            return
+        }
+
         if (state.orgIdentifierInput.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
-                        R.string.validation_field_required.asText(
+                        message = R.string.validation_field_required.asText(
                             R.string.org_identifier.asText(),
                         ),
                     ),
@@ -83,10 +97,12 @@ data class EnterpriseSignOnState(
      */
     sealed class DialogState : Parcelable {
         /**
-         * Represents an error dialog with the given [message].
+         * Represents an error dialog with the given [message] and optional [title]. It no title
+         * is specified a default will be provided.
          */
         @Parcelize
         data class Error(
+            val title: Text? = null,
             val message: Text,
         ) : DialogState()
 
