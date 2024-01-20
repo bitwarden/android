@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import kotlinx.coroutines.test.runTest
@@ -44,11 +45,35 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `LogInClick should emit ShowToast`() = runTest {
+    fun `LogInClick with valid organization should emit ShowToast`() = runTest {
+        val state = DEFAULT_STATE.copy(orgIdentifierInput = "Test")
+        val viewModel = createViewModel(state)
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+            assertEquals(state, viewModel.stateFlow.value)
+            assertEquals(
+                EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LogInClick with invalid organization should emit ShowToast and show error dialog`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
-            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        R.string.validation_field_required.asText(
+                            R.string.org_identifier.asText(),
+                        ),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
             assertEquals(
                 EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
                 awaitItem(),
