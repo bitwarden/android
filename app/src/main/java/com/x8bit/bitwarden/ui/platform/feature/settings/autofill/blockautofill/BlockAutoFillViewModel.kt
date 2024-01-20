@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -13,15 +15,32 @@ private const val KEY_STATE = "state"
  * View model for the blocked autofill URIs screen.
  */
 @HiltViewModel
-@Suppress("TooManyFunctions", "LargeClass")
 class BlockAutoFillViewModel @Inject constructor(
+    private val settingsRepository: SettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<BlockAutoFillState, BlockAutoFillEvent, BlockAutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: BlockAutoFillState(
-            viewState = BlockAutoFillState.ViewState.Empty,
-        ),
+        ?: BlockAutoFillState(viewState = BlockAutoFillState.ViewState.Empty),
 ) {
+    init {
+        updateContentWithUris(
+            uris = settingsRepository.blockedAutofillUris,
+        )
+    }
+
+    private fun updateContentWithUris(uris: List<String>) {
+        mutableStateFlow.update { currentState ->
+            if (uris.isNotEmpty()) {
+                currentState.copy(
+                    viewState = BlockAutoFillState.ViewState.Content(uris.map { it }),
+                )
+            } else {
+                currentState.copy(
+                    viewState = BlockAutoFillState.ViewState.Empty,
+                )
+            }
+        }
+    }
 
     override fun handleAction(action: BlockAutoFillAction) {
         when (action) {
@@ -50,6 +69,16 @@ data class BlockAutoFillState(
      * Represents the specific view states for the [BlockAutoFillScreen].
      */
     sealed class ViewState : Parcelable {
+
+        /**
+         * Represents a content state for the [BlockAutoFillScreen].
+         *
+         * @property blockedUris The list of blocked URIs.
+         */
+        @Parcelize
+        data class Content(
+            val blockedUris: List<String> = emptyList(),
+        ) : ViewState()
 
         /**
          * Represents an empty content state for the [BlockAutoFillScreen].
