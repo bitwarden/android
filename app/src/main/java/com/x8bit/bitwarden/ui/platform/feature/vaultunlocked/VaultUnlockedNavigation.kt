@@ -14,8 +14,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorModal
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ADD_SEND_AS_ROOT_ROUTE
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendAsRootDestination
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ADD_SEND_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
@@ -125,9 +124,12 @@ fun NavGraphBuilder.vaultUnlockedGraphForNewSend(
     navController: NavController,
 ) {
     navigation(
-        startDestination = ADD_SEND_AS_ROOT_ROUTE,
+        startDestination = ADD_SEND_ROUTE,
         route = VAULT_UNLOCKED_FOR_NEW_SEND_GRAPH_ROUTE,
     ) {
-        addSendAsRootDestination(onNavigateBack = { navController.popBackStack() })
+        addSendDestination(
+            defaultType = AddSendType.AddItem,
+            onNavigateBack = { navController.popBackStack() },
+        )
     }
 }
