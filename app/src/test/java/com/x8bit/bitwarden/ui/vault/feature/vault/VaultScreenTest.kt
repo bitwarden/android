@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -61,7 +61,7 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
     private var onNavigateToVerificationCodeScreen = false
-    private val intentManager = mockk<IntentManager>(relaxed = true)
+    private val exitManager = mockk<ExitManager>(relaxed = true)
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -81,7 +81,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
-                intentManager = intentManager,
+                exitManager = exitManager,
             )
         }
     }
@@ -646,9 +646,9 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateOutOfApp event should call exitApplication on the IntentManager`() {
+    fun `NavigateOutOfApp event should call exitApplication on the ExitManager`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateOutOfApp)
-        verify { intentManager.exitApplication() }
+        verify { exitManager.exitApplication() }
     }
 
     @Test

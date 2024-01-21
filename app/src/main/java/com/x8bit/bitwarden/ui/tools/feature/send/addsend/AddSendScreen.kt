@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -33,9 +34,12 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
@@ -49,6 +53,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 @Composable
 fun AddSendScreen(
     viewModel: AddSendViewModel = hiltViewModel(),
+    exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateBack: () -> Unit,
@@ -59,13 +64,20 @@ fun AddSendScreen(
     val resources = context.resources
 
     val fileChooserLauncher = intentManager.launchActivityForResult { activityResult ->
-        intentManager.getFileDataFromIntent(activityResult)?.let {
+        intentManager.getFileDataFromActivityResult(activityResult)?.let {
             viewModel.trySendAction(AddSendAction.FileChoose(it))
         }
     }
 
+    BackHandler(
+        onBack = remember(viewModel) {
+            { viewModel.trySendAction(AddSendAction.CloseClick) }
+        },
+    )
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            AddSendEvent.ExitApp -> exitManager.exitApplication()
+
             is AddSendEvent.NavigateBack -> onNavigateBack()
 
             is AddSendEvent.ShowChooserSheet -> {
@@ -115,11 +127,14 @@ fun AddSendScreen(
         topBar = {
             BitwardenTopAppBar(
                 title = state.screenDisplayName(),
-                navigationIcon = painterResource(id = R.drawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(AddSendAction.CloseClick) }
-                },
+                navigationIcon = NavigationIcon(
+                    navigationIcon = painterResource(id = R.drawable.ic_close),
+                    navigationIconContentDescription = stringResource(id = R.string.close),
+                    onNavigationIconClick = remember(viewModel) {
+                        { viewModel.trySendAction(AddSendAction.CloseClick) }
+                    },
+                )
+                    .takeUnless { state.isShared },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(
@@ -174,6 +189,7 @@ fun AddSendScreen(
             is AddSendState.ViewState.Content -> AddSendContent(
                 state = viewState,
                 isAddMode = state.isAddMode,
+                isShared = state.isShared,
                 addSendHandlers = remember(viewModel) { AddSendHandlers.create(viewModel) },
                 permissionsManager = permissionsManager,
                 modifier = modifier,

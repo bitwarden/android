@@ -51,16 +51,6 @@ class IntentManagerImpl(
     private val context: Context,
     private val clock: Clock = Clock.systemDefaultZone(),
 ) : IntentManager {
-
-    override fun exitApplication() {
-        // Note that we fire an explicit Intent rather than try to cast to an Activity and call
-        // finish to avoid assumptions about what kind of context we have.
-        val intent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_HOME)
-        }
-        startActivity(intent)
-    }
-
     override fun startActivity(intent: Intent) {
         context.startActivity(intent)
     }
@@ -116,11 +106,16 @@ class IntentManagerImpl(
         startActivity(Intent.createChooser(sendIntent, null))
     }
 
-    override fun getFileDataFromIntent(activityResult: ActivityResult): IntentManager.FileData? {
+    override fun getFileDataFromActivityResult(
+        activityResult: ActivityResult,
+    ): IntentManager.FileData? {
         if (activityResult.resultCode != Activity.RESULT_OK) return null
         val uri = activityResult.data?.data
         return if (uri != null) getLocalFileData(uri) else getCameraFileData()
     }
+
+    override fun getFileDataFromIntent(intent: Intent): IntentManager.FileData? =
+        intent.clipData?.getItemAt(0)?.uri?.let { getLocalFileData(it) }
 
     @Suppress("ReturnCount")
     override fun getShareDataFromIntent(intent: Intent): IntentManager.ShareData? {
@@ -133,12 +128,7 @@ class IntentManagerImpl(
                 text = title,
             )
         } else {
-            getFileDataFromIntent(
-                ActivityResult(
-                    Activity.RESULT_OK,
-                    intent,
-                ),
-            )
+            getFileDataFromIntent(intent = intent)
                 ?.let {
                     IntentManager.ShareData.FileSend(
                         fileData = it,

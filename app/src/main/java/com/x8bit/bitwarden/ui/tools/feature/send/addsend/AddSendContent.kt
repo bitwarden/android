@@ -55,6 +55,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 fun AddSendContent(
     state: AddSendState.ViewState.Content,
     isAddMode: Boolean,
+    isShared: Boolean,
     addSendHandlers: AddSendHandlers,
     permissionsManager: PermissionsManager,
     modifier: Modifier = Modifier,
@@ -77,7 +78,7 @@ fun AddSendContent(
             onValueChange = addSendHandlers.onNamChange,
         )
 
-        if (isAddMode) {
+        if (isAddMode && !isShared) {
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.type),
@@ -116,7 +117,25 @@ fun AddSendContent(
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                if (isAddMode) {
+                if (isShared) {
+                    Text(
+                        text = type.name.orEmpty(),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(id = R.string.max_file_size),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                } else if (isAddMode) {
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         text = type.name ?: stringResource(id = R.string.no_file_chosen),

@@ -23,6 +23,7 @@ import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
@@ -45,6 +46,9 @@ class AddSendScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
 
+    private val exitManager: ExitManager = mockk(relaxed = true) {
+        every { exitApplication() } just runs
+    }
     private val permissionsManager = FakePermissionManager()
     private val intentManager: IntentManager = mockk(relaxed = true) {
         every { shareText(any()) } just runs
@@ -61,6 +65,7 @@ class AddSendScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             AddSendScreen(
                 viewModel = viewModel,
+                exitManager = exitManager,
                 intentManager = intentManager,
                 permissionsManager = permissionsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -72,6 +77,14 @@ class AddSendScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AddSendEvent.NavigateBack)
         assert(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `ExitApp should call exitApplication on ExitManager`() {
+        mutableEventFlow.tryEmit(AddSendEvent.ExitApp)
+        verify {
+            exitManager.exitApplication()
+        }
     }
 
     @Test
@@ -89,6 +102,14 @@ class AddSendScreenTest : BaseComposeTest() {
             .onNodeWithContentDescription("Close")
             .performClick()
         verify { viewModel.trySendAction(AddSendAction.CloseClick) }
+    }
+
+    @Test
+    fun `display navigation icon according to state`() {
+        mutableStateFlow.update { it.copy(isShared = false) }
+        composeTestRule.onNodeWithContentDescription("Close").assertIsDisplayed()
+        mutableStateFlow.update { it.copy(isShared = true) }
+        composeTestRule.onNodeWithContentDescription("Close").assertDoesNotExist()
     }
 
     @Test
@@ -282,7 +303,25 @@ class AddSendScreenTest : BaseComposeTest() {
 
     @Test
     fun `segmented buttons should appear based on state`() {
-        mutableStateFlow.update { it.copy(addSendType = AddSendType.AddItem) }
+        mutableStateFlow.update { it.copy(isShared = true) }
+        composeTestRule
+            .onNodeWithText("Type")
+            .assertDoesNotExist()
+        composeTestRule
+            .onAllNodesWithText("File")
+            .filterToOne(!isEditableText)
+            .assertDoesNotExist()
+        composeTestRule
+            .onAllNodesWithText("Text")
+            .filterToOne(!isEditableText)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                isShared = false,
+                addSendType = AddSendType.AddItem,
+            )
+        }
         composeTestRule
             .onNodeWithText("Type")
             .performScrollTo()
@@ -889,6 +928,8 @@ class AddSendScreenTest : BaseComposeTest() {
             addSendType = AddSendType.AddItem,
             viewState = DEFAULT_VIEW_STATE,
             dialogState = null,
+            shouldFinishOnComplete = false,
+            isShared = false,
             isPremiumUser = false,
             baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
         )

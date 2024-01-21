@@ -11,12 +11,6 @@ import androidx.compose.runtime.Composable
  */
 @Suppress("TooManyFunctions")
 interface IntentManager {
-
-    /**
-     * Starts an intent to exit the application.
-     */
-    fun exitApplication()
-
     /**
      * Start an activity using the provided [Intent].
      */
@@ -60,7 +54,12 @@ interface IntentManager {
     /**
      * Processes the [activityResult] and attempts to get the relevant file data from it.
      */
-    fun getFileDataFromIntent(activityResult: ActivityResult): FileData?
+    fun getFileDataFromActivityResult(activityResult: ActivityResult): FileData?
+
+    /**
+     * Processes the [intent] and attempts to get the relevant file data from it.
+     */
+    fun getFileDataFromIntent(intent: Intent): FileData?
 
     /**
      * Processes the [intent] and attempts to derive [ShareData] information from it.
@@ -97,7 +96,7 @@ interface IntentManager {
          * The data required to create a new File Send.
          */
         data class FileSend(
-            val fileData: IntentManager.FileData,
+            val fileData: FileData,
         ) : ShareData()
     }
 }

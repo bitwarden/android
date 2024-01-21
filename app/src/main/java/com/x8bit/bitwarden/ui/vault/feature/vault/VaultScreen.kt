@@ -51,8 +51,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalExitManager
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
@@ -72,7 +72,7 @@ fun VaultScreen(
     onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
-    intentManager: IntentManager = LocalIntentManager.current,
+    exitManager: ExitManager = LocalExitManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -107,7 +107,7 @@ fun VaultScreen(
                 onNavigateToVaultItemListingScreen(event.itemListingType)
             }
 
-            VaultEvent.NavigateOutOfApp -> intentManager.exitApplication()
+            VaultEvent.NavigateOutOfApp -> exitManager.exitApplication()
             is VaultEvent.ShowToast -> {
                 Toast
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
