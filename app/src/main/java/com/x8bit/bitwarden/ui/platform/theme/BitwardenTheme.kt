@@ -23,6 +23,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -45,6 +47,7 @@ fun BitwardenTheme(
 
     // Get the current scheme
     val context = LocalContext.current
+    val activity = context as Activity
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -76,8 +79,9 @@ fun BitwardenTheme(
     CompositionLocalProvider(
         LocalNonMaterialColors provides nonMaterialColors,
         LocalNonMaterialTypography provides nonMaterialTypography,
-        LocalPermissionsManager provides PermissionsManagerImpl(context as Activity),
+        LocalPermissionsManager provides PermissionsManagerImpl(activity),
         LocalIntentManager provides IntentManagerImpl(context),
+        LocalExitManager provides ExitManagerImpl(activity),
     ) {
         // Set overall theme based on color scheme and typography settings
         MaterialTheme(
@@ -165,6 +169,13 @@ private fun lightColorScheme(context: Context): ColorScheme =
 @ColorRes
 private fun Int.toColor(context: Context): Color =
     Color(context.getColor(this))
+
+/**
+ * Provides access to the exit manager throughout the app.
+ */
+val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocalOf {
+    error("CompositionLocal ExitManager not present")
+}
 
 /**
  * Provides access to the intent manager throughout the app.

@@ -24,6 +24,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.shouldFinishOnComplete
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendName
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
@@ -54,7 +57,7 @@ private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 @HiltViewModel
 class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    authRepo: AuthRepository,
+    private val authRepo: AuthRepository,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
@@ -62,13 +65,18 @@ class AddSendViewModel @Inject constructor(
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val addSendType = AddSendArgs(savedStateHandle).sendAddType
+        // Check to see if we are navigating here from an external source
+        val specialCircumstance = authRepo.specialCircumstance
+        val shareSendType = specialCircumstance.toSendType()
+        val sendAddType = AddSendArgs(savedStateHandle).sendAddType
         AddSendState(
-            addSendType = addSendType,
-            viewState = when (addSendType) {
+            shouldFinishOnComplete = specialCircumstance.shouldFinishOnComplete(),
+            isShared = shareSendType != null,
+            addSendType = sendAddType,
+            viewState = when (sendAddType) {
                 AddSendType.AddItem -> AddSendState.ViewState.Content(
                     common = AddSendState.ViewState.Content.Common(
-                        name = "",
+                        name = specialCircumstance.toSendName().orEmpty(),
                         currentAccessCount = null,
                         maxAccessCount = null,
                         passwordInput = "",
@@ -85,7 +93,7 @@ class AddSendViewModel @Inject constructor(
                         sendUrl = null,
                         hasPassword = false,
                     ),
-                    selectedType = AddSendState.ViewState.Content.SendType.Text(
+                    selectedType = shareSendType ?: AddSendState.ViewState.Content.SendType.Text(
                         input = "",
                         isHideByDefaultChecked = false,
                     ),
@@ -179,12 +187,17 @@ class AddSendViewModel @Inject constructor(
 
             is CreateSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(AddSendEvent.NavigateBack)
-                sendEvent(
-                    AddSendEvent.ShowShareSheet(
-                        message = result.sendView.toSendUrl(state.baseWebSendUrl),
-                    ),
-                )
+                if (state.isShared) {
+                    navigateBack()
+                    clipboardManager.setText(result.sendView.toSendUrl(state.baseWebSendUrl))
+                } else {
+                    navigateBack()
+                    sendEvent(
+                        AddSendEvent.ShowShareSheet(
+                            message = result.sendView.toSendUrl(state.baseWebSendUrl),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -209,7 +222,7 @@ class AddSendViewModel @Inject constructor(
 
             is UpdateSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(AddSendEvent.NavigateBack)
+                navigateBack()
                 sendEvent(
                     AddSendEvent.ShowShareSheet(
                         message = result.sendView.toSendUrl(state.baseWebSendUrl),
@@ -236,7 +249,7 @@ class AddSendViewModel @Inject constructor(
 
             is DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(AddSendEvent.NavigateBack)
+                navigateBack()
                 sendEvent(AddSendEvent.ShowToast(message = R.string.send_deleted.asText()))
             }
         }
@@ -421,7 +434,7 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
-    private fun handleCloseClick() = sendEvent(AddSendEvent.NavigateBack)
+    private fun handleCloseClick() = navigateBack()
 
     private fun handleDeletionDateChange(action: AddSendAction.DeletionDateChange) {
         updateCommonContent {
@@ -582,6 +595,17 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
+    private fun navigateBack() {
+        authRepo.specialCircumstance = null
+        sendEvent(
+            event = if (state.shouldFinishOnComplete) {
+                AddSendEvent.ExitApp
+            } else {
+                AddSendEvent.NavigateBack
+            },
+        )
+    }
+
     private inline fun onContent(
         crossinline block: (AddSendState.ViewState.Content) -> Unit,
     ) {
@@ -645,7 +669,9 @@ data class AddSendState(
     val addSendType: AddSendType,
     val dialogState: DialogState?,
     val viewState: ViewState,
+    val shouldFinishOnComplete: Boolean,
     val isPremiumUser: Boolean,
+    val isShared: Boolean,
     val baseWebSendUrl: String,
 ) : Parcelable {
 
@@ -783,6 +809,11 @@ data class AddSendState(
  * Models events for the new send screen.
  */
 sealed class AddSendEvent {
+    /**
+     * Closes the app.
+     */
+    data object ExitApp : AddSendEvent()
+
     /**
      * Navigate back.
      */
