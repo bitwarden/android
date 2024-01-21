@@ -31,7 +31,12 @@ interface CiphersService {
     ): Result<SyncResponseJson.Cipher>
 
     /**
-     * Attempt to delete a cipher.
+     * Attempt to hard delete a cipher.
      */
-    suspend fun deleteCipher(cipherId: String): Result<Unit>
+    suspend fun hardDeleteCipher(cipherId: String): Result<Unit>
+
+    /**
+     * Attempt to soft delete a cipher.
+     */
+    suspend fun softDeleteCipher(cipherId: String): Result<Unit>
 }

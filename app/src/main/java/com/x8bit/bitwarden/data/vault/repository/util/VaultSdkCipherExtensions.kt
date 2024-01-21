@@ -50,6 +50,37 @@ fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
     )
 
 /**
+ * Converts a Bitwarden SDK [Cipher] object to a corresponding
+ * [SyncResponseJson.Cipher] object.
+ */
+fun Cipher.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
+    SyncResponseJson.Cipher(
+        notes = notes,
+        reprompt = reprompt.toNetworkRepromptType(),
+        passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
+        type = type.toNetworkCipherType(),
+        login = login?.toEncryptedNetworkLogin(),
+        secureNote = secureNote?.toEncryptedNetworkSecureNote(),
+        folderId = folderId,
+        organizationId = organizationId,
+        identity = identity?.toEncryptedNetworkIdentity(),
+        name = name,
+        fields = fields?.toEncryptedNetworkFieldList(),
+        isFavorite = favorite,
+        card = card?.toEncryptedNetworkCard(),
+        attachments = attachments?.toNetworkAttachmentList(),
+        shouldOrganizationUseTotp = organizationUseTotp,
+        shouldEdit = edit,
+        revisionDate = ZonedDateTime.ofInstant(revisionDate, ZoneOffset.UTC),
+        creationDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
+        deletedDate = deletedDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
+        collectionIds = collectionIds,
+        id = id.orEmpty(),
+        shouldViewPassword = viewPassword,
+        key = key,
+    )
+
+/**
  * Converts a Bitwarden SDK [Card] object to a corresponding
  * [SyncResponseJson.Cipher.Card] object.
  */
@@ -160,6 +191,27 @@ private fun UriMatchType.toNetworkMatchType(): UriMatchTypeJson =
         UriMatchType.REGULAR_EXPRESSION -> UriMatchTypeJson.REGULAR_EXPRESSION
         UriMatchType.NEVER -> UriMatchTypeJson.NEVER
     }
+
+/**
+ * Converts a list of Bitwarden SDK [Attachment] objects to a corresponding
+ * [SyncResponseJson.Cipher.Attachment] list.
+ */
+private fun List<Attachment>.toNetworkAttachmentList(): List<SyncResponseJson.Cipher.Attachment> =
+    map { it.toNetworkAttachment() }
+
+/**
+ * Converts a Bitwarden SDK [Attachment] object to a corresponding
+ * [SyncResponseJson.Cipher.Attachment] object.
+ */
+private fun Attachment.toNetworkAttachment(): SyncResponseJson.Cipher.Attachment =
+    SyncResponseJson.Cipher.Attachment(
+        fileName = fileName,
+        size = size?.toInt() ?: 0,
+        sizeName = sizeName,
+        id = id,
+        url = url,
+        key = key,
+    )
 
 /**
  * Converts a Bitwarden SDK [Login] object to a corresponding

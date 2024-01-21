@@ -10,7 +10,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
@@ -97,13 +99,76 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on DismissDialogClick should clear the dialog state`() = runTest {
-            val initialState = DEFAULT_STATE.copy(dialog = VaultItemState.DialogState.Loading)
+            val initialState = DEFAULT_STATE.copy(
+                dialog = VaultItemState.DialogState.Loading(
+                    message = R.string.loading.asText(),
+                ),
+            )
             val viewModel = createViewModel(state = initialState)
             assertEquals(initialState, viewModel.stateFlow.value)
 
             viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick)
             assertEquals(initialState.copy(dialog = null), viewModel.stateFlow.value)
         }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `ConfirmDeleteClick with DeleteCipherResult Success should should ShowToast and NavigateBack`() =
+            runTest {
+                val mockCipherView = mockk<CipherView> {
+                    every { toViewState(isPremiumUser = true) } returns DEFAULT_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                coEvery {
+                    vaultRepo.softDeleteCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
+                } returns DeleteCipherResult.Success
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
+
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VaultItemEvent.ShowToast(R.string.item_soft_deleted.asText()),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        VaultItemEvent.NavigateBack,
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `ConfirmDeleteClick with DeleteCipherResult Failure should should Show generic error`() =
+            runTest {
+                val mockCipherView = mockk<CipherView> {
+                    every { toViewState(isPremiumUser = true) } returns DEFAULT_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                coEvery {
+                    vaultRepo.softDeleteCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
+                } returns DeleteCipherResult.Error
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_VIEW_STATE,
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
 
         @Test
         fun `on EditClick should do nothing when ViewState is not Content`() = runTest {
@@ -175,7 +240,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(loginState, awaitItem())
                 viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit("password"))
                 assertEquals(
-                    loginState.copy(dialog = VaultItemState.DialogState.Loading),
+                    loginState.copy(
+                        dialog = VaultItemState.DialogState.Loading(
+                            message = R.string.loading.asText(),
+                        ),
+                    ),
                     awaitItem(),
                 )
                 assertEquals(
@@ -298,7 +367,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isVisible = false,
                 )
                 val loginViewState = VaultItemState.ViewState.Content(
-                    common = createCommonContent(isEmpty = true).copy(
+                    common = createCommonContent(
+                        isEmpty = true,
+                    ).copy(
                         requiresReprompt = false,
                         customFields = listOf(hiddenField),
                     ),
@@ -333,18 +404,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     mockCipherView.toViewState(isPremiumUser = true)
                 }
             }
-
-        @Test
-        fun `on DeleteClick should emit ShowToast`() = runTest {
-            val viewModel = createViewModel(state = DEFAULT_STATE)
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
-                assertEquals(
-                    VaultItemEvent.ShowToast("Not yet implemented.".asText()),
-                    awaitItem(),
-                )
-            }
-        }
 
         @Test
         fun `on AttachmentsClick should emit NavigateToAttachments`() = runTest {
@@ -413,7 +472,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(loginState, awaitItem())
                 viewModel.trySendAction(VaultItemAction.ItemType.Login.CheckForBreachClick)
                 assertEquals(
-                    loginState.copy(dialog = VaultItemState.DialogState.Loading),
+                    loginState.copy(
+                        dialog = VaultItemState.DialogState.Loading(
+                            message = R.string.loading.asText(),
+                        ),
+                    ),
                     awaitItem(),
                 )
                 assertEquals(
@@ -864,6 +927,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     ),
                 ),
                 requiresReprompt = true,
+                currentCipher = createMockCipherView(number = 1),
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =

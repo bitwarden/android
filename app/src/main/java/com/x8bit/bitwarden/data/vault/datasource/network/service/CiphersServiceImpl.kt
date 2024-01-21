@@ -45,6 +45,9 @@ class CiphersServiceImpl constructor(
             body = body,
         )
 
-    override suspend fun deleteCipher(cipherId: String): Result<Unit> =
-        ciphersApi.deleteCipher(cipherId = cipherId)
+    override suspend fun hardDeleteCipher(cipherId: String): Result<Unit> =
+        ciphersApi.hardDeleteCipher(cipherId = cipherId)
+
+    override suspend fun softDeleteCipher(cipherId: String): Result<Unit> =
+        ciphersApi.softDeleteCipher(cipherId = cipherId)
 }

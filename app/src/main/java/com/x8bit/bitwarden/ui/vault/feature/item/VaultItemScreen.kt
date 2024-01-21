@@ -15,7 +15,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -27,7 +30,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -37,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -62,6 +65,11 @@ fun VaultItemScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
+    val confirmDeleteClickAction = remember(viewModel) {
+        { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
+    }
+    var pendingDeleteCipher by rememberSaveable { mutableStateOf(false) }
+
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultItemEvent.NavigateBack -> onNavigateBack()
@@ -103,6 +111,25 @@ fun VaultItemScreen(
         },
     )
 
+    if (pendingDeleteCipher) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete),
+            message = stringResource(id = R.string.do_you_really_want_to_soft_delete_cipher),
+            confirmButtonText = stringResource(id = R.string.ok),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                pendingDeleteCipher = false
+                confirmDeleteClickAction()
+            },
+            onDismissClick = {
+                pendingDeleteCipher = false
+            },
+            onDismissRequest = {
+                pendingDeleteCipher = false
+            },
+        )
+    }
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
@@ -123,9 +150,7 @@ fun VaultItemScreen(
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.delete),
-                                onClick = remember(viewModel) {
-                                    { viewModel.trySendAction(VaultItemAction.Common.DeleteClick) }
-                                },
+                                onClick = { pendingDeleteCipher = true },
                             ),
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.attachments),
@@ -213,8 +238,8 @@ private fun VaultItemDialogs(
             onDismissRequest = onDismissRequest,
         )
 
-        VaultItemState.DialogState.Loading -> BitwardenLoadingDialog(
-            visibilityState = LoadingDialogState.Shown(text = R.string.loading.asText()),
+        is VaultItemState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(text = dialog.message),
         )
 
         VaultItemState.DialogState.MasterPasswordDialog -> {

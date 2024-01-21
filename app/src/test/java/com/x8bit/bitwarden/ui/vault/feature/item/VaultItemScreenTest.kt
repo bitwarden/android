@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
@@ -23,6 +24,7 @@ import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -156,7 +158,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.Loading)
+            it.copy(dialog = VaultItemState.DialogState.Loading(R.string.loading.asText()))
         }
 
         composeTestRule
@@ -558,21 +560,74 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Delete option menu click should send DeleteClick action`() {
+    fun `menu Delete option click should send show deletion confirmation dialog`() {
         // Confirm dropdown version of item is absent
         composeTestRule
             .onAllNodesWithText("Delete")
             .filter(hasAnyAncestor(isPopup()))
             .assertCountEquals(0)
         // Open the overflow menu
-        composeTestRule.onNodeWithContentDescription("More").performClick()
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
         // Click on the delete item in the dropdown
         composeTestRule
             .onAllNodesWithText("Delete")
             .filterToOne(hasAnyAncestor(isPopup()))
             .performClick()
+
+        composeTestRule
+            .onNodeWithText("Do you really want to send to the trash?")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Delete dialog cancel click should hide deletion confirmation menu`() {
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+        // Click on the delete item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Do you really want to send to the trash?")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Do you really want to send to the trash?")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `Delete dialog ok click should send ConfirmDeleteClick`() {
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+        // Click on the delete item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Do you really want to send to the trash?")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
         verify {
-            viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
         }
     }
 

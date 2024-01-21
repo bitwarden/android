@@ -162,7 +162,15 @@ interface VaultRepository : VaultLockManager {
     /**
      * Attempt to delete a cipher.
      */
-    suspend fun deleteCipher(cipherId: String): DeleteCipherResult
+    suspend fun hardDeleteCipher(cipherId: String): DeleteCipherResult
+
+    /**
+     * Attempt to soft delete a cipher.
+     */
+    suspend fun softDeleteCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): DeleteCipherResult
 
     /**
      * Attempt to update a cipher.

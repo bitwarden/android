@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
@@ -71,6 +72,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 /**
  * A "stop timeout delay" in milliseconds used to let a shared coroutine continue to run for the
@@ -383,13 +385,41 @@ class VaultRepositoryImpl(
             )
     }
 
-    override suspend fun deleteCipher(cipherId: String): DeleteCipherResult {
+    override suspend fun hardDeleteCipher(cipherId: String): DeleteCipherResult {
         val userId = requireNotNull(activeUserId)
         return ciphersService
-            .deleteCipher(cipherId)
+            .hardDeleteCipher(cipherId)
             .onSuccess { vaultDiskSource.deleteCipher(userId, cipherId) }
             .fold(
                 onSuccess = { DeleteCipherResult.Success },
+                onFailure = { DeleteCipherResult.Error },
+            )
+    }
+
+    override suspend fun softDeleteCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): DeleteCipherResult {
+        val userId = requireNotNull(activeUserId)
+        return ciphersService
+            .softDeleteCipher(cipherId)
+            .fold(
+                onSuccess = {
+                    vaultSdkSource
+                        .encryptCipher(
+                            userId = userId,
+                            cipherView = cipherView.copy(
+                                deletedDate = Instant.now(),
+                            ),
+                        )
+                        .onSuccess { cipher ->
+                            vaultDiskSource.saveCipher(
+                                userId = userId,
+                                cipher = cipher.toEncryptedNetworkCipherResponse(),
+                            )
+                        }
+                    DeleteCipherResult.Success
+                },
                 onFailure = { DeleteCipherResult.Error },
             )
     }

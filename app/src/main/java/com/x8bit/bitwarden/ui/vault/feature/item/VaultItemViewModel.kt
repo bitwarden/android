@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
@@ -12,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VerifyPasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -67,7 +68,6 @@ class VaultItemViewModel @Inject constructor(
     }
 
     override fun handleAction(action: VaultItemAction) {
-        Log.d("ramsey", "handleAction: action $action")
         when (action) {
             is VaultItemAction.ItemType.Login -> handleLoginTypeActions(action)
             is VaultItemAction.ItemType.Card -> handleCardTypeActions(action)
@@ -100,8 +100,8 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.Common.AttachmentsClick -> handleAttachmentsClick()
             is VaultItemAction.Common.CloneClick -> handleCloneClick()
-            is VaultItemAction.Common.DeleteClick -> handleDeleteClick()
             is VaultItemAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
+            is VaultItemAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
         }
     }
 
@@ -132,7 +132,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleMasterPasswordSubmit(action: VaultItemAction.Common.MasterPasswordSubmit) {
         mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.Loading)
+            it.copy(dialog = VaultItemState.DialogState.Loading(R.string.loading.asText()))
         }
         viewModelScope.launch {
             @Suppress("MagicNumber")
@@ -215,13 +215,35 @@ class VaultItemViewModel @Inject constructor(
         )
     }
 
-    private fun handleDeleteClick() {
-        // TODO Implement delete in BIT-1408
-        sendEvent(VaultItemEvent.ShowToast("Not yet implemented.".asText()))
-    }
-
     private fun handleMoveToOrganizationClick() {
         sendEvent(VaultItemEvent.NavigateToMoveToOrganization(itemId = state.vaultItemId))
+    }
+
+    private fun handleConfirmDeleteClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.Loading(
+                    R.string.soft_deleting.asText(),
+                ),
+            )
+        }
+        onContent { content ->
+            content
+                .common
+                .currentCipher
+                ?.let { cipher ->
+                    viewModelScope.launch {
+                        trySendAction(
+                            VaultItemAction.Internal.DeleteCipherReceive(
+                                result = vaultRepository.softDeleteCipher(
+                                    cipherId = state.vaultItemId,
+                                    cipherView = cipher,
+                                ),
+                            ),
+                        )
+                    }
+            }
+        }
     }
 
     //endregion Common Handlers
@@ -264,7 +286,7 @@ class VaultItemViewModel @Inject constructor(
         onLoginContent { _, login ->
             val password = requireNotNull(login.passwordData?.password)
             mutableStateFlow.update {
-                it.copy(dialog = VaultItemState.DialogState.Loading)
+                it.copy(dialog = VaultItemState.DialogState.Loading(R.string.loading.asText()))
             }
             viewModelScope.launch {
                 val result = authRepository.getPasswordBreachCount(password = password)
@@ -391,6 +413,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Internal.PasswordBreachReceive -> handlePasswordBreachReceive(action)
             is VaultItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
             is VaultItemAction.Internal.VerifyPasswordReceive -> handleVerifyPasswordReceive(action)
+            is VaultItemAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
         }
     }
 
@@ -503,6 +526,25 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleDeleteCipherReceive(action: VaultItemAction.Internal.DeleteCipherReceive) {
+        when (action.result) {
+            DeleteCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+            DeleteCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(VaultItemEvent.ShowToast(message = R.string.item_soft_deleted.asText()))
+                sendEvent(VaultItemEvent.NavigateBack)
+            }
+        }
+    }
+
     //endregion Internal Type Handlers
 
     private inline fun onContent(
@@ -589,6 +631,7 @@ data class VaultItemState(
              * @property customFields A list of custom fields that user has added.
              * @property requiresReprompt Indicates if a master password prompt is required to view
              * secure fields.
+             * @property currentCipher The cipher that is currently being viewed (nullable).
              */
             @Parcelize
             data class Common(
@@ -597,6 +640,8 @@ data class VaultItemState(
                 val notes: String?,
                 val customFields: List<Custom>,
                 val requiresReprompt: Boolean,
+                @IgnoredOnParcel
+                val currentCipher: CipherView? = null,
             ) : Parcelable {
 
                 /**
@@ -766,10 +811,12 @@ data class VaultItemState(
         ) : DialogState()
 
         /**
-         * Displays the loading dialog to the user.
+         * Displays the loading dialog to the user with a message.
          */
         @Parcelize
-        data object Loading : DialogState()
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
 
         /**
          * Displays the master password dialog to the user.
@@ -849,6 +896,11 @@ sealed class VaultItemAction {
         data object CloseClick : Common()
 
         /**
+         * The user has confirmed to deleted the cipher.
+         */
+        data object ConfirmDeleteClick : Common()
+
+        /**
          * The user has clicked to dismiss the dialog.
          */
         data object DismissDialogClick : Common()
@@ -891,11 +943,6 @@ sealed class VaultItemAction {
             val field: VaultItemState.ViewState.Content.Common.Custom.HiddenField,
             val isVisible: Boolean,
         ) : Common()
-
-        /**
-         * The user has clicked the delete button.
-         */
-        data object DeleteClick : Common()
 
         /**
          * The user has clicked the attachments button.
@@ -1005,6 +1052,13 @@ sealed class VaultItemAction {
          */
         data class VerifyPasswordReceive(
             val result: VerifyPasswordResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the delete cipher result has been received.
+         */
+        data class DeleteCipherReceive(
+            val result: DeleteCipherResult,
         ) : Internal()
     }
 }

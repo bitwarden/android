@@ -66,10 +66,18 @@ class CiphersServiceTest : BaseServiceTest() {
         }
 
     @Test
-    fun `deleteCipher should execute the delete cipher API`() = runTest {
+    fun `hardDeleteCipher should execute the hardDeleteCipher API`() = runTest {
         server.enqueue(MockResponse().setResponseCode(200))
         val cipherId = "cipherId"
-        val result = ciphersService.deleteCipher(cipherId = cipherId)
+        val result = ciphersService.hardDeleteCipher(cipherId = cipherId)
+        assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
+    fun `softDeleteCipher should execute the softDeleteCipher API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val result = ciphersService.softDeleteCipher(cipherId = cipherId)
         assertEquals(Unit, result.getOrThrow())
     }
 
