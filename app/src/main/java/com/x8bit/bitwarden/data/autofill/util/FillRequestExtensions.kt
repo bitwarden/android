@@ -12,8 +12,9 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 @SuppressLint("NewApi")
 fun FillRequest.getInlinePresentationSpecs(
     autofillAppInfo: AutofillAppInfo,
+    isInlineAutofillEnabled: Boolean,
 ): List<InlinePresentationSpec> =
-    if (autofillAppInfo.sdkInt >= Build.VERSION_CODES.R) {
+    if (isInlineAutofillEnabled && autofillAppInfo.sdkInt >= Build.VERSION_CODES.R) {
         inlineSuggestionsRequest?.inlinePresentationSpecs ?: emptyList()
     } else {
         emptyList()
@@ -26,8 +27,9 @@ fun FillRequest.getInlinePresentationSpecs(
 @SuppressLint("NewApi")
 fun FillRequest.getMaxInlineSuggestionsCount(
     autofillAppInfo: AutofillAppInfo,
+    isInlineAutofillEnabled: Boolean,
 ): Int =
-    if (autofillAppInfo.sdkInt >= Build.VERSION_CODES.R) {
+    if (isInlineAutofillEnabled && autofillAppInfo.sdkInt >= Build.VERSION_CODES.R) {
         inlineSuggestionsRequest?.maxSuggestionCount ?: 0
     } else {
         0

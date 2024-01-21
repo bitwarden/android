@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -64,6 +65,11 @@ class AutofillParserTests {
         every { this@mockk.fillContexts } returns listOf(fillContext)
     }
     private val inlinePresentationSpecs: List<InlinePresentationSpec> = mockk()
+    private val settingsRepository: SettingsRepository = mockk {
+        every { isInlineAutofillEnabled } answers { mockIsInlineAutofillEnabled }
+    }
+
+    private var mockIsInlineAutofillEnabled = true
 
     @BeforeEach
     fun setup() {
@@ -76,15 +82,31 @@ class AutofillParserTests {
         every {
             fillRequest.getInlinePresentationSpecs(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
         } returns inlinePresentationSpecs
         every {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
+            )
+        } returns emptyList()
+        every {
             fillRequest.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
         } returns MAX_INLINE_SUGGESTION_COUNT
+        every {
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
+            )
+        } returns 0
         every { any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure) } returns URI
-        parser = AutofillParserImpl()
+        parser = AutofillParserImpl(
+            settingsRepository = settingsRepository,
+        )
     }
 
     @AfterEach
@@ -183,9 +205,11 @@ class AutofillParserTests {
         verify(exactly = 1) {
             fillRequest.getInlinePresentationSpecs(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
             fillRequest.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
@@ -231,9 +255,11 @@ class AutofillParserTests {
         verify(exactly = 1) {
             fillRequest.getInlinePresentationSpecs(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
             fillRequest.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
@@ -279,9 +305,11 @@ class AutofillParserTests {
         verify(exactly = 1) {
             fillRequest.getInlinePresentationSpecs(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
             fillRequest.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
@@ -327,9 +355,62 @@ class AutofillParserTests {
         verify(exactly = 1) {
             fillRequest.getInlinePresentationSpecs(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
             )
             fillRequest.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+        }
+    }
+
+    @Test
+    fun `parse should return empty inline suggestions when inline autofill is disabled`() {
+        // Setup
+        mockIsInlineAutofillEnabled = false
+        setupAssistStructureWithAllAutofillViewTypes()
+        val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
+            data = autofillViewData.copy(
+                autofillId = cardAutofillId,
+                isFocused = true,
+            ),
+        )
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
+            data = autofillViewData.copy(
+                autofillId = loginAutofillId,
+                isFocused = true,
+            ),
+        )
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(cardAutofillView),
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = emptyList(),
+            maxInlineSuggestionsCount = 0,
+            partition = autofillPartition,
+            uri = URI,
+        )
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
             )
             any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
         }
