@@ -12,12 +12,15 @@ import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 
 /**
  * The default [AutofillParser] implementation for the app. This is a tool for parsing autofill data
  * from the OS into domain models.
  */
-class AutofillParserImpl : AutofillParser {
+class AutofillParserImpl(
+    private val settingsRepository: SettingsRepository,
+) : AutofillParser {
     override fun parse(
         autofillAppInfo: AutofillAppInfo,
         fillRequest: FillRequest,
@@ -79,12 +82,15 @@ class AutofillParserImpl : AutofillParser {
             .map { it.ignoreAutofillIds }
             .flatten()
 
+        // Get inline information if available
+        val isInlineAutofillEnabled = settingsRepository.isInlineAutofillEnabled
         val maxInlineSuggestionsCount = fillRequest.getMaxInlineSuggestionsCount(
             autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = isInlineAutofillEnabled,
         )
-
         val inlinePresentationSpecs = fillRequest.getInlinePresentationSpecs(
             autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = isInlineAutofillEnabled,
         )
 
         return AutofillRequest.Fillable(

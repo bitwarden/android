@@ -20,7 +20,23 @@ class FillRequestExtensionsTest {
     }
 
     @Test
-    fun `getInlinePresentationSpecs should return empty list when pre-R`() {
+    fun `getInlinePresentationSpecs should return empty list when disabled`() {
+        // Setup
+        val autofillAppInfo: AutofillAppInfo = mockk()
+        val expected: List<InlinePresentationSpec> = emptyList()
+
+        // Test
+        val actual = fillRequest.getInlinePresentationSpecs(
+            autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = false,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getInlinePresentationSpecs should return empty list when enabled pre-R`() {
         // Setup
         val autofillAppInfo = AutofillAppInfo(
             context = mockk(),
@@ -32,6 +48,7 @@ class FillRequestExtensionsTest {
         // Test
         val actual = fillRequest.getInlinePresentationSpecs(
             autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = true,
         )
 
         // Verify
@@ -39,7 +56,7 @@ class FillRequestExtensionsTest {
     }
 
     @Test
-    fun `getInlinePresentationSpecs should return populated list when post-R`() {
+    fun `getInlinePresentationSpecs should return populated list when enabled and post-R`() {
         // Setup
         val autofillAppInfo = AutofillAppInfo(
             context = mockk(),
@@ -51,6 +68,7 @@ class FillRequestExtensionsTest {
         // Test
         val actual = fillRequest.getInlinePresentationSpecs(
             autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = true,
         )
 
         // Verify
@@ -58,7 +76,23 @@ class FillRequestExtensionsTest {
     }
 
     @Test
-    fun `getMaxInlineSuggestionsCount should return 0 when pre-R`() {
+    fun `getMaxInlineSuggestionsCount should return 0 when disabled`() {
+        // Setup
+        val autofillAppInfo: AutofillAppInfo = mockk()
+        val expected = 0
+
+        // Test
+        val actual = fillRequest.getMaxInlineSuggestionsCount(
+            autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = false,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getMaxInlineSuggestionsCount should return 0 when enabled and pre-R`() {
         // Setup
         val autofillAppInfo = AutofillAppInfo(
             context = mockk(),
@@ -70,6 +104,7 @@ class FillRequestExtensionsTest {
         // Test
         val actual = fillRequest.getMaxInlineSuggestionsCount(
             autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = true,
         )
 
         // Verify
@@ -77,7 +112,7 @@ class FillRequestExtensionsTest {
     }
 
     @Test
-    fun `getMaxInlineSuggestionsCount should return the max count when post-R`() {
+    fun `getMaxInlineSuggestionsCount should return the max count when enabled and post-R`() {
         // Setup
         val autofillAppInfo = AutofillAppInfo(
             context = mockk(),
@@ -89,6 +124,7 @@ class FillRequestExtensionsTest {
         // Test
         val actual = fillRequest.getMaxInlineSuggestionsCount(
             autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = true,
         )
 
         // Verify

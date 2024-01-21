@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,7 +35,12 @@ object AutofillModule {
     ): AutofillManager = context.getSystemService(AutofillManager::class.java)
 
     @Provides
-    fun providesAutofillParser(): AutofillParser = AutofillParserImpl()
+    fun providesAutofillParser(
+        settingsRepository: SettingsRepository,
+    ): AutofillParser =
+        AutofillParserImpl(
+            settingsRepository = settingsRepository,
+        )
 
     @Provides
     fun providesAutofillCipherProvider(): AutofillCipherProvider = AutofillCipherProviderImpl()
