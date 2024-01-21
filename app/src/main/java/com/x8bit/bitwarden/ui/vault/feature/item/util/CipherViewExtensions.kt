@@ -34,6 +34,7 @@ fun CipherView.toViewState(
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
+            currentCipher = this,
             name = name,
             requiresReprompt = reprompt == CipherRepromptType.PASSWORD,
             customFields = fields.orEmpty().map { it.toCustomField() },

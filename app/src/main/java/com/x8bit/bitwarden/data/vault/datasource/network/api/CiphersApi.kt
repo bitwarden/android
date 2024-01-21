@@ -39,10 +39,18 @@ interface CiphersApi {
     ): Result<SyncResponseJson.Cipher>
 
     /**
-     * Deletes a cipher.
+     * Hard deletes a cipher.
      */
     @DELETE("ciphers/{cipherId}")
-    suspend fun deleteCipher(
+    suspend fun hardDeleteCipher(
+        @Path("cipherId") cipherId: String,
+    ): Result<Unit>
+
+    /**
+     * Soft deletes a cipher.
+     */
+    @PUT("ciphers/{cipherId}/delete")
+    suspend fun softDeleteCipher(
         @Path("cipherId") cipherId: String,
     ): Result<Unit>
 }

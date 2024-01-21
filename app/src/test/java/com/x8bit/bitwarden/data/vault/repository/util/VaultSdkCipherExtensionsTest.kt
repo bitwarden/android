@@ -33,6 +33,18 @@ import org.junit.Test
 class VaultSdkCipherExtensionsTest {
 
     @Test
+    fun `toEncryptedNetworkCipherResponse should convert an Sdk Cipher to a cipher`() {
+        val sdkCipher = createMockSdkCipher(number = 1)
+
+        val result = sdkCipher.toEncryptedNetworkCipherResponse()
+
+        assertEquals(
+            createMockCipher(number = 1),
+            result,
+        )
+    }
+
+    @Test
     fun `toEncryptedNetworkCipher should convert an Sdk Cipher to a Network Cipher`() {
         val sdkCipher = createMockSdkCipher(number = 1)
         val syncCipher = sdkCipher.toEncryptedNetworkCipher()
