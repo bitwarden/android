@@ -13,4 +13,11 @@ namespace Bit.Core.Utilities.Fido2
         {
         }
     }
+
+    public class UnknownError : Fido2AuthenticatorException
+    {
+        public UnknownError() : base("UnknownError")
+        {
+        }
+    }
 }

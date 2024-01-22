@@ -68,17 +68,27 @@ namespace Bit.Core.Services
 
                 throw new NotAllowedError();
             }
-
-            // if (
-            //     !userVerified &&
-            //     (params.requireUserVerification || selectedCipher.reprompt !== CipherRepromptType.None)
-            // ) {
-            //     this.logService?.warning(
-            //     `[Fido2Authenticator] Aborting because user verification was unsuccessful.`,
-            //     );
-            //     throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed);
-            // }
             
+            try {
+                var selectedFido2Credential = selectedCipher.Login.MainFido2Credential;
+                var selectedCredentialId = selectedFido2Credential.CredentialId;
+
+                if (selectedFido2Credential.CounterValue != 0) {
+                    ++selectedFido2Credential.CounterValue;
+                }
+
+                var encrypted = await _cipherService.EncryptAsync(selectedCipher);
+                await _cipherService.SaveWithServerAsync(encrypted);
+
+                
+            } catch {
+                _logService.Info(
+                    "[Fido2Authenticator] Aborting because no matching credentials were found in the vault."
+                );
+
+                throw new UnknownError();
+            }
+
             // TODO: IMPLEMENT this
             return new Fido2AuthenticatorGetAssertionResult
             {

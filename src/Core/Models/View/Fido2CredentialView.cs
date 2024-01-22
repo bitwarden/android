@@ -27,6 +27,11 @@ namespace Bit.Core.Models.View
         public string Counter { get; set; }
         public DateTime CreationDate { get; set; }
 
+        public int CounterValue {
+            get => int.TryParse(Counter, out var counter) ? counter : 0;
+            set => Counter = value.ToString();
+        }
+
         public override string SubTitle => UserName;
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
         public bool IsDiscoverable => bool.TryParse(Discoverable, out var isDiscoverable) && isDiscoverable;
