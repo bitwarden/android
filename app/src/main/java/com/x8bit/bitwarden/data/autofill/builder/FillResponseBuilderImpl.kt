@@ -4,6 +4,8 @@ import android.service.autofill.FillResponse
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.util.buildDataset
+import com.x8bit.bitwarden.data.autofill.util.buildVaultItemDataset
+import com.x8bit.bitwarden.data.autofill.util.fillableAutofillIds
 
 /**
  * The default implementation for [FillResponseBuilder]. This is a component for compiling fulfilled
@@ -14,7 +16,7 @@ class FillResponseBuilderImpl : FillResponseBuilder {
         autofillAppInfo: AutofillAppInfo,
         filledData: FilledData,
     ): FillResponse? =
-        if (filledData.filledPartitions.any { it.filledItems.isNotEmpty() }) {
+        if (filledData.fillableAutofillIds.isNotEmpty()) {
             val fillResponseBuilder = FillResponse.Builder()
 
             filledData
@@ -35,9 +37,14 @@ class FillResponseBuilderImpl : FillResponseBuilder {
                     }
                 }
 
-            // TODO: add vault item dataset (BIT-1296)
-
             fillResponseBuilder
+                // Add the Vault Item
+                .addDataset(
+                    filledData
+                        .buildVaultItemDataset(
+                            autofillAppInfo = autofillAppInfo,
+                        ),
+                )
                 .setIgnoredIds(*filledData.ignoreAutofillIds.toTypedArray())
                 .build()
         } else {

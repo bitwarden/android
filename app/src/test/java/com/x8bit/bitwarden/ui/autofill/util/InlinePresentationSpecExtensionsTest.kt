@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.app.slice.Slice
 import android.content.Context
 import android.content.Intent
+import android.graphics.BlendMode
 import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.widget.inline.InlinePresentationSpec
@@ -18,7 +19,8 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -53,6 +55,20 @@ class InlinePresentationSpecExtensionsTest {
     @Test
     fun `createCipherInlinePresentationOrNull should return null if incompatible`() {
         // Setup
+        val autofillCipher: AutofillCipher.Card = mockk {
+            every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
+            every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
+            every { this@mockk.iconRes } returns R.drawable.ic_card_item
+        }
+        val pendingIntent: PendingIntent = mockk()
+        every {
+            PendingIntent.getService(
+                testContext,
+                PENDING_INTENT_CODE,
+                any<Intent>(),
+                PENDING_INTENT_FLAGS,
+            )
+        } returns pendingIntent
         every {
             UiVersions.getVersions(testStyle)
         } returns emptyList()
@@ -60,11 +76,11 @@ class InlinePresentationSpecExtensionsTest {
         // Test
         val actual = inlinePresentationSpec.createCipherInlinePresentationOrNull(
             autofillAppInfo = autofillAppInfo,
-            autofillCipher = mockk(),
+            autofillCipher = autofillCipher,
         )
 
         // Verify
-        Assertions.assertNull(actual)
+        assertNull(actual)
         verify(exactly = 1) {
             UiVersions.getVersions(testStyle)
         }
@@ -75,41 +91,19 @@ class InlinePresentationSpecExtensionsTest {
     fun `createCipherInlinePresentationOrNull should return presentation with card icon when card cipher and compatible`() {
         // Setup
         val icon: Icon = mockk()
+        val iconRes = R.drawable.ic_card_item
         val autofillCipher: AutofillCipher.Card = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
-            every { this@mockk.iconRes } returns R.drawable.ic_card_item
+            every { this@mockk.iconRes } returns iconRes
         }
         val pendingIntent: PendingIntent = mockk()
-        val slice: Slice = mockk()
-        every {
-            UiVersions.getVersions(testStyle)
-        } returns listOf(UiVersions.INLINE_UI_VERSION_1)
-        every {
-            PendingIntent.getService(
-                testContext,
-                PENDING_INTENT_CODE,
-                any<Intent>(),
-                PENDING_INTENT_FLAGS,
-            )
-        } returns pendingIntent
-        every { testContext.isSystemDarkMode } returns true
-        every { testContext.getColor(R.color.dark_on_surface) } returns ICON_TINT
-        every {
-            Icon.createWithResource(
-                testContext,
-                R.drawable.ic_card_item,
-            )
-                .setTint(ICON_TINT)
-        } returns icon
-        every {
-            InlineSuggestionUi.newContentBuilder(pendingIntent)
-                .setTitle(AUTOFILL_CIPHER_NAME)
-                .setSubtitle(AUTOFILL_CIPHER_SUBTITLE)
-                .setStartIcon(icon)
-                .build()
-                .slice
-        } returns slice
+        prepareForCompatibleCipherInlinePresentation(
+            iconRes = iconRes,
+            icon = icon,
+            pendingIntent = pendingIntent,
+            isSystemDarkMode = true,
+        )
 
         // Test
         val actual = inlinePresentationSpec.createCipherInlinePresentationOrNull(
@@ -118,7 +112,7 @@ class InlinePresentationSpecExtensionsTest {
         )
 
         // Verify not-null because we can't properly mock Intent constructors.
-        Assertions.assertNotNull(actual)
+        assertNotNull(actual)
         verify(exactly = 1) {
             UiVersions.getVersions(testStyle)
             PendingIntent.getService(
@@ -131,7 +125,7 @@ class InlinePresentationSpecExtensionsTest {
             testContext.getColor(R.color.dark_on_surface)
             Icon.createWithResource(
                 testContext,
-                R.drawable.ic_card_item,
+                iconRes,
             )
                 .setTint(ICON_TINT)
             InlineSuggestionUi.newContentBuilder(pendingIntent)
@@ -148,41 +142,19 @@ class InlinePresentationSpecExtensionsTest {
     fun `createCipherInlinePresentationOrNull should return presentation with login icon when login cipher and compatible`() {
         // Setup
         val icon: Icon = mockk()
+        val iconRes = R.drawable.ic_login_item
         val autofillCipher: AutofillCipher.Login = mockk {
             every { this@mockk.name } returns AUTOFILL_CIPHER_NAME
             every { this@mockk.subtitle } returns AUTOFILL_CIPHER_SUBTITLE
             every { this@mockk.iconRes } returns R.drawable.ic_login_item
         }
         val pendingIntent: PendingIntent = mockk()
-        val slice: Slice = mockk()
-        every {
-            UiVersions.getVersions(testStyle)
-        } returns listOf(UiVersions.INLINE_UI_VERSION_1)
-        every {
-            PendingIntent.getService(
-                testContext,
-                PENDING_INTENT_CODE,
-                any<Intent>(),
-                PENDING_INTENT_FLAGS,
-            )
-        } returns pendingIntent
-        every { testContext.isSystemDarkMode } returns false
-        every { testContext.getColor(R.color.on_surface) } returns ICON_TINT
-        every {
-            Icon.createWithResource(
-                testContext,
-                R.drawable.ic_login_item,
-            )
-                .setTint(ICON_TINT)
-        } returns icon
-        every {
-            InlineSuggestionUi.newContentBuilder(pendingIntent)
-                .setTitle(AUTOFILL_CIPHER_NAME)
-                .setSubtitle(AUTOFILL_CIPHER_SUBTITLE)
-                .setStartIcon(icon)
-                .build()
-                .slice
-        } returns slice
+        prepareForCompatibleCipherInlinePresentation(
+            iconRes = iconRes,
+            icon = icon,
+            pendingIntent = pendingIntent,
+            isSystemDarkMode = false,
+        )
 
         // Test
         val actual = inlinePresentationSpec.createCipherInlinePresentationOrNull(
@@ -191,7 +163,7 @@ class InlinePresentationSpecExtensionsTest {
         )
 
         // Verify not-null because we can't properly mock Intent constructors.
-        Assertions.assertNotNull(actual)
+        assertNotNull(actual)
         verify(exactly = 1) {
             UiVersions.getVersions(testStyle)
             PendingIntent.getService(
@@ -204,7 +176,7 @@ class InlinePresentationSpecExtensionsTest {
             testContext.getColor(R.color.on_surface)
             Icon.createWithResource(
                 testContext,
-                R.drawable.ic_login_item,
+                iconRes,
             )
                 .setTint(ICON_TINT)
             InlineSuggestionUi.newContentBuilder(pendingIntent)
@@ -215,11 +187,196 @@ class InlinePresentationSpecExtensionsTest {
                 .slice
         }
     }
+
+    @Test
+    fun `createVaultItemInlinePresentationOrNull should return null if incompatible`() {
+        // Setup
+        val pendingIntent: PendingIntent = mockk()
+        every {
+            UiVersions.getVersions(testStyle)
+        } returns emptyList()
+
+        every { testContext.getString(R.string.app_name) } returns APP_NAME
+        every { testContext.getString(R.string.vault_is_locked) } returns VAULT_IS_LOCKED
+        every { testContext.getString(R.string.my_vault) } returns MY_VAULT
+
+        // Test
+        val actual = inlinePresentationSpec.createVaultItemInlinePresentationOrNull(
+            autofillAppInfo = autofillAppInfo,
+            pendingIntent = pendingIntent,
+            isLocked = true,
+        )
+
+        // Verify
+        assertNull(actual)
+        verify(exactly = 1) {
+            UiVersions.getVersions(testStyle)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createVaultItemInlinePresentationOrNull should return presentation with locked vault title when vault is locked and compatible`() {
+        // Setup
+        val icon: Icon = mockk()
+        val pendingIntent: PendingIntent = mockk()
+        prepareForCompatibleVaultItemInlinePresentation(
+            icon = icon,
+            pendingIntent = pendingIntent,
+        )
+
+        // Test
+        val actual = inlinePresentationSpec.createVaultItemInlinePresentationOrNull(
+            autofillAppInfo = autofillAppInfo,
+            pendingIntent = pendingIntent,
+            isLocked = true,
+        )
+
+        // Verify not-null because we can't properly mock Intent constructors.
+        assertNotNull(actual)
+        verify(exactly = 1) {
+            UiVersions.getVersions(testStyle)
+            Icon
+                .createWithResource(
+                    testContext,
+                    R.drawable.icon,
+                )
+                .setTintBlendMode(BlendMode.DST)
+            testContext.getString(R.string.app_name)
+            testContext.getString(R.string.vault_is_locked)
+            InlineSuggestionUi.newContentBuilder(pendingIntent)
+                .setTitle(APP_NAME)
+                .setSubtitle(VAULT_IS_LOCKED)
+                .setStartIcon(icon)
+                .build()
+                .slice
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createVaultItemInlinePresentationOrNull should return presentation with my vault title when vault is locked and compatible`() {
+        // Setup
+        val icon: Icon = mockk()
+        val pendingIntent: PendingIntent = mockk()
+        prepareForCompatibleVaultItemInlinePresentation(
+            icon = icon,
+            pendingIntent = pendingIntent,
+        )
+
+        // Test
+        val actual = inlinePresentationSpec.createVaultItemInlinePresentationOrNull(
+            autofillAppInfo = autofillAppInfo,
+            pendingIntent = pendingIntent,
+            isLocked = false,
+        )
+
+        // Verify not-null because we can't properly mock Intent constructors.
+        assertNotNull(actual)
+        verify(exactly = 1) {
+            UiVersions.getVersions(testStyle)
+            Icon
+                .createWithResource(
+                    testContext,
+                    R.drawable.icon,
+                )
+                .setTintBlendMode(BlendMode.DST)
+            testContext.getString(R.string.app_name)
+            testContext.getString(R.string.my_vault)
+            InlineSuggestionUi.newContentBuilder(pendingIntent)
+                .setTitle(APP_NAME)
+                .setSubtitle(MY_VAULT)
+                .setStartIcon(icon)
+                .build()
+                .slice
+        }
+    }
+
+    private fun prepareForCompatibleCipherInlinePresentation(
+        iconRes: Int,
+        icon: Icon,
+        pendingIntent: PendingIntent,
+        isSystemDarkMode: Boolean,
+    ) {
+        val slice: Slice = mockk()
+        every {
+            UiVersions.getVersions(testStyle)
+        } returns listOf(UiVersions.INLINE_UI_VERSION_1)
+        every {
+            PendingIntent.getService(
+                testContext,
+                PENDING_INTENT_CODE,
+                any<Intent>(),
+                PENDING_INTENT_FLAGS,
+            )
+        } returns pendingIntent
+        every { testContext.isSystemDarkMode } returns isSystemDarkMode
+        every { testContext.getColor(R.color.on_surface) } returns ICON_TINT
+        every { testContext.getColor(R.color.dark_on_surface) } returns ICON_TINT
+        every {
+            Icon.createWithResource(
+                testContext,
+                iconRes,
+            )
+                .setTint(ICON_TINT)
+        } returns icon
+        every {
+            InlineSuggestionUi
+                .newContentBuilder(pendingIntent)
+                .setTitle(AUTOFILL_CIPHER_NAME)
+                .setSubtitle(AUTOFILL_CIPHER_SUBTITLE)
+                .setStartIcon(icon)
+                .build()
+                .slice
+        } returns slice
+    }
+
+    private fun prepareForCompatibleVaultItemInlinePresentation(
+        icon: Icon,
+        pendingIntent: PendingIntent,
+    ) {
+        val slice: Slice = mockk()
+        every {
+            UiVersions.getVersions(testStyle)
+        } returns listOf(UiVersions.INLINE_UI_VERSION_1)
+        every {
+            Icon
+                .createWithResource(
+                    testContext,
+                    R.drawable.icon,
+                )
+                .setTintBlendMode(BlendMode.DST)
+        } returns icon
+        every {
+            InlineSuggestionUi
+                .newContentBuilder(pendingIntent)
+                .setTitle(APP_NAME)
+                .setSubtitle(VAULT_IS_LOCKED)
+                .setStartIcon(icon)
+                .build()
+                .slice
+        } returns slice
+        every {
+            InlineSuggestionUi
+                .newContentBuilder(pendingIntent)
+                .setTitle(APP_NAME)
+                .setSubtitle(MY_VAULT)
+                .setStartIcon(icon)
+                .build()
+                .slice
+        } returns slice
+        every { testContext.getString(R.string.app_name) } returns APP_NAME
+        every { testContext.getString(R.string.vault_is_locked) } returns VAULT_IS_LOCKED
+        every { testContext.getString(R.string.my_vault) } returns MY_VAULT
+    }
 }
 
+private const val APP_NAME = "Bitwarden"
 private const val AUTOFILL_CIPHER_NAME = "Cipher1"
 private const val AUTOFILL_CIPHER_SUBTITLE = "Subtitle"
 private const val ICON_TINT: Int = 6123751
+private const val MY_VAULT = "My vault"
 private const val PENDING_INTENT_CODE: Int = 0
 private const val PENDING_INTENT_FLAGS: Int =
     PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+private const val VAULT_IS_LOCKED = "Vault is locked"

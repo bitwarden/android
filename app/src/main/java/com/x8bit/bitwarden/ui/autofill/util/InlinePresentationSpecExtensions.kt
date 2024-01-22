@@ -3,10 +3,12 @@ package com.x8bit.bitwarden.ui.autofill.util
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.BlendMode
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.autofill.InlinePresentation
 import android.widget.inline.InlinePresentationSpec
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
@@ -19,10 +21,59 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
  * it fails, return null.
  */
 @RequiresApi(Build.VERSION_CODES.R)
-@SuppressLint("RestrictedApi")
 fun InlinePresentationSpec.createCipherInlinePresentationOrNull(
     autofillAppInfo: AutofillAppInfo,
     autofillCipher: AutofillCipher,
+): InlinePresentation? =
+    createInlinePresentationOrNull(
+        pendingIntent = PendingIntent.getService(
+            autofillAppInfo.context,
+            0,
+            Intent(),
+            PendingIntent.FLAG_ONE_SHOT or
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                PendingIntent.FLAG_IMMUTABLE,
+        ),
+        autofillAppInfo = autofillAppInfo,
+        title = autofillCipher.name,
+        subtitle = autofillCipher.subtitle,
+        iconRes = autofillCipher.iconRes,
+        shouldTintIcon = true,
+    )
+
+/**
+ * Try creating an [InlinePresentation] for the Vault item with this [InlinePresentationSpec]. If
+ * it fails, return null.
+ */
+@RequiresApi(Build.VERSION_CODES.R)
+fun InlinePresentationSpec.createVaultItemInlinePresentationOrNull(
+    autofillAppInfo: AutofillAppInfo,
+    pendingIntent: PendingIntent,
+    isLocked: Boolean,
+): InlinePresentation? =
+    createInlinePresentationOrNull(
+        pendingIntent = pendingIntent,
+        autofillAppInfo = autofillAppInfo,
+        title = autofillAppInfo.context.getString(R.string.app_name),
+        subtitle = if (isLocked) {
+            autofillAppInfo.context.getString(R.string.vault_is_locked)
+        } else {
+            autofillAppInfo.context.getString(R.string.my_vault)
+        },
+        iconRes = R.drawable.icon,
+        shouldTintIcon = false,
+    )
+
+@Suppress("LongParameterList")
+@RequiresApi(Build.VERSION_CODES.R)
+@SuppressLint("RestrictedApi")
+private fun InlinePresentationSpec.createInlinePresentationOrNull(
+    pendingIntent: PendingIntent,
+    autofillAppInfo: AutofillAppInfo,
+    title: String,
+    subtitle: String,
+    @DrawableRes iconRes: Int,
+    shouldTintIcon: Boolean,
 ): InlinePresentation? {
     val isInlineCompatible = UiVersions
         .getVersions(style)
@@ -30,24 +81,23 @@ fun InlinePresentationSpec.createCipherInlinePresentationOrNull(
 
     if (!isInlineCompatible) return null
 
-    val pendingIntent = PendingIntent.getService(
-        autofillAppInfo.context,
-        0,
-        Intent(),
-        PendingIntent.FLAG_ONE_SHOT or
-            PendingIntent.FLAG_UPDATE_CURRENT or
-            PendingIntent.FLAG_IMMUTABLE,
-    )
     val icon = Icon
         .createWithResource(
             autofillAppInfo.context,
-            autofillCipher.iconRes,
+            iconRes,
         )
-        .setTint(autofillAppInfo.contentColor)
+        .run {
+            if (shouldTintIcon) {
+                setTint(autofillAppInfo.contentColor)
+            } else {
+                // Remove tinting
+                setTintBlendMode(BlendMode.DST)
+            }
+        }
     val slice = InlineSuggestionUi
         .newContentBuilder(pendingIntent)
-        .setTitle(autofillCipher.name)
-        .setSubtitle(autofillCipher.subtitle)
+        .setTitle(title)
+        .setSubtitle(subtitle)
         .setStartIcon(icon)
         .build()
         .slice

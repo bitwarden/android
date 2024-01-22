@@ -26,7 +26,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleInstancePerTask"
+            android:launchMode="@integer/launchModeAPIlevel"
             android:theme="@style/LaunchTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
