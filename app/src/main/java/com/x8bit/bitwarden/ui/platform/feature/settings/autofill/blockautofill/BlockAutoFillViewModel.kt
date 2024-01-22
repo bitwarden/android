@@ -1,9 +1,13 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.validateUri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -20,7 +24,10 @@ class BlockAutoFillViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<BlockAutoFillState, BlockAutoFillEvent, BlockAutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: BlockAutoFillState(viewState = BlockAutoFillState.ViewState.Empty),
+        ?: BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Empty,
+        ),
 ) {
     init {
         updateContentWithUris(
@@ -45,7 +52,87 @@ class BlockAutoFillViewModel @Inject constructor(
     override fun handleAction(action: BlockAutoFillAction) {
         when (action) {
             BlockAutoFillAction.BackClick -> handleCloseClick()
+            BlockAutoFillAction.AddUriClick -> handleAddUriClick()
+            is BlockAutoFillAction.UriTextChange -> handleUriTextChange(action)
+            BlockAutoFillAction.DismissDialog -> handleDismissDialog()
+            is BlockAutoFillAction.EditUriClick -> handleEditUriClick(action)
+            is BlockAutoFillAction.RemoveUriClick -> handleRemoveUriClick(action)
+            is BlockAutoFillAction.SaveUri -> handleSaveUri(action)
         }
+    }
+
+    private fun handleAddUriClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = BlockAutoFillState.DialogState.AddEdit(uri = ""),
+            )
+        }
+    }
+
+    private fun handleUriTextChange(action: BlockAutoFillAction.UriTextChange) {
+        mutableStateFlow.update { currentState ->
+            val currentDialog =
+                currentState.dialog as? BlockAutoFillState.DialogState.AddEdit
+            currentState.copy(
+                dialog = BlockAutoFillState.DialogState.AddEdit(
+                    uri = action.uri,
+                    originalUri = currentDialog?.originalUri,
+                ),
+            )
+        }
+    }
+
+    private fun handleEditUriClick(action: BlockAutoFillAction.EditUriClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = BlockAutoFillState.DialogState.AddEdit(
+                    uri = action.uri,
+                    originalUri = action.uri,
+                ),
+            )
+        }
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleSaveUri(action: BlockAutoFillAction.SaveUri) {
+        val errorText = action.newUri.validateUri(settingsRepository.blockedAutofillUris)
+
+        if (errorText != null) {
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    dialog = BlockAutoFillState.DialogState.AddEdit(
+                        uri = action.newUri,
+                        errorMessage = errorText,
+                    ),
+                )
+            }
+            return
+        }
+
+        val currentUris = settingsRepository.blockedAutofillUris.toMutableList()
+
+        val uriIndex = currentUris.indexOf(action.newUri)
+        if (uriIndex != -1) {
+            currentUris[uriIndex] = action.newUri
+        } else {
+            currentUris.add(action.newUri)
+        }
+
+        settingsRepository.blockedAutofillUris = currentUris
+        updateContentWithUris(currentUris)
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleRemoveUriClick(action: BlockAutoFillAction.RemoveUriClick) {
+        val currentUris = settingsRepository.blockedAutofillUris.toMutableList()
+        currentUris.remove(action.uri)
+
+        settingsRepository.blockedAutofillUris = currentUris
+        updateContentWithUris(currentUris)
+        mutableStateFlow.update { it.copy(dialog = null) }
     }
 
     private fun handleCloseClick() {
@@ -62,8 +149,27 @@ class BlockAutoFillViewModel @Inject constructor(
  */
 @Parcelize
 data class BlockAutoFillState(
+    val dialog: DialogState? = null,
     val viewState: ViewState,
 ) : Parcelable {
+
+    /**
+     * Representation of the dialog to display on BlockAutoFillScreen.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Allows the user to confirm adding or editing URI.
+         */
+        @Parcelize
+        data class AddEdit(
+            val uri: String,
+            val originalUri: String? = null,
+            val errorMessage: Text? = null,
+        ) : DialogState() {
+            val isEdit: Boolean get() = originalUri != null
+        }
+    }
 
     /**
      * Represents the specific view states for the [BlockAutoFillScreen].
@@ -107,7 +213,37 @@ sealed class BlockAutoFillEvent {
 sealed class BlockAutoFillAction {
 
     /**
+     * User clicked BlockAutoFillListItem.
+     */
+    data class EditUriClick(val uri: String) : BlockAutoFillAction()
+
+    /**
+     * User clicked Add uri.
+     */
+    data object AddUriClick : BlockAutoFillAction()
+
+    /**
+     * User updated uri text.
+     */
+    data class UriTextChange(val uri: String) : BlockAutoFillAction()
+
+    /**
      * User clicked close.
      */
     data object BackClick : BlockAutoFillAction()
+
+    /**
+     * User click to save or edit a URI.
+     */
+    data class SaveUri(val newUri: String) : BlockAutoFillAction()
+
+    /**
+     * User click to remove URI.
+     */
+    data class RemoveUriClick(val uri: String) : BlockAutoFillAction()
+
+    /**
+     * User dismissed the currently displayed dialog.
+     */
+    data object DismissDialog : BlockAutoFillAction()
 }

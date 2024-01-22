@@ -44,6 +44,98 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `on AddUriClick should open AddEdit dialog with empty URI`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(BlockAutoFillAction.AddUriClick)
+
+        val expectedDialogState = BlockAutoFillState.DialogState.AddEdit(uri = "")
+        assertEquals(expectedDialogState, viewModel.stateFlow.value.dialog)
+    }
+
+    @Test
+    fun `on UriTextChange should update dialog URI`() = runTest {
+        val viewModel = createViewModel()
+        val testUri = "http://test.com"
+        viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = testUri))
+
+        val expectedState = BlockAutoFillState(
+            dialog = BlockAutoFillState.DialogState.AddEdit(
+                uri = testUri,
+                originalUri = null,
+                errorMessage = null,
+            ),
+            viewState = BlockAutoFillState.ViewState.Content(blockedUris = listOf("blockedUri")),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on EditUriClick should open AddEdit dialog with specified URI`() = runTest {
+        val viewModel = createViewModel()
+        val testUri = "http://edit.com"
+        viewModel.trySendAction(BlockAutoFillAction.EditUriClick(uri = testUri))
+
+        val expectedState = BlockAutoFillState(
+            dialog = BlockAutoFillState.DialogState.AddEdit(
+                uri = testUri,
+                originalUri = testUri,
+                errorMessage = null,
+            ),
+            viewState = BlockAutoFillState.ViewState.Content(listOf("blockedUri")),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on RemoveUriClick action should remove specified URI from list`() = runTest {
+        val blockedUris = mutableListOf("http://a.com", "http://b.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(uri = "http://a.com"))
+
+        val expectedState = BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://b.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on SaveUri action with valid URI should add URI to list`() = runTest {
+        val blockedUris = mutableListOf("http://existing.com")
+
+        every { settingsRepository.blockedAutofillUris } answers { blockedUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            blockedUris.clear()
+            blockedUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        val testUri = "http://new.com"
+        viewModel.trySendAction(BlockAutoFillAction.SaveUri(newUri = testUri))
+
+        val expectedState = BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = blockedUris,
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `on BackClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -61,5 +153,5 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
 }
 
 private val DEFAULT_STATE: BlockAutoFillState = BlockAutoFillState(
-    BlockAutoFillState.ViewState.Empty,
+    viewState = BlockAutoFillState.ViewState.Empty,
 )
