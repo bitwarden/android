@@ -74,8 +74,6 @@ class AuthRepositoryImpl(
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository {
     private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow<Boolean>(false)
-    private val mutableSpecialCircumstanceStateFlow =
-        MutableStateFlow<UserState.SpecialCircumstance?>(null)
 
     /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The
@@ -109,20 +107,17 @@ class AuthRepositoryImpl(
         authDiskSource.userOrganizationsListFlow,
         vaultRepository.vaultStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
-        mutableSpecialCircumstanceStateFlow,
     ) {
             userStateJson,
             userOrganizationsList,
             vaultState,
             hasPendingAccountAddition,
-            specialCircumstance,
         ->
         userStateJson
             ?.toUserState(
                 vaultState = vaultState,
                 userOrganizationsList = userOrganizationsList,
                 hasPendingAccountAddition = hasPendingAccountAddition,
-                specialCircumstance = specialCircumstance,
                 vaultUnlockTypeProvider = ::getVaultUnlockType,
             )
     }
@@ -135,7 +130,6 @@ class AuthRepositoryImpl(
                     vaultState = vaultRepository.vaultStateFlow.value,
                     userOrganizationsList = authDiskSource.userOrganizationsList,
                     hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
-                    specialCircumstance = mutableSpecialCircumstanceStateFlow.value,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                 ),
         )
@@ -146,9 +140,6 @@ class AuthRepositoryImpl(
         mutableCaptchaTokenFlow.asSharedFlow()
 
     override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
-
-    override var specialCircumstance: UserState.SpecialCircumstance?
-        by mutableSpecialCircumstanceStateFlow::value
 
     override var hasPendingAccountAddition: Boolean
         by mutableHasPendingAccountAdditionStateFlow::value

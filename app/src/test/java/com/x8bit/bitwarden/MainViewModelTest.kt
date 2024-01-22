@@ -4,15 +4,15 @@ import android.content.Intent
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -25,13 +25,12 @@ class MainViewModelTest : BaseViewModelTest() {
     val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
         every { activeUserId } returns USER_ID
-        every { specialCircumstance } returns null
-        every { specialCircumstance = any() } just runs
     }
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
     }
+    private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
     private val intentManager: IntentManager = mockk {
         every { getShareDataFromIntent(any()) } returns null
     }
@@ -78,12 +77,13 @@ class MainViewModelTest : BaseViewModelTest() {
                 intent = mockIntent,
             ),
         )
-        verify {
-            authRepository.specialCircumstance = UserState.SpecialCircumstance.ShareNewSend(
+        assertEquals(
+            SpecialCircumstance.ShareNewSend(
                 data = shareData,
                 shouldFinishWhenComplete = true,
-            )
-        }
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -100,16 +100,17 @@ class MainViewModelTest : BaseViewModelTest() {
                 intent = mockIntent,
             ),
         )
-        verify {
-            authRepository.specialCircumstance = UserState.SpecialCircumstance.ShareNewSend(
+        assertEquals(
+            SpecialCircumstance.ShareNewSend(
                 data = shareData,
                 shouldFinishWhenComplete = false,
-            )
-        }
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
     }
 
     private fun createViewModel() = MainViewModel(
-        authRepository = authRepository,
+        specialCircumstanceManager = specialCircumstanceManager,
         settingsRepository = settingsRepository,
         intentManager = intentManager,
     )

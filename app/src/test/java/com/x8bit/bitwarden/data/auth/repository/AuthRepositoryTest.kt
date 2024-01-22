@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
@@ -219,7 +218,6 @@ class AuthRepositoryTest {
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
-                specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
             repository.userStateFlow.value,
@@ -241,7 +239,6 @@ class AuthRepositoryTest {
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
-                specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
             repository.userStateFlow.value,
@@ -257,7 +254,6 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
-                specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
             repository.userStateFlow.value,
@@ -282,7 +278,6 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userOrganizationsList = USER_ORGANIZATIONS,
                 hasPendingAccountAddition = false,
-                specialCircumstance = null,
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
             repository.userStateFlow.value,
@@ -302,35 +297,6 @@ class AuthRepositoryTest {
         // Updating AuthDiskSource updates the repository
         fakeAuthDiskSource.rememberedEmailAddress = null
         assertNull(repository.rememberedEmailAddress)
-    }
-
-    @Test
-    fun `specialCircumstance update should trigger a change in UserState`() {
-        // Populate the initial UserState
-        assertNull(repository.specialCircumstance)
-        val initialUserState = SINGLE_USER_STATE_1.toUserState(
-            vaultState = VAULT_STATE,
-            userOrganizationsList = emptyList(),
-            hasPendingAccountAddition = false,
-            specialCircumstance = null,
-            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-        )
-        mutableVaultStateFlow.value = VAULT_STATE
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        assertEquals(
-            initialUserState,
-            repository.userStateFlow.value,
-        )
-
-        val mockSpecialCircumstance: UserState.SpecialCircumstance = mockk()
-        repository.specialCircumstance = mockSpecialCircumstance
-
-        assertEquals(
-            initialUserState.copy(
-                specialCircumstance = mockSpecialCircumstance,
-            ),
-            repository.userStateFlow.value,
-        )
     }
 
     @Test
@@ -591,7 +557,6 @@ class AuthRepositoryTest {
                 SINGLE_USER_STATE_1,
                 fakeAuthDiskSource.userState,
             )
-            assertNull(repository.specialCircumstance)
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
             verify { vaultRepository.clearUnlockedData() }
         }
@@ -1089,7 +1054,6 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
-            specialCircumstance = null,
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -1120,7 +1084,6 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
-            specialCircumstance = null,
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -1149,7 +1112,6 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
-            specialCircumstance = null,
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE

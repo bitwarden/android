@@ -4,15 +4,16 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
-
-private const val KEY_NAV_DESTINATION = "nav_state"
 
 /**
  * Manages root level navigation state of the application.
@@ -20,13 +21,23 @@ private const val KEY_NAV_DESTINATION = "nav_state"
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
     init {
-        authRepository
-            .userStateFlow
-            .onEach { sendAction(RootNavAction.Internal.UserStateUpdateReceive(it)) }
+        combine(
+            authRepository
+                .userStateFlow,
+            specialCircumstanceManager
+                .specialCircumstanceStateFlow,
+        ) { userState, specialCircumstance ->
+            RootNavAction.Internal.UserStateUpdateReceive(
+                userState = userState,
+                specialCircumstance = specialCircumstance,
+            )
+        }
+            .onEach(::handleAction)
             .launchIn(viewModelScope)
     }
 
@@ -45,16 +56,15 @@ class RootNavViewModel @Inject constructor(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
         val userState = action.userState
+        val specialCircumstance = action.specialCircumstance
         val updatedRootNavState = when {
             userState == null ||
                 !userState.activeAccount.isLoggedIn ||
                 userState.hasPendingAccountAddition -> RootNavState.Auth
 
             userState.activeAccount.isVaultUnlocked -> {
-                when (userState.specialCircumstance) {
-                    is UserState.SpecialCircumstance.ShareNewSend -> {
-                        RootNavState.VaultUnlockedForNewSend
-                    }
+                when (specialCircumstance) {
+                    is SpecialCircumstance.ShareNewSend -> RootNavState.VaultUnlockedForNewSend
 
                     null,
                     -> {
@@ -126,6 +136,9 @@ sealed class RootNavAction {
         /**
          * User state in the repository layer changed.
          */
-        data class UserStateUpdateReceive(val userState: UserState?) : RootNavAction()
+        data class UserStateUpdateReceive(
+            val userState: UserState?,
+            val specialCircumstance: SpecialCircumstance?,
+        ) : RootNavAction()
     }
 }

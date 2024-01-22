@@ -1,16 +1,16 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
 
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
 
 /**
  * Determines the initial [AddSendState.ViewState.Content.SendType] based on the data in the
- * [UserState.SpecialCircumstance].
+ * [SpecialCircumstance].
  */
-fun UserState.SpecialCircumstance?.toSendType(): AddSendState.ViewState.Content.SendType? =
+fun SpecialCircumstance?.toSendType(): AddSendState.ViewState.Content.SendType? =
     when (this) {
-        is UserState.SpecialCircumstance.ShareNewSend -> {
+        is SpecialCircumstance.ShareNewSend -> {
             when (data) {
                 is IntentManager.ShareData.FileSend -> AddSendState.ViewState.Content.SendType.File(
                     uri = data.fileData.uri,
@@ -30,11 +30,11 @@ fun UserState.SpecialCircumstance?.toSendType(): AddSendState.ViewState.Content.
     }
 
 /**
- * Determines the initial send name based on the data in the [UserState.SpecialCircumstance].
+ * Determines the initial send name based on the data in the [SpecialCircumstance].
  */
-fun UserState.SpecialCircumstance?.toSendName(): String? =
+fun SpecialCircumstance?.toSendName(): String? =
     when (this) {
-        is UserState.SpecialCircumstance.ShareNewSend -> {
+        is SpecialCircumstance.ShareNewSend -> {
             when (data) {
                 is IntentManager.ShareData.FileSend -> data.fileData.fileName
                 is IntentManager.ShareData.TextSend -> data.subject
@@ -45,11 +45,10 @@ fun UserState.SpecialCircumstance?.toSendName(): String? =
     }
 
 /**
- * Determines if the [UserState.SpecialCircumstance] requires the app to be closed after completing
- * the send.
+ * Determines if the [SpecialCircumstance] requires the app to be closed after completing the send.
  */
-fun UserState.SpecialCircumstance?.shouldFinishOnComplete(): Boolean =
+fun SpecialCircumstance?.shouldFinishOnComplete(): Boolean =
     when (this) {
-        is UserState.SpecialCircumstance.ShareNewSend -> shouldFinishWhenComplete
+        is SpecialCircumstance.ShareNewSend -> shouldFinishWhenComplete
         else -> false
     }

@@ -8,6 +8,7 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -53,7 +54,7 @@ private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 /**
  * View model for the new send screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -61,12 +62,13 @@ class AddSendViewModel @Inject constructor(
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepo: VaultRepository,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         // Check to see if we are navigating here from an external source
-        val specialCircumstance = authRepo.specialCircumstance
+        val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val shareSendType = specialCircumstance.toSendType()
         val sendAddType = AddSendArgs(savedStateHandle).sendAddType
         AddSendState(
@@ -596,7 +598,7 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun navigateBack() {
-        authRepo.specialCircumstance = null
+        specialCircumstanceManager.specialCircumstance = null
         sendEvent(
             event = if (state.shouldFinishOnComplete) {
                 AddSendEvent.ExitApp
