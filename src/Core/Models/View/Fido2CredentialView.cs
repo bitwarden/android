@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.View
 {
@@ -30,6 +31,11 @@ namespace Bit.Core.Models.View
         public int CounterValue {
             get => int.TryParse(Counter, out var counter) ? counter : 0;
             set => Counter = value.ToString();
+        }
+
+        public byte[] UserHandleValue {
+            get => UserHandle == null ? null : CoreHelpers.Base64UrlDecode(UserHandle);
+            set => UserHandle = value == null ? null : CoreHelpers.Base64UrlEncode(value);
         }
 
         public override string SubTitle => UserName;

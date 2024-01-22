@@ -2,6 +2,7 @@
 using Bit.Core.Models.View;
 using Bit.Core.Enums;
 using Bit.Core.Utilities.Fido2;
+using System.Buffers.Binary;
 
 namespace Bit.Core.Services
 {
@@ -10,13 +11,15 @@ namespace Bit.Core.Services
         private INativeLogService _logService;
         private ICipherService _cipherService;
         private ISyncService _syncService;
+        private ICryptoFunctionService _cryptoFunctionService;
         private IFido2UserInterface _userInterface;
         
-        public Fido2AuthenticatorService(INativeLogService logService, ICipherService cipherService, ISyncService syncService, IFido2UserInterface userInterface)
+        public Fido2AuthenticatorService(INativeLogService logService, ICipherService cipherService, ISyncService syncService, ICryptoFunctionService cryptoFunctionService, IFido2UserInterface userInterface)
         {
             _logService = logService;
             _cipherService = cipherService;
             _syncService = syncService;
+            _cryptoFunctionService = cryptoFunctionService;
             _userInterface = userInterface;
         }
         
@@ -77,10 +80,33 @@ namespace Bit.Core.Services
                     ++selectedFido2Credential.CounterValue;
                 }
 
+                await _cipherService.UpdateLastUsedDateAsync(selectedCipher.Id);
                 var encrypted = await _cipherService.EncryptAsync(selectedCipher);
                 await _cipherService.SaveWithServerAsync(encrypted);
 
-                
+                var authenticatorData = await GenerateAuthData(
+                    rpId: selectedFido2Credential.RpId,
+                    userPresence: true,
+                    userVerification: userVerified,
+                    counter: selectedFido2Credential.CounterValue);
+
+                // const signature = await generateSignature({
+                //     authData: authenticatorData,
+                //     clientDataHash: params.hash,
+                //     privateKey: await getPrivateKeyFromFido2Credential(selectedFido2Credential),
+                // });
+
+                // TODO: IMPLEMENT this
+                return new Fido2AuthenticatorGetAssertionResult
+                {
+                    SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
+                    {
+                        Id = GuidToRawFormat(selectedCredentialId),
+                        UserHandle = selectedFido2Credential.UserHandleValue
+                    },
+                    AuthenticatorData = authenticatorData,
+                    Signature = new byte[8]
+                };
             } catch {
                 _logService.Info(
                     "[Fido2Authenticator] Aborting because no matching credentials were found in the vault."
@@ -88,13 +114,6 @@ namespace Bit.Core.Services
 
                 throw new UnknownError();
             }
-
-            // TODO: IMPLEMENT this
-            return new Fido2AuthenticatorGetAssertionResult
-            {
-                AuthenticatorData = new byte[32],
-                Signature = new byte[8]
-            };
         }
 
     private async Task<List<CipherView>> FindCredentialsById(PublicKeyCredentialDescriptor[] credentials, string rpId)
@@ -137,9 +156,63 @@ namespace Bit.Core.Services
         );
     }
 
+    private async Task<byte[]> GenerateAuthData(
+        string rpId,
+        bool userVerification,
+        bool userPresence,
+        int counter
+        // byte[] credentialId,
+        // CryptoKey? cryptoKey - only needed for attestation
+    ) {
+        List<byte> authData = new List<byte>();
+
+        var rpIdHash = await _cryptoFunctionService.HashAsync(rpId, CryptoHashAlgorithm.Sha256);
+        authData.AddRange(rpIdHash);
+
+        var flags = AuthDataFlags(false, false, userVerification, userPresence);
+        authData.Add(flags);
+
+        authData.AddRange([
+            (byte)(counter >> 24),
+            (byte)(counter >> 16),
+            (byte)(counter >> 8),
+            (byte)counter
+        ]);
+
+        return authData.ToArray();
+    }
+
+    private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence) {
+        byte flags = 0;
+
+        if (extensionData) {
+            flags |= 0b1000000;
+        }
+
+        if (attestationData) {
+            flags |= 0b01000000;
+        }
+
+        if (userVerification) {
+            flags |= 0b00000100;
+        }
+
+        if (userPresence) {
+            flags |= 0b00000001;
+        }
+
+        return flags;
+    }
+
+
     private string GuidToStandardFormat(byte[] bytes)
     {
         return new Guid(bytes).ToString();
+    }
+
+    private byte[] GuidToRawFormat(string guid)
+    {
+        return Guid.Parse(guid).ToByteArray();
     }
     }
 }

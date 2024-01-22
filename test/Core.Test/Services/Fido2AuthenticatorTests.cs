@@ -291,6 +291,42 @@ namespace Bit.Core.Test.Services
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         // Spec: Increment the credential associated signature counter
+        public async Task GetAssertionAsync_ReturnsAssertion(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams, Cipher encryptedCipher) {
+            // Common Arrange
+            var cipherView = CreateCipherView(null, "bitwarden.com", true);
+            aParams.RpId = cipherView.Login.MainFido2Credential.RpId;
+            aParams.AllowCredentialDescriptorList = null;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(new List<CipherView> { cipherView });
+            sutProvider.GetDependency<IFido2UserInterface>().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>()).Returns(new Fido2PickCredentialResult {
+                CipherId = cipherView.Id,
+                UserVerified = true
+            });
+
+            // Arrange
+            var rpIdHashMock = RandomBytes(32);
+            sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(aParams.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
+            cipherView.Login.MainFido2Credential.CounterValue = 9000;
+            
+            // Act
+            var result = await sutProvider.Sut.GetAssertionAsync(aParams);
+
+            // Assert
+            var encAuthData = result.AuthenticatorData;
+            var rpIdHash = encAuthData.Take(32);
+            var flags = encAuthData.Skip(32).Take(1);
+            var counter = encAuthData.Skip(33).Take(4);
+
+            Assert.Equal(result.SelectedCredential.Id, Guid.Parse(cipherView.Login.MainFido2Credential.CredentialId).ToByteArray());
+            Assert.Equal(result.SelectedCredential.UserHandle, CoreHelpers.Base64UrlDecode(cipherView.Login.MainFido2Credential.UserHandle));
+            Assert.Equal(rpIdHash, rpIdHashMock);
+            Assert.Equal(flags, new byte[] { 0b00000101 }); // UP = true, UV = true
+            Assert.Equal(counter, new byte[] { 0, 0, 0x23, 0x29 }); // 9001 in binary big-endian format
+            // TODO: Assert signature...
+        }
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        // Spec: Increment the credential associated signature counter
         public async Task GetAssertionAsync_ThrowsUnknownError_SaveFails(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams, Cipher encryptedCipher) {
             // Common Arrange
             var cipherView = CreateCipherView(null, "bitwarden.com", true);
@@ -331,7 +367,8 @@ namespace Bit.Core.Test.Services
                         new Fido2CredentialView {
                             CredentialId = credentialId ?? Guid.NewGuid().ToString(),
                             RpId = rpId ?? "bitwarden.com",
-                            Discoverable = discoverable.HasValue ? discoverable.ToString() : "true"
+                            Discoverable = discoverable.HasValue ? discoverable.ToString() : "true",
+                            UserHandleValue = RandomBytes(32),
                         }
                     }
                 }
