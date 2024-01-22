@@ -7,6 +7,7 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -56,12 +57,14 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
-        every { specialCircumstance } returns null
-        every { specialCircumstance = null } just runs
         every { userStateFlow } returns mutableUserStateFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
+    }
+    private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
+        every { specialCircumstance } returns null
+        every { specialCircumstance = any() } just runs
     }
     private val mutableSendDataStateFlow = MutableStateFlow<DataState<SendView>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
@@ -170,7 +173,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-                authRepository.specialCircumstance = null
+                specialCircumstanceManager.specialCircumstance = null
                 clipboardManager.setText(sendUrl)
             }
         }
@@ -205,7 +208,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-                authRepository.specialCircumstance = null
+                specialCircumstanceManager.specialCircumstance = null
                 clipboardManager.setText(sendUrl)
             }
         }
@@ -931,6 +934,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: AddSendState? = null,
         addSendType: AddSendType = AddSendType.AddItem,
+        activityToken: String? = null,
     ): AddSendViewModel = AddSendViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state?.copy(addSendType = addSendType))
@@ -942,9 +946,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 },
             )
             set("edit_send_id", (addSendType as? AddSendType.EditItem)?.sendItemId)
+            set("activityToken", activityToken)
         },
         authRepo = authRepository,
         environmentRepo = environmentRepository,
+        specialCircumstanceManager = specialCircumstanceManager,
         clock = clock,
         clipboardManager = clipboardManager,
         vaultRepo = vaultRepository,

@@ -40,15 +40,6 @@ interface AuthRepository : AuthenticatorProvider {
     var rememberedEmailAddress: String?
 
     /**
-     * Any special account circumstances that may be relevant (ex: pending multi-user account
-     * additions).
-     *
-     * This allows a direct view into and modification of [UserState.specialCircumstance].
-     * Note that this call has no effect when there is no [UserState] information available.
-     */
-    var specialCircumstance: UserState.SpecialCircumstance?
-
-    /**
      * Tracks whether there is an additional account that is pending login/registration in order to
      * have multiple accounts available.
      *

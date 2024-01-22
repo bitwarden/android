@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.auth.repository.model
 
 import com.x8bit.bitwarden.data.auth.repository.model.UserState.Account
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
  * Represents the overall "user state" of the current active user as well as any users that may be
@@ -19,7 +18,6 @@ data class UserState(
     val activeUserId: String,
     val accounts: List<Account>,
     val hasPendingAccountAddition: Boolean = false,
-    val specialCircumstance: SpecialCircumstance? = null,
 ) {
     init {
         require(accounts.any { it.userId == activeUserId })
@@ -58,17 +56,4 @@ data class UserState(
         val organizations: List<Organization>,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
     )
-
-    /**
-     * Represents a special account-related circumstance.
-     */
-    sealed class SpecialCircumstance {
-        /**
-         * The app was launched in order to create/share a new Send using the given [data].
-         */
-        data class ShareNewSend(
-            val data: IntentManager.ShareData,
-            val shouldFinishWhenComplete: Boolean,
-        ) : SpecialCircumstance()
-    }
 }

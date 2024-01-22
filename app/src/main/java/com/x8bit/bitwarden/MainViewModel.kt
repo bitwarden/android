@@ -3,8 +3,8 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -21,7 +21,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<MainState, Unit, MainAction>(
@@ -69,8 +69,8 @@ class MainViewModel @Inject constructor(
         val shareData = intentManager.getShareDataFromIntent(intent)
         when {
             shareData != null -> {
-                authRepository.specialCircumstance =
-                    UserState.SpecialCircumstance.ShareNewSend(
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.ShareNewSend(
                         data = shareData,
                         // Allow users back into the already-running app when completing the
                         // Send task when this is not the first intent.
