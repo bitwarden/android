@@ -106,7 +106,10 @@ class FilledDataBuilderTest {
                 filledPartition,
             ),
             ignoreAutofillIds = ignoreAutofillIds,
+            originalPartition = autofillPartition,
+            uri = URI,
             vaultItemInlinePresentationSpec = null,
+            isVaultLocked = false,
         )
         coEvery {
             autofillCipherProvider.getLoginAutofillCiphers(
@@ -167,7 +170,10 @@ class FilledDataBuilderTest {
             val expected = FilledData(
                 filledPartitions = emptyList(),
                 ignoreAutofillIds = ignoreAutofillIds,
+                originalPartition = autofillPartition,
+                uri = null,
                 vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
             )
 
             // Test
@@ -242,7 +248,10 @@ class FilledDataBuilderTest {
                 filledPartition,
             ),
             ignoreAutofillIds = ignoreAutofillIds,
+            originalPartition = autofillPartition,
+            uri = URI,
             vaultItemInlinePresentationSpec = null,
+            isVaultLocked = false,
         )
         coEvery { autofillCipherProvider.getCardAutofillCiphers() } returns listOf(autofillCipher)
         every { autofillViewCode.buildFilledItemOrNull(code) } returns filledItemCode
@@ -337,7 +346,10 @@ class FilledDataBuilderTest {
                     filledPartitionThree,
                 ),
                 ignoreAutofillIds = emptyList(),
+                originalPartition = autofillPartition,
+                uri = URI,
                 vaultItemInlinePresentationSpec = inlinePresentationSpec,
+                isVaultLocked = false,
             )
             coEvery {
                 autofillCipherProvider.getLoginAutofillCiphers(

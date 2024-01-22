@@ -111,7 +111,10 @@ class AutofillProcessorTest {
             val filledData = FilledData(
                 filledPartitions = listOf(mockk()),
                 ignoreAutofillIds = emptyList(),
+                originalPartition = mockk(),
+                uri = null,
                 vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
             )
             val fillResponse: FillResponse = mockk()
             val autofillRequest: AutofillRequest.Fillable = mockk()
