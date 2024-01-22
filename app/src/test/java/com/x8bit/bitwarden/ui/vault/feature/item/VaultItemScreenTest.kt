@@ -70,7 +70,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             VaultItemScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVaultAddEditItem = { onNavigateToVaultEditItemId = it },
+                onNavigateToVaultAddEditItem = { id, _ -> onNavigateToVaultEditItemId = id },
                 onNavigateToMoveToOrganization = { onNavigateToMoveToOrganizationItemId = it },
                 intentManager = intentManager,
             )

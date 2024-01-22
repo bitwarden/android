@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 private const val ADD_TYPE: String = "add"
 private const val EDIT_TYPE: String = "edit"
+private const val CLONE_TYPE: String = "clone"
 private const val EDIT_ITEM_ID: String = "vault_edit_id"
 
 private const val ADD_EDIT_ITEM_PREFIX: String = "vault_add_edit_item"
@@ -32,6 +33,7 @@ data class VaultAddEditArgs(
         vaultAddEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {
             ADD_TYPE -> VaultAddEditType.AddItem
             EDIT_TYPE -> VaultAddEditType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
+            CLONE_TYPE -> VaultAddEditType.CloneItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
             else -> throw IllegalStateException("Unknown VaultAddEditType.")
         },
     )
@@ -79,7 +81,12 @@ private fun VaultAddEditType.toTypeString(): String =
     when (this) {
         is VaultAddEditType.AddItem -> ADD_TYPE
         is VaultAddEditType.EditItem -> EDIT_TYPE
+        is VaultAddEditType.CloneItem -> CLONE_TYPE
     }
 
 private fun VaultAddEditType.toIdOrNull(): String? =
-    (this as? VaultAddEditType.EditItem)?.vaultItemId
+    when (this) {
+        is VaultAddEditType.AddItem -> null
+        is VaultAddEditType.CloneItem -> vaultItemId
+        is VaultAddEditType.EditItem -> vaultItemId
+    }

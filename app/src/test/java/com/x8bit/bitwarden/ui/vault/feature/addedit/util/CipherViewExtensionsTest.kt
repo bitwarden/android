@@ -14,10 +14,12 @@ import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
@@ -28,6 +30,10 @@ import java.time.Instant
 import java.util.UUID
 
 class CipherViewExtensionsTest {
+
+    private val resourceManager: ResourceManager = mockk {
+        every { getString(R.string.clone) } returns "Clone"
+    }
 
     @BeforeEach
     fun setup() {
@@ -44,7 +50,10 @@ class CipherViewExtensionsTest {
     fun `toViewState should create a Card ViewState`() {
         val cipherView = DEFAULT_CARD_CIPHER_VIEW
 
-        val result = cipherView.toViewState()
+        val result = cipherView.toViewState(
+            isClone = false,
+            resourceManager = resourceManager,
+        )
 
         assertEquals(
             VaultAddEditState.ViewState.Content(
@@ -85,7 +94,10 @@ class CipherViewExtensionsTest {
     fun `toViewState should create a Identity ViewState`() {
         val cipherView = DEFAULT_IDENTITY_CIPHER_VIEW
 
-        val result = cipherView.toViewState()
+        val result = cipherView.toViewState(
+            isClone = false,
+            resourceManager = resourceManager,
+        )
 
         assertEquals(
             VaultAddEditState.ViewState.Content(
@@ -131,7 +143,10 @@ class CipherViewExtensionsTest {
     fun `toViewState should create a Login ViewState`() {
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
 
-        val result = cipherView.toViewState()
+        val result = cipherView.toViewState(
+            isClone = false,
+            resourceManager = resourceManager,
+        )
 
         assertEquals(
             VaultAddEditState.ViewState.Content(
@@ -172,13 +187,49 @@ class CipherViewExtensionsTest {
     fun `toViewState should create a Secure Notes ViewState`() {
         val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW
 
-        val result = cipherView.toViewState()
+        val result = cipherView.toViewState(
+            isClone = false,
+            resourceManager = resourceManager,
+        )
 
         assertEquals(
             VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
+                    folderName = R.string.folder_none.asText(),
+                    favorite = false,
+                    masterPasswordReprompt = true,
+                    notes = "Lots of notes",
+                    ownership = "",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
+                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
+                    ),
+                    availableFolders = emptyList(),
+                    availableOwners = emptyList(),
+                ),
+                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toViewState with isClone true should append clone text to the cipher name`() {
+        val cipherView = DEFAULT_SECURE_NOTES_CIPHER_VIEW
+
+        val result = cipherView.toViewState(
+            isClone = true,
+            resourceManager = resourceManager,
+        )
+
+        assertEquals(
+            VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(
+                    originalCipher = cipherView,
+                    name = "cipher - Clone",
                     folderName = R.string.folder_none.asText(),
                     favorite = false,
                     masterPasswordReprompt = true,

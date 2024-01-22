@@ -7,19 +7,34 @@ import kotlinx.parcelize.Parcelize
  * Represents the difference between create a completely new cipher and editing an existing one.
  */
 sealed class VaultAddEditType : Parcelable {
+
+    /**
+     *  The ID of the vault item (nullable).
+     */
+    abstract val vaultItemId: String?
+
     /**
      * Indicates that we want to create a completely new vault item.
      */
     @Parcelize
-    data object AddItem : VaultAddEditType()
+    data object AddItem : VaultAddEditType() {
+        override val vaultItemId: String?
+            get() = null
+    }
 
     /**
      * Indicates that we want to edit an existing item.
-     *
-     * @param vaultItemId The ID of the vault item to edit.
      */
     @Parcelize
     data class EditItem(
-        val vaultItemId: String,
+        override val vaultItemId: String,
+    ) : VaultAddEditType()
+
+    /**
+     * Indicates that we want to clone an existing item.
+     */
+    @Parcelize
+    data class CloneItem(
+        override val vaultItemId: String,
     ) : VaultAddEditType()
 }

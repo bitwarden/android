@@ -7,6 +7,7 @@ import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -18,7 +19,10 @@ import java.util.UUID
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
  */
-fun CipherView.toViewState(): VaultAddEditState.ViewState =
+fun CipherView.toViewState(
+    isClone: Boolean,
+    resourceManager: ResourceManager,
+): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
         type = when (type) {
             CipherType.LOGIN -> {
@@ -63,7 +67,10 @@ fun CipherView.toViewState(): VaultAddEditState.ViewState =
         },
         common = VaultAddEditState.ViewState.Content.Common(
             originalCipher = this,
-            name = this.name,
+            name = name.appendCloneTextIfRequired(
+                isClone = isClone,
+                resourceManager = resourceManager,
+            ),
             favorite = this.favorite,
             masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
             notes = this.notes.orEmpty(),
@@ -121,3 +128,13 @@ private fun String?.toExpirationMonthOrDefault(): VaultCardExpirationMonth =
         .entries
         .find { it.number == this }
         ?: VaultCardExpirationMonth.SELECT
+
+private fun String.appendCloneTextIfRequired(
+    isClone: Boolean,
+    resourceManager: ResourceManager,
+): String =
+    if (isClone) {
+        plus(" - ${resourceManager.getString(R.string.clone)}")
+    } else {
+        this
+    }

@@ -92,8 +92,15 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         vaultItemDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultEditItem = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
+            onNavigateToVaultEditItem = { vaultItemId, isClone ->
+                navController.navigateToVaultAddEdit(
+                    if (isClone) {
+                        VaultAddEditType.CloneItem(vaultItemId)
+                    } else {
+                        VaultAddEditType.EditItem(vaultItemId)
+                    },
+
+                )
             },
             onNavigateToMoveToOrganization = {
                 navController.navigateToVaultMoveToOrganization(it)

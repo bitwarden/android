@@ -59,7 +59,7 @@ fun VaultItemScreen(
     viewModel: VaultItemViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateToVaultAddEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToVaultAddEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -75,8 +75,7 @@ fun VaultItemScreen(
             VaultItemEvent.NavigateBack -> onNavigateBack()
 
             is VaultItemEvent.NavigateToAddEdit -> {
-                // TODO Implement cloning in BIT-526
-                onNavigateToVaultAddEditItem(event.itemId)
+                onNavigateToVaultAddEditItem(event.itemId, event.isClone)
             }
 
             is VaultItemEvent.NavigateToPasswordHistory -> {

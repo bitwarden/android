@@ -28,7 +28,7 @@ data class VaultItemArgs(val vaultItemId: String) {
  */
 fun NavGraphBuilder.vaultItemDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToVaultEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String) -> Unit,
 ) {
     composableWithSlideTransitions(
