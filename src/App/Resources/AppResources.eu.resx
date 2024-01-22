@@ -416,10 +416,10 @@
     <value>Aplikazioaren gehigarria</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Erabili Bitwarden-en erabilerraztasun zerbitzua zure saio hasierak auto-betetzeko aplikazio eta webguneetan zehar.</value>
+    <value>Erabili Bitwarden-en erabilerraztasun zerbitzua zure saio hasierak automatikoki betetzeko aplikazio eta webguneetan zehar.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-betetze zerbitzua</value>
+    <value>Automatikoki betetzeko zerbitzua</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Saihestu karaktere anbiguoak</value>
@@ -431,13 +431,13 @@
     <value>Zure kutxa gotorrean saio hasiera berriak gehitzeko modurik errazena Bitwarden aplikazioaren gehigarria zabaltzea da. Eskuratu informazio gehiago "Ezarpenak" eremuan.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Erabili Bitwarden Safari-n eta beste aplikazio batzuetan zure saio hasierak auto-betetzeko.</value>
+    <value>Erabili Bitwarden Safari-n eta beste aplikazio batzuetan zure saio hasierak automatikoki betetzeko.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden auto-betetze zerbitzua</value>
+    <value>Bitwardenen automatikoki betetzeko zerbitzua</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Erabili Bitwarden-en erabilerraztasun zerbitzua zure saio hasierak auto-betetzeko.</value>
+    <value>Erabili Bitwardenen erabilerraztasun zerbitzua zure saio hasierak automatikoki betetzeko.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Aldatu emaila</value>
@@ -745,10 +745,10 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Sarrera-eremu bat hautatu eta Bitwarden auto-betetzerako gainjartze bat ikusten duzunean, bere kasa betetzeko erabil dezakezu.</value>
+    <value>Sarrera-eremu bat hautatu eta Bitwardenen automatikoki betetzerako gainjartze bat ikusten duzunean, bere kasa betetzeko erabil dezakezu.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Sakatu jakinarazpen hau kutxa gotorreko elementu bat auto-betetzeko.</value>
+    <value>Sakatu jakinarazpen hau kutxa gotorreko elementu bat automatikoki betetzeko.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Ireki erabilerraztasun ezarpenak</value>
@@ -775,16 +775,16 @@
     <value>Egoera</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Zure kutxa gotorrean saio hasiera berriak gehitzeko modurik errazena Bitwarden auto-betetze zerbitzua erabiltzea da. Eskuratu informazio gehiago "Ezarpenak" eremuan.</value>
+    <value>Zure kutxa gotorrean saio hasiera berriak gehitzeko modurik errazena Bitwardenen automatikoki betetzeko zerbitzua erabiltzea da. Eskuratu informazio gehiago "Ezarpenak" eremuan.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-betetzea</value>
+    <value>Automatikoki betetzea</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Elementu hau ikusi edo auto-bete nahi duzu?</value>
+    <value>Elementu hau ikusi edo automatikoki bete nahi duzu?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Ziur al zaude elementu hau auto-bete nahi duzula? Ez dago kointzidentzia osorik “{0}"-entzat.</value>
+    <value>Ziur al zaude elementu hau automatikoki bete nahi duzula? Ez dago kointzidentzia osorik “{0}"-entzat.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Kointzidentzia duten elementuak</value>
@@ -796,7 +796,7 @@
     <value>Bilatu</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>"{0}"-entzat auto-betetzeko elementu baten bila zabiltza.</value>
+    <value>"{0}"-entzat automatikoki betetzeko elementu baten bila zabiltza.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
     <value>Erakundeak ezagutu</value>
@@ -906,7 +906,7 @@
     <value>Kopiatu TOTP-a</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Saio hasiera batek autentifikazio-gakoa badu, TOTP egiaztatze-kodea arbelean automatikoki kopiatuko da saio hasiera bat auto-betetzean.</value>
+    <value>Saio hasiera batek autentifikazio-gakoa badu, TOTP egiaztatze-kodea arbelean automatikoki kopiatuko da saio hasiera bat automatikoki betetzean.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Kopiatu TOTP automatikoki</value>
@@ -1142,7 +1142,7 @@
     <value>Ikonoen zerbitzariaren URL-a</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Bitwardenekin auto-bete</value>
+    <value>Bitwardenekin automatikoki bete</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Kutxa gotorra blokeatuta dago</value>
@@ -1163,13 +1163,13 @@
     <value>Zakarrontzian ez dago elementurik.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-betetze erabilerraztasun zerbitzua</value>
+    <value>Automatikoki betetzeko erabilerraztasun zerbitzua</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden auto-betetze zerbitzuak Android Autofill Framework erabiltzen du zure gailuko beste aplikazio batzuetan saio-hasierako informazioa betetzen laguntzeko.</value>
+    <value>Bitwardenen automatikoki betetzeko zerbitzuak Android Autofill Framework erabiltzen du zure gailuko beste aplikazio batzuetan saio-hasierako informazioa betetzen laguntzeko.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Erabili Bitwarden auto-betetze zerbitzua saio-hasierako informazioa beste aplikazio batzuetan betetzeko.</value>
+    <value>Erabili Bitwarden automatikoki betetzeko zerbitzua saio-hasierako informazioa beste aplikazio batzuetan betetzeko.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Ireki auto-betetze ezarpenak</value>
@@ -1255,7 +1255,7 @@
     <value>Bai, eta gorde</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-bete eta gorde</value>
+    <value>Automatikoki bete eta gorde</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>Erakundea</value>
@@ -1271,7 +1271,7 @@
     <value>Aurrera egiteko, mantendu YubiKey NEO gailuaren atzeko aldean.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Erabilerraztasun zerbitzua erabilgarria izan daiteke aplikazioak bere kabuz auto-betetzeko zerbitzu estandarra jasaten ez dutenean.</value>
+    <value>Erabilerraztasun zerbitzua erabilgarria izan daiteke aplikazioak bere kabuz automatikoki betetzeko zerbitzu estandarra jasaten ez dutenean.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Pasahitza eguneratu da</value>
@@ -1297,7 +1297,7 @@
     <value>Sartu kutxa gotorrera zuzenean teklatutik, pasahitzak azkar auto-betetzeko.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Zure gailuan pasahitza auto-betetzeko aukera gaitzeko, jarraitu jarraibide hauei:</value>
+    <value>Zure gailuan pasahitza automatikoki betetzeko aukera gaitzeko, jarraitu jarraibide hauei:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Joan iOS "Ezarpenak" aplikaziora</value>
@@ -1315,7 +1315,7 @@
     <value>5. Hautatu "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Pasahitza auto-bete</value>
+    <value>Pasahitza automatikoki bete</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Zure kutxa gotorrean saio hasiera berriak gehitzeko modurik errazena Bitwarden pasahitzak auto-betetzea gehigarria erabiltzea da. Eskuratu Bitwarden pasahitzak auto-betetzea gehigarriaren erabilerari buruzko informazio gehiago "Ezarpenak" eremuan.</value>
@@ -1457,7 +1457,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Zure kontuaren hatz-marka esaldia</value>
+    <value>Zure kontuaren hatz-marka digitalaren esaldia</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
@@ -1533,7 +1533,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Hautatu auto-betetzea bezalako saio-hasierako ekintzetarako erabiliko den URI kointzidentzia detektatzeko modu lehenetsia.</value>
+    <value>Hautatu automatikoki betetzean erabiliko den URI kointzidentzia detektatzeko modu lehenetsia.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Gaia</value>
@@ -1573,7 +1573,7 @@
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-bete blokeatutako URI-ak</value>
+    <value>Automatikoki bete blokeatutako URI-ak</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Galdetu saio-hasiera gehitzeko</value>
@@ -1585,7 +1585,7 @@
     <value>Aplikazioa berrabiarazten denean</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-betetzeak Bitwarden-en kutxa gotorra segurtasunez erabiltzeko aukera ematen du beste webgune eta aplikazio batzuetatik. Badirudi ez duzula Bitwardenentzat auto-betetzeko zerbitzurik jarri. "Ezarpenak" atalean gaitu dezakezu.</value>
+    <value>Automatikoki betetzeak Bitwardenen kutxa gotorra segurtasunez erabiltzeko aukera ematen du beste webgune eta aplikazio batzuetatik. Badirudi ez duzula Bitwardenentzat automatikoki betetzeko zerbitzurik jarri. "Ezarpenak" atalean gaitu dezakezu.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Aplikazioa berrabiarazten denean aplikatuko dira gai aldaketak.</value>
@@ -1619,7 +1619,7 @@
     <value>Erabili biometria desblokeatzeko</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwardenek laguntza behar du - Kontsultatu Bitwarden ezarpenetann "auto-betetzerako erabilerraztasun zerbitzua"</value>
+    <value>Bitwardenek laguntza behar du - Kontsultatu Bitwarden ezarpenetan "automatikoki betetzeko erabilerraztasun zerbitzua"</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. Bitwarden aplikazioko Androiden konfigurazioa pantailan, joan "Erakutsi beste aplikazio batzuetan" aukerara (Aurreratua) eta gaitu gainjartzea.</value>
@@ -1694,7 +1694,7 @@
     <value>Eranskina ondo atxiki da</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Mesedez, gaitu Bitwardeneko ezarpenetan "auto-betetze erabilerraztasun zerbitzua", auto-betetzea erabiltzeko.</value>
+    <value>Mesedez, gaitu Bitwardeneko ezarpenetan "automatikoki betetzeko erabilerraztasun zerbitzua", automatikoki betetzea erabiltzeko.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Ez da pasahitz eremurik detektatu</value>
@@ -1813,25 +1813,25 @@
     <value>Pribatutasun politika</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwardenek laguntza behar du - Gainjartzea gaitu behar duzu Bitwarden ezarpenetako "auto-betetze zerbitzua"-n</value>
+    <value>Bitwardenek laguntza behar du - Gainjartzea gaitu behar duzu Bitwarden ezarpenetako "automatikoki betetzeko zerbitzua"-n</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-betetze zerbitzuak</value>
+    <value>Automatikoki betetzeko zerbitzuak</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Erabili lineako auto-betetzea</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Erabili lineako auto-betetzea, hautatutako IME-ak (teklatua) onartzen badu. Ezarpenak ez badira bateragarriak (edo aukera hau desgaituta badago), auto-betetze gainjartzea erabiliko da lehenespenez.</value>
+    <value>Erabili teklatuko lerroko automatikoki betetzea, hautatutako IME-ak (teklatua) onartzen badu. Ezarpenak ez badira bateragarriak (edo aukera hau desgaituta badago), automatikoki betetzeko gainjartzea erabiliko da lehenespenez.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Erabili erabilerraztasuna</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Erabili Bitwarden erabilerraztasun zerbitzua zure saio hasierak aplikazioen eta webgunearen bidez automatizatzeko. Gaituta dagoenean, popup bat agertuko da saio-hasierako eremuak hautatzean.</value>
+    <value>Erabili Bitwarden erabilerraztasun zerbitzua zure saio hasierak aplikazioen eta webgunearen bidez automatikoki betetzeko. Gaituta dagoenean, popup bat agertuko da saio-hasierako eremuak hautatzean.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Erabili Bitwarden erabilerraztasun zerbitzua zure saio hasierak aplikazioen eta webgunearen bidez automatizatzeko. (Gainjartzea gaituta egotea behar du)</value>
+    <value>Erabili Bitwarden erabilerraztasun zerbitzua zure saio hasierak aplikazioen eta webgunearen bidez automatikoki betetzeko. (Gainjartzeak gaituta egon behar du)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Erabili Bitwarden erabilerraztasun zerbitzua auto-betetze ekintza azkarreko mosaikoa erabiltzeko eta/edo erakutsi popup bat gainjartzea erabiliz (gaituta badago).</value>
@@ -1846,7 +1846,7 @@
     <value>Gaituta dagoenean, Bitwarden erabilerraztasun zerbitzuari popup bat erakusteko aukera ematen dio sarbide eremuak hautatzean.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Gaituta badago, Bitwarden erabilerraztasun zerbitzuak popup bat erakutsiko du saio-hasierako eremuak hautatzen direnean, saio hasierak bere kasa betetzen laguntzeko.</value>
+    <value>Gaituta badago, Bitwarden erabilerraztasun zerbitzuak popup bat erakutsiko du saio-hasierako eremuak hautatzen direnean, saio hasierak automatikoki betetzen laguntzeko.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>Gaituz gero, Android-en auto-betetze Framework-arekin bateragarri ez diren aplikazio zaharragoen auto-betetze zerbitzua handitzeko popup bat erakutsiko du erabilerraztasunak.</value>
@@ -2694,10 +2694,10 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Vault timeout action changed to log out</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Block auto-fill</value>
+    <value>Blokeatu automatikoki betetzea</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Auto-fill will not be offered for these URIs.</value>
+    <value>Automatikoki betetzea ez da URL hauetan erabilgarri egongo.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
     <value>New blocked URI</value>
@@ -2779,7 +2779,7 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>Session timeout action</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>Account fingerprint phrase</value>
+    <value>Kontuaren hatz-marka digitalaren esaldia</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
@@ -2801,7 +2801,7 @@ Kontu honetara aldatu nahi duzu?</value>
     <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>Erabili teklatuko lerroko atomatikoki betetzea, zure teklatuak ahalbidetzen badu. Horrela ez bada, automatikoki betetzeko gainjartzea erabiliko da lehenespenez.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Additional options</value>

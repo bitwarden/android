@@ -416,10 +416,10 @@
     <value>Sovelluslaajennus</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Käytä Bitwardenin esteettömyyspalvelua kirjautumistietojesi automaattiseen täyttöön sovelluksissa ja verkossa.</value>
+    <value>Käytä Bitwardenin esteettömyyspalvelua kirjautumistietojen automaattiseen täyttöön sovelluksissa ja verkkosivuilla.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Automaattisen täytön palvelu</value>
+    <value>Automaattitäytön palvelu</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Vältä epäselviä merkkejä</value>
@@ -434,7 +434,7 @@
     <value>Käytä Bitwardenia kirjautumistietojesi automaattiseen täyttöön Safarissa ja muissa sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwardenin automaattisen täytön palvelu</value>
+    <value>Bitwardenin automaattitäytön palvelu</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Käytä Bitwardenin esteettömyyspalvelua kirjautumistietojen automaattiseen täyttöön.</value>
@@ -745,10 +745,10 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Kun valitset syöttökentän ja näet Bitwardenin ponnahdusvalinnan, voit napauttaa sitä avataksesi automaattisen täytön palvelun.</value>
+    <value>Kun valitset syöttökentän ja näet Bitwardenin ponnahdusvalinnan, voit sitä napauttamalla avata automaattitäytön palvelun.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Napauta tätä ilmoitusta täyttääksesi kohteen holvistasi automaattisesti.</value>
+    <value>Täytä kohde holvistasi automaattisesti napauttamalla tätä ilmoitusta.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Avaa "Esteettömyys" -asetukset</value>
@@ -775,16 +775,16 @@
     <value>Tila</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Helpoin tapa lisätä holviisi uusia kirjautumistietoja on Bitwardenin automaattisen täytön palvelu. Asetuksista löydät lisätietoja palvelun käytöstä.</value>
+    <value>Holviin on helpoin lisätä uusia kirjautumistietoja Bitwardenin automaattitäytön palvelun avulla. Asetuksista löydät lisätietoja sen käytöstä.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Automaattinen täyttö</value>
+    <value>Automaattitäyttö</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Täytetäänkö automaatisesti vai näytetäänkö tiedot?</value>
+    <value>Haluatko täyttää kohteen automaattisesti vai tarkastella sitä?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Haluatko varmasti täyttää automaattisesti tällä kohteella? Se ei täsmää täysin osoitteen "{0}" kanssa.</value>
+    <value>Haluatko varmasti täyttää kohteen automaattisesti? Se ei vastaa osoitetta "{0}" täysin.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Tunnistetut kohteet</value>
@@ -878,17 +878,17 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Todennusmenetelmän avain (TOTP)</value>
+    <value>Todennusavain (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Todennuskoodi (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Todennusmenetelmän avain lisätty.</value>
+    <value>Todennusavain on lisätty.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Todennusavaimen luku epäonnistui.</value>
+    <value>Todennusavaimen lukeminen ei onnistu.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
     <value>Kohdista kamera QR-koodiin.
@@ -907,7 +907,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Kopioi TOTP-todennuskoodi</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Jos kirjautumistieto sisältää kaksivaiheisen TOTP-todennusavaimen, kopioidaan todennuskoodi automaattisesti leikepöydälle automaattisen täytön yhteydessä.</value>
+    <value>Jos kirjautumistieto sisältää kaksivaiheisen todennuksen avaimen, kopioidaan TOTP-todennuskoodi leikepöydälle kohteen automaattisen täytön yhteydessä.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTP-koodin kopiointi</value>
@@ -1143,7 +1143,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Kuvakepalvelimen URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Täytä automaattisesti Bitwardenilla</value>
+    <value>Automaattitäytä Bitwardenilla</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Holvi on lukittu</value>
@@ -1164,13 +1164,13 @@ Koodi skannataan automaattisesti.</value>
     <value>Roskakorissa ei ole kohteita.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Automaattisen täytön esteettömyyspalvelu</value>
+    <value>Automaattitäytön esteettömyyspalvelu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwardenin automaattisen täytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen täyttöön laitteen sovelluksissa.</value>
+    <value>Bitwardenin automaattitäytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen täyttöön laitteen muissa sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Käytä Bitwardenin automaattisen täytön palvelua kirjautumistietojen täyttöön sovelluksissa.</value>
+    <value>Käytä Bitwardenin automaattitäytön palvelua kirjautumistietojen täyttöön muissa sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Avaa "Automaattinen täyttö -palvelu" -asetukset</value>
@@ -1256,7 +1256,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Kyllä, ja tallenna</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Täytä automaattisesti ja tallenna</value>
+    <value>Automaattitäytä ja tallenna</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>Organisaatio</value>
@@ -1272,7 +1272,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Jatka pitämällä YubiKey NEO -todennuslaitetta laitteen taustaa vasten.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Esteettömyyspalvelu voi olla hyödyllinen sellaisten sovellusten kanssa, jotka eivät tue tavallista automaattisen täytön palvelua.</value>
+    <value>Esteettömyyspalvelu voi olla hyödyllinen sellaisten sovellusten kanssa, jotka eivät tue tavallista automaattitäytön palvelua.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Salasana vaihdettiin</value>
@@ -1316,7 +1316,7 @@ Koodi skannataan automaattisesti.</value>
     <value>5. Valitse "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Salasanojen automaattinen täyttö</value>
+    <value>Salasanojen automaattitäyttö</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Helpoin tapa lisätä uusia kirjautumistietoja holviisi on Bitwardenin automaattisen täytön laajennus. Asetuksista löydät lisätietoja laajennuksen käytöstä.</value>
@@ -1530,11 +1530,11 @@ Koodi skannataan automaattisesti.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>URI:n tunnistuksen oletustapa</value>
+    <value>URI:n oletuarvoinen tunnistustapa</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Valitse oletustapa, jolla kirjautumistietojen URI tunnistetaan kun suoritetaan toimintoja kuten automaattinen täyttö.</value>
+    <value>Valitse kirjautumistietojen URI:en oletusarvoinen tunnistustapa suoritettaessa automaattisen täytön kaltaisia toimintoja.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Teema</value>
@@ -1574,7 +1574,7 @@ Koodi skannataan automaattisesti.</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Täytä estetyt URI:t automaattisesti</value>
+    <value>Automaattitäytä estetyt URI:t</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Kysy lisätäänkö kirjautumistieto</value>
@@ -1586,7 +1586,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Kun sovellus käynnistetään uudelleen</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automaattinen täyttö tekee Bitwarden-holvisi käytöstä sivustoilla ja muissa sovelluksissa helppoa. Näyttää siltä, ettei Bitwardenille ole määritetty automaattisen täytön palvelua. Määritys onnistuu "Asetukset" -ruudusta.</value>
+    <value>Automaattisen täytön avulla Bitwarden-holviasi on helppo käyttää sivustoilla ja muissa sovelluksissa. Näyttää siltä, ettei Bitwardenia ole määritetty automaattitäytön palveluksi. Määritys onnistuu "Asetukset"-ruudusta.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Teema vaihtuu kun sovellus käynnistetään uudelleen.</value>
@@ -1620,7 +1620,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Avaa biometrialla</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden vaatii huomiota - Katso Bitwardenin asetuksista "Automaattisen täytön esteettömyyspalvelu"</value>
+    <value>Bitwarden vaatii huomiota - Katso Bitwardenin asetuksista "Automaattitäytön esteettömyyspalvelu"</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. Siirry Android-sovellusasetuksien Bitwarden-ruudulta "Näkyminen muiden päällä" -asetukseen (lisäasetusten alla) ja ota ominaisuus kytkinvalinnasta käyttöön.</value>
@@ -1695,7 +1695,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Tiedostoliite tallennettiin</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Ota "Automaattisen täytön esteettömyyspalvelu" käyttöön Bitwardenin asetuksista käyttääksesi automaattisen täytön pikavalintapalkkia.</value>
+    <value>Ota "Automaattitäytön esteettömyyspalvelu" käyttöön Bitwardenin asetuksista käyttääksesi automaattitäytön pikavalintapalkkia.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Salasanakenttiä ei havaittu</value>
@@ -1814,10 +1814,10 @@ Koodi skannataan automaattisesti.</value>
     <value>Tietosuojakäytäntö</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden edellyttää toimenpiteitä - Kytke "Näkyminen muiden päällä" -asetus käyttöön Bitwardenin asetusten kohdasta "Automaattisen täytön palvelut"</value>
+    <value>Bitwarden edellyttää toimenpiteitä - Kytke "Näkyminen muiden päällä" -asetus käyttöön Bitwardenin asetusten kohdasta "Automaattitäytön palvelut"</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Automaattisen täytön palvelut</value>
+    <value>Automaattitäytön palvelut</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Tekstinsisäinen täyttö</value>
@@ -1853,7 +1853,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Jos käytössä, esteettömyyspalvelu näyttää pikavalintapalkin laajentaakseen automaattisen täytön palvelun toiminnan kattamaan myös vanhemmat sovellukset, jotka eivät tue Android Autofill Framework -rajapintaa.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Yrityskäytännön johdosta kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista.</value>
+    <value>Yrityskäytännön vuoksi kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Organisaatiokäytäntö vaikuttaa omistajuusvalintoihisi.</value>
@@ -2126,7 +2126,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Varmista, että oletusselaimesi sisältää WebAuthn-tuen ja yritä uudelleen.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
+    <value>Organisaatiolla on yrityskäytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Organisaatiokäytännöt ovat määrittäneet holvisi aikakatkaisun enimmäisajaksi {0} tunti(a) {1} minuutti(a).</value>
@@ -2273,7 +2273,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Premium-tilaus vaaditaan</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Etkö voi lisätä todennusavainta? </value>
+    <value>Eikä todennusavaimen lisääminen onnistu?</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
     <value>Skannaa QR-koodi</value>
@@ -2282,7 +2282,7 @@ Koodi skannataan automaattisesti.</value>
     <value>Eikö QR-koodin skannaus onnistu? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Todentajan avain</value>
+    <value>Todennusavain</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
     <value>Syötä se manuaalisesti</value>
@@ -2696,7 +2696,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Holvin aikakatkaisutoiminnoksi vaihdettiin uloskirjaus</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Estä automaattinen täyttö</value>
+    <value>Estä automaattitäyttö</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
     <value>Automaattista täyttöä ei tarjota näille URI-osoitteille.</value>

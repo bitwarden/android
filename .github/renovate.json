@@ -8,16 +8,14 @@
     ":pinAllExceptPeerDependencies",
     ":prConcurrentLimit10",
     ":rebaseStalePrs",
-    "schedule:weekends",
-    ":separateMajorReleases"
+    ":separateMajorReleases",
+    "group:monorepos",
+    "schedule:weekends"
   ],
-  "enabledManagers": ["cargo", "github-actions", "npm", "nuget"],
+  "enabledManagers": ["github-actions", "npm", "nuget"],
+  "commitMessagePrefix": "[deps]:",
+  "commitMessageTopic": "{{depName}}",
   "packageRules": [
-    {
-      "groupName": "cargo minor",
-      "matchManagers": ["cargo"],
-      "matchUpdateTypes": ["minor", "patch"]
-    },
     {
       "groupName": "gh minor",
       "matchManagers": ["github-actions"],
@@ -32,6 +30,6 @@
       "groupName": "nuget minor",
       "matchManagers": ["nuget"],
       "matchUpdateTypes": ["minor", "patch"]
-    },
+    }
   ]
 }

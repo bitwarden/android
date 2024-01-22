@@ -885,7 +885,7 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Chave de autenticador adicionada.</value>
+    <value>Chave de autenticação adicionada.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Não é possível ler a chave de autenticação.</value>
