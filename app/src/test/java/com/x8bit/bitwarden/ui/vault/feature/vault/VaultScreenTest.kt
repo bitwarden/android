@@ -61,6 +61,7 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
     private var onNavigateToVerificationCodeScreen = false
+    private var onNavigateToSearchScreen = false
     private val exitManager = mockk<ExitManager>(relaxed = true)
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
@@ -81,6 +82,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
+                onNavigateToSearchVault = { onNavigateToSearchScreen = true },
                 exitManager = exitManager,
             )
         }
@@ -584,6 +586,12 @@ class VaultScreenTest : BaseComposeTest() {
     fun `NavigateToAddItemScreen event should call onNavigateToVaultAddItemScreen`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateToAddItemScreen)
         assertTrue(onNavigateToVaultAddItemScreenCalled)
+    }
+
+    @Test
+    fun `NavigateToVaultSearchScreen event should call onNavigateToSearchScreen`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultSearchScreen)
+        assertTrue(onNavigateToSearchScreen)
     }
 
     @Test

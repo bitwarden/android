@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
@@ -74,6 +75,8 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToVaultAddItem: () -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
@@ -116,6 +119,8 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToVaultItem = onNavigateToVaultItem,
         onNavigateToVaultEditItem = onNavigateToVaultEditItem,
         navigateToVaultAddItem = onNavigateToVaultAddItem,
+        onNavigateToSearchSend = onNavigateToSearchSend,
+        onNavigateToSearchVault = onNavigateToSearchVault,
         navigateToAddSend = onNavigateToAddSend,
         onNavigateToEditSend = onNavigateToEditSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
@@ -151,6 +156,8 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToVaultAddItem: () -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     navigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     navigateToDeleteAccount: () -> Unit,
@@ -210,6 +217,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToVaultAddItemScreen = navigateToVaultAddItem,
                 onNavigateToVaultItemScreen = onNavigateToVaultItem,
                 onNavigateToVaultEditItemScreen = onNavigateToVaultEditItem,
+                onNavigateToSearchVault = onNavigateToSearchVault,
                 onDimBottomNavBarRequest = { shouldDim ->
                     shouldDimNavBar = shouldDim
                 },
@@ -218,6 +226,7 @@ private fun VaultUnlockedNavBarScaffold(
                 navController = navController,
                 onNavigateToAddSend = navigateToAddSend,
                 onNavigateToEditSend = onNavigateToEditSend,
+                onNavigateToSearchSend = onNavigateToSearchSend,
             )
             generatorGraph(
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },

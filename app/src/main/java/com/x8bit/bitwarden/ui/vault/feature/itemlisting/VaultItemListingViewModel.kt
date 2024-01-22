@@ -20,9 +20,11 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPredicate
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toSearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -207,7 +209,9 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleSearchIconClick() {
         sendEvent(
-            event = VaultItemListingEvent.NavigateToVaultSearchScreen,
+            event = VaultItemListingEvent.NavigateToSearchScreen(
+                searchType = state.itemListingType.toSearchType(),
+            ),
         )
     }
 
@@ -693,9 +697,11 @@ sealed class VaultItemListingEvent {
     data class NavigateToVaultItem(val id: String) : VaultItemListingEvent()
 
     /**
-     * Navigates to the VaultSearchScreen.
+     * Navigates to the SearchScreen with the given type filter.
      */
-    data object NavigateToVaultSearchScreen : VaultItemListingEvent()
+    data class NavigateToSearchScreen(
+        val searchType: SearchType,
+    ) : VaultItemListingEvent()
 
     /**
      * Show a share sheet with the given content.

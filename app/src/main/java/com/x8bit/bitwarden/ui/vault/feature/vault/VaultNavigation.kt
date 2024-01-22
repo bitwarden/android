@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
 const val VAULT_ROUTE: String = "vault"
@@ -18,6 +19,7 @@ fun NavGraphBuilder.vaultDestination(
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {
     composableWithRootPushTransitions(
@@ -29,6 +31,7 @@ fun NavGraphBuilder.vaultDestination(
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultItemListingScreen = onNavigateToVaultItemListingScreen,
             onNavigateToVerificationCodeScreen = onNavigateToVerificationCodeScreen,
+            onNavigateToSearchVault = onNavigateToSearchVault,
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         )
     }

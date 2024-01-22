@@ -108,11 +108,11 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SearchClick should emit ShowToast`() = runTest {
+    fun `SearchClick should emit NavigateToSearch`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.SearchClick)
-            assertEquals(SendEvent.ShowToast("Search Not Implemented".asText()), awaitItem())
+            assertEquals(SendEvent.NavigateToSearch, awaitItem())
         }
     }
 

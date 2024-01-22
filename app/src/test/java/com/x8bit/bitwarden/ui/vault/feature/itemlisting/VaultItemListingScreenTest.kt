@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -50,6 +51,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToAddSendScreenCalled = false
     private var onNavigateToEditSendItemId: String? = null
     private var onNavigateToVaultItemId: String? = null
+    private var onNavigateToSearchType: SearchType? = null
 
     private val intentManager: IntentManager = mockk {
         every { shareText(any()) } just runs
@@ -72,6 +74,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
                 onNavigateToAddSendItem = { onNavigateToAddSendScreenCalled = true },
                 onNavigateToEditSendItem = { onNavigateToEditSendItemId = it },
+                onNavigateToSearch = { onNavigateToSearchType = it },
             )
         }
     }
@@ -145,6 +148,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun `NavigateToAddSendItem should call onNavigateToAddSendScreen`() {
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddSendItem)
         assertTrue(onNavigateToAddSendScreenCalled)
+    }
+
+    @Test
+    fun `NavigateToVaultSearchScreen should call onNavigateToSearch`() {
+        val searchType = SearchType.Vault.SecureNotes
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToSearchScreen(searchType))
+        assertEquals(searchType, onNavigateToSearchType)
     }
 
     @Test

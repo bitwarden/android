@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
@@ -14,11 +15,13 @@ const val VAULT_GRAPH_ROUTE: String = "vault_graph"
 /**
  * Add vault destinations to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultGraph(
     navController: NavController,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
 ) {
     navigation(
@@ -33,13 +36,14 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToVerificationCodeScreen = {
                 navController.navigateToVerificationCodeScreen()
             },
-
+            onNavigateToSearchVault = onNavigateToSearchVault,
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
+            onNavigateToSearchVault = onNavigateToSearchVault,
         )
 
         vaultVerificationCodeDestination(

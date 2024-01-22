@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 
 /**
  * The functions below pertain to entry into the [VaultUnlockedNavBarScreen].
@@ -25,6 +26,8 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToVaultAddItem: () -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
@@ -38,6 +41,8 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToVaultAddItem = onNavigateToVaultAddItem,
             onNavigateToVaultItem = onNavigateToVaultItem,
             onNavigateToVaultEditItem = onNavigateToVaultEditItem,
+            onNavigateToSearchSend = onNavigateToSearchSend,
+            onNavigateToSearchVault = onNavigateToSearchVault,
             onNavigateToAddSend = onNavigateToAddSend,
             onNavigateToEditSend = onNavigateToEditSend,
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,

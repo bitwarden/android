@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
@@ -51,6 +52,7 @@ fun VaultItemListingScreen(
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
+    onNavigateToSearch: (searchType: SearchType) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
@@ -94,11 +96,8 @@ fun VaultItemListingScreen(
                 onNavigateToEditSendItem(event.id)
             }
 
-            is VaultItemListingEvent.NavigateToVaultSearchScreen -> {
-                // TODO Create vault search screen and navigation implementation BIT-213
-                Toast
-                    .makeText(context, "Navigate to the vault search screen.", Toast.LENGTH_SHORT)
-                    .show()
+            is VaultItemListingEvent.NavigateToSearchScreen -> {
+                onNavigateToSearch(event.searchType)
             }
         }
     }

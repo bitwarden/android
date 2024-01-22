@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToSendItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.sendItemListingDestination
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -17,6 +18,7 @@ fun NavGraphBuilder.sendGraph(
     navController: NavController,
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
 ) {
     navigation(
         startDestination = SEND_ROUTE,
@@ -31,11 +33,13 @@ fun NavGraphBuilder.sendGraph(
             onNavigateToSendTextList = {
                 navController.navigateToSendItemListing(VaultItemListingType.SendText)
             },
+            onNavigateToSearchSend = onNavigateToSearchSend,
         )
         sendItemListingDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToAddSendItem = onNavigateToAddSend,
             onNavigateToEditSendItem = onNavigateToEditSend,
+            onNavigateToSearchSend = onNavigateToSearchSend,
         )
     }
 }

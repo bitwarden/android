@@ -4,6 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
+import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.navigateToDeleteAccount
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
@@ -67,6 +69,8 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToVaultEditItem = {
                 navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
             },
+            onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
+            onNavigateToSearchSend = { navController.navigateToSearch(searchType = it) },
             onNavigateToAddSend = { navController.navigateToAddSend(AddSendType.AddItem) },
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
@@ -114,6 +118,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         foldersDestination(onNavigateBack = { navController.popBackStack() })
         generatorModalDestination(onNavigateBack = { navController.popBackStack() })
+        searchDestination(onNavigateBack = { navController.popBackStack() })
     }
 }
 
