@@ -18,8 +18,7 @@ class FilledDataBuilderImpl(
     private val autofillCipherProvider: AutofillCipherProvider,
 ) : FilledDataBuilder {
     override suspend fun build(autofillRequest: AutofillRequest.Fillable): FilledData {
-        // TODO: determine whether or not the vault is locked (BIT-1296)
-        val isVaultLocked = false
+        val isVaultLocked = autofillCipherProvider.isVaultLocked()
 
         // Subtract one to make sure there is space for the vault item.
         val maxCipherInlineSuggestionsCount = autofillRequest.maxInlineSuggestionsCount - 1
