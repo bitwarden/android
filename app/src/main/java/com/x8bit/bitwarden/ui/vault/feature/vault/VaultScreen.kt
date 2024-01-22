@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
@@ -347,13 +346,6 @@ private fun VaultScreenScaffold(
                                 // the visual difference here.
                                 end = 12.dp,
                             )
-                            .fillMaxWidth(),
-                    )
-
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                        modifier = Modifier
                             .fillMaxWidth(),
                     )
                 }
