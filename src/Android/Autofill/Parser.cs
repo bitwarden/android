@@ -107,16 +107,16 @@ namespace Bit.Droid.Autofill
                 }
                 ParseNode(node.RootViewNode);
             }
-            if (string.IsNullOrWhiteSpace(PackageName) && string.IsNullOrWhiteSpace(Website))
-            {
-                PackageName = titlePackageId;
-            }
             if (!AutofillHelpers.TrustedBrowsers.Contains(PackageName) &&
                 !AutofillHelpers.CompatBrowsers.Contains(PackageName))
             {
                 Website = null;
             }
-        }
+            if (string.IsNullOrWhiteSpace(PackageName) && string.IsNullOrWhiteSpace(Website))
+            {
+                PackageName = titlePackageId;
+            }
+       }
 
         private void ParseNode(ViewNode node)
         {
