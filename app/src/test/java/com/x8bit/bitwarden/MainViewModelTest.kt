@@ -3,7 +3,6 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -13,14 +12,10 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class MainViewModelTest : BaseViewModelTest() {
@@ -32,7 +27,6 @@ class MainViewModelTest : BaseViewModelTest() {
         every { activeUserId } returns USER_ID
         every { specialCircumstance } returns null
         every { specialCircumstance = any() } just runs
-        every { setCaptchaCallbackTokenResult(any()) } just runs
     }
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
@@ -40,16 +34,6 @@ class MainViewModelTest : BaseViewModelTest() {
     }
     private val intentManager: IntentManager = mockk {
         every { getShareDataFromIntent(any()) } returns null
-    }
-
-    @BeforeEach
-    fun setUp() {
-        mockkStatic(Intent::getCaptchaCallbackTokenResult)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(Intent::getCaptchaCallbackTokenResult)
     }
 
     @Test
@@ -98,29 +82,6 @@ class MainViewModelTest : BaseViewModelTest() {
             authRepository.specialCircumstance = UserState.SpecialCircumstance.ShareNewSend(
                 data = shareData,
                 shouldFinishWhenComplete = true,
-            )
-        }
-    }
-
-    @Test
-    fun `on ReceiveNewIntent with captcha host should call setCaptchaCallbackToken`() {
-        val viewModel = createViewModel()
-        val mockIntent = mockk<Intent>()
-        every {
-            mockIntent.getCaptchaCallbackTokenResult()
-        } returns CaptchaCallbackTokenResult.Success(
-            token = "mockk_token",
-        )
-        viewModel.trySendAction(
-            MainAction.ReceiveNewIntent(
-                intent = mockIntent,
-            ),
-        )
-        verify {
-            authRepository.setCaptchaCallbackTokenResult(
-                tokenResult = CaptchaCallbackTokenResult.Success(
-                    token = "mockk_token",
-                ),
             )
         }
     }
