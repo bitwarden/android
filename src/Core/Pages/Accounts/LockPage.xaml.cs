@@ -81,7 +81,7 @@ namespace Bit.App.Pages
                 {
                     if (message.Command == Constants.ClearSensitiveFields)
                     {
-                        MainThread.BeginInvokeOnMainThread(_vm.ResetPinPasswordFields);
+                        MainThread.BeginInvokeOnMainThread(() => _vm?.ResetPinPasswordFields());
                     }
                 });
                 if (_appeared)

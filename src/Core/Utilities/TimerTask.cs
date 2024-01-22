@@ -1,9 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Bit.Core.Abstractions;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
+﻿using Bit.Core.Abstractions;
 
 namespace Bit.App.Utilities
 {
@@ -37,7 +32,7 @@ namespace Bit.App.Utilities
                 {
                     while (!_cancellationTokenSource.IsCancellationRequested)
                     {
-                        await Device.InvokeOnMainThreadAsync(async () =>
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
                         {
                             if (!_cancellationTokenSource.IsCancellationRequested)
                             {

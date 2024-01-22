@@ -81,7 +81,7 @@ namespace Bit.App
         {
             get
             {
-                return Application.Current.Windows.OfType<ResumeWindow>().FirstOrDefault(w => w.IsActive);
+                return Application.Current?.Windows.OfType<ResumeWindow>().FirstOrDefault(w => w.IsActive);
             }
         }
 
@@ -145,11 +145,14 @@ namespace Bit.App
         {
             get
             {
-                return Application.Current.MainPage;
+                return Application.Current?.MainPage;
             }
             set
             {
-                Application.Current.MainPage = value;
+                if (Application.Current != null)
+                {
+                    Application.Current.MainPage = value;
+                }
             }
         }   
 #endif

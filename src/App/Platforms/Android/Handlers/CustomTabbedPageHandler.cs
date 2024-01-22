@@ -1,5 +1,6 @@
 ﻿using AndroidX.AppCompat.View.Menu;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Google.Android.Material.BottomNavigation;
 using Microsoft.Maui.Handlers;
@@ -90,7 +91,17 @@ namespace Bit.App.Handlers
 			if(e.Item is MenuItemImpl item)
 			{
 				System.Diagnostics.Debug.WriteLine($"Tab '{item.Title}' was reselected so we'll PopToRoot.");
-                MainThread.BeginInvokeOnMainThread(async () => await _tabbedPage.CurrentPage.Navigation.PopToRootAsync());
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    try
+                    {
+                        await _tabbedPage.CurrentPage.Navigation.PopToRootAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    }
+                });
 			}
         }
 

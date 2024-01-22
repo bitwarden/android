@@ -245,9 +245,9 @@ namespace Bit.App.Pages
 
         public async Task SubmitAsync()
         {
-            ShowPassword = false;
             try
             {
+                ShowPassword = false;
                 var kdfConfig = await _stateService.GetActiveUserCustomDataAsync(a => new KdfConfig(a?.Profile));
                 if (PinEnabled)
                 {
@@ -257,11 +257,14 @@ namespace Bit.App.Pages
                 {
                     await UnlockWithMasterPasswordAsync(kdfConfig);
                 }
-
             }
             catch (LegacyUserException)
             {
                 await HandleLegacyUserAsync();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
             }
         }
 

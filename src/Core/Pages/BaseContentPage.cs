@@ -170,8 +170,15 @@ namespace Bit.App.Pages
         {
             Task.Run(async () =>
             {
-                await Task.Delay(ShowModalAnimationDelay);
-                MainThread.BeginInvokeOnMainThread(() => input.Focus());
+                try
+                {
+                    await Task.Delay(ShowModalAnimationDelay);
+                    MainThread.BeginInvokeOnMainThread(() => input.Focus());
+                }
+                catch (Exception ex)
+                {
+                    _logger.Value.Exception(ex);
+                }
             });
         }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -20,7 +19,7 @@ namespace Bit.iOS.Core.Services
             }
 
             // This gets called a lot - try/catch can be expensive so consider caching or something
-            CultureInfo ci = null;
+            CultureInfo? ci;
             try
             {
                 ci = new CultureInfo(netLanguage);
@@ -108,7 +107,7 @@ namespace Bit.iOS.Core.Services
             {
                 df.Locale = NSLocale.CurrentLocale;
                 df.DateStyle = NSDateFormatterStyle.Short;
-                return df.StringFor((NSDate)date);
+                return df.StringFor((NSDate?)date);
             }
         }
 
@@ -118,7 +117,7 @@ namespace Bit.iOS.Core.Services
             {
                 df.Locale = NSLocale.CurrentLocale;
                 df.TimeStyle = NSDateFormatterStyle.Short;
-                return df.StringFor((NSDate)time);
+                return df.StringFor((NSDate?)time);
             }
         }
     }

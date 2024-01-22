@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>İstifadəçi adını kopyalayın</value>
+    <value>İstifadəçi adını kopyala</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -176,7 +176,7 @@
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Redaktə edin</value>
+    <value>Düzəliş et</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
     <value>Qovluğa düzəliş et</value>

@@ -1,5 +1,6 @@
 ﻿using Bit.App.Models;
 using Bit.App.Utilities;
+using Bit.Core.Services;
 
 namespace Bit.App.Pages
 {
@@ -64,12 +65,19 @@ namespace Bit.App.Pages
 
         private async Task SetPasswordSuccessAsync()
         {
-            if (AppHelpers.SetAlternateMainPage(_appOptions))
+            try
             {
-                return;
+                if (AppHelpers.SetAlternateMainPage(_appOptions))
+                {
+                    return;
+                }
+                var previousPage = await AppHelpers.ClearPreviousPage();
+                App.MainPage = new TabsPage(_appOptions, previousPage);
             }
-            var previousPage = await AppHelpers.ClearPreviousPage();
-            App.MainPage = new TabsPage(_appOptions, previousPage);
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
     }
 }

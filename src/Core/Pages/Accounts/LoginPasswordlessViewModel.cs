@@ -77,6 +77,7 @@ namespace Bit.App.Pages
             {
                 _requestTimeCts?.Cancel();
                 _requestTimeCts?.Dispose();
+                _requestTimeCts = null;
             }
             catch (Exception ex)
             {

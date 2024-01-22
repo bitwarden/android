@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>Mewngofnodi</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -308,7 +308,7 @@
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>Na</value>
   </data>
   <data name="Notes" xml:space="preserve">
     <value>Nodiadau</value>
@@ -327,7 +327,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Symud</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Yn cadw...</value>
@@ -391,7 +391,7 @@
     <value>Fersiwn</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>View</value>
+    <value>Golwg</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Visit our website</value>
@@ -401,7 +401,7 @@
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Ydw</value>
   </data>
   <data name="Account" xml:space="preserve">
     <value>Cyfrif</value>
@@ -715,7 +715,7 @@
     <value>Verification code</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View item</value>
+    <value>Gweld yr Eitem</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Cell we Bitwarden</value>

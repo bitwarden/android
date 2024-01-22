@@ -1,5 +1,4 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Pages;
+﻿using Bit.App.Pages;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
@@ -13,7 +12,7 @@ namespace Bit.iOS.Core.Handlers
     public partial class CustomTabbedHandler : TabbedRenderer
     {
         private IBroadcasterService _broadcasterService;
-        private UITabBarItem _previousSelectedItem;
+        private UITabBarItem? _previousSelectedItem;
 
         public CustomTabbedHandler()
         {
@@ -73,8 +72,7 @@ namespace Bit.iOS.Core.Handlers
         private void UpdateTabBarAppearance()
         {
             // https://developer.apple.com/forums/thread/682420
-            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            if (deviceActionService.SystemMajorVersion() >= 15)
+            if (UIDevice.CurrentDevice.CheckSystemVersion(15,0))
             {
                 var appearance = new UITabBarAppearance();
                 appearance.ConfigureWithOpaqueBackground();
