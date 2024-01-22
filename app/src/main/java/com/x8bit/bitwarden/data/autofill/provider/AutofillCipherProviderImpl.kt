@@ -1,22 +1,40 @@
 package com.x8bit.bitwarden.data.autofill.provider
 
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import kotlinx.coroutines.flow.first
 
 /**
  * The default [AutofillCipherProvider] implementation. This service is used for getting currrent
  * [AutofillCipher]s.
  */
-class AutofillCipherProviderImpl : AutofillCipherProvider {
+class AutofillCipherProviderImpl(
+    private val authRepository: AuthRepository,
+    private val vaultRepository: VaultRepository,
+) : AutofillCipherProvider {
+    private val activeUserId: String? get() = authRepository.activeUserId
+
+    override suspend fun isVaultLocked(): Boolean {
+        val userId = activeUserId ?: return true
+
+        // Wait for any unlocking actions to finish. This can be relevant on startup for Never lock
+        // accounts.
+        vaultRepository.vaultStateFlow.first { userId !in it.unlockingVaultUserIds }
+
+        return !vaultRepository.isVaultUnlocked(userId = userId)
+    }
+
     override suspend fun getCardAutofillCiphers(): List<AutofillCipher.Card> {
         // TODO: fulfill with real ciphers (BIT-1294)
-        return cardCiphers
+        return if (isVaultLocked()) emptyList() else cardCiphers
     }
 
     override suspend fun getLoginAutofillCiphers(
         uri: String,
     ): List<AutofillCipher.Login> {
         // TODO: fulfill with real ciphers (BIT-1294)
-        return loginCiphers
+        return if (isVaultLocked()) emptyList() else loginCiphers
     }
 }
 

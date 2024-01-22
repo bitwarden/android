@@ -28,7 +28,9 @@ import org.junit.jupiter.api.Test
 class FilledDataBuilderTest {
     private lateinit var filledDataBuilder: FilledDataBuilder
 
-    private val autofillCipherProvider: AutofillCipherProvider = mockk()
+    private val autofillCipherProvider: AutofillCipherProvider = mockk {
+        coEvery { isVaultLocked() } returns false
+    }
 
     private val autofillId: AutofillId = mockk()
     private val autofillViewData = AutofillView.Data(
