@@ -52,12 +52,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(CIPHER_VIEW_EXTENSIONS_PATH)
+        mockkStatic(CipherView::toViewState)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(CIPHER_VIEW_EXTENSIONS_PATH)
+        unmockkStatic(CipherView::toViewState)
     }
 
     @Test
@@ -835,9 +835,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         )
 
     companion object {
-        private const val CIPHER_VIEW_EXTENSIONS_PATH: String =
-            "com.x8bit.bitwarden.ui.vault.feature.item.util.CipherViewExtensionsKt"
-
         private const val VAULT_ITEM_ID = "vault_item_id"
         private const val DEFAULT_LOGIN_PASSWORD = "password"
         private const val DEFAULT_LOGIN_USERNAME = "username"

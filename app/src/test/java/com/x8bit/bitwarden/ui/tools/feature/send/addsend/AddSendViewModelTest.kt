@@ -71,18 +71,18 @@ class AddSendViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setup() {
         mockkStatic(
-            ADD_SEND_STATE_EXTENSIONS_PATH,
-            ADD_SEND_VIEW_EXTENSIONS_PATH,
-            SEND_VIEW_EXTENSIONS_PATH,
+            AddSendState.ViewState.Content::toSendView,
+            SendView::toSendUrl,
+            SendView::toViewState,
         )
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            ADD_SEND_STATE_EXTENSIONS_PATH,
-            ADD_SEND_VIEW_EXTENSIONS_PATH,
-            SEND_VIEW_EXTENSIONS_PATH,
+            AddSendState.ViewState.Content::toSendView,
+            SendView::toSendUrl,
+            SendView::toViewState,
         )
     }
 
@@ -951,13 +951,6 @@ class AddSendViewModelTest : BaseViewModelTest() {
     )
 
     companion object {
-        private const val ADD_SEND_STATE_EXTENSIONS_PATH: String =
-            "com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.AddSendStateExtensionsKt"
-        private const val ADD_SEND_VIEW_EXTENSIONS_PATH: String =
-            "com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.SendViewExtensionsKt"
-        private const val SEND_VIEW_EXTENSIONS_PATH: String =
-            "com.x8bit.bitwarden.ui.tools.feature.send.util.SendViewExtensionsKt"
-
         private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
             name = "",
             currentAccessCount = null,

@@ -18,12 +18,12 @@ class RefreshTokenResponseJsonTest {
 
     @BeforeEach
     fun beforeEach() {
-        mockkStatic(JWT_TOKEN_UTILS_PATH)
+        mockkStatic(::parseJwtTokenDataOrNull)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(JWT_TOKEN_UTILS_PATH)
+        unmockkStatic(::parseJwtTokenDataOrNull)
     }
 
     @Test
@@ -59,9 +59,6 @@ private const val REFRESH_TOKEN = "refreshToken"
 private const val REFRESH_TOKEN_UPDATED = "updatedRefreshToken"
 private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
 private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
-
-private const val JWT_TOKEN_UTILS_PATH =
-    "com.x8bit.bitwarden.data.auth.repository.util.JwtTokenUtilsKt"
 
 private val JWT_TOKEN_DATA = JwtTokenDataJson(
     userId = USER_ID_1,

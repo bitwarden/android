@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
 import com.bitwarden.core.SendType
+import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
@@ -21,14 +22,20 @@ class SendDataExtensionsTest {
     fun setup() {
         // Setting the timezone so the tests pass consistently no matter the environment.
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-        mockkStatic(SEND_VIEW_EXTENSIONS_PATH)
+        mockkStatic(
+            SendView::toLabelIcons,
+            SendView::toSendUrl,
+        )
     }
 
     @AfterEach
     fun tearDown() {
         // Clearing the timezone after the test.
         TimeZone.setDefault(null)
-        unmockkStatic(SEND_VIEW_EXTENSIONS_PATH)
+        unmockkStatic(
+            SendView::toLabelIcons,
+            SendView::toSendUrl,
+        )
     }
 
     @Test
@@ -87,9 +94,6 @@ class SendDataExtensionsTest {
         )
     }
 }
-
-private const val SEND_VIEW_EXTENSIONS_PATH: String =
-    "com.x8bit.bitwarden.ui.tools.feature.send.util.SendViewExtensionsKt"
 
 private const val DEFAULT_BASE_URL: String = "www.test.com/"
 
