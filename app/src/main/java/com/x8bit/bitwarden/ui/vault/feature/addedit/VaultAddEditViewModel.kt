@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
@@ -56,6 +57,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
     private val generatorRepository: GeneratorRepository,
+    private val resourceManager: ResourceManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -70,6 +72,7 @@ class VaultAddEditViewModel @Inject constructor(
                     )
 
                     is VaultAddEditType.EditItem -> VaultAddEditState.ViewState.Loading
+                    is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = null,
             )
@@ -79,18 +82,18 @@ class VaultAddEditViewModel @Inject constructor(
     //region Initialization and Overrides
 
     init {
-        when (val vaultAddEditType = state.vaultAddEditType) {
-            VaultAddEditType.AddItem -> Unit
-            is VaultAddEditType.EditItem -> {
+        state
+            .vaultAddEditType
+            .vaultItemId
+            ?.let { itemId ->
                 vaultRepository
-                    .getVaultItemStateFlow(vaultAddEditType.vaultItemId)
+                    .getVaultItemStateFlow(itemId)
                     // We'll stop getting updates as soon as we get some loaded data.
                     .takeUntilLoaded()
                     .map { VaultAddEditAction.Internal.VaultDataReceive(it) }
                     .onEach(::sendAction)
                     .launchIn(viewModelScope)
             }
-        }
 
         vaultRepository
             .totpCodeFlow
@@ -239,6 +242,11 @@ class VaultAddEditViewModel @Inject constructor(
                         cipherView = content.toCipherView(),
                     )
                     sendAction(VaultAddEditAction.Internal.UpdateCipherResultReceive(result))
+                }
+
+                is VaultAddEditType.CloneItem -> {
+                    val result = vaultRepository.createCipher(cipherView = content.toCipherView())
+                    sendAction(VaultAddEditAction.Internal.CreateCipherResultReceive(result))
                 }
             }
         }
@@ -810,6 +818,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleVaultDataReceive(action: VaultAddEditAction.Internal.VaultDataReceive) {
         when (val vaultDataState = action.vaultDataState) {
             is DataState.Error -> {
@@ -827,7 +836,10 @@ class VaultAddEditViewModel @Inject constructor(
                     it.copy(
                         viewState = vaultDataState
                             .data
-                            ?.toViewState()
+                            ?.toViewState(
+                                isClone = it.isCloneMode,
+                                resourceManager = resourceManager,
+                            )
                             ?: VaultAddEditState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
@@ -858,7 +870,10 @@ class VaultAddEditViewModel @Inject constructor(
                     it.copy(
                         viewState = vaultDataState
                             .data
-                            ?.toViewState()
+                            ?.toViewState(
+                                isClone = it.isCloneMode,
+                                resourceManager = resourceManager,
+                            )
                             ?: VaultAddEditState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
@@ -1041,12 +1056,18 @@ data class VaultAddEditState(
         get() = when (vaultAddEditType) {
             VaultAddEditType.AddItem -> R.string.add_item.asText()
             is VaultAddEditType.EditItem -> R.string.edit_item.asText()
+            is VaultAddEditType.CloneItem -> R.string.add_item.asText()
         }
 
     /**
      * Helper to determine if the UI should display the content in add item mode.
      */
     val isAddItemMode: Boolean get() = vaultAddEditType == VaultAddEditType.AddItem
+
+    /**
+     * Helper to determine if the UI should display the content in clone mode.
+     */
+    val isCloneMode: Boolean get() = vaultAddEditType is VaultAddEditType.CloneItem
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.

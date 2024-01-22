@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
@@ -58,7 +59,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val totpTestCodeFlow: MutableSharedFlow<TotpCodeResult> = bufferedMutableSharedFlow()
 
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
-
+    private val resourceManager: ResourceManager = mockk()
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableVaultItemFlow
@@ -115,6 +116,25 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial edit state should be correct`() = runTest {
         val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            initState.copy(viewState = VaultAddEditState.ViewState.Loading),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            vaultRepository.getVaultItemStateFlow(DEFAULT_EDIT_ITEM_ID)
+        }
+    }
+
+    @Test
+    fun `initial clone state should be correct`() = runTest {
+        val vaultAddEditType = VaultAddEditType.CloneItem(DEFAULT_EDIT_ITEM_ID)
         val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -254,7 +274,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     name = "mockName",
                 ),
             )
-            every { cipherView.toViewState() } returns stateWithName.viewState
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    resourceManager = resourceManager,
+                )
+            } returns stateWithName.viewState
             mutableVaultItemFlow.value = DataState.Loaded(cipherView)
 
             val viewModel = createAddVaultItemViewModel(
@@ -276,7 +301,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
 
             coVerify(exactly = 1) {
-                cipherView.toViewState()
+                cipherView.toViewState(
+                    isClone = false,
+                    resourceManager = resourceManager,
+                )
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             }
         }
@@ -294,7 +322,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            every { cipherView.toViewState() } returns stateWithName.viewState
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    resourceManager = resourceManager,
+                )
+            } returns stateWithName.viewState
             coEvery {
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             } returns UpdateCipherResult.Error(errorMessage = null)
@@ -336,7 +369,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             val errorMessage = "You do not have permission to edit this."
 
-            every { cipherView.toViewState() } returns stateWithName.viewState
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    resourceManager = resourceManager,
+                )
+            } returns stateWithName.viewState
             coEvery {
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             } returns UpdateCipherResult.Error(errorMessage = errorMessage)
@@ -1192,6 +1230,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 clipboardManager = clipboardManager,
                 vaultRepository = vaultRepository,
                 generatorRepository = generatorRepository,
+                resourceManager = resourceManager,
             )
         }
 
@@ -1484,6 +1523,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             when (vaultAddEditType) {
                 VaultAddEditType.AddItem -> "add"
                 is VaultAddEditType.EditItem -> "edit"
+                is VaultAddEditType.CloneItem -> "clone"
             },
         )
         set("vault_edit_id", (vaultAddEditType as? VaultAddEditType.EditItem)?.vaultItemId)
@@ -1494,12 +1534,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         vaultRepo: VaultRepository = vaultRepository,
         generatorRepo: GeneratorRepository = generatorRepository,
+        bitwardenResourceManager: ResourceManager = resourceManager,
     ): VaultAddEditViewModel =
         VaultAddEditViewModel(
             savedStateHandle = savedStateHandle,
             clipboardManager = bitwardenClipboardManager,
             vaultRepository = vaultRepo,
             generatorRepository = generatorRepo,
+            resourceManager = bitwardenResourceManager,
         )
 
     /**
