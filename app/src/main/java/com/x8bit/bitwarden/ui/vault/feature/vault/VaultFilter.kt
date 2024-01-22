@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
@@ -70,6 +71,7 @@ fun VaultFilter(
     Row(
         modifier = Modifier
             .scrolledContainerBackground(topAppBarScrollBehavior)
+            .bottomDivider(color = MaterialTheme.colorScheme.outlineVariant)
             .padding(vertical = 8.dp)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
