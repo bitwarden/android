@@ -98,4 +98,10 @@ class StringExtensionsTest {
             result,
         )
     }
+
+    @Test
+    fun `removeDiacritics should remove diacritics from the string`() {
+        val result = "áéíóů".removeDiacritics()
+        assertEquals("aeiou", result)
+    }
 }
