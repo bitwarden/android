@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -106,10 +107,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SearchIconClick should emit NavigateToVaultSearchScreen`() = runTest {
+        val searchType = SearchType.Vault.Logins
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultItemListingsAction.SearchIconClick)
-            assertEquals(VaultItemListingEvent.NavigateToVaultSearchScreen, awaitItem())
+            assertEquals(VaultItemListingEvent.NavigateToSearchScreen(searchType), awaitItem())
         }
     }
 

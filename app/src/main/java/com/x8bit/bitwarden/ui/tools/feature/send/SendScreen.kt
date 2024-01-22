@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
@@ -47,7 +48,7 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * UI for the send screen.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
@@ -55,6 +56,7 @@ fun SendScreen(
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
+    onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -71,6 +73,8 @@ fun SendScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is SendEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
+
+            is SendEvent.NavigateToSearch -> onNavigateToSearchSend(SearchType.Sends.All)
 
             is SendEvent.NavigateNewSend -> onNavigateToAddSend()
 

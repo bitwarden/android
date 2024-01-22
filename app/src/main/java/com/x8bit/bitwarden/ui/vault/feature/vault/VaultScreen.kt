@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalExitManager
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -71,6 +72,7 @@ fun VaultScreen(
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
 ) {
@@ -88,12 +90,7 @@ fun VaultScreen(
 
             VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
 
-            VaultEvent.NavigateToVaultSearchScreen -> {
-                // TODO Create vault search screen and navigation implementation BIT-213
-                Toast
-                    .makeText(context, "Navigate to the vault search screen.", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            VaultEvent.NavigateToVaultSearchScreen -> onNavigateToSearchVault(SearchType.Vault.All)
 
             is VaultEvent.NavigateToVerificationCodeScreen -> {
                 onNavigateToVerificationCodeScreen()

@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
 private const val CARD: String = "card"
@@ -54,6 +55,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItemScreen: (id: String) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
     internalVaultItemListingDestination(
         route = VAULT_ITEM_LISTING_ROUTE,
@@ -62,6 +64,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
         onNavigateToEditSendItem = { },
         onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
         onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
+        onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
     )
 }
 
@@ -72,6 +75,7 @@ fun NavGraphBuilder.sendItemListingDestination(
     onNavigateBack: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
+    onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
 ) {
     internalVaultItemListingDestination(
         route = SEND_ITEM_LISTING_ROUTE,
@@ -80,6 +84,7 @@ fun NavGraphBuilder.sendItemListingDestination(
         onNavigateToEditSendItem = onNavigateToEditSendItem,
         onNavigateToVaultAddItemScreen = { },
         onNavigateToVaultItemScreen = { },
+        onNavigateToSearch = { onNavigateToSearchSend(it as SearchType.Sends) },
     )
 }
 
@@ -94,6 +99,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
+    onNavigateToSearch: (searchType: SearchType) -> Unit,
 ) {
     composableWithPushTransitions(
         route = route,
@@ -117,6 +123,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToAddSendItem = onNavigateToAddSendItem,
             onNavigateToEditSendItem = onNavigateToEditSendItem,
+            onNavigateToSearch = onNavigateToSearch,
         )
     }
 }

@@ -233,8 +233,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleSearchClick() {
-        // TODO: navigate to send search BIT-594
-        sendEvent(SendEvent.ShowToast("Search Not Implemented".asText()))
+        sendEvent(SendEvent.NavigateToSearch)
     }
 
     private fun handleSyncClick() {
@@ -565,6 +564,11 @@ sealed class SendEvent {
      * Navigate to the send file list screen.
      */
     data object NavigateToFileSends : SendEvent()
+
+    /**
+     * Navigate to the send search screen.
+     */
+    data object NavigateToSearch : SendEvent()
 
     /**
      * Navigate to the send text screen.

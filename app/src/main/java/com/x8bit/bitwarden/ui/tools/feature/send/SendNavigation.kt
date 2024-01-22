@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 
 const val SEND_ROUTE: String = "send"
 
@@ -15,6 +16,7 @@ fun NavGraphBuilder.sendDestination(
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
+    onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
 ) {
     composableWithRootPushTransitions(
         route = SEND_ROUTE,
@@ -24,6 +26,7 @@ fun NavGraphBuilder.sendDestination(
             onNavigateToEditSend = onNavigateToEditSend,
             onNavigateToSendFilesList = onNavigateToSendFilesList,
             onNavigateToSendTextList = onNavigateToSendTextList,
+            onNavigateToSearchSend = onNavigateToSearchSend,
         )
     }
 }
