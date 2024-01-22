@@ -12,7 +12,7 @@ namespace Bit.Droid.Autofill
         private List<Field> _passwordFields = null;
         private List<Field> _usernameFields = null;
         private HashSet<string> _ignoreSearchTerms = new HashSet<string> { "search", "find", "recipient", "edit" };
-        private HashSet<string> _usernameTerms = new HashSet<string> { "email", "phone", "username" };
+        private HashSet<string> _usernameTerms = new HashSet<string> { "email", "e-mail", "phone", "username" };
         private HashSet<string> _passwordTerms = new HashSet<string> { "password", "pswd" };
 
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
