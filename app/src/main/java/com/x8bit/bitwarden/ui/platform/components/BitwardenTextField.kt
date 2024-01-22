@@ -60,6 +60,7 @@ fun BitwardenTextField(
     textStyle: TextStyle? = null,
     shouldAddCustomLineBreaks: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text,
+    isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
     var widthPx by remember { mutableStateOf(0) }
@@ -109,6 +110,7 @@ fun BitwardenTextField(
         readOnly = readOnly,
         textStyle = currentTextStyle,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+        isError = isError,
         visualTransformation = visualTransformation,
     )
 }

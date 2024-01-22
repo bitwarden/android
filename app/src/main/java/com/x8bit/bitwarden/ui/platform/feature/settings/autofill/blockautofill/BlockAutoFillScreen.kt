@@ -42,7 +42,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
@@ -63,6 +62,51 @@ fun BlockAutoFillScreen(
         when (event) {
             BlockAutoFillEvent.NavigateBack -> onNavigateBack.invoke()
         }
+    }
+
+    when (val dialogState = state.dialog) {
+        is BlockAutoFillState.DialogState.AddEdit -> {
+            AddEditBlockedUriDialog(
+                uri = dialogState.uri,
+                isEdit = dialogState.originalUri != null,
+                errorMessage = dialogState.errorMessage?.invoke(),
+                onUriChange = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it))
+                    }
+                },
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
+                },
+                onDeleteClick = if (dialogState.isEdit) {
+                    remember(viewModel, dialogState) {
+                        {
+                            dialogState.originalUri?.let { originalUri ->
+                                viewModel.trySendAction(
+                                    BlockAutoFillAction.RemoveUriClick(originalUri),
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    null
+                },
+                onCancelClick = remember(viewModel) {
+                    { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
+                },
+                onSaveClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            BlockAutoFillAction.SaveUri(
+                                newUri = it,
+                            ),
+                        )
+                    }
+                },
+            )
+        }
+
+        null -> Unit
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -89,7 +133,9 @@ fun BlockAutoFillScreen(
             ) {
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    onClick = {},
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
+                    },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_plus),
@@ -126,10 +172,16 @@ fun BlockAutoFillScreen(
                         }
                     }
 
-                    items(viewState.blockedUris) { uri ->
+                    items(viewState.blockedUris, key = { it }) { uri ->
                         BlockAutoFillListItem(
                             label = uri,
-                            onClick = {},
+                            onClick = remember(viewModel) {
+                                {
+                                    viewModel.trySendAction(
+                                        BlockAutoFillAction.EditUriClick(uri),
+                                    )
+                                }
+                            },
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
@@ -140,7 +192,9 @@ fun BlockAutoFillScreen(
                 is BlockAutoFillState.ViewState.Empty -> {
                     item {
                         BlockAutoFillNoItems(
-                            addItemClickAction = {},
+                            addItemClickAction = remember(viewModel) {
+                                { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }
+                            },
                             modifier = Modifier
                                 .padding(innerPadding)
                                 .fillMaxSize(),
