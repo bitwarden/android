@@ -51,12 +51,12 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(LOGIN_RESULT_PATH)
+        mockkStatic(::generateUriForCaptcha)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(LOGIN_RESULT_PATH)
+        unmockkStatic(::generateUriForCaptcha)
     }
 
     @Test
@@ -628,7 +628,5 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             dialog = null,
             passwordStrengthState = PasswordStrengthState.GOOD,
         )
-        private const val LOGIN_RESULT_PATH =
-            "com.x8bit.bitwarden.data.auth.repository.util.CaptchaUtilsKt"
     }
 }

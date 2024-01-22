@@ -44,12 +44,12 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(CAPTCHA_UTILS_PATH)
+        mockkStatic(Intent::getCaptchaCallbackTokenResult)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(CAPTCHA_UTILS_PATH)
+        unmockkStatic(Intent::getCaptchaCallbackTokenResult)
     }
 
     @Test
@@ -154,8 +154,6 @@ class MainViewModelTest : BaseViewModelTest() {
     )
 
     companion object {
-        private const val CAPTCHA_UTILS_PATH =
-            "com.x8bit.bitwarden.data.auth.repository.util.CaptchaUtilsKt"
         private const val USER_ID = "userID"
         private val DEFAULT_USER_STATE = UserState(
             activeUserId = USER_ID,

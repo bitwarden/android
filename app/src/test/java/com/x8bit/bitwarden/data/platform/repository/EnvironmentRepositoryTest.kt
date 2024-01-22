@@ -39,12 +39,12 @@ class EnvironmentRepositoryTest {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(ENVIRONMENT_EXTENSIONS_PATH)
+        mockkStatic(EnvironmentUrlDataJson::toEnvironmentUrls)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(ENVIRONMENT_EXTENSIONS_PATH)
+        unmockkStatic(EnvironmentUrlDataJson::toEnvironmentUrls)
     }
 
     @Test
@@ -163,9 +163,6 @@ class EnvironmentRepositoryTest {
             ),
         )
 }
-
-private const val ENVIRONMENT_EXTENSIONS_PATH =
-    "com.x8bit.bitwarden.data.platform.repository.util.EnvironmentUrlDataJsonExtensionsKt"
 
 private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
     override var preAuthEnvironmentUrlData: EnvironmentUrlDataJson? = null

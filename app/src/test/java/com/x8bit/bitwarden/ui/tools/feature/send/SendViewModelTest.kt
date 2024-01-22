@@ -51,12 +51,12 @@ class SendViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(SEND_DATA_EXTENSIONS_PATH)
+        mockkStatic(SendData::toViewState)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(SEND_DATA_EXTENSIONS_PATH)
+        unmockkStatic(SendData::toViewState)
     }
 
     @Test
@@ -451,9 +451,6 @@ class SendViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
     )
 }
-
-private const val SEND_DATA_EXTENSIONS_PATH: String =
-    "com.x8bit.bitwarden.ui.tools.feature.send.util.SendDataExtensionsKt"
 
 private val DEFAULT_STATE: SendState = SendState(
     viewState = SendState.ViewState.Loading,

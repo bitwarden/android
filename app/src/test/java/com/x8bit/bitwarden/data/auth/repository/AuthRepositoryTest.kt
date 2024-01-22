@@ -148,16 +148,16 @@ class AuthRepositoryTest {
     fun beforeEach() {
         clearMocks(identityService, accountsService, haveIBeenPwnedService)
         mockkStatic(
-            GET_TOKEN_RESPONSE_EXTENSIONS_PATH,
-            REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH,
+            GetTokenResponseJson.Success::toUserState,
+            RefreshTokenResponseJson::toUserStateJson,
         )
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            GET_TOKEN_RESPONSE_EXTENSIONS_PATH,
-            REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH,
+            GetTokenResponseJson.Success::toUserState,
+            RefreshTokenResponseJson::toUserStateJson,
         )
     }
 
@@ -1296,10 +1296,6 @@ class AuthRepositoryTest {
     }
 
     companion object {
-        private const val GET_TOKEN_RESPONSE_EXTENSIONS_PATH =
-            "com.x8bit.bitwarden.data.auth.repository.util.GetTokenResponseExtensionsKt"
-        private const val REFRESH_TOKEN_RESPONSE_EXTENSIONS_PATH =
-            "com.x8bit.bitwarden.data.auth.repository.util.RefreshTokenResponseExtensionsKt"
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val EMAIL = "test@bitwarden.com"
         private const val EMAIL_2 = "test2@bitwarden.com"

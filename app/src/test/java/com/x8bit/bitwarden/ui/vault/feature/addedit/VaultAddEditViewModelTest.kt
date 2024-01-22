@@ -69,14 +69,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(CIPHER_VIEW_EXTENSIONS_PATH)
+        mockkStatic(CipherView::toViewState)
         mockkStatic(UUID::randomUUID)
         every { UUID.randomUUID().toString() } returns TEST_ID
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(CIPHER_VIEW_EXTENSIONS_PATH)
+        unmockkStatic(CipherView::toViewState)
         unmockkStatic(CustomFieldType::toCustomField)
     }
 
@@ -1644,8 +1644,5 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 }
 
 private const val TEST_ID = "testId"
-
-private const val CIPHER_VIEW_EXTENSIONS_PATH: String =
-    "com.x8bit.bitwarden.ui.vault.feature.addedit.util.CipherViewExtensionsKt"
 
 private const val DEFAULT_EDIT_ITEM_ID: String = "edit_item_id"

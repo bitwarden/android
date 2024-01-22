@@ -30,12 +30,12 @@ class RefreshAuthenticatorTests {
         authenticator = RefreshAuthenticator()
         authenticator.authenticatorProvider = authenticatorProvider
 
-        mockkStatic(JWT_TOKEN_UTILS_PATH)
+        mockkStatic(::parseJwtTokenDataOrNull)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(JWT_TOKEN_UTILS_PATH)
+        unmockkStatic(::parseJwtTokenDataOrNull)
     }
 
     @Test
@@ -112,9 +112,6 @@ class RefreshAuthenticatorTests {
         }
     }
 }
-
-private const val JWT_TOKEN_UTILS_PATH =
-    "com.x8bit.bitwarden.data.auth.repository.util.JwtTokenUtilsKt"
 
 private const val USER_ID = "2a135b23-e1fb-42c9-bec3-573857bc8181"
 
