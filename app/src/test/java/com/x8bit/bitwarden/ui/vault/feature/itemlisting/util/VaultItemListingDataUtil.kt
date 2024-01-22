@@ -78,7 +78,7 @@ fun createMockDisplayItemForSend(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
-                subtitle = "2023-10-27T12:00:00Z",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 iconData = IconData.Local(R.drawable.ic_send_file),
                 extraIconList = listOf(
                     IconRes(
@@ -108,7 +108,7 @@ fun createMockDisplayItemForSend(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
-                subtitle = "2023-10-27T12:00:00Z",
+                subtitle = "Oct 27, 2023, 12:00 PM",
                 iconData = IconData.Local(R.drawable.ic_send_text),
                 extraIconList = listOf(
                     IconRes(

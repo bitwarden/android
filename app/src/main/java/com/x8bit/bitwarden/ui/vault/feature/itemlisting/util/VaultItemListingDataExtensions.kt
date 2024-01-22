@@ -9,11 +9,14 @@ import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import java.time.Clock
+
+private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
 
 /**
  * Determines a predicate to filter a list of [CipherView] based on the
@@ -197,7 +200,7 @@ private fun SendView.toDisplayItem(
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = name,
-        subtitle = deletionDate.toString(),
+        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock.zone),
         iconData = IconData.Local(
             iconRes = when (type) {
                 SendType.TEXT -> R.drawable.ic_send_text
