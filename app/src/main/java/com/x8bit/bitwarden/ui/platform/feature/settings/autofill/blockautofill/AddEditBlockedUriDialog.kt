@@ -93,7 +93,7 @@ fun AddEditBlockedUriDialog(
                     ),
                     value = uri,
                     onValueChange = onUriChange,
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Uri,
                     modifier = Modifier
                         .padding(start = 16.dp, end = 16.dp)
                         .fillMaxWidth(),
