@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.core.graphics.toColorInt
 import java.net.URI
+import java.text.Normalizer
 import java.util.Locale
 import kotlin.math.floor
 
@@ -163,3 +164,16 @@ fun String.toHexColorRepresentation(): String {
  */
 fun String.capitalize(locale: Locale = Locale.getDefault()): String =
     replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+
+/**
+ * Normalizes the [String] by removing diacritics, such as an umlaut.
+ *
+ * Example: áéíóů --> aeiou
+ */
+fun String.removeDiacritics(): String =
+    "\\p{InCombiningDiacriticalMarks}+"
+        .toRegex()
+        .replace(
+            Normalizer.normalize(this, Normalizer.Form.NFKD),
+            "",
+        )
