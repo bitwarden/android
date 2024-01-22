@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -50,39 +49,34 @@ class MainViewModel @Inject constructor(
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
-        val shareData = intentManager.getShareDataFromIntent(action.intent)
-        when {
-            shareData != null -> {
-                authRepository.specialCircumstance =
-                    UserState.SpecialCircumstance.ShareNewSend(
-                        data = shareData,
-                        shouldFinishWhenComplete = true,
-                    )
-            }
-        }
+        handleIntent(
+            intent = action.intent,
+            isFirstIntent = true,
+        )
     }
 
     private fun handleNewIntentReceived(action: MainAction.ReceiveNewIntent) {
-        val captchaCallbackTokenResult = action.intent.getCaptchaCallbackTokenResult()
-        val shareData = intentManager.getShareDataFromIntent(action.intent)
-        when {
-            captchaCallbackTokenResult != null -> {
-                authRepository.setCaptchaCallbackTokenResult(
-                    tokenResult = captchaCallbackTokenResult,
-                )
-            }
+        handleIntent(
+            intent = action.intent,
+            isFirstIntent = false,
+        )
+    }
 
+    private fun handleIntent(
+        intent: Intent,
+        isFirstIntent: Boolean,
+    ) {
+        val shareData = intentManager.getShareDataFromIntent(intent)
+        when {
             shareData != null -> {
                 authRepository.specialCircumstance =
                     UserState.SpecialCircumstance.ShareNewSend(
                         data = shareData,
                         // Allow users back into the already-running app when completing the
-                        // Send task.
-                        shouldFinishWhenComplete = false,
+                        // Send task when this is not the first intent.
+                        shouldFinishWhenComplete = isFirstIntent,
                     )
             }
-
-            else -> Unit
         }
     }
 }
