@@ -1146,8 +1146,7 @@ namespace Bit.Core.Services
                     if (model.Login.Uris != null)
                     {
                         cipher.Login.Uris = new List<LoginUri>();
-                        model.Login.Uris.RemoveAll(u => u.Uri == null);
-                        foreach (var uri in model.Login.Uris)
+                        foreach (var uri in model.Login.Uris.Where(u => u.Uri != null))
                         {
                             var loginUri = new LoginUri
                             {
