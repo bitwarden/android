@@ -3,7 +3,9 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
@@ -19,16 +21,19 @@ import org.junit.jupiter.api.Test
 class WebAuthCallbackViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
         every { setCaptchaCallbackTokenResult(any()) } just runs
+        every { setSsoCallbackResult(any()) } just runs
     }
 
     @BeforeEach
     fun setUp() {
         mockkStatic(Intent::getCaptchaCallbackTokenResult)
+        mockkStatic(Intent::getSsoCallbackResult)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(Intent::getCaptchaCallbackTokenResult)
+        unmockkStatic(Intent::getSsoCallbackResult)
     }
 
     @Test
@@ -40,6 +45,9 @@ class WebAuthCallbackViewModelTest : BaseViewModelTest() {
         } returns CaptchaCallbackTokenResult.Success(
             token = "mockk_token",
         )
+        every {
+            mockIntent.getSsoCallbackResult()
+        } returns null
         viewModel.trySendAction(
             WebAuthCallbackAction.IntentReceive(
                 intent = mockIntent,
@@ -49,6 +57,34 @@ class WebAuthCallbackViewModelTest : BaseViewModelTest() {
             authRepository.setCaptchaCallbackTokenResult(
                 tokenResult = CaptchaCallbackTokenResult.Success(
                     token = "mockk_token",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on ReceiveNewIntent with sso host should call setSsoCallbackResult`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        every {
+            mockIntent.getSsoCallbackResult()
+        } returns SsoCallbackResult.Success(
+            state = "mockk_state",
+            code = "mockk_code",
+        )
+        every {
+            mockIntent.getCaptchaCallbackTokenResult()
+        } returns null
+        viewModel.trySendAction(
+            WebAuthCallbackAction.IntentReceive(
+                intent = mockIntent,
+            ),
+        )
+        verify {
+            authRepository.setSsoCallbackResult(
+                result = SsoCallbackResult.Success(
+                    state = "mockk_state",
+                    code = "mockk_code",
                 ),
             )
         }
