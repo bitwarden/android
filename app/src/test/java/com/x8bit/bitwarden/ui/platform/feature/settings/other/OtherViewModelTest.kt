@@ -130,6 +130,7 @@ class OtherViewModelTest : BaseViewModelTest() {
             allowSyncOnRefresh = false,
             clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
             lastSyncTime = "5/14/2023 4:52 PM",
+            dialogState = null,
         )
     }
 }
