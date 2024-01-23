@@ -127,6 +127,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         searchDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
+            onNavigateToEditCipher = {
+                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
+            },
+            onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
         )
     }
 }
