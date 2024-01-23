@@ -49,11 +49,10 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
-import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalExitManager
-import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -111,75 +110,12 @@ fun VaultScreen(
             }
         }
     }
+    val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
     VaultScreenScaffold(
         state = state,
         pullToRefreshState = pullToRefreshState,
-        vaultFilterTypeSelect = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.VaultFilterTypeSelect(it)) }
-        },
-        addItemClickAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.AddItemClick) }
-        },
-        searchIconClickAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.SearchIconClick) }
-        },
-        accountLockClickAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.LockAccountClick(it)) }
-        },
-        accountLogoutClickAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.LogoutAccountClick(it)) }
-        },
-        accountSwitchClickAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.SwitchAccountClick(it)) }
-        },
-        addAccountClickAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.AddAccountClick) }
-        },
-        syncAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.SyncClick) }
-        },
-        lockAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.LockClick) }
-        },
-        exitConfirmationAction = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.ExitConfirmationClick) }
-        },
+        vaultHandlers = vaultHandlers,
         onDimBottomNavBarRequest = onDimBottomNavBarRequest,
-        vaultItemClick = remember(viewModel) {
-            { vaultItem -> viewModel.trySendAction(VaultAction.VaultItemClick(vaultItem)) }
-        },
-        folderClick = remember(viewModel) {
-            { folderItem -> viewModel.trySendAction(VaultAction.FolderClick(folderItem)) }
-        },
-        collectionClick = remember(viewModel) {
-            { collectionItem ->
-                viewModel.trySendAction(VaultAction.CollectionClick(collectionItem))
-            }
-        },
-        verificationCodesClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.VerificationCodesClick) }
-        },
-        loginGroupClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.LoginGroupClick) }
-        },
-        cardGroupClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.CardGroupClick) }
-        },
-        identityGroupClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.IdentityGroupClick) }
-        },
-        secureNoteGroupClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.SecureNoteGroupClick) }
-        },
-        trashClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.TrashClick) }
-        },
-        tryAgainClick = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.TryAgainClick) }
-        },
-        dialogDismiss = remember(viewModel) {
-            { viewModel.trySendAction(VaultAction.DialogDismiss) }
-        },
     )
 }
 
@@ -192,28 +128,8 @@ fun VaultScreen(
 private fun VaultScreenScaffold(
     state: VaultState,
     pullToRefreshState: PullToRefreshState?,
-    vaultFilterTypeSelect: (VaultFilterType) -> Unit,
-    addItemClickAction: () -> Unit,
-    searchIconClickAction: () -> Unit,
-    accountLockClickAction: (AccountSummary) -> Unit,
-    accountLogoutClickAction: (AccountSummary) -> Unit,
-    accountSwitchClickAction: (AccountSummary) -> Unit,
-    addAccountClickAction: () -> Unit,
-    syncAction: () -> Unit,
-    lockAction: () -> Unit,
-    exitConfirmationAction: () -> Unit,
+    vaultHandlers: VaultHandlers,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
-    vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
-    folderClick: (VaultState.ViewState.FolderItem) -> Unit,
-    collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
-    verificationCodesClick: () -> Unit,
-    loginGroupClick: () -> Unit,
-    cardGroupClick: () -> Unit,
-    identityGroupClick: () -> Unit,
-    secureNoteGroupClick: () -> Unit,
-    trashClick: () -> Unit,
-    tryAgainClick: () -> Unit,
-    dialogDismiss: () -> Unit,
 ) {
     var accountMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -245,7 +161,7 @@ private fun VaultScreenScaffold(
                     title = dialog.title,
                     message = dialog.message,
                 ),
-                onDismissRequest = dialogDismiss,
+                onDismissRequest = vaultHandlers.dialogDismiss,
             )
         }
 
@@ -261,7 +177,7 @@ private fun VaultScreenScaffold(
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {
                 shouldShowExitConfirmationDialog = false
-                exitConfirmationAction()
+                vaultHandlers.exitConfirmationAction()
             },
             onDismissClick = { shouldShowExitConfirmationDialog = false },
             onDismissRequest = { shouldShowExitConfirmationDialog = false },
@@ -283,17 +199,17 @@ private fun VaultScreenScaffold(
                     )
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = R.string.search_vault),
-                        onClick = searchIconClickAction,
+                        onClick = vaultHandlers.searchIconClickAction,
                     )
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.sync),
-                                onClick = syncAction,
+                                onClick = vaultHandlers.syncAction,
                             ),
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.lock),
-                                onClick = lockAction,
+                                onClick = vaultHandlers.lockAction,
                             ),
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.exit),
@@ -312,7 +228,7 @@ private fun VaultScreenScaffold(
             ) {
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    onClick = addItemClickAction,
+                    onClick = vaultHandlers.addItemClickAction,
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_plus),
@@ -337,7 +253,7 @@ private fun VaultScreenScaffold(
                     VaultFilter(
                         selectedVaultFilterType = vaultFilterData.selectedVaultFilterType,
                         vaultFilterTypes = vaultFilterData.vaultFilterTypes.toImmutableList(),
-                        onVaultFilterTypeSelect = vaultFilterTypeSelect,
+                        onVaultFilterTypeSelect = vaultHandlers.vaultFilterTypeSelect,
                         topAppBarScrollBehavior = scrollBehavior,
                         modifier = Modifier
                             .padding(
@@ -353,15 +269,7 @@ private fun VaultScreenScaffold(
                 when (val viewState = state.viewState) {
                     is VaultState.ViewState.Content -> VaultContent(
                         state = viewState,
-                        vaultItemClick = vaultItemClick,
-                        folderClick = folderClick,
-                        collectionClick = collectionClick,
-                        loginGroupClick = loginGroupClick,
-                        cardGroupClick = cardGroupClick,
-                        identityGroupClick = identityGroupClick,
-                        secureNoteGroupClick = secureNoteGroupClick,
-                        totpItemsClick = verificationCodesClick,
-                        trashClick = trashClick,
+                        vaultHandlers = vaultHandlers,
                         modifier = innerModifier,
                     )
 
@@ -371,12 +279,12 @@ private fun VaultScreenScaffold(
 
                     is VaultState.ViewState.NoItems -> VaultNoItems(
                         modifier = innerModifier,
-                        addItemClickAction = addItemClickAction,
+                        addItemClickAction = vaultHandlers.addItemClickAction,
                     )
 
                     is VaultState.ViewState.Error -> BitwardenErrorContent(
                         message = viewState.message(),
-                        onTryAgainClick = tryAgainClick,
+                        onTryAgainClick = vaultHandlers.tryAgainClick,
                         modifier = innerModifier,
                     )
                 }
@@ -385,10 +293,10 @@ private fun VaultScreenScaffold(
             BitwardenAccountSwitcher(
                 isVisible = accountMenuVisible,
                 accountSummaries = state.accountSummaries.toImmutableList(),
-                onSwitchAccountClick = accountSwitchClickAction,
-                onLockAccountClick = accountLockClickAction,
-                onLogoutAccountClick = accountLogoutClickAction,
-                onAddAccountClick = addAccountClickAction,
+                onSwitchAccountClick = vaultHandlers.accountSwitchClickAction,
+                onLockAccountClick = vaultHandlers.accountLockClickAction,
+                onLogoutAccountClick = vaultHandlers.accountLogoutClickAction,
+                onAddAccountClick = vaultHandlers.addAccountClickAction,
                 onDismissRequest = { updateAccountMenuVisibility(false) },
                 topAppBarScrollBehavior = scrollBehavior,
                 modifier = outerModifier,
