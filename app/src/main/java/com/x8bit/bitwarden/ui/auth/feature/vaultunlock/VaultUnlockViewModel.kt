@@ -133,13 +133,13 @@ class VaultUnlockViewModel @Inject constructor(
         viewModelScope.launch {
             val vaultUnlockResult = when (state.vaultUnlockType) {
                 VaultUnlockType.MASTER_PASSWORD -> {
-                    vaultRepo.unlockVaultWithMasterPasswordAndSync(
+                    vaultRepo.unlockVaultWithMasterPassword(
                         mutableStateFlow.value.input,
                     )
                 }
 
                 VaultUnlockType.PIN -> {
-                    vaultRepo.unlockVaultWithPinAndSync(
+                    vaultRepo.unlockVaultWithPin(
                         mutableStateFlow.value.input,
                     )
                 }

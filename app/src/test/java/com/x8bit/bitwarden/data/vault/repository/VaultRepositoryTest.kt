@@ -587,7 +587,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPasswordAndSync with missing user state should return InvalidStateError `() =
+    fun `unlockVaultWithMasterPassword with missing user state should return InvalidStateError `() =
         runTest {
             fakeAuthDiskSource.userState = null
             assertEquals(
@@ -598,7 +598,7 @@ class VaultRepositoryTest {
                 vaultRepository.vaultStateFlow.value,
             )
 
-            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(masterPassword = "")
+            val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
 
             assertEquals(
                 VaultUnlockResult.InvalidStateError,
@@ -615,7 +615,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPasswordAndSync with missing user key should return InvalidStateError `() =
+    fun `unlockVaultWithMasterPassword with missing user key should return InvalidStateError `() =
         runTest {
             assertEquals(
                 VaultState(
@@ -625,7 +625,7 @@ class VaultRepositoryTest {
                 vaultRepository.vaultStateFlow.value,
             )
 
-            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(masterPassword = "")
+            val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
             fakeAuthDiskSource.storeUserKey(
                 userId = "mockId-1",
                 userKey = null,
@@ -650,7 +650,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPasswordAndSync with missing private key should return InvalidStateError `() =
+    fun `unlockVaultWithMasterPassword with missing private key should return InvalidStateError `() =
         runTest {
             assertEquals(
                 VaultState(
@@ -659,7 +659,7 @@ class VaultRepositoryTest {
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
-            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(masterPassword = "")
+            val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
             fakeAuthDiskSource.storeUserKey(
                 userId = "mockId-1",
                 userKey = "mockKey-1",
@@ -685,7 +685,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPasswordAndSync with VaultLockManager Success and no encrypted PIN should unlock for the current user, sync, and return Success`() =
+    fun `unlockVaultWithMasterPassword with VaultLockManager Success and no encrypted PIN should unlock for the current user and return Success`() =
         runTest {
             val userId = "mockId-1"
             val mockVaultUnlockResult = VaultUnlockResult.Success
@@ -705,7 +705,7 @@ class VaultRepositoryTest {
                 )
             }
 
-            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(
+            val result = vaultRepository.unlockVaultWithMasterPassword(
                 masterPassword = "mockPassword-1",
             )
 
@@ -713,7 +713,6 @@ class VaultRepositoryTest {
                 mockVaultUnlockResult,
                 result,
             )
-            coVerify { syncService.sync() }
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -733,7 +732,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPasswordAndSync with VaultLockManager Success and a stored encrypted pin should unlock for the current user, sync, derive a new pin-protected key, and return Success`() =
+    fun `unlockVaultWithMasterPassword with VaultLockManager Success and a stored encrypted pin should unlock for the current user, derive a new pin-protected key, and return Success`() =
         runTest {
             val userId = "mockId-1"
             val encryptedPin = "encryptedPin"
@@ -758,7 +757,7 @@ class VaultRepositoryTest {
                 )
             }
 
-            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(
+            val result = vaultRepository.unlockVaultWithMasterPassword(
                 masterPassword = "mockPassword-1",
             )
 
@@ -771,7 +770,6 @@ class VaultRepositoryTest {
                 pinProtectedUserKey = pinProtectedUserKey,
                 inMemoryOnly = true,
             )
-            coVerify { syncService.sync() }
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -795,13 +793,13 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPasswordAndSync with VaultLockManager non-Success should unlock for the current user and return the error`() =
+    fun `unlockVaultWithMasterPassword with VaultLockManager non-Success should unlock for the current user and return the error`() =
         runTest {
             val userId = "mockId-1"
             val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
-            val result = vaultRepository.unlockVaultWithMasterPasswordAndSync(
+            val result = vaultRepository.unlockVaultWithMasterPassword(
                 masterPassword = "mockPassword-1",
             )
 
@@ -809,7 +807,6 @@ class VaultRepositoryTest {
                 mockVaultUnlockResult,
                 result,
             )
-            coVerify(exactly = 0) { syncService.sync() }
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -828,7 +825,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPinAndSync with missing user state should return InvalidStateError `() =
+    fun `unlockVaultWithPin with missing user state should return InvalidStateError `() =
         runTest {
             fakeAuthDiskSource.userState = null
             assertEquals(
@@ -839,7 +836,7 @@ class VaultRepositoryTest {
                 vaultRepository.vaultStateFlow.value,
             )
 
-            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
 
             assertEquals(
                 VaultUnlockResult.InvalidStateError,
@@ -856,7 +853,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPinAndSync with missing pin-protected user key should return InvalidStateError `() =
+    fun `unlockVaultWithPin with missing pin-protected user key should return InvalidStateError `() =
         runTest {
             assertEquals(
                 VaultState(
@@ -866,7 +863,7 @@ class VaultRepositoryTest {
                 vaultRepository.vaultStateFlow.value,
             )
 
-            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
             fakeAuthDiskSource.storePinProtectedUserKey(
                 userId = "mockId-1",
                 pinProtectedUserKey = null,
@@ -891,7 +888,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPinAndSync with missing private key should return InvalidStateError `() =
+    fun `unlockVaultWithPin with missing private key should return InvalidStateError `() =
         runTest {
             assertEquals(
                 VaultState(
@@ -900,7 +897,7 @@ class VaultRepositoryTest {
                 ),
                 vaultRepository.vaultStateFlow.value,
             )
-            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
             fakeAuthDiskSource.storePinProtectedUserKey(
                 userId = "mockId-1",
                 pinProtectedUserKey = "mockKey-1",
@@ -925,19 +922,18 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPinAndSync with VaultLockManager Success should unlock for the current user, sync, and return Success`() =
+    fun `unlockVaultWithPin with VaultLockManager Success should unlock for the current user and return Success`() =
         runTest {
             val userId = "mockId-1"
             val mockVaultUnlockResult = VaultUnlockResult.Success
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
-            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
 
             assertEquals(
                 mockVaultUnlockResult,
                 result,
             )
-            coVerify { syncService.sync() }
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -955,19 +951,18 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPinAndSync with VaultLockManager non-Success should unlock for the current user and return the error`() =
+    fun `unlockVaultWithPin with VaultLockManager non-Success should unlock for the current user and return the error`() =
         runTest {
             val userId = "mockId-1"
             val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
-            val result = vaultRepository.unlockVaultWithPinAndSync(pin = "1234")
+            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
 
             assertEquals(
                 mockVaultUnlockResult,
                 result,
             )
-            coVerify(exactly = 0) { syncService.sync() }
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,

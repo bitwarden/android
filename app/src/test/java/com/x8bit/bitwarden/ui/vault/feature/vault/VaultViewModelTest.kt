@@ -69,14 +69,16 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { vaultFilterType = any() } returns Unit
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
             every { sync() } just runs
+            every { syncIfNecessary() } just runs
             every { lockVaultForCurrentUser() } just runs
             every { lockVault(any()) } just runs
         }
 
     @Test
-    fun `initial state should be correct`() {
+    fun `initial state should be correct and should trigger a syncIfNecessary call`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        verify { vaultRepository.syncIfNecessary() }
     }
 
     @Test

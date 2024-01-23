@@ -95,9 +95,18 @@ interface VaultRepository : VaultLockManager {
     fun deleteVaultData(userId: String)
 
     /**
-     * Attempt to sync the vault data.
+     * Sync the vault data for the current user.
+     *
+     * Unlike [syncIfNecessary], this will always perform the requested sync and should only be
+     * utilized in cases where the user specifically requested the action.
      */
     fun sync()
+
+    /**
+     * Checks if conditions have been met to perform a sync request and, if so, syncs the vault
+     * data for the current user.
+     */
+    fun syncIfNecessary()
 
     /**
      * Flow that represents the data for a specific vault item as found by ID. This may emit `null`
@@ -129,18 +138,17 @@ interface VaultRepository : VaultLockManager {
     fun emitTotpCodeResult(totpCodeResult: TotpCodeResult)
 
     /**
-     * Attempt to unlock the vault with the given [masterPassword] and syncs the vault data for the
-     * currently active user.
+     * Attempt to unlock the vault with the given [masterPassword] and for the currently active
+     * user.
      */
-    suspend fun unlockVaultWithMasterPasswordAndSync(
+    suspend fun unlockVaultWithMasterPassword(
         masterPassword: String,
     ): VaultUnlockResult
 
     /**
-     * Attempt to unlock the vault with the given [pin] and syncs the vault data for the currently
-     * active user.
+     * Attempt to unlock the vault with the given [pin] for the currently active user.
      */
-    suspend fun unlockVaultWithPinAndSync(
+    suspend fun unlockVaultWithPin(
         pin: String,
     ): VaultUnlockResult
 
