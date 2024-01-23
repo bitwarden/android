@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
+import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 
 /**
  * Content view for the [VaultScreen].
@@ -24,15 +25,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSup
 @Suppress("LongMethod")
 fun VaultContent(
     state: VaultState.ViewState.Content,
-    vaultItemClick: (VaultState.ViewState.VaultItem) -> Unit,
-    folderClick: (VaultState.ViewState.FolderItem) -> Unit,
-    collectionClick: (VaultState.ViewState.CollectionItem) -> Unit,
-    totpItemsClick: () -> Unit,
-    loginGroupClick: () -> Unit,
-    cardGroupClick: () -> Unit,
-    identityGroupClick: () -> Unit,
-    secureNoteGroupClick: () -> Unit,
-    trashClick: () -> Unit,
+    vaultHandlers: VaultHandlers,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -55,7 +48,7 @@ fun VaultContent(
                     startIcon = painterResource(id = R.drawable.access_time),
                     label = stringResource(id = R.string.verification_codes),
                     supportingLabel = state.totpItemsCount.toString(),
-                    onClick = totpItemsClick,
+                    onClick = vaultHandlers.verificationCodesClick,
                     showDivider = true,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -85,7 +78,7 @@ fun VaultContent(
                     startIcon = favoriteItem.startIcon,
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
-                    onClick = { vaultItemClick(favoriteItem) },
+                    onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
@@ -127,7 +120,7 @@ fun VaultContent(
                 startIcon = painterResource(id = R.drawable.ic_login_item),
                 label = stringResource(id = R.string.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
-                onClick = loginGroupClick,
+                onClick = vaultHandlers.loginGroupClick,
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -140,7 +133,7 @@ fun VaultContent(
                 startIcon = painterResource(id = R.drawable.ic_card_item),
                 label = stringResource(id = R.string.type_card),
                 supportingLabel = state.cardItemsCount.toString(),
-                onClick = cardGroupClick,
+                onClick = vaultHandlers.cardGroupClick,
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -153,7 +146,7 @@ fun VaultContent(
                 startIcon = painterResource(id = R.drawable.ic_identity_item),
                 label = stringResource(id = R.string.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
-                onClick = identityGroupClick,
+                onClick = vaultHandlers.identityGroupClick,
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -166,7 +159,7 @@ fun VaultContent(
                 startIcon = painterResource(id = R.drawable.ic_secure_note_item),
                 label = stringResource(id = R.string.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
-                onClick = secureNoteGroupClick,
+                onClick = vaultHandlers.secureNoteGroupClick,
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -204,7 +197,7 @@ fun VaultContent(
                     startIcon = painterResource(id = R.drawable.ic_folder),
                     label = folder.name(),
                     supportingLabel = folder.itemCount.toString(),
-                    onClick = { folderClick(folder) },
+                    onClick = { vaultHandlers.folderClick(folder) },
                     showDivider = false,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -239,7 +232,7 @@ fun VaultContent(
                     startIcon = noFolderItem.startIcon,
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
-                    onClick = { vaultItemClick(noFolderItem) },
+                    onClick = { vaultHandlers.vaultItemClick(noFolderItem) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -273,7 +266,7 @@ fun VaultContent(
                     startIcon = painterResource(id = R.drawable.ic_collection),
                     label = collection.name,
                     supportingLabel = collection.itemCount.toString(),
-                    onClick = { collectionClick(collection) },
+                    onClick = { vaultHandlers.collectionClick(collection) },
                     showDivider = false,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -311,7 +304,7 @@ fun VaultContent(
                 startIcon = painterResource(id = R.drawable.ic_trash),
                 label = stringResource(id = R.string.trash),
                 supportingLabel = state.trashItemsCount.toString(),
-                onClick = trashClick,
+                onClick = vaultHandlers.trashClick,
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
