@@ -30,6 +30,7 @@ class OtherViewModel @Inject constructor(
             allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
             clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
             lastSyncTime = "5/14/2023 4:52 PM",
+            dialogState = null,
         ),
 ) {
     override fun handleAction(action: OtherAction): Unit = when (action) {
@@ -80,6 +81,7 @@ data class OtherState(
     val allowSyncOnRefresh: Boolean,
     val clearClipboardFrequency: ClearClipboardFrequency,
     val lastSyncTime: String,
+    val dialogState: DialogState?,
 ) : Parcelable {
     /**
      * Represents the different frequencies with which the user clipboard can be cleared.
@@ -92,6 +94,19 @@ data class OtherState(
         ONE_MINUTE(text = R.string.one_minute.asText()),
         TWO_MINUTES(text = R.string.two_minutes.asText()),
         FIVE_MINUTES(text = R.string.five_minutes.asText()),
+    }
+
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+        /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
     }
 }
 

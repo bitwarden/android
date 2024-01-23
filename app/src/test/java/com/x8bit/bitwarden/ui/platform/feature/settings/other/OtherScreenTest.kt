@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -10,11 +11,13 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -124,6 +127,22 @@ class OtherScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(OtherEvent.NavigateBack)
         assertTrue(haveCalledNavigateBack)
     }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        val loadingMessage = "syncing"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = OtherState.DialogState.Loading(loadingMessage.asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
 }
 
 private val DEFAULT_STATE = OtherState(
@@ -131,4 +150,5 @@ private val DEFAULT_STATE = OtherState(
     allowSyncOnRefresh = false,
     clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
     lastSyncTime = "5/14/2023 4:52 PM",
+    dialogState = null,
 )

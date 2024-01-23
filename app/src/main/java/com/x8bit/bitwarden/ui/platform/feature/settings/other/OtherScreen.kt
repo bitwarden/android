@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
@@ -38,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 
 /**
  * Displays the other screen.
@@ -55,6 +57,10 @@ fun OtherScreen(
             OtherEvent.NavigateBack -> onNavigateBack.invoke()
         }
     }
+
+    OtherDialogs(
+        dialogState = state.dialogState,
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -222,5 +228,18 @@ private fun ClearClipboardFrequencyRow(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun OtherDialogs(
+    dialogState: OtherState.DialogState?,
+) {
+    when (dialogState) {
+        is OtherState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(dialogState.message),
+        )
+
+        null -> Unit
     }
 }
