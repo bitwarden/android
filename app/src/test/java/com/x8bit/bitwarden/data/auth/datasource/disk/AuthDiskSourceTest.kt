@@ -11,8 +11,13 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.encodeToJsonElement
@@ -25,14 +30,23 @@ import org.junit.jupiter.api.Test
 class AuthDiskSourceTest {
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
+    private val legacySecureStorageMigrator = mockk<LegacySecureStorageMigrator>() {
+        every { migrateIfNecessary() } just runs
+    }
 
     private val json = PlatformNetworkModule.providesJson()
 
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
         sharedPreferences = fakeSharedPreferences,
+        legacySecureStorageMigrator = legacySecureStorageMigrator,
         json = json,
     )
+
+    @Test
+    fun `initialization should kick off a legacy migration if necessary`() {
+        every { legacySecureStorageMigrator.migrateIfNecessary() }
+    }
 
     @Test
     fun `uniqueAppId should generate a new ID and update SharedPreferences if none exists`() {

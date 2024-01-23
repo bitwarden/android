@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.di.EncryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,11 +25,13 @@ object AuthDiskModule {
     fun provideAuthDiskSource(
         @EncryptedPreferences encryptedSharedPreferences: SharedPreferences,
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
+        legacySecureStorageMigrator: LegacySecureStorageMigrator,
         json: Json,
     ): AuthDiskSource =
         AuthDiskSourceImpl(
             encryptedSharedPreferences = encryptedSharedPreferences,
             sharedPreferences = sharedPreferences,
+            legacySecureStorageMigrator = legacySecureStorageMigrator,
             json = json,
         )
 }
