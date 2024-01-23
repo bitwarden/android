@@ -3,7 +3,6 @@ using Bit.Core.Models.View;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities.Fido2;
-using System.Buffers.Binary;
 
 namespace Bit.Core.Services
 {
@@ -26,9 +25,9 @@ namespace Bit.Core.Services
         
         public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams)
         {
-            // throw new NotAllowedError();
             List<CipherView> cipherOptions;
 
+            // TODO: Unlock vault somehow
             // await userInterfaceSession.ensureUnlockedVault();
             await _syncService.FullSyncAsync(false);
 
