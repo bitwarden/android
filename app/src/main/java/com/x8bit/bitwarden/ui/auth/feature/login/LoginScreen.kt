@@ -64,6 +64,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod")
 fun LoginScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToMasterPasswordHint: (String) -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
     onNavigateToLoginWithDevice: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
@@ -74,6 +75,9 @@ fun LoginScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginEvent.NavigateBack -> onNavigateBack()
+            is LoginEvent.NavigateToMasterPasswordHint -> {
+                onNavigateToMasterPasswordHint(event.emailAddress)
+            }
             is LoginEvent.NavigateToCaptcha -> {
                 intentManager.startCustomTabsActivity(uri = event.uri)
             }

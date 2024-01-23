@@ -43,6 +43,7 @@ fun NavController.navigateToLogin(
  */
 fun NavGraphBuilder.loginDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToMasterPasswordHint: (emailAddress: String) -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
     onNavigateToLoginWithDevice: () -> Unit,
 ) {
@@ -58,6 +59,7 @@ fun NavGraphBuilder.loginDestination(
     ) {
         LoginScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToMasterPasswordHint = onNavigateToMasterPasswordHint,
             onNavigateToEnterpriseSignOn = onNavigateToEnterpriseSignOn,
             onNavigateToLoginWithDevice = onNavigateToLoginWithDevice,
         )

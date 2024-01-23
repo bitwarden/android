@@ -45,6 +45,7 @@ class LoginScreenTest : BaseComposeTest() {
         every { startCustomTabsActivity(any()) } returns Unit
     }
     private var onNavigateBackCalled = false
+    private var onNavigateToMasterPasswordHintCalled = false
     private var onNavigateToEnterpriseSignOnCalled = false
     private var onNavigateToLoginWithDeviceCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<LoginEvent>()
@@ -59,6 +60,7 @@ class LoginScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToMasterPasswordHint = { onNavigateToMasterPasswordHintCalled = true },
                 onNavigateToEnterpriseSignOn = { onNavigateToEnterpriseSignOnCalled = true },
                 onNavigateToLoginWithDevice = { onNavigateToLoginWithDeviceCalled = true },
                 viewModel = viewModel,
@@ -277,6 +279,12 @@ class LoginScreenTest : BaseComposeTest() {
         val mockUri = mockk<Uri>()
         mutableEventFlow.tryEmit(LoginEvent.NavigateToCaptcha(mockUri))
         verify { intentManager.startCustomTabsActivity(mockUri) }
+    }
+
+    @Test
+    fun `NavigateToMasterPasswordHint should call onNavigateToMasterPasswordHint`() {
+        mutableEventFlow.tryEmit(LoginEvent.NavigateToMasterPasswordHint("email"))
+        assertTrue(onNavigateToMasterPasswordHintCalled)
     }
 
     @Test

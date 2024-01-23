@@ -336,13 +336,13 @@ class LoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `MasterPasswordHintClick should emit ShowToast`() = runTest {
+    fun `MasterPasswordHintClick should emit NavigateToMasterPasswordHint`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(LoginAction.MasterPasswordHintClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
-                LoginEvent.ShowToast("Not yet implemented."),
+                LoginEvent.NavigateToMasterPasswordHint("test@gmail.com"),
                 awaitItem(),
             )
         }
