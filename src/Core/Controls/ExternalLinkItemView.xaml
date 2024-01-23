@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -17,7 +17,7 @@
             LineBreakMode="TailTruncation" />
 
         <controls:IconLabel
-            Text="{Binding Source={x:Static core:BitwardenIcons.ShareSquare}}"
+            Text="{Binding Source={x:Static core:BitwardenIcons.ExternalLink}}"
             TextColor="{DynamicResource TextColor}"
             HorizontalOptions="End"
             VerticalOptions="Center"

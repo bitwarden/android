@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="43">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="43">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -185,20 +185,6 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Logins" id="3734">
-                        <leftBarButtonItems>
-                            <barButtonItem title="Cancel" id="3735">
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <action selector="CancelBarButton_Activated:" destination="2304" id="3750"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Account" image="person.2" catalog="system" style="plain" id="I0b-et-FGw" userLabel="Accoutn Switching Button">
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <action selector="AccountSwitchingBarButton_Activated:" destination="2304" id="dZn-bd-bC6"/>
-                                </connections>
-                            </barButtonItem>
-                        </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="3736">
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -216,9 +202,7 @@
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="AccountSwitchingBarButton" destination="I0b-et-FGw" id="KZj-EO-7wd"/>
                         <outlet property="AddBarButton" destination="3736" id="name-outlet-3736"/>
-                        <outlet property="CancelBarButton" destination="3735" id="name-outlet-3735"/>
                         <outlet property="MainView" destination="q9o-3n-3xL" id="gjJ-12-71Q"/>
                         <outlet property="NavItem" destination="3734" id="name-outlet-3734"/>
                         <outlet property="OverlayView" destination="Tq0-Ep-tHr" id="igj-R2-gXJ"/>
@@ -410,19 +394,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Verify Master Password" id="NCb-RV-Vqq">
-                        <leftBarButtonItems>
-                            <barButtonItem title="Cancel" id="Xoh-Zv-hhd">
-                                <connections>
-                                    <action selector="CancelButton_Activated:" destination="cn5-F4-59n" id="1gM-mE-phn"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Account" image="person.2" catalog="system" style="plain" id="nwd-aM-kFD" userLabel="Accoutn Switching Button">
-                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <action selector="AccountSwitchingBarButton_Activated:" destination="cn5-F4-59n" id="vVZ-IM-rkU"/>
-                                </connections>
-                            </barButtonItem>
-                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" title="Submit" id="gju-yD-EmI">
                             <connections>
                                 <action selector="SubmitButton_Activated:" destination="cn5-F4-59n" id="O1U-fk-BDh"/>
@@ -430,8 +401,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="AccountSwitchingBarButton" destination="nwd-aM-kFD" id="T8F-CN-2il"/>
-                        <outlet property="CancelButton" destination="Xoh-Zv-hhd" id="mwi-4K-maj"/>
                         <outlet property="MainTableView" destination="FcI-Ph-m9e" id="Ybv-5r-VGA"/>
                         <outlet property="NavItem" destination="NCb-RV-Vqq" id="L9b-At-x0A"/>
                         <outlet property="OverlayView" destination="sDX-BN-qLw" id="veu-q4-CeW"/>
@@ -601,13 +570,12 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="12959"/>
+        <segue reference="12574"/>
         <segue reference="3731"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="check.png" width="90" height="90"/>
         <image name="logo.png" width="282" height="44"/>
-        <image name="person.2" catalog="system" width="128" height="87"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

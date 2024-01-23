@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2vH-Do-uhk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2vH-Do-uhk">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,11 +14,11 @@
             <objects>
                 <viewController id="bHU-LX-EpF" customClass="LoadingViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="z2O-Vp-jY9">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="804"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Zdy-yw-n0p">
-                                <rect key="frame" x="66" y="352" width="282" height="44"/>
+                                <rect key="frame" x="66" y="350" width="282" height="44"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jNx-Vd-K6U"/>
@@ -41,7 +41,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="2vH-Do-uhk" customClass="ExtensionNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" hidden="YES" contentMode="scaleToFill" translucent="NO" id="JoO-jQ-16M">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </navigationBar>
                     <connections>
@@ -61,30 +61,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="M1A-84-x5l">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="92" width="414" height="770"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableView>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ijE-Pa-OBq" userLabel="OverlayView">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="92" width="414" height="770"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fav-Fz-6ZK">
-                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                                 <items>
                                     <navigationItem title="Verify Master Password" id="aka-In-IYk">
-                                        <leftBarButtonItems>
-                                            <barButtonItem title="Cancel" id="LrG-Qx-w4Q">
-                                                <connections>
-                                                    <action selector="CancelButton_Activated:" destination="Vi7-LV-nWW" id="qyZ-i9-Dwz"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem title="Item" image="person.2" catalog="system" style="plain" id="nlD-Xn-HtM" userLabel="Account Switching Button">
-                                                <color key="tintColor" systemColor="systemBackgroundColor"/>
-                                                <connections>
-                                                    <action selector="AccountSwitchingButton_Activated:" destination="Vi7-LV-nWW" id="G3U-rv-UOl"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </leftBarButtonItems>
                                         <barButtonItem key="rightBarButtonItem" title="Submit" id="oQD-QK-YPB">
                                             <connections>
                                                 <action selector="SubmitButton_Activated:" destination="Vi7-LV-nWW" id="DgO-TS-MPf"/>
@@ -116,8 +103,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="_accountSwitchingButton" destination="nlD-Xn-HtM" id="SSG-zv-bAc"/>
-                        <outlet property="_cancelButton" destination="LrG-Qx-w4Q" id="aag-ZZ-Ifs"/>
                         <outlet property="_mainTableView" destination="M1A-84-x5l" id="pA4-ao-Fhu"/>
                         <outlet property="_navBar" destination="fav-Fz-6ZK" id="Q9p-Dw-ipx"/>
                         <outlet property="_navItem" destination="aka-In-IYk" id="www-Lt-x1g"/>
@@ -132,7 +117,6 @@
     </scenes>
     <resources>
         <image name="logo.png" width="282" height="44"/>
-        <image name="person.2" catalog="system" width="128" height="81"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

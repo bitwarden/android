@@ -13,15 +13,8 @@ namespace Bit.iOS.Autofill
 	partial class LoginListViewController
 	{
 		[Outlet]
-		UIKit.UIBarButtonItem AccountSwitchingBarButton { get; set; }
-
-		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIBarButtonItem AddBarButton { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIKit.UIBarButtonItem CancelBarButton { get; set; }
 
 		[Outlet]
 		UIKit.UIView MainView { get; set; }
@@ -36,14 +29,8 @@ namespace Bit.iOS.Autofill
 		[Outlet]
 		UIKit.UITableView TableView { get; set; }
 
-		[Action ("AccountSwitchingBarButton_Activated:")]
-		partial void AccountSwitchingBarButton_Activated (UIKit.UIBarButtonItem sender);
-
 		[Action ("AddBarButton_Activated:")]
 		partial void AddBarButton_Activated (UIKit.UIBarButtonItem sender);
-
-		[Action ("CancelBarButton_Activated:")]
-		partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
 
 		[Action ("SearchBarButton_Activated:")]
 		partial void SearchBarButton_Activated (UIKit.UIBarButtonItem sender);
@@ -53,11 +40,6 @@ namespace Bit.iOS.Autofill
 			if (AddBarButton != null) {
 				AddBarButton.Dispose ();
 				AddBarButton = null;
-			}
-
-			if (CancelBarButton != null) {
-				CancelBarButton.Dispose ();
-				CancelBarButton = null;
 			}
 
 			if (MainView != null) {
@@ -78,11 +60,6 @@ namespace Bit.iOS.Autofill
 			if (TableView != null) {
 				TableView.Dispose ();
 				TableView = null;
-			}
-
-			if (AccountSwitchingBarButton != null) {
-				AccountSwitchingBarButton.Dispose ();
-				AccountSwitchingBarButton = null;
 			}
 		}
 	}
