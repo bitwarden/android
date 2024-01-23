@@ -5,14 +5,14 @@ import java.time.ZonedDateTime
 /**
  * Create a mock [CipherJsonRequest] with a given [number].
  */
-fun createMockCipherJsonRequest(number: Int): CipherJsonRequest =
+fun createMockCipherJsonRequest(number: Int, hasNullUri: Boolean = false): CipherJsonRequest =
     CipherJsonRequest(
         organizationId = "mockOrganizationId-$number",
         folderId = "mockFolderId-$number",
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = CipherTypeJson.LOGIN,
-        login = createMockLogin(number = number),
+        login = createMockLogin(number = number, hasNullUri = hasNullUri),
         card = createMockCard(number = number),
         fields = listOf(createMockField(number = number)),
         identity = createMockIdentity(number = number),

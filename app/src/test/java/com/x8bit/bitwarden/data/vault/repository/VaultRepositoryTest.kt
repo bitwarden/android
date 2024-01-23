@@ -1381,7 +1381,7 @@ class VaultRepositoryTest {
             } returns createMockSdkCipher(number = 1).asSuccess()
             coEvery {
                 ciphersService.createCipher(
-                    body = createMockCipherJsonRequest(number = 1),
+                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                 )
             } returns IllegalStateException().asFailure()
 
@@ -1409,7 +1409,7 @@ class VaultRepositoryTest {
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.createCipher(
-                    body = createMockCipherJsonRequest(number = 1),
+                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                 )
             } returns mockCipher.asSuccess()
             coEvery { vaultDiskSource.saveCipher(userId, mockCipher) } just runs
@@ -1461,7 +1461,7 @@ class VaultRepositoryTest {
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = createMockCipherJsonRequest(number = 1),
+                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                 )
             } returns IllegalStateException().asFailure()
 
@@ -1490,7 +1490,7 @@ class VaultRepositoryTest {
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = createMockCipherJsonRequest(number = 1),
+                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                 )
             } returns UpdateCipherResponseJson
                 .Invalid(
@@ -1530,7 +1530,7 @@ class VaultRepositoryTest {
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = createMockCipherJsonRequest(number = 1),
+                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                 )
             } returns UpdateCipherResponseJson
                 .Success(cipher = mockCipher)
@@ -2085,7 +2085,7 @@ class VaultRepositoryTest {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
                     body = ShareCipherJsonRequest(
-                        cipher = createMockCipherJsonRequest(number = 1),
+                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
@@ -2120,7 +2120,7 @@ class VaultRepositoryTest {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
                     body = ShareCipherJsonRequest(
-                        cipher = createMockCipherJsonRequest(number = 1),
+                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                         collectionIds = listOf("mockId-1"),
                     ),
                 )

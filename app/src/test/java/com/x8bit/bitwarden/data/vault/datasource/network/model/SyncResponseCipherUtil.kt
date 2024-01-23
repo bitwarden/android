@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 /**
  * Create a mock [SyncResponseJson.Cipher] with a given [number].
  */
-fun createMockCipher(number: Int): SyncResponseJson.Cipher =
+fun createMockCipher(number: Int, hasNullUri: Boolean = false): SyncResponseJson.Cipher =
     SyncResponseJson.Cipher(
         id = "mockId-$number",
         organizationId = "mockOrganizationId-$number",
@@ -14,7 +14,7 @@ fun createMockCipher(number: Int): SyncResponseJson.Cipher =
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = CipherTypeJson.LOGIN,
-        login = createMockLogin(number = number),
+        login = createMockLogin(number = number, hasNullUri = hasNullUri),
         creationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         deletedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
@@ -114,13 +114,13 @@ fun createMockField(number: Int): SyncResponseJson.Cipher.Field =
 /**
  * Create a mock [SyncResponseJson.Cipher.Login] with a given [number].
  */
-fun createMockLogin(number: Int): SyncResponseJson.Cipher.Login =
+fun createMockLogin(number: Int, hasNullUri: Boolean = false): SyncResponseJson.Cipher.Login =
     SyncResponseJson.Cipher.Login(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
         passwordRevisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         shouldAutofillOnPageLoad = false,
-        uri = "mockUri-$number",
+        uri = if (hasNullUri) { null } else "mockUri-$number",
         uris = listOf(createMockUri(number = number)),
         totp = "mockTotp-$number",
     )

@@ -39,7 +39,10 @@ class VaultSdkCipherExtensionsTest {
         val result = sdkCipher.toEncryptedNetworkCipherResponse()
 
         assertEquals(
-            createMockCipher(number = 1),
+            createMockCipher(
+                number = 1,
+                hasNullUri = true,
+            ),
             result,
         )
     }
@@ -49,7 +52,10 @@ class VaultSdkCipherExtensionsTest {
         val sdkCipher = createMockSdkCipher(number = 1)
         val syncCipher = sdkCipher.toEncryptedNetworkCipher()
         assertEquals(
-            createMockCipherJsonRequest(number = 1),
+            createMockCipherJsonRequest(
+                number = 1,
+                hasNullUri = true,
+            ),
             syncCipher,
         )
     }
