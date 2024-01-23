@@ -182,6 +182,48 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(event)
     }
 
+    private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
+        clipboardManager.setText(action.notes)
+    }
+
+    private fun handleCopyNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
+    ) {
+        clipboardManager.setText(action.number)
+    }
+
+    private fun handleCopyPasswordClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
+    ) {
+        clipboardManager.setText(action.password)
+    }
+
+    private fun handleCopySecurityCodeClick(
+        action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
+    ) {
+        clipboardManager.setText(action.securityCode)
+    }
+
+    private fun handleCopyUsernameClick(
+        action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
+    ) {
+        clipboardManager.setText(action.username)
+    }
+
+    private fun handleEditCipherClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
+        sendEvent(VaultItemListingEvent.NavigateToEditCipher(action.cipherId))
+    }
+
+    private fun handleLaunchCipherUrlClick(
+        action: ListingItemOverflowAction.VaultAction.LaunchClick,
+    ) {
+        sendEvent(VaultItemListingEvent.NavigateToUrl(action.url))
+    }
+
+    private fun handleViewCipherClick(action: ListingItemOverflowAction.VaultAction.ViewClick) {
+        sendEvent(VaultItemListingEvent.NavigateToVaultItem(action.cipherId))
+    }
+
     private fun handleDismissDialogClick() {
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
@@ -235,6 +277,38 @@ class VaultItemListingViewModel @Inject constructor(
 
             is ListingItemOverflowAction.SendAction.ShareUrlClick -> {
                 handleShareSendUrlClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyNoteClick -> {
+                handleCopyNoteClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyNumberClick -> {
+                handleCopyNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
+                handleCopyPasswordClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopySecurityCodeClick -> {
+                handleCopySecurityCodeClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyUsernameClick -> {
+                handleCopyUsernameClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.EditClick -> {
+                handleEditCipherClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.LaunchClick -> {
+                handleLaunchCipherUrlClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.ViewClick -> {
+                handleViewCipherClick(overflowAction)
             }
         }
     }
@@ -695,6 +769,20 @@ sealed class VaultItemListingEvent {
      * @property id the id of the item to navigate to.
      */
     data class NavigateToVaultItem(val id: String) : VaultItemListingEvent()
+
+    /**
+     * Navigates to view a cipher.
+     */
+    data class NavigateToEditCipher(
+        val cipherId: String,
+    ) : VaultItemListingEvent()
+
+    /**
+     * Navigates to the given [url].
+     */
+    data class NavigateToUrl(
+        val url: String,
+    ) : VaultItemListingEvent()
 
     /**
      * Navigates to the SearchScreen with the given type filter.

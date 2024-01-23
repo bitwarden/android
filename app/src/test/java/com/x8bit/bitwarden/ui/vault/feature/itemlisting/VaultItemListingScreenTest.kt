@@ -17,6 +17,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -51,10 +52,12 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToAddSendScreenCalled = false
     private var onNavigateToEditSendItemId: String? = null
     private var onNavigateToVaultItemId: String? = null
+    private var onNavigateToVaultEditItemScreenId: String? = null
     private var onNavigateToSearchType: SearchType? = null
 
     private val intentManager: IntentManager = mockk {
         every { shareText(any()) } just runs
+        every { launchUri(any()) } just runs
     }
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -75,6 +78,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 onNavigateToAddSendItem = { onNavigateToAddSendScreenCalled = true },
                 onNavigateToEditSendItem = { onNavigateToEditSendItemId = it },
                 onNavigateToSearch = { onNavigateToSearchType = it },
+                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemScreenId = it },
             )
         }
     }
@@ -158,6 +162,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateToEditCipher should call onNavigateToVaultEditItemScreen`() {
+        val cipherId = "cipherId"
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToEditCipher(cipherId))
+        assertEquals(cipherId, onNavigateToVaultEditItemScreenId)
+    }
+
+    @Test
     fun `NavigateToSendItem event should call onNavigateToEditSendItemId`() {
         val sendId = "sendId"
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToSendItem(sendId))
@@ -169,6 +180,15 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         val id = "id4321"
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToVaultItem(id = id))
         assertEquals(id, onNavigateToVaultItemId)
+    }
+
+    @Test
+    fun `NavigateToUrl should call launchUri on the IntentManager`() {
+        val url = "www.test.com"
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToUrl(url))
+        verify(exactly = 1) {
+            intentManager.launchUri(url.toUri())
+        }
     }
 
     @Test

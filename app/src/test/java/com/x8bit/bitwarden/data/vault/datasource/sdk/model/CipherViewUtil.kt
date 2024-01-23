@@ -37,7 +37,7 @@ fun createMockCipherView(
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = cipherType,
-        login = createMockLoginView(number = number),
+        login = createMockLoginView(number = number).takeIf { cipherType == CipherType.LOGIN },
         creationDate = ZonedDateTime
             .parse("2023-10-27T12:00:00Z")
             .toInstant(),
@@ -52,13 +52,15 @@ fun createMockCipherView(
             .parse("2023-10-27T12:00:00Z")
             .toInstant(),
         attachments = listOf(createMockAttachmentView(number = number)),
-        card = createMockCardView(number = number),
+        card = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
         fields = listOf(createMockFieldView(number = number)),
-        identity = createMockIdentityView(number = number),
+        identity = createMockIdentityView(number = number).takeIf {
+            cipherType == CipherType.IDENTITY
+        },
         favorite = false,
         passwordHistory = listOf(createMockPasswordHistoryView(number = number)),
         reprompt = CipherRepromptType.NONE,
-        secureNote = createMockSecureNoteView(),
+        secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },
         edit = false,
         organizationUseTotp = false,
         viewPassword = false,

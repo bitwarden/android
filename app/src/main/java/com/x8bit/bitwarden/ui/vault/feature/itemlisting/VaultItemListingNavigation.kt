@@ -54,6 +54,7 @@ data class VaultItemListingArgs(
 fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItemScreen: (id: String) -> Unit,
+    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
@@ -64,6 +65,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
         onNavigateToEditSendItem = { },
         onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
         onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
+        onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
         onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
     )
 }
@@ -84,6 +86,7 @@ fun NavGraphBuilder.sendItemListingDestination(
         onNavigateToEditSendItem = onNavigateToEditSendItem,
         onNavigateToVaultAddItemScreen = { },
         onNavigateToVaultItemScreen = { },
+        onNavigateToVaultEditItemScreen = { },
         onNavigateToSearch = { onNavigateToSearchSend(it as SearchType.Sends) },
     )
 }
@@ -96,6 +99,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
     route: String,
     onNavigateBack: () -> Unit,
     onNavigateToVaultItemScreen: (id: String) -> Unit,
+    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -120,6 +124,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
         VaultItemListingScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToVaultItem = onNavigateToVaultItemScreen,
+            onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToAddSendItem = onNavigateToAddSendItem,
             onNavigateToEditSendItem = onNavigateToEditSendItem,

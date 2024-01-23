@@ -60,4 +60,73 @@ sealed class ListingItemOverflowAction : Parcelable {
             override val title: Text get() = R.string.delete.asText()
         }
     }
+
+    /**
+     * Represents the vault actions.
+     */
+    sealed class VaultAction : ListingItemOverflowAction() {
+        /**
+         * Click on the view cipher overflow option.
+         */
+        @Parcelize
+        data class ViewClick(val cipherId: String) : VaultAction() {
+            override val title: Text get() = R.string.view.asText()
+        }
+
+        /**
+         * Click on the edit cipher overflow option.
+         */
+        @Parcelize
+        data class EditClick(val cipherId: String) : VaultAction() {
+            override val title: Text get() = R.string.edit.asText()
+        }
+
+        /**
+         * Click on the copy username overflow option.
+         */
+        @Parcelize
+        data class CopyUsernameClick(val username: String) : VaultAction() {
+            override val title: Text get() = R.string.copy_username.asText()
+        }
+
+        /**
+         * Click on the copy password overflow option.
+         */
+        @Parcelize
+        data class CopyPasswordClick(val password: String) : VaultAction() {
+            override val title: Text get() = R.string.copy_password.asText()
+        }
+
+        /**
+         * Click on the copy number overflow option.
+         */
+        @Parcelize
+        data class CopyNumberClick(val number: String) : VaultAction() {
+            override val title: Text get() = R.string.copy_number.asText()
+        }
+
+        /**
+         * Click on the copy security code overflow option.
+         */
+        @Parcelize
+        data class CopySecurityCodeClick(val securityCode: String) : VaultAction() {
+            override val title: Text get() = R.string.copy_security_code.asText()
+        }
+
+        /**
+         * Click on the copy secure note overflow option.
+         */
+        @Parcelize
+        data class CopyNoteClick(val notes: String) : VaultAction() {
+            override val title: Text get() = R.string.copy_notes.asText()
+        }
+
+        /**
+         * Click on the launch overflow option.
+         */
+        @Parcelize
+        data class LaunchClick(val url: String) : VaultAction() {
+            override val title: Text get() = R.string.launch.asText()
+        }
+    }
 }

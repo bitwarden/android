@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
@@ -61,6 +62,7 @@ fun SearchScreen(
             is SearchEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
             is SearchEvent.NavigateToEditCipher -> onNavigateToEditCipher(event.cipherId)
             is SearchEvent.NavigateToViewCipher -> onNavigateToViewCipher(event.cipherId)
+            is SearchEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
             is SearchEvent.ShowShareSheet -> intentManager.shareText(event.content)
             is SearchEvent.ShowToast -> {
                 Toast

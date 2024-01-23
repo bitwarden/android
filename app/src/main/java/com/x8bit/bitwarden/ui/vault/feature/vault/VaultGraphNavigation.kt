@@ -44,6 +44,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToSearchVault = onNavigateToSearchVault,
+            onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
         )
 
         vaultVerificationCodeDestination(
