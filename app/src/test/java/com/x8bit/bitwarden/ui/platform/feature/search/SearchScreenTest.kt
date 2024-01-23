@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -43,6 +44,7 @@ class SearchScreenTest : BaseComposeTest() {
     }
     private val intentManager: IntentManager = mockk {
         every { shareText(any()) } just runs
+        every { launchUri(any()) } just runs
     }
 
     private var onNavigateBackCalled = false
@@ -89,6 +91,15 @@ class SearchScreenTest : BaseComposeTest() {
         val cipherId = "cipherId"
         mutableEventFlow.tryEmit(SearchEvent.NavigateToViewCipher(cipherId))
         assertEquals(cipherId, onNavigateToViewCipherId)
+    }
+
+    @Test
+    fun `NavigateToUrl should call launchUri on the IntentManager`() {
+        val url = "www.test.com"
+        mutableEventFlow.tryEmit(SearchEvent.NavigateToUrl(url))
+        verify(exactly = 1) {
+            intentManager.launchUri(url.toUri())
+        }
     }
 
     @Test

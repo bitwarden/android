@@ -53,7 +53,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
 
-    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(any<String>()) } just runs
+    }
 
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
@@ -351,17 +353,137 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should call setText on the ClipboardManager`() =
+        runTest {
+            val notes = "notes"
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(notes)
+            }
+        }
+
+    @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val number = "12345-4321-9876-6789"
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(number)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
+        runTest {
+            val password = "passTheWord"
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(password)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should call setText on the ClipboardManager`() =
+        runTest {
+            val securityCode = "234"
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        securityCode = securityCode,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(securityCode)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyUsernameClick should call setText on the ClipboardManager`() =
+        runTest {
+            val username = "bitwarden"
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyUsernameClick(
+                        username = username,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(username)
+            }
+        }
+
+    @Test
+    fun `OverflowOptionClick Vault EditClick should emit NavigateToEditCipher`() = runTest {
+        val cipherId = "cipherId-1234"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
+                ),
+            )
+            assertEquals(VaultItemListingEvent.NavigateToEditCipher(cipherId), awaitItem())
+        }
+    }
+
+    @Test
+    fun `OverflowOptionClick Vault LaunchClick should emit NavigateToUrl`() = runTest {
+        val url = "www.test.com"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.LaunchClick(url = url),
+                ),
+            )
+            assertEquals(VaultItemListingEvent.NavigateToUrl(url), awaitItem())
+        }
+    }
+
+    @Test
+    fun `OverflowOptionClick Vault ViewClick should emit NavigateToUrl`() = runTest {
+        val cipherId = "cipherId-9876"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
+                ),
+            )
+            assertEquals(VaultItemListingEvent.NavigateToVaultItem(cipherId), awaitItem())
+        }
+    }
+
+    @Test
     fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() =
         runTest {
             setupMockUri()
+
             val dataState = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(
-                        createMockCipherView(
-                            number = 1,
-                            isDeleted = false,
-                        ),
-                    ),
+                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),

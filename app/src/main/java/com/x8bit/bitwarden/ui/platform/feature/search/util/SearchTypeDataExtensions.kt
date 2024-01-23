@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
+import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import java.time.Clock
 
@@ -169,7 +170,7 @@ private fun CipherView.toDisplayItem(
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
         extraIconList = emptyList(),
-        overflowOptions = emptyList(),
+        overflowOptions = toOverflowActions(),
     )
 
 private fun CipherView.toIconData(

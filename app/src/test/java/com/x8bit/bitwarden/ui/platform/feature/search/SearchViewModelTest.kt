@@ -302,6 +302,130 @@ class SearchViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should call setText on the ClipboardManager`() =
+        runTest {
+            val notes = "notes"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(notes)
+            }
+        }
+
+    @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val number = "12345-4321-9876-6789"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(number)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
+        runTest {
+            val password = "passTheWord"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(password)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should call setText on the ClipboardManager`() =
+        runTest {
+            val securityCode = "234"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        securityCode = securityCode,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(securityCode)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyUsernameClick should call setText on the ClipboardManager`() =
+        runTest {
+            val username = "bitwarden"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyUsernameClick(
+                        username = username,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(username)
+            }
+        }
+
+    @Test
+    fun `OverflowOptionClick Vault EditClick should emit NavigateToEditCipher`() = runTest {
+        val cipherId = "cipherId-1234"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
+                ),
+            )
+            assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
+        }
+    }
+
+    @Test
+    fun `OverflowOptionClick Vault LaunchClick should emit NavigateToUrl`() = runTest {
+        val url = "www.test.com"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.LaunchClick(url = url),
+                ),
+            )
+            assertEquals(SearchEvent.NavigateToUrl(url), awaitItem())
+        }
+    }
+
+    @Test
+    fun `OverflowOptionClick Vault ViewClick should emit NavigateToUrl`() = runTest {
+        val cipherId = "cipherId-9876"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
+                ),
+            )
+            assertEquals(SearchEvent.NavigateToViewCipher(cipherId), awaitItem())
+        }
+    }
+
+    @Test
     fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() = runTest {
         setupMockUri()
         val ciphers = listOf(createMockCipherView(number = 1))

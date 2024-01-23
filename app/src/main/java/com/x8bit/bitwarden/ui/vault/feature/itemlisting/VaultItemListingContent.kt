@@ -35,6 +35,41 @@ fun VaultItemListingContent(
     onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showConfirmationDialog: ListingItemOverflowAction? by rememberSaveable {
+        mutableStateOf(null)
+    }
+    when (val option = showConfirmationDialog) {
+        is ListingItemOverflowAction.SendAction.DeleteClick -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.delete),
+                message = stringResource(id = R.string.are_you_sure_delete_send),
+                confirmButtonText = stringResource(id = R.string.yes),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = {
+                    showConfirmationDialog = null
+                    onOverflowItemClick(option)
+                },
+                onDismissClick = { showConfirmationDialog = null },
+                onDismissRequest = { showConfirmationDialog = null },
+            )
+        }
+
+        is ListingItemOverflowAction.SendAction.CopyUrlClick,
+        is ListingItemOverflowAction.SendAction.EditClick,
+        is ListingItemOverflowAction.SendAction.RemovePasswordClick,
+        is ListingItemOverflowAction.SendAction.ShareUrlClick,
+        is ListingItemOverflowAction.VaultAction.CopyNoteClick,
+        is ListingItemOverflowAction.VaultAction.CopyNumberClick,
+        is ListingItemOverflowAction.VaultAction.CopyPasswordClick,
+        is ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
+        is ListingItemOverflowAction.VaultAction.CopyUsernameClick,
+        is ListingItemOverflowAction.VaultAction.EditClick,
+        is ListingItemOverflowAction.VaultAction.LaunchClick,
+        is ListingItemOverflowAction.VaultAction.ViewClick,
+        null,
+        -> Unit
+    }
+
     LazyColumn(
         modifier = modifier,
     ) {
@@ -48,9 +83,6 @@ fun VaultItemListingContent(
             )
         }
         items(state.displayItemList) {
-            var showConfirmationDialog: ListingItemOverflowAction? by rememberSaveable {
-                mutableStateOf(null)
-            }
             BitwardenListItem(
                 startIcon = it.iconData,
                 label = it.title,
@@ -86,29 +118,6 @@ fun VaultItemListingContent(
                         end = 12.dp,
                     ),
             )
-            when (val option = showConfirmationDialog) {
-                is ListingItemOverflowAction.SendAction.DeleteClick -> {
-                    BitwardenTwoButtonDialog(
-                        title = stringResource(id = R.string.delete),
-                        message = stringResource(id = R.string.are_you_sure_delete_send),
-                        confirmButtonText = stringResource(id = R.string.yes),
-                        dismissButtonText = stringResource(id = R.string.cancel),
-                        onConfirmClick = {
-                            showConfirmationDialog = null
-                            onOverflowItemClick(option)
-                        },
-                        onDismissClick = { showConfirmationDialog = null },
-                        onDismissRequest = { showConfirmationDialog = null },
-                    )
-                }
-
-                is ListingItemOverflowAction.SendAction.CopyUrlClick,
-                is ListingItemOverflowAction.SendAction.EditClick,
-                is ListingItemOverflowAction.SendAction.RemovePasswordClick,
-                is ListingItemOverflowAction.SendAction.ShareUrlClick,
-                null,
-                -> Unit
-            }
         }
 
         item {

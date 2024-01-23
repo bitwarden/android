@@ -21,6 +21,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
@@ -49,6 +50,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItem: (id: String) -> Unit,
+    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -86,6 +88,14 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
                 onNavigateToVaultAddItemScreen()
+            }
+
+            is VaultItemListingEvent.NavigateToEditCipher -> {
+                onNavigateToVaultEditItemScreen(event.cipherId)
+            }
+
+            is VaultItemListingEvent.NavigateToUrl -> {
+                intentManager.launchUri(event.url.toUri())
             }
 
             is VaultItemListingEvent.NavigateToAddSendItem -> {

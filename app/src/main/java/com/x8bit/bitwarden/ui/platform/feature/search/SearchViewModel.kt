@@ -158,6 +158,38 @@ class SearchViewModel @Inject constructor(
             is ListingItemOverflowAction.SendAction.ShareUrlClick -> {
                 handleShareUrlClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.CopyNoteClick -> {
+                handleCopyNoteClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyNumberClick -> {
+                handleCopyNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
+                handleCopyPasswordClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopySecurityCodeClick -> {
+                handleCopySecurityCodeClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyUsernameClick -> {
+                handleCopyUsernameClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.EditClick -> {
+                handleEditCipherClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.LaunchClick -> {
+                handleLaunchCipherUrlClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.ViewClick -> {
+                handleViewCipherClick(overflowAction)
+            }
         }
     }
 
@@ -197,6 +229,48 @@ class SearchViewModel @Inject constructor(
 
     private fun handleShareUrlClick(action: ListingItemOverflowAction.SendAction.ShareUrlClick) {
         sendEvent(SearchEvent.ShowShareSheet(action.sendUrl))
+    }
+
+    private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
+        clipboardManager.setText(action.notes)
+    }
+
+    private fun handleCopyNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
+    ) {
+        clipboardManager.setText(action.number)
+    }
+
+    private fun handleCopyPasswordClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
+    ) {
+        clipboardManager.setText(action.password)
+    }
+
+    private fun handleCopySecurityCodeClick(
+        action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
+    ) {
+        clipboardManager.setText(action.securityCode)
+    }
+
+    private fun handleCopyUsernameClick(
+        action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
+    ) {
+        clipboardManager.setText(action.username)
+    }
+
+    private fun handleEditCipherClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
+        sendEvent(SearchEvent.NavigateToEditCipher(action.cipherId))
+    }
+
+    private fun handleLaunchCipherUrlClick(
+        action: ListingItemOverflowAction.VaultAction.LaunchClick,
+    ) {
+        sendEvent(SearchEvent.NavigateToUrl(action.url))
+    }
+
+    private fun handleViewCipherClick(action: ListingItemOverflowAction.VaultAction.ViewClick) {
+        sendEvent(SearchEvent.NavigateToViewCipher(action.cipherId))
     }
 
     private fun handleInternalAction(action: SearchAction.Internal) {
@@ -717,6 +791,13 @@ sealed class SearchEvent {
      */
     data class NavigateToViewCipher(
         val cipherId: String,
+    ) : SearchEvent()
+
+    /**
+     * Navigates to the given [url].
+     */
+    data class NavigateToUrl(
+        val url: String,
     ) : SearchEvent()
 
     /**

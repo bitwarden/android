@@ -56,6 +56,14 @@ fun SearchContent(
         is ListingItemOverflowAction.SendAction.EditClick,
         is ListingItemOverflowAction.SendAction.RemovePasswordClick,
         is ListingItemOverflowAction.SendAction.ShareUrlClick,
+        is ListingItemOverflowAction.VaultAction.CopyNoteClick,
+        is ListingItemOverflowAction.VaultAction.CopyNumberClick,
+        is ListingItemOverflowAction.VaultAction.CopyPasswordClick,
+        is ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
+        is ListingItemOverflowAction.VaultAction.CopyUsernameClick,
+        is ListingItemOverflowAction.VaultAction.EditClick,
+        is ListingItemOverflowAction.VaultAction.LaunchClick,
+        is ListingItemOverflowAction.VaultAction.ViewClick,
         null,
         -> Unit
     }

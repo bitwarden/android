@@ -27,7 +27,19 @@ fun createMockDisplayItemForCipher(
                     fallbackIconRes = R.drawable.ic_login_item,
                 ),
                 extraIconList = emptyList(),
-                overflowOptions = emptyList(),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.CopyUsernameClick(
+                        username = "mockUsername-$number",
+                    ),
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        password = "mockPassword-$number",
+                    ),
+                    ListingItemOverflowAction.VaultAction.LaunchClick(
+                        url = "www.mockuri$number.com",
+                    ),
+                ),
             )
         }
 
@@ -38,7 +50,13 @@ fun createMockDisplayItemForCipher(
                 subtitle = null,
                 iconData = IconData.Local(R.drawable.ic_secure_note_item),
                 extraIconList = emptyList(),
-                overflowOptions = emptyList(),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = "mockNotes-$number",
+                    ),
+                ),
             )
         }
 
@@ -49,7 +67,16 @@ fun createMockDisplayItemForCipher(
                 subtitle = "er-$number",
                 iconData = IconData.Local(R.drawable.ic_card_item),
                 extraIconList = emptyList(),
-                overflowOptions = emptyList(),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        number = "mockNumber-$number",
+                    ),
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        securityCode = "mockCode-$number",
+                    ),
+                ),
             )
         }
 
@@ -60,7 +87,10 @@ fun createMockDisplayItemForCipher(
                 subtitle = "mockFirstName-${number}mockLastName-$number",
                 iconData = IconData.Local(R.drawable.ic_identity_item),
                 extraIconList = emptyList(),
-                overflowOptions = emptyList(),
+                overflowOptions = listOf(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                ),
             )
         }
     }
