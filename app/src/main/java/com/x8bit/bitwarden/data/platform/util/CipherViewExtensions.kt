@@ -68,3 +68,18 @@ private val CardView.subtitleCardNumber: String?
  */
 private val String?.isAmEx: Boolean
     get() = this?.startsWith("34") == true || this?.startsWith("37") == true
+
+/**
+ * Take this [CipherView] if its uri matches [uri]. Otherwise, return null.
+ */
+fun CipherView.takeIfUriMatches(
+    uri: String,
+): CipherView? =
+    // TODO: Pass global URI matching value from settings (BIT-1461)
+    this
+        .takeIf {
+            // TODO: perform comprehensive URI matching (BIT-1461)
+            login
+                ?.uris
+                ?.any { it.uri == uri } == true
+        }
