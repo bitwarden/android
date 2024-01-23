@@ -259,7 +259,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         } returns VaultUnlockResult.AuthenticationError
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -272,7 +272,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         }
     }
 
@@ -285,7 +285,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         } returns VaultUnlockResult.GenericError
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -298,7 +298,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         }
     }
 
@@ -311,7 +311,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         } returns VaultUnlockResult.InvalidStateError
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -324,7 +324,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         }
     }
 
@@ -337,7 +337,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         } returns VaultUnlockResult.Success
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -346,7 +346,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         }
     }
 
@@ -360,7 +360,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val resultFlow = bufferedMutableSharedFlow<VaultUnlockResult>()
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         } coAnswers { resultFlow.first() }
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -383,7 +383,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithMasterPasswordAndSync(password)
+            vaultRepository.unlockVaultWithMasterPassword(password)
         }
     }
 
@@ -396,7 +396,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         } returns VaultUnlockResult.AuthenticationError
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -409,7 +409,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         }
     }
 
@@ -422,7 +422,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         } returns VaultUnlockResult.GenericError
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -435,7 +435,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         }
     }
 
@@ -448,7 +448,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         } returns VaultUnlockResult.InvalidStateError
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -461,7 +461,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         }
     }
 
@@ -474,7 +474,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         } returns VaultUnlockResult.Success
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -483,7 +483,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         }
     }
 
@@ -497,7 +497,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val resultFlow = bufferedMutableSharedFlow<VaultUnlockResult>()
         val viewModel = createViewModel(state = initialState)
         coEvery {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         } coAnswers { resultFlow.first() }
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
@@ -520,7 +520,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify {
-            vaultRepository.unlockVaultWithPinAndSync(pin)
+            vaultRepository.unlockVaultWithPin(pin)
         }
     }
 

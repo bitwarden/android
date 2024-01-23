@@ -517,7 +517,7 @@ class AuthRepositoryTest {
                     masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.sync() } just runs
+            coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
                     previousUserState = null,
@@ -552,7 +552,7 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
-                vaultRepository.sync()
+                vaultRepository.syncIfNecessary()
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
@@ -595,7 +595,7 @@ class AuthRepositoryTest {
                     masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.sync() } just runs
+            coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
                     previousUserState = SINGLE_USER_STATE_2,
@@ -632,7 +632,7 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
-                vaultRepository.sync()
+                vaultRepository.syncIfNecessary()
             }
             assertEquals(
                 MULTI_USER_STATE,

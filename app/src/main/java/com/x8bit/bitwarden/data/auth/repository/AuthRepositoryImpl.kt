@@ -227,7 +227,7 @@ class AuthRepositoryImpl(
                         settingsRepository.setDefaultsIfNecessary(
                             userId = userStateJson.activeUserId,
                         )
-                        vaultRepository.sync()
+                        vaultRepository.syncIfNecessary()
                         hasPendingAccountAddition = false
                         LoginResult.Success
                     }

@@ -74,6 +74,9 @@ class VaultViewModel @Inject constructor(
         get() = state.vaultFilterData?.selectedVaultFilterType ?: VaultFilterType.AllVaults
 
     init {
+        // Attempt a sync each time we are on a fresh Vault Screen.
+        vaultRepository.syncIfNecessary()
+
         // Reset the current vault filter type for the current user
         vaultRepository.vaultFilterType = vaultFilterTypeOrDefault
         settingsRepository

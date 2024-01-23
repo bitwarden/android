@@ -257,6 +257,11 @@ class VaultRepositoryImpl(
         }
     }
 
+    override fun syncIfNecessary() {
+        // TODO: Add conditions for when a sync may be performed and test accordingly (BIT-1454)
+        sync()
+    }
+
     override fun getVaultItemStateFlow(itemId: String): StateFlow<DataState<CipherView?>> =
         vaultDataStateFlow
             .map { dataState ->
@@ -346,7 +351,7 @@ class VaultRepositoryImpl(
     }
 
     @Suppress("ReturnCount")
-    override suspend fun unlockVaultWithMasterPasswordAndSync(
+    override suspend fun unlockVaultWithMasterPassword(
         masterPassword: String,
     ): VaultUnlockResult {
         val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
@@ -361,14 +366,13 @@ class VaultRepositoryImpl(
         )
             .also {
                 if (it is VaultUnlockResult.Success) {
-                    sync()
                     deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
                 }
             }
     }
 
     @Suppress("ReturnCount")
-    override suspend fun unlockVaultWithPinAndSync(
+    override suspend fun unlockVaultWithPin(
         pin: String,
     ): VaultUnlockResult {
         val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
@@ -381,11 +385,6 @@ class VaultRepositoryImpl(
                 pinProtectedUserKey = pinProtectedUserKey,
             ),
         )
-            .also {
-                if (it is VaultUnlockResult.Success) {
-                    sync()
-                }
-            }
     }
 
     override suspend fun unlockVault(
