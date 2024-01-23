@@ -107,7 +107,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
             .onNodeWithText(message)
             .assertIsNotDisplayed()
 
-        mutableStateFlow.update { it.copy(viewState = VerificationCodeState.ViewState.NoItems) }
+        mutableStateFlow.update { it.copy(viewState = VerificationCodeState.ViewState.Loading) }
 
         composeTestRule
             .onNodeWithText(message)

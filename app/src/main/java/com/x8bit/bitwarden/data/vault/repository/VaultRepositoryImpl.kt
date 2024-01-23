@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
+import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.DateTime
@@ -33,7 +34,9 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -56,7 +59,9 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,6 +70,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -93,6 +99,7 @@ class VaultRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val fileManager: FileManager,
     private val vaultLockManager: VaultLockManager,
+    private val totpCodeManager: TotpCodeManager,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     VaultLockManager by vaultLockManager {
@@ -292,6 +299,47 @@ class VaultRepositoryImpl(
                 started = SharingStarted.Lazily,
                 initialValue = DataState.Loading,
             )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>> {
+        val userId = requireNotNull(activeUserId)
+        return vaultDataStateFlow
+            .map { dataState ->
+                dataState.map { vaultData ->
+                    vaultData
+                        .cipherViewList
+                        .filter {
+                            it.type == CipherType.LOGIN &&
+                                !it.login?.totp.isNullOrBlank() &&
+                                it.deletedDate == null
+                        }
+                        .toFilteredList(vaultFilterType)
+                }
+            }
+            .flatMapLatest { cipherDataState ->
+                val cipherList = cipherDataState.data ?: emptyList()
+                totpCodeManager
+                    .getTotpCodesStateFlow(
+                        userId = userId,
+                        cipherList = cipherList,
+                    )
+                    .map { verificationCodeDataStates ->
+                        combineDataStates(
+                            verificationCodeDataStates,
+                            cipherDataState,
+                        ) { verificationCodeItems, _ ->
+                            // Just return the verification items; we are only combining the
+                            // DataStates to know the overall state.
+                            verificationCodeItems
+                        }
+                    }
+            }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = DataState.Loading,
+            )
+    }
 
     override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)

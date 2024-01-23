@@ -55,7 +55,9 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -74,6 +76,7 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
+import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -104,6 +107,7 @@ class VaultRepositoryTest {
     private val sendsService: SendsService = mockk()
     private val ciphersService: CiphersService = mockk()
     private val vaultDiskSource: VaultDiskSource = mockk()
+    private val totpCodeManager: TotpCodeManager = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk {
         every { clearCrypto(userId = any()) } just runs
     }
@@ -130,6 +134,7 @@ class VaultRepositoryTest {
         authDiskSource = fakeAuthDiskSource,
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
+        totpCodeManager = totpCodeManager,
         fileManager = fileManager,
     )
 
@@ -2196,6 +2201,60 @@ class VaultRepositoryTest {
         )
     }
 
+    @Test
+    fun `getVerificationCodesFlow should update data state when state changes`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val userId = "mockId-1"
+
+        val mockSyncResponse = createMockSyncResponse(number = 1)
+        coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
+        coEvery {
+            vaultSdkSource.initializeOrganizationCrypto(
+                userId = userId,
+                request = InitOrgCryptoRequest(
+                    organizationKeys = createMockOrganizationKeys(1),
+                ),
+            )
+        } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            vaultDiskSource.replaceVaultData(
+                userId = MOCK_USER_STATE.activeUserId,
+                vault = mockSyncResponse,
+            )
+        } just runs
+
+        val stateFlow = MutableStateFlow<DataState<List<VerificationCodeItem>>>(
+            DataState.Loading,
+        )
+
+        every {
+            totpCodeManager.getTotpCodesStateFlow(userId = userId, any())
+        } returns stateFlow
+
+        setupDataStateFlow(userId = userId)
+
+        vaultRepository.getAuthCodesFlow().test {
+            assertEquals(
+                DataState.Loading,
+                awaitItem(),
+            )
+
+            stateFlow.tryEmit(DataState.Loaded(listOf(createVerificationCodeItem())))
+
+            assertEquals(
+                DataState.Loaded(listOf(createVerificationCodeItem())),
+                awaitItem(),
+            )
+
+            vaultRepository.sync()
+
+            assertEquals(
+                DataState.Pending(listOf(createVerificationCodeItem())),
+                awaitItem(),
+            )
+        }
+    }
+
     //region Helper functions
 
     /**
@@ -2348,6 +2407,63 @@ class VaultRepositoryTest {
         }
     }
 
+    private suspend fun setupDataStateFlow(userId: String) {
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = userId,
+                cipherList = listOf(createMockSdkCipher(1)),
+            )
+        } returns listOf(createMockCipherView(1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(
+                userId = userId,
+                folderList = listOf(createMockSdkFolder(1)),
+            )
+        } returns listOf(createMockFolderView(number = 1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptCollectionList(
+                userId = userId,
+                collectionList = listOf(createMockSdkCollection(1)),
+            )
+        } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = userId,
+                sendList = listOf(createMockSdkSend(number = 1)),
+            )
+        } returns listOf(createMockSendView(number = 1)).asSuccess()
+        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+        val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
+        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+        setupVaultDiskSourceFlows(
+            ciphersFlow = ciphersFlow,
+            collectionsFlow = collectionsFlow,
+            foldersFlow = foldersFlow,
+            sendsFlow = sendsFlow,
+        )
+
+        vaultRepository.vaultDataStateFlow.test {
+            ciphersFlow.tryEmit(listOf(createMockCipher(1)))
+            collectionsFlow.tryEmit(listOf(createMockCollection(number = 1)))
+            foldersFlow.tryEmit(listOf(createMockFolder(number = 1)))
+            sendsFlow.tryEmit(listOf(createMockSend(number = 1)))
+            assertEquals(DataState.Loading, awaitItem())
+
+            assertEquals(
+                DataState.Loaded(
+                    data = VaultData(
+                        cipherViewList = listOf(createMockCipherView(1)),
+                        collectionViewList = listOf(createMockCollectionView(number = 1)),
+                        folderViewList = listOf(createMockFolderView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun setupMockUri(
         url: String,
         queryParams: Map<String, String> = emptyMap(),
@@ -2367,7 +2483,7 @@ class VaultRepositoryTest {
         return mockInstant
     }
 
-    //endregion Helper functions
+//endregion Helper functions
 }
 
 private val MOCK_PROFILE = AccountJson.Profile(

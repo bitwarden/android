@@ -10,6 +10,7 @@ import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -115,6 +116,12 @@ interface VaultRepository : VaultLockManager {
      * the send cannot be found.
      */
     fun getSendStateFlow(sendId: String): StateFlow<DataState<SendView?>>
+
+    /**
+     * Flow that represents the data for the TOTP verification codes for ciphers items.
+     * This may emit an empty list if any issues arise during code generation.
+     */
+    fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>>
 
     /**
      * Emits the totp code result flow to listeners.

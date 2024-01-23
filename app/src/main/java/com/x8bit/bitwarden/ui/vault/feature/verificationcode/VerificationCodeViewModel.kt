@@ -2,23 +2,21 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
-import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.toVerificationCodeViewState
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -65,8 +63,12 @@ class VerificationCodeViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         vaultRepository
-            .vaultDataStateFlow
-            .onEach { sendAction(VerificationCodeAction.Internal.VaultDataReceive(vaultData = it)) }
+            .getAuthCodesFlow()
+            .onEach {
+                sendAction(
+                    VerificationCodeAction.Internal.AuthCodesReceive(it),
+                )
+            }
             .launchIn(viewModelScope)
     }
 
@@ -135,16 +137,13 @@ class VerificationCodeViewModel @Inject constructor(
     private fun handleInternalAction(action: VerificationCodeAction.Internal) {
         when (action) {
             is VerificationCodeAction.Internal.IconLoadingSettingReceive ->
-                handleIconsSettingReceived(
-                    action,
-                )
+                handleIconsSettingReceived(action)
 
             is VerificationCodeAction.Internal.PullToRefreshEnableReceive ->
-                handlePullToRefreshEnableReceive(
-                    action,
-                )
+                handlePullToRefreshEnableReceive(action)
 
-            is VerificationCodeAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
+            is VerificationCodeAction.Internal.AuthCodesReceive ->
+                handleAuthCodeReceive(action)
         }
     }
 
@@ -153,10 +152,6 @@ class VerificationCodeViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isIconLoadingDisabled = action.isIconLoadingDisabled)
-        }
-
-        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
-            updateStateWithVaultData(vaultData, clearDialogState = false)
         }
     }
 
@@ -168,24 +163,45 @@ class VerificationCodeViewModel @Inject constructor(
         }
     }
 
-    private fun handleVaultDataReceive(action: VerificationCodeAction.Internal.VaultDataReceive) {
-        updateViewState(action.vaultData)
+    private fun handleAuthCodeReceive(action: VerificationCodeAction.Internal.AuthCodesReceive) {
+        updateViewState(action.verificationCodeData)
     }
-    //endregion VerificationCode Handlers
 
-    private fun updateViewState(vaultData: DataState<VaultData>) {
-        when (vaultData) {
-            is DataState.Error -> vaultErrorReceive(vaultData)
-            is DataState.Loaded -> vaultLoadedReceive(vaultData = vaultData)
-            is DataState.Loading -> vaultLoadingReceive()
-            is DataState.NoNetwork -> vaultNoNetworkReceive(vaultData)
-            is DataState.Pending -> vaultPendingReceive(vaultData)
+    private fun updateViewState(
+        verificationCodeData: DataState<List<VerificationCodeItem>>,
+    ) {
+        when (verificationCodeData) {
+            is DataState.Loaded -> {
+                vaultLoadedReceive(verificationCodeData)
+            }
+
+            is DataState.Error -> {
+                vaultErrorReceive(verificationCodeData)
+            }
+
+            is DataState.Loading -> {
+                vaultLoadingReceive()
+            }
+
+            is DataState.NoNetwork -> {
+                vaultNoNetworkReceive(verificationCodeData)
+            }
+
+            is DataState.Pending -> {
+                vaultPendingReceive(verificationCodeData)
+            }
         }
     }
 
-    private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
-        if (vaultData.data != null) {
-            updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
+    private fun vaultNoNetworkReceive(
+        verificationCodeData:
+        DataState.NoNetwork<List<VerificationCodeItem>>,
+    ) {
+        if (verificationCodeData.data != null) {
+            updateStateWithVerificationCodeData(
+                verificationCodeData = verificationCodeData.data,
+                clearDialogState = true,
+            )
         } else {
             mutableStateFlow.update { currentState ->
                 currentState.copy(
@@ -201,12 +217,23 @@ class VerificationCodeViewModel @Inject constructor(
         sendEvent(VerificationCodeEvent.DismissPullToRefresh)
     }
 
-    private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
-        updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = false)
+    private fun vaultPendingReceive(
+        verificationCodeData: DataState.Pending<List<VerificationCodeItem>>,
+    ) {
+        updateStateWithVerificationCodeData(
+            verificationCodeData = verificationCodeData.data,
+            clearDialogState = false,
+        )
     }
 
-    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
-        updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
+    private fun vaultLoadedReceive(
+        verificationCodeData:
+        DataState.Loaded<List<VerificationCodeItem>>,
+    ) {
+        updateStateWithVerificationCodeData(
+            verificationCodeData = verificationCodeData.data,
+            clearDialogState = true,
+        )
         sendEvent(VerificationCodeEvent.DismissPullToRefresh)
     }
 
@@ -214,9 +241,12 @@ class VerificationCodeViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(viewState = VerificationCodeState.ViewState.Loading) }
     }
 
-    private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
+    private fun vaultErrorReceive(vaultData: DataState.Error<List<VerificationCodeItem>>) {
         if (vaultData.data != null) {
-            updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
+            updateStateWithVerificationCodeData(
+                verificationCodeData = vaultData.data,
+                clearDialogState = true,
+            )
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -230,35 +260,40 @@ class VerificationCodeViewModel @Inject constructor(
         sendEvent(VerificationCodeEvent.DismissPullToRefresh)
     }
 
-    private fun updateStateWithVaultData(
-        vaultData: VaultData,
+    private fun updateStateWithVerificationCodeData(
+        verificationCodeData: List<VerificationCodeItem>,
         clearDialogState: Boolean,
     ) {
-        val viewState = vaultData
-            .cipherViewList
-            .filter {
-                it.type == CipherType.LOGIN &&
-                    !it.login?.totp.isNullOrBlank() &&
-                    it.deletedDate == null
-            }
-            .toFilteredList(state.vaultFilterType)
-            .toVerificationCodeViewState(
-                baseIconUrl = state.baseIconUrl,
-                isIconLoadingDisabled = state.isIconLoadingDisabled,
-            )
-
-        if (viewState is VerificationCodeState.ViewState.NoItems) {
+        if (verificationCodeData.isEmpty()) {
             sendEvent(VerificationCodeEvent.NavigateBack)
             return
         }
 
-        mutableStateFlow.update { state ->
-            state.copy(
-                viewState = viewState,
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VerificationCodeState.ViewState.Content(
+                    verificationCodeDisplayItems = verificationCodeData
+                        .map { item ->
+                            VerificationCodeDisplayItem(
+                                id = item.id,
+                                authCode = item.code,
+                                label = item.name,
+                                supportingLabel = item.username,
+                                periodSeconds = item.periodSeconds,
+                                timeLeftSeconds = item.timeLeftSeconds,
+                                startIcon = item.uriLoginViewList.toLoginIconData(
+                                    baseIconUrl = state.baseIconUrl,
+                                    isIconLoadingDisabled = state.isIconLoadingDisabled,
+                                ),
+                            )
+                        },
+                ),
                 dialogState = state.dialogState.takeUnless { clearDialogState },
             )
         }
     }
+
+//endregion VerificationCode Handlers
 }
 
 /**
@@ -306,9 +341,13 @@ data class VerificationCodeState(
         abstract val isPullToRefreshEnabled: Boolean
 
         /**
-         * Represents a state where the [VerificationCodeScreen] has no items to display.
+         * Represents an error state for the [VerificationCodeScreen].
+         *
+         * @property message Error message to display.
          */
-        data object NoItems : ViewState() {
+        data class Error(
+            val message: Text,
+        ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
         }
 
@@ -318,17 +357,6 @@ data class VerificationCodeState(
          */
         data object Loading : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = false
-        }
-
-        /**
-         * Represents an error state for the [VerificationCodeScreen].
-         *
-         * @property message Error message to display.
-         */
-        data class Error(
-            val message: Text,
-        ) : ViewState() {
-            override val isPullToRefreshEnabled: Boolean get() = true
         }
 
         /**
@@ -451,10 +479,10 @@ sealed class VerificationCodeAction {
         ) : Internal()
 
         /**
-         * Indicates a vault data was received.
+         * Indicates the verification code data was received.
          */
-        data class VaultDataReceive(
-            val vaultData: DataState<VaultData>,
+        data class AuthCodesReceive(
+            val verificationCodeData: DataState<List<VerificationCodeItem>>,
         ) : Internal()
     }
 }
