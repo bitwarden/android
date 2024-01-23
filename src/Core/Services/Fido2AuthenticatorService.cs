@@ -116,118 +116,123 @@ namespace Bit.Core.Services
             }
         }
 
-    private async Task<List<CipherView>> FindCredentialsById(PublicKeyCredentialDescriptor[] credentials, string rpId)
-    {
-        var ids = new List<string>();
+        public Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) {
+            throw new NotImplementedException();
+        }
 
-        foreach (var credential in credentials)
+        private async Task<List<CipherView>> FindCredentialsById(PublicKeyCredentialDescriptor[] credentials, string rpId)
         {
-            try
+            var ids = new List<string>();
+
+            foreach (var credential in credentials)
             {
-                ids.Add(GuidToStandardFormat(credential.Id));
+                try
+                {
+                    ids.Add(GuidToStandardFormat(credential.Id));
+                }
+                catch {}
             }
-            catch {}
+
+            if (ids.Count == 0)
+            {
+                return new List<CipherView>();
+            }
+
+            var ciphers = await _cipherService.GetAllDecryptedAsync();
+            return ciphers.FindAll((cipher) =>
+                !cipher.IsDeleted &&
+                cipher.Type == CipherType.Login &&
+                cipher.Login.HasFido2Credentials &&
+                cipher.Login.MainFido2Credential.RpId == rpId &&
+                ids.Contains(cipher.Login.MainFido2Credential.CredentialId)
+            );
         }
 
-        if (ids.Count == 0)
+        private async Task<List<CipherView>> FindCredentialsByRp(string rpId)
         {
-            return new List<CipherView>();
+            var ciphers = await _cipherService.GetAllDecryptedAsync();
+            return ciphers.FindAll((cipher) =>
+                !cipher.IsDeleted &&
+                cipher.Type == CipherType.Login &&
+                cipher.Login.HasFido2Credentials &&
+                cipher.Login.MainFido2Credential.RpId == rpId &&
+                cipher.Login.MainFido2Credential.IsDiscoverable
+            );
         }
 
-        var ciphers = await _cipherService.GetAllDecryptedAsync();
-        return ciphers.FindAll((cipher) =>
-            !cipher.IsDeleted &&
-            cipher.Type == CipherType.Login &&
-            cipher.Login.HasFido2Credentials &&
-            cipher.Login.MainFido2Credential.RpId == rpId &&
-            ids.Contains(cipher.Login.MainFido2Credential.CredentialId)
-        );
-    }
+        private async Task<byte[]> GenerateAuthData(
+            string rpId,
+            bool userVerification,
+            bool userPresence,
+            int counter
+            // byte[] credentialId,
+            // CryptoKey? cryptoKey - only needed for attestation
+        ) {
+            List<byte> authData = new List<byte>();
 
-    private async Task<List<CipherView>> FindCredentialsByRp(string rpId)
-    {
-        var ciphers = await _cipherService.GetAllDecryptedAsync();
-        return ciphers.FindAll((cipher) =>
-            !cipher.IsDeleted &&
-            cipher.Type == CipherType.Login &&
-            cipher.Login.HasFido2Credentials &&
-            cipher.Login.MainFido2Credential.RpId == rpId &&
-            cipher.Login.MainFido2Credential.IsDiscoverable
-        );
-    }
+            var rpIdHash = await _cryptoFunctionService.HashAsync(rpId, CryptoHashAlgorithm.Sha256);
+            authData.AddRange(rpIdHash);
 
-    private async Task<byte[]> GenerateAuthData(
-        string rpId,
-        bool userVerification,
-        bool userPresence,
-        int counter
-        // byte[] credentialId,
-        // CryptoKey? cryptoKey - only needed for attestation
-    ) {
-        List<byte> authData = new List<byte>();
+            var flags = AuthDataFlags(false, false, userVerification, userPresence);
+            authData.Add(flags);
 
-        var rpIdHash = await _cryptoFunctionService.HashAsync(rpId, CryptoHashAlgorithm.Sha256);
-        authData.AddRange(rpIdHash);
+            authData.AddRange([
+                (byte)(counter >> 24),
+                (byte)(counter >> 16),
+                (byte)(counter >> 8),
+                (byte)counter
+            ]);
 
-        var flags = AuthDataFlags(false, false, userVerification, userPresence);
-        authData.Add(flags);
-
-        authData.AddRange([
-            (byte)(counter >> 24),
-            (byte)(counter >> 16),
-            (byte)(counter >> 8),
-            (byte)counter
-        ]);
-
-        return authData.ToArray();
-    }
-
-    private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence) {
-        byte flags = 0;
-
-        if (extensionData) {
-            flags |= 0b1000000;
+            return authData.ToArray();
         }
 
-        if (attestationData) {
-            flags |= 0b01000000;
+        private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence) {
+            byte flags = 0;
+
+            if (extensionData) {
+                flags |= 0b1000000;
+            }
+
+            if (attestationData) {
+                flags |= 0b01000000;
+            }
+
+            if (userVerification) {
+                flags |= 0b00000100;
+            }
+
+            if (userPresence) {
+                flags |= 0b00000001;
+            }
+
+            return flags;
         }
 
-        if (userVerification) {
-            flags |= 0b00000100;
-        }
-
-        if (userPresence) {
-            flags |= 0b00000001;
-        }
-
-        return flags;
-    }
-
-    private async Task<byte[]> GenerateSignature(
-        byte[] authData,
-        byte[] clientDataHash,
-        byte[] privateKey
-    )
-    {
-        var sigBase = authData.Concat(clientDataHash).ToArray();
-        var signature = await _cryptoFunctionService.SignAsync(sigBase, privateKey, new CryptoSignEcdsaOptions
+        private async Task<byte[]> GenerateSignature(
+            byte[] authData,
+            byte[] clientDataHash,
+            byte[] privateKey
+        )
         {
-            Algorithm = CryptoSignEcdsaOptions.EcdsaAlgorithm.EcdsaP256Sha256,
-            SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
-        });
+            var sigBase = authData.Concat(clientDataHash).ToArray();
+            var signature = await _cryptoFunctionService.SignAsync(sigBase, privateKey, new CryptoSignEcdsaOptions
+            {
+                Algorithm = CryptoSignEcdsaOptions.EcdsaAlgorithm.EcdsaP256Sha256,
+                SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
+            });
 
-        return signature;
-    }
+            return signature;
+        }
 
-    private string GuidToStandardFormat(byte[] bytes)
-    {
-        return new Guid(bytes).ToString();
-    }
+        private string GuidToStandardFormat(byte[] bytes)
+        {
+            return new Guid(bytes).ToString();
+        }
 
-    private byte[] GuidToRawFormat(string guid)
-    {
-        return Guid.Parse(guid).ToByteArray();
-    }
+        private byte[] GuidToRawFormat(string guid)
+        {
+            return Guid.Parse(guid).ToByteArray();
+        }
+
     }
 }
