@@ -4,8 +4,8 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
-
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource.Companion.ENCRYPTED_BASE_KEY
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
@@ -35,12 +35,20 @@ private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 class AuthDiskSourceImpl(
     encryptedSharedPreferences: SharedPreferences,
     sharedPreferences: SharedPreferences,
+    legacySecureStorageMigrator: LegacySecureStorageMigrator,
     private val json: Json,
 ) : BaseEncryptedDiskSource(
     encryptedSharedPreferences = encryptedSharedPreferences,
     sharedPreferences = sharedPreferences,
 ),
     AuthDiskSource {
+
+    init {
+        // We must migrate if necessary before any of the migrated values would be initialized
+        // and accessed.
+        legacySecureStorageMigrator.migrateIfNecessary()
+    }
+
     private val inMemoryPinProtectedUserKeys = mutableMapOf<String, String?>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
