@@ -136,6 +136,30 @@ class BlockAutoFillViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on SaveUri action with valid URIs in a list should add URIs to list`() = runTest {
+        val initialUris = mutableListOf("http://existing.com")
+        val newUris = "http://new.com, http://another.com"
+
+        every { settingsRepository.blockedAutofillUris } answers { initialUris.toList() }
+        every { settingsRepository.blockedAutofillUris = any() } answers {
+            initialUris.clear()
+            initialUris.addAll(firstArg())
+        }
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(BlockAutoFillAction.SaveUri(newUri = newUris))
+
+        val expectedState = BlockAutoFillState(
+            dialog = null,
+            viewState = BlockAutoFillState.ViewState.Content(
+                blockedUris = listOf("http://existing.com", "http://new.com", "http://another.com"),
+            ),
+        )
+
+        assertEquals(expectedState, viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `on BackClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

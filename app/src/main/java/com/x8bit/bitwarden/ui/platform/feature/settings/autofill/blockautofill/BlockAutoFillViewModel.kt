@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.isValidPattern
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.validateUri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -98,7 +99,16 @@ class BlockAutoFillViewModel @Inject constructor(
     }
 
     private fun handleSaveUri(action: BlockAutoFillAction.SaveUri) {
-        val errorText = action.newUri.validateUri(settingsRepository.blockedAutofillUris)
+        val uriList = action.newUri.split(",").map { it.trim() }
+
+        val errorText = uriList
+            .filter { uri ->
+                uri in settingsRepository.blockedAutofillUris || !uri.isValidPattern()
+            }
+            .mapNotNull { uri ->
+                uri.validateUri(settingsRepository.blockedAutofillUris)
+            }
+            .firstOrNull()
 
         if (errorText != null) {
             mutableStateFlow.update { currentState ->
@@ -113,12 +123,13 @@ class BlockAutoFillViewModel @Inject constructor(
         }
 
         val currentUris = settingsRepository.blockedAutofillUris.toMutableList()
-
-        val uriIndex = currentUris.indexOf(action.newUri)
-        if (uriIndex != -1) {
-            currentUris[uriIndex] = action.newUri
-        } else {
-            currentUris.add(action.newUri)
+        uriList.forEach { newUri ->
+            val uriIndex = currentUris.indexOf(newUri)
+            if (uriIndex != -1) {
+                currentUris[uriIndex] = newUri
+            } else {
+                currentUris.add(newUri)
+            }
         }
 
         settingsRepository.blockedAutofillUris = currentUris
