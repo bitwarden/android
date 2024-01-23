@@ -3,6 +3,7 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,10 +23,17 @@ class WebAuthCallbackViewModel @Inject constructor(
 
     private fun handleIntentReceived(action: WebAuthCallbackAction.IntentReceive) {
         val captchaCallbackTokenResult = action.intent.getCaptchaCallbackTokenResult()
+        val ssoCallbackResult = action.intent.getSsoCallbackResult()
         when {
             captchaCallbackTokenResult != null -> {
                 authRepository.setCaptchaCallbackTokenResult(
                     tokenResult = captchaCallbackTokenResult,
+                )
+            }
+
+            ssoCallbackResult != null -> {
+                authRepository.setSsoCallbackResult(
+                    result = ssoCallbackResult,
                 )
             }
 

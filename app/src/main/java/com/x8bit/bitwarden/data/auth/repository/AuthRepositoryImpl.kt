@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
@@ -138,6 +139,11 @@ class AuthRepositoryImpl(
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
         mutableCaptchaTokenFlow.asSharedFlow()
+
+    private val mutableSsoCallbackResultFlow =
+        bufferedMutableSharedFlow<SsoCallbackResult>()
+    override val ssoCallbackResultFlow: Flow<SsoCallbackResult> =
+        mutableSsoCallbackResultFlow.asSharedFlow()
 
     override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
 
@@ -380,6 +386,10 @@ class AuthRepositoryImpl(
 
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         mutableCaptchaTokenFlow.tryEmit(tokenResult)
+    }
+
+    override fun setSsoCallbackResult(result: SsoCallbackResult) {
+        mutableSsoCallbackResultFlow.tryEmit(result)
     }
 
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =

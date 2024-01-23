@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -1001,6 +1002,19 @@ class AuthRepositoryTest {
             repository.setCaptchaCallbackTokenResult(CaptchaCallbackTokenResult.Success("mockk"))
             assertEquals(
                 CaptchaCallbackTokenResult.Success("mockk"),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `setSsoCallbackResult should change the value of ssoCallbackResultFlow`() = runTest {
+        repository.ssoCallbackResultFlow.test {
+            repository.setSsoCallbackResult(
+                SsoCallbackResult.Success(state = "mockk_state", code = "mockk_code"),
+            )
+            assertEquals(
+                SsoCallbackResult.Success(state = "mockk_state", code = "mockk_code"),
                 awaitItem(),
             )
         }

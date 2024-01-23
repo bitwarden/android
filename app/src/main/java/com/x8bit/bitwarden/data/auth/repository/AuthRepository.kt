@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * Provides an API for observing an modifying authentication state.
  */
+@Suppress("TooManyFunctions")
 interface AuthRepository : AuthenticatorProvider {
     /**
      * Models the current auth state.
@@ -33,6 +35,12 @@ interface AuthRepository : AuthenticatorProvider {
      * in order to receive updates whenever [setCaptchaCallbackTokenResult] is called.
      */
     val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult>
+
+    /**
+     * Flow of the current [SsoCallbackResult]. Subscribers should listen to the flow in order to
+     * receive updates whenever [setSsoCallbackResult] is called.
+     */
+    val ssoCallbackResultFlow: Flow<SsoCallbackResult>
 
     /**
      * The currently persisted saved email address (or `null` if not set).
@@ -93,6 +101,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
+
+    /**
+     * Set the value of [ssoCallbackResultFlow].
+     */
+    fun setSsoCallbackResult(result: SsoCallbackResult)
 
     /**
      * Get a [Boolean] indicating whether this is a known device.
