@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Bit.Core.Utilities.Fido2;
 using System.Buffers.Binary;
 
@@ -88,15 +89,15 @@ namespace Bit.Core.Services
                     rpId: selectedFido2Credential.RpId,
                     userPresence: true,
                     userVerification: userVerified,
-                    counter: selectedFido2Credential.CounterValue);
+                    counter: selectedFido2Credential.CounterValue
+                );
 
-                // const signature = await generateSignature({
-                //     authData: authenticatorData,
-                //     clientDataHash: params.hash,
-                //     privateKey: await getPrivateKeyFromFido2Credential(selectedFido2Credential),
-                // });
+                var signature = await GenerateSignature(
+                    authData: authenticatorData,
+                    clientDataHash: assertionParams.Hash,
+                    privateKey: selectedFido2Credential.KeyBytes
+                );
 
-                // TODO: IMPLEMENT this
                 return new Fido2AuthenticatorGetAssertionResult
                 {
                     SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
@@ -105,7 +106,7 @@ namespace Bit.Core.Services
                         UserHandle = selectedFido2Credential.UserHandleValue
                     },
                     AuthenticatorData = authenticatorData,
-                    Signature = new byte[8]
+                    Signature = signature
                 };
             } catch {
                 _logService.Info(
@@ -204,6 +205,21 @@ namespace Bit.Core.Services
         return flags;
     }
 
+    private async Task<byte[]> GenerateSignature(
+        byte[] authData,
+        byte[] clientDataHash,
+        byte[] privateKey
+    )
+    {
+        var sigBase = authData.Concat(clientDataHash).ToArray();
+        var signature = await _cryptoFunctionService.SignAsync(sigBase, privateKey, new CryptoSignEcdsaOptions
+        {
+            Algorithm = CryptoSignEcdsaOptions.EcdsaAlgorithm.EcdsaP256Sha256,
+            SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
+        });
+
+        return signature;
+    }
 
     private string GuidToStandardFormat(byte[] bytes)
     {

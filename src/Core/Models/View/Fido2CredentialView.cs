@@ -38,6 +38,11 @@ namespace Bit.Core.Models.View
             set => UserHandle = value == null ? null : CoreHelpers.Base64UrlEncode(value);
         }
 
+        public byte[] KeyBytes {
+            get => KeyValue == null ? null : CoreHelpers.Base64UrlDecode(KeyValue);
+            set => KeyValue = value == null ? null : CoreHelpers.Base64UrlEncode(value);
+        }
+
         public override string SubTitle => UserName;
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
         public bool IsDiscoverable => bool.TryParse(Discoverable, out var isDiscoverable) && isDiscoverable;

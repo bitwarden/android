@@ -306,6 +306,15 @@ namespace Bit.Core.Test.Services
             var rpIdHashMock = RandomBytes(32);
             sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(aParams.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
             cipherView.Login.MainFido2Credential.CounterValue = 9000;
+            var signatureMock = RandomBytes(32);
+            sutProvider.GetDependency<ICryptoFunctionService>().SignAsync(
+                Arg.Any<byte[]>(),
+                Arg.Any<byte[]>(),
+                new CryptoSignEcdsaOptions { 
+                    Algorithm = CryptoSignEcdsaOptions.EcdsaAlgorithm.EcdsaP256Sha256,
+                    SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
+                }
+            ).Returns(signatureMock);
             
             // Act
             var result = await sutProvider.Sut.GetAssertionAsync(aParams);
@@ -316,12 +325,12 @@ namespace Bit.Core.Test.Services
             var flags = encAuthData.Skip(32).Take(1);
             var counter = encAuthData.Skip(33).Take(4);
 
-            Assert.Equal(result.SelectedCredential.Id, Guid.Parse(cipherView.Login.MainFido2Credential.CredentialId).ToByteArray());
-            Assert.Equal(result.SelectedCredential.UserHandle, CoreHelpers.Base64UrlDecode(cipherView.Login.MainFido2Credential.UserHandle));
-            Assert.Equal(rpIdHash, rpIdHashMock);
-            Assert.Equal(flags, new byte[] { 0b00000101 }); // UP = true, UV = true
-            Assert.Equal(counter, new byte[] { 0, 0, 0x23, 0x29 }); // 9001 in binary big-endian format
-            // TODO: Assert signature...
+            Assert.Equal(Guid.Parse(cipherView.Login.MainFido2Credential.CredentialId).ToByteArray(), result.SelectedCredential.Id);
+            Assert.Equal(CoreHelpers.Base64UrlDecode(cipherView.Login.MainFido2Credential.UserHandle), result.SelectedCredential.UserHandle);
+            Assert.Equal(rpIdHashMock, rpIdHash);
+            Assert.Equal(new byte[] { 0b00000101 }, flags); // UP = true, UV = true
+            Assert.Equal(new byte[] { 0, 0, 0x23, 0x29 }, counter); // 9001 in binary big-endian format
+            Assert.Equal(signatureMock, result.Signature);
         }
 
         [Theory]
