@@ -48,6 +48,7 @@ data class SearchArgs(
  */
 fun NavGraphBuilder.searchDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToEditSend: (sendId: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = SEARCH_ROUTE,
@@ -61,6 +62,7 @@ fun NavGraphBuilder.searchDestination(
     ) {
         SearchScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToEditSend = onNavigateToEditSend,
         )
     }
 }
