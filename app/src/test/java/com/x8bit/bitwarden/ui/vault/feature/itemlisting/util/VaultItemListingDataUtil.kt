@@ -15,13 +15,14 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
+    subtitle: String? = "mockUsername-$number",
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
-                subtitle = "mockUsername-$number",
+                subtitle = subtitle,
                 iconData = IconData.Network(
                     "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                     fallbackIconRes = R.drawable.ic_login_item,
@@ -35,7 +36,7 @@ fun createMockDisplayItemForCipher(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
-                subtitle = null,
+                subtitle = subtitle,
                 iconData = IconData.Local(R.drawable.ic_secure_note_item),
                 extraIconList = emptyList(),
                 overflowOptions = emptyList(),
@@ -46,7 +47,7 @@ fun createMockDisplayItemForCipher(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
-                subtitle = "er-$number",
+                subtitle = subtitle,
                 iconData = IconData.Local(R.drawable.ic_card_item),
                 extraIconList = emptyList(),
                 overflowOptions = emptyList(),
@@ -57,7 +58,7 @@ fun createMockDisplayItemForCipher(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
-                subtitle = "mockFirstName-${number}mockLastName-$number",
+                subtitle = subtitle,
                 iconData = IconData.Local(R.drawable.ic_identity_item),
                 extraIconList = emptyList(),
                 overflowOptions = emptyList(),

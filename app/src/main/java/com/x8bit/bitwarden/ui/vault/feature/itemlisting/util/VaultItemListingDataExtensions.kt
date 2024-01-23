@@ -8,6 +8,7 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
@@ -210,26 +211,6 @@ private fun SendView.toDisplayItem(
         extraIconList = toLabelIcons(clock = clock),
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
     )
-
-@Suppress("MagicNumber")
-private val CipherView.subtitle: String?
-    get() = when (type) {
-        CipherType.LOGIN -> login?.username.orEmpty()
-        CipherType.SECURE_NOTE -> null
-        CipherType.CARD -> {
-            card
-                ?.number
-                ?.takeLast(4)
-                .orEmpty()
-        }
-
-        CipherType.IDENTITY -> {
-            identity
-                ?.firstName
-                .orEmpty()
-                .plus(identity?.lastName.orEmpty())
-        }
-    }
 
 @get:DrawableRes
 private val CipherType.iconRes: Int

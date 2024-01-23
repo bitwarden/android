@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import android.net.Uri
 import com.bitwarden.core.CipherType
+import com.bitwarden.core.CipherView
 import com.bitwarden.core.SendType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -300,8 +302,10 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     fun `toViewState should transform a list of CipherViews into a ViewState`() {
+        mockkStatic(CipherView::subtitle)
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri.com"
 
@@ -339,24 +343,29 @@ class VaultItemListingDataExtensionsTest {
                     createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherType.LOGIN,
+                        subtitle = null,
                     ),
                     createMockDisplayItemForCipher(
                         number = 2,
                         cipherType = CipherType.CARD,
+                        subtitle = null,
                     ),
                     createMockDisplayItemForCipher(
                         number = 3,
                         cipherType = CipherType.SECURE_NOTE,
+                        subtitle = null,
                     ),
                     createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherType.IDENTITY,
+                        subtitle = null,
                     ),
                 ),
             ),
             result,
         )
 
+        unmockkStatic(CipherView::subtitle)
         unmockkStatic(Uri::class)
     }
 
