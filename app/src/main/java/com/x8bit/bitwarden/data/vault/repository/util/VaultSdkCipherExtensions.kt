@@ -226,7 +226,8 @@ private fun Login.toEncryptedNetworkLogin(): SyncResponseJson.Cipher.Login =
             ZonedDateTime.ofInstant(it, ZoneOffset.UTC)
         },
         shouldAutofillOnPageLoad = autofillOnPageLoad,
-        uri = uris?.firstOrNull()?.uri,
+        // uri needs to be null to avoid duplicating the first url entry for a login item.
+        uri = null,
         username = username,
     )
 
