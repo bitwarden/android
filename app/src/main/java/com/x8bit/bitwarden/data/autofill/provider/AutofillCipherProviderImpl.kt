@@ -1,7 +1,11 @@
 package com.x8bit.bitwarden.data.autofill.provider
 
+import com.bitwarden.core.CipherType
+import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.data.platform.util.takeIfUriMatches
+import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.flow.first
 
@@ -26,49 +30,58 @@ class AutofillCipherProviderImpl(
     }
 
     override suspend fun getCardAutofillCiphers(): List<AutofillCipher.Card> {
-        // TODO: fulfill with real ciphers (BIT-1294)
-        return if (isVaultLocked()) emptyList() else cardCiphers
+        val cipherViews = getUnlockedCiphersOrNull() ?: return emptyList()
+
+        return cipherViews
+            .mapNotNull { cipherView ->
+                cipherView
+                    .takeIf { cipherView.type == CipherType.CARD }
+                    ?.let { nonNullCipherView ->
+                        AutofillCipher.Card(
+                            name = nonNullCipherView.name,
+                            subtitle = nonNullCipherView.subtitle.orEmpty(),
+                            cardholderName = nonNullCipherView.card?.cardholderName.orEmpty(),
+                            code = nonNullCipherView.card?.code.orEmpty(),
+                            expirationMonth = nonNullCipherView.card?.expMonth.orEmpty(),
+                            expirationYear = nonNullCipherView.card?.expYear.orEmpty(),
+                            number = nonNullCipherView.card?.number.orEmpty(),
+                        )
+                    }
+            }
     }
 
     override suspend fun getLoginAutofillCiphers(
         uri: String,
     ): List<AutofillCipher.Login> {
-        // TODO: fulfill with real ciphers (BIT-1294)
-        return if (isVaultLocked()) emptyList() else loginCiphers
-    }
-}
+        val cipherViews = getUnlockedCiphersOrNull() ?: return emptyList()
 
-private val cardCiphers = listOf(
-    AutofillCipher.Card(
-        cardholderName = "John",
-        code = "123",
-        expirationMonth = "January",
-        expirationYear = "1999",
-        name = "John",
-        number = "1234567890",
-        subtitle = "123...",
-    ),
-    AutofillCipher.Card(
-        cardholderName = "Doe",
-        code = "456",
-        expirationMonth = "December",
-        expirationYear = "2024",
-        name = "Doe",
-        number = "0987654321",
-        subtitle = "098...",
-    ),
-)
-private val loginCiphers = listOf(
-    AutofillCipher.Login(
-        name = "Bitwarden1",
-        password = "password123",
-        subtitle = "John-Bitwarden",
-        username = "John-Bitwarden",
-    ),
-    AutofillCipher.Login(
-        name = "Bitwarden2",
-        password = "password123",
-        subtitle = "Doe-Bitwarden",
-        username = "Doe-Bitwarden",
-    ),
-)
+        return cipherViews
+            .mapNotNull { cipherView ->
+                cipherView
+                    .takeIf { cipherView.type == CipherType.LOGIN }
+                    // TODO: Get global URI matching value from settings repo and
+                    // TODO: perform more complex URI matching here (BIT-1461).
+                    ?.takeIfUriMatches(
+                        uri = uri,
+                    )
+                    ?.let { nonNullCipherView ->
+                        AutofillCipher.Login(
+                            name = nonNullCipherView.name,
+                            password = nonNullCipherView.login?.password.orEmpty(),
+                            subtitle = nonNullCipherView.subtitle.orEmpty(),
+                            username = nonNullCipherView.login?.username.orEmpty(),
+                        )
+                    }
+            }
+    }
+
+    /**
+     * Get available [CipherView]s if possible.
+     */
+    private suspend fun getUnlockedCiphersOrNull(): List<CipherView>? =
+        vaultRepository
+            .ciphersStateFlow
+            .takeUnless { isVaultLocked() }
+            ?.first { it.data != null }
+            ?.data
+}
