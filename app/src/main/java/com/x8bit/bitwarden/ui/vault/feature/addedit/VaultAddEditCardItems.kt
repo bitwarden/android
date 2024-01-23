@@ -232,6 +232,7 @@ fun LazyListScope.vaultAddEditCardItems(
         VaultAddEditCustomField(
             customItem,
             onCustomFieldValueChange = commonHandlers.onCustomFieldValueChange,
+            onCustomFieldAction = commonHandlers.onCustomFieldActionSelect,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),

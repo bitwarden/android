@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -1939,7 +1940,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldValueChange(
-                    VaultAddEditState.Custom.TextField("Test ID", "TestText", ""),
+                    VaultAddEditState.Custom.TextField("Test ID 2", "TestText", ""),
                 ),
             )
         }
@@ -1957,7 +1958,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldValueChange(
-                    VaultAddEditState.Custom.HiddenField("Test ID", "TestHidden", ""),
+                    VaultAddEditState.Custom.HiddenField("Test ID 3", "TestHidden", ""),
                 ),
             )
         }
@@ -1975,7 +1976,122 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldValueChange(
-                    VaultAddEditState.Custom.BooleanField("Test ID", "TestBoolean", true),
+                    VaultAddEditState.Custom.BooleanField("Test ID 1", "TestBoolean", true),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking custom field edit icon and Edit option sends a CustomFieldValueChange action`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Edit")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("NewTestBooleanName")
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.CustomFieldValueChange(
+                    VaultAddEditState.Custom.BooleanField("Test ID 1", "NewTestBooleanName", false),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking custom field edit icon and Delete option sends a CustomFieldActionSelect delete action`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Delete")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.CustomFieldActionSelect(
+                    customFieldAction = CustomFieldAction.DELETE,
+                    customField = VaultAddEditState.Custom.BooleanField(
+                        itemId = "Test ID 1",
+                        name = "TestBoolean",
+                        value = false,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking custom field edit icon and Move down option sends a CustomFieldActionSelect move down action`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move down")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.CustomFieldActionSelect(
+                    customFieldAction = CustomFieldAction.MOVE_DOWN,
+                    customField = VaultAddEditState.Custom.BooleanField(
+                        itemId = "Test ID 1",
+                        name = "TestBoolean",
+                        value = false,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking custom field edit icon and Move Up options sends a CustomFieldActionSelect move up action`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll("Edit")
+            .onFirst()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Move Up")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.CustomFieldActionSelect(
+                    customFieldAction = CustomFieldAction.MOVE_UP,
+                    customField = VaultAddEditState.Custom.BooleanField(
+                        itemId = "Test ID 1",
+                        name = "TestBoolean",
+                        value = false,
+                    ),
                 ),
             )
         }
@@ -2111,10 +2227,10 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(
                     customFieldData = listOf(
-                        VaultAddEditState.Custom.BooleanField("Test ID", "TestBoolean", false),
-                        VaultAddEditState.Custom.TextField("Test ID", "TestText", "TestTextVal"),
+                        VaultAddEditState.Custom.BooleanField("Test ID 1", "TestBoolean", false),
+                        VaultAddEditState.Custom.TextField("Test ID 2", "TestText", "TestTextVal"),
                         VaultAddEditState.Custom.HiddenField(
-                            "Test ID",
+                            "Test ID 3",
                             "TestHidden",
                             "TestHiddenVal",
                         ),

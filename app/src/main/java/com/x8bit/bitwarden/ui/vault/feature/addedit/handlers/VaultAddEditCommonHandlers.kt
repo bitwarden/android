@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 
 /**
@@ -33,6 +34,7 @@ data class VaultAddEditCommonHandlers(
     val onTooltipClick: () -> Unit,
     val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
     val onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
+    val onCustomFieldActionSelect: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
 ) {
     companion object {
 
@@ -94,6 +96,14 @@ data class VaultAddEditCommonHandlers(
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.CustomFieldValueChange(
                             newValue,
+                        ),
+                    )
+                },
+                onCustomFieldActionSelect = { customFieldAction, field ->
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.CustomFieldActionSelect(
+                            customFieldAction,
+                            field,
                         ),
                     )
                 },
