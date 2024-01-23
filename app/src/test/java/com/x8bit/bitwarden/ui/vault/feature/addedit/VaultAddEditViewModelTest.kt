@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -1441,6 +1442,201 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertCustomFieldValueChange(
                 initState,
                 CustomFieldType.BOOLEAN,
+            )
+        }
+
+        @Test
+        fun `CustomFieldValueChange should update name field`() = runTest {
+            val initState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                commonContentViewState = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(
+                            "TestId 3",
+                            "Boolean Field",
+                            true,
+                        ),
+                    ),
+                ),
+            )
+
+            assertCustomFieldValueChange(
+                initState,
+                CustomFieldType.BOOLEAN,
+            )
+        }
+
+        @Test
+        fun `CustomFieldActionSelect with delete action should delete the item`() = runTest {
+            val customFieldData = VaultAddEditState.Custom.BooleanField(
+                "TestId 3",
+                "Boolean Field",
+                true,
+            )
+
+            val initState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                commonContentViewState = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(customFieldData),
+                ),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                ),
+            )
+            val currentContentState =
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+            val expectedState = currentContentState
+                .copy(
+                    common = currentContentState.common.copy(
+                        customFieldData = listOf(),
+                    ),
+                )
+
+            viewModel.actionChannel.trySend(
+                VaultAddEditAction.Common.CustomFieldActionSelect(
+                    CustomFieldAction.DELETE,
+                    customFieldData,
+                ),
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value.viewState,
+            )
+        }
+
+        @Test
+        fun `CustomFieldActionSelect with move up action should move the item up`() = runTest {
+            val customFieldData =
+                VaultAddEditState.Custom.BooleanField(
+                    "TestId 3",
+                    "Boolean Field",
+                    true,
+                )
+
+            val initState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                commonContentViewState = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(
+                            "TestId 1",
+                            "Boolean Field",
+                            true,
+                        ), VaultAddEditState.Custom.BooleanField(
+                            "TestId 3",
+                            "Boolean Field",
+                            true,
+                        ),
+                    ),
+                ),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                ),
+            )
+            val currentContentState =
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+            val expectedState = currentContentState
+                .copy(
+                    common = currentContentState.common.copy(
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.BooleanField(
+                                "TestId 3",
+                                "Boolean Field",
+                                true,
+                            ),
+                            VaultAddEditState.Custom.BooleanField(
+                                "TestId 1",
+                                "Boolean Field",
+                                true,
+                            ),
+                        ),
+                    ),
+                )
+
+            viewModel.actionChannel.trySend(
+                VaultAddEditAction.Common.CustomFieldActionSelect(
+                    CustomFieldAction.MOVE_UP,
+                    customFieldData,
+                ),
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value.viewState,
+            )
+        }
+
+        @Test
+        fun `CustomFieldActionSelect with move down action should move the item down`() = runTest {
+            val customFieldData =
+                VaultAddEditState.Custom.BooleanField(
+                    "TestId 1",
+                    "Boolean Field",
+                    true,
+                )
+
+            val initState = createVaultAddItemState(
+                typeContentViewState = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                commonContentViewState = VaultAddEditState.ViewState.Content.Common(
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.BooleanField(
+                            "TestId 1",
+                            "Boolean Field",
+                            true,
+                        ),
+                        VaultAddEditState.Custom.BooleanField(
+                            "TestId 3",
+                            "Boolean Field",
+                            true,
+                        ),
+                    ),
+                ),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                ),
+            )
+            val currentContentState =
+                (viewModel.stateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+            val expectedState = currentContentState
+                .copy(
+                    common = currentContentState.common.copy(
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.BooleanField(
+                                "TestId 3",
+                                "Boolean Field",
+                                true,
+                            ),
+                            VaultAddEditState.Custom.BooleanField(
+                                "TestId 1",
+                                "Boolean Field",
+                                true,
+                            ),
+                        ),
+                    ),
+                )
+
+            viewModel.actionChannel.trySend(
+                VaultAddEditAction.Common.CustomFieldActionSelect(
+                    CustomFieldAction.MOVE_DOWN,
+                    customFieldData,
+                ),
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value.viewState,
             )
         }
 

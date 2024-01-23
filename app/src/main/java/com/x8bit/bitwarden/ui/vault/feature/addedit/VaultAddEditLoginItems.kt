@@ -312,6 +312,7 @@ fun LazyListScope.vaultAddEditLoginItems(
         VaultAddEditCustomField(
             customItem,
             onCustomFieldValueChange = commonActionHandler.onCustomFieldValueChange,
+            onCustomFieldAction = commonActionHandler.onCustomFieldActionSelect,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),

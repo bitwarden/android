@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.util.Collections
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -148,6 +150,9 @@ class VaultAddEditViewModel @Inject constructor(
             )
 
             is VaultAddEditAction.Common.TooltipClick -> handleTooltipClick()
+            is VaultAddEditAction.Common.CustomFieldActionSelect -> handleCustomFieldActionSelected(
+                action,
+            )
         }
     }
 
@@ -294,6 +299,67 @@ class VaultAddEditViewModel @Inject constructor(
                     }
                 },
             )
+        }
+    }
+
+    private fun handleCustomFieldActionSelected(
+        action: VaultAddEditAction.Common.CustomFieldActionSelect,
+    ) {
+        when (action.customFieldAction) {
+            CustomFieldAction.MOVE_UP -> {
+                val items =
+                    (mutableStateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                        .common
+                        .customFieldData
+                        .toMutableList()
+
+                val index = items.lastIndexOf(action.customField)
+                if (index == 0) {
+                    return
+                }
+
+                Collections.swap(items, index, index - 1)
+
+                updateCommonContent { commonContent ->
+                    commonContent.copy(
+                        customFieldData = items,
+                    )
+                }
+            }
+
+            CustomFieldAction.MOVE_DOWN -> {
+                val items =
+                    (mutableStateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                        .common
+                        .customFieldData
+                        .toMutableList()
+
+                val index = items.indexOf(action.customField)
+                if (index == items.lastIndex) {
+                    return
+                }
+
+                Collections.swap(items, index, index + 1)
+
+                updateCommonContent { commonContent ->
+                    commonContent.copy(
+                        customFieldData = items,
+                    )
+                }
+            }
+
+            CustomFieldAction.DELETE -> {
+                updateCommonContent { commonContent ->
+                    commonContent.copy(
+                        customFieldData = commonContent.customFieldData.filter {
+                            it != action.customField
+                        },
+                    )
+                }
+            }
+
+            // Nothing is done here since we handle this with a CustomFieldValueChange action
+            CustomFieldAction.EDIT -> Unit
         }
     }
 
@@ -1278,12 +1344,17 @@ data class VaultAddEditState(
         abstract val itemId: String
 
         /**
+         * The name of the custom field.
+         */
+        abstract val name: String
+
+        /**
          * Represents the data for displaying a custom text field.
          */
         @Parcelize
         data class TextField(
             override val itemId: String,
-            val name: String,
+            override val name: String,
             val value: String,
         ) : Custom()
 
@@ -1293,7 +1364,7 @@ data class VaultAddEditState(
         @Parcelize
         data class HiddenField(
             override val itemId: String,
-            val name: String,
+            override val name: String,
             val value: String,
         ) : Custom()
 
@@ -1303,7 +1374,7 @@ data class VaultAddEditState(
         @Parcelize
         data class BooleanField(
             override val itemId: String,
-            val name: String,
+            override val name: String,
             val value: Boolean,
         ) : Custom()
 
@@ -1313,7 +1384,7 @@ data class VaultAddEditState(
         @Parcelize
         data class LinkedField(
             override val itemId: String,
-            val name: String,
+            override val name: String,
             val vaultLinkedFieldType: VaultLinkedFieldType?,
         ) : Custom()
     }
@@ -1461,6 +1532,14 @@ sealed class VaultAddEditAction {
          *  Fired when the custom field data is changed.
          */
         data class CustomFieldValueChange(val customField: VaultAddEditState.Custom) : Common()
+
+        /**
+         *  Fired when the custom field data is changed.
+         */
+        data class CustomFieldActionSelect(
+            val customFieldAction: CustomFieldAction,
+            val customField: VaultAddEditState.Custom,
+        ) : Common()
 
         /**
          * Represents the action to open tooltip
