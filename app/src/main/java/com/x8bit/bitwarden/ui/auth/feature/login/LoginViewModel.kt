@@ -238,8 +238,8 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleMasterPasswordHintClicked() {
-        // TODO: Navigate to master password hint screen (BIT-72)
-        sendEvent(LoginEvent.ShowToast("Not yet implemented."))
+        val email = mutableStateFlow.value.emailAddress
+        sendEvent(LoginEvent.NavigateToMasterPasswordHint(email))
     }
 
     private fun handleNotYouButtonClicked() {
@@ -284,6 +284,13 @@ sealed class LoginEvent {
      * Navigates back to the previous screen.
      */
     data object NavigateBack : LoginEvent()
+
+    /**
+     * Navigate to the master password hit screen.
+     */
+    data class NavigateToMasterPasswordHint(
+        val emailAddress: String,
+    ) : LoginEvent()
 
     /**
      * Navigates to the captcha verification screen.
