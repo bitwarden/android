@@ -10,16 +10,14 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.toDisplayItem
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
+import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -28,6 +26,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -39,11 +38,12 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     private val clipboardManager: BitwardenClipboardManager = mockk()
 
-    private val mutableVaultDataStateFlow =
-        MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+    private val mutableAuthCodeFlow =
+        MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
+
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
-        every { vaultDataStateFlow } returns mutableVaultDataStateFlow
+        every { getAuthCodesFlow() } returns mutableAuthCodeFlow.asStateFlow()
         every { sync() } just runs
     }
 
@@ -99,22 +99,11 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on ItemClick should emit ItemClick`() = runTest {
-        val viewModel = createViewModel()
-        val testId = "testId"
-
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VerificationCodeAction.ItemClick(testId))
-            assertEquals(VerificationCodeEvent.NavigateToVaultItem(testId), awaitItem())
-        }
-    }
-
-    @Test
-    fun `SearchIconClick should emit NavigateToVaultSearchScreen`() = runTest {
+    fun `ItemClick for vault item should emit NavigateToVaultItem`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VerificationCodeAction.SearchIconClick)
-            assertEquals(VerificationCodeEvent.NavigateToVaultSearchScreen, awaitItem())
+            viewModel.actionChannel.trySend(VerificationCodeAction.ItemClick(id = "mock"))
+            assertEquals(VerificationCodeEvent.NavigateToVaultItem(id = "mock"), awaitItem())
         }
     }
 
@@ -127,6 +116,22 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
         verify(exactly = 1) {
             vaultRepository.lockVaultForCurrentUser()
+        }
+    }
+
+    @Test
+    fun `RefreshClick should sync`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.actionChannel.trySend(VerificationCodeAction.RefreshClick)
+        verify { vaultRepository.sync() }
+    }
+
+    @Test
+    fun `SearchIconClick should emit NavigateToVaultSearchScreen`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(VerificationCodeAction.SearchIconClick)
+            assertEquals(VerificationCodeEvent.NavigateToVaultSearchScreen, awaitItem())
         }
     }
 
@@ -149,52 +154,23 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ItemClick for vault item should emit NavigateToVaultItem`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VerificationCodeAction.ItemClick(id = "mock"))
-            assertEquals(VerificationCodeEvent.NavigateToVaultItem(id = "mock"), awaitItem())
-        }
-    }
-
-    @Test
-    fun `RefreshClick should sync`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(VerificationCodeAction.RefreshClick)
-        verify { vaultRepository.sync() }
-    }
-
-    @Test
-    fun `vaultDataStateFlow Pending with data should update state to Content`() = runTest {
+    fun `AuthCodeFlow Pending with data should update state to Content`() {
         setupMockUri()
 
-        mutableVaultDataStateFlow.tryEmit(
+        val viewModel = createViewModel()
+
+        mutableAuthCodeFlow.tryEmit(
             value = DataState.Pending(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
+                data = listOf(createVerificationCodeItem()),
             ),
         )
-
-        val viewModel = createViewModel()
 
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Content(
-                    verificationCodeDisplayItems = listOf(
-                        createMockCipherView(
-                            number = 1,
-                            isDeleted = false,
-                        )
-                            .toDisplayItem(
-                                baseIconUrl = initialState.baseIconUrl,
-                                isIconLoadingDisabled = initialState.isIconLoadingDisabled,
-                            ),
-                    ),
+                    createDisplayItemList(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -203,56 +179,90 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Pending with empty data should call NavigateBack to go to the vault screen`() =
+    fun `AuthCodeFlow Pending with no data should call NavigateBack to go to the vault screen`() =
         runTest {
-            val dataState = DataState.Pending(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
+            setupMockUri()
 
             val viewModel = createViewModel()
 
+            mutableAuthCodeFlow.tryEmit(
+                value = DataState.Pending(
+                    data = listOf(),
+                ),
+            )
+
             viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
                 assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Pending with trash data should call NavigateBack event`() = runTest {
-        val dataState = DataState.Pending(
-            data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
-                folderViewList = listOf(createMockFolderView(number = 1)),
-                collectionViewList = listOf(createMockCollectionView(number = 1)),
-                sendViewList = listOf(createMockSendView(number = 1)),
+    fun `AuthCodeFlow Error with data should update state to Content`() = runTest {
+        setupMockUri()
+
+        val viewModel = createViewModel()
+
+        mutableAuthCodeFlow.tryEmit(
+            value = DataState.Error(
+                data = listOf(createVerificationCodeItem()),
+                error = IllegalStateException(),
             ),
         )
 
-        val viewModel = createViewModel()
-
         viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-        }
-    }
-
-    @Test
-    fun `vaultDataStateFlow Error without data should update state to Error`() = runTest {
-        val dataState = DataState.Error<VaultData>(
-            error = IllegalStateException(),
-        )
-
-        val viewModel = createViewModel()
-
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
             assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
         }
+
+        assertEquals(
+            createVerificationCodeState(
+                viewState = VerificationCodeState.ViewState.Content(
+                    createDisplayItemList(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AuthCodeFlow Error with no data should call NavigateBack to go to the vault screen`() =
+        runTest {
+            setupMockUri()
+
+            val viewModel = createViewModel()
+
+            mutableAuthCodeFlow.tryEmit(
+                value = DataState.Error(
+                    data = listOf(),
+                    error = IllegalStateException(),
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
+                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AuthCodeFlow Error with null data should show error screen`() = runTest {
+        setupMockUri()
+
+        val viewModel = createViewModel()
+
+        mutableAuthCodeFlow.tryEmit(
+            value = DataState.Error(
+                data = null,
+                error = IllegalStateException(),
+            ),
+        )
+
+        viewModel.eventFlow.test {
+            assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
+        }
+
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Error(
@@ -263,101 +273,30 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Test
-    fun `vaultDataStateFlow Error with data should update state to Content`() = runTest {
-        setupMockUri()
-
-        val dataState = DataState.Error(
-            data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
-                folderViewList = listOf(createMockFolderView(number = 1)),
-                collectionViewList = listOf(createMockCollectionView(number = 1)),
-                sendViewList = listOf(createMockSendView(number = 1)),
-            ),
-            error = IllegalStateException(),
-        )
-
-        val viewModel = createViewModel()
-
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-        }
-        assertEquals(
-            createVerificationCodeState(
-                viewState = VerificationCodeState.ViewState.Content(
-                    verificationCodeDisplayItems = listOf(
-                        createMockCipherView(
-                            number = 1,
-                            isDeleted = false,
-                        )
-                            .toDisplayItem(
-                                baseIconUrl = initialState.baseIconUrl,
-                                isIconLoadingDisabled = initialState.isIconLoadingDisabled,
-                            ),
-                    ),
-                ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
-
     @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Error with empty data should call NavigateBack to go the vault screen`() =
+    fun `AuthCodeFlow NoNetwork with empty data should call NavigateBack to go to the vault screen`() =
         runTest {
-            val dataState = DataState.Error(
-                data = VaultData(
-                    cipherViewList = emptyList(),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
-                ),
-                error = IllegalStateException(),
-            )
-
             val viewModel = createViewModel()
 
-            viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
-                assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `vaultDataStateFlow Error with trash data should call NavigateBack to go to the vault screen`() =
-        runTest {
-            val dataState = DataState.Error(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-                error = IllegalStateException(),
+            mutableAuthCodeFlow.tryEmit(
+                DataState.NoNetwork(emptyList()),
             )
 
-            val viewModel = createViewModel()
-
             viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
                 assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
                 assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
             }
         }
 
     @Test
-    fun `vaultDataStateFlow NoNetwork without data should update state to Error`() = runTest {
-        val dataState = DataState.NoNetwork<VaultData>()
-
+    fun `AuthCodeFlow NoNetwork with null should update state to Error`() = runTest {
         val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-        }
+        mutableAuthCodeFlow.tryEmit(
+            DataState.NoNetwork(null),
+        )
+
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Error(
@@ -371,37 +310,25 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `vaultDataStateFlow NoNetwork with data should update state to Content`() = runTest {
+    fun `AuthCodeFlow NoNetwork with data should update state to Content`() = runTest {
         setupMockUri()
-
-        val dataState = DataState.NoNetwork(
-            data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = false)),
-                folderViewList = listOf(createMockFolderView(number = 1)),
-                collectionViewList = listOf(createMockCollectionView(number = 1)),
-                sendViewList = listOf(createMockSendView(number = 1)),
-            ),
-        )
 
         val viewModel = createViewModel()
 
+        mutableAuthCodeFlow.tryEmit(
+            value = DataState.NoNetwork(
+                listOf(createVerificationCodeItem()),
+            ),
+        )
+
         viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
             assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
         }
+
         assertEquals(
             createVerificationCodeState(
                 viewState = VerificationCodeState.ViewState.Content(
-                    verificationCodeDisplayItems = listOf(
-                        createMockCipherView(
-                            number = 1,
-                            isDeleted = false,
-                        )
-                            .toDisplayItem(
-                                baseIconUrl = initialState.baseIconUrl,
-                                isIconLoadingDisabled = initialState.isIconLoadingDisabled,
-                            ),
-                    ),
+                    createDisplayItemList(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -409,113 +336,49 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `vaultDataStateFlow NoNetwork with trash data should call NavigateBack`() = runTest {
-        val dataState = DataState.NoNetwork(
-            data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
-                folderViewList = listOf(createMockFolderView(number = 1)),
-                collectionViewList = listOf(createMockCollectionView(number = 1)),
-                sendViewList = listOf(createMockSendView(number = 1)),
-            ),
-        )
+    fun `AuthCodeFlow Loaded with empty data should call NavigateBack to go the vault screen`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            mutableAuthCodeFlow.tryEmit(
+                DataState.Loaded(emptyList()),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
+                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
+            }
+        }
+
+    @Test
+    fun `AuthCodeFlow Loaded with valid items should update ViewState to content`() = runTest {
+        setupMockUri()
 
         val viewModel = createViewModel()
 
+        mutableAuthCodeFlow.tryEmit(
+            value = DataState.Loaded(
+                listOf(createVerificationCodeItem()),
+            ),
+        )
+
         viewModel.eventFlow.test {
-            mutableVaultDataStateFlow.tryEmit(value = dataState)
-            assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
             assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
         }
+
+        assertEquals(
+            createVerificationCodeState(
+                viewState = VerificationCodeState.ViewState.Content(
+                    createDisplayItemList(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Loaded with empty items should update call NavigateBack to go the vault screen`() =
-        runTest {
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    cipherViewList = emptyList(),
-                    folderViewList = emptyList(),
-                    collectionViewList = emptyList(),
-                    sendViewList = emptyList(),
-                ),
-            )
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
-                assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `vaultDataStateFlow Loaded with trash items should call NavigateBack to go to the vault screen`() =
-        runTest {
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
-            val viewModel = createViewModel()
-
-            viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
-                assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-            }
-        }
-
-    @Test
-    fun `vaultDataStateFlow Loaded with items should update ViewState to Content`() =
-        runTest {
-            setupMockUri()
-            val dataState = DataState.Loaded(
-                data = VaultData(
-                    cipherViewList = listOf(
-                        createMockCipherView(
-                            number = 1,
-                            isDeleted = false,
-                        ),
-                    ),
-                    folderViewList = listOf(createMockFolderView(number = 1)),
-                    collectionViewList = listOf(createMockCollectionView(number = 1)),
-                    sendViewList = listOf(createMockSendView(number = 1)),
-                ),
-            )
-
-            val viewModel = createViewModel()
-
-            viewModel.eventFlow.test {
-                mutableVaultDataStateFlow.tryEmit(value = dataState)
-                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
-            }
-
-            assertEquals(
-                createVerificationCodeState(
-                    viewState = VerificationCodeState.ViewState.Content(
-                        listOf(
-                            createMockCipherView(
-                                number = 1,
-                                isDeleted = false,
-                            )
-                                .toDisplayItem(
-                                    baseIconUrl = initialState.baseIconUrl,
-                                    isIconLoadingDisabled = initialState.isIconLoadingDisabled,
-                                ),
-                        ),
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Test
-    fun `vaultDataStateFlow Loading should update state to Loading`() = runTest {
-        mutableVaultDataStateFlow.tryEmit(value = DataState.Loading)
+    fun `AuthCodeFlow Loading should update state to Loading`() = runTest {
+        mutableAuthCodeFlow.tryEmit(value = DataState.Loading)
 
         val viewModel = createViewModel()
 
@@ -580,13 +443,33 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     private fun createVerificationCodeState(
         viewState: VerificationCodeState.ViewState = VerificationCodeState.ViewState.Loading,
-    ): VerificationCodeState =
-        VerificationCodeState(
-            viewState = viewState,
-            vaultFilterType = vaultRepository.vaultFilterType,
-            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
-            dialogState = null,
-            isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
+    ) = VerificationCodeState(
+        viewState = viewState,
+        vaultFilterType = vaultRepository.vaultFilterType,
+        isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+        baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+        dialogState = null,
+        isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
+    )
+
+    private fun createDisplayItemList() = listOf(
+        createMockCipherView(
+            number = 1,
+            isDeleted = false,
         )
+            .let { cipherView ->
+                VerificationCodeDisplayItem(
+                    id = cipherView.id.toString(),
+                    authCode = "123456",
+                    label = cipherView.name,
+                    supportingLabel = cipherView.login?.username,
+                    periodSeconds = 30,
+                    timeLeftSeconds = 30,
+                    startIcon = cipherView.login?.uris.toLoginIconData(
+                        isIconLoadingDisabled = initialState.isIconLoadingDisabled,
+                        baseIconUrl = initialState.baseIconUrl,
+                    ),
+                )
+            },
+    )
 }

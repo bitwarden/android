@@ -134,8 +134,6 @@ fun VerificationCodeScreen(
             is VerificationCodeState.ViewState.Loading -> {
                 BitwardenLoadingContent(modifier = modifier)
             }
-
-            is VerificationCodeState.ViewState.NoItems -> Unit
         }
     }
 }
