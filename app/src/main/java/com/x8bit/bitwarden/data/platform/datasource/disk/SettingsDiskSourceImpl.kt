@@ -11,12 +11,14 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.Instant
 
 private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
 private const val APP_THEME_KEY = "$BASE_KEY:theme"
 private const val PULL_TO_REFRESH_KEY = "$BASE_KEY:syncOnRefresh"
 private const val INLINE_AUTOFILL_ENABLED_KEY = "$BASE_KEY:inlineAutofillEnabled"
 private const val BLOCKED_AUTOFILL_URIS_KEY = "$BASE_KEY:autofillBlacklistedUris"
+private const val VAULT_LAST_SYNC_TIME = "$BASE_KEY:vaultLastSyncTime"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
@@ -33,6 +35,8 @@ class SettingsDiskSourceImpl(
     SettingsDiskSource {
     private val mutableAppThemeFlow =
         bufferedMutableSharedFlow<AppTheme>(replay = 1)
+
+    private val mutableLastSyncFlowMap = mutableMapOf<String, MutableSharedFlow<Instant?>>()
 
     private val mutableVaultTimeoutActionFlowMap =
         mutableMapOf<String, MutableSharedFlow<VaultTimeoutAction?>>()
@@ -97,7 +101,23 @@ class SettingsDiskSourceImpl(
             userId = userId,
             isApprovePasswordlessLoginsEnabled = null,
         )
+        storeLastSyncTime(userId = userId, lastSyncTime = null)
     }
+
+    override fun getLastSyncTime(userId: String): Instant? =
+        getLong(key = "${VAULT_LAST_SYNC_TIME}_$userId")?.let { Instant.ofEpochMilli(it) }
+
+    override fun storeLastSyncTime(userId: String, lastSyncTime: Instant?) {
+        putLong(
+            key = "${VAULT_LAST_SYNC_TIME}_$userId",
+            value = lastSyncTime?.toEpochMilli(),
+        )
+        getMutableLastSyncFlow(userId = userId).tryEmit(lastSyncTime)
+    }
+
+    override fun getLastSyncTimeFlow(userId: String): Flow<Instant?> =
+        getMutableLastSyncFlow(userId = userId)
+            .onSubscription { emit(getLastSyncTime(userId = userId)) }
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
         getInt(key = "${VAULT_TIME_IN_MINUTES_KEY}_$userId")
@@ -176,6 +196,13 @@ class SettingsDiskSourceImpl(
             value = blockedAutofillUris?.let { json.encodeToString(it) },
         )
     }
+
+    private fun getMutableLastSyncFlow(
+        userId: String,
+    ): MutableSharedFlow<Instant?> =
+        mutableLastSyncFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableVaultTimeoutActionFlow(
         userId: String,

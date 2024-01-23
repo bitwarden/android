@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 class SettingsDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
@@ -89,6 +90,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             isApprovePasswordlessLoginsEnabled = true,
         )
+        settingsDiskSource.storeLastSyncTime(
+            userId = userId,
+            lastSyncTime = Instant.parse("2023-10-27T12:00:00Z"),
+        )
 
         settingsDiskSource.clearData(userId = userId)
 
@@ -98,6 +103,29 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = userId))
         assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
         assertNull(settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId))
+        assertNull(settingsDiskSource.getLastSyncTime(userId = userId))
+    }
+
+    @Test
+    fun `getLastSyncTime should pull from and update SharedPreferences`() {
+        val userId = "userId-1234"
+        val lastVaultSync = "bwPreferencesStorage:vaultLastSyncTime_$userId"
+        val instantLong = 1_698_408_000_000L
+        val instant = Instant.ofEpochMilli(instantLong)
+
+        // Assert that the default value in disk source is null
+        assertNull(settingsDiskSource.getLastSyncTime(userId = userId))
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences.edit { putLong(lastVaultSync, instantLong) }
+        assertEquals(instant, settingsDiskSource.getLastSyncTime(userId = userId))
+
+        // Updating the disk source updates the shared preferences
+        settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = instant)
+        assertEquals(
+            fakeSharedPreferences.getLong(lastVaultSync, 0L),
+            instantLong,
+        )
     }
 
     @Test
