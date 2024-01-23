@@ -207,7 +207,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         runTest {
             val dataState = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -226,7 +226,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     fun `vaultDataStateFlow Pending with trash data should call NavigateBack event`() = runTest {
         val dataState = DataState.Pending(
             data = VaultData(
-                cipherViewList = listOf(createMockCipherView(number = 1)),
+                cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                 folderViewList = listOf(createMockFolderView(number = 1)),
                 collectionViewList = listOf(createMockCollectionView(number = 1)),
                 sendViewList = listOf(createMockSendView(number = 1)),
@@ -454,7 +454,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         runTest {
             val dataState = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
