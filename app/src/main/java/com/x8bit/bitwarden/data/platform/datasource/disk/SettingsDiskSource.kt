@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 
 /**
  * Primary access point for general settings-related disk information.
@@ -40,6 +41,23 @@ interface SettingsDiskSource {
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
+
+    /**
+     * Gets the last time the app synced the vault data for a given [userId] (or `null` if the
+     * vault has never been synced).
+     */
+    fun getLastSyncTime(userId: String): Instant?
+
+    /**
+     * Emits updates that track [getLastSyncTime] for the given [userId]. This will replay the
+     * last known value, if any.
+     */
+    fun getLastSyncTimeFlow(userId: String): Flow<Instant?>
+
+    /**
+     * Stores the given [lastSyncTime] for the given [userId].
+     */
+    fun storeLastSyncTime(userId: String, lastSyncTime: Instant?)
 
     /**
      * Gets the current vault timeout (in minutes) for the given [userId] (or `null` if the vault

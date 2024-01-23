@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
+import java.time.Instant
 
 /**
  * Fake, memory-based implementation of [SettingsDiskSource].
@@ -16,6 +17,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     private val mutableAppThemeFlow =
         bufferedMutableSharedFlow<AppTheme>(replay = 1)
+
+    private val mutableLastSyncCallFlowMap = mutableMapOf<String, MutableSharedFlow<Instant?>>()
 
     private val mutableVaultTimeoutActionsFlowMap =
         mutableMapOf<String, MutableSharedFlow<VaultTimeoutAction?>>()
@@ -30,6 +33,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         bufferedMutableSharedFlow<Boolean?>()
 
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
+    private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
 
@@ -76,6 +80,18 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
+        mutableLastSyncCallFlowMap.remove(userId)
+    }
+
+    override fun getLastSyncTime(userId: String): Instant? = storedLastSyncTime[userId]
+
+    override fun getLastSyncTimeFlow(userId: String): Flow<Instant?> =
+        getMutableLastSyncTimeFlow(userId = userId)
+            .onSubscription { emit(getLastSyncTime(userId = userId)) }
+
+    override fun storeLastSyncTime(userId: String, lastSyncTime: Instant?) {
+        storedLastSyncTime[userId] = lastSyncTime
+        getMutableLastSyncTimeFlow(userId = userId).tryEmit(lastSyncTime)
     }
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
@@ -151,6 +167,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     }
 
     //region Private helper functions
+
+    private fun getMutableLastSyncTimeFlow(
+        userId: String,
+    ): MutableSharedFlow<Instant?> =
+        mutableLastSyncCallFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
 
     private fun getMutableVaultTimeoutActionsFlow(
         userId: String,
