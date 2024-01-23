@@ -10,6 +10,7 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
@@ -170,26 +171,6 @@ private fun CipherView.toDisplayItem(
         extraIconList = emptyList(),
         overflowOptions = emptyList(),
     )
-
-@Suppress("MagicNumber")
-private val CipherView.subtitle: String?
-    get() = when (type) {
-        CipherType.LOGIN -> login?.username.orEmpty()
-        CipherType.SECURE_NOTE -> null
-        CipherType.CARD -> {
-            card
-                ?.number
-                ?.takeLast(4)
-                .orEmpty()
-        }
-
-        CipherType.IDENTITY -> {
-            identity
-                ?.firstName
-                .orEmpty()
-                .plus(identity?.lastName.orEmpty())
-        }
-    }
 
 private fun CipherView.toIconData(
     baseIconUrl: String,
