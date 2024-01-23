@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.search
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.NavigationIcon
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 
 /**
  * The search UI for vault items or send items.
@@ -37,12 +41,22 @@ import com.x8bit.bitwarden.ui.platform.components.NavigationIcon
 @Composable
 fun SearchScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToEditSend: (sendId: String) -> Unit,
+    intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SearchEvent.NavigateBack -> onNavigateBack()
+            is SearchEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
+            is SearchEvent.ShowShareSheet -> intentManager.shareText(event.content)
+            is SearchEvent.ShowToast -> {
+                Toast
+                    .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 

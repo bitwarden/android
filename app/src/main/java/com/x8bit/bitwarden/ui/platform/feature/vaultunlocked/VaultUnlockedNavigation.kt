@@ -99,7 +99,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     } else {
                         VaultAddEditType.EditItem(vaultItemId)
                     },
-
                 )
             },
             onNavigateToMoveToOrganization = {
@@ -125,7 +124,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         foldersDestination(onNavigateBack = { navController.popBackStack() })
         generatorModalDestination(onNavigateBack = { navController.popBackStack() })
-        searchDestination(onNavigateBack = { navController.popBackStack() })
+        searchDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
+        )
     }
 }
 
