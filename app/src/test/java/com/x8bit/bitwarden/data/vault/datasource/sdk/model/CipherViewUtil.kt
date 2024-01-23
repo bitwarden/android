@@ -25,7 +25,7 @@ import java.time.ZonedDateTime
  */
 fun createMockCipherView(
     number: Int,
-    isDeleted: Boolean = true,
+    isDeleted: Boolean = false,
     cipherType: CipherType = CipherType.LOGIN,
 ): CipherView =
     CipherView(

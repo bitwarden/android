@@ -19,13 +19,19 @@ private const val IOS_URI = "iosapp://"
 /**
  * Transforms [VaultData] into [VaultState.ViewState] using the given [vaultFilterType].
  */
+@Suppress("LongMethod")
 fun VaultData.toViewState(
     isPremium: Boolean,
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
 ): VaultState.ViewState {
-    val filteredCipherViewList = cipherViewList.toFilteredList(vaultFilterType)
+
+    val filteredCipherViewListWithDeletedItems =
+        cipherViewList.toFilteredList(vaultFilterType)
+
+    val filteredCipherViewList = filteredCipherViewListWithDeletedItems
+        .filter { it.deletedDate == null }
     val filteredFolderViewList = folderViewList.toFilteredList(vaultFilterType)
     val filteredCollectionViewList = collectionViewList.toFilteredList(vaultFilterType)
 
@@ -56,7 +62,10 @@ fun VaultData.toViewState(
                     id = folderView.id,
                     name = folderView.name.asText(),
                     itemCount = filteredCipherViewList
-                        .count { !it.id.isNullOrBlank() && folderView.id == it.folderId },
+                        .count {
+                            !it.id.isNullOrBlank() &&
+                                folderView.id == it.folderId
+                        },
                 )
             },
             noFolderItems = filteredCipherViewList
@@ -80,8 +89,9 @@ fun VaultData.toViewState(
                             },
                     )
                 },
-            // TODO need to populate trash item count in BIT-969
-            trashItemsCount = 0,
+            trashItemsCount = filteredCipherViewListWithDeletedItems.count {
+                it.deletedDate != null
+            },
         )
     }
 }

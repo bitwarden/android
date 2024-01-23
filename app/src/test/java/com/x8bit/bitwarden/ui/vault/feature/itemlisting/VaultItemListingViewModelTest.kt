@@ -414,7 +414,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val dataState = DataState.Loaded(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -480,7 +480,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),
@@ -501,7 +501,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         mutableVaultDataStateFlow.tryEmit(
             value = DataState.Pending(
                 data = VaultData(
-                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
                     folderViewList = listOf(createMockFolderView(number = 1)),
                     collectionViewList = listOf(createMockCollectionView(number = 1)),
                     sendViewList = listOf(createMockSendView(number = 1)),

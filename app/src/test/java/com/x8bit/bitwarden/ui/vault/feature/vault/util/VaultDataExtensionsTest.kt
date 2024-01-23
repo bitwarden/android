@@ -381,4 +381,42 @@ class VaultDataExtensionsTest {
 
         unmockkStatic(Uri::class)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should only count deleted items for the trash count`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(number = 1, isDeleted = true),
+                createMockCipherView(number = 2, isDeleted = true),
+                createMockCipherView(number = 3, isDeleted = false),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 2,
+                totpItemsCount = 1,
+            ),
+            actual,
+        )
+    }
 }
