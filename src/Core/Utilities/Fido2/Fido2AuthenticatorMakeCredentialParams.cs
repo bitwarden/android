@@ -23,6 +23,11 @@ namespace Bit.Core.Utilities.Fido2
         public PublicKeyCredentialAlgorithmDescriptor[] CredTypesAndPubKeyAlgs { get; set; }
 
         ///<summary>
+        ///An OPTIONAL list of PublicKeyCredentialDescriptor objects provided by the Relying Party with the intention that, if any of these are known to the authenticator, it SHOULD NOT create a new credential. excludeCredentialDescriptorList contains a list of known credentials.
+        ///</summary>
+        public PublicKeyCredentialDescriptor[] ExcludeCredentialDescriptorList { get; set; }
+
+        ///<summary>
         /// The effective resident key requirement for credential creation, a Boolean value determined by the client. Resident is synonymous with discoverable. */
         ///</summary>
         public bool RequireResidentKey { get; set; }

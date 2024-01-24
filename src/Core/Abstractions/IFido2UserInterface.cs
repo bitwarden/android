@@ -42,5 +42,12 @@ namespace Bit.Core.Abstractions
         /// <param name="pickCredentialParams">The parameters to use when asking the user to pick a credential.</param>
         /// <returns>The ID of the cipher that contains the credentials the user picked.</returns>
         Task<Fido2PickCredentialResult> PickCredentialAsync(Fido2PickCredentialParams pickCredentialParams);
+
+        /// <summary>
+        /// Inform the user that the operation was cancelled because their vault contains excluded credentials.
+        /// </summary>
+        /// <param name="existingCipherIds">The IDs of the excluded credentials.</param>
+        /// <returns>When user has confirmed the message</returns>
+        Task InformExcludedCredential(string[] existingCipherIds);
     }
 }

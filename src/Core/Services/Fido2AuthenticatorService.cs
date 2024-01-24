@@ -23,7 +23,7 @@ namespace Bit.Core.Services
             _userInterface = userInterface;
         }
 
-        public Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) 
+        public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) 
         {
             if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Algorithm != (int) Fido2AlgorithmIdentifier.ES256))
             {
@@ -32,6 +32,20 @@ namespace Bit.Core.Services
                     $"[Fido2Authenticator] No compatible algorithms found, RP requested: {requestedAlgorithms}"
                 );
                 throw new NotSupportedError();
+            }
+
+            // await _userInterface.EnsureUnlockedVault();
+            await _syncService.FullSyncAsync(false);
+
+            var existingCipherIds = await FindExcludedCredentials(
+                makeCredentialParams.ExcludeCredentialDescriptorList
+            );
+            if (existingCipherIds.Length > 0) {
+                _logService.Info(
+                    "[Fido2Authenticator] Aborting due to excluded credential found in vault."
+                );
+                await _userInterface.InformExcludedCredential(existingCipherIds);
+                throw new NotAllowedError();
             }
 
             throw new NotImplementedException();
@@ -128,6 +142,40 @@ namespace Bit.Core.Services
 
                 throw new UnknownError();
             }
+        }
+
+        ///<summary>
+        /// Finds existing crendetials and returns the `CipherId` for each one
+        ///</summary>
+        private async Task<string[]> FindExcludedCredentials(
+            PublicKeyCredentialDescriptor[] credentials
+        ) {
+            var ids = new List<string>();
+
+            foreach (var credential in credentials) 
+            {
+                try
+                {
+                    ids.Add(GuidToStandardFormat(credential.Id));
+                } catch {}
+            }
+
+            if (ids.Count == 0) {
+                return [];
+            }
+
+            var ciphers = await _cipherService.GetAllDecryptedAsync();
+            return ciphers
+                .FindAll(
+                    (cipher) =>
+                    !cipher.IsDeleted &&
+                    cipher.OrganizationId == null &&
+                    cipher.Type == CipherType.Login &&
+                    cipher.Login.HasFido2Credentials &&
+                    ids.Contains(cipher.Login.MainFido2Credential.CredentialId)
+                )
+                .Select((cipher) => cipher.Id)
+                .ToArray();
         }
 
         private async Task<List<CipherView>> FindCredentialsById(PublicKeyCredentialDescriptor[] credentials, string rpId)
