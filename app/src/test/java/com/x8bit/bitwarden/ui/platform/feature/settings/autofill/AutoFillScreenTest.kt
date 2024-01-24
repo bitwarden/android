@@ -232,7 +232,8 @@ class AutoFillScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on default URI match detection toggle should display dialog`() {
+    fun `on default URI match type click should display dialog`() {
+        composeTestRule.assertNoDialogExists()
         composeTestRule
             .onNodeWithText("Default URI match detection")
             .performScrollTo()
@@ -244,8 +245,48 @@ class AutoFillScreenTest : BaseComposeTest() {
             .assertExists()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `default URI match detection add login should be updated on or off according to state`() {
+    fun `on default URI match type dialog item click should send DefaultUriMatchTypeSelect and close the dialog`() {
+        composeTestRule
+            .onNodeWithText("Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Exact")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AutoFillAction.DefaultUriMatchTypeSelect(
+                    defaultUriMatchType = UriMatchType.EXACT,
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on default URI match type dialog cancel click should close the dialog`() {
+        composeTestRule
+            .onNodeWithText("Default URI match detection")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `default URI match type should update according to state`() {
         composeTestRule
             .onNodeWithText("Base domain")
             .assertExists()
@@ -253,7 +294,7 @@ class AutoFillScreenTest : BaseComposeTest() {
             .onNodeWithText("Starts with")
             .assertDoesNotExist()
         mutableStateFlow.update {
-            it.copy(uriDetectionMethod = UriMatchType.STARTS_WITH)
+            it.copy(defaultUriMatchType = UriMatchType.STARTS_WITH)
         }
         composeTestRule
             .onNodeWithText("Base domain")
@@ -296,5 +337,5 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = false,
-    uriDetectionMethod = UriMatchType.DOMAIN,
+    defaultUriMatchType = UriMatchType.DOMAIN,
 )

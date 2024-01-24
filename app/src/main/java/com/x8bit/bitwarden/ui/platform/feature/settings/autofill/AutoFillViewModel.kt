@@ -33,7 +33,7 @@ class AutoFillViewModel @Inject constructor(
             isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
             isCopyTotpAutomaticallyEnabled = false,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
-            uriDetectionMethod = settingsRepository.defaultUriMatchType,
+            defaultUriMatchType = settingsRepository.defaultUriMatchType,
         ),
 ) {
 
@@ -56,7 +56,7 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.AutoFillServicesClick -> handleAutoFillServicesClick(action)
         AutoFillAction.BackClick -> handleBackClick()
         is AutoFillAction.CopyTotpAutomaticallyClick -> handleCopyTotpAutomaticallyClick(action)
-        is AutoFillAction.UriDetectionMethodSelect -> handleUriDetectionMethodSelect(action)
+        is AutoFillAction.DefaultUriMatchTypeSelect -> handleDefaultUriMatchTypeSelect(action)
         AutoFillAction.BlockAutoFillClick -> handleBlockAutoFillClick()
         is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
         is AutoFillAction.Internal.AutofillEnabledUpdateReceive -> {
@@ -95,10 +95,10 @@ class AutoFillViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isUseInlineAutoFillEnabled = action.isEnabled) }
     }
 
-    private fun handleUriDetectionMethodSelect(action: AutoFillAction.UriDetectionMethodSelect) {
-        settingsRepository.defaultUriMatchType = action.uriDetectionMethod
+    private fun handleDefaultUriMatchTypeSelect(action: AutoFillAction.DefaultUriMatchTypeSelect) {
+        settingsRepository.defaultUriMatchType = action.defaultUriMatchType
         mutableStateFlow.update {
-            it.copy(uriDetectionMethod = action.uriDetectionMethod)
+            it.copy(defaultUriMatchType = action.defaultUriMatchType)
         }
     }
 
@@ -124,7 +124,7 @@ data class AutoFillState(
     val isAutoFillServicesEnabled: Boolean,
     val isCopyTotpAutomaticallyEnabled: Boolean,
     val isUseInlineAutoFillEnabled: Boolean,
-    val uriDetectionMethod: UriMatchType,
+    val defaultUriMatchType: UriMatchType,
 ) : Parcelable {
 
     /**
@@ -195,8 +195,8 @@ sealed class AutoFillAction {
     /**
      * User selected a [UriMatchType].
      */
-    data class UriDetectionMethodSelect(
-        val uriDetectionMethod: UriMatchType,
+    data class DefaultUriMatchTypeSelect(
+        val defaultUriMatchType: UriMatchType,
     ) : AutoFillAction()
 
     /**

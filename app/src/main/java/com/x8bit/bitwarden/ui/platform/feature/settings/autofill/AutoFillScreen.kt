@@ -172,10 +172,10 @@ fun AutoFillScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            UriMatchDetectionDialog(
-                selectedUriDetection = state.uriDetectionMethod,
-                onDetectionSelect = remember(viewModel) {
-                    { viewModel.trySendAction(AutoFillAction.UriDetectionMethodSelect(it)) }
+            DefaultUriMatchTypeRow(
+                selectedUriMatchType = state.defaultUriMatchType,
+                onUriMatchTypeSelect = remember(viewModel) {
+                    { viewModel.trySendAction(AutoFillAction.DefaultUriMatchTypeSelect(it)) }
                 },
             )
             BitwardenTextRow(
@@ -194,9 +194,9 @@ fun AutoFillScreen(
 }
 
 @Composable
-private fun UriMatchDetectionDialog(
-    selectedUriDetection: UriMatchType,
-    onDetectionSelect: (UriMatchType) -> Unit,
+private fun DefaultUriMatchTypeRow(
+    selectedUriMatchType: UriMatchType,
+    onUriMatchTypeSelect: (UriMatchType) -> Unit,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -207,7 +207,7 @@ private fun UriMatchDetectionDialog(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = selectedUriDetection.displayLabel(),
+            text = selectedUriMatchType.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -222,10 +222,10 @@ private fun UriMatchDetectionDialog(
             uriMatchTypes.forEach { option ->
                 BitwardenSelectionRow(
                     text = option.displayLabel,
-                    isSelected = option == selectedUriDetection,
+                    isSelected = option == selectedUriMatchType,
                     onClick = {
                         shouldShowDialog = false
-                        onDetectionSelect(
+                        onUriMatchTypeSelect(
                             uriMatchTypes.first { it == option },
                         )
                     },
