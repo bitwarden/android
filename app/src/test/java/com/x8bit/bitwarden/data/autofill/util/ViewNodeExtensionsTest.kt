@@ -94,10 +94,10 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
-    fun `toAutofillView should return AutofillView Login EmailAddress when hint matches`() {
+    fun `toAutofillView should return AutofillView Login Username when hint is EMAIL`() {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_EMAIL_ADDRESS
-        val expected = AutofillView.Login.EmailAddress(
+        val expected = AutofillView.Login.Username(
             data = autofillViewData,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
@@ -126,7 +126,7 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
-    fun `toAutofillView should return AutofillView Login Username when hint matches`() {
+    fun `toAutofillView should return AutofillView Login Username when hint is USERNAME`() {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_USERNAME
         val expected = AutofillView.Login.Username(

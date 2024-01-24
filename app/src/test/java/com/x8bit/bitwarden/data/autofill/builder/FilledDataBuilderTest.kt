@@ -67,9 +67,6 @@ class FilledDataBuilderTest {
             username = username,
             subtitle = "Subtitle",
         )
-        val autofillViewEmail = AutofillView.Login.EmailAddress(
-            data = autofillViewData,
-        )
         val autofillViewPassword = AutofillView.Login.Password(
             data = autofillViewData,
         )
@@ -78,7 +75,6 @@ class FilledDataBuilderTest {
         )
         val autofillPartition = AutofillPartition.Login(
             views = listOf(
-                autofillViewEmail,
                 autofillViewPassword,
                 autofillViewUsername,
             ),
@@ -91,13 +87,11 @@ class FilledDataBuilderTest {
             partition = autofillPartition,
             uri = URI,
         )
-        val filledItemEmail: FilledItem = mockk()
         val filledItemPassword: FilledItem = mockk()
         val filledItemUsername: FilledItem = mockk()
         val filledPartition = FilledPartition(
             autofillCipher = autofillCipher,
             filledItems = listOf(
-                filledItemEmail,
                 filledItemPassword,
                 filledItemUsername,
             ),
@@ -118,7 +112,6 @@ class FilledDataBuilderTest {
                 uri = URI,
             )
         } returns listOf(autofillCipher)
-        every { autofillViewEmail.buildFilledItemOrNull(username) } returns filledItemEmail
         every { autofillViewPassword.buildFilledItemOrNull(password) } returns filledItemPassword
         every { autofillViewUsername.buildFilledItemOrNull(username) } returns filledItemUsername
 
@@ -135,7 +128,6 @@ class FilledDataBuilderTest {
             )
         }
         verify(exactly = 1) {
-            autofillViewEmail.buildFilledItemOrNull(username)
             autofillViewPassword.buildFilledItemOrNull(password)
             autofillViewUsername.buildFilledItemOrNull(username)
         }
@@ -145,9 +137,6 @@ class FilledDataBuilderTest {
     fun `build should return no partitions and ignored AutofillIds when Login and no URI`() =
         runTest {
             // Setup
-            val autofillViewEmail = AutofillView.Login.EmailAddress(
-                data = autofillViewData,
-            )
             val autofillViewPassword = AutofillView.Login.Password(
                 data = autofillViewData,
             )
@@ -156,7 +145,6 @@ class FilledDataBuilderTest {
             )
             val autofillPartition = AutofillPartition.Login(
                 views = listOf(
-                    autofillViewEmail,
                     autofillViewPassword,
                     autofillViewUsername,
                 ),
@@ -293,9 +281,6 @@ class FilledDataBuilderTest {
                 username = username,
                 subtitle = "Subtitle",
             )
-            val autofillViewEmail = AutofillView.Login.EmailAddress(
-                data = autofillViewData,
-            )
             val autofillViewPassword = AutofillView.Login.Password(
                 data = autofillViewData,
             )
@@ -304,7 +289,6 @@ class FilledDataBuilderTest {
             )
             val autofillPartition = AutofillPartition.Login(
                 views = listOf(
-                    autofillViewEmail,
                     autofillViewPassword,
                     autofillViewUsername,
                 ),
@@ -319,13 +303,11 @@ class FilledDataBuilderTest {
                 partition = autofillPartition,
                 uri = URI,
             )
-            val filledItemEmail: FilledItem = mockk()
             val filledItemPassword: FilledItem = mockk()
             val filledItemUsername: FilledItem = mockk()
             val filledPartitionOne = FilledPartition(
                 autofillCipher = autofillCipher,
                 filledItems = listOf(
-                    filledItemEmail,
                     filledItemPassword,
                     filledItemUsername,
                 ),
@@ -335,7 +317,6 @@ class FilledDataBuilderTest {
             val filledPartitionThree = FilledPartition(
                 autofillCipher = autofillCipher,
                 filledItems = listOf(
-                    filledItemEmail,
                     filledItemPassword,
                     filledItemUsername,
                 ),
@@ -358,7 +339,6 @@ class FilledDataBuilderTest {
                     uri = URI,
                 )
             } returns listOf(autofillCipher, autofillCipher, autofillCipher)
-            every { autofillViewEmail.buildFilledItemOrNull(username) } returns filledItemEmail
             every {
                 autofillViewPassword.buildFilledItemOrNull(password)
             } returns filledItemPassword
@@ -379,7 +359,6 @@ class FilledDataBuilderTest {
                 )
             }
             verify(exactly = 3) {
-                autofillViewEmail.buildFilledItemOrNull(username)
                 autofillViewPassword.buildFilledItemOrNull(password)
                 autofillViewUsername.buildFilledItemOrNull(username)
             }

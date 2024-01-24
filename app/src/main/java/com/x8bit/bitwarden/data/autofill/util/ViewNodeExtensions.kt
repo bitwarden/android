@@ -60,19 +60,15 @@ private fun buildAutofillView(
         )
     }
 
-    View.AUTOFILL_HINT_EMAIL_ADDRESS -> {
-        AutofillView.Login.EmailAddress(
-            data = autofillViewData,
-        )
-    }
-
     View.AUTOFILL_HINT_PASSWORD -> {
         AutofillView.Login.Password(
             data = autofillViewData,
         )
     }
 
-    View.AUTOFILL_HINT_USERNAME -> {
+    View.AUTOFILL_HINT_EMAIL_ADDRESS,
+    View.AUTOFILL_HINT_USERNAME,
+    -> {
         AutofillView.Login.Username(
             data = autofillViewData,
         )

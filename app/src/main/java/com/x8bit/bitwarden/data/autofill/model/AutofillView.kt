@@ -69,13 +69,6 @@ sealed class AutofillView {
     sealed class Login : AutofillView() {
 
         /**
-         * The email address [AutofillView] for the [Login] data partition.
-         */
-        data class EmailAddress(
-            override val data: Data,
-        ) : Login()
-
-        /**
          * The password [AutofillView] for the [Login] data partition.
          */
         data class Password(

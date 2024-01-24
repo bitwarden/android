@@ -126,10 +126,7 @@ class FilledDataBuilderImpl(
         val filledItems = autofillViews
             .map { autofillView ->
                 val value = when (autofillView) {
-                    is AutofillView.Login.EmailAddress,
-                    is AutofillView.Login.Username,
-                    -> autofillCipher.username
-
+                    is AutofillView.Login.Username -> autofillCipher.username
                     is AutofillView.Login.Password -> autofillCipher.password
                 }
                 autofillView.buildFilledItemOrNull(
