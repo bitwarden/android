@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -127,6 +128,21 @@ class SettingsRepositoryImpl(
                 vaultTimeoutAction = value,
             )
         }
+
+    override var defaultUriMatchType: UriMatchType
+        get() = activeUserId
+            ?.let {
+                settingsDiskSource.getDefaultUriMatchType(userId = it)
+            }
+            ?: UriMatchType.DOMAIN
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeDefaultUriMatchType(
+                userId = userId,
+                uriMatchType = value,
+            )
+        }
+
     override val isUnlockWithPinEnabled: Boolean
         get() = activeUserId
             ?.let { authDiskSource.getEncryptedPin(userId = it) != null }

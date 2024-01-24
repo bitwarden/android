@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -372,6 +373,39 @@ class SettingsRepositoryTest {
             assertEquals(
                 vaultTimeoutAction,
                 fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+            )
+        }
+    }
+
+    @Test
+    fun `defaultUriMatchType should pull from and update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = null
+        assertEquals(
+            UriMatchType.DOMAIN,
+            settingsRepository.defaultUriMatchType,
+        )
+
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        // Updates to the disk source change the repository value
+        UriMatchType.entries.forEach { uriMatchType ->
+            fakeSettingsDiskSource.storeDefaultUriMatchType(
+                userId = userId,
+                uriMatchType = uriMatchType,
+            )
+            assertEquals(
+                uriMatchType,
+                settingsRepository.defaultUriMatchType,
+            )
+        }
+
+        // Updates to the repository value change the disk source
+        UriMatchType.entries.forEach { uriMatchType ->
+            settingsRepository.defaultUriMatchType = uriMatchType
+            assertEquals(
+                uriMatchType,
+                fakeSettingsDiskSource.getDefaultUriMatchType(userId = userId),
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -57,6 +58,12 @@ interface SettingsRepository {
      * The [VaultTimeoutAction] for the current user.
      */
     var vaultTimeoutAction: VaultTimeoutAction
+
+    /**
+     * The default [UriMatchType] for the current user that should be used when matching URIs for
+     * items that have "default" as their chosen type.
+     */
+    var defaultUriMatchType: UriMatchType
 
     /**
      * Whether or not PIN unlocking is enabled for the current user.

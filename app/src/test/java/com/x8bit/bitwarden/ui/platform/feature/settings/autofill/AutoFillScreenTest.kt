@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -246,16 +247,16 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `default URI match detection add login should be updated on or off according to state`() {
         composeTestRule
-            .onNodeWithText("Default")
+            .onNodeWithText("Base domain")
             .assertExists()
         composeTestRule
             .onNodeWithText("Starts with")
             .assertDoesNotExist()
         mutableStateFlow.update {
-            it.copy(uriDetectionMethod = AutoFillState.UriDetectionMethod.STARTS_WITH)
+            it.copy(uriDetectionMethod = UriMatchType.STARTS_WITH)
         }
         composeTestRule
-            .onNodeWithText("Default")
+            .onNodeWithText("Base domain")
             .assertDoesNotExist()
         composeTestRule
             .onNodeWithText("Starts with")
@@ -295,5 +296,5 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = false,
-    uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
+    uriDetectionMethod = UriMatchType.DOMAIN,
 )

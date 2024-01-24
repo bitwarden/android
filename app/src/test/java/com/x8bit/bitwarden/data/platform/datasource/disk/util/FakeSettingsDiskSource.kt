@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.util
 
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -36,7 +37,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
-
+    private val storedUriMatchTypes = mutableMapOf<String, UriMatchType?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
@@ -74,6 +75,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun clearData(userId: String) {
         storedVaultTimeoutActions.remove(userId)
         storedVaultTimeoutInMinutes.remove(userId)
+        storedUriMatchTypes.remove(userId)
         storedPullToRefreshEnabled.remove(userId)
         storedInlineAutofillEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
@@ -122,6 +124,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     ) {
         storedVaultTimeoutActions[userId] = vaultTimeoutAction
         getMutableVaultTimeoutActionsFlow(userId = userId).tryEmit(vaultTimeoutAction)
+    }
+
+    override fun getDefaultUriMatchType(userId: String): UriMatchType? =
+        storedUriMatchTypes[userId]
+
+    override fun storeDefaultUriMatchType(
+        userId: String,
+        uriMatchType: UriMatchType?,
+    ) {
+        storedUriMatchTypes[userId] = uriMatchType
     }
 
     override fun getPullToRefreshEnabled(userId: String): Boolean? =

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -94,6 +95,16 @@ interface SettingsDiskSource {
         userId: String,
         vaultTimeoutAction: VaultTimeoutAction?,
     )
+
+    /**
+     * Gets the default [UriMatchType] for the given [userId].
+     */
+    fun getDefaultUriMatchType(userId: String): UriMatchType?
+
+    /**
+     * Stores the given default [uriMatchType] for the given [userId].
+     */
+    fun storeDefaultUriMatchType(userId: String, uriMatchType: UriMatchType?)
 
     /**
      * Gets the current state of the pull to refresh feature for the given [userId].
