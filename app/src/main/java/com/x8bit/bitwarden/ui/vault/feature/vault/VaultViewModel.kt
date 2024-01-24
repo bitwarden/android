@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -43,6 +45,7 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
+    private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val settingsRepository: SettingsRepository,
@@ -128,6 +131,7 @@ class VaultViewModel @Inject constructor(
             is VaultAction.TryAgainClick -> handleTryAgainClick()
             is VaultAction.DialogDismiss -> handleDialogDismiss()
             is VaultAction.RefreshPull -> handleRefreshPull()
+            is VaultAction.OverflowOptionClick -> handleOverflowOptionClick(action)
             is VaultAction.Internal -> handleInternalAction(action)
         }
     }
@@ -268,6 +272,82 @@ class VaultViewModel @Inject constructor(
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
         vaultRepository.sync()
+    }
+
+    private fun handleOverflowOptionClick(action: VaultAction.OverflowOptionClick) {
+        when (val overflowAction = action.overflowAction) {
+            is ListingItemOverflowAction.VaultAction.CopyNoteClick -> {
+                handleCopyNoteClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyNumberClick -> {
+                handleCopyNumberClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
+                handleCopyPasswordClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopySecurityCodeClick -> {
+                handleCopySecurityCodeClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.CopyUsernameClick -> {
+                handleCopyUsernameClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.EditClick -> {
+                handleEditClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.LaunchClick -> {
+                handleLaunchClick(overflowAction)
+            }
+
+            is ListingItemOverflowAction.VaultAction.ViewClick -> {
+                handleViewClick(overflowAction)
+            }
+        }
+    }
+
+    private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
+        clipboardManager.setText(action.notes)
+    }
+
+    private fun handleCopyNumberClick(
+        action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
+    ) {
+        clipboardManager.setText(action.number)
+    }
+
+    private fun handleCopyPasswordClick(
+        action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
+    ) {
+        clipboardManager.setText(action.password)
+    }
+
+    private fun handleCopySecurityCodeClick(
+        action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
+    ) {
+        clipboardManager.setText(action.securityCode)
+    }
+
+    private fun handleCopyUsernameClick(
+        action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
+    ) {
+        clipboardManager.setText(action.username)
+    }
+
+    private fun handleEditClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
+        sendEvent(VaultEvent.NavigateToEditVaultItem(action.cipherId))
+    }
+
+    private fun handleLaunchClick(action: ListingItemOverflowAction.VaultAction.LaunchClick) {
+        sendEvent(VaultEvent.NavigateToUrl(action.url))
+    }
+
+    private fun handleViewClick(action: ListingItemOverflowAction.VaultAction.ViewClick) {
+        sendEvent(VaultEvent.NavigateToVaultItem(action.cipherId))
     }
 
     private fun handleInternalAction(action: VaultAction.Internal) {
@@ -585,6 +665,11 @@ data class VaultState(
             abstract val supportingLabel: Text?
 
             /**
+             * The overflow options to be displayed for the vault item.
+             */
+            abstract val overflowOptions: List<ListingItemOverflowAction.VaultAction>
+
+            /**
              * Represents a login item within the vault.
              *
              * @property username The username associated with this login item.
@@ -594,6 +679,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
+                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 val username: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = username
@@ -610,6 +696,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_card_item),
+                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 val brand: Text? = null,
                 val lastFourDigits: Text? = null,
             ) : VaultItem() {
@@ -636,6 +723,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_identity_item),
+                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 val firstName: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = firstName
@@ -650,6 +738,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_secure_note_item),
+                override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
             }
@@ -724,6 +813,13 @@ sealed class VaultEvent {
      */
     data class NavigateToItemListing(
         val itemListingType: VaultItemListingType,
+    ) : VaultEvent()
+
+    /**
+     * Navigates to the given [url].
+     */
+    data class NavigateToUrl(
+        val url: String,
     ) : VaultEvent()
 
     /**
@@ -873,6 +969,13 @@ sealed class VaultAction {
      * User clicked the Try Again button when there is an error displayed.
      */
     data object TryAgainClick : VaultAction()
+
+    /**
+     * User clicked an overflow action.
+     */
+    data class OverflowOptionClick(
+        val overflowAction: ListingItemOverflowAction.VaultAction,
+    ) : VaultAction()
 
     /**
      * Models actions that the [VaultViewModel] itself might send.

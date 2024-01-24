@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.handlers
 
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultViewModel
@@ -31,6 +32,7 @@ data class VaultHandlers(
     val trashClick: () -> Unit,
     val tryAgainClick: () -> Unit,
     val dialogDismiss: () -> Unit,
+    val overflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
 ) {
     companion object {
         /**
@@ -74,6 +76,9 @@ data class VaultHandlers(
                 trashClick = { viewModel.trySendAction(VaultAction.TrashClick) },
                 tryAgainClick = { viewModel.trySendAction(VaultAction.TryAgainClick) },
                 dialogDismiss = { viewModel.trySendAction(VaultAction.DialogDismiss) },
+                overflowOptionClick = {
+                    viewModel.trySendAction(VaultAction.OverflowOptionClick(it))
+                },
             )
     }
 }

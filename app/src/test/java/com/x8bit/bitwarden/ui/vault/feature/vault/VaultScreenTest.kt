@@ -15,6 +15,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -23,6 +24,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -63,6 +65,7 @@ class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToVerificationCodeScreen = false
     private var onNavigateToSearchScreen = false
     private val exitManager = mockk<ExitManager>(relaxed = true)
+    private val intentManager = mockk<IntentManager>(relaxed = true)
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -84,6 +87,7 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
                 exitManager = exitManager,
+                intentManager = intentManager,
             )
         }
     }
@@ -654,6 +658,15 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateToUrl event should call launchUri`() {
+        val url = "www.test.com"
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToUrl(url))
+        verify(exactly = 1) {
+            intentManager.launchUri(url.toUri())
+        }
+    }
+
+    @Test
     fun `NavigateOutOfApp event should call exitApplication on the ExitManager`() {
         mutableEventFlow.tryEmit(VaultEvent.NavigateOutOfApp)
         verify { exitManager.exitApplication() }
@@ -722,6 +735,7 @@ class VaultScreenTest : BaseComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = username.asText(),
+            overflowOptions = emptyList(),
         )
         mutableStateFlow.update {
             it.copy(
@@ -842,6 +856,7 @@ class VaultScreenTest : BaseComposeTest() {
             id = "12345",
             name = itemText.asText(),
             username = userName.asText(),
+            overflowOptions = emptyList(),
         )
         mutableStateFlow.update {
             it.copy(
