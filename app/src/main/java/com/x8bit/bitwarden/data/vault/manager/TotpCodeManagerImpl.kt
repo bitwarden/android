@@ -32,7 +32,7 @@ class TotpCodeManagerImpl(
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     private val mutableVerificationCodeStateFlowMap =
-        mutableMapOf<String, StateFlow<DataState<VerificationCodeItem?>>>()
+        mutableMapOf<CipherView, StateFlow<DataState<VerificationCodeItem?>>>()
 
     override fun getTotpCodesStateFlow(
         userId: String,
@@ -78,7 +78,7 @@ class TotpCodeManagerImpl(
     ): StateFlow<DataState<VerificationCodeItem?>> {
         val cipherId = cipher.id ?: return MutableStateFlow(DataState.Loaded(null))
 
-        return mutableVerificationCodeStateFlowMap.getOrPut(cipherId) {
+        return mutableVerificationCodeStateFlowMap.getOrPut(cipher) {
             flow<DataState<VerificationCodeItem?>> {
 
                 val totpCode = cipher
@@ -134,7 +134,7 @@ class TotpCodeManagerImpl(
                 }
             }
                 .onCompletion {
-                    mutableVerificationCodeStateFlowMap.remove(cipherId)
+                    mutableVerificationCodeStateFlowMap.remove(cipher)
                 }
                 .stateIn(
                     scope = unconfinedScope,
