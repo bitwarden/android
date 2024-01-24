@@ -54,6 +54,7 @@ fun VaultAddEditScreen(
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
     onNavigateToAttachments: (cipherId: String) -> Unit,
+    onNavigateToMoveToOrganization: (cipherId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -78,7 +79,13 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)
-
+            is VaultAddEditEvent.NavigateToMoveToOrganization -> {
+                onNavigateToMoveToOrganization(event.cipherId)
+            }
+            is VaultAddEditEvent.NavigateToCollections -> {
+                // TODO implement Collections in BIT-1575
+                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+            }
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
         }
     }
@@ -140,6 +147,28 @@ fun VaultAddEditScreen(
                                 },
                             )
                                 .takeUnless { state.isAddItemMode },
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.move_to_organization),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultAddEditAction.Common.MoveToOrganizationClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeUnless { state.isAddItemMode || state.isCipherInCollection },
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.collections),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultAddEditAction.Common.CollectionsClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeUnless { state.isAddItemMode || !state.isCipherInCollection },
                         ),
                     )
                 },

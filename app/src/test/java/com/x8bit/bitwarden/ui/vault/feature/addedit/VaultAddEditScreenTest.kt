@@ -15,6 +15,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
@@ -28,6 +29,7 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -61,6 +63,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
     private var onNavigateToAttachmentsId: String? = null
+    private var onNavigateToMoveToOrganizationId: String? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -83,6 +86,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 },
                 onNavigateToGeneratorModal = { onNavigateToGeneratorModalType = it },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
+                onNavigateToMoveToOrganization = { onNavigateToMoveToOrganizationId = it },
                 viewModel = viewModel,
                 permissionsManager = fakePermissionManager,
             )
@@ -125,6 +129,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         val cipherId = "cipherId-1234"
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToAttachments(cipherId))
         assertEquals(cipherId, onNavigateToAttachmentsId)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on NavigateToMoveToOrganization event should invoke onNavigateToMoveToOrganization with the correct ID`() {
+        val cipherId = "cipherId-1234"
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToMoveToOrganization(cipherId))
+        assertEquals(cipherId, onNavigateToMoveToOrganizationId)
     }
 
     @Suppress("MaxLineLength")
@@ -2102,6 +2114,74 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 ),
             )
         }
+    }
+
+    @Test
+    fun `Menu should display correct items when cipher is in a collection`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Attachments")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `Menu should display correct items when cipher is not in a collection`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1).copy(
+                            collectionIds = emptyList(),
+                        ),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Attachments")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertDoesNotExist()
     }
 
     //region Helper functions

@@ -142,6 +142,8 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is VaultAddEditAction.Common.AttachmentsClick -> handleAttachmentsClick()
+            is VaultAddEditAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
+            is VaultAddEditAction.Common.CollectionsClick -> handleCollectionsClick()
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
@@ -260,6 +262,14 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleAttachmentsClick() {
         onEdit { sendEvent(VaultAddEditEvent.NavigateToAttachments(it.vaultItemId)) }
+    }
+
+    private fun handleMoveToOrganizationClick() {
+        onEdit { sendEvent(VaultAddEditEvent.NavigateToMoveToOrganization(it.vaultItemId)) }
+    }
+
+    private fun handleCollectionsClick() {
+        onEdit { sendEvent(VaultAddEditEvent.NavigateToCollections(it.vaultItemId)) }
     }
 
     private fun handleCloseClick() {
@@ -1137,6 +1147,17 @@ data class VaultAddEditState(
         }
 
     /**
+     * Whether or not the cipher is in a collection.
+     */
+    val isCipherInCollection: Boolean
+        get() = (viewState as? ViewState.Content)
+            ?.common
+            ?.originalCipher
+            ?.collectionIds
+            ?.isNotEmpty()
+            ?: false
+
+    /**
      * Helper to determine if the UI should display the content in add item mode.
      */
     val isAddItemMode: Boolean get() = vaultAddEditType == VaultAddEditType.AddItem
@@ -1443,6 +1464,20 @@ sealed class VaultAddEditEvent {
     ) : VaultAddEditEvent()
 
     /**
+     * Navigates to the move to organization screen.
+     */
+    data class NavigateToMoveToOrganization(
+        val cipherId: String,
+    ) : VaultAddEditEvent()
+
+    /**
+     * Navigates to the collections screen.
+     */
+    data class NavigateToCollections(
+        val cipherId: String,
+    ) : VaultAddEditEvent()
+
+    /**
      * Navigate to the QR code scan screen.
      */
     data object NavigateToQrCodeScan : VaultAddEditEvent()
@@ -1490,6 +1525,16 @@ sealed class VaultAddEditAction {
          * The user has clicked the attachments overflow option.
          */
         data object AttachmentsClick : Common()
+
+        /**
+         * The user has clicked the move to organization overflow option.
+         */
+        data object MoveToOrganizationClick : Common()
+
+        /**
+         * The user has clicked the collections overflow option.
+         */
+        data object CollectionsClick : Common()
 
         /**
          * Represents the action when a type option is selected.
