@@ -36,10 +36,10 @@ namespace Bit.App.Pages
                                      AppResources.ContinueToHelpCenter,
                                      ExternalLinksConstants.HELP_CENTER));
 
-            ContactBitwardenSupportCommand = CreateDefaultAsyncCommnad(
-                () => LaunchUriAsync(AppResources.ContactSupportDescriptionLong,
-                                     AppResources.ContinueToContactSupport,
-                                     ExternalLinksConstants.CONTACT_SUPPORT));
+            GoToPrivacyPolicyCommand = CreateDefaultAsyncCommnad(
+                () => LaunchUriAsync(AppResources.PrivacyPolicyDescriptionLong,
+                                     AppResources.ContinueToPrivacyPolicy,
+                                     ExternalLinksConstants.PRIVACY_POLICY));
 
             GoToWebVaultCommand = CreateDefaultAsyncCommnad(
                 () => LaunchUriAsync(AppResources.ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp,
@@ -82,7 +82,7 @@ namespace Bit.App.Pages
 
         public AsyncCommand ToggleSubmitCrashLogsCommand { get; }
         public ICommand GoToHelpCenterCommand { get; }
-        public ICommand ContactBitwardenSupportCommand { get; }
+        public ICommand GoToPrivacyPolicyCommand { get; }
         public ICommand GoToWebVaultCommand { get; }
         public ICommand GoToLearnAboutOrgsCommand { get; }
         public ICommand RateTheAppCommand { get; }

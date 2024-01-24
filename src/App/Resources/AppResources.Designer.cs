@@ -1715,6 +1715,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Continue to privacy policy?.
+        /// </summary>
+        public static string ContinueToPrivacyPolicy {
+            get {
+                return ResourceManager.GetString("ContinueToPrivacyPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Continue to web app?.
         /// </summary>
         public static string ContinueToWebApp {
@@ -5513,6 +5522,15 @@ namespace Bit.App.Resources {
         public static string PrivacyPolicy {
             get {
                 return ResourceManager.GetString("PrivacyPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check out our privacy policy on bitwarden.com..
+        /// </summary>
+        public static string PrivacyPolicyDescriptionLong {
+            get {
+                return ResourceManager.GetString("PrivacyPolicyDescriptionLong", resourceCulture);
             }
         }
         
