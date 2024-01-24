@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
@@ -31,6 +32,7 @@ object AuthRepositoryModule {
     @Suppress("LongParameterList")
     fun providesAuthRepository(
         accountsService: AccountsService,
+        authRequestsService: AuthRequestsService,
         devicesService: DevicesService,
         identityService: IdentityService,
         haveIBeenPwnedService: HaveIBeenPwnedService,
@@ -43,6 +45,7 @@ object AuthRepositoryModule {
         userLogoutManager: UserLogoutManager,
     ): AuthRepository = AuthRepositoryImpl(
         accountsService = accountsService,
+        authRequestsService = authRequestsService,
         devicesService = devicesService,
         identityService = identityService,
         authSdkSource = authSdkSource,

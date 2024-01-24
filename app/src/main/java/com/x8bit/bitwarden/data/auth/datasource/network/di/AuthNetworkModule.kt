@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.network.di
 
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsServiceImpl
+import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
@@ -33,6 +35,14 @@ object AuthNetworkModule {
         accountsApi = retrofits.unauthenticatedApiRetrofit.create(),
         authenticatedAccountsApi = retrofits.authenticatedApiRetrofit.create(),
         json = json,
+    )
+
+    @Provides
+    @Singleton
+    fun providesAuthRequestsService(
+        retrofits: Retrofits,
+    ): AuthRequestsService = AuthRequestsServiceImpl(
+        authRequestsApi = retrofits.authenticatedApiRetrofit.create(),
     )
 
     @Provides

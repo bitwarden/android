@@ -12,12 +12,15 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -65,6 +68,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepositoryImpl(
     private val accountsService: AccountsService,
+    private val authRequestsService: AuthRequestsService,
     private val devicesService: DevicesService,
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
     private val identityService: IdentityService,
@@ -425,6 +429,30 @@ class AuthRepositoryImpl(
     override fun setSsoCallbackResult(result: SsoCallbackResult) {
         mutableSsoCallbackResultFlow.tryEmit(result)
     }
+
+    override suspend fun getAuthRequests(): AuthRequestsResult =
+        authRequestsService.getAuthRequests()
+            .fold(
+                onFailure = { AuthRequestsResult.Error },
+                onSuccess = { response ->
+                    AuthRequestsResult.Success(
+                        authRequests = response.authRequests.map { request ->
+                            AuthRequest(
+                                id = request.id,
+                                publicKey = request.publicKey,
+                                platform = request.platform,
+                                ipAddress = request.ipAddress,
+                                key = request.key,
+                                masterPasswordHash = request.masterPasswordHash,
+                                creationDate = request.creationDate,
+                                responseDate = request.responseDate,
+                                requestApproved = request.requestApproved ?: false,
+                                originUrl = request.originUrl,
+                            )
+                        },
+                    )
+                },
+            )
 
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
         devicesService

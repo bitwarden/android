@@ -69,7 +69,7 @@ class PendingRequestsScreenTest : BaseComposeTest() {
 
     companion object {
         val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
-            viewState = PendingRequestsState.ViewState.Empty,
+            viewState = PendingRequestsState.ViewState.Loading,
         )
     }
 }

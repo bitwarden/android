@@ -105,14 +105,14 @@ fun PendingRequestsScreen(
                     .fillMaxSize(),
             )
 
-            is PendingRequestsState.ViewState.Error -> BitwardenErrorContent(
-                message = viewState.message.toString(resources),
+            PendingRequestsState.ViewState.Error -> BitwardenErrorContent(
+                message = stringResource(R.string.generic_error_message),
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize(),
             )
 
-            is PendingRequestsState.ViewState.Loading -> BitwardenLoadingContent(
+            PendingRequestsState.ViewState.Loading -> BitwardenLoadingContent(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize(),
