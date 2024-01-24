@@ -81,6 +81,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToFolders: () -> Unit,
+    onNavigateToPendingRequests: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
@@ -125,6 +126,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToEditSend = onNavigateToEditSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
         navigateToFolders = onNavigateToFolders,
+        navigateToPendingRequests = onNavigateToPendingRequests,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
         generatorTabClickedAction = {
             viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
@@ -162,6 +164,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     navigateToDeleteAccount: () -> Unit,
     navigateToFolders: () -> Unit,
+    navigateToPendingRequests: () -> Unit,
     navigateToPasswordHistory: () -> Unit,
 ) {
     var shouldDimNavBar by remember { mutableStateOf(false) }
@@ -235,6 +238,7 @@ private fun VaultUnlockedNavBarScaffold(
                 navController = navController,
                 onNavigateToDeleteAccount = navigateToDeleteAccount,
                 onNavigateToFolders = navigateToFolders,
+                onNavigateToPendingRequests = navigateToPendingRequests,
             )
         }
     }

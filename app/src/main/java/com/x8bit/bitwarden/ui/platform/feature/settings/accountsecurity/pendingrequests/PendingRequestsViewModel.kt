@@ -1,0 +1,132 @@
+package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests
+
+import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.parcelize.Parcelize
+import javax.inject.Inject
+
+private const val KEY_STATE = "state"
+
+/**
+ * View model for the pending login requests screen.
+ */
+@HiltViewModel
+class PendingRequestsViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
+    initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
+        viewState = PendingRequestsState.ViewState.Empty,
+    ),
+) {
+    init {
+        // TODO BIT-1291: make /auth-requests call
+    }
+
+    override fun handleAction(action: PendingRequestsAction) {
+        when (action) {
+            PendingRequestsAction.CloseClick -> handleCloseClicked()
+            PendingRequestsAction.DeclineAllRequestsClick -> handleDeclineAllRequestsClicked()
+        }
+    }
+
+    private fun handleCloseClicked() {
+        sendEvent(PendingRequestsEvent.NavigateBack)
+    }
+
+    private fun handleDeclineAllRequestsClicked() {
+        sendEvent(PendingRequestsEvent.ShowToast("Not yet implemented.".asText()))
+    }
+}
+
+/**
+ * Models state for the Pending Login Requests screen.
+ */
+@Parcelize
+data class PendingRequestsState(
+    val viewState: ViewState,
+) : Parcelable {
+    /**
+     * Represents the specific view states for the [PendingRequestsScreen].
+     */
+    @Parcelize
+    sealed class ViewState : Parcelable {
+        /**
+         * Content state for the [PendingRequestsScreen] listing pending request items.
+         */
+        @Parcelize
+        data class Content(
+            val requests: List<PendingLoginRequest>,
+        ) : ViewState() {
+            /**
+             * Models the data for a pending login request.
+             */
+            @Parcelize
+            data class PendingLoginRequest(
+                val fingerprintPhrase: String,
+                val platform: String,
+                val timestamp: String,
+            ) : Parcelable
+        }
+
+        /**
+         * Represents the state wherein there are no pending login requests.
+         */
+        @Parcelize
+        data object Empty : ViewState()
+
+        /**
+         * Represents a state where the [PendingRequestsScreen] is unable to display data due to an
+         * error retrieving it.
+         *
+         * @property message The message to display on the error screen.
+         */
+        @Parcelize
+        data class Error(
+            val message: Text,
+        ) : ViewState()
+
+        /**
+         * Loading state for the [PendingRequestsScreen], signifying that the content is being
+         * processed.
+         */
+        @Parcelize
+        data object Loading : ViewState()
+    }
+}
+
+/**
+ * Models events for the delete account screen.
+ */
+sealed class PendingRequestsEvent {
+    /**
+     * Navigates back.
+     */
+    data object NavigateBack : PendingRequestsEvent()
+
+    /**
+     * Displays the [message] in a toast.
+     */
+    data class ShowToast(
+        val message: Text,
+    ) : PendingRequestsEvent()
+}
+
+/**
+ * Models actions for the delete account screen.
+ */
+sealed class PendingRequestsAction {
+
+    /**
+     * The user has clicked the close button.
+     */
+    data object CloseClick : PendingRequestsAction()
+
+    /**
+     * The user has clicked to deny all login requests.
+     */
+    data object DeclineAllRequestsClick : PendingRequestsAction()
+}

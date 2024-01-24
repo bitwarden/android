@@ -30,6 +30,7 @@ fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToFolders: () -> Unit,
+    onNavigateToPendingRequests: () -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
@@ -51,6 +52,7 @@ fun NavGraphBuilder.settingsGraph(
         accountSecurityDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
+            onNavigateToPendingRequests = onNavigateToPendingRequests,
         )
         appearanceDestination(onNavigateBack = { navController.popBackStack() })
         autoFillDestination(

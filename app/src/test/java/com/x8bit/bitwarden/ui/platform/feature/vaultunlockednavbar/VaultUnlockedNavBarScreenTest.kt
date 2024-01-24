@@ -47,6 +47,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToDeleteAccount = {},
                     onNavigateToFolders = {},
                     onNavigateToPasswordHistory = {},
+                    onNavigateToPendingRequests = {},
                     onNavigateToSearchVault = {},
                     onNavigateToSearchSend = {},
                 )
