@@ -45,10 +45,10 @@ import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays the vault item screen.
@@ -95,6 +95,11 @@ fun VaultItemScreen(
 
             is VaultItemEvent.NavigateToMoveToOrganization -> {
                 onNavigateToMoveToOrganization(event.itemId)
+            }
+
+            is VaultItemEvent.NavigateToCollections -> {
+                // TODO implement Collections in BIT-1575
+                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
             }
 
             is VaultItemEvent.ShowToast -> {
@@ -173,11 +178,7 @@ fun VaultItemScreen(
                     }
                     // TODO make action list dependent on item being in an organization BIT-1446
                     BitwardenOverflowActionItem(
-                        menuItemDataList = persistentListOf(
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.delete),
-                                onClick = { pendingDeleteCipher = true },
-                            ),
+                        menuItemDataList = persistentListOfNotNull(
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.attachments),
                                 onClick = remember(viewModel) {
@@ -193,7 +194,8 @@ fun VaultItemScreen(
                                 onClick = remember(viewModel) {
                                     { viewModel.trySendAction(VaultItemAction.Common.CloneClick) }
                                 },
-                            ),
+                            )
+                                .takeUnless { state.isCipherInCollection },
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.move_to_organization),
                                 onClick = remember(viewModel) {
@@ -203,6 +205,22 @@ fun VaultItemScreen(
                                         )
                                     }
                                 },
+                            )
+                                .takeUnless { state.isCipherInCollection },
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.collections),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.CollectionsClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeIf { state.isCipherInCollection },
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.delete),
+                                onClick = { pendingDeleteCipher = true },
                             ),
                         ),
                     )
