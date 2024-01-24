@@ -41,7 +41,7 @@ fun AttachmentsScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val attachmentsHandlers = remember(viewModel) { AttachmentsHandlers.create(viewModel) }
-    val fileChooserLauncher = intentManager.launchActivityForResult { activityResult ->
+    val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)?.let {
             attachmentsHandlers.onFileChoose(it)
         }

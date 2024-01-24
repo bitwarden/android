@@ -42,7 +42,7 @@ interface IntentManager {
      * retrieving the [ActivityResult].
      */
     @Composable
-    fun launchActivityForResult(
+    fun getActivityResultLauncher(
         onResult: (ActivityResult) -> Unit,
     ): ManagedActivityResultLauncher<Intent, ActivityResult>
 
