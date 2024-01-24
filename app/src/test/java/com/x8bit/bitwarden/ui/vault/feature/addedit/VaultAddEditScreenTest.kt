@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -34,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
@@ -406,10 +408,19 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state clicking Username generator action should trigger OpenUsernameGeneratorClick`() {
+    fun `in ItemType_Login state clicking Username generator action should open dialog that triggers OpenUsernameGeneratorClick`() {
+        composeTestRule.assertNoDialogExists()
+
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Generate username")
             .performClick()
+
+        composeTestRule
+            .onNodeWithText("Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
 
         verify {
             viewModel.trySendAction(
@@ -434,12 +445,21 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state click Password text field generator action should trigger OpenPasswordGeneratorClick`() {
+    fun `in ItemType_Login state click Password text field generator action should open dialog that triggers OpenPasswordGeneratorClick`() {
+        composeTestRule.assertNoDialogExists()
+
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
             .onSiblings()
             .onLast()
             .performClick()
+
+        composeTestRule
+            .onNodeWithText("Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
 
         verify {
             viewModel.trySendAction(
