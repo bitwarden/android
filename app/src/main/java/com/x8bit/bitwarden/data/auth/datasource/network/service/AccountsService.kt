@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
@@ -23,4 +24,9 @@ interface AccountsService {
      * Register a new account to Bitwarden.
      */
     suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson>
+
+    /**
+     * Request a password hint.
+     */
+    suspend fun requestPasswordHint(email: String): Result<PasswordHintResponseJson>
 }

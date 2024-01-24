@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -383,6 +385,20 @@ class AuthRepositoryImpl(
                     RegisterResult.Error(errorMessage = null)
                 },
             )
+    }
+
+    override suspend fun passwordHintRequest(email: String): PasswordHintResult {
+        return accountsService.requestPasswordHint(email).fold(
+            onSuccess = {
+                when (it) {
+                    is PasswordHintResponseJson.Error -> {
+                        PasswordHintResult.Error(it.errorMessage)
+                    }
+                    PasswordHintResponseJson.Success -> PasswordHintResult.Success
+                }
+            },
+            onFailure = { PasswordHintResult.Error(null) },
+        )
     }
 
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {

@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -97,6 +98,13 @@ interface AuthRepository : AuthenticatorProvider {
         captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
     ): RegisterResult
+
+    /**
+     * Attempt to request a password hint.
+     */
+    suspend fun passwordHintRequest(
+        email: String,
+    ): PasswordHintResult
 
     /**
      * Set the value of [captchaTokenResultFlow].
