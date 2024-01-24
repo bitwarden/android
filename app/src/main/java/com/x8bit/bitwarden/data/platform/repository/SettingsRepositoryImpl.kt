@@ -12,10 +12,13 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -326,9 +329,15 @@ class SettingsRepositoryImpl(
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeAutofillEnabledChanges() {
-        appForegroundManager
-            .appForegroundStateFlow
+        mutableIsAutofillEnabledStateFlow
+            // Only observe when subscribed to.
+            .subscriptionCount.map { it > 0 }
+            .filter { hasSubscribers -> hasSubscribers }
+            .flatMapLatest {
+                appForegroundManager.appForegroundStateFlow
+            }
             .onEach {
                 mutableIsAutofillEnabledStateFlow.value = isAutofillEnabledAndSupported
             }

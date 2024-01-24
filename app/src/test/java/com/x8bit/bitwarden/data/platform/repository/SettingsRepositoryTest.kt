@@ -480,6 +480,15 @@ class SettingsRepositoryTest {
     @Test
     fun `isAutofillEnabledStateFlow should emit updates if necessary when the app foreground state changes and disableAutofill is called`() =
         runTest {
+            // Updates are not received without an isAutofillEnabledStateFlow subscriber.
+            isAutofillEnabledAndSupported = true
+            mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
+            assertFalse(settingsRepository.isAutofillEnabledStateFlow.value)
+
+            // Revert back to initial state.
+            isAutofillEnabledAndSupported = false
+            mutableAppForegroundStateFlow.value = AppForegroundState.BACKGROUNDED
+
             settingsRepository.isAutofillEnabledStateFlow.test {
                 assertFalse(awaitItem())
 
@@ -511,17 +520,21 @@ class SettingsRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `disableAutofill should trigger an emission of false from isAutofillEnabledStateFlow and disable autofill with the OS`() {
-        // Start in a state where autofill is enabled
-        isAutofillEnabledAndSupported = true
-        mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
-        assertTrue(settingsRepository.isAutofillEnabledStateFlow.value)
+    fun `disableAutofill should trigger an emission of false from isAutofillEnabledStateFlow and disable autofill with the OS`() =
+        runTest {
+            // Start in a state where autofill is enabled
+            isAutofillEnabledAndSupported = true
+            mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
+            settingsRepository.isAutofillEnabledStateFlow.test {
+                assertTrue(awaitItem())
+                expectNoEvents()
+            }
 
-        settingsRepository.disableAutofill()
+            settingsRepository.disableAutofill()
 
-        assertFalse(settingsRepository.isAutofillEnabledStateFlow.value)
-        verify { autofillManager.disableAutofillServices() }
-    }
+            assertFalse(settingsRepository.isAutofillEnabledStateFlow.value)
+            verify { autofillManager.disableAutofillServices() }
+        }
 
     @Test
     fun `getPullToRefreshEnabledFlow should react to changes in SettingsDiskSource`() = runTest {

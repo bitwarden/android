@@ -87,6 +87,9 @@ interface SettingsRepository {
 
     /**
      * Emits updates whenever there is a change in the app's status for supporting autofill.
+     *
+     * Note that the correct value is only populated upon subscription so calling [StateFlow.value]
+     * may result in an out-of-date value.
      */
     val isAutofillEnabledStateFlow: StateFlow<Boolean>
 
