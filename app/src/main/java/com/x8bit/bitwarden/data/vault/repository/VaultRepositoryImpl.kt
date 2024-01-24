@@ -14,6 +14,7 @@ import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -78,6 +79,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Clock
 import java.time.Instant
 
 /**
@@ -97,9 +99,11 @@ class VaultRepositoryImpl(
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
+    private val settingsDiskSource: SettingsDiskSource,
     private val fileManager: FileManager,
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
+    private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     VaultLockManager by vaultLockManager {
@@ -230,6 +234,7 @@ class VaultRepositoryImpl(
                         unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                         storeProfileData(syncResponse = syncResponse)
                         vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
+                        settingsDiskSource.storeLastSyncTime(userId = userId, clock.instant())
                     },
                     onFailure = { throwable ->
                         mutableCiphersStateFlow.update { currentState ->

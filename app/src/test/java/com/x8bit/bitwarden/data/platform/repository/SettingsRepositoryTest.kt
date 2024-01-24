@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 class SettingsRepositoryTest {
     private val autofillManager: AutofillManager = mockk {
@@ -117,6 +118,36 @@ class SettingsRepositoryTest {
             AppLanguage.DUTCH,
             fakeSettingsDiskSource.appLanguage,
         )
+    }
+
+    @Test
+    fun `vaultLastSync should pull from and update SettingsDiskSource`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertNull(settingsRepository.vaultLastSync)
+        val instant = Instant.ofEpochMilli(1_698_408_000_000L)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.storeLastSyncTime(
+            userId = MOCK_USER_STATE.activeUserId,
+            lastSyncTime = instant,
+        )
+        assertEquals(instant, settingsRepository.vaultLastSync)
+    }
+
+    @Test
+    fun `vaultLastSyncStateFlow should react to changes in SettingsDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val instant = Instant.ofEpochMilli(1_698_408_000_000L)
+        settingsRepository
+            .vaultLastSyncStateFlow
+            .test {
+                assertNull(awaitItem())
+                fakeSettingsDiskSource.storeLastSyncTime(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    lastSyncTime = instant,
+                )
+                assertEquals(instant, awaitItem())
+            }
     }
 
     @Test

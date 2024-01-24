@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.Instant
 
 /**
  * Primary implementation of [SettingsRepository].
@@ -60,6 +61,26 @@ class SettingsRepositoryImpl(
                 started = SharingStarted.Eagerly,
                 initialValue = settingsDiskSource.appTheme,
             )
+
+    override var vaultLastSync: Instant?
+        get() = vaultLastSyncStateFlow.value
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = value)
+        }
+
+    override val vaultLastSyncStateFlow: StateFlow<Instant?>
+        get() = activeUserId
+            ?.let {
+                settingsDiskSource
+                    .getLastSyncTimeFlow(userId = it)
+                    .stateIn(
+                        scope = unconfinedScope,
+                        started = SharingStarted.Eagerly,
+                        initialValue = settingsDiskSource.getLastSyncTime(userId = it),
+                    )
+            }
+            ?: MutableStateFlow(value = null)
 
     override var isIconLoadingDisabled: Boolean
         get() = settingsDiskSource.isIconLoadingDisabled ?: false

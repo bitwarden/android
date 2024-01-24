@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLang
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.Instant
 
 /**
  * Provides an API for observing and modifying settings state.
@@ -26,6 +27,16 @@ interface SettingsRepository {
      * Tracks changes to the [AppTheme].
      */
     val appThemeStateFlow: StateFlow<AppTheme>
+
+    /**
+     * The currently stored last time the vault was synced.
+     */
+    var vaultLastSync: Instant?
+
+    /**
+     * Tracks changes to the [vaultLastSync].
+     */
+    val vaultLastSyncStateFlow: StateFlow<Instant?>
 
     /**
      * The current setting for getting login item icons.
