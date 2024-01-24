@@ -99,6 +99,7 @@ import java.net.UnknownHostException
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 
 @Suppress("LargeClass")
 class VaultRepositoryTest {
@@ -589,6 +590,50 @@ class VaultRepositoryTest {
                     )
                 }
         }
+
+    @Test
+    fun `syncIfNecessary when there is no last sync time should sync the vault`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId = userId)
+        } returns null
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.syncIfNecessary()
+
+        coVerify { syncService.sync() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncIfNecessary when the current time is greater than 30 minutes after the last sync time should sync the vault`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId = userId)
+        } returns clock.instant().minus(31, ChronoUnit.MINUTES)
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.syncIfNecessary()
+
+        coVerify { syncService.sync() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncIfNecessary when the current time is less than 30 minutes after the last sync time should not sync the vault`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId = userId)
+        } returns clock.instant().minus(29, ChronoUnit.MINUTES)
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.syncIfNecessary()
+
+        coVerify(exactly = 0) { syncService.sync() }
+    }
 
     @Suppress("MaxLineLength")
     @Test

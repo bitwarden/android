@@ -81,6 +81,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Clock
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 /**
  * A "stop timeout delay" in milliseconds used to let a shared coroutine continue to run for the
@@ -262,9 +263,18 @@ class VaultRepositoryImpl(
         }
     }
 
+    @Suppress("MagicNumber")
     override fun syncIfNecessary() {
-        // TODO: Add conditions for when a sync may be performed and test accordingly (BIT-1454)
-        sync()
+        val userId = activeUserId ?: return
+        val currentInstant = clock.instant()
+        val lastSyncInstant = settingsDiskSource.getLastSyncTime(userId = userId)
+
+        // Sync if we have never done so or the last time was at last 30 minutes ago
+        if (lastSyncInstant == null ||
+            currentInstant.isAfter(lastSyncInstant.plus(30, ChronoUnit.MINUTES))
+        ) {
+            sync()
+        }
     }
 
     override fun getVaultItemStateFlow(itemId: String): StateFlow<DataState<CipherView?>> =
