@@ -42,12 +42,14 @@ data class VaultAddEditArgs(
 /**
  * Add the vault add & edit screen to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultAddEditDestination(
     onNavigateBack: () -> Unit,
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
     onNavigateToAttachments: (cipherId: String) -> Unit,
+    onNavigateToMoveToOrganization: (cipherId: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = ADD_EDIT_ITEM_ROUTE,
@@ -61,6 +63,7 @@ fun NavGraphBuilder.vaultAddEditDestination(
             onNavigateToQrCodeScanScreen = onNavigateToQrCodeScanScreen,
             onNavigateToGeneratorModal = onNavigateToGeneratorModal,
             onNavigateToAttachments = onNavigateToAttachments,
+            onNavigateToMoveToOrganization = onNavigateToMoveToOrganization,
         )
     }
 }

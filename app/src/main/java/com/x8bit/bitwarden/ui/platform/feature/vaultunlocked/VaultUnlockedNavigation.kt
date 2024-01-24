@@ -93,6 +93,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
             onNavigateToAttachments = { navController.navigateToAttachment(it) },
+            onNavigateToMoveToOrganization = {
+                navController.navigateToVaultMoveToOrganization(it)
+            },
         )
         vaultMoveToOrganizationDestination(
             onNavigateBack = { navController.popBackStack() },
