@@ -6,7 +6,7 @@
         public const string HELP_ABOUT_ORGANIZATIONS = "https://bitwarden.com/help/about-organizations/";
         public const string HELP_FINGERPRINT_PHRASE = "https://bitwarden.com/help/fingerprint-phrase/";
 
-        public const string CONTACT_SUPPORT = "https://bitwarden.com/contact/";
+        public const string PRIVACY_POLICY = "https://bitwarden.com/privacy/";
 
         /// <summary>
         /// Link to go to settings website. Requires to pass website URL as parameter.
