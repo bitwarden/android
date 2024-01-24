@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers
 
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendAction
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendViewModel
 import java.time.ZonedDateTime
@@ -13,6 +14,7 @@ data class AddSendHandlers(
     val onFileTypeSelect: () -> Unit,
     val onTextTypeSelect: () -> Unit,
     val onChooseFileClick: (hasPermission: Boolean) -> Unit,
+    val onFileChoose: (IntentManager.FileData) -> Unit,
     val onTextChange: (String) -> Unit,
     val onIsHideByDefaultToggle: (Boolean) -> Unit,
     val onMaxAccessCountChange: (Int) -> Unit,
@@ -37,6 +39,7 @@ data class AddSendHandlers(
                 onFileTypeSelect = { viewModel.trySendAction(AddSendAction.FileTypeClick) },
                 onTextTypeSelect = { viewModel.trySendAction(AddSendAction.TextTypeClick) },
                 onChooseFileClick = { viewModel.trySendAction(AddSendAction.ChooseFileClick(it)) },
+                onFileChoose = { viewModel.trySendAction(AddSendAction.FileChoose(it)) },
                 onTextChange = { viewModel.trySendAction(AddSendAction.TextChange(it)) },
                 onIsHideByDefaultToggle = {
                     viewModel.trySendAction(AddSendAction.HideByDefaultToggle(it))
