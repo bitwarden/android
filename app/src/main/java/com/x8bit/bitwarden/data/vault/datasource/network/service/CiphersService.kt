@@ -39,4 +39,9 @@ interface CiphersService {
      * Attempt to soft delete a cipher.
      */
     suspend fun softDeleteCipher(cipherId: String): Result<Unit>
+
+    /**
+     * Attempt to restore a cipher.
+     */
+    suspend fun restoreCipher(cipherId: String): Result<Unit>
 }

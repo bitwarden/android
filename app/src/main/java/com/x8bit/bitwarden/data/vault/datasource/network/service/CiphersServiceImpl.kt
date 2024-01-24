@@ -50,4 +50,7 @@ class CiphersServiceImpl constructor(
 
     override suspend fun softDeleteCipher(cipherId: String): Result<Unit> =
         ciphersApi.softDeleteCipher(cipherId = cipherId)
+
+    override suspend fun restoreCipher(cipherId: String): Result<Unit> =
+        ciphersApi.restoreCipher(cipherId = cipherId)
 }

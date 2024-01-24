@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -186,6 +187,14 @@ interface VaultRepository : VaultLockManager {
         cipherId: String,
         cipherView: CipherView,
     ): DeleteCipherResult
+
+    /**
+     * Attempt to restore a cipher.
+     */
+    suspend fun restoreCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): RestoreCipherResult
 
     /**
      * Attempt to update a cipher.

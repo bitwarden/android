@@ -101,6 +101,14 @@ class CiphersServiceTest : BaseServiceTest() {
             result.getOrThrow(),
         )
     }
+
+    @Test
+    fun `restoreCipher should execute the restoreCipher API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val result = ciphersService.restoreCipher(cipherId = cipherId)
+        assertEquals(Unit, result.getOrThrow())
+    }
 }
 
 private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
