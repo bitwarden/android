@@ -2,11 +2,18 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.format.DateTimeFormatter
+import java.util.TimeZone
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -16,20 +23,36 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class PendingRequestsViewModel @Inject constructor(
+    authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
-        viewState = PendingRequestsState.ViewState.Empty,
+        viewState = PendingRequestsState.ViewState.Loading,
     ),
 ) {
+    private val dateTimeFormatter
+        get() = DateTimeFormatter
+            .ofPattern("M/d/yy hh:mm a")
+            .withZone(TimeZone.getDefault().toZoneId())
+
     init {
-        // TODO BIT-1291: make /auth-requests call
+        viewModelScope.launch {
+            trySendAction(
+                PendingRequestsAction.Internal.AuthRequestsResultReceive(
+                    authRequestsResult = authRepository.getAuthRequests(),
+                ),
+            )
+        }
     }
 
     override fun handleAction(action: PendingRequestsAction) {
         when (action) {
             PendingRequestsAction.CloseClick -> handleCloseClicked()
             PendingRequestsAction.DeclineAllRequestsClick -> handleDeclineAllRequestsClicked()
+
+            is PendingRequestsAction.Internal.AuthRequestsResultReceive -> {
+                handleAuthRequestsResultReceived(action)
+            }
         }
     }
 
@@ -39,6 +62,36 @@ class PendingRequestsViewModel @Inject constructor(
 
     private fun handleDeclineAllRequestsClicked() {
         sendEvent(PendingRequestsEvent.ShowToast("Not yet implemented.".asText()))
+    }
+
+    private fun handleAuthRequestsResultReceived(
+        action: PendingRequestsAction.Internal.AuthRequestsResultReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = when (val result = action.authRequestsResult) {
+                    is AuthRequestsResult.Success -> {
+                        if (result.authRequests.isEmpty()) {
+                            PendingRequestsState.ViewState.Empty
+                        } else {
+                            PendingRequestsState.ViewState.Content(
+                                requests = result.authRequests.map { authRequest ->
+                                    PendingRequestsState.ViewState.Content.PendingLoginRequest(
+                                        fingerprintPhrase = authRequest.publicKey,
+                                        platform = authRequest.platform,
+                                        timestamp = dateTimeFormatter.format(
+                                            authRequest.creationDate,
+                                        ),
+                                    )
+                                },
+                            )
+                        }
+                    }
+
+                    AuthRequestsResult.Error -> PendingRequestsState.ViewState.Error
+                },
+            )
+        }
     }
 }
 
@@ -81,13 +134,9 @@ data class PendingRequestsState(
         /**
          * Represents a state where the [PendingRequestsScreen] is unable to display data due to an
          * error retrieving it.
-         *
-         * @property message The message to display on the error screen.
          */
         @Parcelize
-        data class Error(
-            val message: Text,
-        ) : ViewState()
+        data object Error : ViewState()
 
         /**
          * Loading state for the [PendingRequestsScreen], signifying that the content is being
@@ -129,4 +178,16 @@ sealed class PendingRequestsAction {
      * The user has clicked to deny all login requests.
      */
     data object DeclineAllRequestsClick : PendingRequestsAction()
+
+    /**
+     * Models actions sent by the view model itself.
+     */
+    sealed class Internal : PendingRequestsAction() {
+        /**
+         * Indicates that a new auth requests result has been received.
+         */
+        data class AuthRequestsResultReceive(
+            val authRequestsResult: AuthRequestsResult,
+        ) : Internal()
+    }
 }

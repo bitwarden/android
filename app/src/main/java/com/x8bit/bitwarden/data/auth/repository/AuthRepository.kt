@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -122,6 +124,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Set the value of [ssoCallbackResultFlow].
      */
     fun setSsoCallbackResult(result: SsoCallbackResult)
+
+    /**
+     * Get a list of the current user's [AuthRequest]s.
+     */
+    suspend fun getAuthRequests(): AuthRequestsResult
 
     /**
      * Get a [Boolean] indicating whether this is a known device.

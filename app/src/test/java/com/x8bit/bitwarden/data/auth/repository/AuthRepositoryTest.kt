@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
@@ -28,6 +30,8 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_3
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -58,7 +62,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganiz
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -77,12 +80,14 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AuthRepositoryTest {
 
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val accountsService: AccountsService = mockk()
+    private val authRequestsService: AuthRequestsService = mockk()
     private val devicesService: DevicesService = mockk()
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
@@ -135,6 +140,7 @@ class AuthRepositoryTest {
 
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
+        authRequestsService = authRequestsService,
         devicesService = devicesService,
         identityService = identityService,
         haveIBeenPwnedService = haveIBeenPwnedService,
@@ -150,7 +156,6 @@ class AuthRepositoryTest {
 
     @BeforeEach
     fun beforeEach() {
-        clearMocks(identityService, accountsService, haveIBeenPwnedService)
         mockkStatic(
             GetTokenResponseJson.Success::toUserState,
             RefreshTokenResponseJson::toUserStateJson,
@@ -1233,6 +1238,66 @@ class AuthRepositoryTest {
             elapsedRealtimeMillis,
             fakeAuthDiskSource.getLastActiveTimeMillis(userId = userId),
         )
+    }
+
+    @Test
+    fun `getAuthRequests should return failure when service returns failure`() = runTest {
+        coEvery {
+            authRequestsService.getAuthRequests()
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.getAuthRequests()
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequests()
+        }
+        assertEquals(AuthRequestsResult.Error, result)
+    }
+
+    @Test
+    fun `getAuthRequests should return success when service returns success`() = runTest {
+        val responseJson = AuthRequestsResponseJson(
+            authRequests = listOf(
+                AuthRequestsResponseJson.AuthRequest(
+                    id = "1",
+                    publicKey = "2",
+                    platform = "Android",
+                    ipAddress = "192.168.0.1",
+                    key = "public",
+                    masterPasswordHash = "verySecureHash",
+                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                    responseDate = null,
+                    requestApproved = true,
+                    originUrl = "www.bitwarden.com",
+                ),
+            ),
+        )
+        val expected = AuthRequestsResult.Success(
+            authRequests = listOf(
+                AuthRequest(
+                    id = "1",
+                    publicKey = "2",
+                    platform = "Android",
+                    ipAddress = "192.168.0.1",
+                    key = "public",
+                    masterPasswordHash = "verySecureHash",
+                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                    responseDate = null,
+                    requestApproved = true,
+                    originUrl = "www.bitwarden.com",
+                ),
+            ),
+        )
+        coEvery {
+            authRequestsService.getAuthRequests()
+        } returns responseJson.asSuccess()
+
+        val result = repository.getAuthRequests()
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequests()
+        }
+        assertEquals(expected, result)
     }
 
     @Test
