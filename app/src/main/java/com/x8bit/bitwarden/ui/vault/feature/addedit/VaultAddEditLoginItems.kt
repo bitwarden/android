@@ -9,6 +9,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitchWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
@@ -58,58 +64,18 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     item {
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextFieldWithActions(
-            label = stringResource(id = R.string.username),
-            value = loginState.username,
-            onValueChange = loginItemTypeHandlers.onUsernameTextChange,
-            actions = {
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_generator),
-                        contentDescription = stringResource(id = R.string.generate_username),
-                    ),
-                    onClick = loginItemTypeHandlers.onOpenUsernameGeneratorClick,
-                )
-            },
-            modifier = Modifier.padding(horizontal = 16.dp),
+        UsernameRow(
+            loginState = loginState,
+            loginItemTypeHandlers = loginItemTypeHandlers,
         )
     }
 
     item {
         Spacer(modifier = Modifier.height(8.dp))
-        if (loginState.canViewPassword) {
-            BitwardenPasswordFieldWithActions(
-                label = stringResource(id = R.string.password),
-                value = loginState.password,
-                onValueChange = loginItemTypeHandlers.onPasswordTextChange,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            ) {
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_check_mark),
-                        contentDescription = stringResource(id = R.string.check_password),
-                    ),
-                    onClick = loginItemTypeHandlers.onPasswordCheckerClick,
-                )
-                BitwardenIconButtonWithResource(
-                    iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_generator),
-                        contentDescription = stringResource(id = R.string.generate_password),
-                    ),
-                    onClick = loginItemTypeHandlers.onOpenPasswordGeneratorClick,
-                )
-            }
-        } else {
-            BitwardenHiddenPasswordField(
-                label = stringResource(id = R.string.password),
-                value = loginState.password,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-        }
+        PasswordRow(
+            loginState = loginState,
+            loginItemTypeHandlers = loginItemTypeHandlers,
+        )
     }
 
     item {
@@ -360,5 +326,115 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     item {
         Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Composable
+private fun UsernameRow(
+    loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
+    loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+) {
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
+
+    BitwardenTextFieldWithActions(
+        label = stringResource(id = R.string.username),
+        value = loginState.username,
+        onValueChange = loginItemTypeHandlers.onUsernameTextChange,
+        actions = {
+            BitwardenIconButtonWithResource(
+                iconRes = IconResource(
+                    iconPainter = painterResource(id = R.drawable.ic_generator),
+                    contentDescription = stringResource(id = R.string.generate_username),
+                ),
+                onClick = { shouldShowDialog = true },
+            )
+        },
+        modifier = Modifier.padding(horizontal = 16.dp),
+    )
+
+    if (shouldShowDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.username),
+            message = stringResource(
+                id =
+                R.string.are_you_sure_you_want_to_overwrite_the_current_username,
+            ),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.no),
+            onConfirmClick = {
+                shouldShowDialog = false
+                loginItemTypeHandlers.onOpenUsernameGeneratorClick()
+            },
+            onDismissClick = {
+                shouldShowDialog = false
+            },
+            onDismissRequest = {
+                shouldShowDialog = false
+            },
+        )
+    }
+}
+
+@Composable
+private fun PasswordRow(
+    loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
+    loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+) {
+    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (loginState.canViewPassword) {
+        BitwardenPasswordFieldWithActions(
+            label = stringResource(id = R.string.password),
+            value = loginState.password,
+            onValueChange = loginItemTypeHandlers.onPasswordTextChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        ) {
+            BitwardenIconButtonWithResource(
+                iconRes = IconResource(
+                    iconPainter = painterResource(id = R.drawable.ic_check_mark),
+                    contentDescription = stringResource(id = R.string.check_password),
+                ),
+                onClick = loginItemTypeHandlers.onPasswordCheckerClick,
+            )
+            BitwardenIconButtonWithResource(
+                iconRes = IconResource(
+                    iconPainter = painterResource(id = R.drawable.ic_generator),
+                    contentDescription = stringResource(id = R.string.generate_password),
+                ),
+                onClick = { shouldShowDialog = true },
+            )
+
+            if (shouldShowDialog) {
+                BitwardenTwoButtonDialog(
+                    title = stringResource(id = R.string.password),
+                    message = stringResource(
+                        id =
+                        R.string.password_override_alert,
+                    ),
+                    confirmButtonText = stringResource(id = R.string.yes),
+                    dismissButtonText = stringResource(id = R.string.no),
+                    onConfirmClick = {
+                        shouldShowDialog = false
+                        loginItemTypeHandlers.onOpenPasswordGeneratorClick()
+                    },
+                    onDismissClick = {
+                        shouldShowDialog = false
+                    },
+                    onDismissRequest = {
+                        shouldShowDialog = false
+                    },
+                )
+            }
+        }
+    } else {
+        BitwardenHiddenPasswordField(
+            label = stringResource(id = R.string.password),
+            value = loginState.password,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        )
     }
 }
