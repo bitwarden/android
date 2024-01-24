@@ -53,4 +53,12 @@ interface CiphersApi {
     suspend fun softDeleteCipher(
         @Path("cipherId") cipherId: String,
     ): Result<Unit>
+
+    /**
+     * Restores a cipher.
+     */
+    @PUT("ciphers/{cipherId}/restore")
+    suspend fun restoreCipher(
+        @Path("cipherId") cipherId: String,
+    ): Result<Unit>
 }

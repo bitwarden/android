@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
@@ -158,6 +159,65 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 } returns DeleteCipherResult.Error
 
                 viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_VIEW_STATE,
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `ConfirmRestoreClick with RestoreCipherResult Success should should ShowToast and NavigateBack`() =
+            runTest {
+                val mockCipherView = mockk<CipherView> {
+                    every { toViewState(isPremiumUser = true) } returns DEFAULT_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                coEvery {
+                    vaultRepo.restoreCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
+                } returns RestoreCipherResult.Success
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VaultItemEvent.ShowToast(R.string.item_restored.asText()),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        VaultItemEvent.NavigateBack,
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `ConfirmRestoreClick with RestoreCipherResult Failure should should Show generic error`() =
+            runTest {
+                val mockCipherView = mockk<CipherView> {
+                    every { toViewState(isPremiumUser = true) } returns DEFAULT_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                coEvery {
+                    vaultRepo.restoreCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
+                } returns RestoreCipherResult.Error
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
 
                 assertEquals(
                     DEFAULT_STATE.copy(

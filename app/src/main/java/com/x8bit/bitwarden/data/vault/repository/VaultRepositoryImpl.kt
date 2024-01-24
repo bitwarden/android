@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -483,6 +484,33 @@ class VaultRepositoryImpl(
                     DeleteCipherResult.Success
                 },
                 onFailure = { DeleteCipherResult.Error },
+            )
+    }
+
+    override suspend fun restoreCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): RestoreCipherResult {
+        val userId = requireNotNull(activeUserId)
+        return ciphersService
+            .restoreCipher(cipherId)
+            .flatMap {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = cipherView.copy(
+                        deletedDate = null,
+                    ),
+                )
+            }
+            .onSuccess { cipher ->
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = cipher.toEncryptedNetworkCipherResponse(),
+                )
+            }
+            .fold(
+                onSuccess = { RestoreCipherResult.Success },
+                onFailure = { RestoreCipherResult.Error },
             )
     }
 

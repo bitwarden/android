@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
@@ -68,7 +69,11 @@ fun VaultItemScreen(
     val confirmDeleteClickAction = remember(viewModel) {
         { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
     }
+    val confirmRestoreAction = remember(viewModel) {
+        { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
+    }
     var pendingDeleteCipher by rememberSaveable { mutableStateOf(false) }
+    var pendingRestoreCipher by rememberSaveable { mutableStateOf(false) }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -128,6 +133,24 @@ fun VaultItemScreen(
             },
         )
     }
+    if (pendingRestoreCipher) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.restore),
+            message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
+            confirmButtonText = stringResource(id = R.string.ok),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                pendingRestoreCipher = false
+                confirmRestoreAction()
+            },
+            onDismissClick = {
+                pendingRestoreCipher = false
+            },
+            onDismissRequest = {
+                pendingRestoreCipher = false
+            },
+        )
+    }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -144,6 +167,12 @@ fun VaultItemScreen(
                     { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
                 },
                 actions = {
+                    if (state.isCipherDeleted) {
+                        BitwardenTextButton(
+                            label = stringResource(id = R.string.restore),
+                            onClick = { pendingRestoreCipher = true },
+                        )
+                    }
                     // TODO make action list dependent on item being in an organization BIT-1446
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
@@ -184,7 +213,7 @@ fun VaultItemScreen(
         },
         floatingActionButton = {
             AnimatedVisibility(
-                visible = state.viewState is VaultItemState.ViewState.Content,
+                visible = state.isFabVisible,
                 enter = scaleIn(),
                 exit = scaleOut(),
             ) {

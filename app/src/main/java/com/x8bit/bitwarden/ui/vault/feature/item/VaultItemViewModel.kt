@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VerifyPasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -102,6 +103,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.CloneClick -> handleCloneClick()
             is VaultItemAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
             is VaultItemAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
+            is VaultItemAction.Common.ConfirmRestoreClick -> handleConfirmRestoreClick()
         }
     }
 
@@ -243,6 +245,33 @@ class VaultItemViewModel @Inject constructor(
                         )
                     }
             }
+        }
+    }
+
+    private fun handleConfirmRestoreClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.Loading(
+                    R.string.restoring.asText(),
+                ),
+            )
+        }
+        onContent { content ->
+            content
+                .common
+                .currentCipher
+                ?.let { cipher ->
+                    viewModelScope.launch {
+                        trySendAction(
+                            VaultItemAction.Internal.RestoreCipherReceive(
+                                result = vaultRepository.restoreCipher(
+                                    cipherId = state.vaultItemId,
+                                    cipherView = cipher,
+                                ),
+                            ),
+                        )
+                    }
+                }
         }
     }
 
@@ -414,6 +443,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
             is VaultItemAction.Internal.VerifyPasswordReceive -> handleVerifyPasswordReceive(action)
             is VaultItemAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
+            is VaultItemAction.Internal.RestoreCipherReceive -> handleRestoreCipherReceive(action)
         }
     }
 
@@ -545,6 +575,26 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleRestoreCipherReceive(action: VaultItemAction.Internal.RestoreCipherReceive) {
+        when (action.result) {
+            RestoreCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            RestoreCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(VaultItemEvent.ShowToast(message = R.string.item_restored.asText()))
+                sendEvent(VaultItemEvent.NavigateBack)
+            }
+        }
+    }
+
     //endregion Internal Type Handlers
 
     private inline fun onContent(
@@ -593,6 +643,21 @@ data class VaultItemState(
     val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
+
+    /**
+     * Whether or not the cipher has been deleted.
+     */
+    val isCipherDeleted: Boolean
+        get() = (viewState as? ViewState.Content)
+            ?.common
+            ?.currentCipher
+            ?.deletedDate != null
+
+    /**
+     * Whether or not the fab is visible.
+     */
+    val isFabVisible: Boolean
+        get() = viewState is ViewState.Content && !isCipherDeleted
 
     /**
      * Represents the specific view states for the [VaultItemScreen].
@@ -901,6 +966,11 @@ sealed class VaultItemAction {
         data object ConfirmDeleteClick : Common()
 
         /**
+         * The user has confirmed to restore the cipher.
+         */
+        data object ConfirmRestoreClick : Common()
+
+        /**
          * The user has clicked to dismiss the dialog.
          */
         data object DismissDialogClick : Common()
@@ -1059,6 +1129,13 @@ sealed class VaultItemAction {
          */
         data class DeleteCipherReceive(
             val result: DeleteCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the restore cipher result has been received.
+         */
+        data class RestoreCipherReceive(
+            val result: RestoreCipherResult,
         ) : Internal()
     }
 }

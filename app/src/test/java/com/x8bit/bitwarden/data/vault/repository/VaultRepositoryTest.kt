@@ -65,6 +65,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -156,6 +157,8 @@ class VaultRepositoryTest {
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class)
+        unmockkStatic(Instant::class)
+        unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
     }
 
     @Test
@@ -1680,7 +1683,6 @@ class VaultRepositoryTest {
             } returns createMockSdkCipher(number = 1).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { ciphersService.softDeleteCipher(cipherId = cipherId) } returns Unit.asSuccess()
-            coEvery { vaultDiskSource.deleteCipher(userId, cipherId) } just runs
             coEvery {
                 vaultDiskSource.saveCipher(
                     userId = userId,
@@ -1699,6 +1701,64 @@ class VaultRepositoryTest {
             assertEquals(DeleteCipherResult.Success, result)
             unmockkStatic(Instant::class)
             unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `restoreCipher with ciphersService restoreCipher failure should return RestoreCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherId = "mockId-1"
+            coEvery {
+                ciphersService.restoreCipher(cipherId = cipherId)
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.restoreCipher(
+                cipherId = cipherId,
+                cipherView = createMockCipherView(number = 1),
+            )
+
+            assertEquals(RestoreCipherResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `restoreCipher with ciphersService restoreCipher success should return RestoreCipherResult success`() =
+        runTest {
+            mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+            every {
+                createMockSdkCipher(number = 1).toEncryptedNetworkCipherResponse()
+            } returns createMockCipher(number = 1)
+            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = createMockCipherView(number = 1)
+                        .copy(
+                            deletedDate = null,
+                        ),
+                )
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { ciphersService.restoreCipher(cipherId = cipherId) } returns Unit.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = createMockCipher(number = 1),
+                )
+            } returns Unit
+            val cipherView = createMockCipherView(number = 1)
+            mockkStatic(Instant::class)
+            every { Instant.now() } returns fixedInstant
+
+            val result = vaultRepository.restoreCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(RestoreCipherResult.Success, result)
         }
 
     @Test
