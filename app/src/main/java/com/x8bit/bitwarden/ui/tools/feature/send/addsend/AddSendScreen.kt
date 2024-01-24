@@ -59,13 +59,14 @@ fun AddSendScreen(
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val addSendHandlers = remember(viewModel) { AddSendHandlers.create(viewModel) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
     val resources = context.resources
 
     val fileChooserLauncher = intentManager.launchActivityForResult { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)?.let {
-            viewModel.trySendAction(AddSendAction.FileChoose(it))
+            addSendHandlers.onFileChoose(it)
         }
     }
 
@@ -190,7 +191,7 @@ fun AddSendScreen(
                 state = viewState,
                 isAddMode = state.isAddMode,
                 isShared = state.isShared,
-                addSendHandlers = remember(viewModel) { AddSendHandlers.create(viewModel) },
+                addSendHandlers = addSendHandlers,
                 permissionsManager = permissionsManager,
                 modifier = modifier,
             )
