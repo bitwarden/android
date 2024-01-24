@@ -3,12 +3,18 @@ package com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
+import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -19,7 +25,9 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class MasterPasswordHintViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
+    private val savedStateHandle: SavedStateHandle,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<MasterPasswordHintState, MasterPasswordHintEvent, MasterPasswordHintAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: MasterPasswordHintState(
@@ -40,6 +48,9 @@ class MasterPasswordHintViewModel @Inject constructor(
             MasterPasswordHintAction.SubmitClick -> handleSubmitClick()
             is MasterPasswordHintAction.EmailInputChange -> handleEmailInputUpdated(action)
             MasterPasswordHintAction.DismissDialog -> handleDismissDialog()
+            is MasterPasswordHintAction.Internal.PasswordHintResultReceive -> {
+                handlePasswordHintResult(action)
+            }
         }
     }
 
@@ -49,8 +60,86 @@ class MasterPasswordHintViewModel @Inject constructor(
         )
     }
 
+    @Suppress("LongMethod", "ReturnCount")
     private fun handleSubmitClick() {
-        // TODO (BIT-71): Implement master password hint
+        val email = stateFlow.value.emailInput
+
+        if (!networkConnectionManager.isNetworkConnected) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = MasterPasswordHintState.DialogState.Error(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
+                    ),
+                )
+            }
+            return
+        }
+
+        if (email.isBlank()) {
+            val errorMessage =
+                R.string.validation_field_required.asText(R.string.email_address.asText())
+
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = MasterPasswordHintState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = errorMessage,
+                    ),
+                )
+            }
+            return
+        }
+
+        if (!email.contains("@")) {
+            val errorMessage = R.string.invalid_email.asText()
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = MasterPasswordHintState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = errorMessage,
+                    ),
+                )
+            }
+            return
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = MasterPasswordHintState.DialogState.Loading(
+                    R.string.submitting.asText(),
+                ),
+            )
+        }
+
+        viewModelScope.launch {
+            val result = authRepository.passwordHintRequest(email)
+            sendAction(MasterPasswordHintAction.Internal.PasswordHintResultReceive(result))
+        }
+    }
+
+    private fun handlePasswordHintResult(
+        action: MasterPasswordHintAction.Internal.PasswordHintResultReceive,
+    ) {
+        when (action.result) {
+            is PasswordHintResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(dialog = MasterPasswordHintState.DialogState.PasswordHintSent)
+                }
+            }
+            is PasswordHintResult.Error -> {
+                val errorMessage = action.result.message?.asText()
+                    ?: R.string.generic_error_message.asText()
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = MasterPasswordHintState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = errorMessage,
+                        ),
+                    )
+                }
+            }
+        }
     }
 
     private fun handleEmailInputUpdated(action: MasterPasswordHintAction.EmailInputChange) {
@@ -88,10 +177,19 @@ data class MasterPasswordHintState(
         data object PasswordHintSent : DialogState()
 
         /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+
+        /**
          * Represents an error dialog with the given [message].
          */
         @Parcelize
         data class Error(
+            val title: Text? = null,
             val message: Text,
         ) : DialogState()
     }
@@ -132,4 +230,16 @@ sealed class MasterPasswordHintAction {
      * User dismissed the currently displayed dialog.
      */
     data object DismissDialog : MasterPasswordHintAction()
+
+    /**
+     * Actions for internal use by the ViewModel.
+     */
+    sealed class Internal : MasterPasswordHintAction() {
+        /**
+         * Indicates that the password hint result was received.
+         */
+        data class PasswordHintResultReceive(
+            val result: PasswordHintResult,
+        ) : Internal()
+    }
 }

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
@@ -32,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -996,6 +998,43 @@ class AuthRepositoryTest {
             shouldCheckDataBreaches = false,
         )
         assertEquals(RegisterResult.Error(errorMessage = "message"), result)
+    }
+
+    @Test
+    fun `passwordHintRequest with valid email should return Success`() = runTest {
+        val email = "valid@example.com"
+        coEvery {
+            accountsService.requestPasswordHint(email)
+        } returns Result.success(PasswordHintResponseJson.Success)
+
+        val result = repository.passwordHintRequest(email)
+
+        assertEquals(PasswordHintResult.Success, result)
+    }
+
+    @Test
+    fun `passwordHintRequest with error response should return Error`() = runTest {
+        val email = "error@example.com"
+        val errorMessage = "Error message"
+        coEvery {
+            accountsService.requestPasswordHint(email)
+        } returns Result.success(PasswordHintResponseJson.Error(errorMessage))
+
+        val result = repository.passwordHintRequest(email)
+
+        assertEquals(PasswordHintResult.Error(errorMessage), result)
+    }
+
+    @Test
+    fun `passwordHintRequest with failure should return Error with null message`() = runTest {
+        val email = "failure@example.com"
+        coEvery {
+            accountsService.requestPasswordHint(email)
+        } returns Result.failure(RuntimeException("Network error"))
+
+        val result = repository.passwordHintRequest(email)
+
+        assertEquals(PasswordHintResult.Error(null), result)
     }
 
     @Test

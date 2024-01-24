@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
@@ -39,5 +41,21 @@ class AccountsServiceImpl constructor(
                     code = 429,
                     json = json,
                 ) ?: throw throwable
+            }
+
+    override suspend fun requestPasswordHint(
+        email: String,
+    ): Result<PasswordHintResponseJson> =
+        accountsApi
+            .passwordHintRequest(PasswordHintRequestJson(email))
+            .map { PasswordHintResponseJson.Success }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<PasswordHintResponseJson.Error>(
+                        code = 429,
+                        json = json,
+                    )
+                    ?: throw throwable
             }
 }

@@ -25,10 +25,12 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 
 /**
  * The top level composable for the Login screen.
@@ -60,10 +62,18 @@ fun MasterPasswordHintScreen(
             )
         }
 
+        is MasterPasswordHintState.DialogState.Loading -> {
+            BitwardenLoadingDialog(
+                visibilityState = LoadingDialogState.Shown(
+                    text = dialogState.message,
+                ),
+            )
+        }
+
         is MasterPasswordHintState.DialogState.Error -> {
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(
-                    title = R.string.password_hint.asText(),
+                    title = dialogState.title ?: R.string.an_error_has_occurred.asText(),
                     message = dialogState.message,
                 ),
                 onDismissRequest = remember(viewModel) {

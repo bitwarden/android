@@ -1,9 +1,13 @@
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextReplacement
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -39,6 +43,60 @@ class MasterPasswordHintScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(MasterPasswordHintAction.EmailInputChange(emailInput))
         }
+    }
+
+    @Test
+    fun `should show success dialog when PasswordHintSent state is set`() {
+        mutableStateFlow.value = MasterPasswordHintState(
+            dialog = MasterPasswordHintState.DialogState.PasswordHintSent,
+            emailInput = "test@example.com",
+        )
+
+        composeTestRule
+            .onNodeWithText("We've sent you an email with your master password hint.")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `should show error dialog when Error state is set`() {
+        val errorMessage = "Error occurred"
+        mutableStateFlow.value = MasterPasswordHintState(
+            dialog = MasterPasswordHintState.DialogState.Error(message = errorMessage.asText()),
+            emailInput = "test@example.com",
+        )
+
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `should show loading dialog when Loading state is set`() {
+        val loadingMessage = "Submitting"
+        mutableStateFlow.value = MasterPasswordHintState(
+            dialog = MasterPasswordHintState.DialogState.Loading(message = loadingMessage.asText()),
+            emailInput = "test@example.com",
+        )
+
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking ok in dialog should send DismissDialog action`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.value = MasterPasswordHintState(
+            dialog = MasterPasswordHintState.DialogState.Error(message = "".asText()),
+            emailInput = "test@example.com",
+        )
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
     }
 
     @Test

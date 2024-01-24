@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
@@ -196,6 +197,18 @@ class AccountsServiceTest : BaseServiceTest() {
         val response = MockResponse().setResponseCode(400).setBody(json)
         server.enqueue(response)
         assertEquals(Result.success(expectedResponse), service.register(registerRequestBody))
+    }
+
+    @Test
+    fun `requestPasswordHint success should return Success`() = runTest {
+        val email = "test@example.com"
+        val response = MockResponse().setResponseCode(200).setBody("{}")
+        server.enqueue(response)
+
+        val result = service.requestPasswordHint(email)
+
+        assertTrue(result.isSuccess)
+        assertEquals(PasswordHintResponseJson.Success, result.getOrNull())
     }
 
     companion object {
