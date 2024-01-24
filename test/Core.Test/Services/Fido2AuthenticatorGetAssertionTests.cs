@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace Bit.Core.Test.Services
 {
-    public class Fido2AuthenticatorTests
+    public class Fido2AuthenticatorGetAssertionTests
     {
         #region missing non-discoverable credential
 
@@ -310,7 +310,7 @@ namespace Bit.Core.Test.Services
             sutProvider.GetDependency<ICryptoFunctionService>().SignAsync(
                 Arg.Any<byte[]>(),
                 Arg.Any<byte[]>(),
-                new CryptoSignEcdsaOptions { 
+                new CryptoSignEcdsaOptions {
                     Algorithm = CryptoSignEcdsaOptions.EcdsaAlgorithm.EcdsaP256Sha256,
                     SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
                 }

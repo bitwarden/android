@@ -20,7 +20,7 @@ namespace Bit.Core.Utilities.Fido2
         ///<summary>
         /// A sequence of pairs of PublicKeyCredentialType and public key algorithms (COSEAlgorithmIdentifier) requested by the Relying Party. This sequence is ordered from most preferred to least preferred. The authenticator makes a best-effort to create the most preferred credential that it can. */
         ///</summary>
-        public PublicKeyCredentialDescriptor[] CredTypesAndPubKeyAlgs { get; set; }
+        public PublicKeyCredentialAlgorithmDescriptor[] CredTypesAndPubKeyAlgs { get; set; }
 
         ///<summary>
         /// The effective resident key requirement for credential creation, a Boolean value determined by the client. Resident is synonymous with discoverable. */

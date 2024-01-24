@@ -22,6 +22,20 @@ namespace Bit.Core.Services
             _cryptoFunctionService = cryptoFunctionService;
             _userInterface = userInterface;
         }
+
+        public Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) 
+        {
+            if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Algorithm != (int) Fido2AlgorithmIdentifier.ES256))
+            {
+                var requestedAlgorithms = string.Join(", ", makeCredentialParams.CredTypesAndPubKeyAlgs.Select((p) => p.Algorithm).ToArray());
+                _logService.Warning(
+                    $"[Fido2Authenticator] No compatible algorithms found, RP requested: {requestedAlgorithms}"
+                );
+                throw new NotSupportedError();
+            }
+
+            throw new NotImplementedException();
+        }
         
         public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams)
         {
@@ -114,10 +128,6 @@ namespace Bit.Core.Services
 
                 throw new UnknownError();
             }
-        }
-
-        public Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) {
-            throw new NotImplementedException();
         }
 
         private async Task<List<CipherView>> FindCredentialsById(PublicKeyCredentialDescriptor[] credentials, string rpId)
