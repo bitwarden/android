@@ -42,6 +42,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 
 /**
  * The top level composable for the Enterprise Single Sign On screen.
@@ -51,6 +53,7 @@ import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 @Composable
 fun EnterpriseSignOnScreen(
     onNavigateBack: () -> Unit,
+    intentManager: IntentManager = LocalIntentManager.current,
     viewModel: EnterpriseSignOnViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -60,6 +63,10 @@ fun EnterpriseSignOnScreen(
             EnterpriseSignOnEvent.NavigateBack -> onNavigateBack()
             is EnterpriseSignOnEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            }
+
+            is EnterpriseSignOnEvent.NavigateToSsoLogin -> {
+                intentManager.startCustomTabsActivity(event.uri)
             }
         }
     }

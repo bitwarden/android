@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 
 /**
@@ -22,6 +23,15 @@ interface IdentityService {
         passwordHash: String,
         captchaToken: String?,
     ): Result<GetTokenResponseJson>
+
+    /**
+     * Prevalidates the organization identifier used in an SSO request.
+     *
+     * @param organizationIdentifier The SSO organization identifier.
+     */
+    suspend fun prevalidateSso(
+        organizationIdentifier: String,
+    ): Result<PrevalidateSsoResponseJson>
 
     /**
      * Synchronously makes a request to get refresh the access token.

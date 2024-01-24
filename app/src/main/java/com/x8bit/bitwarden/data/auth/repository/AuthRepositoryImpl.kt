@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -387,6 +388,23 @@ class AuthRepositoryImpl(
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         mutableCaptchaTokenFlow.tryEmit(tokenResult)
     }
+
+    override suspend fun prevalidateSso(
+        organizationIdentifier: String,
+    ): PrevalidateSsoResult = identityService
+        .prevalidateSso(
+            organizationIdentifier = organizationIdentifier,
+        )
+        .fold(
+            onSuccess = {
+                if (it.token.isNullOrBlank()) {
+                    PrevalidateSsoResult.Failure
+                } else {
+                    PrevalidateSsoResult.Success(it.token)
+                }
+            },
+            onFailure = { PrevalidateSsoResult.Failure },
+        )
 
     override fun setSsoCallbackResult(result: SsoCallbackResult) {
         mutableSsoCallbackResultFlow.tryEmit(result)

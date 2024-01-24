@@ -1,8 +1,51 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
+import java.net.URLEncoder
+import java.security.MessageDigest
+import java.util.Base64
 
 private const val SSO_HOST: String = "sso-callback"
+private const val SSO_URI = "bitwarden://$SSO_HOST"
+
+/**
+ * Generates a URI for the SSO custom tab.
+ *
+ * @param identityBaseUrl The base URl for the identity service.
+ * @param organizationIdentifier The SSO organization identifier.
+ * @param token The prevalidated SSO token.
+ * @param state Random state used to verify the validity of the response.
+ * @param codeVerifier A random string used to generate the code challenge.
+ */
+fun generateUriForSso(
+    identityBaseUrl: String,
+    organizationIdentifier: String,
+    token: String,
+    state: String,
+    codeVerifier: String,
+): String {
+    val redirectUri = URLEncoder.encode(SSO_URI, "UTF-8")
+    val encodedOrganizationIdentifier = URLEncoder.encode(organizationIdentifier, "UTF-8")
+    val encodedToken = URLEncoder.encode(token, "UTF-8")
+
+    val codeChallenge = Base64.getEncoder().encodeToString(
+        MessageDigest
+            .getInstance("SHA-256")
+            .digest(codeVerifier.toByteArray()),
+    )
+
+    return "$identityBaseUrl/connect/authorize" +
+        "?client_id=mobile" +
+        "&redirect_uri=$redirectUri" +
+        "&response_type=code" +
+        "&scope=api%20offline_access" +
+        "&state=$state" +
+        "&code_challenge=$codeChallenge" +
+        "&code_challenge_method=S256" +
+        "&response_mode=query" +
+        "&domain_hint=$encodedOrganizationIdentifier" +
+        "&ssoToken=$encodedToken"
+}
 
 /**
  * Retrieves an [SsoCallbackResult] from an Intent. There are three possible cases.
