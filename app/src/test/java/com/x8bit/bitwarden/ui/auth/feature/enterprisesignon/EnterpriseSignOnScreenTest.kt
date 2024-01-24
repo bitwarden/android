@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
+import android.net.Uri
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -14,8 +15,11 @@ import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,12 +36,17 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
 
+    private val intentManager: IntentManager = mockk {
+        every { startCustomTabsActivity(any()) } just runs
+    }
+
     @Before
     fun setup() {
         composeTestRule.setContent {
             EnterpriseSignOnScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
+                intentManager = intentManager,
             )
         }
     }
@@ -82,6 +91,15 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToSsoLogin should call startCustomTabsActivity`() {
+        val ssoUri = Uri.parse("https://identity.bitwarden.com/sso-test")
+        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri))
+        verify(exactly = 1) {
+            intentManager.startCustomTabsActivity(ssoUri)
+        }
     }
 
     @Test

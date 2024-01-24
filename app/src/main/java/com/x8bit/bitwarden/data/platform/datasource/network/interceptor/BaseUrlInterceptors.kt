@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
 
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.baseIdentityUrl
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,24 +43,20 @@ class BaseUrlInterceptors @Inject constructor() {
 
         // Determine the required base URLs
         val apiUrl: String
-        val identityUrl: String
         val eventsUrl: String
         if (baseUrl.isNotEmpty()) {
             apiUrl = "$baseUrl/api"
-            identityUrl = "$baseUrl/identity"
             eventsUrl = "$baseUrl/events"
         } else {
             apiUrl =
                 environmentUrlData.api.orNullIfBlank() ?: "https://api.bitwarden.com"
-            identityUrl =
-                environmentUrlData.identity.orNullIfBlank() ?: "https://identity.bitwarden.com"
             eventsUrl =
                 environmentUrlData.events.orNullIfBlank() ?: "https://events.bitwarden.com"
         }
 
         // Update the base URLs
         apiInterceptor.baseUrl = apiUrl
-        identityInterceptor.baseUrl = identityUrl
+        identityInterceptor.baseUrl = environmentUrlData.baseIdentityUrl
         eventsInterceptor.baseUrl = eventsUrl
     }
 }

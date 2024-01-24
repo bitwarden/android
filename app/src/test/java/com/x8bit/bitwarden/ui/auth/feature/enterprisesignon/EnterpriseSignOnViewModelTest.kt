@@ -1,18 +1,56 @@
 package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
+import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
+    private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
+    private val authRepository: AuthRepository = mockk {
+        every { ssoCallbackResultFlow } returns mutableSsoCallbackResultFlow
+    }
+
+    private val environmentRepository: EnvironmentRepository = FakeEnvironmentRepository()
+
+    private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
+
     private val savedStateHandle = SavedStateHandle()
+
+    @BeforeEach
+    fun setUp() {
+        mockkStatic(::generateUriForSso)
+        mockkStatic(Uri::parse)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(::generateUriForSso)
+        unmockkStatic(Uri::parse)
+    }
 
     @Test
     fun `initial state should be correct when not pulling from handle`() = runTest {
@@ -47,18 +85,70 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with valid organization should emit ShowToast, show a loading dialog, and then hide the dialog`() =
+    fun `LogInClick with valid organization and failed prevalidation should emit ShowToast, show a loading dialog, and then show an error`() =
         runTest {
-            val state = DEFAULT_STATE.copy(orgIdentifierInput = "Test")
+            val organizationId = "Test"
+            val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
+
+            coEvery {
+                authRepository.prevalidateSso(organizationId)
+            } returns PrevalidateSsoResult.Failure
+
             val viewModel = createViewModel(state)
-            viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+            viewModel.stateFlow.test {
+                assertEquals(state, awaitItem())
+                viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+
+                assertEquals(
+                    state.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    state.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                           message = R.string.login_sso_error.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
             viewModel.eventFlow.test {
                 assertEquals(
                     EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
                     awaitItem(),
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LogInClick with valid organization and successful prevalidation should emit ShowToast, show a loading dialog, hide a loading dialog, and then emit NavigateToSsoLogin`() =
+        runTest {
+            val organizationId = "Test"
+            val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
+
+            coEvery {
+                authRepository.prevalidateSso(organizationId)
+            } returns PrevalidateSsoResult.Success(token = "token")
+
+            val ssoUri: Uri = mockk()
+            every {
+                generateUriForSso(any(), any(), any(), any(), any())
+            } returns "https://identity.bitwarden.com/sso-test"
+            every {
+                Uri.parse("https://identity.bitwarden.com/sso-test")
+            } returns ssoUri
+
+            val viewModel = createViewModel(state)
             viewModel.stateFlow.test {
+                assertEquals(state, awaitItem())
+                viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
@@ -70,6 +160,16 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     state.copy(dialogState = null),
+                    awaitItem(),
+                )
+            }
+            viewModel.eventFlow.test {
+                assertEquals(
+                    EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
+                    awaitItem(),
+                )
+                assertEquals(
+                    EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri),
                     awaitItem(),
                 )
             }
@@ -183,6 +283,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         ),
         isNetworkConnected: Boolean = true,
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(
+        authRepository = authRepository,
+        environmentRepository = environmentRepository,
+        generatorRepository = generatorRepository,
         networkConnectionManager = FakeNetworkConnectionManager(isNetworkConnected),
         savedStateHandle = savedStateHandle,
     )

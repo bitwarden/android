@@ -8,6 +8,39 @@ import org.junit.jupiter.api.Test
 
 class EnvironmentUrlsDataJsonExtensionsTest {
     @Test
+    fun `baseIdentityUrl should return identity if value is present`() {
+        assertEquals(
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseIdentityUrl,
+            "identity",
+        )
+    }
+
+    @Test
+    fun `baseIdentityUrl should return base value if identity is null`() {
+        assertEquals(
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+                .copy(identity = null)
+                .baseIdentityUrl,
+            "base/identity",
+        )
+    }
+
+    @Test
+    fun `baseIdentityUrl should return default url if base is empty and identity is null`() {
+        val expectedUrl = "https://identity.bitwarden.com"
+
+        assertEquals(
+            expectedUrl,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+                .copy(
+                    base = "",
+                    identity = null,
+                )
+                .baseIdentityUrl,
+        )
+    }
+
+    @Test
     fun `baseWebVaultUrlOrNull should return webVault when populated`() {
         val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseWebVaultUrlOrNull
         assertEquals("webVault", result)

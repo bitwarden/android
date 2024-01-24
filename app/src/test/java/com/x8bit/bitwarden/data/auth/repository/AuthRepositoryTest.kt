@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
@@ -32,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -1018,6 +1020,37 @@ class AuthRepositoryTest {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `prevalidateSso Failure should return Failure `() = runTest {
+        val organizationId = "organizationid"
+        val throwable = Throwable()
+        coEvery {
+            identityService.prevalidateSso(organizationId)
+        } returns Result.failure(throwable)
+        val result = repository.prevalidateSso(organizationId)
+        assertEquals(PrevalidateSsoResult.Failure, result)
+    }
+
+    @Test
+    fun `prevalidateSso Success with a blank token should return Failure`() = runTest {
+        val organizationId = "organizationid"
+        coEvery {
+            identityService.prevalidateSso(organizationId)
+        } returns Result.success(PrevalidateSsoResponseJson(token = ""))
+        val result = repository.prevalidateSso(organizationId)
+        assertEquals(PrevalidateSsoResult.Failure, result)
+    }
+
+    @Test
+    fun `prevalidateSso Success with a valid token should return Success`() = runTest {
+        val organizationId = "organizationid"
+        coEvery {
+            identityService.prevalidateSso(organizationId)
+        } returns Result.success(PrevalidateSsoResponseJson(token = "token"))
+        val result = repository.prevalidateSso(organizationId)
+        assertEquals(PrevalidateSsoResult.Success(token = "token"), result)
     }
 
     @Suppress("MaxLineLength")

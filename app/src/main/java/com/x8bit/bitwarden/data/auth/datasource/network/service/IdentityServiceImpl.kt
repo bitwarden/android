@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
@@ -45,6 +46,13 @@ class IdentityServiceImpl constructor(
                 json = json,
             ) ?: throw throwable
         }
+
+    override suspend fun prevalidateSso(
+        organizationIdentifier: String,
+    ): Result<PrevalidateSsoResponseJson> = api
+        .prevalidateSso(
+            organizationIdentifier = organizationIdentifier,
+        )
 
     override fun refreshTokenSynchronously(
         refreshToken: String,

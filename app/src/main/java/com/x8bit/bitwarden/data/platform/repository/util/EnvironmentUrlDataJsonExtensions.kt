@@ -4,9 +4,21 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJso
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import java.net.URI
 
+private const val DEFAULT_IDENTITY_URL: String = "https://identity.bitwarden.com"
 private const val DEFAULT_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private const val DEFAULT_WEB_SEND_URL: String = "https://send.bitwarden.com/#"
 private const val DEFAULT_ICON_URL: String = "https://icons.bitwarden.net/"
+
+/**
+ * Returns the base identity URL or the default value if one is not present.
+ */
+val EnvironmentUrlDataJson.baseIdentityUrl: String
+    get() =
+        this
+            .identity
+            .takeIf { !it.isNullOrBlank() }
+            ?: base.takeIf { it.isNotBlank() }?.let { "$it/identity" }
+            ?: DEFAULT_IDENTITY_URL
 
 /**
  * Returns the base web vault URL. This will check for a custom [EnvironmentUrlDataJson.webVault]

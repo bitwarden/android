@@ -10,6 +10,37 @@ import org.junit.jupiter.api.Assertions.assertNull
 class SsoUtilsTest {
 
     @Test
+    fun `generateUriForSso should generate the correct URI`() {
+        val identityBaseUrl = "https://identity.bitwarden.com"
+        val organizationIdentifier = "Test Organization"
+        val token = "Test Token"
+        val state = "test_state"
+        val codeVerifier = "test_code_verifier"
+
+        val uri = generateUriForSso(
+            identityBaseUrl = identityBaseUrl,
+            organizationIdentifier = organizationIdentifier,
+            token = token,
+            state = state,
+            codeVerifier = codeVerifier,
+        )
+        assertEquals(
+            "https://identity.bitwarden.com/connect/authorize" +
+                "?client_id=mobile" +
+                "&redirect_uri=bitwarden%3A%2F%2Fsso-callback" +
+                "&response_type=code" +
+                "&scope=api%20offline_access" +
+                "&state=test_state" +
+                "&code_challenge=Qq1fGD0HhxwbmeMrqaebgn1qhvKeguQPXqLdpmixaM4=" +
+                "&code_challenge_method=S256" +
+                "&response_mode=query" +
+                "&domain_hint=Test+Organization" +
+                "&ssoToken=Test+Token",
+            uri,
+        )
+    }
+
+    @Test
     fun `getSsoCallbackResult should return null when data is null`() {
         val intent = mockk<Intent> {
             every { data } returns null

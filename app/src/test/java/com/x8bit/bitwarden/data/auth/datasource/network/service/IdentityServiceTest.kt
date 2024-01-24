@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.MasterPasswordPolicyOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
@@ -82,6 +83,24 @@ class IdentityServiceTest : BaseServiceTest() {
         assertEquals(Result.success(INVALID_LOGIN), result)
     }
 
+    @Test
+    fun `prevalidateSso when response is success should return PrevalidateSsoResponseJson`() =
+        runTest {
+            val organizationId = "organizationId"
+            server.enqueue(MockResponse().setResponseCode(200).setBody(PREVALIDATE_SSO_JSON))
+            val result = identityService.prevalidateSso(organizationId)
+            assertEquals(Result.success(PREVALIDATE_SSO_BODY), result)
+        }
+
+    @Test
+    fun `prevalidateSso when response is an error should return an error`() =
+        runTest {
+            val organizationId = "organizationId"
+            server.enqueue(MockResponse().setResponseCode(400))
+            val result = identityService.prevalidateSso(organizationId)
+            assertTrue(result.isFailure)
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `refreshTokenSynchronously when response is success should return RefreshTokenResponseJson`() {
@@ -104,6 +123,16 @@ class IdentityServiceTest : BaseServiceTest() {
         private const val PASSWORD_HASH = "passwordHash"
     }
 }
+
+private const val PREVALIDATE_SSO_JSON = """
+{
+  "token": "2ff00750-e2d6-47a6-ae54-67b981e78030"
+}
+"""
+
+private val PREVALIDATE_SSO_BODY = PrevalidateSsoResponseJson(
+    token = "2ff00750-e2d6-47a6-ae54-67b981e78030",
+)
 
 private const val REFRESH_TOKEN_JSON = """
 {

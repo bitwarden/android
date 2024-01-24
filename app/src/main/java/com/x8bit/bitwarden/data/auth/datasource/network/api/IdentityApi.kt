@@ -1,12 +1,15 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 /**
  * Defines raw calls under the /identity API.
@@ -28,6 +31,11 @@ interface IdentityApi {
         @Field(value = "grant_type") grantType: String,
         @Field(value = "captchaResponse") captchaResponse: String?,
     ): Result<GetTokenResponseJson.Success>
+
+    @GET("/account/prevalidate")
+    suspend fun prevalidateSso(
+        @Query("domainHint") organizationIdentifier: String,
+    ): Result<PrevalidateSsoResponseJson>
 
     /**
      * This call needs to be synchronous so we need it to return a [Call] directly. The identity
