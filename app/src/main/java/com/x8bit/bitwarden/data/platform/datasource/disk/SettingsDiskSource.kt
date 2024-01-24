@@ -107,6 +107,20 @@ interface SettingsDiskSource {
     fun storeDefaultUriMatchType(userId: String, uriMatchType: UriMatchType?)
 
     /**
+     * Gets the value for whether or not the autofill save prompt should be disabled for the
+     * given [userId].
+     */
+    fun getAutofillSavePromptDisabled(userId: String): Boolean?
+
+    /**
+     * Stores the given [isAutofillSavePromptDisabled] for the given [userId].
+     */
+    fun storeAutofillSavePromptDisabled(
+        userId: String,
+        isAutofillSavePromptDisabled: Boolean?,
+    )
+
+    /**
      * Gets the current state of the pull to refresh feature for the given [userId].
      */
     fun getPullToRefreshEnabled(userId: String): Boolean?

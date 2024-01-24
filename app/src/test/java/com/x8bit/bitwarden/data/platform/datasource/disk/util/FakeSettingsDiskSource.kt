@@ -38,6 +38,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
     private val storedUriMatchTypes = mutableMapOf<String, UriMatchType?>()
+    private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
@@ -76,6 +77,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedVaultTimeoutActions.remove(userId)
         storedVaultTimeoutInMinutes.remove(userId)
         storedUriMatchTypes.remove(userId)
+        storedDisableAutofillSavePrompt.remove(userId)
         storedPullToRefreshEnabled.remove(userId)
         storedInlineAutofillEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
@@ -134,6 +136,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         uriMatchType: UriMatchType?,
     ) {
         storedUriMatchTypes[userId] = uriMatchType
+    }
+
+    override fun getAutofillSavePromptDisabled(userId: String): Boolean? =
+        storedDisableAutofillSavePrompt[userId]
+
+    override fun storeAutofillSavePromptDisabled(
+        userId: String,
+        isAutofillSavePromptDisabled: Boolean?,
+    ) {
+        storedDisableAutofillSavePrompt[userId] = isAutofillSavePromptDisabled
     }
 
     override fun getPullToRefreshEnabled(userId: String): Boolean? =

@@ -23,6 +23,7 @@ private const val VAULT_LAST_SYNC_TIME = "$BASE_KEY:vaultLastSyncTime"
 private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
 private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
 private const val DEFAULT_URI_MATCH_TYPE_KEY = "$BASE_KEY:defaultUriMatch"
+private const val DISABLE_AUTOFILL_SAVE_PROMPT_KEY = "$BASE_KEY:autofillDisableSavePrompt"
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
 private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "$BASE_KEY:approvePasswordlessLogins"
 
@@ -97,6 +98,7 @@ class SettingsDiskSourceImpl(
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
         storeVaultTimeoutAction(userId = userId, vaultTimeoutAction = null)
         storeDefaultUriMatchType(userId = userId, uriMatchType = null)
+        storeAutofillSavePromptDisabled(userId = userId, isAutofillSavePromptDisabled = null)
         storePullToRefreshEnabled(userId = userId, isPullToRefreshEnabled = null)
         storeInlineAutofillEnabled(userId = userId, isInlineAutofillEnabled = null)
         storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
@@ -172,6 +174,19 @@ class SettingsDiskSourceImpl(
         putInt(
             key = "${DEFAULT_URI_MATCH_TYPE_KEY}_$userId",
             value = uriMatchType?.value,
+        )
+    }
+
+    override fun getAutofillSavePromptDisabled(userId: String): Boolean? =
+        getBoolean(key = "${DISABLE_AUTOFILL_SAVE_PROMPT_KEY}_$userId")
+
+    override fun storeAutofillSavePromptDisabled(
+        userId: String,
+        isAutofillSavePromptDisabled: Boolean?,
+    ) {
+        putBoolean(
+            key = "${DISABLE_AUTOFILL_SAVE_PROMPT_KEY}_$userId",
+            value = isAutofillSavePromptDisabled,
         )
     }
 

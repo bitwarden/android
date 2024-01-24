@@ -163,6 +163,18 @@ class SettingsRepositoryImpl(
             )
         }
 
+    override var isAutofillSavePromptDisabled: Boolean
+        get() = activeUserId
+            ?.let { settingsDiskSource.getAutofillSavePromptDisabled(userId = it) }
+            ?: false
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeAutofillSavePromptDisabled(
+                userId = userId,
+                isAutofillSavePromptDisabled = value,
+            )
+        }
+
     override var blockedAutofillUris: List<String>
         get() = activeUserId
             ?.let { settingsDiskSource.getBlockedAutofillUris(userId = it) }
