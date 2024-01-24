@@ -60,6 +60,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private var onNavigateQrCodeScanScreenCalled = false
     private var onNavigateToManualCodeEntryScreenCalled = false
     private var onNavigateToGeneratorModalType: GeneratorMode.Modal? = null
+    private var onNavigateToAttachmentsId: String? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultAddEditEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE_LOGIN)
@@ -76,13 +77,12 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             VaultAddEditScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToQrCodeScanScreen = {
-                    onNavigateQrCodeScanScreenCalled = true
-                },
+                onNavigateToQrCodeScanScreen = { onNavigateQrCodeScanScreenCalled = true },
                 onNavigateToManualCodeEntryScreen = {
                     onNavigateToManualCodeEntryScreenCalled = true
                 },
                 onNavigateToGeneratorModal = { onNavigateToGeneratorModalType = it },
+                onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 viewModel = viewModel,
                 permissionsManager = fakePermissionManager,
             )
@@ -118,6 +118,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
         )
         assertEquals(GeneratorMode.Modal.Password, onNavigateToGeneratorModalType)
+    }
+
+    @Test
+    fun `on NavigateToAttachments event should invoke onNavigateToAttachments`() {
+        val cipherId = "cipherId-1234"
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToAttachments(cipherId))
+        assertEquals(cipherId, onNavigateToAttachmentsId)
     }
 
     @Suppress("MaxLineLength")

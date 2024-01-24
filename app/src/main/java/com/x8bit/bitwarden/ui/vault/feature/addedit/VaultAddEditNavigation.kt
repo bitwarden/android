@@ -47,6 +47,7 @@ fun NavGraphBuilder.vaultAddEditDestination(
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToQrCodeScanScreen: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
+    onNavigateToAttachments: (cipherId: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = ADD_EDIT_ITEM_ROUTE,
@@ -59,6 +60,7 @@ fun NavGraphBuilder.vaultAddEditDestination(
             onNavigateToManualCodeEntryScreen = onNavigateToManualCodeEntryScreen,
             onNavigateToQrCodeScanScreen = onNavigateToQrCodeScanScreen,
             onNavigateToGeneratorModal = onNavigateToGeneratorModal,
+            onNavigateToAttachments = onNavigateToAttachments,
         )
     }
 }

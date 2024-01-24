@@ -141,6 +141,7 @@ class VaultAddEditViewModel @Inject constructor(
                 handleToggleMasterPasswordReprompt(action)
             }
 
+            is VaultAddEditAction.Common.AttachmentsClick -> handleAttachmentsClick()
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
@@ -255,6 +256,10 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun handleAttachmentsClick() {
+        onEdit { sendEvent(VaultAddEditEvent.NavigateToAttachments(it.vaultItemId)) }
     }
 
     private fun handleCloseClick() {
@@ -1007,6 +1012,12 @@ class VaultAddEditViewModel @Inject constructor(
         (state.viewState as? VaultAddEditState.ViewState.Content)?.let(block)
     }
 
+    private inline fun onEdit(
+        crossinline block: (VaultAddEditType.EditItem) -> Unit,
+    ) {
+        (state.vaultAddEditType as? VaultAddEditType.EditItem)?.let(block)
+    }
+
     private inline fun updateContent(
         crossinline block: (
             VaultAddEditState.ViewState.Content,
@@ -1425,6 +1436,13 @@ sealed class VaultAddEditEvent {
     data object NavigateBack : VaultAddEditEvent()
 
     /**
+     * Navigate to attachments screen.
+     */
+    data class NavigateToAttachments(
+        val cipherId: String,
+    ) : VaultAddEditEvent()
+
+    /**
      * Navigate to the QR code scan screen.
      */
     data object NavigateToQrCodeScan : VaultAddEditEvent()
@@ -1467,6 +1485,11 @@ sealed class VaultAddEditAction {
          * The user has clicked to dismiss the dialog.
          */
         data object DismissDialog : Common()
+
+        /**
+         * The user has clicked the attachments overflow option.
+         */
+        data object AttachmentsClick : Common()
 
         /**
          * Represents the action when a type option is selected.
