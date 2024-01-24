@@ -24,12 +24,18 @@ interface IdentityApi {
         @Field(value = "client_id") clientId: String,
         @Field(value = "username") email: String,
         @Header(value = "auth-email") authEmail: String,
-        @Field(value = "password") passwordHash: String,
+        @Field(value = "password") passwordHash: String?,
         @Field(value = "deviceIdentifier") deviceIdentifier: String,
         @Field(value = "deviceName") deviceName: String,
         @Field(value = "deviceType") deviceType: String,
         @Field(value = "grant_type") grantType: String,
         @Field(value = "captchaResponse") captchaResponse: String?,
+        @Field(value = "code") ssoCode: String?,
+        @Field(value = "code_verifier") ssoCodeVerifier: String?,
+        @Field(value = "redirect_uri") ssoRedirectUri: String?,
+        @Field(value = "twoFactorToken") twoFactorCode: String?,
+        @Field(value = "twoFactorProvider") twoFactorMethod: String?,
+        @Field(value = "twoFactorRemember") twoFactorRemember: String?,
     ): Result<GetTokenResponseJson.Success>
 
     @GET("/account/prevalidate")
