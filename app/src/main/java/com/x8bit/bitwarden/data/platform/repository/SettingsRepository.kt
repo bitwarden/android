@@ -76,6 +76,11 @@ interface SettingsRepository {
     var isInlineAutofillEnabled: Boolean
 
     /**
+     * Whether or not the autofill save prompt is disabled for the current user.
+     */
+    var isAutofillSavePromptDisabled: Boolean
+
+    /**
      * A list of blocked autofill URI's for the current user.
      */
     var blockedAutofillUris: List<String>

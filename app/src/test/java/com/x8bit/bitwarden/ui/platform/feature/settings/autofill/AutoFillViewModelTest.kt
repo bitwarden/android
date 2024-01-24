@@ -22,6 +22,8 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     private val settingsRepository: SettingsRepository = mockk() {
         every { isInlineAutofillEnabled } returns true
         every { isInlineAutofillEnabled = any() } just runs
+        every { isAutofillSavePromptDisabled } returns true
+        every { isAutofillSavePromptDisabled = any() } just runs
         every { defaultUriMatchType } returns UriMatchType.DOMAIN
         every { defaultUriMatchType = any() } just runs
         every { isAutofillEnabledStateFlow } returns mutableIsAutofillEnabledStateFlow
@@ -66,16 +68,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on AskToAddLoginClick should emit ShowToast`() = runTest {
+    fun `on AskToAddLoginClick should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AutoFillAction.AskToAddLoginClick(true))
-            assertEquals(AutoFillEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
-        }
+        viewModel.trySendAction(AutoFillAction.AskToAddLoginClick(true))
         assertEquals(
             DEFAULT_STATE.copy(isAskToAddLoginEnabled = true),
             viewModel.stateFlow.value,
         )
+        // The UI enables the value, so the value gets flipped to save it as a "disabled" value.
+        verify { settingsRepository.isAutofillSavePromptDisabled = false }
     }
 
     @Test

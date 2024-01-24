@@ -29,7 +29,7 @@ class AutoFillViewModel @Inject constructor(
 ) : BaseViewModel<AutoFillState, AutoFillEvent, AutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: AutoFillState(
-            isAskToAddLoginEnabled = false,
+            isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
             isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
             isCopyTotpAutomaticallyEnabled = false,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
@@ -65,8 +65,7 @@ class AutoFillViewModel @Inject constructor(
     }
 
     private fun handleAskToAddLoginClick(action: AutoFillAction.AskToAddLoginClick) {
-        // TODO BIT-1092: Persist selection
-        sendEvent(AutoFillEvent.ShowToast("Not yet implemented.".asText()))
+        settingsRepository.isAutofillSavePromptDisabled = !action.isEnabled
         mutableStateFlow.update { it.copy(isAskToAddLoginEnabled = action.isEnabled) }
     }
 

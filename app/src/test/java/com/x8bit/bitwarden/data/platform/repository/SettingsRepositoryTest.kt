@@ -444,6 +444,24 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isAutofillSavePromptDisabled should pull from and update SettingsDiskSource`() {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertFalse(settingsRepository.isAutofillSavePromptDisabled)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.storeAutofillSavePromptDisabled(
+            userId = userId,
+            isAutofillSavePromptDisabled = true,
+        )
+        assertTrue(settingsRepository.isAutofillSavePromptDisabled)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.isAutofillSavePromptDisabled = false
+        assertFalse(fakeSettingsDiskSource.getAutofillSavePromptDisabled(userId = userId)!!)
+    }
+
+    @Test
     fun `blockedAutofillUris should pull from and update SettingsDiskSource`() {
         val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE

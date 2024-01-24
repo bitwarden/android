@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
+@Suppress("LargeClass")
 class SettingsDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
     private val json = PlatformNetworkModule.providesJson()
@@ -79,6 +80,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             uriMatchType = UriMatchType.REGULAR_EXPRESSION,
         )
+        settingsDiskSource.storeAutofillSavePromptDisabled(
+            userId = userId,
+            isAutofillSavePromptDisabled = true,
+        )
         settingsDiskSource.storePullToRefreshEnabled(
             userId = userId,
             isPullToRefreshEnabled = true,
@@ -105,6 +110,7 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
         assertNull(settingsDiskSource.getVaultTimeoutAction(userId = userId))
         assertNull(settingsDiskSource.getDefaultUriMatchType(userId = userId))
+        assertNull(settingsDiskSource.getAutofillSavePromptDisabled(userId = userId))
         assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = userId))
         assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = userId))
         assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
@@ -443,6 +449,50 @@ class SettingsDiskSourceTest {
             uriMatchType = null,
         )
         assertFalse(fakeSharedPreferences.contains(defaultUriMatchTypeKey))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAutofillSavePromptDisabled when values are present should pull from SharedPreferences`() {
+        val disableAutofillSavePromptBaseKey = "bwPreferencesStorage:autofillDisableSavePrompt"
+        val mockUserId = "mockUserId"
+        val disableAutofillSavePromptKey = "${disableAutofillSavePromptBaseKey}_$mockUserId"
+        fakeSharedPreferences
+            .edit {
+                putBoolean(disableAutofillSavePromptKey, true)
+            }
+        assertEquals(true, settingsDiskSource.getAutofillSavePromptDisabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `getAutofillSavePromptDisabled when values are absent should return null`() {
+        val mockUserId = "mockUserId"
+        assertNull(settingsDiskSource.getAutofillSavePromptDisabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `storeAutofillSavePromptDisabled for non-null values should update SharedPreferences`() {
+        val disableAutofillSavePromptBaseKey = "bwPreferencesStorage:autofillDisableSavePrompt"
+        val mockUserId = "mockUserId"
+        val disableAutofillSavePromptKey = "${disableAutofillSavePromptBaseKey}_$mockUserId"
+        settingsDiskSource.storeAutofillSavePromptDisabled(
+            userId = mockUserId,
+            isAutofillSavePromptDisabled = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(disableAutofillSavePromptKey, false))
+    }
+
+    @Test
+    fun `storeAutofillSavePromptDisabled for null values should clear SharedPreferences`() {
+        val disableAutofillSavePromptBaseKey = "bwPreferencesStorage:autofillDisableSavePrompt"
+        val mockUserId = "mockUserId"
+        val disableAutofillSavePromptKey = "${disableAutofillSavePromptBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(disableAutofillSavePromptKey, false) }
+        settingsDiskSource.storeAutofillSavePromptDisabled(
+            userId = mockUserId,
+            isAutofillSavePromptDisabled = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(disableAutofillSavePromptKey))
     }
 
     @Test
