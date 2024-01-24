@@ -32,6 +32,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToFolders: () -> Unit,
+    onNavigateToPendingRequests: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
 ) {
     composableWithStayTransitions(
@@ -47,6 +48,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToEditSend = onNavigateToEditSend,
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
             onNavigateToFolders = onNavigateToFolders,
+            onNavigateToPendingRequests = onNavigateToPendingRequests,
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
         )
     }

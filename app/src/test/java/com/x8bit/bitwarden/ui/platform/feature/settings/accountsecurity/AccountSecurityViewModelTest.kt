@@ -115,12 +115,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on PendingLoginRequestsClick should emit ShowToast`() = runTest {
+    fun `on PendingLoginRequestsClick should emit NavigateToPendingRequests`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick)
             assertEquals(
-                AccountSecurityEvent.ShowToast("Not yet implemented.".asText()),
+                AccountSecurityEvent.NavigateToPendingRequests,
                 awaitItem(),
             )
         }

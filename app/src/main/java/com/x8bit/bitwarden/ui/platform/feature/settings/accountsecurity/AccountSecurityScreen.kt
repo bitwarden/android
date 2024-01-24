@@ -70,6 +70,7 @@ private const val MINUTES_PER_HOUR = 60
 fun AccountSecurityScreen(
     onNavigateBack: () -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
+    onNavigateToPendingRequests: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
@@ -90,6 +91,8 @@ fun AccountSecurityScreen(
             AccountSecurityEvent.NavigateToFingerprintPhrase -> {
                 intentManager.launchUri("http://bitwarden.com/help/fingerprint-phrase".toUri())
             }
+
+            AccountSecurityEvent.NavigateToPendingRequests -> onNavigateToPendingRequests()
 
             is AccountSecurityEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()

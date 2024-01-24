@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.navigateToDeleteAccount
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.navigateToPendingRequests
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.pendingRequestsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
@@ -74,9 +76,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToAddSend = { navController.navigateToAddSend(AddSendType.AddItem) },
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
+            onNavigateToPendingRequests = { navController.navigateToPendingRequests() },
             onNavigateToPasswordHistory = { navController.navigateToPasswordHistory() },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
+        pendingRequestsDestination(onNavigateBack = { navController.popBackStack() })
         vaultAddEditDestination(
             onNavigateToQrCodeScanScreen = {
                 navController.navigateToQrCodeScanScreen()

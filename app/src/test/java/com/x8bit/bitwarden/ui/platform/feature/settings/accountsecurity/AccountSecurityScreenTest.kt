@@ -41,6 +41,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToDeleteAccountCalled = false
+    private var onNavigateToPendingRequestsCalled = false
 
     private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
@@ -61,6 +62,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             AccountSecurityScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
+                onNavigateToPendingRequests = { onNavigateToPendingRequestsCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
                 permissionsManager = permissionsManager,
@@ -1100,9 +1102,15 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToDeleteAccount should call onNavigateToDeleteAccountCalled`() {
+    fun `on NavigateToDeleteAccount should call onNavigateToDeleteAccount`() {
         mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToDeleteAccount)
         assertTrue(onNavigateToDeleteAccountCalled)
+    }
+
+    @Test
+    fun `on NavigateToPendingRequests should call onNavigateToPendingRequests`() {
+        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToPendingRequests)
+        assertTrue(onNavigateToPendingRequestsCalled)
     }
 
     @Test

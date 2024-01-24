@@ -144,8 +144,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handlePendingLoginRequestsClick() {
-        // TODO BIT-466: Implement pending login requests UI
-        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
+        sendEvent(AccountSecurityEvent.NavigateToPendingRequests)
     }
 
     private fun handleVaultTimeoutTypeSelect(action: AccountSecurityAction.VaultTimeoutTypeSelect) {
@@ -295,6 +294,11 @@ sealed class AccountSecurityEvent {
      * Navigate to fingerprint phrase information.
      */
     data object NavigateToFingerprintPhrase : AccountSecurityEvent()
+
+    /**
+     * Navigate to the Pending Login Requests screen.
+     */
+    data object NavigateToPendingRequests : AccountSecurityEvent()
 
     /**
      * Displays a toast with the given [Text].
