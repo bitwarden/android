@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
+import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
@@ -194,7 +195,10 @@ class AuthRepositoryImpl(
             identityService.getToken(
                 uniqueAppId = authDiskSource.uniqueAppId,
                 email = email,
-                passwordHash = passwordHash,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = email,
+                    password = passwordHash,
+                ),
                 captchaToken = captchaToken,
             )
         }

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
@@ -444,7 +445,10 @@ class AuthRepositoryTest {
         coEvery {
             identityService.getToken(
                 email = EMAIL,
-                passwordHash = PASSWORD_HASH,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
@@ -457,7 +461,10 @@ class AuthRepositoryTest {
         coVerify {
             identityService.getToken(
                 email = EMAIL,
-                passwordHash = PASSWORD_HASH,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
@@ -472,7 +479,10 @@ class AuthRepositoryTest {
         coEvery {
             identityService.getToken(
                 email = EMAIL,
-                passwordHash = PASSWORD_HASH,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
@@ -491,7 +501,10 @@ class AuthRepositoryTest {
         coVerify {
             identityService.getToken(
                 email = EMAIL,
-                passwordHash = PASSWORD_HASH,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
@@ -509,7 +522,10 @@ class AuthRepositoryTest {
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
-                    passwordHash = PASSWORD_HASH,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
@@ -548,7 +564,10 @@ class AuthRepositoryTest {
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
-                    passwordHash = PASSWORD_HASH,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
@@ -587,7 +606,10 @@ class AuthRepositoryTest {
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
-                    passwordHash = PASSWORD_HASH,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
@@ -628,7 +650,10 @@ class AuthRepositoryTest {
             coVerify {
                 identityService.getToken(
                     email = EMAIL,
-                    passwordHash = PASSWORD_HASH,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
@@ -658,7 +683,10 @@ class AuthRepositoryTest {
         coEvery {
             identityService.getToken(
                 email = EMAIL,
-                passwordHash = PASSWORD_HASH,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
@@ -671,7 +699,10 @@ class AuthRepositoryTest {
         coVerify {
             identityService.getToken(
                 email = EMAIL,
-                passwordHash = PASSWORD_HASH,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )

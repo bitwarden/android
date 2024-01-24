@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForResult
@@ -21,8 +23,9 @@ class IdentityServiceImpl constructor(
     override suspend fun getToken(
         uniqueAppId: String,
         email: String,
-        passwordHash: String,
+        authModel: IdentityTokenAuthModel,
         captchaToken: String?,
+        twoFactorData: TwoFactorDataModel?,
     ): Result<GetTokenResponseJson> = api
         .getToken(
             scope = "api+offline_access",
@@ -31,9 +34,15 @@ class IdentityServiceImpl constructor(
             deviceIdentifier = uniqueAppId,
             deviceName = deviceModelProvider.deviceModel,
             deviceType = "0",
-            grantType = "password",
-            passwordHash = passwordHash,
+            grantType = authModel.grantType,
+            passwordHash = authModel.password,
             email = email,
+            ssoCode = authModel.ssoCode,
+            ssoCodeVerifier = authModel.ssoCodeVerifier,
+            ssoRedirectUri = authModel.ssoRedirectUri,
+            twoFactorCode = twoFactorData?.code,
+            twoFactorMethod = twoFactorData?.method,
+            twoFactorRemember = twoFactorData?.remember?.let { if (it) "1" else "0 " },
             captchaResponse = captchaToken,
         )
         .recoverCatching { throwable ->
