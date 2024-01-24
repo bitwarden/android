@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
@@ -21,6 +22,8 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     private val settingsRepository: SettingsRepository = mockk() {
         every { isInlineAutofillEnabled } returns true
         every { isInlineAutofillEnabled = any() } just runs
+        every { defaultUriMatchType } returns UriMatchType.DOMAIN
+        every { defaultUriMatchType = any() } just runs
         every { isAutofillEnabledStateFlow } returns mutableIsAutofillEnabledStateFlow
         every { disableAutofill() } just runs
     }
@@ -36,7 +39,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         mutableIsAutofillEnabledStateFlow.value = true
         val state = DEFAULT_STATE.copy(
             isAutoFillServicesEnabled = true,
-            uriDetectionMethod = AutoFillState.UriDetectionMethod.REGULAR_EXPRESSION,
+            uriDetectionMethod = UriMatchType.REGULAR_EXPRESSION,
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
@@ -140,17 +143,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on UriDetectionMethodSelect should emit ShowToast`() = runTest {
+    fun `on UriDetectionMethodSelect should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
-        val method = AutoFillState.UriDetectionMethod.EXACT
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AutoFillAction.UriDetectionMethodSelect(method))
-            assertEquals(AutoFillEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
-        }
+        val method = UriMatchType.EXACT
+        viewModel.trySendAction(AutoFillAction.UriDetectionMethodSelect(method))
         assertEquals(
             DEFAULT_STATE.copy(uriDetectionMethod = method),
             viewModel.stateFlow.value,
         )
+        verify { settingsRepository.defaultUriMatchType = method }
     }
 
     @Test
@@ -175,5 +176,5 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = true,
-    uriDetectionMethod = AutoFillState.UriDetectionMethod.DEFAULT,
+    uriDetectionMethod = UriMatchType.DOMAIN,
 )

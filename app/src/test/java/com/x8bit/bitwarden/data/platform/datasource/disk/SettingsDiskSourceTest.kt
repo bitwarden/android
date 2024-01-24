@@ -4,6 +4,7 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -74,6 +75,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             vaultTimeoutAction = VaultTimeoutAction.LOCK,
         )
+        settingsDiskSource.storeDefaultUriMatchType(
+            userId = userId,
+            uriMatchType = UriMatchType.REGULAR_EXPRESSION,
+        )
         settingsDiskSource.storePullToRefreshEnabled(
             userId = userId,
             isPullToRefreshEnabled = true,
@@ -99,6 +104,7 @@ class SettingsDiskSourceTest {
 
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
         assertNull(settingsDiskSource.getVaultTimeoutAction(userId = userId))
+        assertNull(settingsDiskSource.getDefaultUriMatchType(userId = userId))
         assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = userId))
         assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = userId))
         assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
@@ -377,6 +383,66 @@ class SettingsDiskSourceTest {
             vaultTimeoutAction = null,
         )
         assertNull(fakeSharedPreferences.getString(vaultTimeoutActionKey, null))
+    }
+
+    @Test
+    fun `getDefaultUriMatchType when values are present should pull from SharedPreferences`() {
+        val defaultUriMatchTypeBaseKey = "bwPreferencesStorage:defaultUriMatch"
+        val mockUserId = "mockUserId"
+        val uriMatchType = UriMatchType.REGULAR_EXPRESSION
+        fakeSharedPreferences
+            .edit {
+                putInt(
+                    "${defaultUriMatchTypeBaseKey}_$mockUserId",
+                    3,
+                )
+            }
+        val actual = settingsDiskSource.getDefaultUriMatchType(userId = mockUserId)
+        assertEquals(
+            uriMatchType,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getDefaultUriMatchType when values are absent should return null`() {
+        val mockUserId = "mockUserId"
+        assertNull(settingsDiskSource.getDefaultUriMatchType(userId = mockUserId))
+    }
+
+    @Test
+    fun `storeDefaultUriMatchType for non-null values should update SharedPreferences`() {
+        val defaultUriMatchTypeBaseKey = "bwPreferencesStorage:defaultUriMatch"
+        val mockUserId = "mockUserId"
+        val uriMatchType = UriMatchType.REGULAR_EXPRESSION
+        settingsDiskSource.storeDefaultUriMatchType(
+            userId = mockUserId,
+            uriMatchType = uriMatchType,
+        )
+        val actual = fakeSharedPreferences.getInt(
+            "${defaultUriMatchTypeBaseKey}_$mockUserId",
+            0,
+        )
+        assertEquals(
+            3,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeDefaultUriMatchType for null values should clear SharedPreferences`() {
+        val defaultUriMatchTypeBaseKey = "bwPreferencesStorage:defaultUriMatch"
+        val mockUserId = "mockUserId"
+        val defaultUriMatchTypeKey = "${defaultUriMatchTypeBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit {
+            putInt(defaultUriMatchTypeKey, 3)
+        }
+        assertTrue(fakeSharedPreferences.contains(defaultUriMatchTypeKey))
+        settingsDiskSource.storeDefaultUriMatchType(
+            userId = mockUserId,
+            uriMatchType = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(defaultUriMatchTypeKey))
     }
 
     @Test

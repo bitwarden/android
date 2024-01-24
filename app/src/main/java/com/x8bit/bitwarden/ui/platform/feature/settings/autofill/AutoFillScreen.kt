@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
@@ -40,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 
@@ -193,8 +195,8 @@ fun AutoFillScreen(
 
 @Composable
 private fun UriMatchDetectionDialog(
-    selectedUriDetection: AutoFillState.UriDetectionMethod,
-    onDetectionSelect: (AutoFillState.UriDetectionMethod) -> Unit,
+    selectedUriDetection: UriMatchType,
+    onDetectionSelect: (UriMatchType) -> Unit,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -205,7 +207,7 @@ private fun UriMatchDetectionDialog(
         modifier = Modifier.fillMaxWidth(),
     ) {
         Text(
-            text = selectedUriDetection.text(),
+            text = selectedUriDetection.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -216,14 +218,15 @@ private fun UriMatchDetectionDialog(
             title = stringResource(id = R.string.default_uri_match_detection),
             onDismissRequest = { shouldShowDialog = false },
         ) {
-            AutoFillState.UriDetectionMethod.values().forEach { option ->
+            val uriMatchTypes = UriMatchType.entries
+            uriMatchTypes.forEach { option ->
                 BitwardenSelectionRow(
-                    text = option.text,
+                    text = option.displayLabel,
                     isSelected = option == selectedUriDetection,
                     onClick = {
                         shouldShowDialog = false
                         onDetectionSelect(
-                            AutoFillState.UriDetectionMethod.values().first { it == option },
+                            uriMatchTypes.first { it == option },
                         )
                     },
                 )
