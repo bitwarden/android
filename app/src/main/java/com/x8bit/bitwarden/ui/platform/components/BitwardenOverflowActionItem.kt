@@ -42,6 +42,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun BitwardenOverflowActionItem(
     menuItemDataList: ImmutableList<OverflowMenuItemData> = persistentListOf(),
 ) {
+    if (menuItemDataList.isEmpty()) return
     var isOverflowMenuVisible by remember { mutableStateOf(false) }
     Box(
         contentAlignment = Alignment.Center,
