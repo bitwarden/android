@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 
@@ -156,11 +157,13 @@ private fun CipherView.toVaultItemOrNull(
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 baseIconUrl = baseIconUrl,
             ),
+            overflowOptions = toOverflowActions(),
         )
 
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
             id = id,
             name = name.asText(),
+            overflowOptions = toOverflowActions(),
         )
 
         CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
@@ -170,12 +173,14 @@ private fun CipherView.toVaultItemOrNull(
             lastFourDigits = card?.number
                 ?.takeLast(4)
                 ?.asText(),
+            overflowOptions = toOverflowActions(),
         )
 
         CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
             id = id,
             name = name.asText(),
             firstName = identity?.firstName?.asText(),
+            overflowOptions = toOverflowActions(),
         )
     }
 }

@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
@@ -37,6 +39,10 @@ import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class VaultViewModelTest : BaseViewModelTest() {
+
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(any<String>()) } just runs
+    }
 
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
     private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
@@ -1055,8 +1061,133 @@ class VaultViewModelTest : BaseViewModelTest() {
         assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
     }
 
+    @Test
+    fun `OverflowOptionClick Vault CopyNoteClick should call setText on the ClipboardManager`() =
+        runTest {
+            val notes = "notes"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(notes)
+            }
+        }
+
+    @Test
+    fun `OverflowOptionClick Vault CopyNumberClick should call setText on the ClipboardManager`() =
+        runTest {
+            val number = "12345-4321-9876-6789"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(number)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
+        runTest {
+            val password = "passTheWord"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(password)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopySecurityCodeClick should call setText on the ClipboardManager`() =
+        runTest {
+            val securityCode = "234"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        securityCode = securityCode,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(securityCode)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyUsernameClick should call setText on the ClipboardManager`() =
+        runTest {
+            val username = "bitwarden"
+            val viewModel = createViewModel()
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyUsernameClick(
+                        username = username,
+                    ),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(username)
+            }
+        }
+
+    @Test
+    fun `OverflowOptionClick Vault EditClick should emit NavigateToEditVaultItem`() = runTest {
+        val cipherId = "cipherId-1234"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
+                ),
+            )
+            assertEquals(VaultEvent.NavigateToEditVaultItem(cipherId), awaitItem())
+        }
+    }
+
+    @Test
+    fun `OverflowOptionClick Vault LaunchClick should emit NavigateToUrl`() = runTest {
+        val url = "www.test.com"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.LaunchClick(url = url),
+                ),
+            )
+            assertEquals(VaultEvent.NavigateToUrl(url), awaitItem())
+        }
+    }
+
+    @Test
+    fun `OverflowOptionClick Vault ViewClick should emit NavigateToUrl`() = runTest {
+        val cipherId = "cipherId-9876"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
+                ),
+            )
+            assertEquals(VaultEvent.NavigateToVaultItem(cipherId), awaitItem())
+        }
+    }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
+            clipboardManager = clipboardManager,
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,

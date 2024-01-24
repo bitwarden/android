@@ -79,6 +79,8 @@ fun VaultContent(
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
+                    overflowOptions = favoriteItem.overflowOptions,
+                    onOverflowOptionClick = vaultHandlers.overflowOptionClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
@@ -227,12 +229,13 @@ fun VaultContent(
                 )
             }
             items(state.noFolderItems) { noFolderItem ->
-
                 VaultEntryListItem(
                     startIcon = noFolderItem.startIcon,
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(noFolderItem) },
+                    overflowOptions = noFolderItem.overflowOptions,
+                    onOverflowOptionClick = vaultHandlers.overflowOptionClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
