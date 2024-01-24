@@ -64,7 +64,7 @@ fun AddSendScreen(
     val context = LocalContext.current
     val resources = context.resources
 
-    val fileChooserLauncher = intentManager.launchActivityForResult { activityResult ->
+    val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)?.let {
             addSendHandlers.onFileChoose(it)
         }

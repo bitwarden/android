@@ -56,7 +56,7 @@ class IntentManagerImpl(
     }
 
     @Composable
-    override fun launchActivityForResult(
+    override fun getActivityResultLauncher(
         onResult: (ActivityResult) -> Unit,
     ): ManagedActivityResultLauncher<Intent, ActivityResult> =
         rememberLauncherForActivityResult(
