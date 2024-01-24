@@ -557,6 +557,12 @@
             </Keyboard>
         </Setter>
     </Style>
+    <Style TargetType="InputView"
+           Class="no-keyboard-auto-help"
+           ApplyToDerivedTypes="True">
+        <Setter Property="IsSpellCheckEnabled" Value="False" />
+        <Setter Property="IsTextPredictionEnabled" Value="False" />
+    </Style>
     
     <Style TargetType="controls:CircularProgressbarView">
         <Setter Property="ProgressColor"
