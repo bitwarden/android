@@ -39,7 +39,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         mutableIsAutofillEnabledStateFlow.value = true
         val state = DEFAULT_STATE.copy(
             isAutoFillServicesEnabled = true,
-            uriDetectionMethod = UriMatchType.REGULAR_EXPRESSION,
+            defaultUriMatchType = UriMatchType.REGULAR_EXPRESSION,
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
@@ -142,13 +142,14 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         verify { settingsRepository.isInlineAutofillEnabled = false }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on UriDetectionMethodSelect should update the state and save the new value to settings`() {
+    fun `on DefaultUriMatchTypeSelect should update the state and save the new value to settings`() {
         val viewModel = createViewModel()
         val method = UriMatchType.EXACT
-        viewModel.trySendAction(AutoFillAction.UriDetectionMethodSelect(method))
+        viewModel.trySendAction(AutoFillAction.DefaultUriMatchTypeSelect(method))
         assertEquals(
-            DEFAULT_STATE.copy(uriDetectionMethod = method),
+            DEFAULT_STATE.copy(defaultUriMatchType = method),
             viewModel.stateFlow.value,
         )
         verify { settingsRepository.defaultUriMatchType = method }
@@ -176,5 +177,5 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = true,
-    uriDetectionMethod = UriMatchType.DOMAIN,
+    defaultUriMatchType = UriMatchType.DOMAIN,
 )
