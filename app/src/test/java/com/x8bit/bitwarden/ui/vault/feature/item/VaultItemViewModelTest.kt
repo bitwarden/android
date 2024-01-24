@@ -503,6 +503,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+        @Test
+        fun `on CollectionsClick should emit NavigateToCollections`() = runTest {
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(VaultItemAction.Common.CollectionsClick)
+                assertEquals(
+                    VaultItemEvent.NavigateToCollections(itemId = VAULT_ITEM_ID),
+                    awaitItem(),
+                )
+            }
+        }
     }
 
     @Nested

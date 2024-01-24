@@ -838,6 +838,114 @@ class VaultItemScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultItemAction.Common.MoveToOrganizationClick)
         }
     }
+
+    @Test
+    fun `Collections menu click should send CollectionsClick action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(currentCipher = createMockCipherView(1)),
+                    ),
+            )
+        }
+        // Confirm dropdown version of item is absent
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+        // Click on the move to organization hint item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onNode(isPopup())
+            .assertDoesNotExist()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.CollectionsClick)
+        }
+    }
+
+    @Test
+    fun `Menu should display correct items when cipher is in a collection`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(currentCipher = createMockCipherView(1)),
+                    ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Attachments")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("Clone")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `Menu should display correct items when cipher is not in a collection`() {
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Attachments")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Clone")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Move to Organization")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Collections")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertDoesNotExist()
+    }
     //endregion common
 
     //region login

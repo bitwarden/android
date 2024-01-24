@@ -102,6 +102,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.AttachmentsClick -> handleAttachmentsClick()
             is VaultItemAction.Common.CloneClick -> handleCloneClick()
             is VaultItemAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
+            is VaultItemAction.Common.CollectionsClick -> handleCollectionsClick()
             is VaultItemAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultItemAction.Common.ConfirmRestoreClick -> handleConfirmRestoreClick()
         }
@@ -219,6 +220,10 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleMoveToOrganizationClick() {
         sendEvent(VaultItemEvent.NavigateToMoveToOrganization(itemId = state.vaultItemId))
+    }
+
+    private fun handleCollectionsClick() {
+        sendEvent(VaultItemEvent.NavigateToCollections(itemId = state.vaultItemId))
     }
 
     private fun handleConfirmDeleteClick() {
@@ -660,6 +665,17 @@ data class VaultItemState(
         get() = viewState is ViewState.Content && !isCipherDeleted
 
     /**
+     * Whether or not the cipher is in a collection.
+     */
+    val isCipherInCollection: Boolean
+        get() = (viewState as? ViewState.Content)
+            ?.common
+            ?.currentCipher
+            ?.collectionIds
+            ?.isNotEmpty()
+            ?: false
+
+    /**
      * Represents the specific view states for the [VaultItemScreen].
      */
     sealed class ViewState : Parcelable {
@@ -937,6 +953,13 @@ sealed class VaultItemEvent {
     ) : VaultItemEvent()
 
     /**
+     * Navigates to the collections screen.
+     */
+    data class NavigateToCollections(
+        val itemId: String,
+    ) : VaultItemEvent()
+
+    /**
      * Places the given [message] in your clipboard.
      */
     data class ShowToast(
@@ -1028,6 +1051,11 @@ sealed class VaultItemAction {
          * The user has clicked the move to organization button.
          */
         data object MoveToOrganizationClick : Common()
+
+        /**
+         * The user has clicked the collections button.
+         */
+        data object CollectionsClick : Common()
     }
 
     /**
