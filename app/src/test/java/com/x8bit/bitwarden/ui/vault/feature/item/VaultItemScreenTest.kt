@@ -57,6 +57,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToVaultEditItemId: String? = null
     private var onNavigateToMoveToOrganizationItemId: String? = null
+    private var onNavigateToAttachmentsId: String? = null
 
     private val intentManager = mockk<IntentManager>()
 
@@ -75,6 +76,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultAddEditItem = { id, _ -> onNavigateToVaultEditItemId = id },
                 onNavigateToMoveToOrganization = { onNavigateToMoveToOrganizationItemId = it },
+                onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 intentManager = intentManager,
             )
         }
@@ -93,6 +95,13 @@ class VaultItemScreenTest : BaseComposeTest() {
         val id = "id1234"
         mutableEventFlow.tryEmit(VaultItemEvent.NavigateToMoveToOrganization(itemId = id))
         assertEquals(id, onNavigateToMoveToOrganizationItemId)
+    }
+
+    @Test
+    fun `NavigateToMoveToOrganization event should invoke onNavigateToAttachments`() {
+        val id = "id1234"
+        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToAttachments(itemId = id))
+        assertEquals(id, onNavigateToAttachmentsId)
     }
 
     @Test

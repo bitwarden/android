@@ -162,6 +162,25 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `AttachmentsClick should emit NavigateToAttachments`() = runTest {
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(VaultAddEditAction.Common.AttachmentsClick)
+            assertEquals(
+                VaultAddEditEvent.NavigateToAttachments(DEFAULT_EDIT_ITEM_ID),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `in add mode, SaveClick should show dialog, and remove it once an item is saved`() =
         runTest {
             val stateWithDialog = createVaultAddItemState(
@@ -1526,7 +1545,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             "TestId 1",
                             "Boolean Field",
                             true,
-                        ), VaultAddEditState.Custom.BooleanField(
+                        ),
+                        VaultAddEditState.Custom.BooleanField(
                             "TestId 3",
                             "Boolean Field",
                             true,

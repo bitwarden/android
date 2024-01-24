@@ -25,12 +25,15 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -50,6 +53,7 @@ fun VaultAddEditScreen(
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
+    onNavigateToAttachments: (cipherId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -72,6 +76,8 @@ fun VaultAddEditScreen(
             is VaultAddEditEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
+
+            is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)
 
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
         }
@@ -120,6 +126,21 @@ fun VaultAddEditScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
                         },
+                    )
+                    BitwardenOverflowActionItem(
+                        menuItemDataList = persistentListOfNotNull(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.attachments),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultAddEditAction.Common.AttachmentsClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeUnless { state.isAddItemMode },
+                        ),
                     )
                 },
             )

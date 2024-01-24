@@ -62,6 +62,7 @@ fun VaultItemScreen(
     onNavigateBack: () -> Unit,
     onNavigateToVaultAddEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String) -> Unit,
+    onNavigateToAttachments: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -90,10 +91,7 @@ fun VaultItemScreen(
 
             is VaultItemEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())
 
-            is VaultItemEvent.NavigateToAttachments -> {
-                // TODO implement attachments in BIT-522
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
-            }
+            is VaultItemEvent.NavigateToAttachments -> onNavigateToAttachments(event.itemId)
 
             is VaultItemEvent.NavigateToMoveToOrganization -> {
                 onNavigateToMoveToOrganization(event.itemId)

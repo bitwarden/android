@@ -24,6 +24,8 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
+import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
+import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCodeEntryScreen
@@ -90,6 +92,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateBack = { navController.popBackStack() },
             onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
+            onNavigateToAttachments = { navController.navigateToAttachment(it) },
         )
         vaultMoveToOrganizationDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -108,6 +111,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToMoveToOrganization = {
                 navController.navigateToVaultMoveToOrganization(it)
             },
+            onNavigateToAttachments = { navController.navigateToAttachment(it) },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {
@@ -135,6 +139,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
             },
             onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
+        )
+        attachmentDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
     }
 }
