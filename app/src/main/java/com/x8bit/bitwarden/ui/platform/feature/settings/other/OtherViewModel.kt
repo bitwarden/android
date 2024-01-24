@@ -2,24 +2,34 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
+import java.time.Instant
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+
+private const val VAULT_LAST_SYNC_TIME_PATTERN: String = "M/d/yyyy h:mm a"
 
 /**
  * View model for the other screen.
  */
 @HiltViewModel
 class OtherViewModel @Inject constructor(
+    private val clock: Clock,
     private val settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
     savedStateHandle: SavedStateHandle,
@@ -29,16 +39,28 @@ class OtherViewModel @Inject constructor(
             allowScreenCapture = false,
             allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
             clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
-            lastSyncTime = "5/14/2023 4:52 PM",
+            lastSyncTime = settingsRepo
+                .vaultLastSync
+                ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock.zone)
+                .orEmpty(),
             dialogState = null,
         ),
 ) {
+    init {
+        settingsRepo
+            .vaultLastSyncStateFlow
+            .map { OtherAction.Internal.VaultLastSyncReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+    }
+
     override fun handleAction(action: OtherAction): Unit = when (action) {
         is OtherAction.AllowScreenCaptureToggle -> handleAllowScreenCaptureToggled(action)
         is OtherAction.AllowSyncToggle -> handleAllowSyncToggled(action)
         OtherAction.BackClick -> handleBackClicked()
         is OtherAction.ClearClipboardFrequencyChange -> handleClearClipboardFrequencyChanged(action)
         OtherAction.SyncNowButtonClick -> handleSyncNowButtonClicked()
+        is OtherAction.Internal -> handleInternalAction(action)
     }
 
     private fun handleAllowScreenCaptureToggled(action: OtherAction.AllowScreenCaptureToggle) {
@@ -67,8 +89,28 @@ class OtherViewModel @Inject constructor(
     }
 
     private fun handleSyncNowButtonClicked() {
-        // TODO BIT-1282 add full support and visual feedback
+        mutableStateFlow.update {
+            it.copy(dialogState = OtherState.DialogState.Loading(R.string.syncing.asText()))
+        }
         vaultRepo.sync()
+    }
+
+    private fun handleInternalAction(action: OtherAction.Internal) {
+        when (action) {
+            is OtherAction.Internal.VaultLastSyncReceive -> handleVaultDataReceive(action)
+        }
+    }
+
+    private fun handleVaultDataReceive(action: OtherAction.Internal.VaultLastSyncReceive) {
+        mutableStateFlow.update {
+            it.copy(
+                lastSyncTime = action
+                    .vaultLastSyncTime
+                    ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock.zone)
+                    .orEmpty(),
+                dialogState = null,
+            )
+        }
     }
 }
 
@@ -154,4 +196,16 @@ sealed class OtherAction {
      * Indicates that the user clicked the Sync Now button.
      */
     data object SyncNowButtonClick : OtherAction()
+
+    /**
+     * Models actions that the [OtherViewModel] itself might send.
+     */
+    sealed class Internal : OtherAction() {
+        /**
+         * Indicates last sync time of the vault has been received.
+         */
+        data class VaultLastSyncReceive(
+            val vaultLastSyncTime: Instant?,
+        ) : Internal()
+    }
 }

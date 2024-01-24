@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -14,11 +16,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class OtherViewModelTest : BaseViewModelTest() {
+    private val clock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
+    private val instant: Instant = Instant.parse("2023-10-26T12:00:00Z")
+    private val mutableVaultLastSyncStateFlow = MutableStateFlow(instant)
     private val settingsRepository = mockk<SettingsRepository> {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshStateFlow
+        every { vaultLastSyncStateFlow } returns mutableVaultLastSyncStateFlow
+        every { vaultLastSync } returns instant
     }
     private val vaultRepository = mockk<VaultRepository>()
 
@@ -104,12 +117,37 @@ class OtherViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on VaultLastSyncReceive should sync repo`() = runTest {
+        val newSyncTime = Instant.parse("2023-10-27T12:00:00Z")
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            mutableVaultLastSyncStateFlow.tryEmit(newSyncTime)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    lastSyncTime = "10/27/2023 12:00 PM",
+                    dialogState = null,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     fun `on SyncNowButtonClick should sync repo`() = runTest {
         every { vaultRepository.sync() } just runs
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
             viewModel.trySendAction(OtherAction.SyncNowButtonClick)
-            expectNoEvents()
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = OtherState.DialogState.Loading(
+                        message = R.string.syncing.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
         }
         verify { vaultRepository.sync() }
     }
@@ -117,6 +155,7 @@ class OtherViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: OtherState? = null,
     ) = OtherViewModel(
+        clock = clock,
         settingsRepo = settingsRepository,
         vaultRepo = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
@@ -129,7 +168,7 @@ class OtherViewModelTest : BaseViewModelTest() {
             allowScreenCapture = false,
             allowSyncOnRefresh = false,
             clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
-            lastSyncTime = "5/14/2023 4:52 PM",
+            lastSyncTime = "10/26/2023 12:00 PM",
             dialogState = null,
         )
     }

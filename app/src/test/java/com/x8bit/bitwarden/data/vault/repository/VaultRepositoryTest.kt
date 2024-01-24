@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -95,14 +96,20 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultRepositoryTest {
-
+    private val clock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val fileManager: FileManager = mockk()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
+    private val settingsDiskSource = mockk<SettingsDiskSource>()
     private val syncService: SyncService = mockk()
     private val sendsService: SendsService = mockk()
     private val ciphersService: CiphersService = mockk()
@@ -132,10 +139,12 @@ class VaultRepositoryTest {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
+        settingsDiskSource = settingsDiskSource,
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
         totpCodeManager = totpCodeManager,
         fileManager = fileManager,
+        clock = clock,
     )
 
     @BeforeEach
@@ -411,6 +420,9 @@ class VaultRepositoryTest {
                     userId = MOCK_USER_STATE.activeUserId,
                     vault = mockSyncResponse,
                 )
+            } just runs
+            every {
+                settingsDiskSource.storeLastSyncTime(MOCK_USER_STATE.activeUserId, clock.instant())
             } just runs
 
             vaultRepository.sync()
@@ -1050,6 +1062,9 @@ class VaultRepositoryTest {
                     userId = MOCK_USER_STATE.activeUserId,
                     vault = mockSyncResponse,
                 )
+            } just runs
+            every {
+                settingsDiskSource.storeLastSyncTime(MOCK_USER_STATE.activeUserId, clock.instant())
             } just runs
             coEvery {
                 vaultSdkSource.decryptSendList(
@@ -2216,6 +2231,9 @@ class VaultRepositoryTest {
                 userId = MOCK_USER_STATE.activeUserId,
                 vault = mockSyncResponse,
             )
+        } just runs
+        every {
+            settingsDiskSource.storeLastSyncTime(MOCK_USER_STATE.activeUserId, clock.instant())
         } just runs
 
         val stateFlow = MutableStateFlow<DataState<List<VerificationCodeItem>>>(
