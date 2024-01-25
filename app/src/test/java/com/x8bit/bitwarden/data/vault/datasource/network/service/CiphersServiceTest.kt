@@ -82,6 +82,18 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `deleteCipherAttachment should execute the deleteCipherAttachment API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val attachmentId = "attachmentId"
+        val result = ciphersService.deleteCipherAttachment(
+            cipherId = cipherId,
+            attachmentId = attachmentId,
+        )
+        assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
     fun `shareCipher should execute the share cipher API`() = runTest {
         server.enqueue(
             MockResponse()

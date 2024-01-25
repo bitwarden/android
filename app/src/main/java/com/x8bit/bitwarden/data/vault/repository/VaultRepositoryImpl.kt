@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -484,6 +485,40 @@ class VaultRepositoryImpl(
                     DeleteCipherResult.Success
                 },
                 onFailure = { DeleteCipherResult.Error },
+            )
+    }
+
+    override suspend fun deleteCipherAttachment(
+        cipherId: String,
+        attachmentId: String,
+        cipherView: CipherView,
+    ): DeleteAttachmentResult {
+        val userId = requireNotNull(activeUserId)
+        return ciphersService
+            .deleteCipherAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+            )
+            .flatMap {
+                vaultSdkSource
+                    .encryptCipher(
+                        userId = userId,
+                        cipherView = cipherView.copy(
+                            attachments = cipherView.attachments?.mapNotNull {
+                                if (it.id == attachmentId) null else it
+                            },
+                        ),
+                    )
+            }
+            .onSuccess { cipher ->
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = cipher.toEncryptedNetworkCipherResponse(),
+                )
+            }
+            .fold(
+                onSuccess = { DeleteAttachmentResult.Success },
+                onFailure = { DeleteAttachmentResult.Error },
             )
     }
 

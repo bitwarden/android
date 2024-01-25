@@ -61,6 +61,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -1699,6 +1700,77 @@ class VaultRepositoryTest {
             )
 
             assertEquals(DeleteCipherResult.Success, result)
+            unmockkStatic(Instant::class)
+            unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deleteCipherAttachment with ciphersService deleteCipherAttachment failure should return DeleteAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherId = "mockId-1"
+            val attachmentId = "mockId-1"
+            coEvery {
+                ciphersService.deleteCipherAttachment(
+                    cipherId = cipherId,
+                    attachmentId = attachmentId,
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.deleteCipherAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+                cipherView = createMockCipherView(number = 1),
+            )
+
+            assertEquals(DeleteAttachmentResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `deleteCipherAttachment with ciphersService deleteCipherAttachment success should return DeleteAttachmentResult success`() =
+        runTest {
+            mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+            every {
+                createMockSdkCipher(number = 1).toEncryptedNetworkCipherResponse()
+            } returns createMockCipher(number = 1)
+            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val attachmentId = "mockId-1"
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = createMockCipherView(number = 1).copy(
+                        attachments = emptyList(),
+                    ),
+                )
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                ciphersService.deleteCipherAttachment(
+                    cipherId = cipherId,
+                    attachmentId = attachmentId,
+                )
+            } returns Unit.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = createMockCipher(number = 1),
+                )
+            } returns Unit
+            val cipherView = createMockCipherView(number = 1)
+            mockkStatic(Instant::class)
+            every { Instant.now() } returns fixedInstant
+
+            val result = vaultRepository.deleteCipherAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(DeleteAttachmentResult.Success, result)
             unmockkStatic(Instant::class)
             unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
         }
