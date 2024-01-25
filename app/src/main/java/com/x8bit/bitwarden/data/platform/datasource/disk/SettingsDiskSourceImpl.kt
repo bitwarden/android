@@ -26,6 +26,7 @@ private const val DEFAULT_URI_MATCH_TYPE_KEY = "$BASE_KEY:defaultUriMatch"
 private const val DISABLE_AUTOFILL_SAVE_PROMPT_KEY = "$BASE_KEY:autofillDisableSavePrompt"
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
 private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "$BASE_KEY:approvePasswordlessLogins"
+private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -107,6 +108,7 @@ class SettingsDiskSourceImpl(
             isApprovePasswordlessLoginsEnabled = null,
         )
         storeLastSyncTime(userId = userId, lastSyncTime = null)
+        storeScreenCaptureAllowed(userId = userId, isScreenCaptureAllowed = null)
     }
 
     override fun getLastSyncTime(userId: String): Instant? =
@@ -269,6 +271,20 @@ class SettingsDiskSourceImpl(
         putBoolean(
             key = "${APPROVE_PASSWORDLESS_LOGINS_KEY}_$userId",
             value = isApprovePasswordlessLoginsEnabled,
+        )
+    }
+
+    override fun getScreenCaptureAllowed(userId: String): Boolean? {
+        return getBoolean(key = "${SCREEN_CAPTURE_ALLOW_KEY}_$userId")
+    }
+
+    override fun storeScreenCaptureAllowed(
+        userId: String,
+        isScreenCaptureAllowed: Boolean?,
+    ) {
+        putBoolean(
+            key = "${SCREEN_CAPTURE_ALLOW_KEY}_$userId",
+            value = isScreenCaptureAllowed,
         )
     }
 }
