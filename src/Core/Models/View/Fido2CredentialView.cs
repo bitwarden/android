@@ -43,9 +43,13 @@ namespace Bit.Core.Models.View
             set => KeyValue = value == null ? null : CoreHelpers.Base64UrlEncode(value);
         }
 
+        public bool DiscoverableValue {
+            get => bool.TryParse(Discoverable, out var discoverable) && discoverable;
+            set => Discoverable = value.ToString();
+        }
+
         public override string SubTitle => UserName;
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
-        public bool IsDiscoverable => bool.TryParse(Discoverable, out var isDiscoverable) && isDiscoverable;
         public bool CanLaunch => !string.IsNullOrEmpty(RpId);
         public string LaunchUri => $"https://{RpId}";
 

@@ -91,7 +91,7 @@ namespace Bit.Core.Test.Services
                 CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
                 CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
             ];
-            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
             aParams.RpId = "bitwarden.com";
             aParams.RequireUserVerification = false;
             aParams.AllowCredentialDescriptorList = null;
@@ -118,7 +118,7 @@ namespace Bit.Core.Test.Services
                 CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
                 CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
             ];
-            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
             aParams.RpId = "bitwarden.com";
             aParams.AllowCredentialDescriptorList = null;
             aParams.RequireUserVerification = true;
@@ -146,7 +146,7 @@ namespace Bit.Core.Test.Services
                 CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
                 CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
             ];
-            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
             aParams.RpId = "bitwarden.com";
             aParams.AllowCredentialDescriptorList = null;
             aParams.RequireUserVerification = false;
@@ -172,7 +172,7 @@ namespace Bit.Core.Test.Services
                 CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
                 CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
             ];
-            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
             aParams.RpId = "bitwarden.com";
             aParams.AllowCredentialDescriptorList = null;
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
@@ -193,7 +193,7 @@ namespace Bit.Core.Test.Services
                 CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
                 CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
             ];
-            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
             aParams.RequireUserVerification = true;
             aParams.RpId = "bitwarden.com";
             aParams.AllowCredentialDescriptorList = null;
@@ -216,7 +216,7 @@ namespace Bit.Core.Test.Services
                 CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
             ];
             ciphers[0].Reprompt = CipherRepromptType.Password;
-            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.IsDiscoverable).ToList();
+            var discoverableCiphers = ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
             aParams.RpId = "bitwarden.com";
             aParams.AllowCredentialDescriptorList = null;
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
@@ -311,7 +311,7 @@ namespace Bit.Core.Test.Services
                 Arg.Any<byte[]>(),
                 Arg.Any<byte[]>(),
                 new CryptoSignEcdsaOptions {
-                    Algorithm = CryptoSignEcdsaOptions.EcdsaAlgorithm.EcdsaP256Sha256,
+                    Algorithm = CryptoEcdsaAlgorithm.P256Sha256,
                     SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
                 }
             ).Returns(signatureMock);

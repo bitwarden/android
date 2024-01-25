@@ -228,6 +228,20 @@ namespace Bit.Core.Services
             return Task.FromResult(new Tuple<byte[], byte[]>(publicKey, privateKey));
         }
 
+        public Task<(byte[], byte[])> EcdsaGenerateKeyPairAsync(CryptoEcdsaAlgorithm algorithm)
+        {
+            if (algorithm != CryptoEcdsaAlgorithm.P256Sha256)
+            {
+                throw new ArgumentException("Unsupported algorithm.");
+            }
+
+            var provider = AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.EcdsaP256Sha256);
+            var cryptoKey = provider.CreateKeyPair(256);
+            var publicKey = cryptoKey.ExportPublicKey(CryptographicPublicKeyBlobType.X509SubjectPublicKeyInfo);
+            var privateKey = cryptoKey.Export(CryptographicPrivateKeyBlobType.Pkcs8RawPrivateKeyInfo);
+            return Task.FromResult((publicKey, privateKey));
+        }
+
         public Task<byte[]> RandomBytesAsync(int length)
         {
             return Task.FromResult(CryptographicBuffer.GenerateRandom(length));

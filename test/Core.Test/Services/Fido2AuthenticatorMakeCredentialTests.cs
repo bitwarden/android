@@ -16,6 +16,8 @@ using Xunit;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
+using NSubstitute.Extensions;
 
 namespace Bit.Core.Test.Services
 {
@@ -50,8 +52,8 @@ namespace Bit.Core.Test.Services
         {
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
             List<CipherView> ciphers = [ 
-                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
-                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+                CreateCipherView(true, credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(true, credentialIds[1].ToString(), "bitwarden.com", true)
             ];
             mParams.CredTypesAndPubKeyAlgs = [
                 new PublicKeyCredentialAlgorithmDescriptor {
@@ -87,8 +89,8 @@ namespace Bit.Core.Test.Services
         {
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
             List<CipherView> ciphers = [ 
-                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
-                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+                CreateCipherView(true, credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(true, credentialIds[1].ToString(), "bitwarden.com", true)
             ];
             mParams.CredTypesAndPubKeyAlgs = [
                 new PublicKeyCredentialAlgorithmDescriptor {
@@ -116,8 +118,8 @@ namespace Bit.Core.Test.Services
         {
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
             List<CipherView> ciphers = [ 
-                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
-                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+                CreateCipherView(false, credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(false, credentialIds[1].ToString(), "bitwarden.com", true)
             ];
             ciphers[0].OrganizationId = "someOrganizationId";
             mParams.CredTypesAndPubKeyAlgs = [
@@ -155,8 +157,8 @@ namespace Bit.Core.Test.Services
             // Common Arrange
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
             List<CipherView> ciphers = [
-                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
-                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+                CreateCipherView(false, credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(false, credentialIds[1].ToString(), "bitwarden.com", true)
             ];
             mParams.CredTypesAndPubKeyAlgs = [
                 new PublicKeyCredentialAlgorithmDescriptor {
@@ -166,6 +168,8 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
+                .Returns((RandomBytes(32), RandomBytes(32)));
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
 
             // Arrange
@@ -187,8 +191,8 @@ namespace Bit.Core.Test.Services
             // Common Arrange
             var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
             List<CipherView> ciphers = [
-                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
-                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+                CreateCipherView(false, credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(false, credentialIds[1].ToString(), "bitwarden.com", true)
             ];
             mParams.CredTypesAndPubKeyAlgs = [
                 new PublicKeyCredentialAlgorithmDescriptor {
@@ -197,7 +201,8 @@ namespace Bit.Core.Test.Services
                 }
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
-            mParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
+                .Returns((RandomBytes(32), RandomBytes(32)));
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
 
             // Arrange
@@ -211,6 +216,55 @@ namespace Bit.Core.Test.Services
                 (p) => p.UserVerification == false
             ));
         }
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task MakeCredentialAsync_RequestsUserVerification_RequestConfirmedByUser(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorMakeCredentialParams mParams, Cipher encryptedCipher)
+        {
+            // Common Arrange
+            mParams.CredTypesAndPubKeyAlgs = [
+                new PublicKeyCredentialAlgorithmDescriptor {
+                    Type = "public-key",
+                    Algorithm = -7 // ES256
+                }
+            ];
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
+            mParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
+                .Returns((RandomBytes(32), RandomBytes(32)));
+            var cryptoServiceMock = Substitute.For<ICryptoService>();
+            ServiceContainer.Register(typeof(CryptoService), cryptoServiceMock);
+            encryptedCipher.Key = null;
+            encryptedCipher.Attachments = [];
+
+            // Arrange
+            mParams.RequireResidentKey = false;
+            sutProvider.GetDependency<ICipherService>().EncryptAsync(Arg.Any<CipherView>()).Returns(encryptedCipher);
+            sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(encryptedCipher.Id)).Returns(encryptedCipher);
+            sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
+                CipherId = encryptedCipher.Id,
+                UserVerified = false
+            });
+
+            // Act
+            await sutProvider.Sut.MakeCredentialAsync(mParams);
+
+            // Assert
+            await sutProvider.GetDependency<ICipherService>().Received().EncryptAsync(Arg.Is<CipherView>(
+                (c) => 
+                    c.Login.MainFido2Credential.KeyType == "public-key" &&
+                    c.Login.MainFido2Credential.KeyAlgorithm == "ECDSA" &&
+                    c.Login.MainFido2Credential.KeyCurve == "P-256" &&
+                    c.Login.MainFido2Credential.RpId == mParams.RpEntity.Id &&
+                    c.Login.MainFido2Credential.RpName == mParams.RpEntity.Name &&
+                    c.Login.MainFido2Credential.UserHandle == CoreHelpers.Base64UrlEncode(mParams.UserEntity.Id) &&
+                    c.Login.MainFido2Credential.UserName == mParams.UserEntity.Name &&
+                    c.Login.MainFido2Credential.CounterValue == 0 &&
+                    // c.Login.MainFido2Credential.UserDisplayName == mParams.UserEntity.DisplayName &&
+                    c.Login.MainFido2Credential.DiscoverableValue == false
+            ));
+            await sutProvider.GetDependency<ICipherService>().Received().SaveWithServerAsync(encryptedCipher);
+        }
         
         #endregion
 
@@ -222,21 +276,21 @@ namespace Bit.Core.Test.Services
         }
 
         #nullable enable
-        private CipherView CreateCipherView(string? credentialId, string? rpId, bool? discoverable)
+        private CipherView CreateCipherView(bool? withFido2Credential, string? credentialId = null, string? rpId = null, bool? discoverable = null)
         {
             return new CipherView {
                 Type = CipherType.Login,
                 Id = Guid.NewGuid().ToString(),
                 Reprompt = CipherRepromptType.None,
                 Login = new LoginView {
-                    Fido2Credentials = new List<Fido2CredentialView> {
+                    Fido2Credentials = withFido2Credential.HasValue && withFido2Credential.Value ? new List<Fido2CredentialView> {
                         new Fido2CredentialView {
                             CredentialId = credentialId ?? Guid.NewGuid().ToString(),
                             RpId = rpId ?? "bitwarden.com",
                             Discoverable = discoverable.HasValue ? discoverable.ToString() : "true",
                             UserHandleValue = RandomBytes(32),
                         }
-                    }
+                    } : null
                 }
             };
         }

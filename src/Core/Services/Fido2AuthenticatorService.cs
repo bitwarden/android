@@ -3,6 +3,7 @@ using Bit.Core.Models.View;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities.Fido2;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
 {
@@ -54,9 +55,44 @@ namespace Bit.Core.Services
                 UserVerification = makeCredentialParams.RequireUserVerification
             });
 
+            var cipherId = response.CipherId;
+            string credentialId;
+            // if (cipherId === undefined) {
+            //     this.logService?.warning(
+            //     `[Fido2Authenticator] Aborting because user confirmation was not recieved.`,
+            //     );
+            //     throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed);
+            // }
+            
+            try {
+                var (publicKey, privateKey) = await _cryptoFunctionService.EcdsaGenerateKeyPairAsync(CryptoEcdsaAlgorithm.P256Sha256);
+                var fido2Credential = CreateCredentialView(makeCredentialParams, privateKey);
+
+                var encrypted = await _cipherService.GetAsync(cipherId);
+                var cipher = await encrypted.DecryptAsync();
+
+                // if (
+                // !userVerified &&
+                // (params.requireUserVerification || cipher.reprompt !== CipherRepromptType.None)
+                // ) {
+                // this.logService?.warning(
+                //     `[Fido2Authenticator] Aborting because user verification was unsuccessful.`,
+                // );
+                // throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed);
+                // }
+
+                cipher.Login.Fido2Credentials = [fido2Credential];
+                var reencrypted = await _cipherService.EncryptAsync(cipher);
+                await _cipherService.SaveWithServerAsync(reencrypted);
+                credentialId = fido2Credential.CredentialId;
+            } catch {
+                throw;
+                // throw new NotImplementedException();
+            }
+
             return new Fido2AuthenticatorMakeCredentialResult
             {
-                CredentialId = GuidToRawFormat(Guid.NewGuid().ToString()),
+                CredentialId = GuidToRawFormat(credentialId),
                 AttestationObject = Array.Empty<byte>(),
                 AuthData = Array.Empty<byte>(),
                 PublicKey = Array.Empty<byte>(),
@@ -227,8 +263,27 @@ namespace Bit.Core.Services
                 cipher.Type == CipherType.Login &&
                 cipher.Login.HasFido2Credentials &&
                 cipher.Login.MainFido2Credential.RpId == rpId &&
-                cipher.Login.MainFido2Credential.IsDiscoverable
+                cipher.Login.MainFido2Credential.DiscoverableValue
             );
+        }
+
+        private Fido2CredentialView CreateCredentialView(Fido2AuthenticatorMakeCredentialParams makeCredentialsParams, byte[] privateKey)
+        {
+            return new Fido2CredentialView {
+                CredentialId = Guid.NewGuid().ToString(),
+                KeyType = "public-key",
+                KeyAlgorithm = "ECDSA",
+                KeyCurve = "P-256",
+                KeyValue = CoreHelpers.Base64UrlEncode(privateKey),
+                RpId = makeCredentialsParams.RpEntity.Id,
+                UserHandle = CoreHelpers.Base64UrlEncode(makeCredentialsParams.UserEntity.Id),
+                UserName = makeCredentialsParams.UserEntity.Name,
+                CounterValue = 0,
+                RpName = makeCredentialsParams.RpEntity.Name,
+                // UserDisplayName = makeCredentialsParams.UserEntity.DisplayName,
+                DiscoverableValue = makeCredentialsParams.RequireResidentKey,
+                CreationDate = DateTime.Now
+            };
         }
 
         private async Task<byte[]> GenerateAuthData(
@@ -288,7 +343,7 @@ namespace Bit.Core.Services
             var sigBase = authData.Concat(clientDataHash).ToArray();
             var signature = await _cryptoFunctionService.SignAsync(sigBase, privateKey, new CryptoSignEcdsaOptions
             {
-                Algorithm = CryptoSignEcdsaOptions.EcdsaAlgorithm.EcdsaP256Sha256,
+                Algorithm = CryptoEcdsaAlgorithm.P256Sha256,
                 SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
             });
 
