@@ -432,10 +432,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state clicking Password checker action should trigger PasswordCheckerClick`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(password = "password") }
+        }
+
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
             .onSiblings()
-            .onFirst()
+            .filterToOne(hasContentDescription("Check if password has been exposed."))
             .performClick()
 
         verify {
@@ -2298,7 +2302,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
             ),
-            dialog = VaultAddEditState.DialogState.Error("test".asText()),
+            dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem,
         )
 

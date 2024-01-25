@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
@@ -56,6 +58,7 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions", "LargeClass")
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
     private val generatorRepository: GeneratorRepository,
@@ -220,8 +223,9 @@ class VaultAddEditViewModel @Inject constructor(
         if (content.common.name.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
-                    dialog = VaultAddEditState.DialogState.Error(
-                        R.string.validation_field_required
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required
                             .asText(R.string.name.asText()),
                     ),
                 )
@@ -519,12 +523,15 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleLoginPasswordCheckerClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = VaultAddEditEvent.ShowToast(
-                    message = "Password Checker".asText(),
-                ),
-            )
+        onLoginType { loginType ->
+            mutableStateFlow.update {
+                it.copy(dialog = VaultAddEditState.DialogState.Loading(R.string.loading.asText()))
+            }
+
+            viewModelScope.launch {
+                val result = authRepository.getPasswordBreachCount(password = loginType.password)
+                sendAction(VaultAddEditAction.Internal.PasswordBreachReceive(result))
+            }
         }
     }
 
@@ -847,6 +854,9 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.GeneratorResultReceive -> {
                 handleGeneratorResultReceive(action)
             }
+
+            is VaultAddEditAction.Internal.PasswordBreachReceive ->
+                handlePasswordBreachReceive(action)
         }
     }
 
@@ -883,7 +893,8 @@ class VaultAddEditViewModel @Inject constructor(
             is UpdateCipherResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialog = VaultAddEditState.DialogState.Error(
+                        dialog = VaultAddEditState.DialogState.Generic(
+                            title = R.string.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
                                 ?.asText()
@@ -981,8 +992,9 @@ class VaultAddEditViewModel @Inject constructor(
             TotpCodeResult.CodeScanningError -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialog = VaultAddEditState.DialogState.Error(
-                            R.string.authenticator_key_read_error.asText(),
+                        dialog = VaultAddEditState.DialogState.Generic(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.authenticator_key_read_error.asText(),
                         ),
                     )
                 }
@@ -1009,6 +1021,24 @@ class VaultAddEditViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun handlePasswordBreachReceive(
+        action: VaultAddEditAction.Internal.PasswordBreachReceive,
+    ) {
+        val message = when (val result = action.result) {
+            is BreachCountResult.Error -> R.string.generic_error_message.asText()
+            is BreachCountResult.Success -> {
+                if (result.breachCount > 0) {
+                    R.string.password_exposed.asText(result.breachCount)
+                } else {
+                    R.string.password_safe.asText()
+                }
+            }
+        }
+        mutableStateFlow.update {
+            it.copy(dialog = VaultAddEditState.DialogState.Generic(message = message))
         }
     }
 
@@ -1047,6 +1077,12 @@ class VaultAddEditViewModel @Inject constructor(
         updateContent { currentContent ->
             currentContent.copy(common = block(currentContent.common))
         }
+    }
+
+    private inline fun onLoginType(
+        crossinline block: (VaultAddEditState.ViewState.Content.ItemType.Login) -> Unit,
+    ) {
+        onContent { (it.type as? VaultAddEditState.ViewState.Content.ItemType.Login)?.let(block) }
     }
 
     private inline fun updateLoginContent(
@@ -1428,16 +1464,19 @@ data class VaultAddEditState(
     sealed class DialogState : Parcelable {
 
         /**
+         * Displays a generic dialog to the user.
+         */
+        @Parcelize
+        data class Generic(
+            val title: Text? = null,
+            val message: Text,
+        ) : DialogState()
+
+        /**
          * Displays a loading dialog to the user.
          */
         @Parcelize
         data class Loading(val label: Text) : DialogState()
-
-        /**
-         * Displays an error dialog to the user.
-         */
-        @Parcelize
-        data class Error(val message: Text) : DialogState()
     }
 }
 
@@ -1883,6 +1922,11 @@ sealed class VaultAddEditAction {
      * Models actions that the [VaultAddEditViewModel] itself might send.
      */
     sealed class Internal : VaultAddEditAction() {
+
+        /**
+         * Indicates that the password breach results have been received.
+         */
+        data class PasswordBreachReceive(val result: BreachCountResult) : Internal()
 
         /**
          * Indicates that the vault totp code result has been received.

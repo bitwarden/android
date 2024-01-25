@@ -4,11 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
@@ -48,6 +51,8 @@ import java.util.UUID
 
 @Suppress("LargeClass")
 class VaultAddEditViewModelTest : BaseViewModelTest() {
+
+    private val authRepository: AuthRepository = mockk()
 
     private val loginInitialState = createVaultAddItemState(
         typeContentViewState = createLoginTypeContentViewState(),
@@ -402,7 +407,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 stateWithName.copy(
-                    dialog = VaultAddEditState.DialogState.Error(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
                     ),
                 ),
@@ -449,7 +455,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 stateWithName.copy(
-                    dialog = VaultAddEditState.DialogState.Error(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
                         message = errorMessage.asText(),
                     ),
                 ),
@@ -468,9 +475,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         val stateWithNoNameAndDialog = createVaultAddItemState(
             commonContentViewState = createCommonContentViewState(name = ""),
-            dialogState = VaultAddEditState.DialogState.Error(
-                R.string.validation_field_required
-                    .asText(R.string.name.asText()),
+            dialogState = VaultAddEditState.DialogState.Generic(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.validation_field_required.asText(R.string.name.asText()),
             ),
         )
 
@@ -492,9 +499,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `HandleDialogDismiss will remove the current dialog`() = runTest {
         val errorState = createVaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
-            dialogState = VaultAddEditState.DialogState.Error(
-                R.string.validation_field_required
-                    .asText(R.string.name.asText()),
+            dialogState = VaultAddEditState.DialogState.Generic(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.validation_field_required.asText(R.string.name.asText()),
             ),
         )
 
@@ -687,23 +694,57 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
 
         @Test
-        fun `PasswordCheckerClick should emit ShowToast with 'Password Checker' message`() =
-            runTest {
-                val viewModel = createAddVaultItemViewModel()
+        fun `on CheckForBreachClick should process a password`() = runTest {
+            val cipherView = createMockCipherView(1)
+            val password = "Password"
 
-                viewModel.eventFlow.test {
-                    viewModel
-                        .actionChannel
-                        .trySend(VaultAddEditAction.ItemType.LoginType.PasswordCheckerClick)
+            val loginState = loginInitialState.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(),
+                    type = createLoginTypeContentViewState(
+                        password = password,
+                    ),
+                ),
+            )
 
-                    assertEquals(
-                        VaultAddEditEvent.ShowToast(
-                            "Password Checker".asText(),
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = loginState,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                ),
+            )
+
+            mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
+
+            val breachCount = 5
+            coEvery {
+                authRepository.getPasswordBreachCount(password)
+            } returns BreachCountResult.Success(breachCount = breachCount)
+
+            viewModel.stateFlow.test {
+                assertEquals(loginState, awaitItem())
+                viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.PasswordCheckerClick)
+                assertEquals(
+                    loginState.copy(
+                        dialog = VaultAddEditState.DialogState.Loading(
+                            label = R.string.loading.asText(),
                         ),
-                        awaitItem(),
-                    )
-                }
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    loginState.copy(
+                        dialog = VaultAddEditState.DialogState.Generic(
+                            message = R.string.password_exposed.asText(breachCount),
+                        ),
+                    ),
+                    awaitItem(),
+                )
             }
+
+            coVerify(exactly = 1) { authRepository.getPasswordBreachCount(password) }
+        }
 
         @Suppress("MaxLineLength")
         @Test
@@ -1289,6 +1330,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository = vaultRepository,
                 generatorRepository = generatorRepository,
                 resourceManager = resourceManager,
+                authRepository = authRepository,
             )
         }
 
@@ -1796,6 +1838,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepo,
             generatorRepository = generatorRepo,
             resourceManager = bitwardenResourceManager,
+            authRepository = authRepository,
         )
 
     /**

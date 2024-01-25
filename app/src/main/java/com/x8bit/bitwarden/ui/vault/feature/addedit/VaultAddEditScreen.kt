@@ -19,7 +19,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -82,10 +81,12 @@ fun VaultAddEditScreen(
             is VaultAddEditEvent.NavigateToMoveToOrganization -> {
                 onNavigateToMoveToOrganization(event.cipherId)
             }
+
             is VaultAddEditEvent.NavigateToCollections -> {
                 // TODO implement Collections in BIT-1575
                 Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
             }
+
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
         }
     }
@@ -227,13 +228,15 @@ private fun VaultAddEditItemDialogs(
             )
         }
 
-        is VaultAddEditState.DialogState.Error -> BitwardenBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = dialogState.message,
-            ),
-            onDismissRequest = onDismissRequest,
-        )
+        is VaultAddEditState.DialogState.Generic -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = dialogState.title,
+                    message = dialogState.message,
+                ),
+                onDismissRequest = onDismissRequest,
+            )
+        }
 
         null -> Unit
     }
