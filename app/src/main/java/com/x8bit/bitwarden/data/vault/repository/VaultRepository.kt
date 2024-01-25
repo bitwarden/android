@@ -11,6 +11,7 @@ import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
+import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -181,6 +182,17 @@ interface VaultRepository : VaultLockManager {
      * Attempt to create a cipher.
      */
     suspend fun createCipher(cipherView: CipherView): CreateCipherResult
+
+    /**
+     * Attempt to create an attachment for the given [cipherView].
+     */
+    suspend fun createAttachment(
+        cipherId: String,
+        cipherView: CipherView,
+        fileSizeBytes: String,
+        fileName: String,
+        fileUri: Uri,
+    ): CreateAttachmentResult
 
     /**
      * Attempt to delete a cipher.
