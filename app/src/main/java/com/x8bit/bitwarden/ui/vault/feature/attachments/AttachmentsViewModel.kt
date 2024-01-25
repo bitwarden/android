@@ -6,8 +6,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -28,11 +31,17 @@ import javax.inject.Inject
 private const val KEY_STATE = "state"
 
 /**
+ * The maximum size an upload-able file is allowed to be (100 MiB).
+ */
+private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
+
+/**
  * ViewModel responsible for handling user interactions in the attachments screen.
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class AttachmentsViewModel @Inject constructor(
+    private val authRepo: AuthRepository,
     private val vaultRepo: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AttachmentsState, AttachmentsEvent, AttachmentsAction>(
@@ -42,12 +51,19 @@ class AttachmentsViewModel @Inject constructor(
             cipherId = AttachmentsArgs(savedStateHandle).cipherId,
             viewState = AttachmentsState.ViewState.Loading,
             dialogState = null,
+            isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
         ),
 ) {
     init {
         vaultRepo
             .getVaultItemStateFlow(state.cipherId)
             .map { AttachmentsAction.Internal.CipherReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        authRepo
+            .userStateFlow
+            .map { AttachmentsAction.Internal.UserStateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -69,8 +85,62 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     private fun handleSaveClick() {
-        sendEvent(AttachmentsEvent.ShowToast("Not Yet Implemented".asText()))
-        // TODO: Handle saving the attachments (BIT-522)
+        onContent { content ->
+            if (!state.isPremiumUser) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.premium_required.asText(),
+                        ),
+                    )
+                }
+                return@onContent
+            }
+            if (content.newAttachment == null) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.validation_field_required.asText(
+                                R.string.file.asText(),
+                            ),
+                        ),
+                    )
+                }
+                return@onContent
+            }
+            if (content.newAttachment.sizeBytes > MAX_FILE_SIZE_BYTES) {
+                // Must be under 100 MiB
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.max_file_size.asText(),
+                        ),
+                    )
+                }
+                return@onContent
+            }
+
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AttachmentsState.DialogState.Loading(
+                        message = R.string.saving.asText(),
+                    ),
+                )
+            }
+            viewModelScope.launch {
+                val result = vaultRepo.createAttachment(
+                    cipherId = state.cipherId,
+                    cipherView = requireNotNull(content.originalCipher),
+                    fileSizeBytes = content.newAttachment.sizeBytes.toString(),
+                    fileName = content.newAttachment.displayName,
+                    fileUri = content.newAttachment.uri,
+                )
+                sendAction(AttachmentsAction.Internal.CreateAttachmentResultReceive(result))
+            }
+        }
     }
 
     private fun handleDismissDialogClick() {
@@ -117,7 +187,12 @@ class AttachmentsViewModel @Inject constructor(
     private fun handleInternalAction(action: AttachmentsAction.Internal) {
         when (action) {
             is AttachmentsAction.Internal.CipherReceive -> handleCipherReceive(action)
+            is AttachmentsAction.Internal.CreateAttachmentResultReceive -> {
+                handleCreateAttachmentResultReceive(action)
+            }
+
             is AttachmentsAction.Internal.DeleteResultReceive -> handleDeleteResultReceive(action)
+            is AttachmentsAction.Internal.UserStateReceive -> handleUserStateReceive(action)
         }
     }
 
@@ -178,6 +253,28 @@ class AttachmentsViewModel @Inject constructor(
         }
     }
 
+    private fun handleCreateAttachmentResultReceive(
+        action: AttachmentsAction.Internal.CreateAttachmentResultReceive,
+    ) {
+        when (action.result) {
+            CreateAttachmentResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is CreateAttachmentResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(AttachmentsEvent.ShowToast(R.string.save_attachment_success.asText()))
+            }
+        }
+    }
+
     private fun handleDeleteResultReceive(action: AttachmentsAction.Internal.DeleteResultReceive) {
         when (action.result) {
             DeleteAttachmentResult.Error -> {
@@ -195,6 +292,12 @@ class AttachmentsViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(AttachmentsEvent.ShowToast(R.string.attachment_deleted.asText()))
             }
+        }
+    }
+
+    private fun handleUserStateReceive(action: AttachmentsAction.Internal.UserStateReceive) {
+        mutableStateFlow.update {
+            it.copy(isPremiumUser = action.userState?.activeAccount?.isPremium == true)
         }
     }
 
@@ -225,6 +328,7 @@ data class AttachmentsState(
     val cipherId: String,
     val viewState: ViewState,
     val dialogState: DialogState?,
+    val isPremiumUser: Boolean,
 ) : Parcelable {
     /**
      * Represents the specific view states for the [AttachmentsScreen].
@@ -370,10 +474,24 @@ sealed class AttachmentsAction {
         ) : Internal()
 
         /**
+         * The result of creating an attachment.
+         */
+        data class CreateAttachmentResultReceive(
+            val result: CreateAttachmentResult,
+        ) : Internal()
+
+        /**
          * The result of deleting the attachment.
          */
         data class DeleteResultReceive(
             val result: DeleteAttachmentResult,
+        ) : Internal()
+
+        /**
+         * The updated user state.
+         */
+        data class UserStateReceive(
+            val userState: UserState?,
         ) : Internal()
     }
 }

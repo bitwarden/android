@@ -241,6 +241,7 @@ private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     cipherId = "cipherId-1234",
     viewState = AttachmentsState.ViewState.Loading,
     dialogState = null,
+    isPremiumUser = false,
 )
 
 private val DEFAULT_CONTENT_WITHOUT_ATTACHMENTS: AttachmentsState.ViewState.Content =
