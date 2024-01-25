@@ -46,7 +46,7 @@ fun NavGraphBuilder.loginDestination(
     onNavigateToMasterPasswordHint: (emailAddress: String) -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
     onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
-    onNavigateToTwoFactorLogin: () -> Unit,
+    onNavigateToTwoFactorLogin: (emailAddress: String, password: String?) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = LOGIN_ROUTE,

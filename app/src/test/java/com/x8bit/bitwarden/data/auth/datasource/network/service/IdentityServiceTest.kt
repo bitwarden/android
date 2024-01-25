@@ -254,6 +254,7 @@ private val LOGIN_SUCCESS = GetTokenResponseJson.Success(
     privateKey = "privateKey",
     shouldForcePasswordReset = true,
     shouldResetMasterPassword = true,
+    twoFactorToken = null,
     masterPasswordPolicyOptions = MasterPasswordPolicyOptionsJson(
         minimumComplexity = 10,
         minimumLength = 100,

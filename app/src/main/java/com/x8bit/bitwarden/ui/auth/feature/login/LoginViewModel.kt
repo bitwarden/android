@@ -160,7 +160,12 @@ class LoginViewModel @Inject constructor(
 
             is LoginResult.TwoFactorRequired -> {
                 mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
-                sendEvent(LoginEvent.NavigateToTwoFactorLogin)
+                sendEvent(
+                    LoginEvent.NavigateToTwoFactorLogin(
+                        emailAddress = state.emailAddress,
+                        password = state.passwordInput,
+                    ),
+                )
             }
 
             is LoginResult.Error -> {
@@ -317,7 +322,10 @@ sealed class LoginEvent {
     /**
      * Navigates to the two-factor login screen.
      */
-    data object NavigateToTwoFactorLogin : LoginEvent()
+    data class NavigateToTwoFactorLogin(
+        val emailAddress: String,
+        val password: String?,
+    ) : LoginEvent()
 
     /**
      * Shows a toast with the given [message].

@@ -38,13 +38,18 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMetho
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
@@ -71,10 +76,38 @@ fun TwoFactorLoginScreen(
                 intentManager.launchUri("https://bitwarden.com/help/lost-two-step-device".toUri())
             }
 
+            is TwoFactorLoginEvent.NavigateToCaptcha -> {
+                intentManager.startCustomTabsActivity(uri = event.uri)
+            }
+
             is TwoFactorLoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    when (val dialog = state.dialogState) {
+        is TwoFactorLoginState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = dialog.title ?: R.string.an_error_has_occurred.asText(),
+                    message = dialog.message,
+                ),
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss) }
+                },
+            )
+        }
+
+        is TwoFactorLoginState.DialogState.Loading -> {
+            BitwardenLoadingDialog(
+                visibilityState = LoadingDialogState.Shown(
+                    text = dialog.message,
+                ),
+            )
+        }
+
+        null -> Unit
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -135,6 +168,7 @@ fun TwoFactorLoginScreen(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
+@Suppress("LongMethod")
 private fun TwoFactorLoginScreenContent(
     state: TwoFactorLoginState,
     onCodeInputChange: (String) -> Unit,

@@ -1,38 +1,43 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.model
 
+import androidx.annotation.Keep
+import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseEnumeratedIntSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * Represents different providers that can be used for two-factor login.
  */
-@Serializable
-@Suppress("MagicNumber")
-enum class TwoFactorAuthMethod {
+@Serializable(TwoFactorAuthMethodSerializer::class)
+enum class TwoFactorAuthMethod(val value: UInt) {
     @SerialName("0")
-    AUTHENTICATOR_APP,
+    AUTHENTICATOR_APP(value = 0U),
 
     @SerialName("1")
-    EMAIL,
+    EMAIL(value = 1U),
 
     @SerialName("2")
-    DUO,
+    DUO(value = 2U),
 
     @SerialName("3")
-    YUBI_KEY,
+    YUBI_KEY(value = 3U),
 
     @SerialName("4")
-    U2F,
+    U2F(value = 4U),
 
     @SerialName("5")
-    REMEMBER,
+    REMEMBER(value = 5U),
 
     @SerialName("6")
-    DUO_ORGANIZATION,
+    DUO_ORGANIZATION(value = 6U),
 
     @SerialName("7")
-    FIDO_2_WEB_APP,
+    FIDO_2_WEB_APP(value = 7U),
 
     @SerialName("-1")
-    RECOVERY_CODE,
+    RECOVERY_CODE(value = 100U),
 }
+
+@Keep
+private class TwoFactorAuthMethodSerializer :
+    BaseEnumeratedIntSerializer<TwoFactorAuthMethod>(TwoFactorAuthMethod.values())

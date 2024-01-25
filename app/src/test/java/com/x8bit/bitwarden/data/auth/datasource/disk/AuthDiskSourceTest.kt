@@ -363,6 +363,44 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `getTwoFactorToken should pull from SharedPreferences`() {
+        val twoFactorTokenBaseKey = "bwPreferencesStorage:twoFactorToken"
+        val mockEmail = "mockUserId"
+        val mockTwoFactorToken = "immaLilToken123"
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    "${twoFactorTokenBaseKey}_$mockEmail",
+                    mockTwoFactorToken,
+                )
+            }
+        val actual = authDiskSource.getTwoFactorToken(email = mockEmail)
+        assertEquals(
+            mockTwoFactorToken,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeTwoFactorToken should update SharedPreferences`() {
+        val twoFactorTokenBaseKey = "bwPreferencesStorage:twoFactorToken"
+        val mockEmail = "mockUserId"
+        val mockTwoFactorToken = "immaLilToken123"
+        authDiskSource.storeTwoFactorToken(
+            email = mockEmail,
+            twoFactorToken = mockTwoFactorToken,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "${twoFactorTokenBaseKey}_$mockEmail",
+            null,
+        )
+        assertEquals(
+            mockTwoFactorToken,
+            actual,
+        )
+    }
+
+    @Test
     fun `getUserAutoUnlockKey should pull from SharedPreferences`() {
         val userAutoUnlockKeyBaseKey = "bwSecureStorage:userKeyAutoUnlock"
         val mockUserId = "mockUserId"
