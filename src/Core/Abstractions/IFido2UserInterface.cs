@@ -34,6 +34,37 @@ namespace Bit.Core.Abstractions
         public bool UserVerified { get; set; }
     }
 
+    public struct Fido2ConfirmNewCredentialParams
+    {
+        ///<summary>
+        /// The name of the credential.
+        ///</summary>
+        public string CredentialName { get; set; }
+
+        ///<summary>
+        /// The name of the user.
+        ///</summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// Whether or not the user must be verified before completing the operation.
+        /// </summary>
+        public bool UserVerification { get; set; }
+    }
+
+    public struct Fido2ConfirmNewCredentialResult
+    {
+        /// <summary>
+        /// The name of the user.
+        /// </summary>
+        public string CipherId { get; set; }
+
+        /// <summary>
+        /// Whether or not the user was verified.
+        /// </summary>
+        public bool UserVerified { get; set; }
+    }
+
     public interface IFido2UserInterface
     {
         /// <summary>
@@ -49,5 +80,12 @@ namespace Bit.Core.Abstractions
         /// <param name="existingCipherIds">The IDs of the excluded credentials.</param>
         /// <returns>When user has confirmed the message</returns>
         Task InformExcludedCredential(string[] existingCipherIds);
+
+        /// <summary>
+        /// Ask the user to confirm the creation of a new credential.
+        /// </summary>
+        /// <param name="confirmNewCredentialParams">The parameters to use when asking the user to confirm the creation of a new credential.</param>
+        /// <returns>The ID of the cipher where the new credential should be saved.</returns>
+        Task<Fido2ConfirmNewCredentialResult> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams);
     }
 }

@@ -48,7 +48,20 @@ namespace Bit.Core.Services
                 throw new NotAllowedError();
             }
 
-            throw new NotImplementedException();
+            var response = await _userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams {
+                CredentialName = makeCredentialParams.RpEntity.Name,
+                UserName = makeCredentialParams.UserEntity.Name,
+                UserVerification = makeCredentialParams.RequireUserVerification
+            });
+
+            return new Fido2AuthenticatorMakeCredentialResult
+            {
+                CredentialId = GuidToRawFormat(Guid.NewGuid().ToString()),
+                AttestationObject = Array.Empty<byte>(),
+                AuthData = Array.Empty<byte>(),
+                PublicKey = Array.Empty<byte>(),
+                PublicKeyAlgorithm = (int) Fido2AlgorithmIdentifier.ES256,
+            };
         }
         
         public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams)

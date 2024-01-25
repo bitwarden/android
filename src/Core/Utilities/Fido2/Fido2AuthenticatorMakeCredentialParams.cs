@@ -2,44 +2,44 @@ namespace Bit.Core.Utilities.Fido2
 {
     public class Fido2AuthenticatorMakeCredentialParams
     {
-        ///<summary>
-        /// The caller’s RP ID, as determined by the user agent and the client. */
-        ///</summary>
-        public string RpId { get; set; }
+        /// <summary>
+        /// The Relying Party's PublicKeyCredentialRpEntity.
+        /// </summary>
+        public PublicKeyCredentialRpEntity RpEntity { get; set; }
 
-        ///<summary>
-        /// The Relying Party's PublicKeyCredentialRpEntity. */
-        ///</summary>
+        /// <summary>
+        /// The Relying Party's PublicKeyCredentialRpEntity.
+        /// </summary>
         public PublicKeyCredentialUserEntity UserEntity { get; set; }
 
-        ///<summary>
-        /// The hash of the serialized client data, provided by the client. */
-        ///</summary>
+        /// <summary>
+        /// The hash of the serialized client data, provided by the client.
+        /// </summary>
         public byte[] Hash { get; set; }
 
-        ///<summary>
-        /// A sequence of pairs of PublicKeyCredentialType and public key algorithms (COSEAlgorithmIdentifier) requested by the Relying Party. This sequence is ordered from most preferred to least preferred. The authenticator makes a best-effort to create the most preferred credential that it can. */
-        ///</summary>
+        /// <summary>
+        /// A sequence of pairs of PublicKeyCredentialType and public key algorithms (COSEAlgorithmIdentifier) requested by the Relying Party. This sequence is ordered from most preferred to least preferred. The authenticator makes a best-effort to create the most preferred credential that it can.
+        /// </summary>
         public PublicKeyCredentialAlgorithmDescriptor[] CredTypesAndPubKeyAlgs { get; set; }
 
-        ///<summary>
+        /// <summary>
         ///An OPTIONAL list of PublicKeyCredentialDescriptor objects provided by the Relying Party with the intention that, if any of these are known to the authenticator, it SHOULD NOT create a new credential. excludeCredentialDescriptorList contains a list of known credentials.
-        ///</summary>
+        /// </summary>
         public PublicKeyCredentialDescriptor[] ExcludeCredentialDescriptorList { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// The effective resident key requirement for credential creation, a Boolean value determined by the client. Resident is synonymous with discoverable. */
-        ///</summary>
+        /// </summary>
         public bool RequireResidentKey { get; set; }
 
-        ///<summary>
-        /// The effective user verification requirement for assertion, a Boolean value provided by the client. */
-        ///</summary>
+        /// <summary>
+        /// The effective user verification requirement for assertion, a Boolean value provided by the client.
+        /// </summary>
         public bool RequireUserVerification { get; set; }
         
-        ///<summary>
-        /// CTAP2 authenticators support setting this to false, but we only support the WebAuthn authenticator model which does not have that option. */
-        ///</summary>
+        /// <summary>
+        /// CTAP2 authenticators support setting this to false, but we only support the WebAuthn authenticator model which does not have that option.
+        /// </summary>
         // public bool RequireUserPresence { get; set; } // Always required
 
         /// <summary>

@@ -59,7 +59,7 @@ namespace Bit.Core.Test.Services
                     Algorithm = -7 // ES256
                 }
             ];
-            mParams.RpId = "bitwarden.com";
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
             mParams.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
@@ -96,7 +96,7 @@ namespace Bit.Core.Test.Services
                     Algorithm = -7 // ES256
                 }
             ];
-            mParams.RpId = "bitwarden.com";
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
             mParams.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
@@ -126,7 +126,7 @@ namespace Bit.Core.Test.Services
                     Algorithm = -7 // ES256
                 }
             ];
-            mParams.RpId = "bitwarden.com";
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
             mParams.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
@@ -144,6 +144,74 @@ namespace Bit.Core.Test.Services
             await sutProvider.GetDependency<IFido2UserInterface>().DidNotReceive().InformExcludedCredential(Arg.Any<string[]>());
         }
 
+        #endregion
+
+        #region credential creation
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task MakeCredentialAsync_RequestsUserVerification_ParamsRequireUserVerification(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorMakeCredentialParams mParams)
+        {
+            // Common Arrange
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            mParams.CredTypesAndPubKeyAlgs = [
+                new PublicKeyCredentialAlgorithmDescriptor {
+                    Type = "public-key",
+                    Algorithm = -7 // ES256
+                }
+            ];
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
+            mParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+
+            // Arrange
+            mParams.RequireUserVerification = true;
+
+            // Act
+            await sutProvider.Sut.MakeCredentialAsync(mParams);
+
+            // Assert
+            await sutProvider.GetDependency<IFido2UserInterface>().Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
+                (p) => p.UserVerification == true
+            ));
+        }
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task MakeCredentialAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorMakeCredentialParams mParams)
+        {
+            // Common Arrange
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            mParams.CredTypesAndPubKeyAlgs = [
+                new PublicKeyCredentialAlgorithmDescriptor {
+                    Type = "public-key",
+                    Algorithm = -7 // ES256
+                }
+            ];
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
+            mParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+
+            // Arrange
+            mParams.RequireUserVerification = false;
+
+            // Act
+            await sutProvider.Sut.MakeCredentialAsync(mParams);
+
+            // Assert
+            await sutProvider.GetDependency<IFido2UserInterface>().Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
+                (p) => p.UserVerification == false
+            ));
+        }
+        
         #endregion
 
         private byte[] RandomBytes(int length)
