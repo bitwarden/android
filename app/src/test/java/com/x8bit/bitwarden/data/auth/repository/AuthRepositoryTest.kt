@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResp
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
@@ -694,6 +695,48 @@ class AuthRepositoryTest {
             .returns(Result.success(GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY)))
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
+        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        coVerify { accountsService.preLogin(email = EMAIL) }
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+    }
+
+    @Test
+    fun `login get token returns two factor request should return TwoFactorRequired`() = runTest {
+        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+            .returns(
+                Result.success(
+                    GetTokenResponseJson.TwoFactorRequired(
+                        TWO_FACTOR_AUTH_METHODS_DATA, null, null,
+                    ),
+                ),
+            )
+        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        assertEquals(LoginResult.TwoFactorRequired, result)
+        assertEquals(
+            repository.twoFactorData,
+            GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
+        )
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { accountsService.preLogin(email = EMAIL) }
         coVerify {
@@ -1450,6 +1493,7 @@ class AuthRepositoryTest {
         private const val REFRESH_TOKEN = "refreshToken"
         private const val REFRESH_TOKEN_2 = "refreshToken2"
         private const val CAPTCHA_KEY = "captcha"
+
         private const val DEFAULT_KDF_ITERATIONS = 600000
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"
         private const val PUBLIC_KEY = "PublicKey"
@@ -1457,6 +1501,10 @@ class AuthRepositoryTest {
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
+        private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
+            TwoFactorAuthMethod.EMAIL to mapOf("Email" to "ex***@email.com"),
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to mapOf("Email" to null),
+        )
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
         )

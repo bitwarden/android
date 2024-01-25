@@ -50,6 +50,9 @@ class IdentityServiceImpl constructor(
             bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
                 code = 400,
                 json = json,
+            ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.TwoFactorRequired>(
+                code = 400,
+                json = json,
             ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.Invalid>(
                 code = 400,
                 json = json,

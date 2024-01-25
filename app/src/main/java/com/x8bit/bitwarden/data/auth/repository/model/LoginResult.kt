@@ -4,7 +4,6 @@ package com.x8bit.bitwarden.data.auth.repository.model
  * Models result of logging in.
  */
 sealed class LoginResult {
-
     /**
      * Login succeeded.
      */
@@ -14,6 +13,11 @@ sealed class LoginResult {
      * Captcha verification is required.
      */
     data class CaptchaRequired(val captchaId: String) : LoginResult()
+
+    /**
+     * Two-factor verification is required.
+     */
+    data object TwoFactorRequired : LoginResult()
 
     /**
      * There was an error logging in.

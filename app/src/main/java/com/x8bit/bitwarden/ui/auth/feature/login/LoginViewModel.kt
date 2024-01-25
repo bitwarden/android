@@ -158,6 +158,11 @@ class LoginViewModel @Inject constructor(
                 )
             }
 
+            is LoginResult.TwoFactorRequired -> {
+                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+                sendEvent(LoginEvent.NavigateToTwoFactorLogin)
+            }
+
             is LoginResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -306,6 +311,11 @@ sealed class LoginEvent {
      * Navigates to the login with device screen.
      */
     data object NavigateToLoginWithDevice : LoginEvent()
+
+    /**
+     * Navigates to the two-factor login screen.
+     */
+    data object NavigateToTwoFactorLogin : LoginEvent()
 
     /**
      * Shows a toast with the given [message].

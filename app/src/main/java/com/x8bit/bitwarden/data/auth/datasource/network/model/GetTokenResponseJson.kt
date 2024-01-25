@@ -98,4 +98,30 @@ sealed class GetTokenResponseJson {
             val errorMessage: String,
         )
     }
+
+    /**
+     * Models json body of a two-factor error.
+     *
+     * @property authMethodsData A blob of data formatted as:
+     * `{"1":{"Email":"sh*****@example.com"},"0":{"Email":null}}`
+     * The keys are the raw values of the [TwoFactorAuthMethod],
+     * and the map is any extra information for the method.
+     * @property captchaToken The captcha token used in the second
+     * login attempt if the user has already passed a captcha
+     * authentication in the first attempt.
+     * @property ssoToken  If the user is logging on via Single
+     * Sign On, they'll need this value to complete authentication
+     * after entering their two-factor code.
+     */
+    @Serializable
+    data class TwoFactorRequired(
+        @SerialName("TwoFactorProviders2")
+        val authMethodsData: Map<TwoFactorAuthMethod, Map<String, String?>?>,
+
+        @SerialName("CaptchaBypassToken")
+        val captchaToken: String?,
+
+        @SerialName("SsoEmail2faSessionToken")
+        val ssoToken: String?,
+    ) : GetTokenResponseJson()
 }
