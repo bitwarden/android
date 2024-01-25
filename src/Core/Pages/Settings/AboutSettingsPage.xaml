@@ -31,8 +31,8 @@
         <BoxView StyleClass="box-row-separator" />
 
         <controls:ExternalLinkItemView
-            Title="{u:I18n ContactBitwardenSupport}"
-            GoToLinkCommand="{Binding ContactBitwardenSupportCommand}"
+            Title="{u:I18n PrivacyPolicy}"
+            GoToLinkCommand="{Binding GoToPrivacyPolicyCommand}"
             StyleClass="settings-external-link-item"
             HorizontalOptions="FillAndExpand" />
         <BoxView StyleClass="box-row-separator" />
