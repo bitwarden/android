@@ -247,6 +247,7 @@ private val DEFAULT_CONTENT_WITHOUT_ATTACHMENTS: AttachmentsState.ViewState.Cont
     AttachmentsState.ViewState.Content(
         originalCipher = createMockCipherView(number = 1),
         attachments = emptyList(),
+        newAttachment = null,
     )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
@@ -259,4 +260,5 @@ private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content
                 displaySize = "10 MB",
             ),
         ),
+        newAttachment = null,
     )

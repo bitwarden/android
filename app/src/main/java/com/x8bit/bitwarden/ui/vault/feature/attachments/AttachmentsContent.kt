@@ -86,7 +86,10 @@ fun AttachmentsContent(
         item {
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(id = R.string.no_file_chosen),
+                text = viewState
+                    .newAttachment
+                    ?.displayName
+                    ?: stringResource(id = R.string.no_file_chosen),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
