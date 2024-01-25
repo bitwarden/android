@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
 data class VaultLoginItemTypeHandlers(
     val onCheckForBreachClick: () -> Unit,
     val onCopyPasswordClick: () -> Unit,
+    val onCopyTotpCodeClick: () -> Unit,
     val onCopyUriClick: (String) -> Unit,
     val onCopyUsernameClick: () -> Unit,
     val onLaunchUriClick: (String) -> Unit,
@@ -31,6 +32,9 @@ data class VaultLoginItemTypeHandlers(
                 },
                 onCopyPasswordClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
+                },
+                onCopyTotpCodeClick = {
+                    viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
                 },
                 onCopyUriClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUriClick(it))

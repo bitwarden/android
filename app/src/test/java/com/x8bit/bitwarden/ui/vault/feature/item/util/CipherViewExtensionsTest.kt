@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import com.bitwarden.core.CipherType
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
+import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +26,15 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform full CipherView into ViewState Login Content with premium`() {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
-        val viewState = cipherView.toViewState(isPremiumUser = true)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            TotpCodeItemData(
+                periodSeconds = 30,
+                timeLeftSeconds = 15,
+                verificationCode = "123456",
+                totpCode = "testCode",
+            ),
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -41,7 +50,15 @@ class CipherViewExtensionsTest {
     fun `toViewState should transform full CipherView into ViewState Login Content without premium`() {
         val isPremiumUser = false
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
-        val viewState = cipherView.toViewState(isPremiumUser = isPremiumUser)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = isPremiumUser,
+            totpCodeItemData = TotpCodeItemData(
+                periodSeconds = 30,
+                timeLeftSeconds = 15,
+                verificationCode = "123456",
+                totpCode = "testCode",
+            ),
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -55,7 +72,10 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform empty CipherView into ViewState Login Content`() {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = true)
-        val viewState = cipherView.toViewState(isPremiumUser = true)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            totpCodeItemData = null,
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -71,7 +91,10 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform full CipherView into ViewState Identity Content`() {
         val cipherView = createCipherView(type = CipherType.IDENTITY, isEmpty = false)
-        val viewState = cipherView.toViewState(isPremiumUser = true)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            totpCodeItemData = null,
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -85,7 +108,10 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform empty CipherView into ViewState Identity Content`() {
         val cipherView = createCipherView(type = CipherType.IDENTITY, isEmpty = true)
-        val viewState = cipherView.toViewState(isPremiumUser = true)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            totpCodeItemData = null,
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -109,7 +135,10 @@ class CipherViewExtensionsTest {
                     lastName = null,
                 ),
             )
-        val viewState = cipherView.toViewState(isPremiumUser = true)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            totpCodeItemData = null,
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -138,7 +167,10 @@ class CipherViewExtensionsTest {
                 country = null,
             ),
         )
-        val result = cipherView.toViewState(isPremiumUser = true)
+        val result = cipherView.toViewState(
+            isPremiumUser = true,
+            totpCodeItemData = null,
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -170,7 +202,10 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform full CipherView into ViewState Secure Note Content`() {
         val cipherView = createCipherView(type = CipherType.SECURE_NOTE, isEmpty = false)
-        val viewState = cipherView.toViewState(isPremiumUser = true)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            totpCodeItemData = null,
+        )
 
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -185,7 +220,10 @@ class CipherViewExtensionsTest {
     @Test
     fun `toViewState should transform empty Secure Note CipherView into ViewState Secure Note Content`() {
         val cipherView = createCipherView(type = CipherType.SECURE_NOTE, isEmpty = true)
-        val viewState = cipherView.toViewState(isPremiumUser = true)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            totpCodeItemData = null,
+        )
 
         val expectedState = VaultItemState.ViewState.Content(
             common = createCommonContent(isEmpty = true).copy(currentCipher = cipherView),

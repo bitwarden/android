@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.BitwardenHiddenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
@@ -28,6 +29,9 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+
+private const val AUTH_CODE_SPACING_INTERVAL = 3
 
 /**
  * The top level content UI state for the [VaultItemScreen] when viewing a Login cipher.
@@ -94,14 +98,18 @@ fun VaultItemLoginContent(
             }
         }
 
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            TotpField(
-                isPremiumUser = loginItemState.isPremiumUser,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
+        loginItemState.totpCodeItemData?.let { totpCodeItemData ->
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                TotpField(
+                    totpCodeItemData = totpCodeItemData,
+                    isPremiumUser = loginItemState.isPremiumUser,
+                    onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
         }
 
         loginItemState.uris.takeUnless { it.isEmpty() }?.let { uris ->
@@ -298,11 +306,37 @@ private fun PasswordHistoryCount(
 
 @Composable
 private fun TotpField(
+    totpCodeItemData: TotpCodeItemData,
     isPremiumUser: Boolean,
+    onCopyTotpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (isPremiumUser) {
-        // TODO: Insert TOTP values here (BIT-1214)
+        Row {
+            BitwardenTextFieldWithActions(
+                label = stringResource(id = R.string.verification_code_totp),
+                value = totpCodeItemData.verificationCode
+                    .chunked(AUTH_CODE_SPACING_INTERVAL)
+                    .joinToString(" "),
+                onValueChange = { },
+                readOnly = true,
+                singleLine = true,
+                actions = {
+                    BitwardenCircularCountdownIndicator(
+                        timeLeftSeconds = totpCodeItemData.timeLeftSeconds,
+                        periodSeconds = totpCodeItemData.periodSeconds,
+                    )
+                    BitwardenIconButtonWithResource(
+                        iconRes = IconResource(
+                            iconPainter = painterResource(id = R.drawable.ic_copy),
+                            contentDescription = stringResource(id = R.string.copy_totp),
+                        ),
+                        onClick = onCopyTotpClick,
+                    )
+                },
+                modifier = modifier,
+            )
+        }
     } else {
         BitwardenTextField(
             label = stringResource(id = R.string.verification_code_totp),

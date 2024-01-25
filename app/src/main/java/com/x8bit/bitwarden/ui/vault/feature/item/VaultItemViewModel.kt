@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
+import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -18,6 +20,8 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -58,10 +62,28 @@ class VaultItemViewModel @Inject constructor(
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
-        ) { cipherViewState, userState ->
+            vaultRepository.getAuthCodeFlow(state.vaultItemId),
+        ) { cipherViewState, userState, authCodeState ->
+            val totpCodeData = authCodeState.data?.let {
+                TotpCodeItemData(
+                    periodSeconds = it.periodSeconds,
+                    timeLeftSeconds = it.timeLeftSeconds,
+                    totpCode = it.totpCode,
+                    verificationCode = it.code,
+                )
+            }
+
             VaultItemAction.Internal.VaultDataReceive(
                 userState = userState,
-                vaultDataState = cipherViewState,
+                vaultDataState = combineDataStates(
+                    cipherViewState,
+                    authCodeState.map { Unit },
+                ) { vaultData, _ ->
+                    VaultItemStateData(
+                        cipher = vaultData,
+                        totpCodeItemData = totpCodeData,
+                    )
+                },
             )
         }
             .onEach(::sendAction)
@@ -249,7 +271,7 @@ class VaultItemViewModel @Inject constructor(
                             ),
                         )
                     }
-            }
+                }
         }
     }
 
@@ -292,6 +314,10 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.ItemType.Login.CopyPasswordClick -> {
                 handleCopyPasswordClick()
+            }
+
+            is VaultItemAction.ItemType.Login.CopyTotpClick -> {
+                handleCopyTotpClick()
             }
 
             is VaultItemAction.ItemType.Login.CopyUriClick -> {
@@ -339,6 +365,13 @@ class VaultItemViewModel @Inject constructor(
             }
             val password = requireNotNull(login.passwordData?.password)
             clipboardManager.setText(text = password)
+        }
+    }
+
+    private fun handleCopyTotpClick() {
+        onLoginContent { _, login ->
+            val code = login.totpCodeItemData?.verificationCode ?: return@onLoginContent
+            clipboardManager.setText(text = code)
         }
     }
 
@@ -470,6 +503,7 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleVaultDataReceive(action: VaultItemAction.Internal.VaultDataReceive) {
         // Leave the current data alone if there is no UserState; we are in the process of logging
         // out.
@@ -489,8 +523,13 @@ class VaultItemViewModel @Inject constructor(
             is DataState.Loaded -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = vaultDataState.data
-                            ?.toViewState(isPremiumUser = userState.activeAccount.isPremium)
+                        viewState = vaultDataState
+                            .data
+                            .cipher
+                            ?.toViewState(
+                                isPremiumUser = userState.activeAccount.isPremium,
+                                totpCodeItemData = vaultDataState.data.totpCodeItemData,
+                            )
                             ?: VaultItemState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
@@ -519,8 +558,13 @@ class VaultItemViewModel @Inject constructor(
             is DataState.Pending -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = vaultDataState.data
-                            ?.toViewState(isPremiumUser = userState.activeAccount.isPremium)
+                        viewState = vaultDataState
+                            .data
+                            .cipher
+                            ?.toViewState(
+                                isPremiumUser = userState.activeAccount.isPremium,
+                                totpCodeItemData = vaultDataState.data.totpCodeItemData,
+                            )
                             ?: VaultItemState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
@@ -572,6 +616,7 @@ class VaultItemViewModel @Inject constructor(
                     )
                 }
             }
+
             DeleteCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(VaultItemEvent.ShowToast(message = R.string.item_soft_deleted.asText()))
@@ -786,7 +831,7 @@ data class VaultItemState(
                  * @property uris The URI associated with the login item.
                  * @property passwordRevisionDate An optional string indicating the last time the
                  * password was changed.
-                 * @property totp The optional TOTP string value to be displayed.
+                 * @property totpCodeItemData The optional data related the TOTP code.
                  * @property isPremiumUser Indicates if the user has subscribed to a premium
                  * account.
                  */
@@ -797,7 +842,7 @@ data class VaultItemState(
                     val passwordHistoryCount: Int?,
                     val uris: List<UriData>,
                     val passwordRevisionDate: String?,
-                    val totp: String?,
+                    val totpCodeItemData: TotpCodeItemData?,
                     val isPremiumUser: Boolean,
                 ) : ItemType() {
 
@@ -1078,6 +1123,11 @@ sealed class VaultItemAction {
             data object CopyPasswordClick : Login()
 
             /**
+             * The user has clicked the copy button for the TOTP code.
+             */
+            data object CopyTotpClick : Login()
+
+            /**
              * The user has clicked the copy button for a URI.
              */
             data class CopyUriClick(
@@ -1142,7 +1192,7 @@ sealed class VaultItemAction {
          */
         data class VaultDataReceive(
             val userState: UserState?,
-            val vaultDataState: DataState<CipherView?>,
+            val vaultDataState: DataState<VaultItemStateData>,
         ) : Internal()
 
         /**

@@ -10,6 +10,7 @@ import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
+import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import java.time.Instant
 
@@ -196,9 +197,14 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
             )
         },
         passwordRevisionDate = "1/1/70 12:16 AM".takeUnless { isEmpty },
-        totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example"
-            .takeUnless { isEmpty },
         isPremiumUser = true,
+        totpCodeItemData = TotpCodeItemData(
+            periodSeconds = 30,
+            timeLeftSeconds = 15,
+            verificationCode = "123456",
+            totpCode = "testCode",
+        )
+            .takeUnless { isEmpty },
     )
 
 fun createIdentityContent(
