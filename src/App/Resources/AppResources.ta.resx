@@ -858,7 +858,7 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>புதிய இணைப்பை சேர்</value>
+    <value>புதிய இணைப்பைச் சேர்</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>இணைப்புகள்</value>
@@ -2331,7 +2331,7 @@
     <value>நேரம்</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>இதற்கருகில்</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
     <value>உள்நுழைவை உறுதிபடுத்து</value>
@@ -2772,7 +2772,7 @@
     <value>இப்போது ஒத்திசை</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Unlock options</value>
+    <value>பூட்டவிழ்ப்பு விருப்பங்கள்</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
     <value>அமர்வு நேரமுடிவு</value>
@@ -2785,16 +2785,16 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
-    <value>One hour and one minute</value>
+    <value>ஒரு மணிநேரம் மற்றும் ஒரு நிமிடம்</value>
   </data>
   <data name="OneHourAndXMinute" xml:space="preserve">
-    <value>One hour and {0} minutes</value>
+    <value>ஒரு மணிநேரம் மற்றும் {0} நிமிடங்கள்</value>
   </data>
   <data name="XHoursAndOneMinute" xml:space="preserve">
-    <value>{0} hours and one minute</value>
+    <value>{0} மணிநேரம் மற்றும் ஒரு நிமிடம்</value>
   </data>
   <data name="XHoursAndYMinutes" xml:space="preserve">
-    <value>{0} hours and {1} minutes</value>
+    <value>{0} மணிநேரம் மற்றும் {1} நிமிடங்கள்</value>
   </data>
   <data name="XHours" xml:space="preserve">
     <value>{0} மணிநேரம்</value>
@@ -2809,29 +2809,29 @@
     <value>கூடுதல் தேர்வுகள்</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>Continue to web app?</value>
+    <value>வலைச்செயலிக்குத் தொடரவா?</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
-    <value>Continue to {0}?</value>
+    <value>{0}-க்குத் தொடரவா?</value>
     <comment>The parameter is an URL, like bitwarden.com.</comment>
   </data>
   <data name="ContinueToHelpCenter" xml:space="preserve">
-    <value>Continue to Help center?</value>
+    <value>உதவி மையத்திற்குத் தொடரவா?</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
-    <value>Continue to contact support?</value>
+    <value>ஆதரவைத் தொடர்புகொள்ளத் தொடரவா?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continue to app store?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+    <value>Bitwarden வலைச்செயலியில் இரு-படி உள்நுழைவை அமைத்து உமது கணக்கின் பாதுகாப்பை அதிகரி.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
-    <value>You can change your master password on the Bitwarden web app.</value>
+    <value>Bitwarden வலைச்செயலியில் உமது பிரதான கடவுச்சொல்லை மாற்றலாம்.</value>
   </data>
   <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
-    <value>You can import data to your vault on {0}.</value>
+    <value>{0}-இல் உமது பெட்டகத்திற்குத் தரவை இறக்குமதி செய்யலாம்.</value>
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">

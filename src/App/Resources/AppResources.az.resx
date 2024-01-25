@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>İstifadəçi adını kopyalayın</value>
+    <value>İstifadəçi adını kopyala</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -176,7 +176,7 @@
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Redaktə edin</value>
+    <value>Düzəliş et</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
     <value>Qovluğa düzəliş et</value>
@@ -784,13 +784,13 @@
     <value>Avto-doldurmaq və ya bu elementə baxmaq istəyirsiniz?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Bu elementi avto-doldurmaq istədiyinizə əminsiniz? "{0}" ilə tam uyğun gəlmir.</value>
+    <value>Bu elementi avto-doldurmaq istədiyinizə əminsiniz? "{0}" ilə tam uyuşmur.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Uyğun gələnlər</value>
+    <value>Uyuşan elementlər</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Uyğun gələ bilənlər</value>
+    <value>Uyuşması mümkün olan elementlər</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Axtar</value>
@@ -1246,10 +1246,10 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Başlayır</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI uyğunluq aşkarlaması</value>
+    <value>URI uyuşma aşkarlaması</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Uyğunluq aşkarlaması</value>
+    <value>Uyuşmanı aşkarlama</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
@@ -1530,11 +1530,11 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>İlkin URI uyğunluq aşkarlaması</value>
+    <value>İlkin URI uyuşma aşkarlaması</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Avto-doldurma kimi əməliyyatları icra edərkən giriş etmə prosesi üçün URI uyğunluq aşkarlamasının ilkin yolunu seçin.</value>
+    <value>Avto-doldurma kimi əməliyyatları icra edərkən giriş etmə prosesi üçün URI uyuşma aşkarlamasının idarə edliəcəyi ilkin yolu seçin.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
@@ -2464,7 +2464,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Əlçatımlılıq Xidməti açıqlaması</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden, tətbiqlərdə və veb saytlarda giriş sahələrini axtarmaq üçün Əlçatımlılıq Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyğunluq aşkar etdikdə istifadəçi adı və parolun daxil edilməsi üçün müvafiq sahə kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</value>
+    <value>Bitwarden, tətbiqlərdə və veb saytlarda giriş sahələrini axtarmaq üçün Əlçatımlılıq Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq sahə kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Qəbul et</value>
@@ -2505,7 +2505,7 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Cihazınıza bir bildiriş göndərildi.</value>
   </data>
   <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
-    <value>Lütfən anbarınızın kilidinin açıq olduğuna və Barmaq izi ifadəsinin digər cihazda uyğun gəldiyinə əmin olun.</value>
+    <value>Lütfən anbarınızın kilidinin açıq olduğuna və Barmaq izi ifadəsinin digər cihazla uyuşduğuna əmin olun.</value>
   </data>
   <data name="ResendNotification" xml:space="preserve">
     <value>Bildirişi təkrar göndər</value>
@@ -2592,13 +2592,13 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Açarı, mövcud və ya yeni bir elementə əlavə edin</value>
   </data>
   <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
-    <value>Anbarınızda {0} ilə uyğunlaşan heç bir element yoxdur</value>
+    <value>Anbarınızda {0} ilə uyuşan heç bir element yoxdur</value>
   </data>
   <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
     <value>Bir element axtarın və ya yenisini əlavə edin</value>
   </data>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
-    <value>Axtarışa uyğun gələn heç bir element yoxdur</value>
+    <value>Axtarışla uyuşan heç bir element yoxdur</value>
   </data>
   <data name="US" xml:space="preserve">
     <value>ABŞ</value>

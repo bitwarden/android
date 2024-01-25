@@ -2862,12 +2862,12 @@
     <value>帳戶已登出。</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>您的組織權限已更新，需要您設定主密碼。</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>您的組織要求您設定主密碼。</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
-    <value>Set up an unlock option to change your vault timeout action.</value>
+    <value>設定一個解鎖方式來變更您的密碼庫逾時動作。</value>
   </data>
 </root>

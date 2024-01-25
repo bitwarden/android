@@ -157,7 +157,7 @@ namespace Bit.Droid
             var autofillHandler = new AutofillHandler(stateService, messagingService, clipboardService,
                 platformUtilsService, new LazyResolve<IEventService>());
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
-            var cryptoService = new CryptoService(stateService, cryptoFunctionService);
+            var cryptoService = new CryptoService(stateService, cryptoFunctionService, logger);
             var biometricService = new BiometricService(stateService, cryptoService);
             var userPinService = new UserPinService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
