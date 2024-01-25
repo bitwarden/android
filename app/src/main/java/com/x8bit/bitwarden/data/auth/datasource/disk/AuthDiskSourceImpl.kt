@@ -27,6 +27,7 @@ private const val PIN_PROTECTED_USER_KEY_KEY = "$BASE_KEY:pinKeyEncryptedUserKey
 private const val ENCRYPTED_PIN_KEY = "$BASE_KEY:protectedPin"
 private const val ORGANIZATIONS_KEY = "$BASE_KEY:organizations"
 private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
+private const val TWO_FACTOR_TOKEN_KEY = "$BASE_KEY:twoFactorToken"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -169,6 +170,16 @@ class AuthDiskSourceImpl(
         putString(
             key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId",
             value = pinProtectedUserKey,
+        )
+    }
+
+    override fun getTwoFactorToken(email: String): String? =
+        getString(key = "${TWO_FACTOR_TOKEN_KEY}_$email")
+
+    override fun storeTwoFactorToken(email: String, twoFactorToken: String?) {
+        putString(
+            key = "${TWO_FACTOR_TOKEN_KEY}_$email",
+            value = twoFactorToken,
         )
     }
 

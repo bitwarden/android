@@ -118,6 +118,16 @@ interface AuthDiskSource {
     )
 
     /**
+     * Gets a two-factor auth token using a user's [email].
+     */
+    fun getTwoFactorToken(email: String): String?
+
+    /**
+     * Stores a two-factor auth token using a user's [email].
+     */
+    fun storeTwoFactorToken(email: String, twoFactorToken: String?)
+
+    /**
      * Retrieves an encrypted PIN for the given [userId].
      */
     fun getEncryptedPin(userId: String): String?

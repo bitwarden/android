@@ -23,6 +23,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
+    private val storedTwoFactorTokens = mutableMapOf<String, String?>()
     private val storedUserAutoUnlockKeys = mutableMapOf<String, String?>()
     private val storedPinProtectedUserKeys = mutableMapOf<String, Pair<String?, Boolean>>()
     private val storedEncryptedPins = mutableMapOf<String, String?>()
@@ -44,6 +45,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedInvalidUnlockAttempts.remove(userId)
         storedUserKeys.remove(userId)
         storedPrivateKeys.remove(userId)
+        storedTwoFactorTokens.clear()
         storedUserAutoUnlockKeys.remove(userId)
         storedPinProtectedUserKeys.remove(userId)
         storedEncryptedPins.remove(userId)
@@ -83,6 +85,12 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storePrivateKey(userId: String, privateKey: String?) {
         storedPrivateKeys[userId] = privateKey
+    }
+
+    override fun getTwoFactorToken(email: String): String? = storedTwoFactorTokens[email]
+
+    override fun storeTwoFactorToken(email: String, twoFactorToken: String?) {
+        storedTwoFactorTokens[email] = twoFactorToken
     }
 
     override fun getUserAutoUnlockKey(userId: String): String? =
@@ -171,6 +179,13 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertPrivateKey(userId: String, privateKey: String?) {
         assertEquals(privateKey, storedPrivateKeys[userId])
+    }
+
+    /**
+     * Assert that the [twoFactorToken] was stored successfully using the [email].
+     */
+    fun assertTwoFactorToken(email: String, twoFactorToken: String?) {
+        assertEquals(twoFactorToken, storedTwoFactorTokens[email])
     }
 
     /**

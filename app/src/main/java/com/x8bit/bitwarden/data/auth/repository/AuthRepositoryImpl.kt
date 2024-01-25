@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
@@ -87,13 +89,19 @@ class AuthRepositoryImpl(
     private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow<Boolean>(false)
 
     /**
+     * The auth information to make the identity token request will need to be
+     * cached to make the request again in the case of two-factor authentication.
+     */
+    private var identityTokenAuthModel: IdentityTokenAuthModel? = null
+
+    /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The
      * use of [Dispatchers.Unconfined] allows for this to happen synchronously whenever any of
      * these flows changes.
      */
     private val collectionScope = CoroutineScope(dispatcherManager.unconfined)
 
-    override var twoFactorData: TwoFactorRequired? = null
+    override var twoFactorResponse: TwoFactorRequired? = null
 
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -180,7 +188,6 @@ class AuthRepositoryImpl(
             )
     }
 
-    @Suppress("LongMethod")
     override suspend fun login(
         email: String,
         password: String,
@@ -195,10 +202,10 @@ class AuthRepositoryImpl(
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
         }
-        .flatMap { passwordHash ->
-            identityService.getToken(
-                uniqueAppId = authDiskSource.uniqueAppId,
+        .map { passwordHash ->
+            loginCommon(
                 email = email,
+                password = password,
                 authModel = IdentityTokenAuthModel.MasterPassword(
                     username = email,
                     password = passwordHash,
@@ -208,11 +215,51 @@ class AuthRepositoryImpl(
         }
         .fold(
             onFailure = { LoginResult.Error(errorMessage = null) },
+            onSuccess = { it },
+        )
+
+    override suspend fun login(
+        email: String,
+        password: String?,
+        twoFactorData: TwoFactorDataModel,
+        captchaToken: String?,
+    ): LoginResult = identityTokenAuthModel?.let {
+        loginCommon(
+            email = email,
+            password = password,
+            authModel = it,
+            twoFactorData = twoFactorData,
+            captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
+        )
+    } ?: LoginResult.Error(errorMessage = null)
+
+    /**
+     * A helper function to extract the common logic of logging in through
+     * any of the available methods.
+     */
+    @Suppress("LongMethod")
+    private suspend fun loginCommon(
+        email: String,
+        password: String? = null,
+        authModel: IdentityTokenAuthModel,
+        twoFactorData: TwoFactorDataModel? = null,
+        captchaToken: String?,
+    ): LoginResult = identityService
+        .getToken(
+            uniqueAppId = authDiskSource.uniqueAppId,
+            email = email,
+            authModel = authModel,
+            twoFactorData = twoFactorData ?: getRememberedTwoFactorData(email),
+            captchaToken = captchaToken,
+        )
+        .fold(
+            onFailure = { LoginResult.Error(errorMessage = null) },
             onSuccess = { loginResponse ->
                 when (loginResponse) {
                     is CaptchaRequired -> LoginResult.CaptchaRequired(loginResponse.captchaKey)
                     is TwoFactorRequired -> {
-                        twoFactorData = loginResponse
+                        identityTokenAuthModel = authModel
+                        twoFactorResponse = loginResponse
                         LoginResult.TwoFactorRequired
                     }
 
@@ -223,18 +270,38 @@ class AuthRepositoryImpl(
                                 .environment
                                 .environmentUrlData,
                         )
-                        vaultRepository.clearUnlockedData()
-                        vaultRepository.unlockVault(
-                            userId = userStateJson.activeUserId,
-                            email = userStateJson.activeAccount.profile.email,
-                            kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                            userKey = loginResponse.key,
-                            privateKey = loginResponse.privateKey,
-                            masterPassword = password,
-                            // We can separately unlock the vault for organization data after
-                            // receiving the sync response if this data is currently absent.
-                            organizationKeys = null,
-                        )
+
+                        // If the user just authenticated with a two-factor code and selected
+                        // the option to remember it, then the API response will return a token
+                        // that will be used in place of the two-factor code on the next login
+                        // attempt.
+                        loginResponse.twoFactorToken?.let {
+                            authDiskSource.storeTwoFactorToken(
+                                email = email,
+                                twoFactorToken = it,
+                            )
+                        }
+
+                        // Remove any cached data after successfully logging in.
+                        identityTokenAuthModel = null
+                        twoFactorResponse = null
+
+                        // Attempt to unlock the vault if possible.
+                        password?.let {
+                            vaultRepository.clearUnlockedData()
+                            vaultRepository.unlockVault(
+                                userId = userStateJson.activeUserId,
+                                email = userStateJson.activeAccount.profile.email,
+                                kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                                userKey = loginResponse.key,
+                                privateKey = loginResponse.privateKey,
+                                masterPassword = it,
+                                // We can separately unlock the vault for organization data after
+                                // receiving the sync response if this data is currently absent.
+                                organizationKeys = null,
+                            )
+                        }
+
                         authDiskSource.userState = userStateJson
                         authDiskSource.storeUserKey(
                             userId = userStateJson.activeUserId,
@@ -522,6 +589,18 @@ class AuthRepositoryImpl(
                     PasswordStrengthResult.Error
                 },
             )
+
+    /**
+     * Get the remembered two-factor token associated with the user's email, if applicable.
+     */
+    private fun getRememberedTwoFactorData(email: String): TwoFactorDataModel? =
+        authDiskSource.getTwoFactorToken(email = email)?.let { twoFactorToken ->
+            TwoFactorDataModel(
+                code = twoFactorToken,
+                method = TwoFactorAuthMethod.REMEMBER.value.toString(),
+                remember = false,
+            )
+        }
 
     private fun getVaultUnlockType(
         userId: String,

@@ -23,6 +23,8 @@ sealed class GetTokenResponseJson {
      * @property shouldForcePasswordReset Whether or not the app must force a password reset.
      * @property shouldResetMasterPassword Whether or not the user is required to reset their
      * master password.
+     * @property twoFactorToken If the user has chosen to remember the two-factor authorization,
+     * this token will be cached and used for future auth requests.
      * @property masterPasswordPolicyOptions The options available for a user's master password.
      * @property userDecryptionOptions The options available to a user for decryption.
      */
@@ -63,6 +65,9 @@ sealed class GetTokenResponseJson {
 
         @SerialName("ResetMasterPassword")
         val shouldResetMasterPassword: Boolean,
+
+        @SerialName("TwoFactorToken")
+        val twoFactorToken: String?,
 
         @SerialName("MasterPasswordPolicy")
         val masterPasswordPolicyOptions: MasterPasswordPolicyOptionsJson?,

@@ -67,7 +67,7 @@ fun LoginScreen(
     onNavigateToMasterPasswordHint: (String) -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
     onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
-    onNavigateToTwoFactorLogin: () -> Unit,
+    onNavigateToTwoFactorLogin: (String, String?) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -89,7 +89,10 @@ fun LoginScreen(
                 onNavigateToLoginWithDevice(event.emailAddress)
             }
 
-            LoginEvent.NavigateToTwoFactorLogin -> onNavigateToTwoFactorLogin()
+            is LoginEvent.NavigateToTwoFactorLogin -> {
+                onNavigateToTwoFactorLogin(event.emailAddress, event.password)
+            }
+
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }

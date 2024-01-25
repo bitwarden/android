@@ -81,6 +81,7 @@ private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     privateKey = "privateKey",
     shouldForcePasswordReset = true,
     shouldResetMasterPassword = true,
+    twoFactorToken = null,
     masterPasswordPolicyOptions = null,
     userDecryptionOptions = null,
 )

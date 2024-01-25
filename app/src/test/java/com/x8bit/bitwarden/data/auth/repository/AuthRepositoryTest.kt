@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
@@ -736,7 +737,7 @@ class AuthRepositoryTest {
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.TwoFactorRequired, result)
         assertEquals(
-            repository.twoFactorData,
+            repository.twoFactorResponse,
             GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
         )
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -752,6 +753,184 @@ class AuthRepositoryTest {
                 uniqueAppId = UNIQUE_APP_ID,
             )
         }
+    }
+
+    @Test
+    fun `login two factor with remember saves two factor auth token`() = runTest {
+        // Attempt a normal login with a two factor error first, so that the auth
+        // data will be cached.
+        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        } returns Result.success(
+            GetTokenResponseJson.TwoFactorRequired(
+                TWO_FACTOR_AUTH_METHODS_DATA, null, null,
+            ),
+        )
+        val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        assertEquals(LoginResult.TwoFactorRequired, firstResult)
+        coVerify { accountsService.preLogin(email = EMAIL) }
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+
+        // Login with two factor data.
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            twoFactorToken = "twoFactorTokenToStore",
+        )
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+                twoFactorData = TWO_FACTOR_DATA,
+            )
+        } returns Result.success(successResponse)
+        coEvery {
+            vaultRepository.unlockVault(
+                userId = USER_ID_1,
+                email = EMAIL,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                userKey = successResponse.key,
+                privateKey = successResponse.privateKey,
+                organizationKeys = null,
+                masterPassword = PASSWORD,
+            )
+        } returns VaultUnlockResult.Success
+        coEvery { vaultRepository.syncIfNecessary() } just runs
+        every {
+            successResponse.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+        } returns SINGLE_USER_STATE_1
+        val finalResult = repository.login(
+            email = EMAIL,
+            password = PASSWORD,
+            twoFactorData = TWO_FACTOR_DATA,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Success, finalResult)
+        assertNull(repository.twoFactorResponse)
+        fakeAuthDiskSource.assertTwoFactorToken(
+            email = EMAIL,
+            twoFactorToken = "twoFactorTokenToStore",
+        )
+    }
+
+    @Test
+    fun `login uses remembered two factor tokens`() = runTest {
+        fakeAuthDiskSource.storeTwoFactorToken(EMAIL, "storedTwoFactorToken")
+        val rememberedTwoFactorData = TwoFactorDataModel(
+            code = "storedTwoFactorToken",
+            method = TwoFactorAuthMethod.REMEMBER.value.toString(),
+            remember = false,
+        )
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+        coEvery {
+            accountsService.preLogin(email = EMAIL)
+        } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+                twoFactorData = rememberedTwoFactorData,
+            )
+        } returns Result.success(successResponse)
+        coEvery {
+            vaultRepository.unlockVault(
+                userId = USER_ID_1,
+                email = EMAIL,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                userKey = successResponse.key,
+                privateKey = successResponse.privateKey,
+                organizationKeys = null,
+                masterPassword = PASSWORD,
+            )
+        } returns VaultUnlockResult.Success
+        coEvery { vaultRepository.syncIfNecessary() } just runs
+        every {
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+        } returns SINGLE_USER_STATE_1
+        val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        assertEquals(LoginResult.Success, result)
+        assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+        coVerify { accountsService.preLogin(email = EMAIL) }
+        fakeAuthDiskSource.assertPrivateKey(
+            userId = USER_ID_1,
+            privateKey = "privateKey",
+        )
+        fakeAuthDiskSource.assertUserKey(
+            userId = USER_ID_1,
+            userKey = "key",
+        )
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+                twoFactorData = rememberedTwoFactorData,
+            )
+            vaultRepository.unlockVault(
+                userId = USER_ID_1,
+                email = EMAIL,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                userKey = successResponse.key,
+                privateKey = successResponse.privateKey,
+                organizationKeys = null,
+                masterPassword = PASSWORD,
+            )
+            vaultRepository.syncIfNecessary()
+        }
+        assertEquals(
+            SINGLE_USER_STATE_1,
+            fakeAuthDiskSource.userState,
+        )
+        verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        verify { vaultRepository.clearUnlockedData() }
+    }
+
+    @Test
+    fun `login two factor returns error if no cached auth data`() = runTest {
+        val result = repository.login(
+            email = EMAIL,
+            password = PASSWORD,
+            twoFactorData = TWO_FACTOR_DATA,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Error(errorMessage = null), result)
     }
 
     @Test
@@ -1557,6 +1736,14 @@ class AuthRepositoryTest {
         private const val REFRESH_TOKEN = "refreshToken"
         private const val REFRESH_TOKEN_2 = "refreshToken2"
         private const val CAPTCHA_KEY = "captcha"
+        private const val TWO_FACTOR_CODE = "123456"
+        private val TWO_FACTOR_METHOD = TwoFactorAuthMethod.EMAIL
+        private const val TWO_FACTOR_REMEMBER = true
+        private val TWO_FACTOR_DATA = TwoFactorDataModel(
+            code = TWO_FACTOR_CODE,
+            method = TWO_FACTOR_METHOD.value.toString(),
+            remember = TWO_FACTOR_REMEMBER,
+        )
 
         private const val DEFAULT_KDF_ITERATIONS = 600000
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"
@@ -1591,6 +1778,7 @@ class AuthRepositoryTest {
             privateKey = "privateKey",
             shouldForcePasswordReset = true,
             shouldResetMasterPassword = true,
+            twoFactorToken = null,
             masterPasswordPolicyOptions = null,
             userDecryptionOptions = null,
         )

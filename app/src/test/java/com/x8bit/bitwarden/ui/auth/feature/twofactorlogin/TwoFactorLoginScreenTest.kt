@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 
+import android.net.Uri
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -14,6 +15,7 @@ import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
@@ -45,6 +47,22 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
                 intentManager = intentManager,
             )
         }
+    }
+
+    @Test
+    fun `basicDialog should update according to state`() {
+        composeTestRule.onNodeWithText("Error message").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = TwoFactorLoginState.DialogState.Error(
+                    title = null,
+                    message = "Error message".asText(),
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Error message").isDisplayed()
     }
 
     @Test
@@ -103,6 +121,19 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `loadingOverlay should update according to state`() {
+        composeTestRule.onNodeWithText("Loading...").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = TwoFactorLoginState.DialogState.Loading("Loading...".asText()),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Loading...").isDisplayed()
+    }
+
+    @Test
     fun `remember me click should send RememberMeToggle action`() {
         composeTestRule.onNodeWithText("Remember me").performClick()
         verify {
@@ -131,7 +162,7 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `resend email button visibility should should update according to state`() {
+    fun `resend email button visibility should update according to state`() {
         val buttonText = "Send verification code email again"
         composeTestRule.onNodeWithText(buttonText).assertIsDisplayed()
 
@@ -179,19 +210,35 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
+        val mockUri = mockk<Uri>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToCaptcha(mockUri))
+        verify { intentManager.startCustomTabsActivity(mockUri) }
+    }
+
+    @Test
     fun `NavigateToRecoveryCode should launch the recovery code uri`() {
         mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToRecoveryCode)
         verify {
             intentManager.launchUri(any())
         }
     }
-}
 
-private val DEFAULT_STATE = TwoFactorLoginState(
-    authMethod = TwoFactorAuthMethod.EMAIL,
-    availableAuthMethods = listOf(TwoFactorAuthMethod.EMAIL, TwoFactorAuthMethod.RECOVERY_CODE),
-    codeInput = "",
-    displayEmail = "ex***@email.com",
-    isContinueButtonEnabled = false,
-    isRememberMeEnabled = false,
-)
+    companion object {
+        private val DEFAULT_STATE = TwoFactorLoginState(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            availableAuthMethods = listOf(
+                TwoFactorAuthMethod.EMAIL,
+                TwoFactorAuthMethod.RECOVERY_CODE,
+            ),
+            codeInput = "",
+            displayEmail = "ex***@email.com",
+            dialogState = null,
+            isContinueButtonEnabled = false,
+            isRememberMeEnabled = false,
+            captchaToken = null,
+            email = "example@email.com",
+            password = "password123",
+        )
+    }
+}
