@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -147,6 +148,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.AttachmentsClick -> handleAttachmentsClick()
             is VaultAddEditAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
             is VaultAddEditAction.Common.CollectionsClick -> handleCollectionsClick()
+            is VaultAddEditAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
@@ -274,6 +276,30 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleCollectionsClick() {
         onEdit { sendEvent(VaultAddEditEvent.NavigateToCollections(it.vaultItemId)) }
+    }
+
+    private fun handleConfirmDeleteClick() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Loading(
+                    R.string.soft_deleting.asText(),
+                ),
+            )
+        }
+        onContent { content ->
+            if (content.common.originalCipher?.id != null) {
+                viewModelScope.launch {
+                    trySendAction(
+                        VaultAddEditAction.Internal.DeleteCipherReceive(
+                            result = vaultRepository.softDeleteCipher(
+                                cipherId = content.common.originalCipher.id.toString(),
+                                cipherView = content.common.originalCipher,
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
     }
 
     private fun handleCloseClick() {
@@ -848,7 +874,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.UpdateCipherResultReceive -> {
                 handleUpdateCipherResultReceive(action)
             }
-
+            is VaultAddEditAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultAddEditAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
             is VaultAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
             is VaultAddEditAction.Internal.GeneratorResultReceive -> {
@@ -905,6 +931,30 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is UpdateCipherResult.Success -> {
+                sendEvent(VaultAddEditEvent.NavigateBack)
+            }
+        }
+    }
+
+    private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
+        when (action.result) {
+            DeleteCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.Generic(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            DeleteCipherResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(
+                    VaultAddEditEvent.ShowToast(
+                        message = R.string.item_soft_deleted.asText(),
+                    ),
+                )
                 sendEvent(VaultAddEditEvent.NavigateBack)
             }
         }
@@ -1576,6 +1626,11 @@ sealed class VaultAddEditAction {
         data object CollectionsClick : Common()
 
         /**
+         * The user has confirmed to deleted the cipher.
+         */
+        data object ConfirmDeleteClick : Common()
+
+        /**
          * Represents the action when a type option is selected.
          *
          * @property typeOption The selected type option.
@@ -1959,6 +2014,13 @@ sealed class VaultAddEditAction {
          */
         data class UpdateCipherResultReceive(
             val updateCipherResult: UpdateCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the delete cipher result has been received.
+         */
+        data class DeleteCipherReceive(
+            val result: DeleteCipherResult,
         ) : Internal()
     }
 }

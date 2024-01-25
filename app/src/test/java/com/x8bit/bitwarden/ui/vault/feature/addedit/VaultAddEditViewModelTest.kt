@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRep
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -222,6 +223,97 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ConfirmDeleteClick with DeleteCipherResult Success should emit ShowToast and NavigateBack`() =
+        runTest {
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                ),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = createMockCipherView(number = 1))
+
+            coEvery {
+                vaultRepository.softDeleteCipher(
+                    cipherId = "mockId-1",
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns DeleteCipherResult.Success
+
+            viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick)
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(R.string.item_soft_deleted.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ConfirmDeleteClick with DeleteCipherResult Failure should show generic error`() =
+        runTest {
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = initState,
+                    vaultAddEditType = vaultAddEditType,
+                ),
+            )
+            mutableVaultItemFlow.value = DataState.Loaded(data = createMockCipherView(number = 1))
+
+            coEvery {
+                vaultRepository.softDeleteCipher(
+                    cipherId = "mockId-1",
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns DeleteCipherResult.Error
+
+            viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick)
+
+            assertEquals(
+                createVaultAddItemState(
+                    vaultAddEditType = vaultAddEditType,
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                    commonContentViewState = createCommonContentViewState(
+                        name = "mockName-1",
+                        folder = "mockId-1".asText(),
+                        ownership = "",
+                        originalCipher = createMockCipherView(number = 1),
+                        availableFolders = emptyList(),
+                        availableOwners = emptyList(),
+                        notes = "mockNotes-1",
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "testId",
+                                name = "mockName-1",
+                                value = "mockValue-1",
+                            ),
+                        ),
+                    ),
+                    typeContentViewState = createLoginTypeContentViewState(
+                        username = "mockUsername-1",
+                        password = "mockPassword-1",
+                        uri = "www.mockuri1.com",
+                        totpCode = "mockTotp-1",
+                        canViewPassword = false,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `in add mode, SaveClick should show dialog, and remove it once an item is saved`() =
@@ -1785,6 +1877,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         notes: String = "",
         customFieldData: List<VaultAddEditState.Custom> = listOf(),
         ownership: String = "placeholder@email.com",
+        originalCipher: CipherView? = null,
+        availableFolders: List<Text> = listOf(
+            "Folder 1".asText(),
+            "Folder 2".asText(),
+            "Folder 3".asText(),
+        ),
+        availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
     ): VaultAddEditState.ViewState.Content.Common =
         VaultAddEditState.ViewState.Content.Common(
             name = name,
@@ -1794,6 +1893,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             masterPasswordReprompt = masterPasswordReprompt,
             notes = notes,
             ownership = ownership,
+            originalCipher = originalCipher,
+            availableFolders = availableFolders,
+            availableOwners = availableOwners,
         )
 
     private fun createLoginTypeContentViewState(
@@ -1801,12 +1903,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         password: String = "",
         uri: String = "",
         totpCode: String? = null,
+        canViewPassword: Boolean = true,
     ): VaultAddEditState.ViewState.Content.ItemType.Login =
         VaultAddEditState.ViewState.Content.ItemType.Login(
             username = username,
             password = password,
             uri = uri,
             totp = totpCode,
+            canViewPassword = canViewPassword,
         )
 
     private fun createSavedStateHandleWithState(
