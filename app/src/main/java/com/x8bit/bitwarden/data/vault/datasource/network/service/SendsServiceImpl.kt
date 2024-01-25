@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenErr
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SendsApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -59,7 +60,7 @@ class SendsServiceImpl(
     ): Result<SyncResponseJson.Send> {
         val send = sendFileResponse.sendResponse
         return when (sendFileResponse.fileUploadType) {
-            SendFileResponseJson.FileUploadType.DIRECT -> {
+            FileUploadType.DIRECT -> {
                 sendsApi.uploadFile(
                     sendId = requireNotNull(send.id),
                     fileId = requireNotNull(send.file?.id),
@@ -80,7 +81,7 @@ class SendsServiceImpl(
                 )
             }
 
-            SendFileResponseJson.FileUploadType.AZURE -> {
+            FileUploadType.AZURE -> {
                 azureApi.uploadAzureBlob(
                     url = sendFileResponse.url,
                     date = DateTimeFormatter
