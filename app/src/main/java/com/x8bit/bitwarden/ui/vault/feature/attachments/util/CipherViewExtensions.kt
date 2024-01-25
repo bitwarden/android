@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsState
  */
 fun CipherView.toViewState(): AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
+        originalCipher = this,
         attachments = this
             .attachments
             .orEmpty()

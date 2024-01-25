@@ -7,11 +7,13 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -72,6 +74,19 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `DismissDialogClick should emit DismissDialogClick`() = runTest {
+        val initialState = DEFAULT_STATE.copy(
+            dialogState = AttachmentsState.DialogState.Loading("Loading".asText()),
+        )
+        val viewModel = createViewModel(initialState)
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(AttachmentsAction.DismissDialogClick)
+            assertEquals(initialState.copy(dialogState = null), awaitItem())
+        }
+    }
+
+    @Test
     fun `ChooseFileClick should emit ShowToast`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -91,12 +106,65 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteClick should emit ShowToast`() = runTest {
-        val attachmentId = "attachmentId-1234"
+    fun `DeleteClick with deleteCipherAttachment error should display error dialog`() = runTest {
+        val cipherId = "mockId-1"
+        val attachmentId = "mockId-1"
+        val cipherView = createMockCipherView(number = 1)
+        val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+        coEvery {
+            vaultRepository.deleteCipherAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+                cipherView = cipherView,
+            )
+        } returns DeleteAttachmentResult.Error
+        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.actionChannel.trySend(AttachmentsAction.DeleteClick(attachmentId))
+            assertEquals(
+                initialState.copy(
+                    dialogState = AttachmentsState.DialogState.Loading(
+                        message = R.string.deleting.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                initialState.copy(
+                    dialogState = AttachmentsState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `DeleteClick with deleteCipherAttachment success should emit ShowToast`() = runTest {
+        val cipherId = "mockId-1"
+        val attachmentId = "mockId-1"
+        val cipherView = createMockCipherView(number = 1)
+        coEvery {
+            vaultRepository.deleteCipherAttachment(
+                cipherId = cipherId,
+                attachmentId = attachmentId,
+                cipherView = cipherView,
+            )
+        } returns DeleteAttachmentResult.Success
+        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AttachmentsAction.DeleteClick(attachmentId))
-            assertEquals(AttachmentsEvent.ShowToast("Not Yet Implemented".asText()), awaitItem())
+            viewModel.actionChannel.trySend(AttachmentsAction.DeleteClick(cipherId))
+            assertEquals(
+                AttachmentsEvent.ShowToast(R.string.attachment_deleted.asText()),
+                awaitItem(),
+            )
         }
     }
 
@@ -213,23 +281,25 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
-            set("cipher_id", initialState?.cipherId ?: "cipherId-1234")
+            set("cipher_id", initialState?.cipherId ?: "mockId-1")
         },
     )
 }
 
 private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
-    cipherId = "cipherId-1234",
+    cipherId = "mockId-1",
     viewState = AttachmentsState.ViewState.Loading,
+    dialogState = null,
 )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
+        originalCipher = createMockCipherView(number = 1),
         attachments = listOf(
             AttachmentsState.AttachmentItem(
-                id = "cipherId-1234",
-                title = "cool_file.png",
-                displaySize = "10 MB",
+                id = "mockId-1",
+                title = "mockFileName-1",
+                displaySize = "mockSizeName-1",
             ),
         ),
     )

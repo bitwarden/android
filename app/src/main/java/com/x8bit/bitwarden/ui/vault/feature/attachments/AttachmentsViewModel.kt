@@ -7,6 +7,7 @@ import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -26,6 +29,7 @@ private const val KEY_STATE = "state"
 /**
  * ViewModel responsible for handling user interactions in the attachments screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class AttachmentsViewModel @Inject constructor(
     private val vaultRepo: VaultRepository,
@@ -36,6 +40,7 @@ class AttachmentsViewModel @Inject constructor(
         ?: AttachmentsState(
             cipherId = AttachmentsArgs(savedStateHandle).cipherId,
             viewState = AttachmentsState.ViewState.Loading,
+            dialogState = null,
         ),
 ) {
     init {
@@ -50,6 +55,7 @@ class AttachmentsViewModel @Inject constructor(
         when (action) {
             AttachmentsAction.BackClick -> handleBackClick()
             AttachmentsAction.SaveClick -> handleSaveClick()
+            AttachmentsAction.DismissDialogClick -> handleDismissDialogClick()
             AttachmentsAction.ChooseFileClick -> handleChooseFileClick()
             is AttachmentsAction.FileChoose -> handleFileChoose(action)
             is AttachmentsAction.DeleteClick -> handleDeleteClick(action)
@@ -66,6 +72,10 @@ class AttachmentsViewModel @Inject constructor(
         // TODO: Handle saving the attachments (BIT-522)
     }
 
+    private fun handleDismissDialogClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
     private fun handleChooseFileClick() {
         sendEvent(AttachmentsEvent.ShowChooserSheet)
     }
@@ -76,13 +86,30 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     private fun handleDeleteClick(action: AttachmentsAction.DeleteClick) {
-        sendEvent(AttachmentsEvent.ShowToast("Not Yet Implemented".asText()))
-        // TODO: Handle choosing a file the attachments (BIT-522)
+        onContent { content ->
+            val cipherView = content.originalCipher ?: return@onContent
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AttachmentsState.DialogState.Loading(
+                        message = R.string.deleting.asText(),
+                    ),
+                )
+            }
+            viewModelScope.launch {
+                val result = vaultRepo.deleteCipherAttachment(
+                    cipherId = state.cipherId,
+                    attachmentId = action.attachmentId,
+                    cipherView = cipherView,
+                )
+                sendAction(AttachmentsAction.Internal.DeleteResultReceive(result))
+            }
+        }
     }
 
     private fun handleInternalAction(action: AttachmentsAction.Internal) {
         when (action) {
             is AttachmentsAction.Internal.CipherReceive -> handleCipherReceive(action)
+            is AttachmentsAction.Internal.DeleteResultReceive -> handleDeleteResultReceive(action)
         }
     }
 
@@ -142,6 +169,32 @@ class AttachmentsViewModel @Inject constructor(
             }
         }
     }
+
+    private fun handleDeleteResultReceive(action: AttachmentsAction.Internal.DeleteResultReceive) {
+        when (action.result) {
+            DeleteAttachmentResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            DeleteAttachmentResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(AttachmentsEvent.ShowToast(R.string.attachment_deleted.asText()))
+            }
+        }
+    }
+
+    private inline fun onContent(
+        crossinline block: (AttachmentsState.ViewState.Content) -> Unit,
+    ) {
+        (state.viewState as? AttachmentsState.ViewState.Content)?.let(block)
+    }
 }
 
 /**
@@ -151,6 +204,7 @@ class AttachmentsViewModel @Inject constructor(
 data class AttachmentsState(
     val cipherId: String,
     val viewState: ViewState,
+    val dialogState: DialogState?,
 ) : Parcelable {
     /**
      * Represents the specific view states for the [AttachmentsScreen].
@@ -174,6 +228,8 @@ data class AttachmentsState(
          */
         @Parcelize
         data class Content(
+            @IgnoredOnParcel
+            val originalCipher: CipherView? = null,
             val attachments: List<AttachmentItem>,
         ) : ViewState()
     }
@@ -187,6 +243,28 @@ data class AttachmentsState(
         val title: String,
         val displaySize: String,
     ) : Parcelable
+
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+    }
 }
 
 /**
@@ -226,6 +304,11 @@ sealed class AttachmentsAction {
     data object SaveClick : AttachmentsAction()
 
     /**
+     * User clicked to dismiss a dialog.
+     */
+    data object DismissDialogClick : AttachmentsAction()
+
+    /**
      * User clicked to select a new attachment file.
      */
     data object ChooseFileClick : AttachmentsAction()
@@ -253,6 +336,13 @@ sealed class AttachmentsAction {
          */
         data class CipherReceive(
             val cipherDataState: DataState<CipherView?>,
+        ) : Internal()
+
+        /**
+         * The result of deleting the attachment.
+         */
+        data class DeleteResultReceive(
+            val result: DeleteAttachmentResult,
         ) : Internal()
     }
 }

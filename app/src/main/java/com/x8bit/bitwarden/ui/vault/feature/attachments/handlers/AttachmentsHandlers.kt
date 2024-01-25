@@ -13,6 +13,7 @@ data class AttachmentsHandlers(
     val onChooseFileClick: () -> Unit,
     val onFileChoose: (IntentManager.FileData) -> Unit,
     val onDeleteClick: (attachmentId: String) -> Unit,
+    val onDismissRequest: () -> Unit,
 ) {
     companion object {
         /**
@@ -29,6 +30,9 @@ data class AttachmentsHandlers(
                 onFileChoose = { viewModel.trySendAction(AttachmentsAction.FileChoose(it)) },
                 onDeleteClick = {
                     viewModel.trySendAction(AttachmentsAction.DeleteClick(it))
+                },
+                onDismissRequest = {
+                    viewModel.trySendAction(AttachmentsAction.DismissDialogClick)
                 },
             )
     }

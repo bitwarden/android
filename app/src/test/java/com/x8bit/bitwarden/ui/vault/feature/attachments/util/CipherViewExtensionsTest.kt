@@ -16,6 +16,7 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             AttachmentsState.ViewState.Content(
+                originalCipher = cipherView,
                 attachments = listOf(
                     AttachmentsState.AttachmentItem(
                         id = "mockId-1",
@@ -37,7 +38,10 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            AttachmentsState.ViewState.Content(attachments = emptyList()),
+            AttachmentsState.ViewState.Content(
+                originalCipher = cipherView,
+                attachments = emptyList(),
+            ),
             result,
         )
     }
@@ -55,7 +59,10 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState()
 
         assertEquals(
-            AttachmentsState.ViewState.Content(attachments = emptyList()),
+            AttachmentsState.ViewState.Content(
+                originalCipher = cipherView,
+                attachments = emptyList(),
+            ),
             result,
         )
     }
