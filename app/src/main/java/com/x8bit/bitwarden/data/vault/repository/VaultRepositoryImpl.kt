@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
+import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
@@ -26,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoadin
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
@@ -38,6 +40,7 @@ import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
+import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -56,6 +59,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
@@ -640,6 +644,71 @@ class VaultRepositoryImpl(
                     vaultDiskSource.saveCipher(userId = userId, cipher = it)
                     ShareCipherResult.Success
                 },
+            )
+    }
+
+    override suspend fun createAttachment(
+        cipherId: String,
+        cipherView: CipherView,
+        fileSizeBytes: String,
+        fileName: String,
+        fileUri: Uri,
+    ): CreateAttachmentResult {
+        val userId = requireNotNull(activeUserId)
+        val attachmentView = AttachmentView(
+            id = null,
+            url = null,
+            size = fileSizeBytes,
+            sizeName = null,
+            fileName = fileName,
+            key = null,
+        )
+        return vaultSdkSource
+            .encryptCipher(
+                userId = userId,
+                cipherView = cipherView,
+            )
+            .flatMap { cipher ->
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = cipher,
+                    attachmentView = attachmentView,
+                    fileBuffer = fileManager.uriToByteArray(fileUri = fileUri),
+                )
+            }
+            .flatMap { attachmentEncryptResult ->
+                ciphersService
+                    .createAttachment(
+                        cipherId = cipherId,
+                        body = AttachmentJsonRequest(
+                            // We know these values are present because
+                            // - the filename/size are passed into the function
+                            // - the SDK call fills in the key
+                            fileName = requireNotNull(attachmentEncryptResult.attachment.fileName),
+                            key = requireNotNull(attachmentEncryptResult.attachment.key),
+                            fileSize = requireNotNull(attachmentEncryptResult.attachment.size),
+                        ),
+                    )
+                    .flatMap { attachmentJsonResponse ->
+                        ciphersService.uploadAttachment(
+                            attachmentJsonResponse = attachmentJsonResponse,
+                            encryptedFile = attachmentEncryptResult.contents,
+                        )
+                    }
+            }
+            .onSuccess {
+                // Save the send immediately, regardless of whether the decrypt succeeds
+                vaultDiskSource.saveCipher(userId = userId, cipher = it)
+            }
+            .flatMap {
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = it.toEncryptedSdkCipher(),
+                )
+            }
+            .fold(
+                onFailure = { CreateAttachmentResult.Error },
+                onSuccess = { CreateAttachmentResult.Success(it) },
             )
     }
 

@@ -28,9 +28,17 @@ object VaultNetworkModule {
     fun provideCiphersService(
         retrofits: Retrofits,
         json: Json,
+        clock: Clock,
     ): CiphersService = CiphersServiceImpl(
+        azureApi = retrofits
+            .staticRetrofitBuilder
+            // This URL will be overridden dynamically
+            .baseUrl("https://www.bitwarden.com")
+            .build()
+            .create(),
         ciphersApi = retrofits.authenticatedApiRetrofit.create(),
         json = json,
+        clock = clock,
     )
 
     @Provides
@@ -43,7 +51,7 @@ object VaultNetworkModule {
         azureApi = retrofits
             .staticRetrofitBuilder
             // This URL will be overridden dynamically
-            .baseUrl("https://www.bitwaredn.com")
+            .baseUrl("https://www.bitwarden.com")
             .build()
             .create(),
         sendsApi = retrofits.authenticatedApiRetrofit.create(),

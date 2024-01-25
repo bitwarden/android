@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
@@ -34,6 +35,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRe
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentEncryptResult
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
@@ -48,6 +51,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAttachmentView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -60,6 +64,7 @@ import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
+import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -76,6 +81,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
@@ -2367,6 +2373,332 @@ class VaultRepositoryTest {
             )
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAttachment with encryptCipher failure should return CreateAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            assertEquals(CreateAttachmentResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAttachment with encryptAttachment failure should return CreateAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            val mockAttachmentView = createMockAttachmentView(number = 1).copy(
+                sizeName = null,
+                id = null,
+                url = null,
+                key = null,
+            )
+            val mockByteArray = byteArrayOf(1, 2)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = mockAttachmentView,
+                    fileBuffer = mockByteArray,
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            assertEquals(CreateAttachmentResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAttachment with createAttachment failure should return CreateAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            val mockAttachmentView = createMockAttachmentView(number = 1).copy(
+                sizeName = null,
+                id = null,
+                url = null,
+                key = null,
+            )
+            val mockByteArray = byteArrayOf(1, 2)
+            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = mockAttachmentView,
+                    fileBuffer = mockByteArray,
+                )
+            } returns mockAttachmentEncryptResult.asSuccess()
+            coEvery {
+                ciphersService.createAttachment(
+                    cipherId = cipherId,
+                    body = AttachmentJsonRequest(
+                        fileName = mockFileName,
+                        key = "mockKey-1",
+                        fileSize = mockFileSize,
+                    ),
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            assertEquals(CreateAttachmentResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAttachment with uploadAttachment failure should return CreateAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            val mockAttachmentView = createMockAttachmentView(number = 1).copy(
+                sizeName = null,
+                id = null,
+                url = null,
+                key = null,
+            )
+            val mockByteArray = byteArrayOf(1, 2)
+            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = mockAttachmentView,
+                    fileBuffer = mockByteArray,
+                )
+            } returns mockAttachmentEncryptResult.asSuccess()
+            coEvery {
+                ciphersService.createAttachment(
+                    cipherId = cipherId,
+                    body = AttachmentJsonRequest(
+                        fileName = mockFileName,
+                        key = "mockKey-1",
+                        fileSize = mockFileSize,
+                    ),
+                )
+            } returns mockAttachmentJsonResponse.asSuccess()
+            coEvery {
+                ciphersService.uploadAttachment(
+                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    encryptedFile = mockAttachmentEncryptResult.contents,
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            assertEquals(CreateAttachmentResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAttachment with decryptCipher failure should return CreateAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            val mockAttachmentView = createMockAttachmentView(number = 1).copy(
+                sizeName = null,
+                id = null,
+                url = null,
+                key = null,
+            )
+            val mockByteArray = byteArrayOf(1, 2)
+            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val mockCipherResponse = createMockCipher(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = mockAttachmentView,
+                    fileBuffer = mockByteArray,
+                )
+            } returns mockAttachmentEncryptResult.asSuccess()
+            coEvery {
+                ciphersService.createAttachment(
+                    cipherId = cipherId,
+                    body = AttachmentJsonRequest(
+                        fileName = mockFileName,
+                        key = "mockKey-1",
+                        fileSize = mockFileSize,
+                    ),
+                )
+            } returns mockAttachmentJsonResponse.asSuccess()
+            coEvery {
+                ciphersService.uploadAttachment(
+                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    encryptedFile = mockAttachmentEncryptResult.contents,
+                )
+            } returns mockCipherResponse.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = userId, cipher = mockCipherResponse)
+            } just runs
+            coEvery {
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = mockCipherResponse.toEncryptedSdkCipher(),
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            assertEquals(CreateAttachmentResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAttachment with createAttachment success should return CreateAttachmentResult Success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            val mockAttachmentView = createMockAttachmentView(number = 1).copy(
+                sizeName = null,
+                id = null,
+                url = null,
+                key = null,
+            )
+            val mockByteArray = byteArrayOf(1, 2)
+            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val mockCipherResponse = createMockCipher(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = mockAttachmentView,
+                    fileBuffer = mockByteArray,
+                )
+            } returns mockAttachmentEncryptResult.asSuccess()
+            coEvery {
+                ciphersService.createAttachment(
+                    cipherId = cipherId,
+                    body = AttachmentJsonRequest(
+                        fileName = mockFileName,
+                        key = "mockKey-1",
+                        fileSize = mockFileSize,
+                    ),
+                )
+            } returns mockAttachmentJsonResponse.asSuccess()
+            coEvery {
+                ciphersService.uploadAttachment(
+                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    encryptedFile = mockAttachmentEncryptResult.contents,
+                )
+            } returns mockCipherResponse.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = userId, cipher = mockCipherResponse)
+            } just runs
+            coEvery {
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = mockCipherResponse.toEncryptedSdkCipher(),
+                )
+            } returns mockCipherView.asSuccess()
+
+            val result = vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            assertEquals(CreateAttachmentResult.Success(mockCipherView), result)
+        }
+
     @Test
     fun `generateTotp should return a success result on getting a code`() = runTest {
         val totpResponse = TotpResponse("Testcode", 30u)
@@ -2726,12 +3058,6 @@ class VaultRepositoryTest {
         }
         every { Uri.parse(url) } returns mockUri
         return mockUri
-    }
-
-    private fun setupMockInstant(): Instant {
-        val mockInstant = mockk<Instant>()
-        every { Instant.now() } returns Instant.MIN
-        return mockInstant
     }
 
 //endregion Helper functions

@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.POST
@@ -19,6 +22,25 @@ interface CiphersApi {
      */
     @POST("ciphers")
     suspend fun createCipher(@Body body: CipherJsonRequest): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Associates an attachment with a cipher.
+     */
+    @POST("ciphers/{cipherId}/attachment/v2")
+    suspend fun createAttachment(
+        @Path("cipherId") cipherId: String,
+        @Body body: AttachmentJsonRequest,
+    ): Result<AttachmentJsonResponse>
+
+    /**
+     * Uploads the attachment associated with a cipher.
+     */
+    @POST("ciphers/{cipherId}/attachment/{attachmentId}")
+    suspend fun uploadAttachment(
+        @Path("cipherId") cipherId: String,
+        @Path("attachmentId") attachmentId: String,
+        @Body body: MultipartBody,
+    ): Result<Unit>
 
     /**
      * Updates a cipher.
