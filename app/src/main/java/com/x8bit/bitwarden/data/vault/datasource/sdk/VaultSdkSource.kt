@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import com.bitwarden.core.AttachmentEncryptResult
+import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
@@ -86,6 +88,20 @@ interface VaultSdkSource {
         userId: String,
         request: InitOrgCryptoRequest,
     ): Result<InitializeCryptoResult>
+
+    /**
+     * Encrypts a [AttachmentView] for the user with the given [userId], returning an
+     * [AttachmentEncryptResult] wrapped in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun encryptAttachment(
+        userId: String,
+        cipher: Cipher,
+        attachmentView: AttachmentView,
+        fileBuffer: ByteArray,
+    ): Result<AttachmentEncryptResult>
 
     /**
      * Encrypts a [CipherView] for the user with the given [userId], returning a [Cipher] wrapped

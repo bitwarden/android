@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import com.bitwarden.core.AttachmentEncryptResult
+import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
@@ -37,6 +39,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class VaultSdkSourceTest {
     private val clientCrypto = mockk<ClientCrypto>()
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
@@ -470,6 +473,39 @@ class VaultSdkSourceTest {
                 )
             }
             verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        }
+
+    @Test
+    fun `encryptAttachment should call SDK and return correct data wrapped in a Result`() =
+        runBlocking {
+            val userId = "userId"
+            val expectedResult = mockk<AttachmentEncryptResult>()
+            val mockCipher = mockk<Cipher>()
+            val mockAttachmentView = mockk<AttachmentView>()
+            val fileBuffer = byteArrayOf(1, 2)
+            coEvery {
+                clientVault.attachments().encryptBuffer(
+                    cipher = mockCipher,
+                    attachment = mockAttachmentView,
+                    buffer = fileBuffer,
+                )
+            } returns expectedResult
+
+            val result = vaultSdkSource.encryptAttachment(
+                userId = userId,
+                cipher = mockCipher,
+                attachmentView = mockAttachmentView,
+                fileBuffer = fileBuffer,
+            )
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify {
+                clientVault.attachments().encryptBuffer(
+                    cipher = mockCipher,
+                    attachment = mockAttachmentView,
+                    buffer = fileBuffer,
+                )
+            }
         }
 
     @Test
