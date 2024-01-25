@@ -33,7 +33,7 @@ namespace Bit.App.Pages
                                      AppResources.ContinueToHelpCenter,
                                      ExternalLinksConstants.HELP_CENTER), allowsMultipleExecutions: false);
 
-            GoToPrivacyPolicyCommand = CreateDefaultAsyncCommnad(
+            GoToPrivacyPolicyCommand = CreateDefaultAsyncRelayCommand(
                 () => LaunchUriAsync(AppResources.PrivacyPolicyDescriptionLong,
                                      AppResources.ContinueToPrivacyPolicy,
                                      ExternalLinksConstants.PRIVACY_POLICY), allowsMultipleExecutions: false);
