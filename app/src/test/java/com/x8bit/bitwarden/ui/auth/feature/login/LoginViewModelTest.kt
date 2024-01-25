@@ -40,14 +40,14 @@ import org.junit.jupiter.api.Test
 class LoginViewModelTest : BaseViewModelTest() {
 
     private val savedStateHandle = SavedStateHandle().also {
-        it["email_address"] = "test@gmail.com"
+        it["email_address"] = EMAIL
     }
     private val mutableCaptchaTokenResultFlow =
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         coEvery {
-            getIsKnownDevice("test@gmail.com")
+            getIsKnownDevice(EMAIL)
         } returns KnownDeviceResult.Success(false)
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { userStateFlow } returns mutableUserStateFlow
@@ -160,7 +160,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             shouldShowLoginWithDevice = true,
         )
         coEvery {
-            authRepository.getIsKnownDevice("test@gmail.com")
+            authRepository.getIsKnownDevice(EMAIL)
         } returns KnownDeviceResult.Success(true)
         val viewModel = createViewModel()
 
@@ -172,7 +172,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `should have default state when isKnownDevice returns error`() = runTest {
         coEvery {
-            authRepository.getIsKnownDevice("test@gmail.com")
+            authRepository.getIsKnownDevice(EMAIL)
         } returns KnownDeviceResult.Error
         val viewModel = createViewModel()
 
@@ -246,7 +246,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `LoginButtonClick login returns error should update errorDialogState`() = runTest {
         coEvery {
             authRepository.login(
-                email = "test@gmail.com",
+                email = EMAIL,
                 password = "",
                 captchaToken = null,
             )
@@ -275,7 +275,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             )
         }
         coVerify {
-            authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
+            authRepository.login(email = EMAIL, password = "", captchaToken = null)
         }
     }
 
@@ -283,7 +283,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `LoginButtonClick login returns success should update loadingDialogState`() = runTest {
         coEvery {
             authRepository.login(
-                email = "test@gmail.com",
+                email = EMAIL,
                 password = "",
                 captchaToken = null,
             )
@@ -306,7 +306,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             )
         }
         coVerify {
-            authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
+            authRepository.login(email = EMAIL, password = "", captchaToken = null)
         }
     }
 
@@ -319,7 +319,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             } returns mockkUri
             coEvery {
                 authRepository.login(
-                    email = "test@gmail.com",
+                    email = EMAIL,
                     password = "",
                     captchaToken = null,
                 )
@@ -331,7 +331,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 assertEquals(LoginEvent.NavigateToCaptcha(uri = mockkUri), awaitItem())
             }
             coVerify {
-                authRepository.login(email = "test@gmail.com", password = "", captchaToken = null)
+                authRepository.login(email = EMAIL, password = "", captchaToken = null)
             }
         }
 
@@ -342,7 +342,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(LoginAction.MasterPasswordHintClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
-                LoginEvent.NavigateToMasterPasswordHint("test@gmail.com"),
+                LoginEvent.NavigateToMasterPasswordHint(EMAIL),
                 awaitItem(),
             )
         }
@@ -355,7 +355,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(LoginAction.LoginWithDeviceButtonClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
-                LoginEvent.NavigateToLoginWithDevice,
+                LoginEvent.NavigateToLoginWithDevice(EMAIL),
                 awaitItem(),
             )
         }
@@ -435,7 +435,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `captchaTokenFlow success update should trigger a login`() = runTest {
         coEvery {
             authRepository.login(
-                email = "test@gmail.com",
+                email = EMAIL,
                 password = "",
                 captchaToken = "token",
             )
@@ -443,7 +443,7 @@ class LoginViewModelTest : BaseViewModelTest() {
         createViewModel()
         mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success("token"))
         coVerify {
-            authRepository.login(email = "test@gmail.com", password = "", captchaToken = "token")
+            authRepository.login(email = EMAIL, password = "", captchaToken = "token")
         }
     }
 
@@ -456,8 +456,9 @@ class LoginViewModelTest : BaseViewModelTest() {
         )
 
     companion object {
+        private const val EMAIL = "test@gmail.com"
         private val DEFAULT_STATE = LoginState(
-            emailAddress = "test@gmail.com",
+            emailAddress = EMAIL,
             passwordInput = "",
             isLoginButtonEnabled = false,
             environmentLabel = Environment.Us.label,

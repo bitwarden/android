@@ -297,15 +297,16 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateToLoginWithDevice should call onNavigateToLoginWithDevice`() {
-        mutableEventFlow.tryEmit(LoginEvent.NavigateToLoginWithDevice)
+        mutableEventFlow.tryEmit(LoginEvent.NavigateToLoginWithDevice(EMAIL))
         assertTrue(onNavigateToLoginWithDeviceCalled)
     }
 }
 
+private const val EMAIL = "active@bitwarden.com"
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
     userId = "activeUserId",
     name = "Active User",
-    email = "active@bitwarden.com",
+    email = EMAIL,
     avatarColorHex = "#aa00aa",
     environmentLabel = "bitwarden.com",
     isActive = true,
@@ -315,7 +316,7 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
 
 private val DEFAULT_STATE =
     LoginState(
-        emailAddress = "",
+        emailAddress = EMAIL,
         captchaToken = null,
         isLoginButtonEnabled = false,
         passwordInput = "",

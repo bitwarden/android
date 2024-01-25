@@ -1,10 +1,13 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.ClientAuth
+import com.bitwarden.sdk.ClientPlatform
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toPasswordStrengthOrNull
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toUByte
@@ -15,7 +18,28 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toUByte
  */
 class AuthSdkSourceImpl(
     private val clientAuth: ClientAuth,
+    private val clientPlatform: ClientPlatform,
 ) : AuthSdkSource {
+
+    override suspend fun getNewAuthRequest(
+        email: String,
+    ): Result<AuthRequestResponse> = runCatching {
+        clientAuth.newAuthRequest(
+            email = email,
+        )
+    }
+
+    override suspend fun getUserFingerprint(
+        email: String,
+        publicKey: String,
+    ): Result<String> = runCatching {
+        clientPlatform.fingerprint(
+            req = FingerprintRequest(
+                fingerprintMaterial = email,
+                publicKey = publicKey,
+            ),
+        )
+    }
 
     override suspend fun hashPassword(
         email: String,

@@ -217,7 +217,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLoginWithDeviceButtonClicked() {
-        sendEvent(LoginEvent.NavigateToLoginWithDevice)
+        sendEvent(LoginEvent.NavigateToLoginWithDevice(state.emailAddress))
     }
 
     private fun attemptLogin() {
@@ -310,7 +310,9 @@ sealed class LoginEvent {
     /**
      * Navigates to the login with device screen.
      */
-    data object NavigateToLoginWithDevice : LoginEvent()
+    data class NavigateToLoginWithDevice(
+        val emailAddress: String,
+    ) : LoginEvent()
 
     /**
      * Navigates to the two-factor login screen.
