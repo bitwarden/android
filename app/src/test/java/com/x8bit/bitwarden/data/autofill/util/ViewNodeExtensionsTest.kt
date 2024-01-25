@@ -2,12 +2,19 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
 import android.view.View
+import android.view.ViewStructure.HtmlInfo
 import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ViewNodeExtensionsTest {
@@ -20,13 +27,31 @@ class ViewNodeExtensionsTest {
         webDomain = WEB_DOMAIN,
         webScheme = WEB_SCHEME,
     )
+
     private val viewNode: AssistStructure.ViewNode = mockk {
         every { this@mockk.autofillId } returns expectedAutofillId
         every { this@mockk.childCount } returns 0
+        every { this@mockk.inputType } returns 1
         every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.isFocused } returns expectedIsFocused
         every { this@mockk.webDomain } returns WEB_DOMAIN
         every { this@mockk.webScheme } returns WEB_SCHEME
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(HtmlInfo::isInputField)
+        mockkStatic(HtmlInfo::isPasswordField)
+        mockkStatic(Int::isPasswordInputType)
+        mockkStatic(Int::isUsernameInputType)
+    }
+
+    @AfterEach
+    fun teardown() {
+        unmockkStatic(HtmlInfo::isInputField)
+        unmockkStatic(HtmlInfo::isPasswordField)
+        unmockkStatic(Int::isPasswordInputType)
+        unmockkStatic(Int::isUsernameInputType)
     }
 
     @Test
@@ -94,23 +119,7 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
-    fun `toAutofillView should return AutofillView Login Username when hint is EMAIL`() {
-        // Setup
-        val autofillHint = View.AUTOFILL_HINT_EMAIL_ADDRESS
-        val expected = AutofillView.Login.Username(
-            data = autofillViewData,
-        )
-        every { viewNode.autofillHints } returns arrayOf(autofillHint)
-
-        // Test
-        val actual = viewNode.toAutofillView()
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `toAutofillView should return AutofillView Login Password when hint matches`() {
+    fun `toAutofillView should return AutofillView Login Password when isPasswordField`() {
         // Setup
         val autofillHint = View.AUTOFILL_HINT_PASSWORD
         val expected = AutofillView.Login.Password(
@@ -125,14 +134,17 @@ class ViewNodeExtensionsTest {
         assertEquals(expected, actual)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `toAutofillView should return AutofillView Login Username when hint is USERNAME`() {
+    fun `toAutofillView should return AutofillView Login Username when is android text field and is isUsernameField`() {
         // Setup
-        val autofillHint = View.AUTOFILL_HINT_USERNAME
         val expected = AutofillView.Login.Username(
             data = autofillViewData,
         )
-        every { viewNode.autofillHints } returns arrayOf(autofillHint)
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.className } returns ANDROID_EDIT_TEXT_CLASS_NAME
+        every { any<Int>().isPasswordInputType } returns false
+        every { any<Int>().isUsernameInputType } returns true
 
         // Test
         val actual = viewNode.toAutofillView()
@@ -142,10 +154,25 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
-    fun `toAutofillView should return null when hint is not supported`() {
+    fun `toAutofillView should return null when hint is not supported and isn't an inputField`() {
         // Setup
         val autofillHint = "Shenanigans"
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
+        every { viewNode.className } returns null
+        every { viewNode.htmlInfo.isInputField } returns false
+
+        // Test
+        val actual = viewNode.toAutofillView()
+
+        // Verify
+        assertNull(actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return null when hint is not supported, is an inputField, and isn't a username or password`() {
+        // Setup
+        setupUnsupportedInputFieldViewNode()
 
         // Test
         val actual = viewNode.toAutofillView()
@@ -171,9 +198,214 @@ class ViewNodeExtensionsTest {
         assertEquals(expected, actual)
     }
 
-    companion object {
-        private const val ID_PACKAGE: String = "ID_PACKAGE"
-        private const val WEB_DOMAIN: String = "WEB_DOMAIN"
-        private const val WEB_SCHEME: String = "WEB_SCHEME"
+    @Test
+    fun `isPasswordField returns true when supportedHint is AUTOFILL_HINT_PASSWORD`() {
+        // Setup
+        val supportedHint = View.AUTOFILL_HINT_PASSWORD
+
+        // Test
+        val actual = viewNode.isPasswordField(
+            supportedHint = supportedHint,
+        )
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isPasswordField returns true when supportedHint is null and hint is supported`() {
+        SUPPORTED_RAW_PASSWORD_HINTS
+            .forEach { hint ->
+                // Setup
+                every { viewNode.hint } returns hint
+
+                // Test
+                val actual = viewNode.isPasswordField(
+                    supportedHint = null,
+                )
+
+                // Verify
+                assertTrue(actual)
+            }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordField returns true when hints aren't supported, isPasswordInputType, isValidField, and isn't username`() {
+        // Setup
+        setupUnsupportedInputFieldViewNode()
+        every { any<Int>().isPasswordInputType } returns true
+
+        // Test
+        val actual = viewNode.isPasswordField(
+            supportedHint = null,
+        )
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordField returns true when hints aren't supported, not isPasswordInputType, and htmlInfo isPasswordField is true`() {
+        // Setup
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.htmlInfo.isPasswordField() } returns true
+
+        // Test
+        val actual = viewNode.isPasswordField(
+            supportedHint = null,
+        )
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordField returns false when hints aren't supported, isPasswordInputType, not validInputField, and htmlInfo isPasswordField is false`() {
+        // Setup testing the hint
+        setupUnsupportedInputFieldViewNode()
+        every { any<Int>().isPasswordInputType } returns true
+
+        IGNORED_RAW_HINTS.forEach { hint ->
+            // Setup
+            every { viewNode.hint } returns hint
+
+            // Test
+            val actual = viewNode.isPasswordField(
+                supportedHint = null,
+            )
+
+            // Verify
+            assertFalse(actual)
+        }
+
+        // Setup testing the idEntry
+        every { viewNode.hint } returns null
+        IGNORED_RAW_HINTS.forEach { hint ->
+            // Setup
+            every { viewNode.idEntry } returns hint
+
+            // Test
+            val actual = viewNode.isPasswordField(
+                supportedHint = null,
+            )
+
+            // Verify
+            assertFalse(actual)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isPasswordField returns false when hints aren't supported, isPasswordInputType, validInputField, isUsernameField, and htmlInfo isPasswordField is false`() {
+        // Setup
+        setupUnsupportedInputFieldViewNode()
+        every { any<Int>().isPasswordInputType } returns true
+        every { viewNode.hint } returns SUPPORTED_RAW_USERNAME_HINTS.first()
+
+        // Test
+        val actual = viewNode.isPasswordField(
+            supportedHint = null,
+        )
+
+        // Verify
+        assertFalse(actual)
+    }
+
+    @Test
+    fun `isUsernameField returns true whe supportedHint is AUTOFILL_HINT_USERNAME`() {
+        // Setup
+        val supportedHint = View.AUTOFILL_HINT_USERNAME
+
+        // Test
+        val actual = viewNode.isUsernameField(
+            supportedHint = supportedHint,
+        )
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isUsernameField returns true when supportedHint is AUTOFILL_HINT_EMAIL_ADDRESS`() {
+        // Setup
+        val supportedHint = View.AUTOFILL_HINT_EMAIL_ADDRESS
+
+        // Test
+        val actual = viewNode.isUsernameField(
+            supportedHint = supportedHint,
+        )
+
+        // Verify
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `isUsernameField returns true when supportedHint is null and raw hint is supported`() {
+        // Setup testing the hints
+        every { viewNode.idEntry } returns null
+        SUPPORTED_RAW_USERNAME_HINTS.forEach { hint ->
+            // Setup
+            every { viewNode.hint } returns hint
+
+            // Test
+            val actual = viewNode.isUsernameField(
+                supportedHint = null,
+            )
+
+            // Verify
+            assertTrue(actual)
+        }
+
+        // Setup testing the idEntries
+        every { viewNode.hint } returns null
+        SUPPORTED_RAW_USERNAME_HINTS.forEach { hint ->
+            // Setup
+            every { viewNode.idEntry } returns hint
+
+            // Test
+            val actual = viewNode.isUsernameField(
+                supportedHint = null,
+            )
+
+            // Verify
+            assertTrue(actual)
+        }
+    }
+
+    /**
+     * Set up [viewNode] to be an input field but not supported.
+     */
+    private fun setupUnsupportedInputFieldViewNode() {
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isPasswordField() } returns false
+        every { viewNode.htmlInfo.isInputField } returns true
+        every { viewNode.idEntry } returns null
+        every { viewNode.autofillHints } returns emptyArray()
+        every { viewNode.className } returns null
+        every { any<Int>().isPasswordInputType } returns false
+        every { any<Int>().isUsernameInputType } returns false
     }
 }
+
+private const val ANDROID_EDIT_TEXT_CLASS_NAME: String = "android.widget.EditText"
+private const val ID_PACKAGE: String = "ID_PACKAGE"
+private const val WEB_DOMAIN: String = "WEB_DOMAIN"
+private const val WEB_SCHEME: String = "WEB_SCHEME"
+private val IGNORED_RAW_HINTS: List<String> = listOf(
+    "search",
+    "find",
+    "recipient",
+    "edit",
+)
+private val SUPPORTED_RAW_PASSWORD_HINTS: List<String> = listOf(
+    "password",
+    "pswd",
+)
+private val SUPPORTED_RAW_USERNAME_HINTS: List<String> = listOf(
+    "email",
+    "phone",
+    "username",
+)
