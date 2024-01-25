@@ -1,13 +1,18 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -17,6 +22,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -25,10 +31,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
+import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
 
 /**
  * Displays the folders screen.
@@ -40,10 +52,19 @@ fun FoldersScreen(
     onNavigateBack: () -> Unit,
     viewModel: FoldersViewModel = hiltViewModel(),
 ) {
+    val state = viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            FoldersEvent.NavigateBack -> onNavigateBack()
+            is FoldersEvent.NavigateBack -> onNavigateBack()
+            is FoldersEvent.NavigateToAddFolderScreen -> {
+                showNotYetImplementedToast(context = context)
+            }
+
+            is FoldersEvent.NavigateToEditFolderScreen -> {
+                showNotYetImplementedToast(context = context)
+            }
+
             is FoldersEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
@@ -82,27 +103,86 @@ fun FoldersScreen(
             }
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            // TODO BIT-460 populate Folders screen
+        when (val viewState = state.value.viewState) {
+            is FoldersState.ViewState.Content -> {
+                FoldersContent(
+                    foldersList = viewState.folderList,
+                    onItemClick = remember(viewModel) {
+                        { viewModel.trySendAction(FoldersAction.OnFolderClick(it)) }
+                    },
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+                )
+            }
 
+            is FoldersState.ViewState.Error -> {
+                BitwardenErrorContent(
+                    message = viewState.message(),
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+                )
+            }
+
+            is FoldersState.ViewState.Loading -> {
+                BitwardenLoadingContent(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize(),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun FoldersContent(
+    foldersList: List<FolderDisplayItem>,
+    onItemClick: (folderId: String) -> Unit,
+    modifier: Modifier,
+) {
+    if (foldersList.isEmpty()) {
+        Column(
+            modifier = modifier,
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(
                 text = stringResource(id = R.string.no_folders_to_list),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(
-                        vertical = 4.dp,
-                        horizontal = 16.dp,
-                    ),
             )
+        }
+    } else {
+        LazyColumn(
+            modifier = modifier,
+        ) {
+            items(foldersList) {
+                Row(
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                            onClick = { onItemClick(it.id) },
+                        )
+                        .bottomDivider(paddingStart = 16.dp)
+                        .defaultMinSize(minHeight = 56.dp)
+                        .padding(vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                            .weight(1f),
+                        text = it.name,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
         }
     }
 }
