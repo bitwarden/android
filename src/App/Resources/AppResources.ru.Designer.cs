@@ -6229,6 +6229,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Настройте опцию разблокировки для изменения действия по тайм-ауту хранилища..
+        /// </summary>
+        internal static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
+            get {
+                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Настроить TOTP.
         /// </summary>
         internal static string SetupTotp {
@@ -7764,6 +7773,24 @@ namespace Bit.App.Resources {
         internal static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Права доступа организации были обновлены, требуется установить мастер-пароль..
+        /// </summary>
+        internal static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
+            get {
+                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Необходимо установить мастер-пароль для организации..
+        /// </summary>
+        internal static string YourOrganizationRequiresYouToSetAMasterPassword {
+            get {
+                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
             }
         }
         

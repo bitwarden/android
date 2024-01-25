@@ -12,7 +12,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -42,6 +41,7 @@ namespace Bit.App.Pages
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _enableContinue = false;
         private bool _showContinue = true;
+        private bool _isDuoFrameless = false;
 
         public TwoFactorPageViewModel()
         {
@@ -62,6 +62,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
+            DuoFramelessCommand = new Command(async () => await DuoFramelessAuthenticateAsync());
             MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
         }
 
@@ -104,6 +105,16 @@ namespace Bit.App.Pages
             set => SetProperty(ref _enableContinue, value);
         }
 
+        public bool IsDuoFrameless
+        {
+            get => _isDuoFrameless;
+            set => SetProperty(ref _isDuoFrameless, value, additionalPropertyNames: new string[] { nameof(DuoFramelessLabel) });
+        }
+
+        public string DuoFramelessLabel => SelectedProviderType != TwoFactorProviderType.OrganizationDuo ?
+            $"{AppResources.DUOTwoStepLoginIsRequiredForYourAccount} {AppResources.FollowTheStepsFromDUOToFinishLoggingIn}" :
+            AppResources.FollowTheStepsFromDUOToFinishLoggingIn;
+
         public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
 
@@ -122,6 +133,7 @@ namespace Bit.App.Pages
             });
         }
         public Command SubmitCommand { get; }
+        public Command DuoFramelessCommand { get; }
         public ICommand MoreCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
         public Action LockAction { get; set; }
@@ -177,14 +189,18 @@ namespace Bit.App.Pages
                     break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
-                    var host = WebUtility.UrlEncode(providerData["Host"] as string);
-                    var req = WebUtility.UrlEncode(providerData["Signature"] as string);
-                    page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
-                    page.DuoWebView.RegisterAction(sig =>
+                    IsDuoFrameless = providerData.ContainsKey("AuthUrl");
+                    if (!IsDuoFrameless)
                     {
-                        Token = sig;
-                        Device.BeginInvokeOnMainThread(async () => await SubmitAsync());
-                    });
+                        var host = WebUtility.UrlEncode(providerData["Host"] as string);
+                        var req = WebUtility.UrlEncode(providerData["Signature"] as string);
+                        page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
+                        page.DuoWebView.RegisterAction(sig =>
+                        {
+                            Token = sig;
+                            Device.BeginInvokeOnMainThread(async () => await SubmitAsync());
+                        });
+                    }
                     break;
                 case TwoFactorProviderType.Email:
                     TotpInstruction = string.Format(AppResources.EnterVerificationCodeEmail,
@@ -206,6 +222,51 @@ namespace Bit.App.Pages
                 _messagingService.Send("listenYubiKeyOTP", false);
             }
             ShowContinue = !(SelectedProviderType == null || DuoMethod || Fido2Method);
+        }
+
+        private async Task DuoFramelessAuthenticateAsync()
+        {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
+            var providerData = _authService.TwoFactorProvidersData[SelectedProviderType.Value];
+            var url = providerData["AuthUrl"] as string;
+            WebAuthenticatorResult authResult;
+            try
+            {
+                authResult = await WebAuthenticator.AuthenticateAsync(new WebAuthenticatorOptions
+                {
+                    Url = new Uri(url),
+                    CallbackUrl = new Uri("bitwarden://duo-callback")
+                });
+            }
+            catch (TaskCanceledException)
+            {
+                // user canceled
+                await _deviceActionService.HideLoadingAsync();
+                return;
+            }
+
+            string response = null;
+            if (authResult != null && authResult.Properties.TryGetValue("code", out var resultData))
+            {
+                response = Uri.UnescapeDataString(resultData);
+            }
+            if (!string.IsNullOrWhiteSpace(response))
+            {
+                Token = response;
+                await SubmitAsync(false);
+                return;
+            }
+
+            await _deviceActionService.HideLoadingAsync();
+            if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
+            {
+                await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred,
+                    AppResources.Ok);
+            }
+            else
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred, AppResources.Ok);
+            }
         }
 
         public async Task Fido2AuthenticateAsync(Dictionary<string, object> providerData = null)
