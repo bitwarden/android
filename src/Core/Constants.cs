@@ -74,6 +74,7 @@ namespace Bit.Core
         public const string DefaultFido2CredentialType = "public-key";
         public const string DefaultFido2CredentialAlgorithm = "ECDSA";
         public const string DefaultFido2CredentialCurve = "P-256";
+        public const int LatestStateVersion = 7;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
