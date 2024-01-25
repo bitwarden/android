@@ -5,9 +5,13 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -15,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -27,6 +32,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AttachmentsViewModelTest : BaseViewModelTest() {
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
+    private val authRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
     private val mutableVaultItemStateFlow =
         MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
@@ -68,11 +77,216 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SaveClick should emit ShowToast`() = runTest {
+    fun `SaveClick should display error dialog when user is not premium`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        val state = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
         val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(state, awaitItem())
+            viewModel.trySendAction(AttachmentsAction.SaveClick)
+            assertEquals(
+                state.copy(
+                    dialogState = AttachmentsState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.premium_required.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `SaveClick should display error dialog when no file is selected`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        val state = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
+            isPremiumUser = true,
+        )
+        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(state, awaitItem())
+            viewModel.trySendAction(AttachmentsAction.SaveClick)
+            assertEquals(
+                state.copy(
+                    dialogState = AttachmentsState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required.asText(R.string.file.asText()),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `SaveClick should display error dialog when file is too large`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        val fileName = "test.png"
+        val uri = mockk<Uri>()
+        val sizeToBig = 104_857_601L
+        val state = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                newAttachment = AttachmentsState.NewAttachment(
+                    displayName = fileName,
+                    uri = uri,
+                    sizeBytes = sizeToBig,
+                ),
+            ),
+            isPremiumUser = true,
+        )
+        val fileData = IntentManager.FileData(
+            fileName = fileName,
+            uri = uri,
+            sizeBytes = sizeToBig,
+        )
+        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+
+        val viewModel = createViewModel()
+        // Need to populate the VM with a file
+        viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
+        viewModel.stateFlow.test {
+            assertEquals(state, awaitItem())
+            viewModel.trySendAction(AttachmentsAction.SaveClick)
+            assertEquals(
+                state.copy(
+                    dialogState = AttachmentsState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.max_file_size.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `SaveClick should display loading dialog and error dialog when createAttachment fails`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1)
+            val fileName = "test.png"
+            val uri = mockk<Uri>()
+            val sizeJustRight = 104_857_600L
+            val state = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                    newAttachment = AttachmentsState.NewAttachment(
+                        displayName = fileName,
+                        uri = uri,
+                        sizeBytes = sizeJustRight,
+                    ),
+                ),
+                isPremiumUser = true,
+            )
+            val fileData = IntentManager.FileData(
+                fileName = fileName,
+                uri = uri,
+                sizeBytes = sizeJustRight,
+            )
+            mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            coEvery {
+                vaultRepository.createAttachment(
+                    cipherId = state.cipherId,
+                    cipherView = cipherView,
+                    fileSizeBytes = sizeJustRight.toString(),
+                    fileName = fileName,
+                    fileUri = uri,
+                )
+            } returns CreateAttachmentResult.Error
+
+            val viewModel = createViewModel()
+            // Need to populate the VM with a file
+            viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
+            viewModel.stateFlow.test {
+                assertEquals(state, awaitItem())
+                viewModel.trySendAction(AttachmentsAction.SaveClick)
+                assertEquals(
+                    state.copy(
+                        dialogState = AttachmentsState.DialogState.Loading(
+                            message = R.string.saving.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    state.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultRepository.createAttachment(
+                    cipherId = state.cipherId,
+                    cipherView = cipherView,
+                    fileSizeBytes = sizeJustRight.toString(),
+                    fileName = fileName,
+                    fileUri = uri,
+                )
+            }
+        }
+
+    @Test
+    fun `SaveClick should send ShowToast when createAttachment succeeds`() = runTest {
+        val cipherView = createMockCipherView(number = 1)
+        val fileName = "test.png"
+        val uri = mockk<Uri>()
+        val sizeJustRight = 104_857_600L
+        val state = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                newAttachment = AttachmentsState.NewAttachment(
+                    displayName = fileName,
+                    uri = uri,
+                    sizeBytes = sizeJustRight,
+                ),
+            ),
+            isPremiumUser = true,
+        )
+        val fileData = IntentManager.FileData(
+            fileName = fileName,
+            uri = uri,
+            sizeBytes = sizeJustRight,
+        )
+        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        coEvery {
+            vaultRepository.createAttachment(
+                cipherId = state.cipherId,
+                cipherView = cipherView,
+                fileSizeBytes = sizeJustRight.toString(),
+                fileName = fileName,
+                fileUri = uri,
+            )
+        } returns CreateAttachmentResult.Success(cipherView)
+
+        val viewModel = createViewModel()
+        // Need to populate the VM with a file
+        viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
         viewModel.eventFlow.test {
             viewModel.trySendAction(AttachmentsAction.SaveClick)
-            assertEquals(AttachmentsEvent.ShowToast("Not Yet Implemented".asText()), awaitItem())
+            assertEquals(
+                AttachmentsEvent.ShowToast(R.string.save_attachment_success.asText()),
+                awaitItem(),
+            )
+        }
+        coVerify(exactly = 1) {
+            vaultRepository.createAttachment(
+                cipherId = state.cipherId,
+                cipherView = cipherView,
+                fileSizeBytes = sizeJustRight.toString(),
+                fileName = fileName,
+                fileUri = uri,
+            )
         }
     }
 
@@ -296,9 +510,21 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `userStateFlow should update isPremiumUser state`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        assertEquals(
+            DEFAULT_STATE.copy(isPremiumUser = true),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(
         initialState: AttachmentsState? = null,
     ): AttachmentsViewModel = AttachmentsViewModel(
+        authRepo = authRepository,
         vaultRepo = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
@@ -307,10 +533,28 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     )
 }
 
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "mockUserId-1",
+    accounts = listOf(
+        UserState.Account(
+            userId = "mockUserId-1",
+            name = "Active User",
+            email = "active@bitwarden.com",
+            environment = Environment.Us,
+            avatarColorHex = "#aa00aa",
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            organizations = emptyList(),
+        ),
+    ),
+)
+
 private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     cipherId = "mockId-1",
     viewState = AttachmentsState.ViewState.Loading,
     dialogState = null,
+    isPremiumUser = false,
 )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
