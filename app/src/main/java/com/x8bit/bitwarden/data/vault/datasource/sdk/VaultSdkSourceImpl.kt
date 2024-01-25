@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import com.bitwarden.core.AttachmentEncryptResult
+import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
 import com.bitwarden.core.CipherView
@@ -117,6 +119,23 @@ class VaultSdkSourceImpl(
                 .sends()
                 .encryptBuffer(
                     send = send,
+                    buffer = fileBuffer,
+                )
+        }
+
+    override suspend fun encryptAttachment(
+        userId: String,
+        cipher: Cipher,
+        attachmentView: AttachmentView,
+        fileBuffer: ByteArray,
+    ): Result<AttachmentEncryptResult> =
+        runCatching {
+            getClient(userId = userId)
+                .vault()
+                .attachments()
+                .encryptBuffer(
+                    cipher = cipher,
+                    attachment = attachmentView,
                     buffer = fileBuffer,
                 )
         }
