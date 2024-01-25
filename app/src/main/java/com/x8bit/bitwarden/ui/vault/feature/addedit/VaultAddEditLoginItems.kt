@@ -346,7 +346,13 @@ private fun UsernameRow(
                     iconPainter = painterResource(id = R.drawable.ic_generator),
                     contentDescription = stringResource(id = R.string.generate_username),
                 ),
-                onClick = { shouldShowDialog = true },
+                onClick = {
+                    if (loginState.username.isEmpty()) {
+                        loginItemTypeHandlers.onOpenUsernameGeneratorClick()
+                    } else {
+                        shouldShowDialog = true
+                    }
+                },
             )
         },
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -375,6 +381,7 @@ private fun UsernameRow(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun PasswordRow(
     loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
@@ -403,7 +410,13 @@ private fun PasswordRow(
                     iconPainter = painterResource(id = R.drawable.ic_generator),
                     contentDescription = stringResource(id = R.string.generate_password),
                 ),
-                onClick = { shouldShowDialog = true },
+                onClick = {
+                    if (loginState.password.isEmpty()) {
+                        loginItemTypeHandlers.onOpenPasswordGeneratorClick()
+                    } else {
+                        shouldShowDialog = true
+                    }
+                },
             )
 
             if (shouldShowDialog) {
