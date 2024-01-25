@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -241,4 +242,13 @@ interface VaultRepository : VaultLockManager {
      * Attempt to delete a send.
      */
     suspend fun deleteSend(sendId: String): DeleteSendResult
+
+    /**
+     * Attempt to delete an attachment from a send.
+     */
+    suspend fun deleteCipherAttachment(
+        cipherId: String,
+        attachmentId: String,
+        cipherView: CipherView,
+    ): DeleteAttachmentResult
 }

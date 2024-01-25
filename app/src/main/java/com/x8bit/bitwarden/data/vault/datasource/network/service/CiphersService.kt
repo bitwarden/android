@@ -41,6 +41,14 @@ interface CiphersService {
     suspend fun softDeleteCipher(cipherId: String): Result<Unit>
 
     /**
+     * Attempt to delete an attachment from a cipher.
+     */
+    suspend fun deleteCipherAttachment(
+        cipherId: String,
+        attachmentId: String,
+    ): Result<Unit>
+
+    /**
      * Attempt to restore a cipher.
      */
     suspend fun restoreCipher(cipherId: String): Result<Unit>

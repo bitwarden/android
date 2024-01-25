@@ -55,6 +55,15 @@ interface CiphersApi {
     ): Result<Unit>
 
     /**
+     * Deletes an attachment from a cipher.
+     */
+    @DELETE("ciphers/{cipherId}/attachment/{attachmentId}")
+    suspend fun deleteCipherAttachment(
+        @Path("cipherId") cipherId: String,
+        @Path("attachmentId") attachmentId: String,
+    ): Result<Unit>
+
+    /**
      * Restores a cipher.
      */
     @PUT("ciphers/{cipherId}/restore")
