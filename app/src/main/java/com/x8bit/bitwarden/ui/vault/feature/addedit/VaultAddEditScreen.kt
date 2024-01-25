@@ -9,7 +9,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -43,7 +47,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTy
  * Top level composable for the vault add item screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun VaultAddEditScreen(
     onNavigateBack: () -> Unit,
@@ -107,12 +111,33 @@ fun VaultAddEditScreen(
         VaultAddEditCardTypeHandlers.create(viewModel = viewModel)
     }
 
+    val confirmDeleteClickAction = remember(viewModel) {
+        { viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick) }
+    }
+
+    var pendingDeleteCipher by rememberSaveable { mutableStateOf(false) }
+
     VaultAddEditItemDialogs(
         dialogState = state.dialog,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultAddEditAction.Common.DismissDialog) }
         },
     )
+
+    if (pendingDeleteCipher) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete),
+            message = stringResource(id = R.string.do_you_really_want_to_soft_delete_cipher),
+            confirmButtonText = stringResource(id = R.string.ok),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                pendingDeleteCipher = false
+                confirmDeleteClickAction()
+            },
+            onDismissClick = { pendingDeleteCipher = false },
+            onDismissRequest = { pendingDeleteCipher = false },
+        )
+    }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -170,6 +195,11 @@ fun VaultAddEditScreen(
                                 },
                             )
                                 .takeUnless { state.isAddItemMode || !state.isCipherInCollection },
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.delete),
+                                onClick = { pendingDeleteCipher = true },
+                            )
+                                .takeUnless { state.isAddItemMode },
                         ),
                     )
                 },

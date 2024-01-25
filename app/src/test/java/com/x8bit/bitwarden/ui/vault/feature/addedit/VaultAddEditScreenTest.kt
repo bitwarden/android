@@ -2225,6 +2225,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Move to Organization")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
     }
 
     @Test
@@ -2260,6 +2265,101 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Collections")
             .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Delete dialog ok click should send ConfirmDeleteClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Do you really want to send to the trash?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick)
+        }
+    }
+
+    @Test
+    fun `Delete dialog cancel click should dismiss the dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Do you really want to send to the trash?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
     }
 
     //region Helper functions
