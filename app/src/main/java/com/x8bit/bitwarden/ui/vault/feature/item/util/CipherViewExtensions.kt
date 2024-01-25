@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
+import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -29,8 +30,10 @@ private val dateTimeFormatter
 /**
  * Transforms [VaultData] into [VaultState.ViewState].
  */
+@Suppress("LongMethod")
 fun CipherView.toViewState(
     isPremiumUser: Boolean,
+    totpCodeItemData: TotpCodeItemData?,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -58,8 +61,8 @@ fun CipherView.toViewState(
                         dateTimeFormatter.format(it)
                     },
                     passwordHistoryCount = passwordHistory?.count(),
-                    totp = loginValues.totp,
                     isPremiumUser = isPremiumUser,
+                    totpCodeItemData = totpCodeItemData,
                 )
             }
 

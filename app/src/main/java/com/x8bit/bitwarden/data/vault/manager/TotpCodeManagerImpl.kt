@@ -74,13 +74,12 @@ class TotpCodeManagerImpl(
     @Suppress("LongMethod")
     private fun getTotpCodeStateFlowInternal(
         userId: String,
-        cipher: CipherView,
+        cipher: CipherView?,
     ): StateFlow<DataState<VerificationCodeItem?>> {
-        val cipherId = cipher.id ?: return MutableStateFlow(DataState.Loaded(null))
+        val cipherId = cipher?.id ?: return MutableStateFlow(DataState.Loaded(null))
 
         return mutableVerificationCodeStateFlowMap.getOrPut(cipher) {
             flow<DataState<VerificationCodeItem?>> {
-
                 val totpCode = cipher
                     .login
                     ?.totp

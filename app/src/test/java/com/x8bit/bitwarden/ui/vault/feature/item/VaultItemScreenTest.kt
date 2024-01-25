@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onFirstNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
@@ -1011,8 +1012,8 @@ class VaultItemScreenTest : BaseComposeTest() {
                         passwordHistoryCount = null,
                         uris = emptyList(),
                         passwordRevisionDate = null,
-                        totp = null,
                         isPremiumUser = true,
+                        totpCodeItemData = null,
                     ),
                 ),
             )
@@ -1097,6 +1098,102 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
+        }
+    }
+
+    @Test
+    fun `in login state, the TOTP field should exist based on the state`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    type = DEFAULT_LOGIN.copy(
+                        totpCodeItemData = null,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isProgressBar)
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithContentDescription("Copy TOTP")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    type = DEFAULT_LOGIN.copy(
+                        totpCodeItemData = TotpCodeItemData(
+                            periodSeconds = 30,
+                            timeLeftSeconds = 15,
+                            verificationCode = "123456",
+                            totpCode = "testCode",
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isProgressBar)
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription("Copy TOTP")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `in login state, TOTP item should be displayed according to state`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE,
+            )
+        }
+
+        composeTestRule
+            .onNode(isProgressBar)
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription("Copy TOTP")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    type = DEFAULT_LOGIN.copy(
+                        isPremiumUser = false,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isProgressBar)
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithContentDescription("Copy TOTP")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `in login state, on copy totp click should send CopyTotpClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Copy TOTP")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
         }
     }
 
@@ -1290,8 +1387,10 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE)
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(totpCodeItemData = null)
+            }
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
@@ -1779,8 +1878,13 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
             ),
         ),
         passwordRevisionDate = "4/14/83 3:56 PM",
-        totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
         isPremiumUser = true,
+        totpCodeItemData = TotpCodeItemData(
+            periodSeconds = 30,
+            timeLeftSeconds = 15,
+            verificationCode = "123456",
+            totpCode = "testCode",
+        ),
     )
 
 private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity =
@@ -1821,7 +1925,7 @@ private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
         passwordHistoryCount = null,
         uris = emptyList(),
         passwordRevisionDate = null,
-        totp = null,
+        totpCodeItemData = null,
         isPremiumUser = true,
     )
 

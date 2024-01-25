@@ -74,6 +74,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -353,6 +354,37 @@ class VaultRepositoryImpl(
                             // Just return the verification items; we are only combining the
                             // DataStates to know the overall state.
                             verificationCodeItems
+                        }
+                    }
+            }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = DataState.Loading,
+            )
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getAuthCodeFlow(cipherId: String): StateFlow<DataState<VerificationCodeItem?>> {
+        val userId = requireNotNull(activeUserId)
+        return getVaultItemStateFlow(cipherId)
+            .flatMapLatest { cipherDataState ->
+                val cipher = cipherDataState.data
+                    ?: return@flatMapLatest flowOf(DataState.Loaded(null))
+                totpCodeManager
+                    .getTotpCodeStateFlow(
+                        userId = userId,
+                        cipher = cipher,
+                    )
+                    .map { totpCodeDataState ->
+                        val totpCodeData = totpCodeDataState.data
+                        combineDataStates(
+                            totpCodeDataState.map { Unit },
+                            cipherDataState,
+                        ) { _, _ ->
+                            // Just return the verification items; we are only combining the
+                            // DataStates to know the overall state.
+                            totpCodeData
                         }
                     }
             }

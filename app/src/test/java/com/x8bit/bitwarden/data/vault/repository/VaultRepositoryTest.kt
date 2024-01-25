@@ -2388,6 +2388,66 @@ class VaultRepositoryTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getVerificationCodeFlow for a single cipher should update data state when state changes`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = mockSyncResponse,
+                )
+            } just runs
+
+            every {
+                settingsDiskSource.storeLastSyncTime(MOCK_USER_STATE.activeUserId, clock.instant())
+            } just runs
+
+            val stateFlow = MutableStateFlow<DataState<VerificationCodeItem?>>(
+                DataState.Loading,
+            )
+
+            every {
+                totpCodeManager.getTotpCodeStateFlow(userId = userId, any())
+            } returns stateFlow
+
+            setupDataStateFlow(userId = userId)
+
+            vaultRepository.getAuthCodeFlow(createMockCipherView(1).id.toString()).test {
+                assertEquals(
+                    DataState.Loading,
+                    awaitItem(),
+                )
+
+                stateFlow.tryEmit(DataState.Loaded(createVerificationCodeItem()))
+
+                assertEquals(
+                    DataState.Loaded(createVerificationCodeItem()),
+                    awaitItem(),
+                )
+
+                vaultRepository.sync()
+
+                assertEquals(
+                    DataState.Pending(createVerificationCodeItem()),
+                    awaitItem(),
+                )
+            }
+        }
+
     @Test
     fun `getVerificationCodesFlow should update data state when state changes`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
