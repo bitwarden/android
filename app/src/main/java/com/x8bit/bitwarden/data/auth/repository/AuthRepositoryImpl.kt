@@ -6,8 +6,8 @@ import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.TwoFactorRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
+import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.TwoFactorRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
@@ -62,6 +62,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Singleton
@@ -86,7 +87,8 @@ class AuthRepositoryImpl(
     dispatcherManager: DispatcherManager,
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository {
-    private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow<Boolean>(false)
+    private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow(false)
+    private val mutableHasPendingAccountDeletionStateFlow = MutableStateFlow(false)
 
     /**
      * The auth information to make the identity token request will need to be
@@ -128,11 +130,13 @@ class AuthRepositoryImpl(
         authDiskSource.userOrganizationsListFlow,
         vaultRepository.vaultStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
+        mutableHasPendingAccountDeletionStateFlow,
     ) {
             userStateJson,
             userOrganizationsList,
             vaultState,
             hasPendingAccountAddition,
+            _,
         ->
         userStateJson
             ?.toUserState(
@@ -142,6 +146,11 @@ class AuthRepositoryImpl(
                 vaultUnlockTypeProvider = ::getVaultUnlockType,
             )
     }
+        .filter {
+            // If there is a pending account deletion, continue showing
+            // the original UserState until it is confirmed.
+            !mutableHasPendingAccountDeletionStateFlow.value
+        }
         .stateIn(
             scope = collectionScope,
             started = SharingStarted.Eagerly,
@@ -170,9 +179,14 @@ class AuthRepositoryImpl(
     override var hasPendingAccountAddition: Boolean
         by mutableHasPendingAccountAdditionStateFlow::value
 
+    override fun clearPendingAccountDeletion() {
+        mutableHasPendingAccountDeletionStateFlow.value = false
+    }
+
     override suspend fun deleteAccount(password: String): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return DeleteAccountResult.Error
+        mutableHasPendingAccountDeletionStateFlow.value = true
         return authSdkSource
             .hashPassword(
                 email = profile.email,
@@ -182,6 +196,7 @@ class AuthRepositoryImpl(
             )
             .flatMap { hashedPassword -> accountsService.deleteAccount(hashedPassword) }
             .onSuccess { logout() }
+            .onFailure { clearPendingAccountDeletion() }
             .fold(
                 onFailure = { DeleteAccountResult.Error },
                 onSuccess = { DeleteAccountResult.Success },

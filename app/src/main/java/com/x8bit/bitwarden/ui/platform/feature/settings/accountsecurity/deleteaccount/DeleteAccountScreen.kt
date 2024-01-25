@@ -67,6 +67,16 @@ fun DeleteAccountScreen(
     }
 
     when (val dialog = state.dialog) {
+        DeleteAccountState.DeleteAccountDialog.DeleteSuccess -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = null,
+                message = R.string.your_account_has_been_permanently_deleted.asText(),
+            ),
+            onDismissRequest = remember(viewModel) {
+                { viewModel.trySendAction(DeleteAccountAction.AccountDeletionConfirm) }
+            },
+        )
+
         is DeleteAccountState.DeleteAccountDialog.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),

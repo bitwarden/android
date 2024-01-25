@@ -92,6 +92,40 @@ class DeleteAccountScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `delete success dialog presence should update with dialog state`() {
+        val message = "Your account has been permanently deleted"
+        composeTestRule
+            .onAllNodesWithText(message)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess)
+        }
+
+        composeTestRule
+            .onAllNodesWithText(message)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertExists()
+    }
+
+    @Test
+    fun `delete success dialog dismiss should emit DeleteAccountAction`() {
+        mutableStateFlow.update {
+            it.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess)
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(DeleteAccountAction.AccountDeletionConfirm)
+        }
+    }
+
+    @Test
     fun `delete account dialog should dismiss on cancel click`() {
         composeTestRule
             .onAllNodesWithText("Master password confirmation")
