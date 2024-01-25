@@ -58,8 +58,7 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleRateAppClick() {
-        // TODO: BIT-748 Launch the rate your app UI.
-        sendEvent(AboutEvent.ShowToast(text = "Navigate to rate the app.".asText()))
+        sendEvent(AboutEvent.NavigateToRateApp)
     }
 
     private fun handleSubmitCrashLogsClick(action: AboutAction.SubmitCrashLogsClick) {
@@ -120,11 +119,9 @@ sealed class AboutEvent {
     data object NavigateToWebVault : AboutEvent()
 
     /**
-     * Displays a toast with the given [Text].
+     * Navigates to rate the app.
      */
-    data class ShowToast(
-        val text: Text,
-    ) : AboutEvent()
+    data object NavigateToRateApp : AboutEvent()
 }
 
 /**

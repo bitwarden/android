@@ -142,6 +142,16 @@ class AboutScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `on NavigateToAboutSend should call launchUri on intentManager`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToRateApp)
+        verify {
+            intentManager.launchUri(
+                "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
+            )
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `on rate the app click should display confirmation dialog and confirm click should emit RateAppClick`() {
