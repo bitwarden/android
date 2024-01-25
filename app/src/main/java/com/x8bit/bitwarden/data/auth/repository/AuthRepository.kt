@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -45,6 +46,11 @@ interface AuthRepository : AuthenticatorProvider {
      * receive updates whenever [setSsoCallbackResult] is called.
      */
     val ssoCallbackResultFlow: Flow<SsoCallbackResult>
+
+    /**
+     * The two-factor data necessary for login and also to populate the Two-Factor Login screen.
+     */
+    var twoFactorData: GetTokenResponseJson.TwoFactorRequired?
 
     /**
      * The currently persisted saved email address (or `null` if not set).

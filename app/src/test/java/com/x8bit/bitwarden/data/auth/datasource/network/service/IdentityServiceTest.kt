@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.MasterPasswordPoli
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
@@ -79,6 +80,21 @@ class IdentityServiceTest : BaseServiceTest() {
             uniqueAppId = UNIQUE_APP_ID,
         )
         assertEquals(Result.success(CAPTCHA_BODY), result)
+    }
+
+    @Test
+    fun `getToken when response is TwoFactorRequired should return TwoFactorRequired`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(400).setBody(TWO_FACTOR_BODY_JSON))
+        val result = identityService.getToken(
+            email = EMAIL,
+            authModel = IdentityTokenAuthModel.MasterPassword(
+                username = EMAIL,
+                password = PASSWORD_HASH,
+            ),
+            captchaToken = null,
+            uniqueAppId = UNIQUE_APP_ID,
+        )
+        assertEquals(Result.success(TWO_FACTOR_BODY), result)
     }
 
     @Test
@@ -169,6 +185,22 @@ private const val CAPTCHA_BODY_JSON = """
 }
 """
 private val CAPTCHA_BODY = GetTokenResponseJson.CaptchaRequired("123")
+
+private const val TWO_FACTOR_BODY_JSON = """
+{
+  "TwoFactorProviders2": {"1": {"Email": "ex***@email.com"}, "0": {"Email": null}},
+  "SsoEmail2faSessionToken": "exampleToken",
+  "CaptchaBypassToken": "BWCaptchaBypass_ABCXYZ"
+}
+"""
+private val TWO_FACTOR_BODY = GetTokenResponseJson.TwoFactorRequired(
+    authMethodsData = mapOf(
+        TwoFactorAuthMethod.EMAIL to mapOf("Email" to "ex***@email.com"),
+        TwoFactorAuthMethod.AUTHENTICATOR_APP to mapOf("Email" to null),
+    ),
+    ssoToken = "exampleToken",
+    captchaToken = "BWCaptchaBypass_ABCXYZ",
+)
 
 private const val LOGIN_SUCCESS_JSON = """
 {

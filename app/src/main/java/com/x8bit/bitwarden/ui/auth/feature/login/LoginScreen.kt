@@ -67,6 +67,7 @@ fun LoginScreen(
     onNavigateToMasterPasswordHint: (String) -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
     onNavigateToLoginWithDevice: () -> Unit,
+    onNavigateToTwoFactorLogin: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -78,12 +79,14 @@ fun LoginScreen(
             is LoginEvent.NavigateToMasterPasswordHint -> {
                 onNavigateToMasterPasswordHint(event.emailAddress)
             }
+
             is LoginEvent.NavigateToCaptcha -> {
                 intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
             LoginEvent.NavigateToEnterpriseSignOn -> onNavigateToEnterpriseSignOn()
             LoginEvent.NavigateToLoginWithDevice -> onNavigateToLoginWithDevice()
+            LoginEvent.NavigateToTwoFactorLogin -> onNavigateToTwoFactorLogin()
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }

@@ -48,6 +48,7 @@ class LoginScreenTest : BaseComposeTest() {
     private var onNavigateToMasterPasswordHintCalled = false
     private var onNavigateToEnterpriseSignOnCalled = false
     private var onNavigateToLoginWithDeviceCalled = false
+    private var onNavigateToTwoFactorLoginCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<LoginEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LoginViewModel>(relaxed = true) {
@@ -63,6 +64,7 @@ class LoginScreenTest : BaseComposeTest() {
                 onNavigateToMasterPasswordHint = { onNavigateToMasterPasswordHintCalled = true },
                 onNavigateToEnterpriseSignOn = { onNavigateToEnterpriseSignOnCalled = true },
                 onNavigateToLoginWithDevice = { onNavigateToLoginWithDeviceCalled = true },
+                onNavigateToTwoFactorLogin = { onNavigateToTwoFactorLoginCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
             )

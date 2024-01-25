@@ -20,12 +20,15 @@ import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.loginWithDeviceDestin
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDevice
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.masterPasswordHintDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.navigateToMasterPasswordHint
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
 
 const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 
 /**
  * Add auth destinations to the nav graph.
  */
+@Suppress("LongMethod")
 fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
         startDestination = LANDING_ROUTE,
@@ -67,6 +70,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             },
             onNavigateToEnterpriseSignOn = { navController.navigateToEnterpriseSignOn() },
             onNavigateToLoginWithDevice = { navController.navigateToLoginWithDevice() },
+            onNavigateToTwoFactorLogin = { navController.navigateToTwoFactorLogin() },
         )
         loginWithDeviceDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -75,6 +79,9 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             onNavigateBack = { navController.popBackStack() },
         )
         masterPasswordHintDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        twoFactorLoginDestination(
             onNavigateBack = { navController.popBackStack() },
         )
     }

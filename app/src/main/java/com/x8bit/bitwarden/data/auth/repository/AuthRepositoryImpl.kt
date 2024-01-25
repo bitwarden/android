@@ -6,6 +6,7 @@ import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
+import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.TwoFactorRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
@@ -90,6 +91,8 @@ class AuthRepositoryImpl(
      * these flows changes.
      */
     private val collectionScope = CoroutineScope(dispatcherManager.unconfined)
+
+    override var twoFactorData: TwoFactorRequired? = null
 
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -207,6 +210,11 @@ class AuthRepositoryImpl(
             onSuccess = { loginResponse ->
                 when (loginResponse) {
                     is CaptchaRequired -> LoginResult.CaptchaRequired(loginResponse.captchaKey)
+                    is TwoFactorRequired -> {
+                        twoFactorData = loginResponse
+                        LoginResult.TwoFactorRequired
+                    }
+
                     is Success -> {
                         val userStateJson = loginResponse.toUserState(
                             previousUserState = authDiskSource.userState,
