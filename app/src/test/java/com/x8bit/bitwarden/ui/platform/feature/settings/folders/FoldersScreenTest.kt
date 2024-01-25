@@ -15,8 +15,9 @@ import org.junit.Test
 class FoldersScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+
     private val mutableEventFlow = bufferedMutableSharedFlow<FoldersEvent>()
-    private val mutableStateFlow = MutableStateFlow(Unit)
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     val viewModel = mockk<FoldersViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
@@ -52,3 +53,6 @@ class FoldersScreenTest : BaseComposeTest() {
         assertTrue(onNavigateBackCalled)
     }
 }
+
+private val DEFAULT_STATE =
+    FoldersState(viewState = FoldersState.ViewState.Loading)
