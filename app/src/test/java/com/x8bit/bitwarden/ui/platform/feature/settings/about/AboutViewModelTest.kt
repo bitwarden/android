@@ -49,11 +49,11 @@ class AboutViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `on RateAppClick should emit ShowToast`() = runTest {
+    fun `on RateAppClick should emit NavigateToRateApp`() = runTest {
         val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
         viewModel.eventFlow.test {
             viewModel.trySendAction(AboutAction.RateAppClick)
-            assertEquals(AboutEvent.ShowToast("Navigate to rate the app.".asText()), awaitItem())
+            assertEquals(AboutEvent.NavigateToRateApp, awaitItem())
         }
     }
 

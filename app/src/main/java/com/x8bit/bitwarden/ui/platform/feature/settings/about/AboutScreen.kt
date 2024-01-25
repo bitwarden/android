@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -81,8 +80,11 @@ fun AboutScreen(
                 intentManager.launchUri("https://vault.bitwarden.com".toUri())
             }
 
-            is AboutEvent.ShowToast -> {
-                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
+            AboutEvent.NavigateToRateApp -> {
+                intentManager.launchUri(
+                    uri =
+                    "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
+                )
             }
         }
     }
