@@ -171,4 +171,14 @@ interface SettingsDiskSource {
         userId: String,
         isApprovePasswordlessLoginsEnabled: Boolean?,
     )
+
+    /**
+     * Gets whether or not the given [userId] has enabled screen capture.
+     */
+    fun getScreenCaptureAllowed(userId: String): Boolean?
+
+    /**
+     * Stores whether or not [isScreenCaptureAllowed] for the given [userId].
+     */
+    fun storeScreenCaptureAllowed(userId: String, isScreenCaptureAllowed: Boolean?)
 }

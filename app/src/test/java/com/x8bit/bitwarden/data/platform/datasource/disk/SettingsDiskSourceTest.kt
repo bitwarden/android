@@ -104,6 +104,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             lastSyncTime = Instant.parse("2023-10-27T12:00:00Z"),
         )
+        settingsDiskSource.storeScreenCaptureAllowed(
+            userId = userId,
+            isScreenCaptureAllowed = true,
+        )
 
         settingsDiskSource.clearData(userId = userId)
 
@@ -116,6 +120,7 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
         assertNull(settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId))
         assertNull(settingsDiskSource.getLastSyncTime(userId = userId))
+        assertNull(settingsDiskSource.getScreenCaptureAllowed(userId = userId))
     }
 
     @Test
@@ -716,5 +721,54 @@ class SettingsDiskSourceTest {
             isApprovePasswordlessLoginsEnabled = null,
         )
         assertFalse(fakeSharedPreferences.contains(approvePasswordlessLoginsKey))
+    }
+
+    @Test
+    fun `getScreenCaptureAllowed should pull from SharedPreferences`() {
+        val screenCaptureAllowBaseKey = "bwPreferencesStorage:screenCaptureAllowed"
+        val mockUserId = "mockUserId"
+        val isScreenCaptureAllowed = true
+        fakeSharedPreferences.edit {
+            putBoolean("${screenCaptureAllowBaseKey}_$mockUserId", isScreenCaptureAllowed)
+        }
+        val actual = settingsDiskSource.getScreenCaptureAllowed(userId = mockUserId)
+        assertEquals(
+            isScreenCaptureAllowed,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeScreenCaptureAllowed for non-null values should update SharedPreferences`() {
+        val screenCaptureAllowBaseKey = "bwPreferencesStorage:screenCaptureAllowed"
+        val mockUserId = "mockUserId"
+        val isScreenCaptureAllowed = true
+        settingsDiskSource.storeScreenCaptureAllowed(
+            userId = mockUserId,
+            isScreenCaptureAllowed = isScreenCaptureAllowed,
+        )
+        val actual = fakeSharedPreferences.getBoolean(
+            "${screenCaptureAllowBaseKey}_$mockUserId",
+            false,
+        )
+        assertEquals(
+            isScreenCaptureAllowed,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeScreenCaptureAllowed for null values should clear SharedPreferences`() {
+        val screenCaptureAllowBaseKey = "bwPreferencesStorage:screenCaptureAllowed"
+        val mockUserId = "mockUserId"
+        val screenCaptureAllowKey = "${screenCaptureAllowBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit {
+            putBoolean(screenCaptureAllowKey, true)
+        }
+        settingsDiskSource.storeScreenCaptureAllowed(
+            userId = mockUserId,
+            isScreenCaptureAllowed = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(screenCaptureAllowKey))
     }
 }

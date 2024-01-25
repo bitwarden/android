@@ -42,10 +42,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
-
     private var storedIsIconLoadingDisabled: Boolean? = null
-
     private val storedApprovePasswordLoginsEnabled = mutableMapOf<String, Boolean?>()
+    private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
 
     override var appLanguage: AppLanguage? = null
 
@@ -81,6 +80,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedPullToRefreshEnabled.remove(userId)
         storedInlineAutofillEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
+        storedScreenCaptureAllowed.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
@@ -188,6 +188,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         isApprovePasswordlessLoginsEnabled: Boolean?,
     ) {
         storedApprovePasswordLoginsEnabled[userId] = isApprovePasswordlessLoginsEnabled
+    }
+
+    override fun getScreenCaptureAllowed(userId: String): Boolean? =
+        storedScreenCaptureAllowed[userId]
+
+    override fun storeScreenCaptureAllowed(
+        userId: String,
+        isScreenCaptureAllowed: Boolean?,
+    ) {
+        storedScreenCaptureAllowed[userId] = isScreenCaptureAllowed
     }
 
     //region Private helper functions
