@@ -82,7 +82,7 @@ fun VerificationCodeScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.verification_code),
+                title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),

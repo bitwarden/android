@@ -91,9 +91,10 @@ fun VaultVerificationCodeItem(
             supportingLabel?.let {
                 Text(
                     text = it,
-                    maxLines = 1,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -115,7 +116,7 @@ fun VaultVerificationCodeItem(
             Icon(
                 painter = painterResource(id = R.drawable.ic_copy),
                 contentDescription = stringResource(id = R.string.copy),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp),
             )
         }
