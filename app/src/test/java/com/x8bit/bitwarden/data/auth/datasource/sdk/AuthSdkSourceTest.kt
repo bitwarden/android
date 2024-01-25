@@ -1,10 +1,13 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.ClientAuth
+import com.bitwarden.sdk.ClientPlatform
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
@@ -17,10 +20,60 @@ import org.junit.jupiter.api.Test
 
 class AuthSdkSourceTest {
     private val clientAuth = mockk<ClientAuth>()
+    private val clientPlatform = mockk<ClientPlatform>()
 
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
         clientAuth = clientAuth,
+        clientPlatform = clientPlatform,
     )
+
+    @Test
+    fun `getNewAuthRequest should call SDK and return a Result with correct data`() = runBlocking {
+        val email = "test@gmail.com"
+        val expectedResult = mockk<AuthRequestResponse>()
+        coEvery {
+            clientAuth.newAuthRequest(email)
+        } returns expectedResult
+
+        val result = authSkdSource.getNewAuthRequest(email)
+
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        coVerify {
+            clientAuth.newAuthRequest(email)
+        }
+    }
+
+    @Test
+    fun `getUserFingerprint should call SDK and return a Result with correct data`() = runBlocking {
+        val email = "email@gmail.com"
+        val publicKey = "publicKey"
+        val expectedResult = "fingerprint"
+        coEvery {
+            clientPlatform.fingerprint(
+                req = FingerprintRequest(
+                    fingerprintMaterial = email,
+                    publicKey = publicKey,
+                ),
+            )
+        } returns expectedResult
+
+        val result = authSkdSource.getUserFingerprint(email, publicKey)
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        coVerify {
+            clientPlatform.fingerprint(
+                req = FingerprintRequest(
+                    fingerprintMaterial = email,
+                    publicKey = publicKey,
+                ),
+            )
+        }
+    }
 
     @Test
     fun `hashPassword should call SDK and return a Result with the correct data`() = runBlocking {

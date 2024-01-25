@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -410,6 +411,7 @@ class AuthRepositoryImpl(
                     is PasswordHintResponseJson.Error -> {
                         PasswordHintResult.Error(it.errorMessage)
                     }
+
                     PasswordHintResponseJson.Success -> PasswordHintResult.Success
                 }
             },
@@ -464,6 +466,22 @@ class AuthRepositoryImpl(
                         },
                     )
                 },
+            )
+
+    override suspend fun getFingerprintPhrase(
+        email: String,
+    ): UserFingerprintResult =
+        authSdkSource.getNewAuthRequest(email)
+            .flatMap { requestResponse ->
+                authSdkSource
+                    .getUserFingerprint(
+                        email = email,
+                        publicKey = requestResponse.publicKey,
+                    )
+            }
+            .fold(
+                onFailure = { UserFingerprintResult.Error },
+                onSuccess = { UserFingerprintResult.Success(it) },
             )
 
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =

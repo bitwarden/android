@@ -20,5 +20,8 @@ object AuthSdkModule {
     @Singleton
     fun provideAuthSdkSource(
         client: Client,
-    ): AuthSdkSource = AuthSdkSourceImpl(clientAuth = client.auth())
+    ): AuthSdkSource = AuthSdkSourceImpl(
+        clientAuth = client.auth(),
+        clientPlatform = client.platform(),
+    )
 }

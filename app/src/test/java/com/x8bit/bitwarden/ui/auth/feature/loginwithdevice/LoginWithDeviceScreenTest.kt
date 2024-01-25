@@ -105,7 +105,9 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
     }
 
     companion object {
+        private const val EMAIL = "test@gmail.com"
         private val DEFAULT_STATE = LoginWithDeviceState(
+            emailAddress = EMAIL,
             viewState = LoginWithDeviceState.ViewState.Content(
                 fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
             ),

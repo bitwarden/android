@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
+import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
@@ -11,6 +12,21 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
  */
 interface AuthSdkSource {
     /**
+     * Gets the data needed to create a new auth request.
+     */
+    suspend fun getNewAuthRequest(
+        email: String,
+    ): Result<AuthRequestResponse>
+
+    /**
+     * Gets the fingerprint phrase for this [email] and [publicKey].
+     */
+    suspend fun getUserFingerprint(
+        email: String,
+        publicKey: String,
+    ): Result<String>
+
+    /**
      * Creates a hashed password provided the given [email], [password], [kdf], and [purpose].
      */
     suspend fun hashPassword(
@@ -21,7 +37,7 @@ interface AuthSdkSource {
     ): Result<String>
 
     /**
-     * Creates a set of encryption key information for registraation pers
+     * Creates a set of encryption key information for registration.
      */
     suspend fun makeRegisterKeys(
         email: String,

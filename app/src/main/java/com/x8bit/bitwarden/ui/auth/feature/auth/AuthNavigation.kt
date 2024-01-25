@@ -69,7 +69,11 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 )
             },
             onNavigateToEnterpriseSignOn = { navController.navigateToEnterpriseSignOn() },
-            onNavigateToLoginWithDevice = { navController.navigateToLoginWithDevice() },
+            onNavigateToLoginWithDevice = { emailAddress ->
+                navController.navigateToLoginWithDevice(
+                    emailAddress = emailAddress,
+                )
+            },
             onNavigateToTwoFactorLogin = { navController.navigateToTwoFactorLogin() },
         )
         loginWithDeviceDestination(

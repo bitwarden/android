@@ -61,12 +61,12 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 fun LoginScreen(
     onNavigateBack: () -> Unit,
     onNavigateToMasterPasswordHint: (String) -> Unit,
     onNavigateToEnterpriseSignOn: () -> Unit,
-    onNavigateToLoginWithDevice: () -> Unit,
+    onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
     onNavigateToTwoFactorLogin: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
@@ -85,7 +85,10 @@ fun LoginScreen(
             }
 
             LoginEvent.NavigateToEnterpriseSignOn -> onNavigateToEnterpriseSignOn()
-            LoginEvent.NavigateToLoginWithDevice -> onNavigateToLoginWithDevice()
+            is LoginEvent.NavigateToLoginWithDevice -> {
+                onNavigateToLoginWithDevice(event.emailAddress)
+            }
+
             LoginEvent.NavigateToTwoFactorLogin -> onNavigateToTwoFactorLogin()
             is LoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()

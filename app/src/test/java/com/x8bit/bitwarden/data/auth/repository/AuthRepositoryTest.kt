@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
@@ -44,6 +45,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -1372,6 +1374,68 @@ class AuthRepositoryTest {
             authRequestsService.getAuthRequests()
         }
         assertEquals(expected, result)
+    }
+
+    @Test
+    fun `getUserFingerprint should return failure when source returns failure`() = runTest {
+        coEvery {
+            authSdkSource.getNewAuthRequest(EMAIL)
+        } returns Result.success(
+            mockk<AuthRequestResponse> {
+                every { publicKey } returns PUBLIC_KEY
+            },
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+            )
+        } returns Result.failure(Throwable())
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.getFingerprintPhrase(EMAIL)
+
+        coVerify(exactly = 1) {
+            authSdkSource.getNewAuthRequest(EMAIL)
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+            )
+        }
+        assertEquals(UserFingerprintResult.Error, result)
+    }
+
+    @Test
+    fun `getUserFingerprint should return success when source returns success`() = runTest {
+        val fingerprint = "fingerprint"
+        coEvery {
+            authSdkSource.getNewAuthRequest(EMAIL)
+        } returns Result.success(
+            AuthRequestResponse(
+                fingerprint = fingerprint,
+                publicKey = PUBLIC_KEY,
+                privateKey = "key",
+                accessCode = "accessCode",
+            ),
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+            )
+        } returns Result.success(fingerprint)
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.getFingerprintPhrase(EMAIL)
+
+        coVerify(exactly = 1) {
+            authSdkSource.getNewAuthRequest(EMAIL)
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+            )
+        }
+        assertEquals(UserFingerprintResult.Success(fingerprint), result)
     }
 
     @Test

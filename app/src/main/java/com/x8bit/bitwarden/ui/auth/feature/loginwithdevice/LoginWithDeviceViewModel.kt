@@ -2,10 +2,16 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -16,19 +22,20 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class LoginWithDeviceViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginWithDeviceState, LoginWithDeviceEvent, LoginWithDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: LoginWithDeviceState(
+            emailAddress = LoginWithDeviceArgs(savedStateHandle).emailAddress,
             viewState = LoginWithDeviceState.ViewState.Loading,
         ),
 ) {
     init {
-        mutableStateFlow.update {
-            // TODO BIT-809: Pull phrase from SDK
-            it.copy(
-                viewState = LoginWithDeviceState.ViewState.Content(
-                    fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
+        viewModelScope.launch {
+            trySendAction(
+                LoginWithDeviceAction.Internal.FingerprintPhraseReceived(
+                    result = authRepository.getFingerprintPhrase(state.emailAddress),
                 ),
             )
         }
@@ -39,6 +46,10 @@ class LoginWithDeviceViewModel @Inject constructor(
             LoginWithDeviceAction.CloseButtonClick -> handleCloseButtonClicked()
             LoginWithDeviceAction.ResendNotificationClick -> handleResendNotificationClicked()
             LoginWithDeviceAction.ViewAllLogInOptionsClick -> handleViewAllLogInOptionsClicked()
+
+            is LoginWithDeviceAction.Internal.FingerprintPhraseReceived -> {
+                handleFingerprintPhraseReceived(action)
+            }
         }
     }
 
@@ -54,6 +65,32 @@ class LoginWithDeviceViewModel @Inject constructor(
     private fun handleViewAllLogInOptionsClicked() {
         sendEvent(LoginWithDeviceEvent.NavigateBack)
     }
+
+    private fun handleFingerprintPhraseReceived(
+        action: LoginWithDeviceAction.Internal.FingerprintPhraseReceived,
+    ) {
+        when (action.result) {
+            is UserFingerprintResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = LoginWithDeviceState.ViewState.Content(
+                            fingerprintPhrase = action.result.fingerprint,
+                        ),
+                    )
+                }
+            }
+
+            is UserFingerprintResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = LoginWithDeviceState.ViewState.Error(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -61,6 +98,7 @@ class LoginWithDeviceViewModel @Inject constructor(
  */
 @Parcelize
 data class LoginWithDeviceState(
+    val emailAddress: String,
     val viewState: ViewState,
 ) : Parcelable {
     /**
@@ -133,4 +171,16 @@ sealed class LoginWithDeviceAction {
      * Indicates that the "View all log in options" text has been clicked.
      */
     data object ViewAllLogInOptionsClick : LoginWithDeviceAction()
+
+    /**
+     * Models actions for internal use by the view model.
+     */
+    sealed class Internal : LoginWithDeviceAction() {
+        /**
+         * A fingerprint phrase for this user has been received.
+         */
+        data class FingerprintPhraseReceived(
+            val result: UserFingerprintResult,
+        ) : Internal()
+    }
 }
