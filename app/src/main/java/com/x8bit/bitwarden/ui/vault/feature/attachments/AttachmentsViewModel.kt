@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -81,8 +82,15 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     private fun handleFileChoose(action: AttachmentsAction.FileChoose) {
-        sendEvent(AttachmentsEvent.ShowToast("Not Yet Implemented".asText()))
-        // TODO: Handle choosing a file the attachments (BIT-522)
+        updateContent {
+            it.copy(
+                newAttachment = AttachmentsState.NewAttachment(
+                    uri = action.fileData.uri,
+                    displayName = action.fileData.fileName,
+                    sizeBytes = action.fileData.sizeBytes,
+                ),
+            )
+        }
     }
 
     private fun handleDeleteClick(action: AttachmentsAction.DeleteClick) {
@@ -195,6 +203,18 @@ class AttachmentsViewModel @Inject constructor(
     ) {
         (state.viewState as? AttachmentsState.ViewState.Content)?.let(block)
     }
+
+    private inline fun updateContent(
+        crossinline block: (
+            AttachmentsState.ViewState.Content,
+        ) -> AttachmentsState.ViewState.Content,
+    ) {
+        val currentViewState = state.viewState
+        val updatedContent = (currentViewState as? AttachmentsState.ViewState.Content)
+            ?.let(block)
+            ?: return
+        mutableStateFlow.update { it.copy(viewState = updatedContent) }
+    }
 }
 
 /**
@@ -231,8 +251,19 @@ data class AttachmentsState(
             @IgnoredOnParcel
             val originalCipher: CipherView? = null,
             val attachments: List<AttachmentItem>,
+            val newAttachment: NewAttachment?,
         ) : ViewState()
     }
+
+    /**
+     * Represents an individual attachment that is ready to be added to the cipher.
+     */
+    @Parcelize
+    data class NewAttachment(
+        val uri: Uri,
+        val displayName: String,
+        val sizeBytes: Long,
+    ) : Parcelable
 
     /**
      * Represents an individual attachment that is already saved to the cipher.

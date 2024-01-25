@@ -20,4 +20,5 @@ fun CipherView.toViewState(): AttachmentsState.ViewState.Content =
                     displaySize = it.sizeName.orEmpty(),
                 )
             },
+        newAttachment = null,
     )

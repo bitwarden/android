@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
@@ -35,11 +36,13 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setup() {
         mockkStatic(CipherView::toViewState)
+        mockkStatic(Uri::class)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(CipherView::toViewState)
+        unmockkStatic(Uri::class)
     }
 
     @Test
@@ -96,13 +99,31 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ChooseFile should emit ShowToast`() = runTest {
-        val fileData = mockk<IntentManager.FileData>()
+    fun `ChooseFile should update state with new file data`() = runTest {
+        val uri = createMockUri()
+        val fileData = IntentManager.FileData(
+            fileName = "filename-1",
+            uri = uri,
+            sizeBytes = 100L,
+        )
+        val cipherView = createMockCipherView(number = 1)
+        val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
-            assertEquals(AttachmentsEvent.ShowToast("Not Yet Implemented".asText()), awaitItem())
-        }
+        viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
+        assertEquals(
+            initialState.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                    newAttachment = AttachmentsState.NewAttachment(
+                        displayName = "filename-1",
+                        uri = uri,
+                        sizeBytes = 100L,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -302,4 +323,11 @@ private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content
                 displaySize = "mockSizeName-1",
             ),
         ),
+        newAttachment = null,
     )
+
+private fun createMockUri(): Uri {
+    val uriMock = mockk<Uri>()
+    every { Uri.parse(any()) } returns uriMock
+    return uriMock
+}

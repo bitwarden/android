@@ -24,6 +24,7 @@ class CipherViewExtensionsTest {
                         displaySize = "mockSizeName-1",
                     ),
                 ),
+                newAttachment = null,
             ),
             result,
         )
@@ -41,6 +42,7 @@ class CipherViewExtensionsTest {
             AttachmentsState.ViewState.Content(
                 originalCipher = cipherView,
                 attachments = emptyList(),
+                newAttachment = null,
             ),
             result,
         )
@@ -62,6 +64,7 @@ class CipherViewExtensionsTest {
             AttachmentsState.ViewState.Content(
                 originalCipher = cipherView,
                 attachments = emptyList(),
+                newAttachment = null,
             ),
             result,
         )
