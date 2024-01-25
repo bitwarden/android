@@ -11,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -76,7 +77,7 @@ class AttachmentsScreenTest : BaseComposeTest() {
     @Test
     fun `on choose file click should send ChooseFileClick`() {
         mutableStateFlow.update {
-            it.copy(viewState = AttachmentsState.ViewState.Content(emptyList()))
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
         }
 
         composeTestRule.onNodeWithTextAfterScroll("Choose file").performClick()
@@ -96,7 +97,7 @@ class AttachmentsScreenTest : BaseComposeTest() {
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(viewState = AttachmentsState.ViewState.Content(emptyList()))
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
@@ -113,7 +114,7 @@ class AttachmentsScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(viewState = AttachmentsState.ViewState.Content(emptyList()))
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
         }
         composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
     }
@@ -121,7 +122,7 @@ class AttachmentsScreenTest : BaseComposeTest() {
     @Test
     fun `content with no items should be displayed according to state`() {
         mutableStateFlow.update {
-            it.copy(viewState = AttachmentsState.ViewState.Content(emptyList()))
+            it.copy(viewState = DEFAULT_CONTENT_WITHOUT_ATTACHMENTS)
         }
         composeTestRule
             .onNodeWithTextAfterScroll("There are no attachments.")
@@ -197,15 +198,60 @@ class AttachmentsScreenTest : BaseComposeTest() {
             viewModel.trySendAction(AttachmentsAction.DeleteClick(cipherId))
         }
     }
+
+    @Test
+    fun `error dialog should be displayed according to state`() {
+        val errorMessage = "Fail"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = AttachmentsState.DialogState.Error(
+                    title = null,
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        val loadingMessage = "deleting"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = AttachmentsState.DialogState.Loading(loadingMessage.asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
 }
 
 private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     cipherId = "cipherId-1234",
     viewState = AttachmentsState.ViewState.Loading,
+    dialogState = null,
 )
+
+private val DEFAULT_CONTENT_WITHOUT_ATTACHMENTS: AttachmentsState.ViewState.Content =
+    AttachmentsState.ViewState.Content(
+        originalCipher = createMockCipherView(number = 1),
+        attachments = emptyList(),
+    )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =
     AttachmentsState.ViewState.Content(
+        originalCipher = createMockCipherView(number = 1),
         attachments = listOf(
             AttachmentsState.AttachmentItem(
                 id = "cipherId-1234",

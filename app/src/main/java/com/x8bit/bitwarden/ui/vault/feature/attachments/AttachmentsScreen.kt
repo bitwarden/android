@@ -18,11 +18,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
@@ -64,6 +68,11 @@ fun AttachmentsScreen(
             }
         }
     }
+
+    AttachmentsDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = attachmentsHandlers.onDismissRequest,
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -107,5 +116,27 @@ fun AttachmentsScreen(
                 modifier = modifier,
             )
         }
+    }
+}
+
+@Composable
+private fun AttachmentsDialogs(
+    dialogState: AttachmentsState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is AttachmentsState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
+        is AttachmentsState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(dialogState.message),
+        )
+
+        null -> Unit
     }
 }
