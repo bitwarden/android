@@ -32,7 +32,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AttachmentsViewModelTest : BaseViewModelTest() {
-    private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
     }
@@ -79,8 +79,16 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     @Test
     fun `SaveClick should display error dialog when user is not premium`() = runTest {
         val cipherView = createMockCipherView(number = 1)
-        val state = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        val state = DEFAULT_STATE.copy(
+            viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
+            dialogState = AttachmentsState.DialogState.Error(
+                title = null,
+                message = R.string.premium_required.asText(),
+            ),
+            isPremiumUser = false,
+        )
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+        mutableUserStateFlow.value = null
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(state, awaitItem())
@@ -104,7 +112,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS,
             isPremiumUser = true,
         )
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
         mutableUserStateFlow.value = DEFAULT_USER_STATE
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -143,7 +151,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             uri = uri,
             sizeBytes = sizeToBig,
         )
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
         mutableUserStateFlow.value = DEFAULT_USER_STATE
 
         val viewModel = createViewModel()
@@ -187,7 +195,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 uri = uri,
                 sizeBytes = sizeJustRight,
             )
-            mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+            mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
             mutableUserStateFlow.value = DEFAULT_USER_STATE
             coEvery {
                 vaultRepository.createAttachment(
@@ -256,7 +264,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             uri = uri,
             sizeBytes = sizeJustRight,
         )
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
         mutableUserStateFlow.value = DEFAULT_USER_STATE
         coEvery {
             vaultRepository.createAttachment(
@@ -322,7 +330,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         )
         val cipherView = createMockCipherView(number = 1)
         val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
         val viewModel = createViewModel()
         viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
 
@@ -353,7 +361,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 cipherView = cipherView,
             )
         } returns DeleteAttachmentResult.Error
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -391,7 +399,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                 cipherView = cipherView,
             )
         } returns DeleteAttachmentResult.Success
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
 
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -423,7 +431,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
     fun `vaultItemStateFlow Loaded with data should update state to Content`() = runTest {
         val cipherView = createMockCipherView(number = 1)
         every { cipherView.toViewState() } returns DEFAULT_CONTENT_WITH_ATTACHMENTS
-        mutableVaultItemStateFlow.tryEmit(DataState.Loaded(cipherView))
+        mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
 
         val viewModel = createViewModel()
 
@@ -554,7 +562,7 @@ private val DEFAULT_STATE: AttachmentsState = AttachmentsState(
     cipherId = "mockId-1",
     viewState = AttachmentsState.ViewState.Loading,
     dialogState = null,
-    isPremiumUser = false,
+    isPremiumUser = true,
 )
 
 private val DEFAULT_CONTENT_WITH_ATTACHMENTS: AttachmentsState.ViewState.Content =

@@ -47,12 +47,19 @@ class AttachmentsViewModel @Inject constructor(
 ) : BaseViewModel<AttachmentsState, AttachmentsEvent, AttachmentsAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
-        ?: AttachmentsState(
-            cipherId = AttachmentsArgs(savedStateHandle).cipherId,
-            viewState = AttachmentsState.ViewState.Loading,
-            dialogState = null,
-            isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
-        ),
+        ?: run {
+            val isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true
+            AttachmentsState(
+                cipherId = AttachmentsArgs(savedStateHandle).cipherId,
+                viewState = AttachmentsState.ViewState.Loading,
+                dialogState = AttachmentsState.DialogState.Error(
+                    title = null,
+                    message = R.string.premium_required.asText(),
+                )
+                    .takeUnless { isPremiumUser },
+                isPremiumUser = isPremiumUser,
+            )
+        },
 ) {
     init {
         vaultRepo
