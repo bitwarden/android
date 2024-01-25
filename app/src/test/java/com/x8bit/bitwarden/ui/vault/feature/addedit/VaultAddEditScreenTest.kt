@@ -408,7 +408,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state clicking Username generator action should open dialog that triggers OpenUsernameGeneratorClick`() {
+    fun `in ItemType_Login state clicking Username text field generator action with non empty username should open dialog that triggers OpenUsernameGeneratorClick`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(username = "username") }
+        }
+
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
@@ -418,6 +422,28 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Yes")
             .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking Username generator icon with empty username field should trigger OpenPasswordGeneratorClick`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(username = "") }
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Generate username")
             .performClick()
 
         composeTestRule.assertNoDialogExists()
@@ -449,7 +475,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state click Password text field generator action should open dialog that triggers OpenPasswordGeneratorClick`() {
+    fun `in ItemType_Login state clicking Password text field generator action with non empty password field should open dialog that triggers OpenPasswordGeneratorClick`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(password = "password") }
+        }
+
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
@@ -461,6 +491,30 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Yes")
             .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.OpenPasswordGeneratorClick,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state clicking Password generator icon with empty password field should trigger OpenPasswordGeneratorClick`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(password = "") }
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Password")
+            .onSiblings()
+            .onLast()
             .performClick()
 
         composeTestRule.assertNoDialogExists()
