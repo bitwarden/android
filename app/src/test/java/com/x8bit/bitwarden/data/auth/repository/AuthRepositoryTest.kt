@@ -315,6 +315,48 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `clear Pending Account Deletion should unblock userState updates`() = runTest {
+        val masterPassword = "hello world"
+        val hashedMasterPassword = "dlrow olleh"
+        val originalUserState = SINGLE_USER_STATE_1.toUserState(
+            vaultState = VAULT_STATE,
+            userOrganizationsList = emptyList(),
+            hasPendingAccountAddition = false,
+            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+        )
+        val finalUserState = SINGLE_USER_STATE_2.toUserState(
+            vaultState = VAULT_STATE,
+            userOrganizationsList = emptyList(),
+            hasPendingAccountAddition = false,
+            vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+        )
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        coEvery {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+        } returns hashedMasterPassword.asSuccess()
+        coEvery {
+            accountsService.deleteAccount(hashedMasterPassword)
+        } returns Unit.asSuccess()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        repository.userStateFlow.test {
+            assertEquals(originalUserState, awaitItem())
+
+            // Deleting the account sets the pending deletion flag
+            repository.deleteAccount(password = masterPassword)
+
+            // Update the account. No changes are emitted because
+            // the pending deletion blocks the update.
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+            expectNoEvents()
+
+            // Clearing the pending deletion allows the change to go through
+            repository.clearPendingAccountDeletion()
+            assertEquals(finalUserState, awaitItem())
+        }
+    }
+
+    @Test
     fun `delete account fails if not logged in`() = runTest {
         val masterPassword = "hello world"
         val result = repository.deleteAccount(password = masterPassword)

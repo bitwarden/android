@@ -70,6 +70,11 @@ interface AuthRepository : AuthenticatorProvider {
     var hasPendingAccountAddition: Boolean
 
     /**
+     * Clears the pending deletion state that occurs when the an account is successfully deleted.
+     */
+    fun clearPendingAccountDeletion()
+
+    /**
      * Attempt to delete the current account and logout them out upon success.
      */
     suspend fun deleteAccount(password: String): DeleteAccountResult

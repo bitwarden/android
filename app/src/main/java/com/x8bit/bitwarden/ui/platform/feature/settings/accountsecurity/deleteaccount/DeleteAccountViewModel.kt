@@ -43,6 +43,7 @@ class DeleteAccountViewModel @Inject constructor(
             DeleteAccountAction.CancelClick -> handleCancelClick()
             DeleteAccountAction.CloseClick -> handleCloseClick()
             is DeleteAccountAction.DeleteAccountClick -> handleDeleteAccountClick(action)
+            DeleteAccountAction.AccountDeletionConfirm -> handleAccountDeletionConfirm()
             DeleteAccountAction.DismissDialog -> handleDismissDialog()
             is DeleteAccountAction.Internal.DeleteAccountComplete -> {
                 handleDeleteAccountComplete(action)
@@ -68,6 +69,11 @@ class DeleteAccountViewModel @Inject constructor(
         }
     }
 
+    private fun handleAccountDeletionConfirm() {
+        authRepository.clearPendingAccountDeletion()
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
     private fun handleDismissDialog() {
         mutableStateFlow.update { it.copy(dialog = null) }
     }
@@ -77,8 +83,9 @@ class DeleteAccountViewModel @Inject constructor(
     ) {
         when (action.result) {
             DeleteAccountResult.Success -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
-                // TODO: Display a dialog confirming account deletion (BIT-1184)
+                mutableStateFlow.update {
+                    it.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess)
+                }
             }
 
             DeleteAccountResult.Error -> {
@@ -106,6 +113,12 @@ data class DeleteAccountState(
      * Displays a dialog.
      */
     sealed class DeleteAccountDialog : Parcelable {
+        /**
+         * Dialog to confirm to the user that the account has been deleted.
+         */
+        @Parcelize
+        data object DeleteSuccess : DeleteAccountDialog()
+
         /**
          * Displays the error dialog when deleting an account fails.
          */
@@ -159,6 +172,11 @@ sealed class DeleteAccountAction {
     data class DeleteAccountClick(
         val masterPassword: String,
     ) : DeleteAccountAction()
+
+    /**
+     * The user has confirmed that their account has been deleted.
+     */
+    data object AccountDeletionConfirm : DeleteAccountAction()
 
     /**
      * The user has clicked to dismiss the dialog.

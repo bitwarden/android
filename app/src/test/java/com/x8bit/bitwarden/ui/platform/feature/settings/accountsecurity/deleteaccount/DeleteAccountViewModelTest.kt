@@ -9,7 +9,11 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -52,21 +56,26 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on DeleteAccountClick should make the delete call`() = runTest {
-        val viewModel = createViewModel()
-        val masterPassword = "ckasb kcs ja"
-        coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Success
+    fun `on DeleteAccountClick should update dialog state when delete account succeeds`() =
+        runTest {
+            val viewModel = createViewModel()
+            val masterPassword = "ckasb kcs ja"
+            coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Success
 
-        viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(masterPassword))
+            viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(masterPassword))
 
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        coVerify {
-            authRepo.deleteAccount(masterPassword)
+            assertEquals(
+                DEFAULT_STATE.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess),
+                viewModel.stateFlow.value,
+            )
+
+            coVerify {
+                authRepo.deleteAccount(masterPassword)
+            }
         }
-    }
 
     @Test
-    fun `on DeleteAccountClick should update dialog state`() = runTest {
+    fun `on DeleteAccountClick should update dialog state when deleteAccount fails`() = runTest {
         val viewModel = createViewModel()
         val masterPassword = "ckasb kcs ja"
         coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Error
@@ -86,6 +95,25 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             authRepo.deleteAccount(masterPassword)
         }
     }
+
+    @Test
+    fun `AccountDeletionConfirm should clear dialog state and call clearPendingAccountDeletion`() =
+        runTest {
+            every { authRepo.clearPendingAccountDeletion() } just runs
+            val state = DEFAULT_STATE.copy(
+                dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess,
+            )
+            val viewModel = createViewModel(state = state)
+
+            viewModel.trySendAction(DeleteAccountAction.AccountDeletionConfirm)
+            assertEquals(
+                DEFAULT_STATE.copy(dialog = null),
+                viewModel.stateFlow.value,
+            )
+            verify {
+                authRepo.clearPendingAccountDeletion()
+            }
+        }
 
     @Test
     fun `on DismissDialog should clear dialog state`() = runTest {
