@@ -4,6 +4,7 @@ import android.net.Uri
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SendsApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
@@ -53,7 +54,7 @@ class SendsServiceTest : BaseServiceTest() {
     fun `createFileSend should return the correct response`() = runTest {
         val response = SendFileResponseJson(
             url = "www.test.com",
-            fileUploadType = SendFileResponseJson.FileUploadType.AZURE,
+            fileUploadType = FileUploadType.AZURE,
             sendResponse = createMockSend(number = 1, type = SendTypeJson.FILE),
         )
         server.enqueue(MockResponse().setBody(CREATE_FILE_SEND_SUCCESS_JSON))
@@ -115,7 +116,7 @@ class SendsServiceTest : BaseServiceTest() {
         val mockSend = createMockSend(number = 1, type = SendTypeJson.FILE)
         val sendFileResponse = SendFileResponseJson(
             url = url,
-            fileUploadType = SendFileResponseJson.FileUploadType.AZURE,
+            fileUploadType = FileUploadType.AZURE,
             sendResponse = mockSend,
         )
         val encryptedFile = byteArrayOf()
@@ -134,7 +135,7 @@ class SendsServiceTest : BaseServiceTest() {
         val mockSend = createMockSend(number = 1, type = SendTypeJson.FILE)
         val sendFileResponse = SendFileResponseJson(
             url = "www.test.com",
-            fileUploadType = SendFileResponseJson.FileUploadType.DIRECT,
+            fileUploadType = FileUploadType.DIRECT,
             sendResponse = mockSend,
         )
         val encryptedFile = byteArrayOf()

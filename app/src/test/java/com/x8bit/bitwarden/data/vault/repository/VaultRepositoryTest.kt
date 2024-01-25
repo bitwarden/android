@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
@@ -1944,7 +1945,7 @@ class VaultRepositoryTest {
             val encryptedByteArray = byteArrayOf(2)
             val sendFileResponse = SendFileResponseJson(
                 url = url,
-                fileUploadType = SendFileResponseJson.FileUploadType.AZURE,
+                fileUploadType = FileUploadType.AZURE,
                 sendResponse = createMockSend(number = 1, type = SendTypeJson.FILE),
             )
             coEvery {
@@ -1988,7 +1989,7 @@ class VaultRepositoryTest {
             val sendResponse = createMockSend(number = 1)
             val sendFileResponse = SendFileResponseJson(
                 url = url,
-                fileUploadType = SendFileResponseJson.FileUploadType.AZURE,
+                fileUploadType = FileUploadType.AZURE,
                 sendResponse = sendResponse,
             )
             val mockSendViewResult = createMockSendView(number = 1)
