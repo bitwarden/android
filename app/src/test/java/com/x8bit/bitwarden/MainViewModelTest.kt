@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
@@ -16,6 +17,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class MainViewModelTest : BaseViewModelTest() {
@@ -33,6 +35,38 @@ class MainViewModelTest : BaseViewModelTest() {
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
     private val intentManager: IntentManager = mockk {
         every { getShareDataFromIntent(any()) } returns null
+    }
+    private val savedStateHandle = SavedStateHandle()
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initialization should set a saved SpecialCircumstance to the SpecialCircumstanceManager if present`() {
+        assertNull(specialCircumstanceManager.specialCircumstance)
+
+        val specialCircumstance = mockk<SpecialCircumstance>()
+        createViewModel(
+            initialSpecialCircumstance = specialCircumstance,
+        )
+
+        assertEquals(
+            specialCircumstance,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Test
+    fun `SpecialCircumstance updates should update the SavedStateHandle`() {
+        createViewModel()
+
+        assertNull(savedStateHandle[SPECIAL_CIRCUMSTANCE_KEY])
+
+        val specialCircumstance = mockk<SpecialCircumstance>()
+        specialCircumstanceManager.specialCircumstance = specialCircumstance
+
+        assertEquals(
+            specialCircumstance,
+            savedStateHandle[SPECIAL_CIRCUMSTANCE_KEY],
+        )
     }
 
     @Test
@@ -109,13 +143,19 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
-    private fun createViewModel() = MainViewModel(
+    private fun createViewModel(
+        initialSpecialCircumstance: SpecialCircumstance? = null,
+    ) = MainViewModel(
         specialCircumstanceManager = specialCircumstanceManager,
         settingsRepository = settingsRepository,
         intentManager = intentManager,
+        savedStateHandle = savedStateHandle.apply {
+            set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
+        },
     )
 
     companion object {
+        private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
         private const val USER_ID = "userID"
         private val DEFAULT_USER_STATE = UserState(
             activeUserId = USER_ID,

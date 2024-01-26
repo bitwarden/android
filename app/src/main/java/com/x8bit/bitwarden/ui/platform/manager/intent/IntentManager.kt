@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.ui.platform.manager.intent
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Parcelable
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
+import kotlinx.parcelize.Parcelize
 
 /**
  * A manager class for simplifying the handling of Android Intents within a given context.
@@ -74,19 +76,21 @@ interface IntentManager {
     /**
      * Represents file information.
      */
+    @Parcelize
     data class FileData(
         val fileName: String,
         val uri: Uri,
         val sizeBytes: Long,
-    )
+    ) : Parcelable
 
     /**
      * Represents data for a share request coming from outside the app.
      */
-    sealed class ShareData {
+    sealed class ShareData : Parcelable {
         /**
          * The data required to create a new Text Send.
          */
+        @Parcelize
         data class TextSend(
             val subject: String?,
             val text: String,
@@ -95,6 +99,7 @@ interface IntentManager {
         /**
          * The data required to create a new File Send.
          */
+        @Parcelize
         data class FileSend(
             val fileData: FileData,
         ) : ShareData()
