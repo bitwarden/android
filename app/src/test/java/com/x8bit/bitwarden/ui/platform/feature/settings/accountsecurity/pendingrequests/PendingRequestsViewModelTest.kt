@@ -56,7 +56,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             authRequests = listOf(
                 AuthRequest(
                     id = "1",
-                    publicKey = "pantry-overdue-survive-sleep-jab",
+                    publicKey = "publicKey-1",
                     platform = "Android",
                     ipAddress = "192.168.0.1",
                     key = "publicKey",
@@ -65,10 +65,11 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                     responseDate = null,
                     requestApproved = true,
                     originUrl = "www.bitwarden.com",
+                    fingerprint = "pantry-overdue-survive-sleep-jab",
                 ),
                 AuthRequest(
                     id = "2",
-                    publicKey = "erupt-anew-matchbook-disk-student",
+                    publicKey = "publicKey-2",
                     platform = "iOS",
                     ipAddress = "192.168.0.2",
                     key = "publicKey",
@@ -77,6 +78,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                     responseDate = null,
                     requestApproved = false,
                     originUrl = "www.bitwarden.com",
+                    fingerprint = "erupt-anew-matchbook-disk-student",
                 ),
             ),
         )

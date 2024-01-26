@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -12,6 +13,8 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -29,8 +32,13 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when saved state is set`() {
-        val viewModel = createViewModel(initialState = DEFAULT_STATE)
+        val settingsRepository = getMockSettingsRepository()
+        val viewModel = createViewModel(
+            initialState = DEFAULT_STATE,
+            settingsRepository = settingsRepository,
+        )
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        coVerify { settingsRepository.getUserFingerprint() }
     }
 
     @Test
@@ -40,6 +48,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
             every { vaultTimeoutAction } returns VaultTimeoutAction.LOCK
             every { isApprovePasswordlessLoginsEnabled } returns false
+            coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
         }
         val viewModel = createViewModel(
             initialState = null,
@@ -47,6 +56,33 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             DEFAULT_STATE.copy(isUnlockWithPinEnabled = true),
+            viewModel.stateFlow.value,
+        )
+        coVerify { settingsRepository.getUserFingerprint() }
+    }
+
+    @Test
+    fun `on FingerprintResultReceive should update the fingerprint phrase`() = runTest {
+        val fingerprint = "fingerprint"
+        val viewModel = createViewModel()
+        // Set fingerprint phrase to value received
+        viewModel.trySendAction(
+            AccountSecurityAction.Internal.FingerprintResultReceive(
+                UserFingerprintResult.Success(fingerprint),
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(fingerprintPhrase = fingerprint.asText()),
+            viewModel.stateFlow.value,
+        )
+        // Clear fingerprint phrase
+        viewModel.trySendAction(
+            AccountSecurityAction.Internal.FingerprintResultReceive(
+                UserFingerprintResult.Error,
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(fingerprintPhrase = "".asText()),
             viewModel.stateFlow.value,
         )
     }
@@ -151,6 +187,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     fun `on VaultTimeoutTypeSelect should update the selection()`() = runTest {
         val settingsRepository = mockk<SettingsRepository>() {
             every { vaultTimeout = any() } just runs
+            coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
         }
         val viewModel = createViewModel(settingsRepository = settingsRepository)
         viewModel.trySendAction(
@@ -169,6 +206,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     fun `on CustomVaultTimeoutSelect should update the selection()`() = runTest {
         val settingsRepository = mockk<SettingsRepository>() {
             every { vaultTimeout = any() } just runs
+            coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
         }
         val viewModel = createViewModel(settingsRepository = settingsRepository)
         viewModel.trySendAction(
@@ -191,6 +229,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     fun `on VaultTimeoutActionSelect should update vault timeout action`() = runTest {
         val settingsRepository = mockk<SettingsRepository>() {
             every { vaultTimeoutAction = any() } just runs
+            coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
         }
         val viewModel = createViewModel(settingsRepository = settingsRepository)
         viewModel.trySendAction(
@@ -257,6 +296,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
         val settingsRepository: SettingsRepository = mockk() {
             every { clearUnlockPin() } just runs
+            coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
         }
         val viewModel = createViewModel(
             initialState = initialState,
@@ -296,6 +336,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
         val settingsRepository: SettingsRepository = mockk() {
             every { storeUnlockPin(any(), any()) } just runs
+            coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
         }
         val viewModel = createViewModel(
             initialState = initialState,
@@ -353,6 +394,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         runTest {
             val settingsRepository = mockk<SettingsRepository> {
                 every { isApprovePasswordlessLoginsEnabled = true } just runs
+                coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
             }
             val viewModel = createViewModel(
                 settingsRepository = settingsRepository,
@@ -387,6 +429,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         runTest {
             val settingsRepository = mockk<SettingsRepository> {
                 every { isApprovePasswordlessLoginsEnabled = false } just runs
+                coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
             }
             val viewModel = createViewModel(
                 settingsRepository = settingsRepository,
@@ -416,13 +459,21 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             }
         }
 
+    /**
+     * Returns a [mockk] of the [SettingsRepository] with the call made on init already mocked.
+     */
+    private fun getMockSettingsRepository(): SettingsRepository =
+        mockk<SettingsRepository> {
+            coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
+        }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: AccountSecurityState? = DEFAULT_STATE,
         authRepository: AuthRepository = mockk(relaxed = true),
         vaultRepository: VaultRepository = mockk(relaxed = true),
-        settingsRepository: SettingsRepository = mockk(relaxed = true),
         environmentRepository: EnvironmentRepository = fakeEnvironmentRepository,
+        settingsRepository: SettingsRepository = getMockSettingsRepository(),
         savedStateHandle: SavedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
         },
@@ -435,9 +486,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     )
 
     companion object {
+        private const val FINGERPRINT = "fingerprint"
         private val DEFAULT_STATE = AccountSecurityState(
             dialog = null,
-            fingerprintPhrase = "fingerprint-placeholder".asText(),
+            fingerprintPhrase = FINGERPRINT.asText(),
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = false,

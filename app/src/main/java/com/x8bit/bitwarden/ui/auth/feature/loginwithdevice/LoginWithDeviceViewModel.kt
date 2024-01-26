@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -34,14 +33,6 @@ class LoginWithDeviceViewModel @Inject constructor(
 ) {
     init {
         sendNewAuthRequest()
-
-        viewModelScope.launch {
-            trySendAction(
-                LoginWithDeviceAction.Internal.FingerprintPhraseReceived(
-                    result = authRepository.getFingerprintPhrase(state.emailAddress),
-                ),
-            )
-        }
     }
 
     override fun handleAction(action: LoginWithDeviceAction) {
@@ -52,10 +43,6 @@ class LoginWithDeviceViewModel @Inject constructor(
 
             is LoginWithDeviceAction.Internal.NewAuthRequestResultReceive -> {
                 handleNewAuthRequestResultReceived(action)
-            }
-
-            is LoginWithDeviceAction.Internal.FingerprintPhraseReceived -> {
-                handleFingerprintPhraseReceived(action)
             }
         }
     }
@@ -76,26 +63,19 @@ class LoginWithDeviceViewModel @Inject constructor(
     private fun handleNewAuthRequestResultReceived(
         action: LoginWithDeviceAction.Internal.NewAuthRequestResultReceive,
     ) {
-        if (action.result is AuthRequestResult.Error) {
-            // TODO BIT-1563 handle error
-        }
-    }
-
-    private fun handleFingerprintPhraseReceived(
-        action: LoginWithDeviceAction.Internal.FingerprintPhraseReceived,
-    ) {
         when (action.result) {
-            is UserFingerprintResult.Success -> {
+            is AuthRequestResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
-                            fingerprintPhrase = action.result.fingerprint,
+                            fingerprintPhrase = action.result.authRequest.fingerprint,
                         ),
                     )
                 }
             }
 
-            is UserFingerprintResult.Error -> {
+            is AuthRequestResult.Error -> {
+                // TODO BIT-1563 display error dialog
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Error(
@@ -208,13 +188,6 @@ sealed class LoginWithDeviceAction {
          */
         data class NewAuthRequestResultReceive(
             val result: AuthRequestResult,
-        ) : Internal()
-
-        /**
-         * A fingerprint phrase for this user has been received.
-         */
-        data class FingerprintPhraseReceived(
-            val result: UserFingerprintResult,
         ) : Internal()
     }
 }

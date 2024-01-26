@@ -4,26 +4,25 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     private val authRepository = mockk<AuthRepository> {
         coEvery {
-            getFingerprintPhrase(EMAIL)
-        } returns UserFingerprintResult.Success("initialFingerprint")
-        coEvery {
             createAuthRequest(EMAIL)
-        } returns mockk<AuthRequestResult.Success>()
+        } returns AuthRequestResult.Success(AUTH_REQUEST)
     }
 
     @Test
@@ -33,7 +32,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             assertEquals(DEFAULT_STATE, awaitItem())
         }
         coVerify { authRepository.createAuthRequest(EMAIL) }
-        coVerify { authRepository.getFingerprintPhrase(EMAIL) }
     }
 
     @Test
@@ -42,14 +40,11 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
         coEvery {
             authRepository.createAuthRequest(newEmail)
-        } returns mockk<AuthRequestResult.Success>()
-        coEvery {
-            authRepository.getFingerprintPhrase(newEmail)
-        } returns UserFingerprintResult.Success("initialFingerprint")
+        } returns AuthRequestResult.Success(AUTH_REQUEST)
         val state = LoginWithDeviceState(
             emailAddress = newEmail,
             viewState = LoginWithDeviceState.ViewState.Content(
-                fingerprintPhrase = "initialFingerprint",
+                fingerprintPhrase = FINGERPRINT,
             ),
         )
         val viewModel = createViewModel(state)
@@ -58,7 +53,6 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         }
         coVerify {
             authRepository.createAuthRequest(newEmail)
-            authRepository.getFingerprintPhrase(newEmail)
         }
     }
 
@@ -101,13 +95,17 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on fingerprint result success received should show content`() = runTest {
+    fun `on auth request result success received should show content`() = runTest {
         val newFingerprint = "newFingerprint"
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         viewModel.actionChannel.trySend(
-            LoginWithDeviceAction.Internal.FingerprintPhraseReceived(
-                result = UserFingerprintResult.Success(newFingerprint),
+            LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(
+                result = AuthRequestResult.Success(
+                    authRequest = mockk<AuthRequest> {
+                        every { fingerprint } returns newFingerprint
+                    },
+                ),
             ),
         )
         assertEquals(
@@ -125,8 +123,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         viewModel.actionChannel.trySend(
-            LoginWithDeviceAction.Internal.FingerprintPhraseReceived(
-                result = UserFingerprintResult.Error,
+            LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(
+                result = AuthRequestResult.Error,
             ),
         )
         assertEquals(
@@ -149,11 +147,25 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     companion object {
         private const val EMAIL = "test@gmail.com"
+        private const val FINGERPRINT = "fingerprint"
         private val DEFAULT_STATE = LoginWithDeviceState(
             emailAddress = EMAIL,
             viewState = LoginWithDeviceState.ViewState.Content(
-                fingerprintPhrase = "initialFingerprint",
+                fingerprintPhrase = FINGERPRINT,
             ),
+        )
+        private val AUTH_REQUEST = AuthRequest(
+            id = "1",
+            publicKey = "2",
+            platform = "Android",
+            ipAddress = "192.168.0.1",
+            key = "public",
+            masterPasswordHash = "verySecureHash",
+            creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+            responseDate = null,
+            requestApproved = true,
+            originUrl = "www.bitwarden.com",
+            fingerprint = FINGERPRINT,
         )
     }
 }
