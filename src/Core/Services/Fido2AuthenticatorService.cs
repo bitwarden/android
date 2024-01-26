@@ -4,11 +4,15 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities.Fido2;
 using Bit.Core.Utilities;
+using System.Formats.Cbor;
 
 namespace Bit.Core.Services
 {
     public class Fido2AuthenticatorService : IFido2AuthenticatorService
     {
+        // AAGUID: d548826e-79b4-db40-a3d8-11116f7e8349
+        public static readonly byte[] AAGUID = [ 0xd5, 0x48, 0x82, 0x6e, 0x79, 0xb4, 0xdb, 0x40, 0xa3, 0xd8, 0x11, 0x11, 0x6f, 0x7e, 0x83, 0x49 ];
+
         private INativeLogService _logService;
         private ICipherService _cipherService;
         private ISyncService _syncService;
@@ -83,6 +87,25 @@ namespace Bit.Core.Services
                 var reencrypted = await _cipherService.EncryptAsync(cipher);
                 await _cipherService.SaveWithServerAsync(reencrypted);
                 credentialId = fido2Credential.CredentialId;
+
+                var authData = await GenerateAuthData(
+                    rpId: makeCredentialParams.RpEntity.Id,
+                    counter: fido2Credential.CounterValue,
+                    userPresence: true,
+                    userVerification: userVerified,
+                    credentialId: GuidToRawFormat(credentialId),
+                    publicKey: publicKey,
+                    privateKey: privateKey
+                );
+
+                return new Fido2AuthenticatorMakeCredentialResult
+                {
+                    CredentialId = GuidToRawFormat(credentialId),
+                    AttestationObject = EncodeAttestationObject(authData),
+                    AuthData = authData,
+                    PublicKey = Array.Empty<byte>(),
+                    PublicKeyAlgorithm = (int) Fido2AlgorithmIdentifier.ES256,
+                };
             } catch (NotAllowedError) {
                 throw;
             } catch (Exception e) {
@@ -92,15 +115,6 @@ namespace Bit.Core.Services
 
                 throw new UnknownError();
             }
-
-            return new Fido2AuthenticatorMakeCredentialResult
-            {
-                CredentialId = GuidToRawFormat(credentialId),
-                AttestationObject = Array.Empty<byte>(),
-                AuthData = Array.Empty<byte>(),
-                PublicKey = Array.Empty<byte>(),
-                PublicKeyAlgorithm = (int) Fido2AlgorithmIdentifier.ES256,
-            };
         }
         
         public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams)
@@ -293,16 +307,24 @@ namespace Bit.Core.Services
             string rpId,
             bool userVerification,
             bool userPresence,
-            int counter
-            // byte[] credentialId,
-            // CryptoKey? cryptoKey - only needed for attestation
+            int counter,
+            byte[] credentialId = null,
+            byte[] publicKey = null,
+            byte[] privateKey = null
         ) {
+            var isAttestation = credentialId != null && publicKey != null && privateKey != null;
+
             List<byte> authData = new List<byte>();
 
             var rpIdHash = await _cryptoFunctionService.HashAsync(rpId, CryptoHashAlgorithm.Sha256);
             authData.AddRange(rpIdHash);
 
-            var flags = AuthDataFlags(false, false, userVerification, userPresence);
+            var flags = AuthDataFlags(
+                extensionData: false,
+                attestationData: isAttestation,
+                userVerification: userVerification,
+                userPresence: userPresence
+            );
             authData.Add(flags);
 
             authData.AddRange([
@@ -311,6 +333,40 @@ namespace Bit.Core.Services
                 (byte)(counter >> 8),
                 (byte)counter
             ]);
+
+            if (isAttestation)
+            {
+                var attestedCredentialData = new List<byte>();
+
+                attestedCredentialData.AddRange(AAGUID);
+                
+                // credentialIdLength (2 bytes) and credential Id
+                var credentialIdLength = new byte[] {
+                    (byte)((credentialId.Length - (credentialId.Length & 0xff)) / 256),
+                    (byte)(credentialId.Length & 0xff)
+                };
+                attestedCredentialData.AddRange(credentialIdLength);
+                attestedCredentialData.AddRange(credentialId);
+
+                var base64PrivateKey = CoreHelpers.Base64UrlEncode(privateKey);
+
+                // const publicKeyJwk = await crypto.subtle.exportKey("jwk", params.keyPair.publicKey);
+                // // COSE format of the EC256 key
+                // const keyX = Utils.fromUrlB64ToArray(publicKeyJwk.x);
+                // const keyY = Utils.fromUrlB64ToArray(publicKeyJwk.y);
+
+                // // Can't get `cbor-redux` to encode in CTAP2 canonical CBOR. So we do it manually:
+                // const coseBytes = new Uint8Array(77);
+                // coseBytes.set([0xa5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20], 0);
+                // coseBytes.set(keyX, 10);
+                // coseBytes.set([0x22, 0x58, 0x20], 10 + 32);
+                // coseBytes.set(keyY, 10 + 32 + 3);
+
+                // // credential public key - convert to array from CBOR encoded COSE key
+                // attestedCredentialData.push(...coseBytes);
+
+                // authData.push(...attestedCredentialData);
+            }
 
             return authData.ToArray();
         }
@@ -335,6 +391,21 @@ namespace Bit.Core.Services
             }
 
             return flags;
+        }
+
+        private byte[] EncodeAttestationObject(byte[] authData) {
+            var attestationObject = new CborWriter(CborConformanceMode.Ctap2Canonical);
+            attestationObject.WriteStartMap(3);
+            attestationObject.WriteTextString("fmt");
+            attestationObject.WriteTextString("none");
+            attestationObject.WriteTextString("attStmt");
+            attestationObject.WriteStartMap(0);
+            attestationObject.WriteEndMap();
+            attestationObject.WriteTextString("authData");
+            attestationObject.WriteByteString(authData);
+            attestationObject.WriteEndMap();
+
+            return attestationObject.Encode();
         }
 
         private async Task<byte[]> GenerateSignature(

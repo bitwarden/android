@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
 using NSubstitute.Extensions;
+using System.Formats.Cbor;
 
 namespace Bit.Core.Test.Services
 {
@@ -392,7 +393,69 @@ namespace Bit.Core.Test.Services
             // Act & Assert
             await Assert.ThrowsAsync<UnknownError>(() => sutProvider.Sut.MakeCredentialAsync(mParams));
         }
-        
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task MakeCredentialAsync_ReturnsAttestation(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorMakeCredentialParams mParams)
+        {
+                        // Common Arrange
+            mParams.CredTypesAndPubKeyAlgs = [
+                new PublicKeyCredentialAlgorithmDescriptor {
+                    Type = "public-key",
+                    Algorithm = -7 // ES256
+                }
+            ];
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
+            mParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
+                .Returns((RandomBytes(32), RandomBytes(32)));
+            _encryptedCipher.Key = null;
+            _encryptedCipher.Attachments = [];
+
+            // Arrange
+            var rpIdHashMock = RandomBytes(32);
+            mParams.RequireResidentKey = false;
+            sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(mParams.RpEntity.Id, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
+            // sutProvider.GetDependency<ICipherService>().EncryptAsync(Arg.Any<CipherView>()).Returns(_encryptedCipher);
+            sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedCipher.Id)).Returns(_encryptedCipher);
+            sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
+                CipherId = _encryptedCipher.Id,
+                UserVerified = false
+            });
+            CipherView generatedCipherView = null;
+            sutProvider.GetDependency<ICipherService>().EncryptAsync(Arg.Any<CipherView>()).Returns((call) => {
+                generatedCipherView = call.Arg<CipherView>();
+                return _encryptedCipher;
+            });
+
+            // Act
+            var result = await sutProvider.Sut.MakeCredentialAsync(mParams);
+
+            // Assert
+            var credentialIdBytes = Guid.Parse(generatedCipherView.Login.MainFido2Credential.CredentialId).ToByteArray();
+            var attestationObject = DecodeAttestationObject(result.AttestationObject);
+            Assert.Equal("none", attestationObject.Fmt);
+
+            var authData = attestationObject.AuthData;
+            var rpIdHash = authData.Take(32).ToArray();
+            var flags = authData.Skip(32).Take(1).ToArray();
+            var counter = authData.Skip(33).Take(4).ToArray();
+            var aaguid = authData.Skip(37).Take(16).ToArray();
+            var credentialIdLength = authData.Skip(53).Take(2).ToArray();
+            var credentialId = authData.Skip(55).Take(16).ToArray();
+            // Unsure how to test public key
+            // const publicKey = authData.Skip(71).ToArray(); // Key data is 77 bytes long
+
+            // Not implemented yet
+            // Assert.Equal(71 + 77, authData.Length);
+            // Assert.Equal(rpIdHashMock, rpIdHash);
+            // Assert.Equal([0b01000001], flags); // UP = true, AD = true
+            // Assert.Equal([0, 0, 0, 0], counter);
+            // Assert.Equal(Fido2AuthenticatorService.AAGUID, aaguid);
+            // Assert.Equal([0, 16], credentialIdLength); // 16 bytes because we're using GUIDs
+            // Assert.Equal(credentialIdBytes, credentialId);
+        }
+
         #endregion
 
         private byte[] RandomBytes(int length)
@@ -429,6 +492,42 @@ namespace Bit.Core.Test.Services
                 Type = CipherType.Login,
                 Login = new Login {}
             };
+        }
+
+        private class AttestationObject
+        {
+            public string Fmt { get; set; }
+            public object AttStmt { get; set; }
+            public byte[] AuthData { get; set; }
+        }
+
+        private AttestationObject DecodeAttestationObject(byte[] attestationObject) 
+        {
+            var result = new AttestationObject();
+            var reader = new CborReader(attestationObject, CborConformanceMode.Ctap2Canonical);
+            reader.ReadStartMap();
+
+            while (reader.BytesRemaining != 0)
+            {
+                var key = reader.ReadTextString();
+                switch (key)
+                {
+                    case "fmt":
+                        result.Fmt = reader.ReadTextString();
+                        break;
+                    case "attStmt":
+                        reader.ReadStartMap();
+                        reader.ReadEndMap();
+                        break;
+                    case "authData":
+                        result.AuthData = reader.ReadByteString();
+                        break;
+                    default:
+                        throw new Exception("Unknown key");
+                }
+            }
+
+            return result;
         }
     }
 }
