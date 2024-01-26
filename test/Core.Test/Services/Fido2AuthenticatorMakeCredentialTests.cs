@@ -365,20 +365,33 @@ namespace Bit.Core.Test.Services
             await Assert.ThrowsAsync<NotAllowedError>(() => sutProvider.Sut.MakeCredentialAsync(mParams));
         }
 
-    //   /** Spec: If any error occurred while creating the new credential object, return an error code equivalent to "UnknownError" and terminate the operation. */
-    //   it("should throw unkown error if creation fails", async () => {
-    //     const _encryptedCipher = Symbol();
-    //     userInterfaceSession.confirmNewCredential.mockResolvedValue({
-    //       cipherId: existingCipher.id,
-    //       userVerified: false,
-    //     });
-    //     cipherService.encrypt.mockResolvedValue(_encryptedCipher as unknown as Cipher);
-    //     cipherService.updateWithServer.mockRejectedValue(new Error("Internal error"));
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task MakeCredentialAsync_ThrowsUnknownError_SavingCipherFails(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorMakeCredentialParams mParams)
+        {
+            // Common Arrange
+            mParams.CredTypesAndPubKeyAlgs = [
+                new PublicKeyCredentialAlgorithmDescriptor {
+                    Type = "public-key",
+                    Algorithm = -7 // ES256
+                }
+            ];
+            mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
+            mParams.RequireUserVerification = false;
+            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
+                .Returns((RandomBytes(32), RandomBytes(32)));
 
-    //     const result = async () => await authenticator.makeCredential(params, tab);
+            // Arrange
+            sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedCipher.Id)).Returns(_encryptedCipher);
+            sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
+                CipherId = _encryptedCipher.Id,
+                UserVerified = false
+            });
+            sutProvider.GetDependency<ICipherService>().SaveWithServerAsync(Arg.Any<Cipher>()).Throws(new Exception("Error"));
 
-    //     await expect(result).rejects.toThrowError(Fido2AuthenticatorErrorCode.Unknown);
-    //   });
+            // Act & Assert
+            await Assert.ThrowsAsync<UnknownError>(() => sutProvider.Sut.MakeCredentialAsync(mParams));
+        }
         
         #endregion
 

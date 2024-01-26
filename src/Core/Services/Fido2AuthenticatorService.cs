@@ -83,9 +83,14 @@ namespace Bit.Core.Services
                 var reencrypted = await _cipherService.EncryptAsync(cipher);
                 await _cipherService.SaveWithServerAsync(reencrypted);
                 credentialId = fido2Credential.CredentialId;
-            } catch {
+            } catch (NotAllowedError) {
                 throw;
-                // throw new NotImplementedException();
+            } catch (Exception e) {
+                _logService.Error(
+                    $"[Fido2Authenticator] Unknown error occured during attestation: {e.Message}"
+                );
+
+                throw new UnknownError();
             }
 
             return new Fido2AuthenticatorMakeCredentialResult
@@ -182,9 +187,9 @@ namespace Bit.Core.Services
                     AuthenticatorData = authenticatorData,
                     Signature = signature
                 };
-            } catch {
-                _logService.Info(
-                    "[Fido2Authenticator] Aborting because no matching credentials were found in the vault."
+            } catch (Exception e) {
+                _logService.Error(
+                    $"[Fido2Authenticator] Unknown error occured during assertion: {e.Message}"
                 );
 
                 throw new UnknownError();
