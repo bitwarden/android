@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorModal
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ADD_SEND_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
@@ -37,20 +36,12 @@ import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestinatio
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
-const val VAULT_UNLOCKED_FOR_NEW_SEND_GRAPH_ROUTE: String = "vault_unlocked_for_new_send_graph"
 
 /**
  * Navigate to the vault unlocked screen.
  */
 fun NavController.navigateToVaultUnlockedGraph(navOptions: NavOptions? = null) {
     navigate(VAULT_UNLOCKED_GRAPH_ROUTE, navOptions)
-}
-
-/**
- * Navigate to the vault unlocked graph for a new send.
- */
-fun NavController.navigateToVaultUnlockedForNewSendGraph(navOptions: NavOptions? = null) {
-    navigate(VAULT_UNLOCKED_FOR_NEW_SEND_GRAPH_ROUTE, navOptions)
 }
 
 /**
@@ -144,23 +135,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
         )
         attachmentDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-    }
-}
-
-/**
- * Add vault unlocked destinations for the new send flow to the root nav graph.
- */
-fun NavGraphBuilder.vaultUnlockedGraphForNewSend(
-    navController: NavController,
-) {
-    navigation(
-        startDestination = ADD_SEND_ROUTE,
-        route = VAULT_UNLOCKED_FOR_NEW_SEND_GRAPH_ROUTE,
-    ) {
-        addSendDestination(
-            defaultType = AddSendType.AddItem,
             onNavigateBack = { navController.popBackStack() },
         )
     }

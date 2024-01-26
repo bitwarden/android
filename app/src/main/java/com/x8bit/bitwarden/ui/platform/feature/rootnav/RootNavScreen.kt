@@ -20,13 +20,12 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_FOR_NEW_SEND_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_GRAPH_ROUTE
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedForNewSendGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
-import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraphForNewSend
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
@@ -70,15 +69,15 @@ fun RootNavScreen(
         authGraph(navController)
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
-        vaultUnlockedGraphForNewSend(navController)
     }
 
     val targetRoute = when (state) {
         RootNavState.Auth -> AUTH_GRAPH_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
         RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
-        is RootNavState.VaultUnlocked -> VAULT_UNLOCKED_GRAPH_ROUTE
-        RootNavState.VaultUnlockedForNewSend -> VAULT_UNLOCKED_FOR_NEW_SEND_GRAPH_ROUTE
+        is RootNavState.VaultUnlocked,
+        RootNavState.VaultUnlockedForNewSend,
+        -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
 
@@ -109,7 +108,11 @@ fun RootNavScreen(
         RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
         is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(rootNavOptions)
         RootNavState.VaultUnlockedForNewSend -> {
-            navController.navigateToVaultUnlockedForNewSendGraph(rootNavOptions)
+            navController.navigateToVaultUnlock(rootNavOptions)
+            navController.navigateToAddSend(
+                sendAddType = AddSendType.AddItem,
+                navOptions = rootNavOptions,
+            )
         }
     }
 }
