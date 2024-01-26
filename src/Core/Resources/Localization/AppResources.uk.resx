@@ -2820,6 +2820,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Перейти до зв'язку зі службою підтримки?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Перейти до політики приватності?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Продовжити в App Store?</value>
   </data>
@@ -2838,6 +2841,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Не вдалося знайти те, що шукаєте? Зверніться до служби підтримки на bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Ознайомтеся з нашою політикою приватності на bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Ознайомтеся з іншими функціями вашого облікового запису Bitwarden у вебпрограмі.</value>

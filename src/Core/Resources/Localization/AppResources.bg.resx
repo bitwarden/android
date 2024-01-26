@@ -2820,6 +2820,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Продължаване към връзка с поддръжката?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Продължаване към Политиката за поверителност?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Продължаване към магазина за приложения?</value>
   </data>
@@ -2838,6 +2841,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Не намирате това, което търсите? Свържете се с поддръжката на Битуорден на bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Прегледайте нашата Политика за поверителност на bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Разгледайте още от възможностите на регистрацията си в Битуорден в уеб приложението.</value>

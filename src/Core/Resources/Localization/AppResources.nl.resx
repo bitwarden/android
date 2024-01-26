@@ -2820,6 +2820,9 @@ Wilt u naar dit account wisselen?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Doorgaan met het contact opnemen met support?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Doorgaan naar privacybeleid?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Doorgaan naar de app store?</value>
   </data>
@@ -2838,6 +2841,9 @@ Wilt u naar dit account wisselen?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Kan je niet vinden wat je zoekt? Neem contact op met Bitwarden-ondersteuning via bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Bekijk ons privacybeleid op bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Ontdek meer functies van je Bitwarden-account in de webapp.</value>
