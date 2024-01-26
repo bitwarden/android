@@ -47,7 +47,7 @@
         Grid.Column="1"
         Grid.Row="0"
         VerticalTextAlignment="Center"
-        VerticalOptions="Fill"
+        VerticalOptions="End"
         StyleClass="list-title, list-title-platform"
         Text="{Binding Cipher.Name}" />
 
@@ -56,7 +56,7 @@
         Grid.Column="1"
         Grid.Row="1"
         VerticalTextAlignment="Center"
-        VerticalOptions="Fill"
+        VerticalOptions="Start"
         StyleClass="list-subtitle, list-subtitle-platform"
         Text="{Binding Cipher.SubTitle}" />
 
@@ -66,11 +66,14 @@
         Grid.Column="2"
         Grid.RowSpan="2"
         HorizontalOptions="Fill"
+        WidthRequest="50"
+        HeightRequest="50"
         VerticalOptions="CenterAndExpand" />
 
     <Label
         Text="{Binding TotpSec, Mode=OneWay}"
         Style="{DynamicResource textTotp}"
+        BackgroundColor="Transparent"
         Grid.Row="0"
         Grid.Column="2"
         Grid.RowSpan="2"
