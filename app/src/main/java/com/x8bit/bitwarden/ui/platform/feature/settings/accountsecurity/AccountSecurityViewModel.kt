@@ -5,9 +5,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -30,6 +32,7 @@ class AccountSecurityViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val settingsRepository: SettingsRepository,
+    private val environmentRepository: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -43,6 +46,14 @@ class AccountSecurityViewModel @Inject constructor(
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
         ),
 ) {
+    private val webSettingsUrl: String
+        get() {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            return "$baseUrl/#/settings"
+        }
 
     init {
         stateFlow
@@ -90,8 +101,7 @@ class AccountSecurityViewModel @Inject constructor(
     private fun handleBackClick() = sendEvent(AccountSecurityEvent.NavigateBack)
 
     private fun handleChangeMasterPasswordClick() {
-        // TODO BIT-971: Add Leaving app Dialog
-        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
+        sendEvent(AccountSecurityEvent.NavigateToChangeMasterPassword(webSettingsUrl))
     }
 
     private fun handleConfirmLogoutClick() {
@@ -198,8 +208,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleTwoStepLoginClick() {
-        // TODO BIT-468: Implement two-step login
-        sendEvent(AccountSecurityEvent.ShowToast("Not yet implemented.".asText()))
+        sendEvent(AccountSecurityEvent.NavigateToTwoStepLogin(webSettingsUrl))
     }
 
     private fun handleUnlockWithBiometricToggled(
@@ -299,6 +308,16 @@ sealed class AccountSecurityEvent {
      * Navigate to the Pending Login Requests screen.
      */
     data object NavigateToPendingRequests : AccountSecurityEvent()
+
+    /**
+     * Navigate to the two step login screen.
+     */
+    data class NavigateToTwoStepLogin(val url: String) : AccountSecurityEvent()
+
+    /**
+     * Navigate to the change master password screen.
+     */
+    data class NavigateToChangeMasterPassword(val url: String) : AccountSecurityEvent()
 
     /**
      * Displays a toast with the given [Text].

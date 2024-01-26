@@ -1060,6 +1060,13 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(AccountSecurityAction.TwoStepLoginClick) }
     }
 
+    @Test
+    fun `on NavigateToTwoStepLogin should call launchUri on intentManager`() {
+        val uri = "testUri"
+        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToTwoStepLogin(uri))
+        verify { intentManager.launchUri(uri.toUri()) }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `on change master password click should display confirmation dialog and confirm should send ChangeMasterPasswordClick`() {
@@ -1075,6 +1082,13 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .performClick()
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         verify { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
+    }
+
+    @Test
+    fun `on NavigateToChangeMasterPassword should call launchUri on intentManager`() {
+        val uri = "testUri"
+        mutableEventFlow.tryEmit(AccountSecurityEvent.NavigateToChangeMasterPassword(uri))
+        verify { intentManager.launchUri(uri.toUri()) }
     }
 
     @Test

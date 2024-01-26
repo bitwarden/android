@@ -94,6 +94,14 @@ fun AccountSecurityScreen(
 
             AccountSecurityEvent.NavigateToPendingRequests -> onNavigateToPendingRequests()
 
+            is AccountSecurityEvent.NavigateToTwoStepLogin -> {
+                intentManager.launchUri(event.url.toUri())
+            }
+
+            is AccountSecurityEvent.NavigateToChangeMasterPassword -> {
+                intentManager.launchUri(event.url.toUri())
+            }
+
             is AccountSecurityEvent.ShowToast -> {
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
