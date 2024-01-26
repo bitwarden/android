@@ -12,12 +12,16 @@ private const val FOLDERS_ROUTE = "settings_folders"
  */
 fun NavGraphBuilder.foldersDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToAddFolderScreen: () -> Unit,
+    onNavigateToEditFolderScreen: (folderId: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = FOLDERS_ROUTE,
     ) {
         FoldersScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+            onNavigateToEditFolderScreen = onNavigateToEditFolderScreen,
         )
     }
 }

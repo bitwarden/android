@@ -11,9 +11,12 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteac
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.navigateToPendingRequests
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.pendingRequestsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.exportVaultDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.navigateToExportVault
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.folderAddEditDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.navigateToFolderAddEdit
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolders
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
@@ -128,7 +131,19 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         addSendDestination(onNavigateBack = { navController.popBackStack() })
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         exportVaultDestination(onNavigateBack = { navController.popBackStack() })
-        foldersDestination(onNavigateBack = { navController.popBackStack() })
+        foldersDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToAddFolderScreen = {
+                navController.navigateToFolderAddEdit(FolderAddEditType.AddItem)
+            },
+            onNavigateToEditFolderScreen = {
+                navController.navigateToFolderAddEdit(
+                    FolderAddEditType.EditItem(it),
+                )
+            },
+        )
+
+        folderAddEditDestination(onNavigateBack = { navController.popBackStack() })
         generatorModalDestination(onNavigateBack = { navController.popBackStack() })
         searchDestination(
             onNavigateBack = { navController.popBackStack() },
