@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -20,6 +21,9 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         coEvery {
             getFingerprintPhrase(EMAIL)
         } returns UserFingerprintResult.Success("initialFingerprint")
+        coEvery {
+            createAuthRequest(EMAIL)
+        } returns mockk<AuthRequestResult.Success>()
     }
 
     @Test
@@ -28,12 +32,17 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
         }
+        coVerify { authRepository.createAuthRequest(EMAIL) }
         coVerify { authRepository.getFingerprintPhrase(EMAIL) }
     }
 
     @Test
     fun `initial state should be correct when set`() = runTest {
         val newEmail = "newEmail@gmail.com"
+
+        coEvery {
+            authRepository.createAuthRequest(newEmail)
+        } returns mockk<AuthRequestResult.Success>()
         coEvery {
             authRepository.getFingerprintPhrase(newEmail)
         } returns UserFingerprintResult.Success("initialFingerprint")
@@ -47,7 +56,10 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(state, awaitItem())
         }
-        coVerify { authRepository.getFingerprintPhrase(newEmail) }
+        coVerify {
+            authRepository.createAuthRequest(newEmail)
+            authRepository.getFingerprintPhrase(newEmail)
+        }
     }
 
     @Test

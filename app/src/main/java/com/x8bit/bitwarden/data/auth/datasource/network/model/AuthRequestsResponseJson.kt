@@ -41,6 +41,7 @@ data class AuthRequestsResponseJson(
 
         @SerialName("requestIpAddress")
         val ipAddress: String,
+
         @SerialName("key")
         val key: String?,
 

@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedSe
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityServiceImpl
+import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import dagger.Module
 import dagger.Provides
@@ -73,5 +75,13 @@ object AuthNetworkModule {
             .baseUrl("https://api.pwnedpasswords.com")
             .build()
             .create(),
+    )
+
+    @Provides
+    @Singleton
+    fun providesNewAuthRequestService(
+        retrofits: Retrofits,
+    ): NewAuthRequestService = NewAuthRequestServiceImpl(
+        authRequestsApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 }
