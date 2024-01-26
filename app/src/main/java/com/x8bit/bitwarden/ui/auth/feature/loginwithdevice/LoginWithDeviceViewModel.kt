@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -32,6 +33,8 @@ class LoginWithDeviceViewModel @Inject constructor(
         ),
 ) {
     init {
+        sendNewAuthRequest()
+
         viewModelScope.launch {
             trySendAction(
                 LoginWithDeviceAction.Internal.FingerprintPhraseReceived(
@@ -46,6 +49,10 @@ class LoginWithDeviceViewModel @Inject constructor(
             LoginWithDeviceAction.CloseButtonClick -> handleCloseButtonClicked()
             LoginWithDeviceAction.ResendNotificationClick -> handleResendNotificationClicked()
             LoginWithDeviceAction.ViewAllLogInOptionsClick -> handleViewAllLogInOptionsClicked()
+
+            is LoginWithDeviceAction.Internal.NewAuthRequestResultReceive -> {
+                handleNewAuthRequestResultReceived(action)
+            }
 
             is LoginWithDeviceAction.Internal.FingerprintPhraseReceived -> {
                 handleFingerprintPhraseReceived(action)
@@ -64,6 +71,14 @@ class LoginWithDeviceViewModel @Inject constructor(
 
     private fun handleViewAllLogInOptionsClicked() {
         sendEvent(LoginWithDeviceEvent.NavigateBack)
+    }
+
+    private fun handleNewAuthRequestResultReceived(
+        action: LoginWithDeviceAction.Internal.NewAuthRequestResultReceive,
+    ) {
+        if (action.result is AuthRequestResult.Error) {
+            // TODO BIT-1563 handle error
+        }
     }
 
     private fun handleFingerprintPhraseReceived(
@@ -89,6 +104,18 @@ class LoginWithDeviceViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun sendNewAuthRequest() {
+        viewModelScope.launch {
+            trySendAction(
+                LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(
+                    result = authRepository.createAuthRequest(
+                        email = state.emailAddress,
+                    ),
+                ),
+            )
         }
     }
 }
@@ -176,6 +203,13 @@ sealed class LoginWithDeviceAction {
      * Models actions for internal use by the view model.
      */
     sealed class Internal : LoginWithDeviceAction() {
+        /**
+         * A new auth request result was received.
+         */
+        data class NewAuthRequestResultReceive(
+            val result: AuthRequestResult,
+        ) : Internal()
+
         /**
          * A fingerprint phrase for this user has been received.
          */

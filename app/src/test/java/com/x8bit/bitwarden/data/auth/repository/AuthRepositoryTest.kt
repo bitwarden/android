@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsServ
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -36,6 +37,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_4
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -98,6 +100,7 @@ class AuthRepositoryTest {
     private val devicesService: DevicesService = mockk()
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
+    private val newAuthRequestService: NewAuthRequestService = mockk()
     private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
     private val vaultRepository: VaultRepository = mockk {
         every { vaultStateFlow } returns mutableVaultStateFlow
@@ -114,6 +117,11 @@ class AuthRepositoryTest {
         every { setDefaultsIfNecessary(any()) } just runs
     }
     private val authSdkSource = mockk<AuthSdkSource> {
+        coEvery {
+            getNewAuthRequest(
+                email = EMAIL,
+            )
+        } returns Result.success(AUTH_REQUEST_RESPONSE)
         coEvery {
             hashPassword(
                 email = EMAIL,
@@ -151,6 +159,7 @@ class AuthRepositoryTest {
         devicesService = devicesService,
         identityService = identityService,
         haveIBeenPwnedService = haveIBeenPwnedService,
+        newAuthRequestService = newAuthRequestService,
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
         environmentRepository = fakeEnvironmentRepository,
@@ -1606,6 +1615,93 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `createAuthRequest should return failure when service returns failure`() = runTest {
+        val accessCode = "accessCode"
+        val fingerprint = "fingerprint"
+        coEvery {
+            newAuthRequestService.createAuthRequest(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+                deviceId = UNIQUE_APP_ID,
+                accessCode = accessCode,
+                fingerprint = fingerprint,
+            )
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.createAuthRequest(
+            email = EMAIL,
+        )
+
+        coVerify(exactly = 1) {
+            newAuthRequestService.createAuthRequest(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+                deviceId = UNIQUE_APP_ID,
+                accessCode = accessCode,
+                fingerprint = fingerprint,
+            )
+        }
+        assertEquals(AuthRequestResult.Error, result)
+    }
+
+    @Test
+    fun `createAuthRequest should return success when service returns success`() = runTest {
+        val accessCode = "accessCode"
+        val fingerprint = "fingerprint"
+
+        val responseJson = AuthRequestsResponseJson.AuthRequest(
+            id = "1",
+            publicKey = PUBLIC_KEY,
+            platform = "Android",
+            ipAddress = "192.168.0.1",
+            key = "public",
+            masterPasswordHash = "verySecureHash",
+            creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+            responseDate = null,
+            requestApproved = true,
+            originUrl = "www.bitwarden.com",
+        )
+        val expected = AuthRequestResult.Success(
+            authRequest = AuthRequest(
+                id = "1",
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = true,
+                originUrl = "www.bitwarden.com",
+            ),
+        )
+        coEvery {
+            newAuthRequestService.createAuthRequest(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+                deviceId = UNIQUE_APP_ID,
+                accessCode = accessCode,
+                fingerprint = fingerprint,
+            )
+        } returns responseJson.asSuccess()
+
+        val result = repository.createAuthRequest(
+            email = EMAIL,
+        )
+
+        coVerify(exactly = 1) {
+            newAuthRequestService.createAuthRequest(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+                deviceId = UNIQUE_APP_ID,
+                accessCode = accessCode,
+                fingerprint = fingerprint,
+            )
+        }
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `getAuthRequests should return failure when service returns failure`() = runTest {
         coEvery {
             authRequestsService.getAuthRequests()
@@ -1868,6 +1964,12 @@ class AuthRepositoryTest {
         )
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
+        )
+        private val AUTH_REQUEST_RESPONSE = AuthRequestResponse(
+            privateKey = PRIVATE_KEY,
+            publicKey = PUBLIC_KEY,
+            accessCode = "accessCode",
+            fingerprint = "fingerprint",
         )
         private val REFRESH_TOKEN_RESPONSE_JSON = RefreshTokenResponseJson(
             accessToken = ACCESS_TOKEN_2,

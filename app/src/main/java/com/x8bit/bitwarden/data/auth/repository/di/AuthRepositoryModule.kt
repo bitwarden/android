@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsServ
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -36,6 +37,7 @@ object AuthRepositoryModule {
         devicesService: DevicesService,
         identityService: IdentityService,
         haveIBeenPwnedService: HaveIBeenPwnedService,
+        newAuthRequestService: NewAuthRequestService,
         authSdkSource: AuthSdkSource,
         authDiskSource: AuthDiskSource,
         dispatchers: DispatcherManager,
@@ -48,6 +50,7 @@ object AuthRepositoryModule {
         authRequestsService = authRequestsService,
         devicesService = devicesService,
         identityService = identityService,
+        newAuthRequestService = newAuthRequestService,
         authSdkSource = authSdkSource,
         authDiskSource = authDiskSource,
         haveIBeenPwnedService = haveIBeenPwnedService,

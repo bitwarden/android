@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsRespon
 class AuthRequestsServiceImpl(
     private val authRequestsApi: AuthRequestsApi,
 ) : AuthRequestsService {
-
     override suspend fun getAuthRequests(): Result<AuthRequestsResponseJson> =
         authRequestsApi.getAuthRequests()
 }

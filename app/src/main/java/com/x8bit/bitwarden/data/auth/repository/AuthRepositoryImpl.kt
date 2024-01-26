@@ -21,10 +21,12 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsServ
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -80,6 +82,7 @@ class AuthRepositoryImpl(
     private val devicesService: DevicesService,
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
     private val identityService: IdentityService,
+    private val newAuthRequestService: NewAuthRequestService,
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val environmentRepository: EnvironmentRepository,
@@ -555,6 +558,40 @@ class AuthRepositoryImpl(
         mutableSsoCallbackResultFlow.tryEmit(result)
     }
 
+    override suspend fun createAuthRequest(
+        email: String,
+    ): AuthRequestResult =
+        authSdkSource
+            .getNewAuthRequest(email)
+            .flatMap { authRequest ->
+                newAuthRequestService.createAuthRequest(
+                    email = email,
+                    publicKey = authRequest.publicKey,
+                    deviceId = authDiskSource.uniqueAppId,
+                    accessCode = authRequest.accessCode,
+                    fingerprint = authRequest.fingerprint,
+                )
+            }
+            .fold(
+                onFailure = { AuthRequestResult.Error },
+                onSuccess = { request ->
+                    AuthRequestResult.Success(
+                        authRequest = AuthRequest(
+                            id = request.id,
+                            publicKey = request.publicKey,
+                            platform = request.platform,
+                            ipAddress = request.ipAddress,
+                            key = request.key,
+                            masterPasswordHash = request.masterPasswordHash,
+                            creationDate = request.creationDate,
+                            responseDate = request.responseDate,
+                            requestApproved = request.requestApproved ?: false,
+                            originUrl = request.originUrl,
+                        ),
+                    )
+                },
+            )
+
     override suspend fun getAuthRequests(): AuthRequestsResult =
         authRequestsService.getAuthRequests()
             .fold(
@@ -582,7 +619,8 @@ class AuthRepositoryImpl(
     override suspend fun getFingerprintPhrase(
         email: String,
     ): UserFingerprintResult =
-        authSdkSource.getNewAuthRequest(email)
+        authSdkSource
+            .getNewAuthRequest(email)
             .flatMap { requestResponse ->
                 authSdkSource
                     .getUserFingerprint(

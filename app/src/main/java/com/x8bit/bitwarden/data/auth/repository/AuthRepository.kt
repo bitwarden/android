@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -156,6 +157,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Set the value of [ssoCallbackResultFlow].
      */
     fun setSsoCallbackResult(result: SsoCallbackResult)
+
+    /**
+     * Creates a new authentication request.
+     */
+    suspend fun createAuthRequest(email: String): AuthRequestResult
 
     /**
      * Get a list of the current user's [AuthRequest]s.
