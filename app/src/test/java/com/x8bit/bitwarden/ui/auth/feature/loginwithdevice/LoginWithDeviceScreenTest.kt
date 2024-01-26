@@ -110,6 +110,7 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
             emailAddress = EMAIL,
             viewState = LoginWithDeviceState.ViewState.Content(
                 fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
+                isResendNotificationLoading = false,
             ),
         )
     }
