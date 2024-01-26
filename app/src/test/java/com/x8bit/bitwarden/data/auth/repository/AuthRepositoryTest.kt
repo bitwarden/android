@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResp
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -45,6 +46,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -1416,6 +1418,72 @@ class AuthRepositoryTest {
 
         verify { userLogoutManager.logout(userId = userId) }
         verify(exactly = 0) { vaultRepository.clearUnlockedData() }
+    }
+
+    @Test
+    fun `resendVerificationCodeEmail uses cached request data to make api call`() = runTest {
+        // Attempt a normal login with a two factor error first, so that the necessary
+        // data will be cached.
+        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        } returns Result.success(
+            GetTokenResponseJson.TwoFactorRequired(
+                TWO_FACTOR_AUTH_METHODS_DATA, null, null,
+            ),
+        )
+        val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+        assertEquals(LoginResult.TwoFactorRequired, firstResult)
+        coVerify { accountsService.preLogin(email = EMAIL) }
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.MasterPassword(
+                    username = EMAIL,
+                    password = PASSWORD_HASH,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+
+        // Resend the verification code email.
+        coEvery {
+            accountsService.resendVerificationCodeEmail(
+                body = ResendEmailJsonRequest(
+                    deviceIdentifier = UNIQUE_APP_ID,
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    ssoToken = null,
+                ),
+            )
+        } returns Result.success(Unit)
+        val resendEmailResult = repository.resendVerificationCodeEmail()
+        assertEquals(ResendEmailResult.Success, resendEmailResult)
+        coVerify {
+            accountsService.resendVerificationCodeEmail(
+                body = ResendEmailJsonRequest(
+                    deviceIdentifier = UNIQUE_APP_ID,
+                    email = EMAIL,
+                    passwordHash = PASSWORD_HASH,
+                    ssoToken = null,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `resendVerificationCodeEmail returns error if no request data cached`() = runTest {
+        val result = repository.resendVerificationCodeEmail()
+        assertEquals(ResendEmailResult.Error(message = null), result)
     }
 
     @Test

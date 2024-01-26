@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
 
 /**
  * Provides an API for querying accounts endpoints.
@@ -29,4 +30,9 @@ interface AccountsService {
      * Request a password hint.
      */
     suspend fun requestPasswordHint(email: String): Result<PasswordHintResponseJson>
+
+    /**
+     * Resend the email with the two-factor verification code.
+     */
+    suspend fun resendVerificationCodeEmail(body: ResendEmailJsonRequest): Result<Unit>
 }

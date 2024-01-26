@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -12,7 +13,6 @@ import retrofit2.http.POST
  * Defines raw calls under the /accounts API.
  */
 interface AccountsApi {
-
     @POST("/accounts/prelogin")
     suspend fun preLogin(@Body body: PreLoginRequestJson): Result<PreLoginResponseJson>
 
@@ -22,5 +22,10 @@ interface AccountsApi {
     @POST("/accounts/password-hint")
     suspend fun passwordHintRequest(
         @Body body: PasswordHintRequestJson,
+    ): Result<Unit>
+
+    @POST("/two-factor/send-email-login")
+    suspend fun resendVerificationCodeEmail(
+        @Body body: ResendEmailJsonRequest,
     ): Result<Unit>
 }

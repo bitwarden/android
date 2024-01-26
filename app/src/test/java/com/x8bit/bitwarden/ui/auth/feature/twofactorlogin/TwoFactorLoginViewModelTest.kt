@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMetho
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -239,7 +240,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ContinueButtonClick login returns Error should update errorStateDialog`() = runTest {
+    fun `ContinueButtonClick login returns Error should update dialogState`() = runTest {
         coEvery {
             authRepository.login(
                 email = "example@email.com",
@@ -309,13 +310,66 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ResendEmailClick should emit ShowToast`() = runTest {
+    fun `ResendEmailClick returns success should emit ShowToast`() = runTest {
+        coEvery {
+            authRepository.resendVerificationCodeEmail()
+        } returns ResendEmailResult.Success
+
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.ResendEmailClick)
+            viewModel.actionChannel.trySend(
+                TwoFactorLoginAction.SelectAuthMethod(
+                    TwoFactorAuthMethod.EMAIL,
+                ),
+            )
             assertEquals(
-                TwoFactorLoginEvent.ShowToast("Not yet implemented"),
+                DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.EMAIL),
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.actionChannel.trySend(TwoFactorLoginAction.ResendEmailClick)
+
+            assertEquals(
+                DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.EMAIL),
+                viewModel.stateFlow.value,
+            )
+
+            assertEquals(
+                TwoFactorLoginEvent.ShowToast(message = R.string.verification_email_sent.asText()),
                 awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ResendEmailClick returns error should update dialogState`() = runTest {
+        coEvery {
+            authRepository.resendVerificationCodeEmail()
+        } returns ResendEmailResult.Error(message = null)
+
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(
+                TwoFactorLoginAction.SelectAuthMethod(
+                    TwoFactorAuthMethod.EMAIL,
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.EMAIL),
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.actionChannel.trySend(TwoFactorLoginAction.ResendEmailClick)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    authMethod = TwoFactorAuthMethod.EMAIL,
+                    dialogState = TwoFactorLoginState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.verification_email_not_sent.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
             )
         }
     }
