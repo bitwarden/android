@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
+import com.x8bit.bitwarden.data.autofill.util.website
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 
 /**
@@ -119,6 +120,8 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
     // Set up mutable lists for collecting valid AutofillViews and ignorable view ids.
     val mutableAutofillViewList: MutableList<AutofillView> = mutableListOf()
     val mutableIgnoreAutofillIdList: MutableList<AutofillId> = mutableListOf()
+    var idPackage: String? = this.idPackage
+    var website: String? = this.website
 
     // Try converting this `ViewNode` into an `AutofillView`. If a valid instance is returned, add
     // it to the list. Otherwise, ignore the `AutofillId` associated with this `ViewNode`.
@@ -134,6 +137,15 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
             .let { viewNodeTraversalData ->
                 viewNodeTraversalData.autofillViews.forEach(mutableAutofillViewList::add)
                 viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
+
+                // Get the first non-null idPackage.
+                if (idPackage.isNullOrBlank()) {
+                    idPackage = viewNodeTraversalData.idPackage
+                }
+                // Get the first non-null website.
+                if (website == null) {
+                    website = viewNodeTraversalData.website
+                }
             }
     }
 
@@ -141,6 +153,8 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
     // descendant's.
     return ViewNodeTraversalData(
         autofillViews = mutableAutofillViewList,
+        idPackage = idPackage,
         ignoreAutofillIds = mutableIgnoreAutofillIdList,
+        website = website,
     )
 }

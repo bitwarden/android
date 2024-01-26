@@ -22,20 +22,14 @@ class ViewNodeExtensionsTest {
     private val expectedIsFocused = true
     private val autofillViewData = AutofillView.Data(
         autofillId = expectedAutofillId,
-        idPackage = ID_PACKAGE,
         isFocused = expectedIsFocused,
-        webDomain = WEB_DOMAIN,
-        webScheme = WEB_SCHEME,
     )
 
     private val viewNode: AssistStructure.ViewNode = mockk {
         every { this@mockk.autofillId } returns expectedAutofillId
         every { this@mockk.childCount } returns 0
         every { this@mockk.inputType } returns 1
-        every { this@mockk.idPackage } returns ID_PACKAGE
         every { this@mockk.isFocused } returns expectedIsFocused
-        every { this@mockk.webDomain } returns WEB_DOMAIN
-        every { this@mockk.webScheme } returns WEB_SCHEME
     }
 
     @BeforeEach
@@ -375,6 +369,80 @@ class ViewNodeExtensionsTest {
         }
     }
 
+    @Test
+    fun `website should return URI if domain and scheme are valid`() {
+        // Setup
+        val webDomain = "www.google.com"
+        val webScheme = "http"
+        val expected = "http://www.google.com"
+        every { viewNode.webDomain } returns webDomain
+        every { viewNode.webScheme } returns webScheme
+
+        // Test
+        val actual = viewNode.website
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `website should return URI with default scheme if domain is valid and scheme is null`() {
+        // Setup
+        val webDomain = "www.google.com"
+        val webScheme = null
+        val expected = "https://www.google.com"
+        every { viewNode.webDomain } returns webDomain
+        every { viewNode.webScheme } returns webScheme
+
+        // Test
+        val actual = viewNode.website
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `website should return URI with default scheme if domain is valid and scheme is blank`() {
+        // Setup
+        val webDomain = "www.google.com"
+        val webScheme = " "
+        val expected = "https://www.google.com"
+        every { viewNode.webDomain } returns webDomain
+        every { viewNode.webScheme } returns webScheme
+
+        // Test
+        val actual = viewNode.website
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `website should return null when domain is null`() {
+        // Setup
+        val webDomain = null
+        every { viewNode.webDomain } returns webDomain
+
+        // Test
+        val actual = viewNode.website
+
+        // Verify
+        assertNull(actual)
+    }
+
+    @Test
+    fun `website should return null when domain is blank`() {
+        // Setup
+        val webDomain = " "
+        every { viewNode.webDomain } returns webDomain
+
+        // Test
+        val actual = viewNode.website
+
+        // Verify
+        assertNull(actual)
+    }
+
     /**
      * Set up [viewNode] to be an input field but not supported.
      */
@@ -391,9 +459,6 @@ class ViewNodeExtensionsTest {
 }
 
 private const val ANDROID_EDIT_TEXT_CLASS_NAME: String = "android.widget.EditText"
-private const val ID_PACKAGE: String = "ID_PACKAGE"
-private const val WEB_DOMAIN: String = "WEB_DOMAIN"
-private const val WEB_SCHEME: String = "WEB_SCHEME"
 private val IGNORED_RAW_HINTS: List<String> = listOf(
     "search",
     "find",

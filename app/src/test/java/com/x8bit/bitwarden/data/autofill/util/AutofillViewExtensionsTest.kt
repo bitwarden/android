@@ -19,10 +19,7 @@ class AutofillViewExtensionsTest {
     private val autofillValue: AutofillValue = mockk()
     private val autofillViewData = AutofillView.Data(
         autofillId = autofillId,
-        idPackage = null,
         isFocused = false,
-        webDomain = null,
-        webScheme = null,
     )
 
     @BeforeEach

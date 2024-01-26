@@ -69,10 +69,7 @@ class FilledDataExtensionsTest {
                 AutofillView.Login.Username(
                     data = AutofillView.Data(
                         autofillId = autofillId,
-                        idPackage = null,
                         isFocused = true,
-                        webDomain = null,
-                        webScheme = null,
                     ),
                 ),
             ),
