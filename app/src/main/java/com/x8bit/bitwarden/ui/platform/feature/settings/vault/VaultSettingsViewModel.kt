@@ -24,8 +24,7 @@ class VaultSettingsViewModel @Inject constructor() :
     }
 
     private fun handleExportVaultClicked() {
-        // TODO BIT-1272 go to vault export screen
-        sendEvent(VaultSettingsEvent.ShowToast("Not yet implemented."))
+        sendEvent(VaultSettingsEvent.NavigateToExportVault)
     }
 
     private fun handleFoldersButtonClicked() {
@@ -46,6 +45,11 @@ sealed class VaultSettingsEvent {
      * Navigate back.
      */
     data object NavigateBack : VaultSettingsEvent()
+
+    /**
+     * Navigate to the Export Vault screen.
+     */
+    data object NavigateToExportVault : VaultSettingsEvent()
 
     /**
      * Navigate to the Folders screen.

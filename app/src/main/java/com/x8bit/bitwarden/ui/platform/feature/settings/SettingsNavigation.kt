@@ -29,6 +29,7 @@ private const val SETTINGS_ROUTE: String = "settings"
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onNavigateToDeleteAccount: () -> Unit,
+    onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
 ) {
@@ -62,6 +63,7 @@ fun NavGraphBuilder.settingsGraph(
         otherDestination(onNavigateBack = { navController.popBackStack() })
         vaultSettingsDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToExportVault = onNavigateToExportVault,
             onNavigateToFolders = onNavigateToFolders,
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
