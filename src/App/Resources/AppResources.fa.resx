@@ -2821,6 +2821,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>می‌خواهید با پشتیبانی تماس بگیرید؟</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>به فروشگاه برنامه ادامه می‌دهید؟</value>
   </data>
@@ -2839,6 +2842,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>چیزی را که به دنبالش هستید پیدا نمی‌کنید؟ با پشتیبانی Bitwarden در bitwarden.com تماس بگیرید.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>ویژگی‌های بیشتر حساب Bitwarden خود را در برنامه وب کاوش کنید.</value>

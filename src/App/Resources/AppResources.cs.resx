@@ -2819,6 +2819,9 @@ Chcete se přepnout na tento účet?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Pokračovat v kontaktování podpory?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Pokračovat na Zásady ochrany osobních údajů?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Pokračovat do obchodu s aplikacemi?</value>
   </data>
@@ -2837,6 +2840,9 @@ Chcete se přepnout na tento účet?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Nenašli jste to, co jste hledali? Na bitwarden.com získejte podporu.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Podívejte se na naše Zásady ochrany osobních údajů na bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Prozkoumejte další funkce Vašeho účtu Bitwarden ve webové aplikaci.</value>

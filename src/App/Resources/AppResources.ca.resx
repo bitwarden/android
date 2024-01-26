@@ -2820,6 +2820,9 @@ Voleu canviar a aquest compte?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Voleu continuar per contactar amb l'assistència?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Voleu continuar amb la política de privadesa?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Voleu continuar cap a l'app store?</value>
   </data>
@@ -2838,6 +2841,9 @@ Voleu canviar a aquest compte?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>No trobeu el que esteu buscant? Poseu-vos en contacte amb l'assistència de Bitwarden a bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Consulteu la nostra política de privadesa a bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Exploreu més característiques del vostre compte Bitwarden a l'aplicació web.</value>

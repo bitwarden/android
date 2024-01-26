@@ -2819,6 +2819,9 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Tovább az ügyfélszolgálathoz?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Tovább az adatvédelmi szabályzathoz?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Tovább az alkalmazásboltba?</value>
   </data>
@@ -2837,6 +2840,9 @@ Szeretnénk átváltani erre a fiókra?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Nem találjuk, amit keresünk? Lépjünk kapcsolatba a Bitwarden ügyfélszolgálatával a bitwarden.com oldalon.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Az adatvédelmi szabályzat megtekintése a bitwarden.com webhelyen.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Fedezzük fel a Bitwarden-fiók további funkcióit a webalkalmazásban.</value>
