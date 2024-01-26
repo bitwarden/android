@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -18,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -38,7 +40,7 @@ class AccountSecurityViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: AccountSecurityState(
             dialog = null,
-            fingerprintPhrase = "fingerprint-placeholder".asText(),
+            fingerprintPhrase = "".asText(), // This will be filled in dynamically
             isApproveLoginRequestsEnabled = settingsRepository.isApprovePasswordlessLoginsEnabled,
             isUnlockWithBiometricsEnabled = false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
@@ -59,6 +61,14 @@ class AccountSecurityViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
+
+        viewModelScope.launch {
+            trySendAction(
+                AccountSecurityAction.Internal.FingerprintResultReceive(
+                    fingerprintResult = settingsRepository.getUserFingerprint(),
+                ),
+            )
+        }
     }
 
     override fun handleAction(action: AccountSecurityAction): Unit = when (action) {
@@ -91,6 +101,10 @@ class AccountSecurityViewModel @Inject constructor(
 
         is AccountSecurityAction.PushNotificationConfirm -> {
             handlePushNotificationConfirm()
+        }
+
+        is AccountSecurityAction.Internal.FingerprintResultReceive -> {
+            handleFingerprintResultReceived(action)
         }
     }
 
@@ -237,6 +251,20 @@ class AccountSecurityViewModel @Inject constructor(
                     action.shouldRequireMasterPasswordOnRestart,
                 )
             }
+        }
+    }
+
+    private fun handleFingerprintResultReceived(
+        action: AccountSecurityAction.Internal.FingerprintResultReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                fingerprintPhrase = when (val result = action.fingerprintResult) {
+                    is UserFingerprintResult.Success -> result.fingerprint.asText()
+                    // This should never fail for an unlocked account.
+                    is UserFingerprintResult.Error -> "".asText()
+                },
+            )
         }
     }
 }
@@ -473,5 +501,17 @@ sealed class AccountSecurityAction {
         ) : UnlockWithPinToggle() {
             override val isUnlockWithPinEnabled: Boolean get() = true
         }
+    }
+
+    /**
+     * Models actions that can be sent by the view model itself.
+     */
+    sealed class Internal : AccountSecurityAction() {
+        /**
+         * A fingerprint has been received.
+         */
+        data class FingerprintResultReceive(
+            val fingerprintResult: UserFingerprintResult,
+        ) : Internal()
     }
 }

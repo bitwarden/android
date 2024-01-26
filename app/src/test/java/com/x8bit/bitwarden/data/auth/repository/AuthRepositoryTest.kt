@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -2135,6 +2134,7 @@ class AuthRepositoryTest {
                 responseDate = null,
                 requestApproved = true,
                 originUrl = "www.bitwarden.com",
+                fingerprint = fingerprint,
             ),
         )
         coEvery {
@@ -2179,11 +2179,12 @@ class AuthRepositoryTest {
 
     @Test
     fun `getAuthRequests should return success when service returns success`() = runTest {
+        val fingerprint = "fingerprint"
         val responseJson = AuthRequestsResponseJson(
             authRequests = listOf(
                 AuthRequestsResponseJson.AuthRequest(
                     id = "1",
-                    publicKey = "2",
+                    publicKey = PUBLIC_KEY,
                     platform = "Android",
                     ipAddress = "192.168.0.1",
                     key = "public",
@@ -2199,7 +2200,46 @@ class AuthRepositoryTest {
             authRequests = listOf(
                 AuthRequest(
                     id = "1",
-                    publicKey = "2",
+                    publicKey = PUBLIC_KEY,
+                    platform = "Android",
+                    ipAddress = "192.168.0.1",
+                    key = "public",
+                    masterPasswordHash = "verySecureHash",
+                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                    responseDate = null,
+                    requestApproved = true,
+                    originUrl = "www.bitwarden.com",
+                    fingerprint = fingerprint,
+                ),
+            ),
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+            )
+        } returns Result.success(fingerprint)
+        coEvery {
+            authRequestsService.getAuthRequests()
+        } returns responseJson.asSuccess()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.getAuthRequests()
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequests()
+            authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+        }
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `getAuthRequests should return empty list when user profile is null`() = runTest {
+        val responseJson = AuthRequestsResponseJson(
+            authRequests = listOf(
+                AuthRequestsResponseJson.AuthRequest(
+                    id = "1",
+                    publicKey = PUBLIC_KEY,
                     platform = "Android",
                     ipAddress = "192.168.0.1",
                     key = "public",
@@ -2211,6 +2251,7 @@ class AuthRepositoryTest {
                 ),
             ),
         )
+        val expected = AuthRequestsResult.Success(emptyList())
         coEvery {
             authRequestsService.getAuthRequests()
         } returns responseJson.asSuccess()
@@ -2221,68 +2262,6 @@ class AuthRepositoryTest {
             authRequestsService.getAuthRequests()
         }
         assertEquals(expected, result)
-    }
-
-    @Test
-    fun `getUserFingerprint should return failure when source returns failure`() = runTest {
-        coEvery {
-            authSdkSource.getNewAuthRequest(EMAIL)
-        } returns Result.success(
-            mockk<AuthRequestResponse> {
-                every { publicKey } returns PUBLIC_KEY
-            },
-        )
-        coEvery {
-            authSdkSource.getUserFingerprint(
-                email = EMAIL,
-                publicKey = PUBLIC_KEY,
-            )
-        } returns Result.failure(Throwable())
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-        val result = repository.getFingerprintPhrase(EMAIL)
-
-        coVerify(exactly = 1) {
-            authSdkSource.getNewAuthRequest(EMAIL)
-            authSdkSource.getUserFingerprint(
-                email = EMAIL,
-                publicKey = PUBLIC_KEY,
-            )
-        }
-        assertEquals(UserFingerprintResult.Error, result)
-    }
-
-    @Test
-    fun `getUserFingerprint should return success when source returns success`() = runTest {
-        val fingerprint = "fingerprint"
-        coEvery {
-            authSdkSource.getNewAuthRequest(EMAIL)
-        } returns Result.success(
-            AuthRequestResponse(
-                fingerprint = fingerprint,
-                publicKey = PUBLIC_KEY,
-                privateKey = "key",
-                accessCode = "accessCode",
-            ),
-        )
-        coEvery {
-            authSdkSource.getUserFingerprint(
-                email = EMAIL,
-                publicKey = PUBLIC_KEY,
-            )
-        } returns Result.success(fingerprint)
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-        val result = repository.getFingerprintPhrase(EMAIL)
-
-        coVerify(exactly = 1) {
-            authSdkSource.getNewAuthRequest(EMAIL)
-            authSdkSource.getUserFingerprint(
-                email = EMAIL,
-                publicKey = PUBLIC_KEY,
-            )
-        }
-        assertEquals(UserFingerprintResult.Success(fingerprint), result)
     }
 
     @Test
@@ -2462,7 +2441,7 @@ class AuthRepositoryTest {
         private val ACCOUNT_1 = AccountJson(
             profile = AccountJson.Profile(
                 userId = USER_ID_1,
-                email = "test@bitwarden.com",
+                email = EMAIL,
                 isEmailVerified = true,
                 name = "Bitwarden Tester",
                 hasPremium = false,

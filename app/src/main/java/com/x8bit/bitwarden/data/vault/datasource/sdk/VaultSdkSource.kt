@@ -69,6 +69,11 @@ interface VaultSdkSource {
     suspend fun getUserEncryptionKey(userId: String): Result<String>
 
     /**
+     * Gets the user's fingerprint.
+     */
+    suspend fun getUserFingerprint(userId: String): Result<String>
+
+    /**
      * Attempts to initialize cryptography functionality for an individual user with the given
      * [userId] for the Bitwarden SDK with a given [InitUserCryptoRequest].
      */

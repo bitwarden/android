@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -112,6 +113,11 @@ interface SettingsRepository {
      * Disables autofill if it is currently enabled.
      */
     fun disableAutofill()
+
+    /**
+     * Gets the unique fingerprint phrase for the current user.
+     */
+    suspend fun getUserFingerprint(): UserFingerprintResult
 
     /**
      * Sets default values for various settings for the given [userId] if necessary. This is

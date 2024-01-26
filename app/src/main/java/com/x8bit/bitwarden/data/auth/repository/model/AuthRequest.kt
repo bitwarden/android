@@ -15,6 +15,7 @@ import java.time.ZonedDateTime
  * @param responseDate The date & time on which this request was responded to.
  * @param requestApproved Whether this request was approved.
  * @param originUrl The origin URL of this auth request.
+ * @param fingerprint The fingerprint of this auth request.
  */
 data class AuthRequest(
     val id: String,
@@ -27,4 +28,5 @@ data class AuthRequest(
     val responseDate: ZonedDateTime?,
     val requestApproved: Boolean,
     val originUrl: String,
+    val fingerprint: String,
 )

@@ -22,6 +22,7 @@ import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientPasswordHistory
+import com.bitwarden.sdk.ClientPlatform
 import com.bitwarden.sdk.ClientVault
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -42,12 +43,14 @@ import org.junit.jupiter.api.Test
 @Suppress("LargeClass")
 class VaultSdkSourceTest {
     private val clientCrypto = mockk<ClientCrypto>()
+    private val clientPlatform = mockk<ClientPlatform>()
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
     private val clientVault = mockk<ClientVault>() {
         every { passwordHistory() } returns clientPasswordHistory
     }
     private val client = mockk<Client>() {
         every { vault() } returns clientVault
+        every { platform() } returns clientPlatform
         every { crypto() } returns clientCrypto
     }
     private val sdkClientManager = mockk<SdkClientManager> {
@@ -131,6 +134,28 @@ class VaultSdkSourceTest {
             }
             verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
+
+    @Test
+    fun `getUserFingerprint should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
+        val expectedResult = "fingerprint"
+        coEvery {
+            clientPlatform.userFingerprint(
+                fingerprintMaterial = userId,
+            )
+        } returns expectedResult
+
+        val result = vaultSdkSource.getUserFingerprint(userId)
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        coVerify {
+            clientPlatform.userFingerprint(
+                fingerprintMaterial = userId,
+            )
+        }
+    }
 
     @Test
     fun `initializeUserCrypto with sdk success should return InitializeCryptoResult Success`() =

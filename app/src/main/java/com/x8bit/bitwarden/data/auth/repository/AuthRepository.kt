@@ -16,7 +16,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -183,11 +182,6 @@ interface AuthRepository : AuthenticatorProvider {
      * Get a list of the current user's [AuthRequest]s.
      */
     suspend fun getAuthRequests(): AuthRequestsResult
-
-    /**
-     * Gets a unique fingerprint phrase for this user.
-     */
-    suspend fun getFingerprintPhrase(email: String): UserFingerprintResult
 
     /**
      * Get a [Boolean] indicating whether this is a known device.

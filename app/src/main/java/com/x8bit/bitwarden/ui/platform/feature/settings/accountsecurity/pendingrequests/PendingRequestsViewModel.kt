@@ -77,7 +77,7 @@ class PendingRequestsViewModel @Inject constructor(
                             PendingRequestsState.ViewState.Content(
                                 requests = result.authRequests.map { authRequest ->
                                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
-                                        fingerprintPhrase = authRequest.publicKey,
+                                        fingerprintPhrase = authRequest.fingerprint,
                                         platform = authRequest.platform,
                                         timestamp = dateTimeFormatter.format(
                                             authRequest.creationDate,

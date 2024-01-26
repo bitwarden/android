@@ -582,42 +582,17 @@ class AuthRepositoryImpl(
         authSdkSource
             .getNewAuthRequest(email)
             .flatMap { authRequest ->
-                newAuthRequestService.createAuthRequest(
-                    email = email,
-                    publicKey = authRequest.publicKey,
-                    deviceId = authDiskSource.uniqueAppId,
-                    accessCode = authRequest.accessCode,
-                    fingerprint = authRequest.fingerprint,
-                )
-            }
-            .fold(
-                onFailure = { AuthRequestResult.Error },
-                onSuccess = { request ->
-                    AuthRequestResult.Success(
-                        authRequest = AuthRequest(
-                            id = request.id,
-                            publicKey = request.publicKey,
-                            platform = request.platform,
-                            ipAddress = request.ipAddress,
-                            key = request.key,
-                            masterPasswordHash = request.masterPasswordHash,
-                            creationDate = request.creationDate,
-                            responseDate = request.responseDate,
-                            requestApproved = request.requestApproved ?: false,
-                            originUrl = request.originUrl,
-                        ),
+                newAuthRequestService
+                    .createAuthRequest(
+                        email = email,
+                        publicKey = authRequest.publicKey,
+                        deviceId = authDiskSource.uniqueAppId,
+                        accessCode = authRequest.accessCode,
+                        fingerprint = authRequest.fingerprint,
                     )
-                },
-            )
-
-    override suspend fun getAuthRequests(): AuthRequestsResult =
-        authRequestsService.getAuthRequests()
-            .fold(
-                onFailure = { AuthRequestsResult.Error },
-                onSuccess = { response ->
-                    AuthRequestsResult.Success(
-                        authRequests = response.authRequests.map { request ->
-                            AuthRequest(
+                    .map { request ->
+                        AuthRequestResult.Success(
+                            authRequest = AuthRequest(
                                 id = request.id,
                                 publicKey = request.publicKey,
                                 platform = request.platform,
@@ -628,27 +603,43 @@ class AuthRepositoryImpl(
                                 responseDate = request.responseDate,
                                 requestApproved = request.requestApproved ?: false,
                                 originUrl = request.originUrl,
-                            )
+                                fingerprint = authRequest.fingerprint,
+                            ),
+                        )
+                    }
+            }
+            .fold(
+                onFailure = { AuthRequestResult.Error },
+                onSuccess = { it },
+            )
+
+    override suspend fun getAuthRequests(): AuthRequestsResult =
+        authRequestsService
+            .getAuthRequests()
+            .fold(
+                onFailure = { AuthRequestsResult.Error },
+                onSuccess = { response ->
+                    AuthRequestsResult.Success(
+                        authRequests = response.authRequests.mapNotNull { request ->
+                            when (val result = getFingerprintPhrase(request.publicKey)) {
+                                is UserFingerprintResult.Error -> null
+                                is UserFingerprintResult.Success -> AuthRequest(
+                                    id = request.id,
+                                    publicKey = request.publicKey,
+                                    platform = request.platform,
+                                    ipAddress = request.ipAddress,
+                                    key = request.key,
+                                    masterPasswordHash = request.masterPasswordHash,
+                                    creationDate = request.creationDate,
+                                    responseDate = request.responseDate,
+                                    requestApproved = request.requestApproved ?: false,
+                                    originUrl = request.originUrl,
+                                    fingerprint = result.fingerprint,
+                                )
+                            }
                         },
                     )
                 },
-            )
-
-    override suspend fun getFingerprintPhrase(
-        email: String,
-    ): UserFingerprintResult =
-        authSdkSource
-            .getNewAuthRequest(email)
-            .flatMap { requestResponse ->
-                authSdkSource
-                    .getUserFingerprint(
-                        email = email,
-                        publicKey = requestResponse.publicKey,
-                    )
-            }
-            .fold(
-                onFailure = { UserFingerprintResult.Error },
-                onSuccess = { UserFingerprintResult.Success(it) },
             )
 
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
@@ -689,6 +680,23 @@ class AuthRepositoryImpl(
                     PasswordStrengthResult.Error
                 },
             )
+
+    private suspend fun getFingerprintPhrase(
+        publicKey: String,
+    ): UserFingerprintResult {
+        val profile = authDiskSource.userState?.activeAccount?.profile
+            ?: return UserFingerprintResult.Error
+
+        return authSdkSource
+            .getUserFingerprint(
+                email = profile.email,
+                publicKey = publicKey,
+            )
+            .fold(
+                onFailure = { UserFingerprintResult.Error },
+                onSuccess = { UserFingerprintResult.Success(it) },
+            )
+    }
 
     /**
      * Get the remembered two-factor token associated with the user's email, if applicable.

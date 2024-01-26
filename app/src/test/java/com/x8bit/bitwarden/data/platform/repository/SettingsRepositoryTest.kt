@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.DerivePinKeyResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
@@ -556,6 +557,56 @@ class SettingsRepositoryTest {
         }
 
     @Test
+    fun `getUserFingerprint should return failure with no active user`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = settingsRepository.getUserFingerprint()
+
+        assertEquals(UserFingerprintResult.Error, result)
+    }
+
+    @Test
+    fun `getUserFingerprint should return failure with active user when source returns failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.getUserFingerprint(
+                    userId = MOCK_USER_STATE.activeUserId,
+                )
+            } returns Result.failure(Throwable())
+
+            val result = settingsRepository.getUserFingerprint()
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.getUserFingerprint(
+                    userId = MOCK_USER_STATE.activeUserId,
+                )
+            }
+            assertEquals(UserFingerprintResult.Error, result)
+        }
+
+    @Test
+    fun `getUserFingerprint should return success with active user when source returns success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val fingerprint = "fingerprint"
+            coEvery {
+                vaultSdkSource.getUserFingerprint(
+                    userId = MOCK_USER_STATE.activeUserId,
+                )
+            } returns Result.success(fingerprint)
+
+            val result = settingsRepository.getUserFingerprint()
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.getUserFingerprint(
+                    userId = MOCK_USER_STATE.activeUserId,
+                )
+            }
+            assertEquals(UserFingerprintResult.Success(fingerprint), result)
+        }
+
+    @Test
     fun `getPullToRefreshEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
         val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -728,26 +779,27 @@ class SettingsRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isScreenCaptureAllowed property should update SettingsDiskSource and emit changes`() = runTest {
-        val userId = "userId"
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
+    fun `isScreenCaptureAllowed property should update SettingsDiskSource and emit changes`() =
+        runTest {
+            val userId = "userId"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-        fakeSettingsDiskSource.storeScreenCaptureAllowed(userId, false)
+            fakeSettingsDiskSource.storeScreenCaptureAllowed(userId, false)
 
-        settingsRepository.isScreenCaptureAllowedStateFlow.test {
-            assertFalse(awaitItem())
+            settingsRepository.isScreenCaptureAllowedStateFlow.test {
+                assertFalse(awaitItem())
 
-            settingsRepository.isScreenCaptureAllowed = true
-            assertTrue(awaitItem())
+                settingsRepository.isScreenCaptureAllowed = true
+                assertTrue(awaitItem())
 
-            assertEquals(true, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
+                assertEquals(true, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
 
-            settingsRepository.isScreenCaptureAllowed = false
-            assertFalse(awaitItem())
+                settingsRepository.isScreenCaptureAllowed = false
+                assertFalse(awaitItem())
 
-            assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
+                assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
+            }
         }
-    }
 }
 
 private val MOCK_USER_STATE =

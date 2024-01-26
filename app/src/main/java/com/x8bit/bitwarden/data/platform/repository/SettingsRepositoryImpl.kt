@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -250,6 +251,19 @@ class SettingsRepositoryImpl(
         // Manually indicate that autofill is no longer supported without needing a foreground state
         // change.
         mutableIsAutofillEnabledStateFlow.value = false
+    }
+
+    @Suppress("ReturnCount")
+    override suspend fun getUserFingerprint(): UserFingerprintResult {
+        val userId = activeUserId
+            ?: return UserFingerprintResult.Error
+
+        return vaultSdkSource
+            .getUserFingerprint(userId)
+            .fold(
+                onFailure = { UserFingerprintResult.Error },
+                onSuccess = { UserFingerprintResult.Success(it) },
+            )
     }
 
     override fun setDefaultsIfNecessary(userId: String) {

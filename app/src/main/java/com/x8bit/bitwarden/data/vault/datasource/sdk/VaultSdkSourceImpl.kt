@@ -65,6 +65,15 @@ class VaultSdkSourceImpl(
                 .getUserEncryptionKey()
         }
 
+    override suspend fun getUserFingerprint(
+        userId: String,
+    ): Result<String> =
+        runCatching {
+            getClient(userId = userId)
+                .platform()
+                .userFingerprint(userId)
+        }
+
     override suspend fun initializeCrypto(
         userId: String,
         request: InitUserCryptoRequest,
