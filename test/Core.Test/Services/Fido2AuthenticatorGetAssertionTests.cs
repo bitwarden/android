@@ -291,7 +291,7 @@ namespace Bit.Core.Test.Services
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         // Spec: Increment the credential associated signature counter
-        public async Task GetAssertionAsync_ReturnsAssertion(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams, Cipher encryptedCipher) {
+        public async Task GetAssertionAsync_ReturnsAssertion(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
             // Common Arrange
             var cipherView = CreateCipherView(null, "bitwarden.com", true);
             aParams.RpId = cipherView.Login.MainFido2Credential.RpId;
@@ -336,7 +336,7 @@ namespace Bit.Core.Test.Services
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         // Spec: Increment the credential associated signature counter
-        public async Task GetAssertionAsync_ThrowsUnknownError_SaveFails(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams, Cipher encryptedCipher) {
+        public async Task GetAssertionAsync_ThrowsUnknownError_SaveFails(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
             // Common Arrange
             var cipherView = CreateCipherView(null, "bitwarden.com", true);
             aParams.RpId = cipherView.Login.MainFido2Credential.RpId;
