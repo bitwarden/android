@@ -35,7 +35,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
-import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
@@ -50,6 +49,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisp
 @Composable
 fun FoldersScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToAddFolderScreen: () -> Unit,
+    onNavigateToEditFolderScreen: (folderId: String) -> Unit,
     viewModel: FoldersViewModel = hiltViewModel(),
 ) {
     val state = viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -57,13 +58,9 @@ fun FoldersScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is FoldersEvent.NavigateBack -> onNavigateBack()
-            is FoldersEvent.NavigateToAddFolderScreen -> {
-                showNotYetImplementedToast(context = context)
-            }
-
-            is FoldersEvent.NavigateToEditFolderScreen -> {
-                showNotYetImplementedToast(context = context)
-            }
+            is FoldersEvent.NavigateToAddFolderScreen -> onNavigateToAddFolderScreen()
+            is FoldersEvent.NavigateToEditFolderScreen ->
+                onNavigateToEditFolderScreen(event.folderId)
 
             is FoldersEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
@@ -108,7 +105,7 @@ fun FoldersScreen(
                 FoldersContent(
                     foldersList = viewState.folderList,
                     onItemClick = remember(viewModel) {
-                        { viewModel.trySendAction(FoldersAction.OnFolderClick(it)) }
+                        { viewModel.trySendAction(FoldersAction.FolderClick(it)) }
                     },
                     modifier = Modifier
                         .padding(innerPadding)

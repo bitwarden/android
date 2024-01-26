@@ -39,10 +39,10 @@ class FoldersViewModel @Inject constructor(
         is FoldersAction.AddFolderButtonClick -> handleAddFolderButtonClicked()
         is FoldersAction.CloseButtonClick -> handleCloseButtonClicked()
         is FoldersAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
-        is FoldersAction.OnFolderClick -> handleFolderClick(action)
+        is FoldersAction.FolderClick -> handleFolderClick(action)
     }
 
-    private fun handleFolderClick(action: FoldersAction.OnFolderClick) {
+    private fun handleFolderClick(action: FoldersAction.FolderClick) {
         sendEvent(FoldersEvent.NavigateToEditFolderScreen(action.folderId))
     }
 
@@ -196,7 +196,7 @@ sealed class FoldersAction {
     /**
      * Indicates that the user clicked a folder.
      */
-    data class OnFolderClick(val folderId: String) : FoldersAction()
+    data class FolderClick(val folderId: String) : FoldersAction()
 
     /**
      * Indicates that the user clicked the close button.
