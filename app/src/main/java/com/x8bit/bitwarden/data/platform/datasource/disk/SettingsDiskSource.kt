@@ -178,6 +178,11 @@ interface SettingsDiskSource {
     fun getScreenCaptureAllowed(userId: String): Boolean?
 
     /**
+     * Emits updates that track [getScreenCaptureAllowed] for the given [userId].
+     */
+    fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?>
+
+    /**
      * Stores whether or not [isScreenCaptureAllowed] for the given [userId].
      */
     fun storeScreenCaptureAllowed(userId: String, isScreenCaptureAllowed: Boolean?)

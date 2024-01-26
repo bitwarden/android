@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import app.cash.turbine.test
 import androidx.lifecycle.SavedStateHandle
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -16,6 +17,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -24,6 +26,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
         every { activeUserId } returns USER_ID
@@ -31,6 +34,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
+        every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
     private val intentManager: IntentManager = mockk {
@@ -142,6 +146,26 @@ class MainViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `changes in the allowed screen capture value should result in emissions of ScreenCaptureSettingChange `() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    MainEvent.ScreenCaptureSettingChange(isAllowed = true),
+                    awaitItem(),
+                )
+
+                mutableScreenCaptureAllowedFlow.value = false
+                assertEquals(
+                    MainEvent.ScreenCaptureSettingChange(isAllowed = false),
+                    awaitItem(),
+                )
+            }
+        }
 
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,

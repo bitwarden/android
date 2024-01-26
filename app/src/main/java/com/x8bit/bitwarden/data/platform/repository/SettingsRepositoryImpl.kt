@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
+import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
@@ -19,12 +20,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
+
+private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
 
 /**
  * Primary implementation of [SettingsRepository].
@@ -202,6 +206,39 @@ class SettingsRepositoryImpl(
         }
     override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
         mutableIsAutofillEnabledStateFlow.asStateFlow()
+
+    override var isScreenCaptureAllowed: Boolean
+        get() = activeUserId?.let {
+            settingsDiskSource.getScreenCaptureAllowed(it)
+        } ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeScreenCaptureAllowed(
+                userId = userId,
+                isScreenCaptureAllowed = value,
+            )
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
+        get() = authDiskSource
+            .userStateFlow
+            .flatMapLatest { userState ->
+                userState
+                    ?.activeUserId
+                    ?.let {
+                        settingsDiskSource.getScreenCaptureAllowedFlow(userId = it)
+                            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
+                    }
+                    ?: flowOf(DEFAULT_IS_SCREEN_CAPTURE_ALLOWED)
+            }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Lazily,
+                initialValue = activeUserId
+                    ?.let { settingsDiskSource.getScreenCaptureAllowed(userId = it) }
+                    ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
+            )
 
     init {
         observeAutofillEnabledChanges()

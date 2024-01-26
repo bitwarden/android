@@ -54,6 +54,9 @@ class SettingsDiskSourceImpl(
     private val mutableIsIconLoadingDisabledFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableScreenCaptureAllowedFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
             ?.let { storedValue ->
@@ -260,6 +263,11 @@ class SettingsDiskSourceImpl(
             bufferedMutableSharedFlow(replay = 1)
         }
 
+    private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> =
+        mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
     override fun getApprovePasswordlessLoginsEnabled(userId: String): Boolean? {
         return getBoolean(key = "${APPROVE_PASSWORDLESS_LOGINS_KEY}_$userId")
     }
@@ -278,6 +286,10 @@ class SettingsDiskSourceImpl(
         return getBoolean(key = "${SCREEN_CAPTURE_ALLOW_KEY}_$userId")
     }
 
+    override fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?> =
+        getMutableScreenCaptureAllowedFlow(userId)
+            .onSubscription { emit(getScreenCaptureAllowed(userId)) }
+
     override fun storeScreenCaptureAllowed(
         userId: String,
         isScreenCaptureAllowed: Boolean?,
@@ -286,5 +298,6 @@ class SettingsDiskSourceImpl(
             key = "${SCREEN_CAPTURE_ALLOW_KEY}_$userId",
             value = isScreenCaptureAllowed,
         )
+        getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)
     }
 }

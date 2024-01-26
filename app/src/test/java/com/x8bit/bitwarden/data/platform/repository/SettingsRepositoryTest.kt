@@ -32,6 +32,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
+@Suppress("LargeClass")
 class SettingsRepositoryTest {
     private val autofillManager: AutofillManager = mockk {
         every { hasEnabledAutofillServices() } answers { isAutofillEnabledAndSupported }
@@ -723,6 +724,29 @@ class SettingsRepositoryTest {
             false,
             fakeSettingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId),
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isScreenCaptureAllowed property should update SettingsDiskSource and emit changes`() = runTest {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        fakeSettingsDiskSource.storeScreenCaptureAllowed(userId, false)
+
+        settingsRepository.isScreenCaptureAllowedStateFlow.test {
+            assertFalse(awaitItem())
+
+            settingsRepository.isScreenCaptureAllowed = true
+            assertTrue(awaitItem())
+
+            assertEquals(true, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
+
+            settingsRepository.isScreenCaptureAllowed = false
+            assertFalse(awaitItem())
+
+            assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
+        }
     }
 }
 

@@ -36,7 +36,7 @@ class OtherViewModel @Inject constructor(
 ) : BaseViewModel<OtherState, OtherEvent, OtherAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: OtherState(
-            allowScreenCapture = false,
+            allowScreenCapture = settingsRepo.isScreenCaptureAllowed,
             allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
             clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
             lastSyncTime = settingsRepo
@@ -64,7 +64,7 @@ class OtherViewModel @Inject constructor(
     }
 
     private fun handleAllowScreenCaptureToggled(action: OtherAction.AllowScreenCaptureToggle) {
-        // TODO BIT-805 implement screen capture setting
+        settingsRepo.isScreenCaptureAllowed = action.isScreenCaptureEnabled
         mutableStateFlow.update { it.copy(allowScreenCapture = action.isScreenCaptureEnabled) }
     }
 
