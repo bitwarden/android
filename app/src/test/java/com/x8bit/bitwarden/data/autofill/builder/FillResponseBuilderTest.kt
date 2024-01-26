@@ -111,10 +111,7 @@ class FillResponseBuilderTest {
                     AutofillView.Login.Username(
                         data = AutofillView.Data(
                             autofillId = mockk(),
-                            idPackage = null,
                             isFocused = true,
-                            webDomain = null,
-                            webScheme = null,
                         ),
                     ),
                 ),

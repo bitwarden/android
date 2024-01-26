@@ -3,11 +3,17 @@ package com.x8bit.bitwarden.data.autofill.util
 import android.app.assist.AssistStructure
 import android.view.View
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 
 /**
  * The class name of the android edit text field.
  */
 private const val ANDROID_EDIT_TEXT_CLASS_NAME: String = "android.widget.EditText"
+
+/**
+ * The default web URI scheme.
+ */
+private const val DEFAULT_SCHEME: String = "https"
 
 /**
  * The set of raw autofill hints that should be ignored.
@@ -72,10 +78,7 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? =
             if (supportedHint != null || this.isInputField) {
                 val autofillViewData = AutofillView.Data(
                     autofillId = nonNullAutofillId,
-                    idPackage = idPackage,
                     isFocused = isFocused,
-                    webDomain = webDomain,
-                    webScheme = webScheme,
                 )
                 buildAutofillView(
                     autofillViewData = autofillViewData,
@@ -164,3 +167,22 @@ fun AssistStructure.ViewNode.isUsernameField(
         inputType.isUsernameInputType ||
         idEntry?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
         hint?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true
+
+/**
+ * The website that this [AssistStructure.ViewNode] is a part of representing.
+ */
+val AssistStructure.ViewNode.website: String?
+    get() = this
+        .webDomain
+        .takeUnless { it?.isBlank() == true }
+        ?.let { webDomain ->
+            val webScheme = this
+                .webScheme
+                .orNullIfBlank()
+                ?: DEFAULT_SCHEME
+
+            buildUri(
+                domain = webDomain,
+                scheme = webScheme,
+            )
+        }

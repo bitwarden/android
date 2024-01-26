@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class ViewNodeTraversalDataExtensionsTest {
@@ -17,28 +16,18 @@ class ViewNodeTraversalDataExtensionsTest {
     }
     private val autofillViewData = AutofillView.Data(
         autofillId = mockk(),
-        idPackage = null,
         isFocused = false,
-        webDomain = null,
-        webScheme = null,
     )
 
     @Test
-    fun `buildUriOrNull should return URI when contains valid domain and scheme`() {
+    fun `buildUriOrNull should return website URI when present`() {
         // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                webDomain = WEB_DOMAIN,
-                webScheme = WEB_SCHEME,
-            ),
-        )
         val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
+            autofillViews = emptyList(),
+            idPackage = null,
             ignoreAutofillIds = emptyList(),
+            website = WEBSITE,
         )
-        val expected = "$WEB_SCHEME://$WEB_DOMAIN"
 
         // Test
         val actual = listOf(viewNodeTraversalData).buildUriOrNull(
@@ -46,77 +35,17 @@ class ViewNodeTraversalDataExtensionsTest {
         )
 
         // Verify
-        assertEquals(expected, actual)
+        assertEquals(WEBSITE, actual)
     }
 
     @Test
-    fun `buildUriOrNull should return URI with default scheme when domain valid and scheme null`() {
+    fun `buildUriOrNull should return idPackage URI when WEBSITE is null`() {
         // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                webDomain = WEB_DOMAIN,
-                webScheme = null,
-            ),
-        )
         val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
+            autofillViews = emptyList(),
+            idPackage = ID_PACKAGE,
             ignoreAutofillIds = emptyList(),
-        )
-        val expected = "https://$WEB_DOMAIN"
-
-        // Test
-        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
-        )
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `buildUriOrNull should return URI with default scheme when domain valid and scheme empty`() {
-        // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                webDomain = WEB_DOMAIN,
-                webScheme = "",
-            ),
-        )
-        val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
-            ignoreAutofillIds = emptyList(),
-        )
-        val expected = "https://$WEB_DOMAIN"
-
-        // Test
-        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
-        )
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `buildUriOrNull should return idPackage URI when domain is null`() {
-        // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                idPackage = ID_PACKAGE,
-                webDomain = null,
-                webScheme = null,
-            ),
-        )
-        val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
-            ignoreAutofillIds = emptyList(),
+            website = null,
         )
         val expected = "androidapp://$ID_PACKAGE"
 
@@ -130,47 +59,13 @@ class ViewNodeTraversalDataExtensionsTest {
     }
 
     @Test
-    fun `buildUriOrNull should return idPackage URI when domain is empty`() {
+    fun `buildUriOrNull should return title URI when website and idPackage are null`() {
         // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                idPackage = ID_PACKAGE,
-                webDomain = "",
-                webScheme = "",
-            ),
-        )
         val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
+            autofillViews = emptyList(),
+            idPackage = null,
             ignoreAutofillIds = emptyList(),
-        )
-        val expected = "androidapp://$ID_PACKAGE"
-
-        // Test
-        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
-        )
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `buildUriOrNull should return title URI when domain and idPackage are null`() {
-        // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                idPackage = null,
-                webDomain = null,
-                webScheme = null,
-            ),
-        )
-        val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
-            ignoreAutofillIds = emptyList(),
+            website = null,
         )
         val expected = "androidapp://com.x8bit.bitwarden"
         every { windowNode.title } returns "com.x8bit.bitwarden/path.deeper.into.app"
@@ -182,93 +77,10 @@ class ViewNodeTraversalDataExtensionsTest {
 
         // Verify
         assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `buildUriOrNull should return title URI when domain and idPackage are empty`() {
-        // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                idPackage = "",
-                webDomain = "",
-                webScheme = null,
-            ),
-        )
-        val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
-            ignoreAutofillIds = emptyList(),
-        )
-        val expected = "androidapp://com.x8bit.bitwarden"
-        every { windowNode.title } returns "com.x8bit.bitwarden/path.deeper.into.app"
-
-        // Test
-        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
-        )
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `buildUriOrNull should return null when title, domain, and idPackage are null`() {
-        // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                idPackage = null,
-                webDomain = null,
-                webScheme = null,
-            ),
-        )
-        val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
-            ignoreAutofillIds = emptyList(),
-        )
-        every { windowNode.title } returns null
-
-        // Test
-        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
-        )
-
-        // Verify
-        assertNull(actual)
-    }
-
-    @Test
-    fun `buildUriOrNull should return null when title, domain, and idPackage are empty`() {
-        // Setup
-        val autofillView = AutofillView.Card.Number(
-            data = autofillViewData.copy(
-                idPackage = "",
-                webDomain = "",
-                webScheme = null,
-            ),
-        )
-        val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = listOf(
-                autofillView,
-            ),
-            ignoreAutofillIds = emptyList(),
-        )
-        every { windowNode.title } returns ""
-
-        // Test
-        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
-        )
-
-        // Verify
-        assertNull(actual)
     }
 
     companion object {
         private const val ID_PACKAGE: String = "com.x8bit.bitwarden"
-        private const val WEB_DOMAIN: String = "www.google.com"
-        private const val WEB_SCHEME: String = "https"
+        private const val WEBSITE: String = "https://www.google.com"
     }
 }

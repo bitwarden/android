@@ -11,17 +11,11 @@ sealed class AutofillView {
      * The data important to a given [AutofillView].
      *
      * @param autofillId The [AutofillId] associated with this view.
-     * @param idPackage The package id for this view, if there is one.
      * @param isFocused Whether the view is currently focused.
-     * @param webDomain The web domain for this view, if there is one. (example: m.facebook.com)
-     * @param webScheme The web scheme for this view, if there is one. (example: https)
      */
     data class Data(
         val autofillId: AutofillId,
-        val idPackage: String?,
         val isFocused: Boolean,
-        val webDomain: String?,
-        val webScheme: String?,
     )
 
     /**

@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
 import com.x8bit.bitwarden.data.autofill.util.toAutofillView
+import com.x8bit.bitwarden.data.autofill.util.website
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -30,13 +31,6 @@ class AutofillParserTests {
     private lateinit var parser: AutofillParser
 
     private val autofillAppInfo: AutofillAppInfo = mockk()
-    private val autofillViewData = AutofillView.Data(
-        autofillId = mockk(),
-        isFocused = true,
-        idPackage = null,
-        webDomain = null,
-        webScheme = null,
-    )
     private val assistStructure: AssistStructure = mockk()
     private val cardAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
     private val cardAutofillId: AutofillId = mockk()
@@ -44,6 +38,7 @@ class AutofillParserTests {
         every { this@mockk.autofillHints } returns arrayOf(cardAutofillHint)
         every { this@mockk.autofillId } returns cardAutofillId
         every { this@mockk.childCount } returns 0
+        every { this@mockk.idPackage } returns ID_PACKAGE
     }
     private val loginAutofillHint = View.AUTOFILL_HINT_USERNAME
     private val loginAutofillId: AutofillId = mockk()
@@ -51,6 +46,7 @@ class AutofillParserTests {
         every { this@mockk.autofillHints } returns arrayOf(loginAutofillHint)
         every { this@mockk.autofillId } returns loginAutofillId
         every { this@mockk.childCount } returns 0
+        every { this@mockk.idPackage } returns ID_PACKAGE
     }
     private val cardWindowNode: AssistStructure.WindowNode = mockk {
         every { this@mockk.rootViewNode } returns cardViewNode
@@ -74,11 +70,14 @@ class AutofillParserTests {
     @BeforeEach
     fun setup() {
         mockkStatic(AssistStructure.ViewNode::toAutofillView)
+        mockkStatic(AssistStructure.ViewNode::website)
         mockkStatic(
             FillRequest::getMaxInlineSuggestionsCount,
             FillRequest::getInlinePresentationSpecs,
         )
         mockkStatic(List<ViewNodeTraversalData>::buildUriOrNull)
+        every { cardViewNode.website } returns WEBSITE
+        every { loginViewNode.website } returns WEBSITE
         every {
             fillRequest.getInlinePresentationSpecs(
                 autofillAppInfo = autofillAppInfo,
@@ -112,6 +111,7 @@ class AutofillParserTests {
     @AfterEach
     fun teardown() {
         unmockkStatic(AssistStructure.ViewNode::toAutofillView)
+        unmockkStatic(AssistStructure.ViewNode::website)
         unmockkStatic(
             FillRequest::getMaxInlineSuggestionsCount,
             FillRequest::getInlinePresentationSpecs,
@@ -160,13 +160,15 @@ class AutofillParserTests {
             every { this@mockk.autofillHints } returns arrayOf(childAutofillHint)
             every { this@mockk.autofillId } returns childAutofillId
             every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns null
             every { this@mockk.isFocused } returns false
             every { this@mockk.toAutofillView() } returns null
+            every { this@mockk.website } returns null
         }
         val parentAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
         val parentAutofillId: AutofillId = mockk()
         val parentAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = parentAutofillId,
                 isFocused = true,
             ),
@@ -174,9 +176,11 @@ class AutofillParserTests {
         val parentViewNode: AssistStructure.ViewNode = mockk {
             every { this@mockk.autofillHints } returns arrayOf(parentAutofillHint)
             every { this@mockk.autofillId } returns parentAutofillId
+            every { this@mockk.idPackage } returns null
             every { this@mockk.toAutofillView() } returns parentAutofillView
             every { this@mockk.childCount } returns 1
             every { this@mockk.getChildAt(0) } returns childViewNode
+            every { this@mockk.website } returns null
         }
         val windowNode: AssistStructure.WindowNode = mockk {
             every { this@mockk.rootViewNode } returns parentViewNode
@@ -220,13 +224,13 @@ class AutofillParserTests {
         // Setup
         setupAssistStructureWithAllAutofillViewTypes()
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
             ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = false,
             ),
@@ -270,13 +274,13 @@ class AutofillParserTests {
         // Setup
         setupAssistStructureWithAllAutofillViewTypes()
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = false,
             ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
             ),
@@ -320,13 +324,13 @@ class AutofillParserTests {
         // Setup
         setupAssistStructureWithAllAutofillViewTypes()
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
             ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
             ),
@@ -371,13 +375,13 @@ class AutofillParserTests {
         mockIsInlineAutofillEnabled = false
         setupAssistStructureWithAllAutofillViewTypes()
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
             ),
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
-            data = autofillViewData.copy(
+            data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
             ),
@@ -427,5 +431,7 @@ class AutofillParserTests {
     }
 }
 
+private const val ID_PACKAGE: String = "com.x8bit.bitwarden"
 private const val MAX_INLINE_SUGGESTION_COUNT: Int = 42
 private const val URI: String = "androidapp://com.x8bit.bitwarden"
+private const val WEBSITE: String = "https://www.google.com"
