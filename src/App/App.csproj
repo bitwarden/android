@@ -66,9 +66,9 @@
       <CodesignProvision>Automatic:AppStore</CodesignProvision>
       <CodesignKey>iPhone Distribution</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
-	  <UseInterpreter>true</UseInterpreter>
-	  <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
 	</PropertyGroup>
+	  <!-- <UseInterpreter>true</UseInterpreter>
+	  <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs> -->
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
 		<!--This is needed for PCLCrypto to work correctly-->
 		<TrimmerRootAssembly Include="System.Security.Cryptography" />
