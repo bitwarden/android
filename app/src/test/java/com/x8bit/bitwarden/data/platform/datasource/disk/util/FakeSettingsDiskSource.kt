@@ -33,6 +33,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableIsIconLoadingDisabled =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableScreenCaptureAllowedFlowMap =
+        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
@@ -193,11 +196,22 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun getScreenCaptureAllowed(userId: String): Boolean? =
         storedScreenCaptureAllowed[userId]
 
+    override fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?> {
+        return getMutableScreenCaptureAllowedFlow(userId)
+    }
+
     override fun storeScreenCaptureAllowed(
         userId: String,
         isScreenCaptureAllowed: Boolean?,
     ) {
         storedScreenCaptureAllowed[userId] = isScreenCaptureAllowed
+        getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)
+    }
+
+    private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {
+        return mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
     }
 
     //region Private helper functions

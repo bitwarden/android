@@ -2,6 +2,7 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,10 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 /**
@@ -31,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
+
+        observeViewModelEvents()
 
         if (savedInstanceState == null) {
             mainViewModel.trySendAction(
@@ -66,5 +72,26 @@ class MainActivity : AppCompatActivity() {
                 intent = intent,
             ),
         )
+    }
+
+    private fun observeViewModelEvents() {
+        mainViewModel
+            .eventFlow
+            .onEach { event ->
+                when (event) {
+                    is MainEvent.ScreenCaptureSettingChange -> {
+                        handleScreenCaptureSettingChange(event)
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun handleScreenCaptureSettingChange(event: MainEvent.ScreenCaptureSettingChange) {
+        if (event.isAllowed) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        } else {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 }

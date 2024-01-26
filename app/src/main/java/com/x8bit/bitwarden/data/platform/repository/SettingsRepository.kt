@@ -99,6 +99,16 @@ interface SettingsRepository {
     val isAutofillEnabledStateFlow: StateFlow<Boolean>
 
     /**
+     * Sets whether or not screen capture is allowed for the current user.
+     */
+    var isScreenCaptureAllowed: Boolean
+
+    /**
+     * Whether or not screen capture is allowed for the current user.
+     */
+    val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
+
+    /**
      * Disables autofill if it is currently enabled.
      */
     fun disableAutofill()

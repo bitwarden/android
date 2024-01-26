@@ -28,7 +28,7 @@ class MainViewModel @Inject constructor(
     private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
     private val savedStateHandle: SavedStateHandle,
-) : BaseViewModel<MainState, Unit, MainAction>(
+) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
         theme = settingsRepository.appTheme,
     ),
@@ -51,6 +51,13 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .appThemeStateFlow
             .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isScreenCaptureAllowedStateFlow
+            .onEach { isAllowed ->
+                sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
+            }
             .launchIn(viewModelScope)
     }
 
@@ -132,4 +139,15 @@ sealed class MainAction {
             val theme: AppTheme,
         ) : Internal()
     }
+}
+
+/**
+ * Represents events that are emitted by the [MainViewModel].
+ */
+sealed class MainEvent {
+
+    /**
+     * Event indicating a change in the screen capture setting.
+     */
+    data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
 }

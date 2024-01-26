@@ -27,11 +27,16 @@ class OtherViewModelTest : BaseViewModelTest() {
     )
     private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
     private val instant: Instant = Instant.parse("2023-10-26T12:00:00Z")
+    private val isAllowed: Boolean = false
     private val mutableVaultLastSyncStateFlow = MutableStateFlow(instant)
+    private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(isAllowed)
     private val settingsRepository = mockk<SettingsRepository> {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshStateFlow
         every { vaultLastSyncStateFlow } returns mutableVaultLastSyncStateFlow
         every { vaultLastSync } returns instant
+        every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedStateFlow
+        every { isScreenCaptureAllowed } answers { mutableScreenCaptureAllowedStateFlow.value }
+        every { isScreenCaptureAllowed = any() } just runs
     }
     private val vaultRepository = mockk<VaultRepository>()
 
@@ -50,18 +55,19 @@ class OtherViewModelTest : BaseViewModelTest() {
         assertEquals(state, viewModel.stateFlow.value)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on AllowScreenCaptureToggled should update value in state`() = runTest {
+    fun `on AllowScreenCaptureToggled should update value in state and SettingsRepository`() = runTest {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            expectNoEvents()
+        val newScreenCaptureAllowedValue = true
+
+        viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(newScreenCaptureAllowedValue))
+
+        verify(exactly = 1) {
+            settingsRepository.isScreenCaptureAllowed = newScreenCaptureAllowedValue
         }
+
         viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE,
-                awaitItem(),
-            )
-            viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(true))
             assertEquals(
                 DEFAULT_STATE.copy(allowScreenCapture = true),
                 awaitItem(),
