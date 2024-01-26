@@ -153,6 +153,7 @@ class AuthRepositoryImpl(
                 vaultState = vaultState,
                 userOrganizationsList = userOrganizationsList,
                 hasPendingAccountAddition = hasPendingAccountAddition,
+                isBiometricsEnabledProvider = ::isBiometricsEnabled,
                 vaultUnlockTypeProvider = ::getVaultUnlockType,
             )
     }
@@ -170,6 +171,7 @@ class AuthRepositoryImpl(
                     vaultState = vaultRepository.vaultStateFlow.value,
                     userOrganizationsList = authDiskSource.userOrganizationsList,
                     hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
+                    isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                 ),
         )
@@ -709,6 +711,10 @@ class AuthRepositoryImpl(
                 remember = false,
             )
         }
+
+    private fun isBiometricsEnabled(
+        userId: String,
+    ): Boolean = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
 
     private fun getVaultUnlockType(
         userId: String,

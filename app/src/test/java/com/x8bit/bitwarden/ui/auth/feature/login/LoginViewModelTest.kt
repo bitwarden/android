@@ -127,6 +127,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     isPremium = true,
                     isLoggedIn = true,
                     isVaultUnlocked = true,
+                    isBiometricsEnabled = false,
                     organizations = emptyList(),
                 ),
             ),

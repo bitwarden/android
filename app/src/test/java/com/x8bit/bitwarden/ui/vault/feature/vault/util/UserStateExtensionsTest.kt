@@ -69,6 +69,7 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -85,6 +86,7 @@ class UserStateExtensionsTest {
                         isPremium = false,
                         isLoggedIn = true,
                         isVaultUnlocked = false,
+                        isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -105,6 +107,7 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -125,6 +128,7 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = false,
                         isVaultUnlocked = false,
+                        isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -160,6 +164,7 @@ class UserStateExtensionsTest {
                 isPremium = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
+                isBiometricsEnabled = false,
                 organizations = listOf(
                     Organization(
                         id = "organizationId",
@@ -193,6 +198,7 @@ class UserStateExtensionsTest {
                 isPremium = false,
                 isLoggedIn = true,
                 isVaultUnlocked = false,
+                isBiometricsEnabled = false,
                 organizations = listOf(
                     Organization(
                         id = "organizationId",
@@ -230,6 +236,7 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -255,6 +262,7 @@ class UserStateExtensionsTest {
                 isPremium = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
+                isBiometricsEnabled = false,
                 organizations = emptyList(),
             )
                 .toVaultFilterData(),
@@ -289,6 +297,7 @@ class UserStateExtensionsTest {
                 isPremium = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
+                isBiometricsEnabled = false,
                 organizations = listOf(
                     Organization(
                         id = "organizationId-B",

@@ -113,6 +113,7 @@ class UserStateJsonExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        isBiometricsEnabled = false,
                         vaultUnlockType = VaultUnlockType.PIN,
                     ),
                 ),
@@ -155,6 +156,7 @@ class UserStateJsonExtensionsTest {
                         ),
                     ),
                     hasPendingAccountAddition = false,
+                    isBiometricsEnabledProvider = { false },
                     vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                 ),
         )
@@ -182,6 +184,7 @@ class UserStateJsonExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        isBiometricsEnabled = true,
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                     ),
                 ),
@@ -225,6 +228,7 @@ class UserStateJsonExtensionsTest {
                         ),
                     ),
                     hasPendingAccountAddition = true,
+                    isBiometricsEnabledProvider = { true },
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 ),
         )
