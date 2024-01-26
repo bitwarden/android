@@ -2,6 +2,7 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -16,6 +17,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
+
 /**
  * A view model that helps launch actions for the [MainActivity].
  */
@@ -24,12 +27,27 @@ class MainViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MainState, Unit, MainAction>(
     MainState(
         theme = settingsRepository.appTheme,
     ),
 ) {
+    private var specialCircumstance: SpecialCircumstance?
+        get() = savedStateHandle[SPECIAL_CIRCUMSTANCE_KEY]
+        set(value) {
+            savedStateHandle[SPECIAL_CIRCUMSTANCE_KEY] = value
+        }
+
     init {
+        // Immediately restore the special circumstance if we have one and then listen for changes
+        specialCircumstanceManager.specialCircumstance = specialCircumstance
+
+        specialCircumstanceManager
+            .specialCircumstanceStateFlow
+            .onEach { specialCircumstance = it }
+            .launchIn(viewModelScope)
+
         settingsRepository
             .appThemeStateFlow
             .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
