@@ -2819,6 +2819,9 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Weiter, um den Support zu kontaktieren?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Weiter zur Datenschutzerklärung?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Weiter zum App Store?</value>
   </data>
@@ -2837,6 +2840,9 @@ Möchtest du zu diesem Konto wechseln?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Du findest nicht, was du suchst? Kontaktiere den Bitwarden Support auf bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Lies unsere Datenschutzerklärung auf bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Entdecke mehr Funktionen deines Bitwarden-Kontos in der Web-App.</value>

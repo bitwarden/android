@@ -560,7 +560,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Kirjaudu tai luo uusi tili käyttääksesi salattua holviasi.</value>
+    <value>Käytä salattua holviasi kirjautumalla sisään tai tai luo uusi tili.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Hallinta</value>
@@ -2821,6 +2821,9 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Siirrytäänkö asiakaspalveluun?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Jatketaanko tietosuojakäytäntöön?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Avataanko sovelluskauppa?</value>
   </data>
@@ -2839,6 +2842,9 @@ Haluatko vaihtaa tähän tiliin?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Etkö löydä etsimääsi? Tavoitat Bitwardenin asiakaspalvelun osoitteesta bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Tutustu tietosuojakäytäntöömme osoitteessa bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Tutustu Bitwarden-tilisi muihin omimaisuuksiin verkkosovelluksessa.</value>

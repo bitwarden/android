@@ -2819,6 +2819,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Συνέχεια στην επικοινωνία με την υποστήριξη;</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Συνέχεια στο κατάστημα εφαρμογών;</value>
   </data>
@@ -2837,6 +2840,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Δεν μπορείτε να βρείτε αυτό που ψάχνετε; Επικοινωνήστε με την υποστήριξη Bitwarden στο bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Εξερευνήστε περισσότερες δυνατότητες του Bitwarden λογαριασμού σας, στην εφαρμογή διαδικτύου.</value>
