@@ -38,20 +38,15 @@ data class AddSendArgs(
 
 /**
  * Add the new send screen to the nav graph.
- *
- * The [defaultType] will be relevant in cases where the Add Send screen needs to be added as a
- * start destination of a graph.
  */
 fun NavGraphBuilder.addSendDestination(
     onNavigateBack: () -> Unit,
-    defaultType: AddSendType = AddSendType.AddItem,
 ) {
     composableWithSlideTransitions(
         route = ADD_SEND_ROUTE,
         arguments = listOf(
             navArgument(ADD_SEND_ITEM_TYPE) {
                 type = NavType.StringType
-                defaultValue = defaultType.toTypeString()
             },
         ),
     ) {
