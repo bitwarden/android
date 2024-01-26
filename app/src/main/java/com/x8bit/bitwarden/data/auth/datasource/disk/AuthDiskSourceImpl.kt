@@ -19,6 +19,7 @@ private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricU
 private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnlock"
 private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
+private const val REMEMBERED_ORG_IDENTIFIER_KEY = "$BASE_KEY:rememberedOrgIdentifier"
 private const val STATE_KEY = "$BASE_KEY:state"
 private const val LAST_ACTIVE_TIME_KEY = "$BASE_KEY:lastActiveTime"
 private const val INVALID_UNLOCK_ATTEMPTS_KEY = "$BASE_KEY:invalidUnlockAttempts"
@@ -63,6 +64,15 @@ class AuthDiskSourceImpl(
         set(value) {
             putString(
                 key = REMEMBERED_EMAIL_ADDRESS_KEY,
+                value = value,
+            )
+        }
+
+    override var rememberedOrgIdentifier: String?
+        get() = getString(key = REMEMBERED_ORG_IDENTIFIER_KEY)
+        set(value) {
+            putString(
+                key = REMEMBERED_ORG_IDENTIFIER_KEY,
                 value = value,
             )
         }

@@ -1,12 +1,14 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.net.URLEncoder
 import java.security.MessageDigest
 import java.util.Base64
 
 private const val SSO_HOST: String = "sso-callback"
-private const val SSO_URI = "bitwarden://$SSO_HOST"
+const val SSO_URI: String = "bitwarden://$SSO_HOST"
 
 /**
  * Generates a URI for the SSO custom tab.
@@ -28,7 +30,7 @@ fun generateUriForSso(
     val encodedOrganizationIdentifier = URLEncoder.encode(organizationIdentifier, "UTF-8")
     val encodedToken = URLEncoder.encode(token, "UTF-8")
 
-    val codeChallenge = Base64.getEncoder().encodeToString(
+    val codeChallenge = Base64.getUrlEncoder().withoutPadding().encodeToString(
         MessageDigest
             .getInstance("SHA-256")
             .digest(codeVerifier.toByteArray()),
@@ -77,10 +79,11 @@ fun Intent.getSsoCallbackResult(): SsoCallbackResult? {
 /**
  * Sealed class representing the result of an SSO callback data extraction.
  */
-sealed class SsoCallbackResult {
+sealed class SsoCallbackResult : Parcelable {
     /**
      * Represents an SSO callback object with a missing code value.
      */
+    @Parcelize
     data object MissingCode : SsoCallbackResult()
 
     /**
@@ -88,6 +91,7 @@ sealed class SsoCallbackResult {
      * present doesn't guarantee it is correct, and should be checked against the known state before
      * being used.
      */
+    @Parcelize
     data class Success(
         val state: String?,
         val code: String,

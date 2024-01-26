@@ -186,6 +186,8 @@ class AuthRepositoryImpl(
 
     override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
 
+    override var rememberedOrgIdentifier: String? by authDiskSource::rememberedOrgIdentifier
+
     override var hasPendingAccountAddition: Boolean
         by mutableHasPendingAccountAdditionStateFlow::value
 
@@ -257,6 +259,22 @@ class AuthRepositoryImpl(
             captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
         )
     } ?: LoginResult.Error(errorMessage = null)
+
+    override suspend fun login(
+        email: String,
+        ssoCode: String,
+        ssoCodeVerifier: String,
+        ssoRedirectUri: String,
+        captchaToken: String?,
+    ): LoginResult = loginCommon(
+        email = email,
+        authModel = IdentityTokenAuthModel.SingleSignOn(
+            ssoCode = ssoCode,
+            ssoCodeVerifier = ssoCodeVerifier,
+            ssoRedirectUri = ssoRedirectUri,
+        ),
+        captchaToken = captchaToken,
+    )
 
     /**
      * A helper function to extract the common logic of logging in through

@@ -65,7 +65,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun LoginScreen(
     onNavigateBack: () -> Unit,
     onNavigateToMasterPasswordHint: (String) -> Unit,
-    onNavigateToEnterpriseSignOn: () -> Unit,
+    onNavigateToEnterpriseSignOn: (String) -> Unit,
     onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
     onNavigateToTwoFactorLogin: (String, String?) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
@@ -84,7 +84,10 @@ fun LoginScreen(
                 intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
-            LoginEvent.NavigateToEnterpriseSignOn -> onNavigateToEnterpriseSignOn()
+            is LoginEvent.NavigateToEnterpriseSignOn -> {
+                onNavigateToEnterpriseSignOn(event.emailAddress)
+            }
+
             is LoginEvent.NavigateToLoginWithDevice -> {
                 onNavigateToLoginWithDevice(event.emailAddress)
             }

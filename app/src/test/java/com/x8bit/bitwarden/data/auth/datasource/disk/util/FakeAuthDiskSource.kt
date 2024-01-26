@@ -14,6 +14,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     override val uniqueAppId: String = "testUniqueAppId"
 
     override var rememberedEmailAddress: String? = null
+    override var rememberedOrgIdentifier: String? = null
 
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()

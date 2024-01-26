@@ -48,6 +48,12 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         )
         enterpriseSignOnDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToTwoFactorLogin = { emailAddress ->
+                navController.navigateToTwoFactorLogin(
+                    emailAddress = emailAddress,
+                    password = null,
+                )
+            },
         )
         landingDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
@@ -68,7 +74,11 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                     emailAddress = emailAddress,
                 )
             },
-            onNavigateToEnterpriseSignOn = { navController.navigateToEnterpriseSignOn() },
+            onNavigateToEnterpriseSignOn = { emailAddress ->
+                navController.navigateToEnterpriseSignOn(
+                    emailAddress = emailAddress,
+                )
+            },
             onNavigateToLoginWithDevice = { emailAddress ->
                 navController.navigateToLoginWithDevice(
                     emailAddress = emailAddress,

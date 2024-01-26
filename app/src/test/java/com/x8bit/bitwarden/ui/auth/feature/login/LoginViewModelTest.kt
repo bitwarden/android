@@ -368,7 +368,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(LoginAction.SingleSignOnClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
-                LoginEvent.NavigateToEnterpriseSignOn,
+                LoginEvent.NavigateToEnterpriseSignOn("test@gmail.com"),
                 awaitItem(),
             )
         }

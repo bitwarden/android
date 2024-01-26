@@ -3,10 +3,14 @@ package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
+import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -17,9 +21,12 @@ import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRep
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -30,15 +37,17 @@ import org.junit.jupiter.api.Test
 class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
+    private val mutableCaptchaTokenResultFlow =
+        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val authRepository: AuthRepository = mockk {
         every { ssoCallbackResultFlow } returns mutableSsoCallbackResultFlow
+        every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
+        every { rememberedOrgIdentifier } returns null
     }
 
     private val environmentRepository: EnvironmentRepository = FakeEnvironmentRepository()
 
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
-
-    private val savedStateHandle = SavedStateHandle()
 
     @BeforeEach
     fun setUp() {
@@ -85,7 +94,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with valid organization and failed prevalidation should emit ShowToast, show a loading dialog, and then show an error`() =
+    fun `LogInClick with valid organization and failed prevalidation should show a loading dialog, and then show an error`() =
         runTest {
             val organizationId = "Test"
             val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
@@ -111,15 +120,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                           message = R.string.login_sso_error.asText(),
+                            message = R.string.login_sso_error.asText(),
                         ),
                     ),
-                    awaitItem(),
-                )
-            }
-            viewModel.eventFlow.test {
-                assertEquals(
-                    EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
                     awaitItem(),
                 )
             }
@@ -127,7 +130,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with valid organization and successful prevalidation should emit ShowToast, show a loading dialog, hide a loading dialog, and then emit NavigateToSsoLogin`() =
+    fun `LogInClick with valid organization and successful prevalidation should show a loading dialog, hide a loading dialog, and then emit NavigateToSsoLogin`() =
         runTest {
             val organizationId = "Test"
             val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
@@ -165,10 +168,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             }
             viewModel.eventFlow.test {
                 assertEquals(
-                    EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
-                    awaitItem(),
-                )
-                assertEquals(
                     EnterpriseSignOnEvent.NavigateToSsoLogin(ssoUri),
                     awaitItem(),
                 )
@@ -177,7 +176,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with invalid organization should emit ShowToast and show error dialog`() =
+    fun `LogInClick with invalid organization should show error dialog`() =
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
@@ -192,16 +191,12 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ),
                     viewModel.stateFlow.value,
                 )
-                assertEquals(
-                    EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
-                    awaitItem(),
-                )
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with no Internet should emit ShowToast and show error dialog`() = runTest {
+    fun `LogInClick with no Internet should show error dialog`() = runTest {
         val viewModel = createViewModel(isNetworkConnected = false)
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
@@ -213,10 +208,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ),
                 ),
                 viewModel.stateFlow.value,
-            )
-            assertEquals(
-                EnterpriseSignOnEvent.ShowToast("Not yet implemented."),
-                awaitItem(),
             )
         }
     }
@@ -276,10 +267,341 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `ssoCallbackResultFlow MissingCode should show an error dialog`() {
+        val viewModel = createViewModel(
+            ssoData = DEFAULT_SSO_DATA,
+        )
+        mutableSsoCallbackResultFlow.tryEmit(SsoCallbackResult.MissingCode)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Error(
+                    message = R.string.login_sso_error.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ssoCallbackResultFlow Success with different state should show an error dialog`() {
+        val viewModel = createViewModel(
+            ssoData = DEFAULT_SSO_DATA,
+        )
+        val ssoCallbackResult = SsoCallbackResult.Success(state = "xyz", code = "lmn")
+        mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Error(
+                    message = R.string.login_sso_error.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoCallbackResultFlow Success with same state with login Error should show loading dialog then show an error`() =
+        runTest {
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any())
+            } returns LoginResult.Error(null)
+
+            val viewModel = createViewModel(
+                ssoData = DEFAULT_SSO_DATA,
+                emailAddress = DEFAULT_EMAIL,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            message = R.string.login_sso_error.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoCallbackResultFlow Success with same state with login Success should show loading dialog, hide it, and save org identifier`() =
+        runTest {
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any())
+            } returns LoginResult.Success
+
+            coEvery {
+                authRepository.rememberedOrgIdentifier = "Bitwarden"
+            } just runs
+
+            val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
+            val viewModel = createViewModel(
+                initialState = initialState,
+                ssoData = DEFAULT_SSO_DATA,
+                emailAddress = DEFAULT_EMAIL,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState,
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    initialState.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    initialState,
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                )
+            }
+            coVerify(exactly = 1) {
+                authRepository.rememberedOrgIdentifier = "Bitwarden"
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoCallbackResultFlow Success with same state with login CaptchaRequired should show loading dialog, hide it, and send NavigateToCaptcha event`() =
+        runTest {
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any())
+            } returns LoginResult.CaptchaRequired("captcha")
+
+            val uri: Uri = mockk()
+            every {
+                generateUriForCaptcha(captchaId = "captcha")
+            } returns uri
+
+            val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
+            val viewModel = createViewModel(
+                initialState = initialState,
+                ssoData = DEFAULT_SSO_DATA,
+                emailAddress = DEFAULT_EMAIL,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            turbineScope {
+                val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
+                val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+
+                assertEquals(initialState, stateFlow.awaitItem())
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    initialState.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                assertEquals(
+                    initialState,
+                    stateFlow.awaitItem(),
+                )
+
+                assertEquals(
+                    EnterpriseSignOnEvent.NavigateToCaptcha(uri),
+                    eventFlow.awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ssoCallbackResultFlow Success with same state with login TwoFactorRequired should show loading dialog, hide it, and send NavigateToTwoFactorLogin event`() =
+        runTest {
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any())
+            } returns LoginResult.TwoFactorRequired
+
+            val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
+            val viewModel = createViewModel(
+                initialState = initialState,
+                ssoData = DEFAULT_SSO_DATA,
+                emailAddress = DEFAULT_EMAIL,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            turbineScope {
+                val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
+                val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
+
+                assertEquals(initialState, stateFlow.awaitItem())
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    initialState.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                assertEquals(
+                    initialState,
+                    stateFlow.awaitItem(),
+                )
+
+                assertEquals(
+                    EnterpriseSignOnEvent.NavigateToTwoFactorLogin("test@gmail.com"),
+                    eventFlow.awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Test
+    fun `captchaTokenResultFlow MissingToken should show error dialog`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.MissingToken)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.log_in_denied.asText(),
+                        message = R.string.captcha_failed.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `captchaTokenResultFlow Success should update the state and attempt to login`() = runTest {
+        coEvery {
+            authRepository.login(any(), any(), any(), any(), any())
+        } returns LoginResult.Success
+
+        coEvery {
+            authRepository.rememberedOrgIdentifier = "Bitwarden"
+        } just runs
+
+        val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
+        val viewModel = createViewModel(
+            initialState = initialState,
+            emailAddress = "test@gmail.com",
+            ssoData = DEFAULT_SSO_DATA,
+            ssoCallbackResult = SsoCallbackResult.Success(
+                state = "abc",
+                code = "lmn",
+            ),
+        )
+        viewModel.stateFlow.test {
+            assertEquals(
+                initialState,
+                awaitItem(),
+            )
+
+            mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success("token"))
+
+            assertEquals(
+                initialState.copy(
+                    captchaToken = "token",
+                    dialogState = EnterpriseSignOnState.DialogState.Loading(
+                        R.string.logging_in.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+
+            assertEquals(
+                initialState.copy(captchaToken = "token"),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: EnterpriseSignOnState? = null,
+        emailAddress: String? = null,
+        ssoData: SsoResponseData? = null,
+        ssoCallbackResult: SsoCallbackResult? = null,
         savedStateHandle: SavedStateHandle = SavedStateHandle(
-            initialState = mapOf("state" to initialState),
+            initialState = mapOf(
+                "state" to initialState,
+                "email_address" to emailAddress,
+                "ssoData" to ssoData,
+                "ssoCallbackResult" to ssoCallbackResult,
+            ),
         ),
         isNetworkConnected: Boolean = true,
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(
@@ -294,6 +616,12 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         private val DEFAULT_STATE = EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
+            captchaToken = null,
         )
+        private val DEFAULT_SSO_DATA = SsoResponseData(
+            state = "abc",
+            codeVerifier = "def",
+        )
+        private const val DEFAULT_EMAIL = "test@gmail.com"
     }
 }

@@ -98,6 +98,26 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `rememberedOrgIdentifier should pull from and update SharedPreferences`() {
+        val rememberedOrgIdentifierKey = "bwPreferencesStorage:rememberedOrgIdentifier"
+
+        // Shared preferences and the disk source start with the same value.
+        assertNull(authDiskSource.rememberedOrgIdentifier)
+        assertNull(fakeSharedPreferences.getString(rememberedOrgIdentifierKey, null))
+
+        // Updating the disk source updates shared preferences
+        authDiskSource.rememberedOrgIdentifier = "Bitwarden"
+        assertEquals(
+            "Bitwarden",
+            fakeSharedPreferences.getString(rememberedOrgIdentifierKey, null),
+        )
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit { putString(rememberedOrgIdentifierKey, null) }
+        assertNull(authDiskSource.rememberedOrgIdentifier)
+    }
+
+    @Test
     fun `userState should pull from and update SharedPreferences`() {
         val userStateKey = "bwPreferencesStorage:state"
 
