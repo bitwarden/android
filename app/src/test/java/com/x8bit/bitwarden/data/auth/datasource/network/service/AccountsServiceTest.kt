@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -209,6 +210,21 @@ class AccountsServiceTest : BaseServiceTest() {
 
         assertTrue(result.isSuccess)
         assertEquals(PasswordHintResponseJson.Success, result.getOrNull())
+    }
+
+    @Test
+    fun `resendVerificationCodeEmail with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.resendVerificationCodeEmail(
+            body = ResendEmailJsonRequest(
+                deviceIdentifier = "3",
+                email = "example@email.com",
+                passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
+                ssoToken = null,
+            ),
+        )
+        assertTrue(result.isSuccess)
     }
 
     companion object {

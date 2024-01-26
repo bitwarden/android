@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -105,6 +106,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Log out the current user.
      */
     fun logout()
+
+    /**
+     * Resend the email with the two-factor verification code.
+     */
+    suspend fun resendVerificationCodeEmail(): ResendEmailResult
 
     /**
      * Switches to the account corresponding to the given [userId] if possible.

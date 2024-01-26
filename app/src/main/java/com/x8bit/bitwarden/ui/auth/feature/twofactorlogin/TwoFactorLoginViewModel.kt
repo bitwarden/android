@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.util.preferredAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.util.twoFactorDisplayEmail
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -31,6 +32,7 @@ private const val KEY_STATE = "state"
  * Manages application state for the Two-Factor Login screen.
  */
 @HiltViewModel
+@Suppress("TooManyFunctions")
 class TwoFactorLoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
@@ -83,6 +85,9 @@ class TwoFactorLoginViewModel @Inject constructor(
             }
 
             is TwoFactorLoginAction.Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
+            is TwoFactorLoginAction.Internal.ReceiveResendEmailResult -> {
+                handleReceiveResendEmailResult(action)
+            }
         }
     }
 
@@ -214,6 +219,39 @@ class TwoFactorLoginViewModel @Inject constructor(
     }
 
     /**
+     * Handle the resend email result.
+     */
+    private fun handleReceiveResendEmailResult(
+        action: TwoFactorLoginAction.Internal.ReceiveResendEmailResult,
+    ) {
+        // Dismiss the loading overlay.
+        mutableStateFlow.update { it.copy(dialogState = null) }
+
+        when (action.resendEmailResult) {
+            // Display a dialog for an error result.
+            is ResendEmailResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.verification_email_not_sent.asText(),
+                        ),
+                    )
+                }
+            }
+
+            // Display a toast for a successful result.
+            ResendEmailResult.Success -> {
+                sendEvent(
+                    TwoFactorLoginEvent.ShowToast(
+                        message = R.string.verification_email_sent.asText(),
+                    ),
+                )
+            }
+        }
+    }
+
+    /**
      * Update the state with the new toggle value.
      */
     private fun handleRememberMeToggle(action: TwoFactorLoginAction.RememberMeToggle) {
@@ -228,8 +266,29 @@ class TwoFactorLoginViewModel @Inject constructor(
      * Resend the verification code email.
      */
     private fun handleResendEmailClick() {
-        // TODO: Finish implementation (BIT-918)
-        sendEvent(TwoFactorLoginEvent.ShowToast("Not yet implemented"))
+        // Ensure that the user is in fact verifying with email.
+        if (mutableStateFlow.value.authMethod != TwoFactorAuthMethod.EMAIL) {
+            return
+        }
+
+        // Show the loading overlay.
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = TwoFactorLoginState.DialogState.Loading(
+                    message = R.string.submitting.asText(),
+                ),
+            )
+        }
+
+        // Resend the email notification.
+        viewModelScope.launch {
+            val result = authRepository.resendVerificationCodeEmail()
+            sendAction(
+                TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                    resendEmailResult = result,
+                ),
+            )
+        }
     }
 
     /**
@@ -312,7 +371,7 @@ sealed class TwoFactorLoginEvent {
      * Shows a toast with the given [message].
      */
     data class ShowToast(
-        val message: String,
+        val message: Text,
     ) : TwoFactorLoginEvent()
 }
 
@@ -377,6 +436,13 @@ sealed class TwoFactorLoginAction {
          */
         data class ReceiveLoginResult(
             val loginResult: LoginResult,
+        ) : Internal()
+
+        /**
+         * Indicates a resend email result has been received.
+         */
+        data class ReceiveResendEmailResult(
+            val resendEmailResult: ResendEmailResult,
         ) : Internal()
     }
 }

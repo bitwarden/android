@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -34,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -95,6 +97,11 @@ class AuthRepositoryImpl(
      * cached to make the request again in the case of two-factor authentication.
      */
     private var identityTokenAuthModel: IdentityTokenAuthModel? = null
+
+    /**
+     * The information necessary to resend the verification code email for two-factor login.
+     */
+    private var resendEmailJsonRequest: ResendEmailJsonRequest? = null
 
     /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The
@@ -272,9 +279,22 @@ class AuthRepositoryImpl(
             onSuccess = { loginResponse ->
                 when (loginResponse) {
                     is CaptchaRequired -> LoginResult.CaptchaRequired(loginResponse.captchaKey)
+
                     is TwoFactorRequired -> {
+                        // Cache the data necessary for the remaining two-factor auth flow.
                         identityTokenAuthModel = authModel
                         twoFactorResponse = loginResponse
+                        resendEmailJsonRequest = ResendEmailJsonRequest(
+                            deviceIdentifier = authDiskSource.uniqueAppId,
+                            email = email,
+                            passwordHash = authModel.password,
+                            ssoToken = loginResponse.ssoToken,
+                        )
+
+                        // If this error was received, it also means any cached two-factor
+                        // token is invalid.
+                        authDiskSource.storeTwoFactorToken(email, null)
+
                         LoginResult.TwoFactorRequired
                     }
 
@@ -300,6 +320,7 @@ class AuthRepositoryImpl(
                         // Remove any cached data after successfully logging in.
                         identityTokenAuthModel = null
                         twoFactorResponse = null
+                        resendEmailJsonRequest = null
 
                         // Attempt to unlock the vault if possible.
                         password?.let {
@@ -372,6 +393,14 @@ class AuthRepositoryImpl(
         // Clear the current vault data if the logged out user was the active one.
         if (wasActiveUser) vaultRepository.clearUnlockedData()
     }
+
+    override suspend fun resendVerificationCodeEmail(): ResendEmailResult =
+        resendEmailJsonRequest?.let { jsonRequest ->
+            accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
+                onFailure = { ResendEmailResult.Error(message = it.message) },
+                onSuccess = { ResendEmailResult.Success },
+            )
+        } ?: ResendEmailResult.Error(message = null)
 
     @Suppress("ReturnCount")
     override fun switchAccount(userId: String): SwitchAccountResult {

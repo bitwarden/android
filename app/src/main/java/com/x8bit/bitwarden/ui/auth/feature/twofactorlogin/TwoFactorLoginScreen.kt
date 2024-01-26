@@ -81,7 +81,7 @@ fun TwoFactorLoginScreen(
             }
 
             is TwoFactorLoginEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }
         }
     }
