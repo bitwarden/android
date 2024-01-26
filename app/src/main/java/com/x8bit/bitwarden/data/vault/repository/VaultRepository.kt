@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -68,6 +69,14 @@ interface VaultRepository : VaultLockManager {
      * must be collected in order to trigger state changes.
      */
     val collectionsStateFlow: StateFlow<DataState<List<CollectionView>>>
+
+    /**
+     * Flow that represents all domains for the active user.
+     *
+     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
+     * must be collected in order to trigger state changes.
+     */
+    val domainsStateFlow: StateFlow<DataState<DomainsData>>
 
     /**
      * Flow that represents all folders for the active user.
