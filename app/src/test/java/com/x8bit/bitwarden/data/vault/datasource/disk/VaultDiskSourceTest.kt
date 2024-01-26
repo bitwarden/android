@@ -5,15 +5,18 @@ import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkMo
 import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
+import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeDomainsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeFoldersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeSendsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CipherEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
+import com.x8bit.bitwarden.data.vault.datasource.disk.entity.DomainsEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockDomains
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
 import io.mockk.every
@@ -21,6 +24,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -31,6 +36,7 @@ class VaultDiskSourceTest {
     private val json = PlatformNetworkModule.providesJson()
     private lateinit var ciphersDao: FakeCiphersDao
     private lateinit var collectionsDao: FakeCollectionsDao
+    private lateinit var domainsDao: FakeDomainsDao
     private lateinit var foldersDao: FakeFoldersDao
     private lateinit var sendsDao: FakeSendsDao
 
@@ -40,11 +46,13 @@ class VaultDiskSourceTest {
     fun setup() {
         ciphersDao = FakeCiphersDao()
         collectionsDao = FakeCollectionsDao()
+        domainsDao = FakeDomainsDao()
         foldersDao = FakeFoldersDao()
         sendsDao = FakeSendsDao()
         vaultDiskSource = VaultDiskSourceImpl(
             ciphersDao = ciphersDao,
             collectionsDao = collectionsDao,
+            domainsDao = domainsDao,
             foldersDao = foldersDao,
             sendsDao = sendsDao,
             json = json,
@@ -120,6 +128,17 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `getDomains should emit DomainsDao updates`() = runTest {
+        vaultDiskSource
+            .getDomains(USER_ID)
+            .test {
+                expectNoEvents()
+                domainsDao.insertDomains(DOMAINS_ENTITY)
+                assertEquals(DOMAINS_1, awaitItem())
+            }
+    }
+
+    @Test
     fun `saveFolder should call insertFolder`() = runTest {
         assertFalse(foldersDao.insertFolderCalled)
         assertEquals(0, foldersDao.storedFolders.size)
@@ -191,6 +210,7 @@ class VaultDiskSourceTest {
     fun `replaceVaultData should clear the daos and insert the new vault data`() = runTest {
         assertEquals(ciphersDao.storedCiphers, emptyList<CipherEntity>())
         assertEquals(collectionsDao.storedCollections, emptyList<CollectionEntity>())
+        assertNull(domainsDao.storedDomains)
         assertEquals(foldersDao.storedFolders, emptyList<FolderEntity>())
         assertEquals(sendsDao.storedSends, emptyList<SendEntity>())
 
@@ -206,6 +226,17 @@ class VaultDiskSourceTest {
 
         // Verify the collections dao is updated
         assertEquals(listOf(COLLECTION_ENTITY), collectionsDao.storedCollections)
+
+        assertNotNull(domainsDao.storedDomains)
+        // Verify the domains dao is updated
+        val storedDomainsEntity = requireNotNull(domainsDao.storedDomains)
+        // We cannot compare the JSON strings directly because of formatting differences
+        // So we split that off into its own assertion.
+        assertEquals(
+            DOMAINS_ENTITY.copy(domainsJson = ""),
+            storedDomainsEntity.copy(domainsJson = ""),
+        )
+        assertJsonEquals(DOMAINS_ENTITY.domainsJson, storedDomainsEntity.domainsJson)
 
         // Verify the folders dao is updated
         assertEquals(listOf(FOLDER_ENTITY), foldersDao.storedFolders)
@@ -223,11 +254,13 @@ class VaultDiskSourceTest {
     fun `deleteVaultData should remove all vault data matching the user ID`() = runTest {
         assertFalse(ciphersDao.deleteCiphersCalled)
         assertFalse(collectionsDao.deleteCollectionsCalled)
+        assertFalse(domainsDao.deleteDomainsCalled)
         assertFalse(foldersDao.deleteFoldersCalled)
         assertFalse(sendsDao.deleteSendsCalled)
         vaultDiskSource.deleteVaultData(USER_ID)
         assertTrue(ciphersDao.deleteCiphersCalled)
         assertTrue(collectionsDao.deleteCollectionsCalled)
+        assertTrue(domainsDao.deleteDomainsCalled)
         assertTrue(foldersDao.deleteFoldersCalled)
         assertTrue(sendsDao.deleteSendsCalled)
     }
@@ -237,6 +270,7 @@ private const val USER_ID: String = "test_user_id"
 
 private val CIPHER_1: SyncResponseJson.Cipher = createMockCipher(1)
 private val COLLECTION_1: SyncResponseJson.Collection = createMockCollection(3)
+private val DOMAINS_1: SyncResponseJson.Domains = createMockDomains(1)
 private val FOLDER_1: SyncResponseJson.Folder = createMockFolder(2)
 private val SEND_1: SyncResponseJson.Send = createMockSend(1)
 
@@ -248,10 +282,7 @@ private val VAULT_DATA: SyncResponseJson = SyncResponseJson(
     },
     ciphers = listOf(CIPHER_1),
     policies = null,
-    domains = SyncResponseJson.Domains(
-        globalEquivalentDomains = null,
-        equivalentDomains = null,
-    ),
+    domains = DOMAINS_1,
     sends = listOf(SEND_1),
 )
 
@@ -362,6 +393,30 @@ private val COLLECTION_ENTITY = CollectionEntity(
     name = "mockName-3",
     externalId = "mockExternalId-3",
     isReadOnly = false,
+)
+
+private const val DOMAINS_JSON = """
+{
+  "globalEquivalentDomains": [
+    {
+      "excluded": false,
+      "domains": [
+        "mockDomain-1"
+      ],
+      "type": 1
+    }
+  ],
+  "equivalentDomains": [
+    [
+      "mockEquivalentDomain-1"
+    ]
+  ]
+}
+"""
+
+private val DOMAINS_ENTITY = DomainsEntity(
+    domainsJson = DOMAINS_JSON,
+    userId = USER_ID,
 )
 
 private val FOLDER_ENTITY = FolderEntity(

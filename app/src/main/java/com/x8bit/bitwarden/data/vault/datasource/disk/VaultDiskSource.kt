@@ -35,6 +35,11 @@ interface VaultDiskSource {
     fun getCollections(userId: String): Flow<List<SyncResponseJson.Collection>>
 
     /**
+     * Retrieves all domains from the data source for a given [userId].
+     */
+    fun getDomains(userId: String): Flow<SyncResponseJson.Domains>
+
+    /**
      * Saves a folder to the data source for the given [userId].
      */
     suspend fun saveFolder(userId: String, folder: SyncResponseJson.Folder)

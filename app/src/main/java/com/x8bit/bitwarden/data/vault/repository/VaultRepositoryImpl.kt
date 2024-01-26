@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -56,6 +57,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
@@ -136,6 +138,9 @@ class VaultRepositoryImpl(
     private val mutableCollectionsStateFlow =
         MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
 
+    private val mutableDomainsStateFlow =
+        MutableStateFlow<DataState<DomainsData>>(DataState.Loading)
+
     override var vaultFilterType: VaultFilterType = VaultFilterType.AllVaults
 
     override val vaultDataStateFlow: StateFlow<DataState<VaultData>> =
@@ -171,6 +176,9 @@ class VaultRepositoryImpl(
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
 
+    override val domainsStateFlow: StateFlow<DataState<DomainsData>>
+        get() = mutableDomainsStateFlow.asStateFlow()
+
     override val foldersStateFlow: StateFlow<DataState<List<FolderView>>>
         get() = mutableFoldersStateFlow.asStateFlow()
 
@@ -185,6 +193,12 @@ class VaultRepositoryImpl(
         mutableCiphersStateFlow
             .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
                 observeVaultDiskCiphers(activeUserId)
+            }
+            .launchIn(unconfinedScope)
+        // Setup domains MutableStateFlow
+        mutableDomainsStateFlow
+            .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
+                observeVaultDiskDomains(activeUserId)
             }
             .launchIn(unconfinedScope)
         // Setup folders MutableStateFlow
@@ -209,6 +223,7 @@ class VaultRepositoryImpl(
 
     override fun clearUnlockedData() {
         mutableCiphersStateFlow.update { DataState.Loading }
+        mutableDomainsStateFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }
         mutableCollectionsStateFlow.update { DataState.Loading }
         mutableSendDataStateFlow.update { DataState.Loading }
@@ -224,6 +239,7 @@ class VaultRepositoryImpl(
         val userId = activeUserId ?: return
         if (!syncJob.isCompleted || isVaultUnlocking(userId)) return
         mutableCiphersStateFlow.updateToPendingOrLoading()
+        mutableDomainsStateFlow.updateToPendingOrLoading()
         mutableFoldersStateFlow.updateToPendingOrLoading()
         mutableCollectionsStateFlow.updateToPendingOrLoading()
         mutableSendDataStateFlow.updateToPendingOrLoading()
@@ -246,6 +262,11 @@ class VaultRepositoryImpl(
                     },
                     onFailure = { throwable ->
                         mutableCiphersStateFlow.update { currentState ->
+                            throwable.toNetworkOrErrorState(
+                                data = currentState.data,
+                            )
+                        }
+                        mutableDomainsStateFlow.update { currentState ->
                             throwable.toNetworkOrErrorState(
                                 data = currentState.data,
                             )
@@ -992,6 +1013,19 @@ class VaultRepositoryImpl(
                     )
             }
             .onEach { mutableCiphersStateFlow.value = it }
+
+    private fun observeVaultDiskDomains(
+        userId: String,
+    ): Flow<DataState<DomainsData>> =
+        vaultDiskSource
+            .getDomains(userId = userId)
+            .onStart { mutableDomainsStateFlow.value = DataState.Loading }
+            .map {
+                DataState.Loaded(
+                    data = it.toDomainsData(),
+                )
+            }
+            .onEach { mutableDomainsStateFlow.value = it }
 
     private fun observeVaultDiskFolders(
         userId: String,

@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachm
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockDomains
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
@@ -70,6 +71,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -80,6 +82,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.model.createMockDomainsData
+import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
@@ -159,11 +163,13 @@ class VaultRepositoryTest {
 
     @BeforeEach
     fun setup() {
+        mockkStatic(SyncResponseJson.Domains::toDomainsData)
         mockkStatic(Uri::class)
     }
 
     @AfterEach
     fun tearDown() {
+        unmockkStatic(SyncResponseJson.Domains::toDomainsData)
         unmockkStatic(Uri::class)
         unmockkStatic(Instant::class)
         unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
@@ -500,6 +506,10 @@ class VaultRepositoryTest {
             vaultRepository.collectionsStateFlow.value,
         )
         assertEquals(
+            DataState.Error<DomainsData>(mockException),
+            vaultRepository.domainsStateFlow.value,
+        )
+        assertEquals(
             DataState.Error<List<FolderView>>(mockException),
             vaultRepository.foldersStateFlow.value,
         )
@@ -539,6 +549,10 @@ class VaultRepositoryTest {
         assertEquals(
             DataState.NoNetwork(data = null),
             vaultRepository.collectionsStateFlow.value,
+        )
+        assertEquals(
+            DataState.NoNetwork(data = null),
+            vaultRepository.domainsStateFlow.value,
         )
         assertEquals(
             DataState.NoNetwork(data = null),
@@ -1255,6 +1269,36 @@ class VaultRepositoryTest {
             assertEquals(
                 DataState.Loaded(
                     data = SendData(sendViewList = listOf(createMockSendView(number = 1))),
+                ),
+                awaitItem(),
+            )
+
+            vaultRepository.clearUnlockedData()
+
+            assertEquals(DataState.Loading, awaitItem())
+        }
+    }
+
+    @Test
+    fun `clearUnlockedData should update the domainsStateFlow to Loading`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val domainsData = createMockDomainsData(number = 1)
+        coEvery {
+            createMockDomains(number = 1).toDomainsData()
+        } returns domainsData
+        val domainsFlow = bufferedMutableSharedFlow<SyncResponseJson.Domains>()
+        setupVaultDiskSourceFlows(
+            domainsFlow = domainsFlow,
+        )
+
+        vaultRepository.domainsStateFlow.test {
+            assertEquals(DataState.Loading, awaitItem())
+
+            domainsFlow.tryEmit(createMockDomains(number = 1))
+
+            assertEquals(
+                DataState.Loaded(
+                    data = domainsData,
                 ),
                 awaitItem(),
             )
@@ -2927,6 +2971,7 @@ class VaultRepositoryTest {
     private fun setupVaultDiskSourceFlows(
         ciphersFlow: Flow<List<SyncResponseJson.Cipher>> = bufferedMutableSharedFlow(),
         collectionsFlow: Flow<List<SyncResponseJson.Collection>> = bufferedMutableSharedFlow(),
+        domainsFlow: Flow<SyncResponseJson.Domains> = bufferedMutableSharedFlow(),
         foldersFlow: Flow<List<SyncResponseJson.Folder>> = bufferedMutableSharedFlow(),
         sendsFlow: Flow<List<SyncResponseJson.Send>> = bufferedMutableSharedFlow(),
     ) {
@@ -2934,6 +2979,7 @@ class VaultRepositoryTest {
         coEvery {
             vaultDiskSource.getCollections(MOCK_USER_STATE.activeUserId)
         } returns collectionsFlow
+        coEvery { vaultDiskSource.getDomains(MOCK_USER_STATE.activeUserId) } returns domainsFlow
         coEvery { vaultDiskSource.getFolders(MOCK_USER_STATE.activeUserId) } returns foldersFlow
         coEvery { vaultDiskSource.getSends(MOCK_USER_STATE.activeUserId) } returns sendsFlow
     }
