@@ -100,6 +100,10 @@ class FakeSharedPreferences : SharedPreferences {
         private inline fun <reified T> putValue(
             key: String,
             value: T,
-        ): SharedPreferences.Editor = apply { pendingSharedPreferences[key] = value }
+        ): SharedPreferences.Editor = apply {
+            value
+                ?.let { pendingSharedPreferences[key] = it }
+                ?: pendingSharedPreferences.remove(key)
+        }
     }
 }

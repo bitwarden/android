@@ -101,6 +101,16 @@ interface AuthDiskSource {
     fun storeUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?)
 
     /**
+     * Gets the biometrics key for the given [userId].
+     */
+    fun getUserBiometricUnlockKey(userId: String): String?
+
+    /**
+     * Stores the biometrics key for the given [userId].
+     */
+    fun storeUserBiometricUnlockKey(userId: String, biometricsKey: String?)
+
+    /**
      * Retrieves a pin-protected user key for the given [userId].
      */
     fun getPinProtectedUserKey(userId: String): String?

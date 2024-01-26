@@ -15,6 +15,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.UUID
 
+private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnlock"
 private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
@@ -92,6 +93,7 @@ class AuthDiskSourceImpl(
         storePrivateKey(userId = userId, privateKey = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
+        storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
@@ -153,6 +155,19 @@ class AuthDiskSourceImpl(
         putEncryptedString(
             key = "${USER_AUTO_UNLOCK_KEY_KEY}_$userId",
             value = userAutoUnlockKey,
+        )
+    }
+
+    override fun getUserBiometricUnlockKey(userId: String): String? =
+        getEncryptedString(key = "${BIOMETRICS_UNLOCK_KEY}_$userId")
+
+    override fun storeUserBiometricUnlockKey(
+        userId: String,
+        biometricsKey: String?,
+    ) {
+        putEncryptedString(
+            key = "${BIOMETRICS_UNLOCK_KEY}_$userId",
+            value = biometricsKey,
         )
     }
 
