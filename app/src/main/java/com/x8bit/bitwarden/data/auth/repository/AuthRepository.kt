@@ -63,6 +63,11 @@ interface AuthRepository : AuthenticatorProvider {
     var rememberedEmailAddress: String?
 
     /**
+     * The currently persisted organization identifier (or `null` if not set).
+     */
+    var rememberedOrgIdentifier: String?
+
+    /**
      * Tracks whether there is an additional account that is pending login/registration in order to
      * have multiple accounts available.
      *
@@ -100,6 +105,17 @@ interface AuthRepository : AuthenticatorProvider {
         email: String,
         password: String?,
         twoFactorData: TwoFactorDataModel,
+        captchaToken: String?,
+    ): LoginResult
+
+    /**
+     * Attempt to login using a SSO flow. Updated access token will be reflected in [authStateFlow].
+     */
+    suspend fun login(
+        email: String,
+        ssoCode: String,
+        ssoCodeVerifier: String,
+        ssoRedirectUri: String,
         captchaToken: String?,
     ): LoginResult
 

@@ -31,7 +31,7 @@ class SsoUtilsTest {
                 "&response_type=code" +
                 "&scope=api%20offline_access" +
                 "&state=test_state" +
-                "&code_challenge=Qq1fGD0HhxwbmeMrqaebgn1qhvKeguQPXqLdpmixaM4=" +
+                "&code_challenge=Qq1fGD0HhxwbmeMrqaebgn1qhvKeguQPXqLdpmixaM4" +
                 "&code_challenge_method=S256" +
                 "&response_mode=query" +
                 "&domain_hint=Test+Organization" +

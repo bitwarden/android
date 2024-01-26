@@ -291,7 +291,7 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateToEnterpriseSignOn should call onNavigateToEnterpriseSignOn`() {
-        mutableEventFlow.tryEmit(LoginEvent.NavigateToEnterpriseSignOn)
+        mutableEventFlow.tryEmit(LoginEvent.NavigateToEnterpriseSignOn("email"))
         assertTrue(onNavigateToEnterpriseSignOnCalled)
     }
 

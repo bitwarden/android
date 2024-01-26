@@ -257,7 +257,8 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleSingleSignOnClicked() {
-        sendEvent(LoginEvent.NavigateToEnterpriseSignOn)
+        val email = mutableStateFlow.value.emailAddress
+        sendEvent(LoginEvent.NavigateToEnterpriseSignOn(email))
     }
 
     private fun handlePasswordInputChanged(action: LoginAction.PasswordInputChanged) {
@@ -310,7 +311,7 @@ sealed class LoginEvent {
     /**
      * Navigates to the enterprise single sign on screen.
      */
-    data object NavigateToEnterpriseSignOn : LoginEvent()
+    data class NavigateToEnterpriseSignOn(val emailAddress: String) : LoginEvent()
 
     /**
      * Navigates to the login with device screen.

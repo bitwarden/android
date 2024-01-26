@@ -6,8 +6,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
+import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -25,13 +29,15 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-private const val KEY_SSO_STATE = "ssoState"
+private const val KEY_SSO_DATA = "ssoData"
+private const val KEY_SSO_CALLBACK_RESULT = "ssoCallbackResult"
 private const val KEY_STATE = "state"
 private const val RANDOM_STRING_LENGTH = 64
 
 /**
  * Manages application state for the enterprise single sign on screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class EnterpriseSignOnViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -43,25 +49,41 @@ class EnterpriseSignOnViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: EnterpriseSignOnState(
             dialogState = null,
-            orgIdentifierInput = "",
+            orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+            captchaToken = null,
         ),
 ) {
 
     /**
-     * A "state" maintained throughout the SSO process to verify that the response from the server
-     * is valid and matches what was originally sent in the request.
+     * Data needed once a response is received from the SSO backend.
      */
-    private var ssoState: String?
-        get() = savedStateHandle[KEY_SSO_STATE]
+    private var ssoResponseData: SsoResponseData?
+        get() = savedStateHandle[KEY_SSO_DATA]
         set(value) {
-            savedStateHandle[KEY_SSO_STATE] = value
+            savedStateHandle[KEY_SSO_DATA] = value
+        }
+
+    private var savedSsoCallbackResult: SsoCallbackResult?
+        get() = savedStateHandle[KEY_SSO_CALLBACK_RESULT]
+        set(value) {
+            savedStateHandle[KEY_SSO_CALLBACK_RESULT] = value
         }
 
     init {
         authRepository
             .ssoCallbackResultFlow
             .onEach {
-                handleSsoCallbackResult(it)
+                sendAction(EnterpriseSignOnAction.Internal.OnSsoCallbackResult(it))
+            }
+            .launchIn(viewModelScope)
+
+        // Automatically attempt to login again if a captcha token is received.
+        authRepository
+            .captchaTokenResultFlow
+            .onEach {
+                sendAction(
+                    EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken(it),
+                )
             }
             .launchIn(viewModelScope)
     }
@@ -82,6 +104,18 @@ class EnterpriseSignOnViewModel @Inject constructor(
             EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure -> {
                 handleOnSsoPrevalidationFailure()
             }
+
+            is EnterpriseSignOnAction.Internal.OnSsoCallbackResult -> {
+                handleOnSsoCallbackResult(action)
+            }
+
+            is EnterpriseSignOnAction.Internal.OnLoginResult -> {
+                handleOnLoginResult(action)
+            }
+
+            is EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken -> {
+                handleOnReceiveCaptchaToken(action)
+            }
         }
     }
 
@@ -94,9 +128,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
     }
 
     private fun handleLogInClicked() {
-        // TODO BIT-816: submit request for single sign on
-        sendEvent(EnterpriseSignOnEvent.ShowToast("Not yet implemented."))
-
         if (!networkConnectionManager.isNetworkConnected) {
             mutableStateFlow.update {
                 it.copy(
@@ -123,13 +154,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             return
         }
 
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = EnterpriseSignOnState.DialogState.Loading(
-                    R.string.logging_in.asText(),
-                ),
-            )
-        }
+        showLoading()
 
         viewModelScope.launch {
             val prevalidateSsoResult = authRepository.prevalidateSso(organizationIdentifier)
@@ -148,6 +173,44 @@ class EnterpriseSignOnViewModel @Inject constructor(
         }
     }
 
+    private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
+        when (val loginResult = action.loginResult) {
+            is LoginResult.CaptchaRequired -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    event = EnterpriseSignOnEvent.NavigateToCaptcha(
+                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
+                    ),
+                )
+            }
+
+            is LoginResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            message = loginResult.errorMessage?.asText()
+                                ?: R.string.login_sso_error.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                authRepository.rememberedOrgIdentifier = state.orgIdentifierInput
+            }
+
+            is LoginResult.TwoFactorRequired -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    EnterpriseSignOnEvent.NavigateToTwoFactorLogin(
+                        emailAddress = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleOnGenerateUriForSsoResult(
         action: EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult,
     ) {
@@ -156,13 +219,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
     }
 
     private fun handleOnSsoPrevalidationFailure() {
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = EnterpriseSignOnState.DialogState.Error(
-                    message = R.string.login_sso_error.asText(),
-                ),
-            )
-        }
+        showDefaultError()
     }
 
     private fun handleOrgIdentifierInputChanged(
@@ -171,8 +228,64 @@ class EnterpriseSignOnViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(orgIdentifierInput = action.input) }
     }
 
-    private fun handleSsoCallbackResult(ssoCallbackResult: SsoCallbackResult) {
-        // TODO Handle result as last part of BIT-816
+    private fun handleOnSsoCallbackResult(
+        action: EnterpriseSignOnAction.Internal.OnSsoCallbackResult,
+    ) {
+        savedSsoCallbackResult = action.ssoCallbackResult
+        attemptLogin()
+    }
+
+    private fun handleOnReceiveCaptchaToken(
+        action: EnterpriseSignOnAction.Internal.OnReceiveCaptchaToken,
+    ) {
+        when (val tokenResult = action.tokenResult) {
+            CaptchaCallbackTokenResult.MissingToken -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.log_in_denied.asText(),
+                            message = R.string.captcha_failed.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is CaptchaCallbackTokenResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(captchaToken = tokenResult.token)
+                }
+                attemptLogin()
+            }
+        }
+    }
+
+    private fun attemptLogin() {
+        val ssoCallbackResult = requireNotNull(savedSsoCallbackResult)
+        val ssoData = requireNotNull(ssoResponseData)
+
+        when (ssoCallbackResult) {
+            is SsoCallbackResult.MissingCode -> {
+                showDefaultError()
+            }
+            is SsoCallbackResult.Success -> {
+                if (ssoCallbackResult.state == ssoData.state) {
+                    showLoading()
+                    viewModelScope.launch {
+                        val result = authRepository
+                            .login(
+                                email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                                ssoCode = ssoCallbackResult.code,
+                                ssoCodeVerifier = ssoData.codeVerifier,
+                                ssoRedirectUri = SSO_URI,
+                                captchaToken = mutableStateFlow.value.captchaToken,
+                            )
+                        sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
+                    }
+                } else {
+                    showDefaultError()
+                }
+            }
+        }
     }
 
     private suspend fun prepareAndLaunchCustomTab(
@@ -184,7 +297,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
         // Save this for later so that we can validate the SSO callback response
         val generatedSsoState = generatorRepository
             .generateRandomString(RANDOM_STRING_LENGTH)
-            .also { ssoState = it }
+            .also {
+                ssoResponseData = SsoResponseData(
+                    codeVerifier = codeVerifier,
+                    state = it,
+                )
+            }
 
         val uri = generateUriForSso(
             identityBaseUrl = environmentRepository.environment.environmentUrlData.baseIdentityUrl,
@@ -198,6 +316,26 @@ class EnterpriseSignOnViewModel @Inject constructor(
         // a result due to user intervention
         sendAction(EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(Uri.parse(uri)))
     }
+
+    private fun showDefaultError() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Error(
+                    message = R.string.login_sso_error.asText(),
+                ),
+            )
+        }
+    }
+
+    private fun showLoading() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Loading(
+                    R.string.logging_in.asText(),
+                ),
+            )
+        }
+    }
 }
 
 /**
@@ -207,6 +345,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
 data class EnterpriseSignOnState(
     val dialogState: DialogState?,
     val orgIdentifierInput: String,
+    val captchaToken: String?,
 ) : Parcelable {
     /**
      * Represents the current state of any dialogs on the screen.
@@ -247,11 +386,14 @@ sealed class EnterpriseSignOnEvent {
     data class NavigateToSsoLogin(val uri: Uri) : EnterpriseSignOnEvent()
 
     /**
-     * Shows a toast with the given [message].
+     * Navigates to the captcha verification screen.
      */
-    data class ShowToast(
-        val message: String,
-    ) : EnterpriseSignOnEvent()
+    data class NavigateToCaptcha(val uri: Uri) : EnterpriseSignOnEvent()
+
+    /**
+     * Navigates to the two-factor login screen.
+     */
+    data class NavigateToTwoFactorLogin(val emailAddress: String) : EnterpriseSignOnEvent()
 }
 
 /**
@@ -290,8 +432,37 @@ sealed class EnterpriseSignOnAction {
         data class OnGenerateUriForSsoResult(val uri: Uri) : Internal()
 
         /**
+         * A login result has been received.
+         */
+        data class OnLoginResult(val loginResult: LoginResult) : Internal()
+
+        /**
+         * An SSO callback result has been received.
+         */
+        data class OnSsoCallbackResult(val ssoCallbackResult: SsoCallbackResult) : Internal()
+
+        /**
          * SSO prevalidation failed.
          */
         data object OnSsoPrevalidationFailure : Internal()
+
+        /**
+         * A captcha callback result has been received
+         */
+        data class OnReceiveCaptchaToken(val tokenResult: CaptchaCallbackTokenResult) : Internal()
     }
 }
+
+/**
+ * Data needed by the SSO flow to verify and continue the process after receiving a response.
+ *
+ * @property state A "state" maintained throughout the SSO process to verify that the response from
+ * the server is valid and matches what was originally sent in the request.
+ * @property codeVerifier A random string used to generate the code challenge for the initial SSO
+ * request.
+ */
+@Parcelize
+data class SsoResponseData(
+    val state: String,
+    val codeVerifier: String,
+) : Parcelable

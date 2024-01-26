@@ -22,6 +22,11 @@ interface AuthDiskSource {
     var rememberedEmailAddress: String?
 
     /**
+     * The currently persisted organization identifier (or `null` if not set).
+     */
+    var rememberedOrgIdentifier: String?
+
+    /**
      * The currently persisted user state information (or `null` if not set).
      */
     var userState: UserStateJson?

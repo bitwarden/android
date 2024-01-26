@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -53,20 +51,25 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 @Composable
 fun EnterpriseSignOnScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToTwoFactorLogin: (String) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: EnterpriseSignOnViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             EnterpriseSignOnEvent.NavigateBack -> onNavigateBack()
-            is EnterpriseSignOnEvent.ShowToast -> {
-                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
-            }
 
             is EnterpriseSignOnEvent.NavigateToSsoLogin -> {
                 intentManager.startCustomTabsActivity(event.uri)
+            }
+
+            is EnterpriseSignOnEvent.NavigateToCaptcha -> {
+                intentManager.startCustomTabsActivity(event.uri)
+            }
+
+            is EnterpriseSignOnEvent.NavigateToTwoFactorLogin -> {
+                onNavigateToTwoFactorLogin(event.emailAddress)
             }
         }
     }

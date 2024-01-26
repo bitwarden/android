@@ -326,6 +326,21 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `rememberedOrgIdentifier should pull from and update AuthDiskSource`() {
+        // AuthDiskSource and the repository start with the same value.
+        assertNull(repository.rememberedOrgIdentifier)
+        assertNull(fakeAuthDiskSource.rememberedOrgIdentifier)
+
+        // Updating the repository updates AuthDiskSource
+        repository.rememberedOrgIdentifier = "Bitwarden"
+        assertEquals("Bitwarden", fakeAuthDiskSource.rememberedOrgIdentifier)
+
+        // Updating AuthDiskSource updates the repository
+        fakeAuthDiskSource.rememberedOrgIdentifier = null
+        assertNull(repository.rememberedOrgIdentifier)
+    }
+
+    @Test
     fun `clear Pending Account Deletion should unblock userState updates`() = runTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"
@@ -984,6 +999,453 @@ class AuthRepositoryTest {
             captchaToken = null,
         )
         assertEquals(LoginResult.Error(errorMessage = null), result)
+    }
+
+    @Test
+    fun `SSO login get token fails should return Error with no message`() = runTest {
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+            .returns(Result.failure(RuntimeException()))
+        val result = repository.login(
+            email = EMAIL,
+            ssoCode = SSO_CODE,
+            ssoCodeVerifier = SSO_CODE_VERIFIER,
+            ssoRedirectUri = SSO_REDIRECT_URI,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+    }
+
+    @Test
+    fun `SSO login get token returns Invalid should return Error with correct message`() = runTest {
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        } returns Result.success(
+            GetTokenResponseJson.Invalid(
+                errorModel = GetTokenResponseJson.Invalid.ErrorModel(
+                    errorMessage = "mock_error_message",
+                ),
+            ),
+        )
+
+        val result = repository.login(
+            email = EMAIL,
+            ssoCode = SSO_CODE,
+            ssoCodeVerifier = SSO_CODE_VERIFIER,
+            ssoRedirectUri = SSO_REDIRECT_URI,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
+        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SSO login get token succeeds should return Success, update AuthState, update stored keys, and sync`() =
+        runTest {
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+                .returns(Result.success(successResponse))
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                captchaToken = null,
+            )
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(
+                SINGLE_USER_STATE_1,
+                fakeAuthDiskSource.userState,
+            )
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SSO login get token succeeds when there is an existing user should switch to the new logged in user`() =
+        runTest {
+            // Ensure the initial state for User 2 with a account addition
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_2
+            repository.hasPendingAccountAddition = true
+
+            // Set up login for User 1
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+                .returns(Result.success(successResponse))
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = SINGLE_USER_STATE_2,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns MULTI_USER_STATE
+
+            val result = repository.login(
+                email = EMAIL,
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
+                captchaToken = null,
+            )
+
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(
+                MULTI_USER_STATE,
+                fakeAuthDiskSource.userState,
+            )
+            assertFalse(repository.hasPendingAccountAddition)
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        }
+
+    @Test
+    fun `SSO login get token returns captcha request should return CaptchaRequired`() = runTest {
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+            .returns(Result.success(GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY)))
+        val result = repository.login(
+            email = EMAIL,
+            ssoCode = SSO_CODE,
+            ssoCodeVerifier = SSO_CODE_VERIFIER,
+            ssoRedirectUri = SSO_REDIRECT_URI,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
+        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SSO login get token returns two factor request should return TwoFactorRequired`() = runTest {
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+            .returns(
+                Result.success(
+                    GetTokenResponseJson.TwoFactorRequired(
+                        TWO_FACTOR_AUTH_METHODS_DATA, null, null,
+                    ),
+                ),
+            )
+        val result = repository.login(
+            email = EMAIL,
+            ssoCode = SSO_CODE,
+            ssoCodeVerifier = SSO_CODE_VERIFIER,
+            ssoRedirectUri = SSO_REDIRECT_URI,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.TwoFactorRequired, result)
+        assertEquals(
+            repository.twoFactorResponse,
+            GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
+        )
+        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+    }
+
+    @Test
+    fun `SSO login two factor with remember saves two factor auth token`() = runTest {
+        // Attempt a normal login with a two factor error first, so that the auth
+        // data will be cached.
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        } returns Result.success(
+            GetTokenResponseJson.TwoFactorRequired(
+                TWO_FACTOR_AUTH_METHODS_DATA, null, null,
+            ),
+        )
+        val firstResult = repository.login(
+            email = EMAIL,
+            ssoCode = SSO_CODE,
+            ssoCodeVerifier = SSO_CODE_VERIFIER,
+            ssoRedirectUri = SSO_REDIRECT_URI,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.TwoFactorRequired, firstResult)
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+
+        // Login with two factor data.
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            twoFactorToken = "twoFactorTokenToStore",
+        )
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+                twoFactorData = TWO_FACTOR_DATA,
+            )
+        } returns Result.success(successResponse)
+        coEvery { vaultRepository.syncIfNecessary() } just runs
+        every {
+            successResponse.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+        } returns SINGLE_USER_STATE_1
+        val finalResult = repository.login(
+            email = EMAIL,
+            password = null,
+            twoFactorData = TWO_FACTOR_DATA,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Success, finalResult)
+        assertNull(repository.twoFactorResponse)
+        fakeAuthDiskSource.assertTwoFactorToken(
+            email = EMAIL,
+            twoFactorToken = "twoFactorTokenToStore",
+        )
+    }
+
+    @Test
+    fun `SSO login uses remembered two factor tokens`() = runTest {
+        fakeAuthDiskSource.storeTwoFactorToken(EMAIL, "storedTwoFactorToken")
+        val rememberedTwoFactorData = TwoFactorDataModel(
+            code = "storedTwoFactorToken",
+            method = TwoFactorAuthMethod.REMEMBER.value.toString(),
+            remember = false,
+        )
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+                twoFactorData = rememberedTwoFactorData,
+            )
+        } returns Result.success(successResponse)
+        coEvery { vaultRepository.syncIfNecessary() } just runs
+        every {
+            GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+        } returns SINGLE_USER_STATE_1
+        val result = repository.login(
+            email = EMAIL,
+            ssoCode = SSO_CODE,
+            ssoCodeVerifier = SSO_CODE_VERIFIER,
+            ssoRedirectUri = SSO_REDIRECT_URI,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Success, result)
+        assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+        fakeAuthDiskSource.assertPrivateKey(
+            userId = USER_ID_1,
+            privateKey = "privateKey",
+        )
+        fakeAuthDiskSource.assertUserKey(
+            userId = USER_ID_1,
+            userKey = "key",
+        )
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.SingleSignOn(
+                    ssoCode = SSO_CODE,
+                    ssoCodeVerifier = SSO_CODE_VERIFIER,
+                    ssoRedirectUri = SSO_REDIRECT_URI,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+                twoFactorData = rememberedTwoFactorData,
+            )
+            vaultRepository.syncIfNecessary()
+        }
+        assertEquals(
+            SINGLE_USER_STATE_1,
+            fakeAuthDiskSource.userState,
+        )
+        verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
     }
 
     @Test
@@ -1950,6 +2412,9 @@ class AuthRepositoryTest {
             method = TWO_FACTOR_METHOD.value.toString(),
             remember = TWO_FACTOR_REMEMBER,
         )
+        private const val SSO_CODE = "ssoCode"
+        private const val SSO_CODE_VERIFIER = "ssoCodeVerifier"
+        private const val SSO_REDIRECT_URI = "bitwarden://sso-test"
 
         private const val DEFAULT_KDF_ITERATIONS = 600000
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"

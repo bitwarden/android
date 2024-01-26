@@ -26,9 +26,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 
 class EnterpriseSignOnScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
+    private var twoFactorLoginEmail: String? = null
     private val mutableEventFlow = bufferedMutableSharedFlow<EnterpriseSignOnEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<EnterpriseSignOnViewModel>(relaxed = true) {
@@ -45,6 +47,7 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             EnterpriseSignOnScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToTwoFactorLogin = { twoFactorLoginEmail = it },
                 viewModel = viewModel,
                 intentManager = intentManager,
             )
@@ -100,6 +103,22 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         verify(exactly = 1) {
             intentManager.startCustomTabsActivity(ssoUri)
         }
+    }
+
+    @Test
+    fun `NavigateToCaptcha should call startCustomTabsActivity`() {
+        val captchaUri = Uri.parse("https://captcha.com")
+        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToCaptcha(captchaUri))
+        verify(exactly = 1) {
+            intentManager.startCustomTabsActivity(captchaUri)
+        }
+    }
+
+    @Test
+    fun `NavigateToTwoFactorLogin should call onNavigateToTwoFactorLogin`() {
+        val email = "test@example.com"
+        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToTwoFactorLogin(email))
+        assertEquals(email, twoFactorLoginEmail)
     }
 
     @Test
@@ -170,6 +189,7 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         private val DEFAULT_STATE = EnterpriseSignOnState(
             dialogState = null,
             orgIdentifierInput = "",
+            captchaToken = null,
         )
     }
 }
