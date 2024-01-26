@@ -23,6 +23,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -82,6 +84,7 @@ fun BitwardenTheme(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),
         LocalIntentManager provides IntentManagerImpl(context),
         LocalExitManager provides ExitManagerImpl(activity),
+        LocalBiometricsManager provides BiometricsManagerImpl(activity),
     ) {
         // Set overall theme based on color scheme and typography settings
         MaterialTheme(
@@ -169,6 +172,13 @@ private fun lightColorScheme(context: Context): ColorScheme =
 @ColorRes
 private fun Int.toColor(context: Context): Color =
     Color(context.getColor(this))
+
+/**
+ * Provides access to the biometrics manager throughout the app.
+ */
+val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
+    error("CompositionLocal BiometricsManager not present")
+}
 
 /**
  * Provides access to the exit manager throughout the app.
