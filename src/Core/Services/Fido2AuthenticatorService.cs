@@ -56,13 +56,14 @@ namespace Bit.Core.Services
             });
 
             var cipherId = response.CipherId;
+            var userVerified = response.UserVerified;
             string credentialId;
-            // if (cipherId === undefined) {
-            //     this.logService?.warning(
-            //     `[Fido2Authenticator] Aborting because user confirmation was not recieved.`,
-            //     );
-            //     throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed);
-            // }
+            if (cipherId == null) {
+                _logService.Info(
+                    "[Fido2Authenticator] Aborting because user confirmation was not recieved."
+                );
+                throw new NotAllowedError();
+            }
             
             try {
                 var (publicKey, privateKey) = await _cryptoFunctionService.EcdsaGenerateKeyPairAsync(CryptoEcdsaAlgorithm.P256Sha256);
@@ -71,15 +72,12 @@ namespace Bit.Core.Services
                 var encrypted = await _cipherService.GetAsync(cipherId);
                 var cipher = await encrypted.DecryptAsync();
 
-                // if (
-                // !userVerified &&
-                // (params.requireUserVerification || cipher.reprompt !== CipherRepromptType.None)
-                // ) {
-                // this.logService?.warning(
-                //     `[Fido2Authenticator] Aborting because user verification was unsuccessful.`,
-                // );
-                // throw new Fido2AuthenticatorError(Fido2AuthenticatorErrorCode.NotAllowed);
-                // }
+                if (!userVerified && (makeCredentialParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None)) {
+                    _logService.Info(
+                        "[Fido2Authenticator] Aborting because user verification was unsuccessful."
+                    );
+                    throw new NotAllowedError();
+                }
 
                 cipher.Login.Fido2Credentials = [fido2Credential];
                 var reencrypted = await _cipherService.EncryptAsync(cipher);
