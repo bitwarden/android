@@ -27,10 +27,11 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class AuthDiskSourceTest {
     private val fakeEncryptedSharedPreferences = FakeSharedPreferences()
     private val fakeSharedPreferences = FakeSharedPreferences()
-    private val legacySecureStorageMigrator = mockk<LegacySecureStorageMigrator>() {
+    private val legacySecureStorageMigrator = mockk<LegacySecureStorageMigrator> {
         every { migrateIfNecessary() } just runs
     }
 
@@ -137,6 +138,10 @@ class AuthDiskSourceTest {
     fun `clearData should clear all necessary data for the given user`() {
         val userId = "userId"
 
+        authDiskSource.storeUserBiometricUnlockKey(
+            userId = userId,
+            biometricsKey = "1234-9876-0192",
+        )
         authDiskSource.storeLastActiveTimeMillis(
             userId = userId,
             lastActiveTimeMillis = 123456789L,
@@ -162,6 +167,7 @@ class AuthDiskSourceTest {
 
         authDiskSource.clearData(userId = userId)
 
+        assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
@@ -437,6 +443,52 @@ class AuthDiskSourceTest {
             mockUserAutoUnlockKey,
             actual,
         )
+    }
+
+    @Test
+    fun `getUserBiometricUnlockKey should pull from SharedPreferences`() {
+        val biometricsKeyBaseKey = "bwSecureStorage:userKeyBiometricUnlock"
+        val mockUserId = "mockUserId"
+        val biometricsKeyKey = "${biometricsKeyBaseKey}_$mockUserId"
+        val biometricsKey = "1234"
+        fakeEncryptedSharedPreferences.edit {
+            putString(biometricsKeyKey, biometricsKey)
+        }
+        val actual = authDiskSource.getUserBiometricUnlockKey(userId = mockUserId)
+        assertEquals(biometricsKey, actual)
+    }
+
+    @Test
+    fun `storeUserBiometricUnlockKey for non-null values should update SharedPreferences`() {
+        val biometricsKeyBaseKey = "bwSecureStorage:userKeyBiometricUnlock"
+        val mockUserId = "mockUserId"
+        val biometricsKeyKey = "${biometricsKeyBaseKey}_$mockUserId"
+        val biometricsKey = "1234"
+        authDiskSource.storeUserBiometricUnlockKey(
+            userId = mockUserId,
+            biometricsKey = biometricsKey,
+        )
+        val actual = fakeEncryptedSharedPreferences.getString(
+            key = biometricsKeyKey,
+            defaultValue = null,
+        )
+        assertEquals(biometricsKey, actual)
+    }
+
+    @Test
+    fun `storeUserBiometricUnlockKey for null values should clear SharedPreferences`() {
+        val biometricsKeyBaseKey = "bwSecureStorage:userKeyBiometricUnlock"
+        val mockUserId = "mockUserId"
+        val biometricsKeyKey = "${biometricsKeyBaseKey}_$mockUserId"
+        val biometricsKey = "1234"
+        fakeEncryptedSharedPreferences.edit {
+            putString(biometricsKeyKey, biometricsKey)
+        }
+        authDiskSource.storeUserBiometricUnlockKey(
+            userId = mockUserId,
+            biometricsKey = null,
+        )
+        assertFalse(fakeEncryptedSharedPreferences.contains(biometricsKeyKey))
     }
 
     @Test

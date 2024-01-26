@@ -30,6 +30,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOrganizations =
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
+    private val storedBiometricKeys = mutableMapOf<String, String?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -50,6 +51,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPinProtectedUserKeys.remove(userId)
         storedEncryptedPins.remove(userId)
         storedOrganizations.remove(userId)
+        storedBiometricKeys.remove(userId)
 
         storedOrganizationKeys.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
@@ -144,6 +146,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     ) {
         storedOrganizations[userId] = organizations
         getMutableOrganizationsFlow(userId = userId).tryEmit(organizations)
+    }
+
+    override fun getUserBiometricUnlockKey(userId: String): String? =
+        storedBiometricKeys[userId]
+
+    override fun storeUserBiometricUnlockKey(userId: String, biometricsKey: String?) {
+        storedBiometricKeys[userId] = biometricsKey
     }
 
     /**
