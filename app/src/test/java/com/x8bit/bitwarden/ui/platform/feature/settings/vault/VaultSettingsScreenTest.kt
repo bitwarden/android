@@ -20,6 +20,7 @@ import org.junit.Test
 class VaultSettingsScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultSettingsEvent>()
     private val mutableStateFlow = MutableStateFlow(Unit)
@@ -34,6 +35,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
             VaultSettingsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
             )
         }
@@ -86,6 +88,12 @@ class VaultSettingsScreenTest : BaseComposeTest() {
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToExportVault should call onNavigateToExportVault`() {
+        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToExportVault)
+        assertTrue(onNavigateToExportVaultCalled)
     }
 
     @Test

@@ -56,7 +56,7 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import kotlinx.collections.immutable.toPersistentList
 
 /**
- * The top level composable for the Login with Device screen.
+ * The top level composable for the Two-Factor Login screen.
  */
 @Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)

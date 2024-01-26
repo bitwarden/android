@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 @Composable
 fun VaultSettingsScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
 ) {
@@ -40,6 +41,7 @@ fun VaultSettingsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             VaultSettingsEvent.NavigateBack -> onNavigateBack()
+            VaultSettingsEvent.NavigateToExportVault -> onNavigateToExportVault()
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
             is VaultSettingsEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()

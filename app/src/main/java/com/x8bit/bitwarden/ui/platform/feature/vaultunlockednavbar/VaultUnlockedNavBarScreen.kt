@@ -80,6 +80,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
+    onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
@@ -125,6 +126,7 @@ fun VaultUnlockedNavBarScreen(
         navigateToAddSend = onNavigateToAddSend,
         onNavigateToEditSend = onNavigateToEditSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
+        navigateToExportVault = onNavigateToExportVault,
         navigateToFolders = onNavigateToFolders,
         navigateToPendingRequests = onNavigateToPendingRequests,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
@@ -163,6 +165,7 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     navigateToDeleteAccount: () -> Unit,
+    navigateToExportVault: () -> Unit,
     navigateToFolders: () -> Unit,
     navigateToPendingRequests: () -> Unit,
     navigateToPasswordHistory: () -> Unit,
@@ -237,6 +240,7 @@ private fun VaultUnlockedNavBarScaffold(
             settingsGraph(
                 navController = navController,
                 onNavigateToDeleteAccount = navigateToDeleteAccount,
+                onNavigateToExportVault = navigateToExportVault,
                 onNavigateToFolders = navigateToFolders,
                 onNavigateToPendingRequests = navigateToPendingRequests,
             )

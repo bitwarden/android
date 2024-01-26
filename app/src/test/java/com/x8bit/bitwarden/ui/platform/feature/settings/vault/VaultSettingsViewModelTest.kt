@@ -18,12 +18,12 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ExportVaultClick should emit ShowToast`() = runTest {
+    fun `ExportVaultClick should emit NavigateToExportVault`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultSettingsAction.ExportVaultClick)
             assertEquals(
-                VaultSettingsEvent.ShowToast("Not yet implemented."),
+                VaultSettingsEvent.NavigateToExportVault,
                 awaitItem(),
             )
         }
