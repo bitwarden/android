@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
-import app.cash.turbine.test
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
@@ -193,6 +193,7 @@ class MainViewModelTest : BaseViewModelTest() {
                     isPremium = true,
                     isLoggedIn = true,
                     isVaultUnlocked = true,
+                    isBiometricsEnabled = false,
                     organizations = emptyList(),
                 ),
             ),

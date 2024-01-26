@@ -553,6 +553,7 @@ private val DEFAULT_USER_STATE = UserState(
             isPremium = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
+            isBiometricsEnabled = false,
             organizations = emptyList(),
         ),
     ),

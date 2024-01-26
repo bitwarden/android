@@ -12,7 +12,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
  * that user.
  * @property hasPendingAccountAddition Returns `true` if there is an additional account that is
  * pending login/registration in order to have multiple accounts available.
- * @property specialCircumstance A special circumstance (if any) that may be present.
  */
 data class UserState(
     val activeUserId: String,
@@ -42,6 +41,8 @@ data class UserState(
      * authentication to view their vault.
      * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
      * @property organizations List of [Organization]s the user is associated with, if any.
+     * @property isBiometricsEnabled Indicates that the biometrics mechanism for unlocking the
+     * user's vault is enabled.
      * @property vaultUnlockType The mechanism by which the user's vault may be unlocked.
      */
     data class Account(
@@ -54,6 +55,7 @@ data class UserState(
         val isLoggedIn: Boolean,
         val isVaultUnlocked: Boolean,
         val organizations: List<Organization>,
+        val isBiometricsEnabled: Boolean,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
     )
 }

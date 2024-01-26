@@ -41,13 +41,13 @@ fun UserStateJson.toUpdatedUserStateJson(
 }
 
 /**
- * Converts the given [UserStateJson] to a [UserState] using the given [vaultState] and
- * [specialCircumstance].
+ * Converts the given [UserStateJson] to a [UserState] using the given [vaultState].
  */
 fun UserStateJson.toUserState(
     vaultState: VaultState,
     userOrganizationsList: List<UserOrganizations>,
     hasPendingAccountAddition: Boolean,
+    isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
 ): UserState =
     UserState(
@@ -74,6 +74,7 @@ fun UserStateJson.toUserState(
                         .find { it.userId == userId }
                         ?.organizations
                         .orEmpty(),
+                    isBiometricsEnabled = isBiometricsEnabledProvider(userId),
                     vaultUnlockType = vaultUnlockTypeProvider(userId),
                 )
             },

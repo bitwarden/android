@@ -243,6 +243,7 @@ class AuthRepositoryTest {
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
+                isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
             repository.userStateFlow.value,
@@ -264,6 +265,7 @@ class AuthRepositoryTest {
                 vaultState = VAULT_STATE,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
+                isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
             repository.userStateFlow.value,
@@ -279,6 +281,7 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
+                isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
             ),
             repository.userStateFlow.value,
@@ -303,6 +306,7 @@ class AuthRepositoryTest {
                 vaultState = emptyVaultState,
                 userOrganizationsList = USER_ORGANIZATIONS,
                 hasPendingAccountAddition = false,
+                isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             ),
             repository.userStateFlow.value,
@@ -347,12 +351,14 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
+            isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
+            isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
@@ -1252,54 +1258,54 @@ class AuthRepositoryTest {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `SSO login get token returns two factor request should return TwoFactorRequired`() = runTest {
-        coEvery {
-            identityService.getToken(
-                email = EMAIL,
-                authModel = IdentityTokenAuthModel.SingleSignOn(
-                    ssoCode = SSO_CODE,
-                    ssoCodeVerifier = SSO_CODE_VERIFIER,
-                    ssoRedirectUri = SSO_REDIRECT_URI,
-                ),
-                captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
-            )
-        }
-            .returns(
-                Result.success(
-                    GetTokenResponseJson.TwoFactorRequired(
-                        TWO_FACTOR_AUTH_METHODS_DATA, null, null,
+    fun `SSO login get token returns two factor request should return TwoFactorRequired`() =
+        runTest {
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
                     ),
-                ),
-            )
-        val result = repository.login(
-            email = EMAIL,
-            ssoCode = SSO_CODE,
-            ssoCodeVerifier = SSO_CODE_VERIFIER,
-            ssoRedirectUri = SSO_REDIRECT_URI,
-            captchaToken = null,
-        )
-        assertEquals(LoginResult.TwoFactorRequired, result)
-        assertEquals(
-            repository.twoFactorResponse,
-            GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
-        )
-        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
-        coVerify {
-            identityService.getToken(
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+                .returns(
+                    Result.success(
+                        GetTokenResponseJson.TwoFactorRequired(
+                            TWO_FACTOR_AUTH_METHODS_DATA, null, null,
+                        ),
+                    ),
+                )
+            val result = repository.login(
                 email = EMAIL,
-                authModel = IdentityTokenAuthModel.SingleSignOn(
-                    ssoCode = SSO_CODE,
-                    ssoCodeVerifier = SSO_CODE_VERIFIER,
-                    ssoRedirectUri = SSO_REDIRECT_URI,
-                ),
+                ssoCode = SSO_CODE,
+                ssoCodeVerifier = SSO_CODE_VERIFIER,
+                ssoRedirectUri = SSO_REDIRECT_URI,
                 captchaToken = null,
-                uniqueAppId = UNIQUE_APP_ID,
             )
+            assertEquals(LoginResult.TwoFactorRequired, result)
+            assertEquals(
+                repository.twoFactorResponse,
+                GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
+            )
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.SingleSignOn(
+                        ssoCode = SSO_CODE,
+                        ssoCodeVerifier = SSO_CODE_VERIFIER,
+                        ssoRedirectUri = SSO_REDIRECT_URI,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
         }
-    }
 
     @Test
     fun `SSO login two factor with remember saves two factor auth token`() = runTest {
@@ -1980,6 +1986,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
+            isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -2010,6 +2017,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
+            isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -2038,6 +2046,7 @@ class AuthRepositoryTest {
             vaultState = VAULT_STATE,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
+            isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE

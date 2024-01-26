@@ -71,6 +71,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     isPremium = true,
                     isLoggedIn = true,
                     isVaultUnlocked = true,
+                    isBiometricsEnabled = false,
                     organizations = emptyList(),
                 ),
             ),
@@ -201,6 +202,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isPremium = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
+            isBiometricsEnabled = false,
             organizations = emptyList(),
         )
         val userState = UserState(
@@ -250,6 +252,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isPremium = true,
                 isLoggedIn = false,
                 isVaultUnlocked = true,
+                isBiometricsEnabled = false,
                 organizations = emptyList(),
             )
             val userState = UserState(
