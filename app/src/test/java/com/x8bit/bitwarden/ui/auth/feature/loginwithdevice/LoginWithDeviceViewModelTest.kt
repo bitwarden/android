@@ -45,6 +45,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             emailAddress = newEmail,
             viewState = LoginWithDeviceState.ViewState.Content(
                 fingerprintPhrase = FINGERPRINT,
+                isResendNotificationLoading = false,
             ),
         )
         val viewModel = createViewModel(state)
@@ -69,16 +70,22 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ResendNotificationClick should emit ShowToast`() = runTest {
+    fun `ResendNotificationClick should create new auth request and update state`() = runTest {
+        val newFingerprint = "newFingerprint"
+        coEvery {
+            authRepository.createAuthRequest(EMAIL)
+        } returns AuthRequestResult.Success(AUTH_REQUEST.copy(fingerprint = newFingerprint))
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginWithDeviceAction.ResendNotificationClick)
-            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-            assertEquals(
-                LoginWithDeviceEvent.ShowToast("Not yet implemented."),
-                awaitItem(),
-            )
-        }
+        viewModel.actionChannel.trySend(LoginWithDeviceAction.ResendNotificationClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = LoginWithDeviceState.ViewState.Content(
+                    fingerprintPhrase = newFingerprint,
+                    isResendNotificationLoading = false,
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -112,6 +119,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 viewState = LoginWithDeviceState.ViewState.Content(
                     fingerprintPhrase = newFingerprint,
+                    isResendNotificationLoading = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -152,6 +160,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             emailAddress = EMAIL,
             viewState = LoginWithDeviceState.ViewState.Content(
                 fingerprintPhrase = FINGERPRINT,
+                isResendNotificationLoading = false,
             ),
         )
         private val AUTH_REQUEST = AuthRequest(

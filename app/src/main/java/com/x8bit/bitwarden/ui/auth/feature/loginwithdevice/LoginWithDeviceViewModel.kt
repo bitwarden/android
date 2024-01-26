@@ -52,8 +52,7 @@ class LoginWithDeviceViewModel @Inject constructor(
     }
 
     private fun handleResendNotificationClicked() {
-        // TODO BIT-810: implement Resend Notification button
-        sendEvent(LoginWithDeviceEvent.ShowToast("Not yet implemented."))
+        sendNewAuthRequest()
     }
 
     private fun handleViewAllLogInOptionsClicked() {
@@ -69,6 +68,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
                             fingerprintPhrase = action.result.authRequest.fingerprint,
+                            isResendNotificationLoading = false,
                         ),
                     )
                 }
@@ -88,6 +88,7 @@ class LoginWithDeviceViewModel @Inject constructor(
     }
 
     private fun sendNewAuthRequest() {
+        setIsResendNotificationLoading(true)
         viewModelScope.launch {
             trySendAction(
                 LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(
@@ -96,6 +97,21 @@ class LoginWithDeviceViewModel @Inject constructor(
                     ),
                 ),
             )
+        }
+    }
+
+    private fun setIsResendNotificationLoading(isLoading: Boolean) {
+        when (val viewState = mutableStateFlow.value.viewState) {
+            is LoginWithDeviceState.ViewState.Content -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = viewState.copy(
+                            isResendNotificationLoading = isLoading,
+                        ),
+                    )
+                }
+            }
+            else -> Unit
         }
     }
 }
@@ -139,6 +155,7 @@ data class LoginWithDeviceState(
         @Parcelize
         data class Content(
             val fingerprintPhrase: String,
+            val isResendNotificationLoading: Boolean,
         ) : ViewState()
     }
 }
