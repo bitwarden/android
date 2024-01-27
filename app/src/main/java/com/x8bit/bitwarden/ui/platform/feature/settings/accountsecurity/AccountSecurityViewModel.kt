@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -17,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,7 +44,11 @@ class AccountSecurityViewModel @Inject constructor(
             dialog = null,
             fingerprintPhrase = "".asText(), // This will be filled in dynamically
             isApproveLoginRequestsEnabled = settingsRepository.isApprovePasswordlessLoginsEnabled,
-            isUnlockWithBiometricsEnabled = false,
+            isUnlockWithBiometricsEnabled = authRepository
+                .userStateFlow
+                .value
+                ?.activeAccount
+                ?.isBiometricsEnabled == true,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -69,6 +75,12 @@ class AccountSecurityViewModel @Inject constructor(
                 ),
             )
         }
+
+        authRepository
+            .userStateFlow
+            .map { AccountSecurityAction.Internal.UserStateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AccountSecurityAction): Unit = when (action) {
@@ -84,10 +96,7 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityAction.PendingLoginRequestsClick -> handlePendingLoginRequestsClick()
         is AccountSecurityAction.VaultTimeoutTypeSelect -> handleVaultTimeoutTypeSelect(action)
         is AccountSecurityAction.CustomVaultTimeoutSelect -> handleCustomVaultTimeoutSelect(action)
-        is AccountSecurityAction.VaultTimeoutActionSelect -> {
-            handleVaultTimeoutActionSelect(action)
-        }
-
+        is AccountSecurityAction.VaultTimeoutActionSelect -> handleVaultTimeoutActionSelect(action)
         AccountSecurityAction.TwoStepLoginClick -> handleTwoStepLoginClick()
         is AccountSecurityAction.UnlockWithBiometricToggle -> {
             handleUnlockWithBiometricToggled(action)
@@ -99,13 +108,8 @@ class AccountSecurityViewModel @Inject constructor(
             handleApprovePasswordlessLoginsToggle(action)
         }
 
-        is AccountSecurityAction.PushNotificationConfirm -> {
-            handlePushNotificationConfirm()
-        }
-
-        is AccountSecurityAction.Internal.FingerprintResultReceive -> {
-            handleFingerprintResultReceived(action)
-        }
+        is AccountSecurityAction.PushNotificationConfirm -> handlePushNotificationConfirm()
+        is AccountSecurityAction.Internal -> handleInternalAction(action)
     }
 
     private fun handleAccountFingerprintPhraseClick() {
@@ -254,6 +258,16 @@ class AccountSecurityViewModel @Inject constructor(
         }
     }
 
+    private fun handleInternalAction(action: AccountSecurityAction.Internal) {
+        when (action) {
+            is AccountSecurityAction.Internal.FingerprintResultReceive -> {
+                handleFingerprintResultReceived(action)
+            }
+
+            is AccountSecurityAction.Internal.UserStateReceive -> handleUserStateReceive(action)
+        }
+    }
+
     private fun handleFingerprintResultReceived(
         action: AccountSecurityAction.Internal.FingerprintResultReceive,
     ) {
@@ -264,6 +278,17 @@ class AccountSecurityViewModel @Inject constructor(
                     // This should never fail for an unlocked account.
                     is UserFingerprintResult.Error -> "".asText()
                 },
+            )
+        }
+    }
+
+    private fun handleUserStateReceive(action: AccountSecurityAction.Internal.UserStateReceive) {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = action
+                    .userState
+                    ?.activeAccount
+                    ?.isBiometricsEnabled == true,
             )
         }
     }
@@ -512,6 +537,13 @@ sealed class AccountSecurityAction {
          */
         data class FingerprintResultReceive(
             val fingerprintResult: UserFingerprintResult,
+        ) : Internal()
+
+        /**
+         * The updated [userState] has been received.
+         */
+        data class UserStateReceive(
+            val userState: UserState?,
         ) : Internal()
     }
 }
