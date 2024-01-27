@@ -12,11 +12,15 @@ private const val PENDING_REQUESTS_ROUTE = "pending_requests"
  */
 fun NavGraphBuilder.pendingRequestsDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToLoginApproval: (fingerprintPhrase: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = PENDING_REQUESTS_ROUTE,
     ) {
-        PendingRequestsScreen(onNavigateBack = onNavigateBack)
+        PendingRequestsScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToLoginApproval = onNavigateToLoginApproval,
+        )
     }
 }
 

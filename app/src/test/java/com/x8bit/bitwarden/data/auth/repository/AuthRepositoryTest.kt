@@ -2173,6 +2173,94 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `getAuthRequest should return failure when getAuthRequests returns failure`() = runTest {
+        val fingerprint = "fingerprint"
+        coEvery {
+            authRequestsService.getAuthRequests()
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.getAuthRequest(fingerprint)
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequests()
+        }
+        assertEquals(AuthRequestResult.Error, result)
+    }
+
+    @Test
+    fun `getAuthRequest should return success when service returns success`() = runTest {
+        val fingerprint = "fingerprint"
+        val responseJson = AuthRequestsResponseJson(
+            authRequests = listOf(
+                AuthRequestsResponseJson.AuthRequest(
+                    id = "1",
+                    publicKey = PUBLIC_KEY,
+                    platform = "Android",
+                    ipAddress = "192.168.0.1",
+                    key = "public",
+                    masterPasswordHash = "verySecureHash",
+                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                    responseDate = null,
+                    requestApproved = true,
+                    originUrl = "www.bitwarden.com",
+                ),
+            ),
+        )
+        val expected = AuthRequestResult.Success(
+            authRequest = AuthRequest(
+                id = "1",
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = true,
+                originUrl = "www.bitwarden.com",
+                fingerprint = fingerprint,
+            ),
+        )
+        coEvery {
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = PUBLIC_KEY,
+            )
+        } returns Result.success(fingerprint)
+        coEvery {
+            authRequestsService.getAuthRequests()
+        } returns responseJson.asSuccess()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.getAuthRequest(fingerprint)
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequests()
+            authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+        }
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `getAuthRequest should return error when no matching fingerprint exists`() = runTest {
+        val fingerprint = "fingerprint"
+        val responseJson = AuthRequestsResponseJson(
+            authRequests = listOf(),
+        )
+        val expected = AuthRequestResult.Error
+        coEvery {
+            authRequestsService.getAuthRequests()
+        } returns responseJson.asSuccess()
+
+        val result = repository.getAuthRequest(fingerprint)
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequests()
+        }
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `getAuthRequests should return failure when service returns failure`() = runTest {
         coEvery {
             authRequestsService.getAuthRequests()

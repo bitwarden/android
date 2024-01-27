@@ -143,6 +143,23 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on PendingRequestRowClick should emit NavigateToLoginApproval`() = runTest {
+        val fingerprint = "fingerprint"
+        coEvery {
+            authRepository.getAuthRequests()
+        } returns AuthRequestsResult.Success(
+            authRequests = emptyList(),
+        )
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                PendingRequestsAction.PendingRequestRowClick(fingerprint),
+            )
+            assertEquals(PendingRequestsEvent.NavigateToLoginApproval(fingerprint), awaitItem())
+        }
+    }
+
+    @Test
     fun `on DeclineAllRequestsClick should send ShowToast event`() = runTest {
         coEvery {
             authRepository.getAuthRequests()

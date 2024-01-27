@@ -49,6 +49,9 @@ class PendingRequestsViewModel @Inject constructor(
         when (action) {
             PendingRequestsAction.CloseClick -> handleCloseClicked()
             PendingRequestsAction.DeclineAllRequestsClick -> handleDeclineAllRequestsClicked()
+            is PendingRequestsAction.PendingRequestRowClick -> {
+                handlePendingRequestRowClicked(action)
+            }
 
             is PendingRequestsAction.Internal.AuthRequestsResultReceive -> {
                 handleAuthRequestsResultReceived(action)
@@ -62,6 +65,12 @@ class PendingRequestsViewModel @Inject constructor(
 
     private fun handleDeclineAllRequestsClicked() {
         sendEvent(PendingRequestsEvent.ShowToast("Not yet implemented.".asText()))
+    }
+
+    private fun handlePendingRequestRowClicked(
+        action: PendingRequestsAction.PendingRequestRowClick,
+    ) {
+        sendEvent(PendingRequestsEvent.NavigateToLoginApproval(action.fingerprint))
     }
 
     private fun handleAuthRequestsResultReceived(
@@ -157,6 +166,13 @@ sealed class PendingRequestsEvent {
     data object NavigateBack : PendingRequestsEvent()
 
     /**
+     * Navigates to the Login Approval screen with the given fingerprint.
+     */
+    data class NavigateToLoginApproval(
+        val fingerprint: String,
+    ) : PendingRequestsEvent()
+
+    /**
      * Displays the [message] in a toast.
      */
     data class ShowToast(
@@ -178,6 +194,13 @@ sealed class PendingRequestsAction {
      * The user has clicked to deny all login requests.
      */
     data object DeclineAllRequestsClick : PendingRequestsAction()
+
+    /**
+     * The user has clicked one of the pending request rows.
+     */
+    data class PendingRequestRowClick(
+        val fingerprint: String,
+    ) : PendingRequestsAction()
 
     /**
      * Models actions sent by the view model itself.

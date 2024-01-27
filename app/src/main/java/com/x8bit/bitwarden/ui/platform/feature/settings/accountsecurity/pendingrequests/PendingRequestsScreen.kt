@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -51,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 fun PendingRequestsScreen(
     viewModel: PendingRequestsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    onNavigateToLoginApproval: (fingerprint: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -58,6 +62,9 @@ fun PendingRequestsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             PendingRequestsEvent.NavigateBack -> onNavigateBack()
+            is PendingRequestsEvent.NavigateToLoginApproval -> {
+                onNavigateToLoginApproval(event.fingerprint)
+            }
 
             is PendingRequestsEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
@@ -96,6 +103,13 @@ fun PendingRequestsScreen(
                             )
                         }
                     },
+                    onNavigateToLoginApproval = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(
+                                PendingRequestsAction.PendingRequestRowClick(it),
+                            )
+                        }
+                    },
                 )
             }
 
@@ -128,6 +142,7 @@ fun PendingRequestsScreen(
 private fun PendingRequestsContent(
     state: PendingRequestsState.ViewState.Content,
     onDeclineAllRequestsClick: () -> Unit,
+    onNavigateToLoginApproval: (fingerprint: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -142,6 +157,7 @@ private fun PendingRequestsContent(
                     fingerprintPhrase = request.fingerprintPhrase,
                     platform = request.platform,
                     timestamp = request.timestamp,
+                    onNavigateToLoginApproval = onNavigateToLoginApproval,
                     modifier = Modifier.fillMaxWidth(),
                 )
                 HorizontalDivider(
@@ -171,10 +187,16 @@ private fun PendingRequestItem(
     fingerprintPhrase: String,
     platform: String,
     timestamp: String,
+    onNavigateToLoginApproval: (fingerprintPhrase: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                onClick = { onNavigateToLoginApproval(fingerprintPhrase) },
+            ),
         horizontalAlignment = Alignment.Start,
     ) {
         Spacer(modifier = Modifier.height(16.dp))
