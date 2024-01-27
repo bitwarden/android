@@ -40,9 +40,9 @@ class ExportVaultViewModel @Inject constructor(
     override fun handleAction(action: ExportVaultAction) {
         when (action) {
             ExportVaultAction.CloseButtonClick -> handleCloseButtonClicked()
+            ExportVaultAction.ConfirmExportVaultClicked -> handleConfirmExportVaultClicked()
             ExportVaultAction.DialogDismiss -> handleDialogDismiss()
             is ExportVaultAction.ExportFormatOptionSelect -> handleExportFormatOptionSelect(action)
-            ExportVaultAction.ExportVaultClick -> handleExportVaultClick()
             is ExportVaultAction.PasswordInputChanged -> handlePasswordInputChanged(action)
         }
     }
@@ -52,6 +52,15 @@ class ExportVaultViewModel @Inject constructor(
      */
     private fun handleCloseButtonClicked() {
         sendEvent(ExportVaultEvent.NavigateBack)
+    }
+
+    /**
+     * Verify the master password after confirming exporting the vault.
+     */
+    private fun handleConfirmExportVaultClicked() {
+        // TODO: BIT-1273
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        sendEvent(ExportVaultEvent.ShowToast("Coming soon to a PR near you!".asText()))
     }
 
     /**
@@ -68,14 +77,6 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(exportFormat = action.option)
         }
-    }
-
-    /**
-     * Show the confirmation dialog and export the vault.
-     */
-    private fun handleExportVaultClick() {
-        // TODO: BIT-1273
-        sendEvent(ExportVaultEvent.ShowToast(message = "Coming soon to an app near you!".asText()))
     }
 
     /**
@@ -146,6 +147,11 @@ sealed class ExportVaultAction {
     data object CloseButtonClick : ExportVaultAction()
 
     /**
+     * Indicates that the confirm export vault button was clicked.
+     */
+    data object ConfirmExportVaultClicked : ExportVaultAction()
+
+    /**
      * Indicates that the dialog has been dismissed.
      */
     data object DialogDismiss : ExportVaultAction()
@@ -154,11 +160,6 @@ sealed class ExportVaultAction {
      * Indicates that an export format option was selected.
      */
     data class ExportFormatOptionSelect(val option: ExportVaultFormat) : ExportVaultAction()
-
-    /**
-     * Indicates that the export vault button was clicked.
-     */
-    data object ExportVaultClick : ExportVaultAction()
 
     /**
      * Indicates that the password input has changed.

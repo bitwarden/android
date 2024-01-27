@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -49,18 +48,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 )
             }
         }
-
-    @Test
-    fun `ExportVaultClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(ExportVaultAction.ExportVaultClick)
-            assertEquals(
-                ExportVaultEvent.ShowToast(message = "Coming soon to an app near you!".asText()),
-                awaitItem(),
-            )
-        }
-    }
 
     @Test
     fun `PasswordInputChanged should update the password input in the state`() = runTest {
