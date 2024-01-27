@@ -615,6 +615,21 @@ class AuthRepositoryImpl(
                 onSuccess = { it },
             )
 
+    override suspend fun getAuthRequest(
+        fingerprint: String,
+    ): AuthRequestResult =
+        when (val authRequestsResult = getAuthRequests()) {
+            AuthRequestsResult.Error -> AuthRequestResult.Error
+            is AuthRequestsResult.Success -> {
+                val request = authRequestsResult.authRequests
+                    .firstOrNull { it.fingerprint == fingerprint }
+
+                request
+                    ?.let { AuthRequestResult.Success(it) }
+                    ?: AuthRequestResult.Error
+            }
+        }
+
     override suspend fun getAuthRequests(): AuthRequestsResult =
         authRequestsService
             .getAuthRequests()

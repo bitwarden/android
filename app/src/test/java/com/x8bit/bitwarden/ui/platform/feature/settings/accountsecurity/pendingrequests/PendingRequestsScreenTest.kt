@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 class PendingRequestsScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToLoginApprovalCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<PendingRequestsEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -29,6 +30,7 @@ class PendingRequestsScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             PendingRequestsScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToLoginApproval = { _ -> onNavigateToLoginApprovalCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -38,6 +40,12 @@ class PendingRequestsScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(PendingRequestsEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToLoginApproval should call onNavigateToLoginApproval`() = runTest {
+        mutableEventFlow.tryEmit(PendingRequestsEvent.NavigateToLoginApproval("fingerprint"))
+        assertTrue(onNavigateToLoginApprovalCalled)
     }
 
     @Test

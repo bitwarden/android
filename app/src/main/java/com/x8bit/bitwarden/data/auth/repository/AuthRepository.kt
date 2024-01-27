@@ -179,6 +179,11 @@ interface AuthRepository : AuthenticatorProvider {
     suspend fun createAuthRequest(email: String): AuthRequestResult
 
     /**
+     * Get an auth request by its [fingerprint].
+     */
+    suspend fun getAuthRequest(fingerprint: String): AuthRequestResult
+
+    /**
      * Get a list of the current user's [AuthRequest]s.
      */
     suspend fun getAuthRequests(): AuthRequestsResult
