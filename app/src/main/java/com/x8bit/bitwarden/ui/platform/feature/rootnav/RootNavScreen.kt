@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
@@ -26,6 +27,7 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
@@ -76,7 +78,8 @@ fun RootNavScreen(
         RootNavState.Splash -> SPLASH_ROUTE
         RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
         is RootNavState.VaultUnlocked,
-        RootNavState.VaultUnlockedForNewSend,
+        is RootNavState.VaultUnlockedForAutofillSelection,
+        is RootNavState.VaultUnlockedForNewSend,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -102,7 +105,7 @@ fun RootNavScreen(
         restoreState = false
     }
 
-    when (state) {
+    when (val currentState = state) {
         RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
         RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
         RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
@@ -111,6 +114,14 @@ fun RootNavScreen(
             navController.navigateToVaultUnlock(rootNavOptions)
             navController.navigateToAddSend(
                 sendAddType = AddSendType.AddItem,
+                navOptions = rootNavOptions,
+            )
+        }
+
+        is RootNavState.VaultUnlockedForAutofillSelection -> {
+            navController.navigateToVaultUnlockedGraph(rootNavOptions)
+            navController.navigateToVaultItemListingAsRoot(
+                vaultItemListingType = currentState.type.toVaultItemListingType(),
                 navOptions = rootNavOptions,
             )
         }

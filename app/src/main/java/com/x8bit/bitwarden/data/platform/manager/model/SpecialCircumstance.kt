@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.parcelize.Parcelize
 
@@ -15,6 +16,15 @@ sealed class SpecialCircumstance : Parcelable {
     @Parcelize
     data class ShareNewSend(
         val data: IntentManager.ShareData,
+        val shouldFinishWhenComplete: Boolean,
+    ) : SpecialCircumstance()
+
+    /**
+     * The app was launched in order to allow the user to manually select data for autofill.
+     */
+    @Parcelize
+    data class AutofillSelection(
+        val autofillSelectionData: AutofillSelectionData,
         val shouldFinishWhenComplete: Boolean,
     ) : SpecialCircumstance()
 }

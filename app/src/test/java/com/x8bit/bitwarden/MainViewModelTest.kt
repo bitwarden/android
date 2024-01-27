@@ -5,7 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -107,7 +108,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val shareData = mockk<IntentManager.ShareData>()
-        every { mockIntent.getCaptchaCallbackTokenResult() } returns null
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
 
         viewModel.trySendAction(
@@ -126,11 +127,34 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with autofill data should set the special circumstance to AutofillSelection`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val autofillSelectionData = mockk<AutofillSelectionData>()
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = autofillSelectionData,
+                shouldFinishWhenComplete = true,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val shareData = mockk<IntentManager.ShareData>()
-        every { mockIntent.getCaptchaCallbackTokenResult() } returns null
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
 
         viewModel.trySendAction(
@@ -141,6 +165,29 @@ class MainViewModelTest : BaseViewModelTest() {
         assertEquals(
             SpecialCircumstance.ShareNewSend(
                 data = shareData,
+                shouldFinishWhenComplete = false,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with autofill data should set the special circumstance to AutofillSelection`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val autofillSelectionData = mockk<AutofillSelectionData>()
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = autofillSelectionData,
                 shouldFinishWhenComplete = false,
             ),
             specialCircumstanceManager.specialCircumstance,

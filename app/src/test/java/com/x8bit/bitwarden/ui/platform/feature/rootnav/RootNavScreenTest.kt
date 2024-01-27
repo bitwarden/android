@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.navigation.navOptions
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.FakeNavHostController
 import io.mockk.every
@@ -95,6 +96,18 @@ class RootNavScreenTest : BaseComposeTest() {
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "add_send_item/add",
+                navOptions = expectedNavOptions,
+            )
+        }
+
+        // Make sure navigating to vault unlocked for autofill works as expected:
+        rootNavStateFlow.value =
+            RootNavState.VaultUnlockedForAutofillSelection(
+                type = AutofillSelectionData.Type.LOGIN,
+            )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_item_listing_as_root/login",
                 navOptions = expectedNavOptions,
             )
         }

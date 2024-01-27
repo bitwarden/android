@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
@@ -21,10 +22,14 @@ private const val SEND_FILE: String = "send_file"
 private const val SEND_TEXT: String = "send_text"
 private const val TRASH: String = "trash"
 private const val VAULT_ITEM_LISTING_PREFIX: String = "vault_item_listing"
+private const val VAULT_ITEM_LISTING_AS_ROOT_PREFIX: String = "vault_item_listing_as_root"
 private const val VAULT_ITEM_LISTING_TYPE: String = "vault_item_listing_type"
 private const val ID: String = "id"
 private const val VAULT_ITEM_LISTING_ROUTE: String =
     "$VAULT_ITEM_LISTING_PREFIX/{$VAULT_ITEM_LISTING_TYPE}" +
+        "?$ID={$ID}"
+private const val VAULT_ITEM_LISTING_AS_ROOT_ROUTE: String =
+    "$VAULT_ITEM_LISTING_AS_ROOT_PREFIX/{$VAULT_ITEM_LISTING_TYPE}" +
         "?$ID={$ID}"
 private const val SEND_ITEM_LISTING_PREFIX: String = "send_item_listing"
 private const val SEND_ITEM_LISTING_ROUTE: String =
@@ -73,6 +78,39 @@ fun NavGraphBuilder.vaultItemListingDestination(
 /**
  * Add the [VaultItemListingScreen] to the nav graph.
  */
+fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
+    onNavigateBack: () -> Unit,
+    onNavigateToVaultItemScreen: (id: String) -> Unit,
+    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
+    onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
+) {
+    composableWithStayTransitions(
+        route = VAULT_ITEM_LISTING_AS_ROOT_ROUTE,
+        arguments = listOf(
+            navArgument(
+                name = VAULT_ITEM_LISTING_TYPE,
+                builder = {
+                    type = NavType.StringType
+                },
+            ),
+        ),
+    ) {
+        VaultItemListingScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToVaultItem = onNavigateToVaultItemScreen,
+            onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
+            onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
+            onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
+            onNavigateToAddSendItem = {},
+            onNavigateToEditSendItem = {},
+        )
+    }
+}
+
+/**
+ * Add the [VaultItemListingScreen] to the nav graph.
+ */
 fun NavGraphBuilder.sendItemListingDestination(
     onNavigateBack: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
@@ -110,7 +148,9 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
         arguments = listOf(
             navArgument(
                 name = VAULT_ITEM_LISTING_TYPE,
-                builder = { type = NavType.StringType },
+                builder = {
+                    type = NavType.StringType
+                },
             ),
             navArgument(
                 name = ID,
@@ -142,6 +182,20 @@ fun NavController.navigateToVaultItemListing(
 ) {
     navigate(
         route = "$VAULT_ITEM_LISTING_PREFIX/${vaultItemListingType.toTypeString()}" +
+            "?$ID=${vaultItemListingType.toIdOrNull()}",
+        navOptions = navOptions,
+    )
+}
+
+/**
+ * Navigate to the [VaultItemListingScreen] for vault.
+ */
+fun NavController.navigateToVaultItemListingAsRoot(
+    vaultItemListingType: VaultItemListingType,
+    navOptions: NavOptions? = null,
+) {
+    navigate(
+        route = "$VAULT_ITEM_LISTING_AS_ROOT_PREFIX/${vaultItemListingType.toTypeString()}" +
             "?$ID=${vaultItemListingType.toIdOrNull()}",
         navOptions = navOptions,
     )

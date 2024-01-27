@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -76,6 +77,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
     }
+    private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
     private val initialState = createVaultItemListingState()
     private val initialSavedStateHandle = createSavedStateHandleWithVaultItemListingType(
         vaultItemListingType = VaultItemListingType.Login,
@@ -941,6 +943,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
+            specialCircumstanceManager = specialCircumstanceManager,
         )
 
     @Suppress("MaxLineLength")
@@ -957,5 +960,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = false,
             dialogState = null,
+            autofillSelectionData = null,
+            shouldFinishOnComplete = false,
         )
 }

@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.navigateToAttachment
 import com.x8bit.bitwarden.ui.vault.feature.item.navigateToVaultItem
 import com.x8bit.bitwarden.ui.vault.feature.item.vaultItemDestination
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestinationAsRoot
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.navigateToManualCodeEntryScreen
 import com.x8bit.bitwarden.ui.vault.feature.manualcodeentry.vaultManualCodeEntryDestination
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMoveToOrganization
@@ -62,6 +63,17 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         startDestination = VAULT_UNLOCKED_NAV_BAR_ROUTE,
         route = VAULT_UNLOCKED_GRAPH_ROUTE,
     ) {
+        vaultItemListingDestinationAsRoot(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToVaultItemScreen = { navController.navigateToVaultItem(vaultItemId = it) },
+            onNavigateToVaultAddItemScreen = {
+                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem)
+            },
+            onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
+            onNavigateToVaultEditItemScreen = {
+                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
+            },
+        )
         vaultUnlockedNavBarDestination(
             onNavigateToExportVault = { navController.navigateToExportVault() },
             onNavigateToFolders = { navController.navigateToFolders() },
