@@ -53,6 +53,7 @@ class VaultUnlockViewModel @Inject constructor(
             dialog = null,
             environmentUrl = environmentRepo.environment.label,
             input = "",
+            isBiometricEnabled = userState.activeAccount.isBiometricsEnabled,
             vaultUnlockType = userState.activeAccount.vaultUnlockType,
         )
     },
@@ -87,13 +88,7 @@ class VaultUnlockViewModel @Inject constructor(
             is VaultUnlockAction.LogoutAccountClick -> handleLogoutAccountClick(action)
             is VaultUnlockAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             VaultUnlockAction.UnlockClick -> handleUnlockClick()
-            is VaultUnlockAction.Internal.ReceiveVaultUnlockResult -> {
-                handleReceiveVaultUnlockResult(action)
-            }
-
-            is VaultUnlockAction.Internal.UserStateUpdateReceive -> {
-                handleUserStateUpdateReceive(action)
-            }
+            is VaultUnlockAction.Internal -> handleInternalAction(action)
         }
     }
 
@@ -150,6 +145,18 @@ class VaultUnlockViewModel @Inject constructor(
                     vaultUnlockResult = vaultUnlockResult,
                 ),
             )
+        }
+    }
+
+    private fun handleInternalAction(action: VaultUnlockAction.Internal) {
+        when (action) {
+            is VaultUnlockAction.Internal.ReceiveVaultUnlockResult -> {
+                handleReceiveVaultUnlockResult(action)
+            }
+
+            is VaultUnlockAction.Internal.UserStateUpdateReceive -> {
+                handleUserStateUpdateReceive(action)
+            }
         }
     }
 
@@ -211,6 +218,7 @@ class VaultUnlockViewModel @Inject constructor(
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
                 email = activeAccountSummary.email,
+                isBiometricEnabled = userState.activeAccount.isBiometricsEnabled,
                 vaultUnlockType = userState.activeAccount.vaultUnlockType,
             )
         }
@@ -229,6 +237,7 @@ data class VaultUnlockState(
     val environmentUrl: String,
     val dialog: VaultUnlockDialog?,
     val input: String,
+    val isBiometricEnabled: Boolean,
     val vaultUnlockType: VaultUnlockType,
 ) : Parcelable {
 

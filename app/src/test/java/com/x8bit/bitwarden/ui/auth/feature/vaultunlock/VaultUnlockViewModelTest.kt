@@ -34,7 +34,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val environmentRepository = FakeEnvironmentRepository()
-    private val authRepository = mockk<AuthRepository>() {
+    private val authRepository = mockk<AuthRepository> {
         every { activeUserId } answers { mutableUserStateFlow.value?.activeUserId }
         every { userStateFlow } returns mutableUserStateFlow
         every { hasPendingAccountAddition } returns false
@@ -145,7 +145,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = false,
-                        isBiometricsEnabled = false,
+                        isBiometricsEnabled = true,
                         organizations = emptyList(),
                     ),
                 ),
@@ -168,6 +168,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         isVaultUnlocked = false,
                     ),
                 ),
+                isBiometricEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -557,6 +558,7 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     dialog = null,
     environmentUrl = Environment.Us.label,
     input = "",
+    isBiometricEnabled = false,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )
 
