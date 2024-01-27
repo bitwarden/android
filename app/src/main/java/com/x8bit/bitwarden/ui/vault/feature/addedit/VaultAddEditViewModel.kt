@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -109,8 +110,12 @@ class VaultAddEditViewModel @Inject constructor(
 
         generatorRepository
             .generatorResultFlow
-            .map {
-                VaultAddEditAction.Internal.GeneratorResultReceive(generatorResult = it)
+            .map { result ->
+                // Wait until we have a Content screen to update
+                mutableStateFlow.first {
+                    it.viewState is VaultAddEditState.ViewState.Content
+                }
+                VaultAddEditAction.Internal.GeneratorResultReceive(generatorResult = result)
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -874,6 +879,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.UpdateCipherResultReceive -> {
                 handleUpdateCipherResultReceive(action)
             }
+
             is VaultAddEditAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultAddEditAction.Internal.TotpCodeReceive -> handleVaultTotpCodeReceive(action)
             is VaultAddEditAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
