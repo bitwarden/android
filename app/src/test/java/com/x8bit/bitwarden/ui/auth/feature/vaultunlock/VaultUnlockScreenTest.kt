@@ -377,5 +377,6 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     environmentUrl = DEFAULT_ENVIRONMENT_URL,
     initials = "AU",
     input = "",
+    isBiometricEnabled = true,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )
