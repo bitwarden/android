@@ -7,6 +7,7 @@ import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -20,6 +21,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -34,6 +36,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
@@ -43,6 +46,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         every { ssoCallbackResultFlow } returns mutableSsoCallbackResultFlow
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { rememberedOrgIdentifier } returns null
+        coEvery {
+            getOrganizationDomainSsoDetails(any())
+        } just awaits
     }
 
     private val environmentRepository: EnvironmentRepository = FakeEnvironmentRepository()
@@ -198,7 +204,35 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `LogInClick with no Internet should show error dialog`() = runTest {
         val viewModel = createViewModel(isNetworkConnected = false)
-        viewModel.eventFlow.test {
+        viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Error(
+                    title = R.string.internet_connection_required_title.asText(),
+                    message = R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `OrgIdentifierInputChange should update organization identifier`() = runTest {
+        val input = "input"
+        val viewModel = createViewModel()
+        viewModel.actionChannel.trySend(EnterpriseSignOnAction.OrgIdentifierInputChange(input))
+        assertEquals(
+            DEFAULT_STATE.copy(orgIdentifierInput = input),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `DialogDismiss should clear the active dialog when DialogState is Error`() = runTest {
+        val viewModel = createViewModel(isNetworkConnected = false)
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
             viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -207,62 +241,33 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                         message = R.string.internet_connection_required_message.asText(),
                     ),
                 ),
-                viewModel.stateFlow.value,
+                awaitItem(),
             )
-        }
-    }
 
-    @Test
-    fun `OrgIdentifierInputChange should update organization identifier`() = runTest {
-        val input = "input"
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(EnterpriseSignOnAction.OrgIdentifierInputChange(input))
+            viewModel.actionChannel.trySend(EnterpriseSignOnAction.DialogDismiss)
             assertEquals(
-                DEFAULT_STATE.copy(orgIdentifierInput = input),
-                viewModel.stateFlow.value,
+                DEFAULT_STATE,
+                awaitItem(),
             )
         }
-    }
-
-    @Test
-    fun `DialogDismiss should clear the active dialog when DialogState is Error`() {
-        val initialState = DEFAULT_STATE.copy(
-            dialogState = EnterpriseSignOnState.DialogState.Error(
-                message = "Error".asText(),
-            ),
-        )
-        val viewModel = createViewModel(initialState)
-        assertEquals(
-            initialState,
-            viewModel.stateFlow.value,
-        )
-
-        viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss)
-
-        assertEquals(
-            initialState.copy(dialogState = null),
-            viewModel.stateFlow.value,
-        )
     }
 
     @Test
     fun `DialogDismiss should clear the active dialog when DialogState is Loading`() {
-        val initialState = DEFAULT_STATE.copy(
-            dialogState = EnterpriseSignOnState.DialogState.Loading(
-                message = "Loading".asText(),
-            ),
+        val viewModel = createViewModel(
+            dismissInitialDialog = false,
         )
-        val viewModel = createViewModel(initialState)
         assertEquals(
-            initialState,
+            DEFAULT_STATE.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Loading(R.string.loading.asText()),
+            ),
             viewModel.stateFlow.value,
         )
 
         viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss)
 
         assertEquals(
-            initialState.copy(dialogState = null),
+            DEFAULT_STATE.copy(dialogState = null),
             viewModel.stateFlow.value,
         )
     }
@@ -310,7 +315,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
-                emailAddress = DEFAULT_EMAIL,
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -368,7 +372,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 initialState = initialState,
                 ssoData = DEFAULT_SSO_DATA,
-                emailAddress = DEFAULT_EMAIL,
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -426,7 +429,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 initialState = initialState,
                 ssoData = DEFAULT_SSO_DATA,
-                emailAddress = DEFAULT_EMAIL,
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -481,7 +483,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 initialState = initialState,
                 ssoData = DEFAULT_SSO_DATA,
-                emailAddress = DEFAULT_EMAIL,
             )
             val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
 
@@ -557,7 +558,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
         val viewModel = createViewModel(
             initialState = initialState,
-            emailAddress = "test@gmail.com",
             ssoData = DEFAULT_SSO_DATA,
             ssoCallbackResult = SsoCallbackResult.Success(
                 state = "abc",
@@ -589,21 +589,138 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OrganizationDomainSsoDetails failure should make a request, hide the dialog, and update the org input based on the remembered org`() = runTest {
+        coEvery {
+            authRepository.getOrganizationDomainSsoDetails(any())
+        } returns OrganizationDomainSsoDetailsResult.Failure
+
+        coEvery {
+            authRepository.rememberedOrgIdentifier
+        } returns "Bitwarden"
+
+        val viewModel = createViewModel(dismissInitialDialog = false)
+        assertEquals(
+            DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify(exactly = 1) {
+            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+            authRepository.rememberedOrgIdentifier
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OrganizationDomainSsoDetails success with no SSO available should make a request, hide the dialog, and update the org input based on the remembered org`() = runTest {
+        val orgDetails = OrganizationDomainSsoDetailsResult.Success(
+            isSsoAvailable = false,
+            organizationIdentifier = "Bitwarden without SSO",
+        )
+
+        coEvery {
+            authRepository.getOrganizationDomainSsoDetails(any())
+        } returns orgDetails
+
+        coEvery {
+            authRepository.rememberedOrgIdentifier
+        } returns "Bitwarden"
+
+        val viewModel = createViewModel(dismissInitialDialog = false)
+        assertEquals(
+            DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify(exactly = 1) {
+            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+            authRepository.rememberedOrgIdentifier
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OrganizationDomainSsoDetails success with blank identifier should make a request, show the error dialog, and update the org input based on the remembered org`() = runTest {
+        val orgDetails = OrganizationDomainSsoDetailsResult.Success(
+            isSsoAvailable = true,
+            organizationIdentifier = "",
+        )
+
+        coEvery {
+            authRepository.getOrganizationDomainSsoDetails(any())
+        } returns orgDetails
+
+        coEvery {
+            authRepository.rememberedOrgIdentifier
+        } returns "Bitwarden"
+
+        val viewModel = createViewModel(dismissInitialDialog = false)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Error(
+                    message = R.string.organization_sso_identifier_required.asText(),
+                ),
+                orgIdentifierInput = "Bitwarden",
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify(exactly = 1) {
+            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+            authRepository.rememberedOrgIdentifier
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OrganizationDomainSsoDetails success with valid organization should make a request then attempt to login`() = runTest {
+        val orgDetails = OrganizationDomainSsoDetailsResult.Success(
+            isSsoAvailable = true,
+            organizationIdentifier = "Bitwarden with SSO",
+        )
+
+        coEvery {
+            authRepository.getOrganizationDomainSsoDetails(any())
+        } returns orgDetails
+
+        // Just hang on this request; login is tested elsewhere
+        coEvery {
+            authRepository.prevalidateSso(any())
+        } just awaits
+
+        val viewModel = createViewModel(dismissInitialDialog = false)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                orgIdentifierInput = "Bitwarden with SSO",
+                dialogState = EnterpriseSignOnState.DialogState.Loading(
+                    message = R.string.logging_in.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify(exactly = 1) {
+            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+        }
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: EnterpriseSignOnState? = null,
-        emailAddress: String? = null,
         ssoData: SsoResponseData? = null,
         ssoCallbackResult: SsoCallbackResult? = null,
         savedStateHandle: SavedStateHandle = SavedStateHandle(
             initialState = mapOf(
                 "state" to initialState,
-                "email_address" to emailAddress,
+                "email_address" to DEFAULT_EMAIL,
                 "ssoData" to ssoData,
                 "ssoCallbackResult" to ssoCallbackResult,
             ),
         ),
         isNetworkConnected: Boolean = true,
+        dismissInitialDialog: Boolean = true,
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(
         authRepository = authRepository,
         environmentRepository = environmentRepository,
@@ -611,6 +728,13 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         networkConnectionManager = FakeNetworkConnectionManager(isNetworkConnected),
         savedStateHandle = savedStateHandle,
     )
+        .also {
+            if (dismissInitialDialog) {
+                // A loading dialog is shown on initialization, so allow tests to automatically
+                // dismiss it.
+                it.trySendAction(EnterpriseSignOnAction.DialogDismiss)
+            }
+        }
 
     companion object {
         private val DEFAULT_STATE = EnterpriseSignOnState(

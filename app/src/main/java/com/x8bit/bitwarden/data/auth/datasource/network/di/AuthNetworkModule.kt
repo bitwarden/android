@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestServiceImpl
+import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import dagger.Module
 import dagger.Provides
@@ -83,5 +85,13 @@ object AuthNetworkModule {
         retrofits: Retrofits,
     ): NewAuthRequestService = NewAuthRequestServiceImpl(
         authRequestsApi = retrofits.unauthenticatedApiRetrofit.create(),
+    )
+
+    @Provides
+    @Singleton
+    fun providesOrganizationService(
+        retrofits: Retrofits,
+    ): OrganizationService = OrganizationServiceImpl(
+         organizationApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 }

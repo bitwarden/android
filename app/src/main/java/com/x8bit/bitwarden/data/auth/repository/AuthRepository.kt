@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -160,6 +161,13 @@ interface AuthRepository : AuthenticatorProvider {
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
+
+    /**
+     * Checks for a claimed domain organization for the [email] that can be used for an SSO request.
+     */
+    suspend fun getOrganizationDomainSsoDetails(
+        email: String,
+    ): OrganizationDomainSsoDetailsResult
 
     /**
      * Prevalidates the organization identifier used in an SSO request.

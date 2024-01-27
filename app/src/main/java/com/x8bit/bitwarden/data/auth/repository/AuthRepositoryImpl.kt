@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
@@ -33,6 +34,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -83,6 +85,7 @@ class AuthRepositoryImpl(
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
     private val identityService: IdentityService,
     private val newAuthRequestService: NewAuthRequestService,
+    private val organizationService: OrganizationService,
     private val authSdkSource: AuthSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val environmentRepository: EnvironmentRepository,
@@ -571,6 +574,22 @@ class AuthRepositoryImpl(
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         mutableCaptchaTokenFlow.tryEmit(tokenResult)
     }
+
+    override suspend fun getOrganizationDomainSsoDetails(
+        email: String,
+    ): OrganizationDomainSsoDetailsResult = organizationService
+        .getOrganizationDomainSsoDetails(
+            email = email,
+        )
+        .fold(
+            onSuccess = {
+                OrganizationDomainSsoDetailsResult.Success(
+                    isSsoAvailable = it.isSsoAvailable,
+                    organizationIdentifier = it.organizationIdentifier,
+                )
+            },
+            onFailure = { OrganizationDomainSsoDetailsResult.Failure },
+        )
 
     override suspend fun prevalidateSso(
         organizationIdentifier: String,

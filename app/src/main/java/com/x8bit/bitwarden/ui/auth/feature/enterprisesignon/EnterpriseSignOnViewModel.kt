@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
@@ -49,7 +50,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: EnterpriseSignOnState(
             dialogState = null,
-            orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+            orgIdentifierInput = "",
             captchaToken = null,
         ),
 ) {
@@ -86,6 +87,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+
+        checkOrganizationDomainSsoDetails()
     }
 
     override fun handleAction(action: EnterpriseSignOnAction) {
@@ -103,6 +106,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
             EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure -> {
                 handleOnSsoPrevalidationFailure()
+            }
+
+            is EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive -> {
+                handleOnOrganizationDomainSsoDetailsReceive(action)
             }
 
             is EnterpriseSignOnAction.Internal.OnSsoCallbackResult -> {
@@ -128,49 +135,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
     }
 
     private fun handleLogInClicked() {
-        if (!networkConnectionManager.isNetworkConnected) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.internet_connection_required_title.asText(),
-                        message = R.string.internet_connection_required_message.asText(),
-                    ),
-                )
-            }
-            return
-        }
-
-        val organizationIdentifier = state.orgIdentifierInput
-        if (organizationIdentifier.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = EnterpriseSignOnState.DialogState.Error(
-                        message = R.string.validation_field_required.asText(
-                            R.string.org_identifier.asText(),
-                        ),
-                    ),
-                )
-            }
-            return
-        }
-
-        showLoading()
-
-        viewModelScope.launch {
-            val prevalidateSsoResult = authRepository.prevalidateSso(organizationIdentifier)
-            when (prevalidateSsoResult) {
-                is PrevalidateSsoResult.Failure -> {
-                    sendAction(EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure)
-                }
-
-                is PrevalidateSsoResult.Success -> {
-                    prepareAndLaunchCustomTab(
-                        organizationIdentifier = organizationIdentifier,
-                        prevalidateSsoResult = prevalidateSsoResult,
-                    )
-                }
-            }
-        }
+        prevalidateSso()
     }
 
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
@@ -222,6 +187,61 @@ class EnterpriseSignOnViewModel @Inject constructor(
         showDefaultError()
     }
 
+    private fun handleOnOrganizationDomainSsoDetailsFailure() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = null,
+                orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+            )
+        }
+    }
+
+    private fun handleOnOrganizationDomainSsoDetailsReceive(
+        action: EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive,
+    ) {
+        when (val orgDetails = action.organizationDomainSsoDetailsResult) {
+            is OrganizationDomainSsoDetailsResult.Failure -> {
+                handleOnOrganizationDomainSsoDetailsFailure()
+            }
+
+            is OrganizationDomainSsoDetailsResult.Success -> {
+                handleOnOrganizationDomainSsoDetailsSuccess(orgDetails)
+            }
+        }
+    }
+
+    private fun handleOnOrganizationDomainSsoDetailsSuccess(
+        orgDetails: OrganizationDomainSsoDetailsResult.Success,
+    ) {
+        if (!orgDetails.isSsoAvailable) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = null,
+                    orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                )
+            }
+            return
+        }
+
+        if (orgDetails.organizationIdentifier.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        message = R.string.organization_sso_identifier_required.asText(),
+                    ),
+                    orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                )
+            }
+            return
+        }
+
+        mutableStateFlow.update { it.copy(orgIdentifierInput = orgDetails.organizationIdentifier) }
+
+        // If the email address is associated with a claimed organization we can proceed to the
+        // prevalidation step.
+        prevalidateSso()
+    }
+
     private fun handleOrgIdentifierInputChanged(
         action: EnterpriseSignOnAction.OrgIdentifierInputChange,
     ) {
@@ -259,6 +279,52 @@ class EnterpriseSignOnViewModel @Inject constructor(
         }
     }
 
+    private fun prevalidateSso() {
+        if (!networkConnectionManager.isNetworkConnected) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
+                    ),
+                )
+            }
+            return
+        }
+
+        val organizationIdentifier = state.orgIdentifierInput
+        if (organizationIdentifier.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        message = R.string.validation_field_required.asText(
+                            R.string.org_identifier.asText(),
+                        ),
+                    ),
+                )
+            }
+            return
+        }
+
+        showLoading()
+
+        viewModelScope.launch {
+            val prevalidateSsoResult = authRepository.prevalidateSso(organizationIdentifier)
+            when (prevalidateSsoResult) {
+                is PrevalidateSsoResult.Failure -> {
+                    sendAction(EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure)
+                }
+
+                is PrevalidateSsoResult.Success -> {
+                    prepareAndLaunchCustomTab(
+                        organizationIdentifier = organizationIdentifier,
+                        prevalidateSsoResult = prevalidateSsoResult,
+                    )
+                }
+            }
+        }
+    }
+
     private fun attemptLogin() {
         val ssoCallbackResult = requireNotNull(savedSsoCallbackResult)
         val ssoData = requireNotNull(ssoResponseData)
@@ -267,6 +333,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             is SsoCallbackResult.MissingCode -> {
                 showDefaultError()
             }
+
             is SsoCallbackResult.Success -> {
                 if (ssoCallbackResult.state == ssoData.state) {
                     showLoading()
@@ -285,6 +352,22 @@ class EnterpriseSignOnViewModel @Inject constructor(
                     showDefaultError()
                 }
             }
+        }
+    }
+
+    private fun checkOrganizationDomainSsoDetails() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = EnterpriseSignOnState.DialogState.Loading(R.string.loading.asText()),
+            )
+        }
+        viewModelScope.launch {
+            val result = authRepository.getOrganizationDomainSsoDetails(
+                email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+            )
+            sendAction(
+                EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive(result),
+            )
         }
     }
 
@@ -445,6 +528,13 @@ sealed class EnterpriseSignOnAction {
          * SSO prevalidation failed.
          */
         data object OnSsoPrevalidationFailure : Internal()
+
+        /**
+         * A result was received when requesting an [OrganizationDomainSsoDetailsResult].
+         */
+        data class OnOrganizationDomainSsoDetailsReceive(
+            val organizationDomainSsoDetailsResult: OrganizationDomainSsoDetailsResult,
+        ) : Internal()
 
         /**
          * A captcha callback result has been received

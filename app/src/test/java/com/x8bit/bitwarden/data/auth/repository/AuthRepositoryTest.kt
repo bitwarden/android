@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
@@ -29,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -44,6 +46,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -100,6 +103,7 @@ class AuthRepositoryTest {
     private val identityService: IdentityService = mockk()
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
     private val newAuthRequestService: NewAuthRequestService = mockk()
+    private val organizationService: OrganizationService = mockk()
     private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
     private val vaultRepository: VaultRepository = mockk {
         every { vaultStateFlow } returns mutableVaultStateFlow
@@ -167,6 +171,7 @@ class AuthRepositoryTest {
         identityService = identityService,
         haveIBeenPwnedService = haveIBeenPwnedService,
         newAuthRequestService = newAuthRequestService,
+        organizationService = organizationService,
         authSdkSource = authSdkSource,
         authDiskSource = fakeAuthDiskSource,
         environmentRepository = fakeEnvironmentRepository,
@@ -1851,6 +1856,41 @@ class AuthRepositoryTest {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `getOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
+        val email = "test@gmail.com"
+        val throwable = Throwable()
+        coEvery {
+            organizationService.getOrganizationDomainSsoDetails(email)
+        } returns Result.failure(throwable)
+        val result = repository.getOrganizationDomainSsoDetails(email)
+        assertEquals(OrganizationDomainSsoDetailsResult.Failure, result)
+    }
+
+    @Test
+    fun `getOrganizationDomainSsoDetails Success should return Success`() = runTest {
+        val email = "test@gmail.com"
+        coEvery {
+            organizationService.getOrganizationDomainSsoDetails(email)
+        } returns Result.success(
+            OrganizationDomainSsoDetailsResponseJson(
+                isSsoAvailable = true,
+                organizationIdentifier = "Test Org",
+                domainName = "bitwarden.com",
+                isSsoRequired = false,
+                verifiedDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+            ),
+        )
+        val result = repository.getOrganizationDomainSsoDetails(email)
+        assertEquals(
+            OrganizationDomainSsoDetailsResult.Success(
+                isSsoAvailable = true,
+                organizationIdentifier = "Test Org",
+            ),
+            result,
+        )
     }
 
     @Test
