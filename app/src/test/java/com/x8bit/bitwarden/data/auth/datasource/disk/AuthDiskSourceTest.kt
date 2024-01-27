@@ -713,6 +713,45 @@ class AuthDiskSourceTest {
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }
+
+    @Test
+    fun `getMasterPasswordHash should pull from SharedPreferences`() {
+        val passwordHashBaseKey = "bwPreferencesStorage:keyHash"
+        val mockUserId = "mockUserId"
+        val mockPasswordHash = "mockPasswordHash"
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    "${passwordHashBaseKey}_$mockUserId",
+                    mockPasswordHash,
+                )
+            }
+        val actual = authDiskSource.getMasterPasswordHash(userId = mockUserId)
+        assertEquals(
+            mockPasswordHash,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storeMasterPasswordHash should update SharedPreferences`() {
+        val passwordHashBaseKey = "bwPreferencesStorage:keyHash"
+        val mockUserId = "mockUserId"
+        val mockPasswordHash = "mockPasswordHash"
+        authDiskSource.storeMasterPasswordHash(
+            userId = mockUserId,
+            passwordHash = mockPasswordHash,
+        )
+        val actual = fakeSharedPreferences
+            .getString(
+                "${passwordHashBaseKey}_$mockUserId",
+                null,
+            )
+        assertEquals(
+            mockPasswordHash,
+            actual,
+        )
+    }
 }
 
 private const val USER_STATE_JSON = """

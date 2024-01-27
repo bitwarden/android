@@ -32,6 +32,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
+    private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -156,6 +157,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedBiometricKeys[userId] = biometricsKey
     }
 
+    override fun getMasterPasswordHash(userId: String): String? =
+        storedMasterPasswordHashes[userId]
+
+    override fun storeMasterPasswordHash(userId: String, passwordHash: String?) {
+        storedMasterPasswordHashes[userId] = passwordHash
+    }
+
     /**
      * Assert that the given [userState] matches the currently tracked value.
      */
@@ -228,6 +236,13 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertOrganizationKeys(userId: String, organizationKeys: Map<String, String>?) {
         assertEquals(organizationKeys, storedOrganizationKeys[userId])
+    }
+
+    /**
+     * Assert that the [passwordHash] was stored successfully using the [userId].
+     */
+    fun assertMasterPasswordHash(userId: String, passwordHash: String?) {
+        assertEquals(passwordHash, storedMasterPasswordHashes[userId])
     }
 
     /**

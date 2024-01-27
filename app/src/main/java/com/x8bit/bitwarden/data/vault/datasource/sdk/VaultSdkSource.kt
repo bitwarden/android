@@ -283,4 +283,13 @@ interface VaultSdkSource {
         totp: String,
         time: DateTime,
     ): Result<TotpResponse>
+
+    /**
+     * Validates that the given password matches the password hash.
+     */
+    suspend fun validatePassword(
+        userId: String,
+        password: String,
+        passwordHash: String,
+    ): Boolean
 }

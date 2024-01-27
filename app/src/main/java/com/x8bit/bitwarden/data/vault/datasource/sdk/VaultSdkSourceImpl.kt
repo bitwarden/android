@@ -295,6 +295,18 @@ class VaultSdkSourceImpl(
             )
     }
 
+    override suspend fun validatePassword(
+        userId: String,
+        password: String,
+        passwordHash: String,
+    ): Boolean =
+        getClient(userId = userId)
+            .auth()
+            .validatePassword(
+                password = password,
+                passwordHash = passwordHash,
+            )
+
     private fun getClient(
         userId: String,
     ): Client = sdkClientManager.getOrCreateClient(userId = userId)

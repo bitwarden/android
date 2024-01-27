@@ -800,6 +800,40 @@ class SettingsRepositoryTest {
                 assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
             }
         }
+
+    @Test
+    fun `validatePassword returns the validate password result`() = runTest {
+        val userId = "userId"
+        val password = "password"
+        val passwordHash = "passwordHash"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAuthDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = passwordHash)
+        coEvery {
+            vaultSdkSource.validatePassword(
+                userId = userId,
+                password = password,
+                passwordHash = passwordHash,
+            )
+        } returns true
+
+        val result = settingsRepository
+            .validatePassword(
+                password = password,
+            )
+        assertTrue(result)
+    }
+
+    @Test
+    fun `validatePassword returns false if there's no stored password hash`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val password = "password"
+
+        val result = settingsRepository
+            .validatePassword(
+                password = password,
+            )
+        assertFalse(result)
+    }
 }
 
 private val MOCK_USER_STATE =

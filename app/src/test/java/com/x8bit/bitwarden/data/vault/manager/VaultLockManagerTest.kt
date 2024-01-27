@@ -3,9 +3,11 @@ package com.x8bit.bitwarden.data.vault.manager
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.crypto.HashPurpose
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -42,6 +44,16 @@ import org.junit.jupiter.api.Test
 class VaultLockManagerTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeAppForegroundManager = FakeAppForegroundManager()
+    private val authSdkSource: AuthSdkSource = mockk {
+        coEvery {
+            hashPassword(
+                email = MOCK_PROFILE.email,
+                password = "drowssap",
+                kdf = MOCK_PROFILE.toSdkParams(),
+                purpose = HashPurpose.LOCAL_AUTHORIZATION,
+            )
+        } returns Result.success("hashedPassword")
+    }
     private val vaultSdkSource: VaultSdkSource = mockk {
         every { clearCrypto(userId = any()) } just runs
     }
@@ -62,6 +74,7 @@ class VaultLockManagerTest {
 
     private val vaultLockManager: VaultLockManager = VaultLockManagerImpl(
         authDiskSource = fakeAuthDiskSource,
+        authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
         settingsRepository = settingsRepository,
         appForegroundManager = fakeAppForegroundManager,
@@ -747,6 +760,10 @@ class VaultLockManagerTest {
             fakeAuthDiskSource.assertUserAutoUnlockKey(
                 userId = userId,
                 userAutoUnlockKey = null,
+            )
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = userId,
+                passwordHash = "hashedPassword",
             )
             coVerify(exactly = 1) {
                 vaultSdkSource.initializeCrypto(

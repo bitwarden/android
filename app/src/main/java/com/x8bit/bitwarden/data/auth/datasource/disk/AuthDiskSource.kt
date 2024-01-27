@@ -178,6 +178,16 @@ interface AuthDiskSource {
     fun getOrganizationsFlow(userId: String): Flow<List<SyncResponseJson.Profile.Organization>?>
 
     /**
+     * Gets the master password hash for the given [userId].
+     */
+    fun getMasterPasswordHash(userId: String): String?
+
+    /**
+     * Stores the [passwordHash] for the given [userId].
+     */
+    fun storeMasterPasswordHash(userId: String, passwordHash: String?)
+
+    /**
      * Stores the organization data for the given [userId].
      */
     fun storeOrganizations(

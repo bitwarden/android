@@ -359,6 +359,21 @@ class AuthRepositoryImpl(
                                 // receiving the sync response if this data is currently absent.
                                 organizationKeys = null,
                             )
+
+                            // Save the master password hash.
+                            authSdkSource
+                                .hashPassword(
+                                    email = email,
+                                    password = it,
+                                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                                )
+                                .onSuccess { passwordHash ->
+                                    authDiskSource.storeMasterPasswordHash(
+                                        userId = userStateJson.activeUserId,
+                                        passwordHash = passwordHash,
+                                    )
+                                }
                         }
 
                         authDiskSource.userState = userStateJson

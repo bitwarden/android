@@ -30,6 +30,7 @@ private const val ENCRYPTED_PIN_KEY = "$BASE_KEY:protectedPin"
 private const val ORGANIZATIONS_KEY = "$BASE_KEY:organizations"
 private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 private const val TWO_FACTOR_TOKEN_KEY = "$BASE_KEY:twoFactorToken"
+private const val MASTER_PASSWORD_HASH_KEY = "$BASE_KEY:keyHash"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -104,6 +105,7 @@ class AuthDiskSourceImpl(
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
+        storeMasterPasswordHash(userId = userId, passwordHash = null)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
@@ -265,6 +267,13 @@ class AuthDiskSourceImpl(
             },
         )
         getMutableOrganizationsFlow(userId = userId).tryEmit(organizations)
+    }
+
+    override fun getMasterPasswordHash(userId: String): String? =
+        getString(key = "${MASTER_PASSWORD_HASH_KEY}_$userId")
+
+    override fun storeMasterPasswordHash(userId: String, passwordHash: String?) {
+        putString(key = "${MASTER_PASSWORD_HASH_KEY}_$userId", value = passwordHash)
     }
 
     private fun generateAndStoreUniqueAppId(): String =
