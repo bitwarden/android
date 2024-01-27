@@ -1,6 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
@@ -13,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -65,13 +70,48 @@ class ExportVaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `export vault button click should emit ExportVaultClick action`() {
+    fun `export vault button click should display confirmation dialog`() {
+        composeTestRule.onNodeWithText("Confirm vault export").assertDoesNotExist()
+
+        // Click the export vault button shows the alert.
         composeTestRule
             .onAllNodesWithText("Export vault")
             .onFirst()
             .performClick()
+        composeTestRule
+            .onNodeWithText("Confirm vault export")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        // Clicking the cancel button dismisses the alert.
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `confirm export vault button click should send ConfirmExportClick action`() {
+        composeTestRule.onNodeWithText("Confirm vault export").assertDoesNotExist()
+
+        // Click the export vault button shows the alert.
+        composeTestRule
+            .onAllNodesWithText("Export vault")
+            .onFirst()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Confirm vault export")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        // Clicking the confirm button sends the confirm action.
+        composeTestRule
+            .onAllNodesWithText("Export vault")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
         verify {
-            viewModel.trySendAction(ExportVaultAction.ExportVaultClick)
+            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
         }
     }
 

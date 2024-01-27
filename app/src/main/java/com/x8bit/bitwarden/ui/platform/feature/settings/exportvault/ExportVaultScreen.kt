@@ -17,7 +17,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -40,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
@@ -65,6 +68,29 @@ fun ExportVaultScreen(
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    var shouldShowConfirmationDialog by remember { mutableStateOf(false) }
+    if (shouldShowConfirmationDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.export_vault_confirmation_title),
+            message = if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+                stringResource(id = R.string.enc_export_key_warning)
+                    .plus("\n\n")
+                    .plus(stringResource(id = R.string.enc_export_account_warning))
+            } else {
+                stringResource(
+                    id = R.string.export_vault_warning,
+                )
+            },
+            confirmButtonText = stringResource(id = R.string.export_vault),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = remember(viewModel) {
+                { viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked) }
+            },
+            onDismissClick = { shouldShowConfirmationDialog = false },
+            onDismissRequest = { shouldShowConfirmationDialog = false },
+        )
     }
 
     when (val dialog = state.dialogState) {
@@ -116,9 +142,7 @@ fun ExportVaultScreen(
             onPasswordInputChanged = remember(viewModel) {
                 { viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(it)) }
             },
-            onExportVaultClick = remember(viewModel) {
-                { viewModel.trySendAction(ExportVaultAction.ExportVaultClick) }
-            },
+            onExportVaultClick = { shouldShowConfirmationDialog = true },
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
