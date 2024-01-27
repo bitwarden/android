@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
-import android.content.Intent
 import android.os.Build
 import android.service.autofill.Dataset
 import android.service.autofill.Presentations
@@ -11,8 +10,9 @@ import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
 import android.widget.inline.InlinePresentationSpec
 import androidx.annotation.RequiresApi
-import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
+import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.ui.autofill.buildVaultItemAutofillRemoteViews
@@ -31,11 +31,14 @@ val FilledData.fillableAutofillIds: List<AutofillId>
 fun FilledData.buildVaultItemDataset(
     autofillAppInfo: AutofillAppInfo,
 ): Dataset {
-    val intent = Intent(
-        autofillAppInfo.context,
-        MainActivity::class.java,
+    val intent = createAutofillSelectionIntent(
+        context = autofillAppInfo.context,
+        type = when (this.originalPartition) {
+            is AutofillPartition.Card -> AutofillSelectionData.Type.CARD
+            is AutofillPartition.Login -> AutofillSelectionData.Type.LOGIN
+        },
+        uri = this.uri,
     )
-    // TODO: Add additional data to the Intent to be pulled out in the app (BIT-1296)
 
     val pendingIntent = PendingIntent
         .getActivity(

@@ -4,7 +4,10 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -44,7 +47,7 @@ import javax.inject.Inject
  * and launches [VaultItemListingEvent] for the [VaultItemListingScreen].
  */
 @HiltViewModel
-@Suppress("MagicNumber", "TooManyFunctions")
+@Suppress("MagicNumber", "TooManyFunctions", "LongParameterList")
 class VaultItemListingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
@@ -52,19 +55,26 @@ class VaultItemListingViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
-    initialState = VaultItemListingState(
-        itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
-            .vaultItemListingType
-            .toItemListingType(),
-        viewState = VaultItemListingState.ViewState.Loading,
-        vaultFilterType = vaultRepository.vaultFilterType,
-        baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
-        baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
-        isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-        isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
-        dialogState = null,
-    ),
+    initialState = run {
+        val specialCircumstance =
+            specialCircumstanceManager.specialCircumstance as? SpecialCircumstance.AutofillSelection
+        VaultItemListingState(
+            itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
+                .vaultItemListingType
+                .toItemListingType(),
+            viewState = VaultItemListingState.ViewState.Loading,
+            vaultFilterType = vaultRepository.vaultFilterType,
+            baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
+            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+            isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
+            dialogState = null,
+            autofillSelectionData = specialCircumstance?.autofillSelectionData,
+            shouldFinishOnComplete = specialCircumstance?.shouldFinishWhenComplete ?: false,
+        )
+    },
 ) {
 
     init {
@@ -521,7 +531,10 @@ data class VaultItemListingState(
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
+    // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
+    private val autofillSelectionData: AutofillSelectionData? = null,
+    private val shouldFinishOnComplete: Boolean = false,
 ) {
 
     /**
@@ -529,6 +542,12 @@ data class VaultItemListingState(
      */
     val isPullToRefreshEnabled: Boolean
         get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
+
+    /**
+     * Whether or not this represents a listing screen for autofill.
+     */
+    val isAutofill: Boolean
+        get() = autofillSelectionData != null
 
     /**
      * Represents the current state of any dialogs on the screen.

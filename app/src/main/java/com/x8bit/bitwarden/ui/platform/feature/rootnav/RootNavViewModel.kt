@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -64,10 +65,15 @@ class RootNavViewModel @Inject constructor(
 
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
+                    is SpecialCircumstance.AutofillSelection -> {
+                        RootNavState.VaultUnlockedForAutofillSelection(
+                            type = specialCircumstance.autofillSelectionData.type,
+                        )
+                    }
+
                     is SpecialCircumstance.ShareNewSend -> RootNavState.VaultUnlockedForNewSend
 
-                    null,
-                    -> {
+                    null -> {
                         RootNavState.VaultUnlocked(
                             activeUserId = userState.activeAccount.userId,
                         )
@@ -109,6 +115,14 @@ sealed class RootNavState : Parcelable {
     @Parcelize
     data class VaultUnlocked(
         val activeUserId: String,
+    ) : RootNavState()
+
+    /**
+     * App should show a selection screen for autofill for an unlocked user.
+     */
+    @Parcelize
+    data class VaultUnlockedForAutofillSelection(
+        val type: AutofillSelectionData.Type,
     ) : RootNavState()
 
     /**
