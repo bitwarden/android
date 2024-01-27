@@ -406,6 +406,21 @@ class SettingsRepositoryImpl(
             }
             .launchIn(unconfinedScope)
     }
+
+    override suspend fun validatePassword(password: String): Boolean =
+        activeUserId
+            ?.let { userId ->
+                authDiskSource
+                    .getMasterPasswordHash(userId)
+                    ?.let { passwordHash ->
+                        vaultSdkSource.validatePassword(
+                            userId = userId,
+                            password = password,
+                            passwordHash = passwordHash,
+                        )
+                    }
+            }
+            ?: false
 }
 
 /**

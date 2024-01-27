@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertTrue
 
 class ExportVaultScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
@@ -166,6 +167,12 @@ class ExportVaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateBack event should call onNavigateBack`() {
+        mutableEventFlow.tryEmit(ExportVaultEvent.NavigateBack)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
     fun `password input change should send PasswordInputChange action`() {
         val input = "Test123"
         composeTestRule.onNodeWithText("Master password").performTextInput(input)
@@ -173,12 +180,10 @@ class ExportVaultScreenTest : BaseComposeTest() {
             viewModel.trySendAction(ExportVaultAction.PasswordInputChanged("Test123"))
         }
     }
-
-    companion object {
-        private val DEFAULT_STATE = ExportVaultState(
-            dialogState = null,
-            exportFormat = ExportVaultFormat.JSON,
-            passwordInput = "",
-        )
-    }
 }
+
+private val DEFAULT_STATE = ExportVaultState(
+    dialogState = null,
+    exportFormat = ExportVaultFormat.JSON,
+    passwordInput = "",
+)

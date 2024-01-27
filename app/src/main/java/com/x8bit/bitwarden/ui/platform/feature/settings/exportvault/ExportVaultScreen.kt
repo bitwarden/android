@@ -71,6 +71,9 @@ fun ExportVaultScreen(
     }
 
     var shouldShowConfirmationDialog by remember { mutableStateOf(false) }
+    var confirmExportVaultClicked = remember(viewModel) {
+        { viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked) }
+    }
     if (shouldShowConfirmationDialog) {
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.export_vault_confirmation_title),
@@ -85,8 +88,9 @@ fun ExportVaultScreen(
             },
             confirmButtonText = stringResource(id = R.string.export_vault),
             dismissButtonText = stringResource(id = R.string.cancel),
-            onConfirmClick = remember(viewModel) {
-                { viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked) }
+            onConfirmClick = {
+                shouldShowConfirmationDialog = false
+                confirmExportVaultClicked()
             },
             onDismissClick = { shouldShowConfirmationDialog = false },
             onDismissRequest = { shouldShowConfirmationDialog = false },

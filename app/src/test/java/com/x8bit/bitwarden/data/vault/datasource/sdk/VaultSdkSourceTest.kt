@@ -20,6 +20,7 @@ import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
+import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientPlatform
@@ -38,10 +39,12 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class VaultSdkSourceTest {
+    private val clientAuth = mockk<ClientAuth>()
     private val clientCrypto = mockk<ClientCrypto>()
     private val clientPlatform = mockk<ClientPlatform>()
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
@@ -49,6 +52,7 @@ class VaultSdkSourceTest {
         every { passwordHistory() } returns clientPasswordHistory
     }
     private val client = mockk<Client>() {
+        every { auth() } returns clientAuth
         every { vault() } returns clientVault
         every { platform() } returns clientPlatform
         every { crypto() } returns clientCrypto
@@ -708,4 +712,24 @@ class VaultSdkSourceTest {
 
             verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
+
+    @Test
+    fun `validatePassword should call SDK and return the expected Boolean`() = runTest {
+        val userId = "userId"
+        val password = "password"
+        val passwordHash = "passwordHash"
+        coEvery {
+            clientAuth.validatePassword(
+                password = password,
+                passwordHash = passwordHash,
+            )
+        } returns true
+
+        val result = vaultSdkSource.validatePassword(
+            userId = userId,
+            password = password,
+            passwordHash = passwordHash,
+        )
+        assertTrue(result)
+    }
 }

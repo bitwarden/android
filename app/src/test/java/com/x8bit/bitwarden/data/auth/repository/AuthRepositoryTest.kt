@@ -130,6 +130,14 @@ class AuthRepositoryTest {
             )
         } returns Result.success(PASSWORD_HASH)
         coEvery {
+            hashPassword(
+                email = EMAIL,
+                password = PASSWORD,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                purpose = HashPurpose.LOCAL_AUTHORIZATION,
+            )
+        } returns Result.success(PASSWORD_HASH)
+        coEvery {
             makeRegisterKeys(
                 email = EMAIL,
                 password = PASSWORD,
@@ -637,6 +645,10 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.assertUserKey(
                 userId = USER_ID_1,
                 userKey = "key",
+            )
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = USER_ID_1,
+                passwordHash = PASSWORD_HASH,
             )
             coVerify {
                 identityService.getToken(
@@ -2475,6 +2487,7 @@ class AuthRepositoryTest {
         private const val EMAIL_2 = "test2@bitwarden.com"
         private const val PASSWORD = "password"
         private const val PASSWORD_HASH = "passwordHash"
+        private const val PASSWORD_HASH_LOCAL = "passwordHashLocal"
         private const val ACCESS_TOKEN = "accessToken"
         private const val ACCESS_TOKEN_2 = "accessToken2"
         private const val REFRESH_TOKEN = "refreshToken"

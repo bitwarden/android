@@ -4,8 +4,10 @@ import android.os.SystemClock
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
@@ -53,6 +55,7 @@ private const val MAXIMUM_INVALID_UNLOCK_ATTEMPTS = 5
 @Suppress("TooManyFunctions", "LongParameterList")
 class VaultLockManagerImpl(
     private val authDiskSource: AuthDiskSource,
+    private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
     private val settingsRepository: SettingsRepository,
     private val appForegroundManager: AppForegroundManager,
@@ -98,6 +101,7 @@ class VaultLockManagerImpl(
         }
     }
 
+    @Suppress("LongMethod")
     override suspend fun unlockVault(
         userId: String,
         email: String,
@@ -142,6 +146,24 @@ class VaultLockManagerImpl(
                         onSuccess = { initializeCryptoResult ->
                             initializeCryptoResult
                                 .toVaultUnlockResult()
+                                .also {
+                                    if (initUserCryptoMethod is InitUserCryptoMethod.Password) {
+                                        // Save the master password hash.
+                                        authSdkSource
+                                            .hashPassword(
+                                                email = email,
+                                                password = initUserCryptoMethod.password,
+                                                kdf = kdf,
+                                                purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                                            )
+                                            .onSuccess { passwordHash ->
+                                                authDiskSource.storeMasterPasswordHash(
+                                                    userId = userId,
+                                                    passwordHash = passwordHash,
+                                                )
+                                            }
+                                    }
+                                }
                                 .also {
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
