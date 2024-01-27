@@ -9,7 +9,6 @@ import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -27,15 +26,16 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerat
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.Instant
 import javax.inject.Singleton
@@ -58,13 +58,13 @@ class GeneratorRepositoryImpl(
     private val mutablePasswordHistoryStateFlow =
         MutableStateFlow<LocalDataState<List<PasswordHistoryView>>>(LocalDataState.Loading)
 
-    private val mutableGeneratorResultFlow = bufferedMutableSharedFlow<GeneratorResult>()
+    private val generatorResultChannel = Channel<GeneratorResult>(capacity = Int.MAX_VALUE)
 
     override val passwordHistoryStateFlow: StateFlow<LocalDataState<List<PasswordHistoryView>>>
         get() = mutablePasswordHistoryStateFlow.asStateFlow()
 
     override val generatorResultFlow: Flow<GeneratorResult>
-        get() = mutableGeneratorResultFlow.asSharedFlow()
+        get() = generatorResultChannel.receiveAsFlow()
 
     init {
         mutablePasswordHistoryStateFlow
@@ -100,7 +100,7 @@ class GeneratorRepositoryImpl(
             }
 
     override fun emitGeneratorResult(generatorResult: GeneratorResult) {
-        mutableGeneratorResultFlow.tryEmit(generatorResult)
+        generatorResultChannel.trySend(generatorResult)
     }
 
     override suspend fun generatePassword(
