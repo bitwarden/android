@@ -7,6 +7,7 @@ import com.bitwarden.core.Card
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
+import com.bitwarden.core.CipherView
 import com.bitwarden.core.Field
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.Identity
@@ -26,6 +27,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
+import java.util.Locale
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
@@ -491,3 +493,10 @@ fun FieldTypeJson.toSdkFieldType(): FieldType =
         FieldTypeJson.BOOLEAN -> FieldType.BOOLEAN
         FieldTypeJson.LINKED -> FieldType.LINKED
     }
+
+/**
+ * Sorts the data in alphabetical order by name.
+ */
+@JvmName("toAlphabeticallySortedCipherList")
+fun List<CipherView>.sortAlphabetically(): List<CipherView> =
+    this.sortedBy { it.name.uppercase(Locale.getDefault()) }

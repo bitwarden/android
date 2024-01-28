@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.Collection
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -54,6 +55,31 @@ class VaultSdkCollectionExtensionsTest {
                 )
                     .toEncryptedSdkCollection(),
             ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSortAlphabetically should sort collections by name`() {
+        val list = listOf(
+            createMockCollectionView(1).copy(name = "c"),
+            createMockCollectionView(1).copy(name = "B"),
+            createMockCollectionView(1).copy(name = "z"),
+            createMockCollectionView(1).copy(name = "A"),
+            createMockCollectionView(1).copy(name = "D"),
+        )
+
+        val expected = listOf(
+            createMockCollectionView(1).copy(name = "A"),
+            createMockCollectionView(1).copy(name = "B"),
+            createMockCollectionView(1).copy(name = "c"),
+            createMockCollectionView(1).copy(name = "D"),
+            createMockCollectionView(1).copy(name = "z"),
+        )
+
+        assertEquals(
+            expected,
+            list.sortAlphabetically(),
         )
     }
 }

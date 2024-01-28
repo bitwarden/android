@@ -57,6 +57,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabetically
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
@@ -1027,7 +1028,7 @@ class VaultRepositoryImpl(
                         cipherList = it.toEncryptedSdkCipherList(),
                     )
                     .fold(
-                        onSuccess = { ciphers -> DataState.Loaded(ciphers) },
+                        onSuccess = { ciphers -> DataState.Loaded(ciphers.sortAlphabetically()) },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }
@@ -1059,7 +1060,7 @@ class VaultRepositoryImpl(
                         folderList = it.toEncryptedSdkFolderList(),
                     )
                     .fold(
-                        onSuccess = { folders -> DataState.Loaded(folders) },
+                        onSuccess = { folders -> DataState.Loaded(folders.sortAlphabetically()) },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }
@@ -1078,7 +1079,11 @@ class VaultRepositoryImpl(
                         collectionList = it.toEncryptedSdkCollectionList(),
                     )
                     .fold(
-                        onSuccess = { collections -> DataState.Loaded(collections) },
+                        onSuccess = { collections ->
+                            DataState.Loaded(
+                                collections.sortAlphabetically(),
+                            )
+                        },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -30,6 +31,31 @@ class VaultSdkFolderExtensionsTest {
         assertEquals(
             createMockSdkFolder(number = 1),
             sdkFolder,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSortAlphabetically should sort folders by name`() {
+        val list = listOf(
+            createMockFolderView(1).copy(name = "c"),
+            createMockFolderView(1).copy(name = "D"),
+            createMockFolderView(1).copy(name = "B"),
+            createMockFolderView(1).copy(name = "A"),
+            createMockFolderView(1).copy(name = "z"),
+        )
+
+        val expected = listOf(
+            createMockFolderView(1).copy(name = "A"),
+            createMockFolderView(1).copy(name = "B"),
+            createMockFolderView(1).copy(name = "c"),
+            createMockFolderView(1).copy(name = "D"),
+            createMockFolderView(1).copy(name = "z"),
+        )
+
+        assertEquals(
+            expected,
+            list.sortAlphabetically(),
         )
     }
 }

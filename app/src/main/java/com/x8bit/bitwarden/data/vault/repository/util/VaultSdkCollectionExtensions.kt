@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.Collection
+import com.bitwarden.core.CollectionView
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import java.util.Locale
 
 /**
  * Converts a [SyncResponseJson.Collection] object to a corresponding Bitwarden SDK [Collection]
@@ -23,3 +25,10 @@ fun SyncResponseJson.Collection.toEncryptedSdkCollection(): Collection =
  */
 fun List<SyncResponseJson.Collection>.toEncryptedSdkCollectionList(): List<Collection> =
     map { it.toEncryptedSdkCollection() }
+
+/**
+ * Sorts the data in alphabetical order by name.
+ */
+@JvmName("toAlphabeticallySortedCollectionList")
+fun List<CollectionView>.sortAlphabetically(): List<CollectionView> =
+    this.sortedBy { it.name.uppercase(Locale.getDefault()) }
