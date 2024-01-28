@@ -240,6 +240,17 @@ class VaultSdkSourceImpl(
             }
         }
 
+    override suspend fun encryptFolder(
+        userId: String,
+        folder: FolderView,
+    ): Result<Folder> =
+        runCatching {
+            getClient(userId = userId)
+                .vault()
+                .folders()
+                .encrypt(folder)
+        }
+
     override suspend fun decryptFolder(
         userId: String,
         folder: Folder,

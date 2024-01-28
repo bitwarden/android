@@ -582,6 +582,34 @@ class VaultSdkSourceTest {
         }
 
     @Test
+    fun `encryptFolder should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
+        val expectedResult = mockk<Folder>()
+        val mockFolder = mockk<FolderView>()
+        coEvery {
+            clientVault.folders().encrypt(
+                folder = mockFolder,
+            )
+        } returns expectedResult
+
+        val result = vaultSdkSource.encryptFolder(
+            userId = userId,
+            folder = mockFolder,
+        )
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+
+        coVerify {
+            clientVault.folders().encrypt(
+                folder = mockFolder,
+            )
+        }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+    }
+
+    @Test
     fun `Folder decrypt should call SDK and return a Result with correct data`() = runBlocking {
         val userId = "userId"
         val mockFolder = mockk<Folder>()

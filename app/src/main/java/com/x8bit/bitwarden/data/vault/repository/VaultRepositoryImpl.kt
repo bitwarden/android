@@ -31,8 +31,10 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonReq
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
+import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -42,9 +44,11 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -54,6 +58,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -61,10 +66,12 @@ import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabetically
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkFolderList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkSendList
@@ -80,6 +87,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -107,6 +115,7 @@ class VaultRepositoryImpl(
     private val syncService: SyncService,
     private val ciphersService: CiphersService,
     private val sendsService: SendsService,
+    private val folderService: FolderService,
     private val vaultDiskSource: VaultDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
@@ -915,6 +924,95 @@ class VaultRepositoryImpl(
                 },
                 onFailure = { GenerateTotpResult.Error },
             )
+    }
+
+    override suspend fun createFolder(folderView: FolderView): CreateFolderResult {
+        val userId = activeUserId ?: return CreateFolderResult.Error
+        return vaultSdkSource
+            .encryptFolder(
+                userId = userId,
+                folder = folderView,
+            )
+            .flatMap { folder ->
+                folderService
+                    .createFolder(
+                        body = folder.toEncryptedNetworkFolder(),
+                    )
+            }
+            .onSuccess { vaultDiskSource.saveFolder(userId = userId, folder = it) }
+            .flatMap { vaultSdkSource.decryptFolder(userId, it.toEncryptedSdkFolder()) }
+            .fold(
+                onSuccess = { CreateFolderResult.Success(folderView = it) },
+                onFailure = { CreateFolderResult.Error },
+            )
+    }
+
+    override suspend fun updateFolder(
+        folderId: String,
+        folderView: FolderView,
+    ): UpdateFolderResult {
+        val userId = activeUserId ?: return UpdateFolderResult.Error(null)
+        return vaultSdkSource
+            .encryptFolder(
+                userId = userId,
+                folder = folderView,
+            )
+            .flatMap { folder ->
+                folderService
+                    .updateFolder(
+                        folderId = folder.id.toString(),
+                        body = folder.toEncryptedNetworkFolder(),
+                    )
+            }
+            .fold(
+                onSuccess = { response ->
+                    when (response) {
+                        is UpdateFolderResponseJson.Success -> {
+                            vaultDiskSource.saveFolder(userId, response.folder)
+                            vaultSdkSource
+                                .decryptFolder(
+                                    userId,
+                                    response.folder.toEncryptedSdkFolder(),
+                                )
+                                .fold(
+                                    onSuccess = { UpdateFolderResult.Success(it) },
+                                    onFailure = { UpdateFolderResult.Error(errorMessage = null) },
+                                )
+                        }
+
+                        is UpdateFolderResponseJson.Invalid -> {
+                            UpdateFolderResult.Error(response.message)
+                        }
+                    }
+                },
+                onFailure = { UpdateFolderResult.Error(it.message) },
+            )
+    }
+
+    override suspend fun deleteFolder(folderId: String): DeleteFolderResult {
+        val userId = activeUserId ?: return DeleteFolderResult.Error
+        return folderService
+            .deleteFolder(
+                folderId = folderId,
+            )
+            .onSuccess {
+                clearFolderIdFromCiphers(folderId, userId)
+                vaultDiskSource.deleteFolder(userId, folderId)
+            }
+            .fold(
+                onSuccess = { DeleteFolderResult.Success },
+                onFailure = { DeleteFolderResult.Error },
+            )
+    }
+
+    private suspend fun clearFolderIdFromCiphers(folderId: String, userId: String) {
+        vaultDiskSource.getCiphers(userId).firstOrNull()?.forEach {
+            if (it.folderId == folderId) {
+                vaultDiskSource.saveCipher(
+                    userId, it.copy(folderId = null),
+                )
+            }
+        }
     }
 
     /**

@@ -114,6 +114,10 @@ class VaultDiskSourceImpl(
                 json.decodeFromString<SyncResponseJson.Domains>(entity.domainsJson)
             }
 
+    override suspend fun deleteFolder(userId: String, folderId: String) {
+        foldersDao.deleteFolder(userId = userId, folderId = folderId)
+    }
+
     override suspend fun saveFolder(userId: String, folder: SyncResponseJson.Folder) {
         foldersDao.insertFolder(
             folder = FolderEntity(

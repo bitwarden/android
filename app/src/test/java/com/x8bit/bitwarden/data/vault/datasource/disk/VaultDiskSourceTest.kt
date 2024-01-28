@@ -139,6 +139,18 @@ class VaultDiskSourceTest {
     }
 
     @Test
+    fun `DeleteFolder should call deleteFolder`() = runTest {
+        assertFalse(foldersDao.deleteFolderCalled)
+        vaultDiskSource.saveFolder(USER_ID, FOLDER_1)
+        assertEquals(1, foldersDao.storedFolders.size)
+
+        vaultDiskSource.deleteFolder(USER_ID, FOLDER_1.id)
+
+        assertTrue(foldersDao.deleteFolderCalled)
+        assertEquals(emptyList<FolderEntity>(), foldersDao.storedFolders)
+    }
+
+    @Test
     fun `saveFolder should call insertFolder`() = runTest {
         assertFalse(foldersDao.insertFolderCalled)
         assertEquals(0, foldersDao.storedFolders.size)
