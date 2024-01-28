@@ -66,7 +66,7 @@ private const val MINUTES_PER_HOUR = 60
 /**
  * Displays the account security screen.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountSecurityScreen(
@@ -175,13 +175,15 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenTextRow(
-                text = stringResource(id = R.string.pending_log_in_requests),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            if (state.isApproveLoginRequestsEnabled) {
+                BitwardenTextRow(
+                    text = stringResource(id = R.string.pending_log_in_requests),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
             Spacer(Modifier.height(16.dp))
             BitwardenListHeaderText(
