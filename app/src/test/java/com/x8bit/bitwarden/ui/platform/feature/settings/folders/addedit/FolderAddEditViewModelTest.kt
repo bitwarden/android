@@ -7,10 +7,15 @@ import com.bitwarden.core.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -78,13 +83,343 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DeleteClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
+    fun `DeleteClick with DeleteFolderResult Success should emit toast and navigate back`() =
+        runTest {
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = DEFAULT_STATE.copy(
+                        folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
+                    ),
+                ),
+            )
 
-        viewModel.eventFlow.test {
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        DEFAULT_EDIT_ITEM_ID,
+                        DEFAULT_FOLDER_NAME,
+                        DateTime.now(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.deleteFolder(folderId = DEFAULT_EDIT_ITEM_ID)
+            } returns DeleteFolderResult.Success
+
             viewModel.trySendAction(FolderAddEditAction.DeleteClick)
-            assertEquals(FolderAddEditEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    FolderAddEditEvent.ShowToast(R.string.folder_deleted.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    FolderAddEditEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DeleteClick with DeleteFolderResult Success should show dialog, and remove it once an item is deleted`() =
+        runTest {
+            val stateWithDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
+                dialog = FolderAddEditState.DialogState.Loading(
+                    R.string.deleting.asText(),
+                ),
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+            )
+
+            val stateWithoutDialog = stateWithDialog.copy(
+                dialog = null,
+            )
+
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithoutDialog,
+                ),
+            )
+
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        DEFAULT_EDIT_ITEM_ID,
+                        DEFAULT_FOLDER_NAME,
+                        DateTime.now(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.deleteFolder(folderId = DEFAULT_EDIT_ITEM_ID)
+            } returns DeleteFolderResult.Success
+
+            viewModel.stateFlow.test {
+                viewModel.trySendAction(FolderAddEditAction.DeleteClick)
+                assertEquals(stateWithoutDialog, awaitItem())
+                assertEquals(stateWithDialog, awaitItem())
+                assertEquals(stateWithoutDialog, awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DeleteClick should not call deleteFolder if no folderId is present`() =
+        runTest {
+            val state = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.AddItem,
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            )
+
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = state,
+                ),
+            )
+
+            viewModel.trySendAction(FolderAddEditAction.DeleteClick)
+
+            coVerify(exactly = 0) {
+                vaultRepository.deleteFolder(any())
+            }
+        }
+
+    @Test
+    fun `DeleteClick with DeleteFolderResult Failure should show an error dialog`() =
+        runTest {
+            val stateWithDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
+                dialog = FolderAddEditState.DialogState.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+            )
+
+            val stateWithoutDialog = stateWithDialog.copy(
+                dialog = null,
+            )
+
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithoutDialog,
+                ),
+            )
+
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        DEFAULT_EDIT_ITEM_ID,
+                        DEFAULT_FOLDER_NAME,
+                        DateTime.now(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.deleteFolder(folderId = DEFAULT_EDIT_ITEM_ID)
+            } returns DeleteFolderResult.Error
+
+            viewModel.trySendAction(FolderAddEditAction.DeleteClick)
+
+            assertEquals(
+                stateWithDialog,
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `SaveClick with empty name should show an error dialog`() =
+        runTest {
+            val stateWithoutName = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.AddItem,
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = "",
+                ),
+            )
+
+            val stateWithDialog = stateWithoutName.copy(
+                dialog = FolderAddEditState.DialogState.Error(
+                    R.string.validation_field_required
+                        .asText(R.string.name.asText()),
+                ),
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithoutName,
+                ),
+            )
+
+            assertEquals(stateWithoutName, viewModel.stateFlow.value)
+
+            viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+            assertEquals(stateWithDialog, viewModel.stateFlow.value)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick createFolder success should show dialog, and remove it once an item is saved`() =
+        runTest {
+            val stateWithDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.AddItem,
+                dialog = FolderAddEditState.DialogState.Loading(
+                    R.string.saving.asText(),
+                ),
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+            )
+
+            val stateWithoutDialog = stateWithDialog.copy(
+                dialog = null,
+            )
+
+            val viewModel = createViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithoutDialog,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(mockk())
+
+            viewModel.stateFlow.test {
+                viewModel.trySendAction(FolderAddEditAction.SaveClick)
+                assertEquals(stateWithoutDialog, awaitItem())
+                assertEquals(stateWithDialog, awaitItem())
+                assertEquals(stateWithoutDialog, awaitItem())
+            }
+        }
+
+    @Test
+    fun `in add mode, SaveClick createFolder error should show an error dialog`() = runTest {
+        val state = FolderAddEditState(
+            folderAddEditType = FolderAddEditType.AddItem,
+            dialog = null,
+            viewState = FolderAddEditState.ViewState.Content(
+                folderName = DEFAULT_FOLDER_NAME,
+            ),
+        )
+
+        val viewModel = createViewModel(
+            createSavedStateHandleWithState(
+                state = state,
+            ),
+        )
+
+        coEvery {
+            vaultRepository.createFolder(any())
+        } returns CreateFolderResult.Error
+
+        viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+        assertEquals(
+            state.copy(
+                dialog = FolderAddEditState.DialogState.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `in edit mode, SaveClick should show dialog, and remove it once an item is saved`() =
+        runTest {
+            val stateWithDialog = FolderAddEditState(
+                folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                dialog = FolderAddEditState.DialogState.Loading(
+                    R.string.saving.asText(),
+                ),
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+            )
+
+            val stateWithoutDialog = stateWithDialog.copy(
+                folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                dialog = null,
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = DEFAULT_FOLDER_NAME,
+                ),
+            )
+
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithoutDialog,
+                ),
+            )
+
+            mutableFoldersStateFlow.value =
+                DataState.Loaded(
+                    FolderView(
+                        DEFAULT_EDIT_ITEM_ID,
+                        DEFAULT_FOLDER_NAME,
+                        DateTime.now(),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.updateFolder(any(), any())
+            } returns UpdateFolderResult.Success(mockk())
+
+            viewModel.stateFlow.test {
+                viewModel.trySendAction(FolderAddEditAction.SaveClick)
+                assertEquals(stateWithoutDialog, awaitItem())
+                assertEquals(stateWithDialog, awaitItem())
+                assertEquals(stateWithoutDialog, awaitItem())
+            }
+        }
+
+    @Test
+    fun `in edit mode, SaveClick updateFolder error should show an error dialog`() = runTest {
+        val state = FolderAddEditState(
+            folderAddEditType = FolderAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+            dialog = null,
+            viewState = FolderAddEditState.ViewState.Content(
+                folderName = DEFAULT_FOLDER_NAME,
+            ),
+        )
+
+        val viewModel = createViewModel(
+            createSavedStateHandleWithState(
+                state = state,
+            ),
+        )
+
+        mutableFoldersStateFlow.value =
+            DataState.Loaded(
+                FolderView(
+                    DEFAULT_EDIT_ITEM_ID,
+                    DEFAULT_FOLDER_NAME,
+                    DateTime.now(),
+                ),
+            )
+
+        coEvery {
+            vaultRepository.updateFolder(any(), any())
+        } returns UpdateFolderResult.Error(errorMessage = null)
+
+        viewModel.trySendAction(FolderAddEditAction.SaveClick)
+
+        assertEquals(
+            state.copy(
+                dialog = FolderAddEditState.DialogState.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -119,15 +454,6 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             expectedState,
             viewModel.stateFlow.value,
         )
-    }
-
-    @Test
-    fun `SaveClick should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(FolderAddEditAction.SaveClick)
-            assertEquals(FolderAddEditEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
-        }
     }
 
     @Test
