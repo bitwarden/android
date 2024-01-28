@@ -629,26 +629,24 @@ class AuthRepositoryImpl(
                         fingerprint = authRequest.fingerprint,
                     )
                     .map { request ->
-                        AuthRequestResult.Success(
-                            authRequest = AuthRequest(
-                                id = request.id,
-                                publicKey = request.publicKey,
-                                platform = request.platform,
-                                ipAddress = request.ipAddress,
-                                key = request.key,
-                                masterPasswordHash = request.masterPasswordHash,
-                                creationDate = request.creationDate,
-                                responseDate = request.responseDate,
-                                requestApproved = request.requestApproved ?: false,
-                                originUrl = request.originUrl,
-                                fingerprint = authRequest.fingerprint,
-                            ),
+                        AuthRequest(
+                            id = request.id,
+                            publicKey = request.publicKey,
+                            platform = request.platform,
+                            ipAddress = request.ipAddress,
+                            key = request.key,
+                            masterPasswordHash = request.masterPasswordHash,
+                            creationDate = request.creationDate,
+                            responseDate = request.responseDate,
+                            requestApproved = request.requestApproved ?: false,
+                            originUrl = request.originUrl,
+                            fingerprint = authRequest.fingerprint,
                         )
                     }
             }
             .fold(
                 onFailure = { AuthRequestResult.Error },
-                onSuccess = { it },
+                onSuccess = { AuthRequestResult.Success(it) },
             )
 
     override suspend fun getAuthRequest(
