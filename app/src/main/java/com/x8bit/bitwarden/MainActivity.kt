@@ -12,6 +12,7 @@ import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -27,6 +28,9 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var autofillCompletionManager: AutofillCompletionManager
 
     @Inject
     lateinit var settingsRepository: SettingsRepository
@@ -79,12 +83,23 @@ class MainActivity : AppCompatActivity() {
             .eventFlow
             .onEach { event ->
                 when (event) {
+                    is MainEvent.CompleteAutofill -> {
+                        handleCompleteAutofill(event)
+                    }
+
                     is MainEvent.ScreenCaptureSettingChange -> {
                         handleScreenCaptureSettingChange(event)
                     }
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+    private fun handleCompleteAutofill(event: MainEvent.CompleteAutofill) {
+        autofillCompletionManager.completeAutofill(
+            activity = this,
+            cipherView = event.cipherView,
+        )
     }
 
     private fun handleScreenCaptureSettingChange(event: MainEvent.ScreenCaptureSettingChange) {

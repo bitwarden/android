@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.parser
 
+import android.app.assist.AssistStructure
 import android.service.autofill.FillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -18,5 +19,16 @@ interface AutofillParser {
     fun parse(
         autofillAppInfo: AutofillAppInfo,
         fillRequest: FillRequest,
+    ): AutofillRequest
+
+    /**
+     * Parse the useful information from [assistStructure] into an [AutofillRequest].
+     *
+     * @param autofillAppInfo Provides app context that is required to properly parse the request.
+     * @param assistStructure The key data from the original request that needs parsing.
+     */
+    fun parse(
+        autofillAppInfo: AutofillAppInfo,
+        assistStructure: AssistStructure,
     ): AutofillRequest
 }

@@ -91,6 +91,12 @@ class AutofillParserTests {
             )
         } returns emptyList()
         every {
+            null.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
+            )
+        } returns emptyList()
+        every {
             fillRequest.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = true,
@@ -98,6 +104,12 @@ class AutofillParserTests {
         } returns MAX_INLINE_SUGGESTION_COUNT
         every {
             fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
+            )
+        } returns 0
+        every {
+            null.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = false,
             )
@@ -413,6 +425,57 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = false,
             )
             fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
+            )
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+        }
+    }
+
+    @Test
+    fun `parse should return empty inline suggestions when parsing an AssistStructure directly`() {
+        // Setup
+        mockIsInlineAutofillEnabled = false
+        setupAssistStructureWithAllAutofillViewTypes()
+        val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
+            data = AutofillView.Data(
+                autofillId = cardAutofillId,
+                isFocused = true,
+            ),
+        )
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                isFocused = true,
+            ),
+        )
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(cardAutofillView),
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = emptyList(),
+            maxInlineSuggestionsCount = 0,
+            partition = autofillPartition,
+            uri = URI,
+        )
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            assistStructure = assistStructure,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            null.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = false,
+            )
+            null.getMaxInlineSuggestionsCount(
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = false,
             )

@@ -3,8 +3,11 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -25,6 +28,7 @@ import org.junit.jupiter.api.Test
 
 class MainViewModelTest : BaseViewModelTest() {
 
+    private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
@@ -57,6 +61,22 @@ class MainViewModelTest : BaseViewModelTest() {
             specialCircumstance,
             specialCircumstanceManager.specialCircumstance,
         )
+    }
+
+    @Test
+    fun `autofill selection updates should emit CompleteAutofill events`() = runTest {
+        val viewModel = createViewModel()
+        val cipherView = mockk<CipherView>()
+        viewModel.eventFlow.test {
+            // Ignore initial screen capture event
+            awaitItem()
+
+            autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+            assertEquals(
+                MainEvent.CompleteAutofill(cipherView = cipherView),
+                awaitItem(),
+            )
+        }
     }
 
     @Test
@@ -217,6 +237,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
+        autofillSelectionManager = autofillSelectionManager,
         specialCircumstanceManager = specialCircumstanceManager,
         settingsRepository = settingsRepository,
         intentManager = intentManager,

@@ -40,13 +40,23 @@ class AutofillParserImpl(
             }
             ?: AutofillRequest.Unfillable
 
+    override fun parse(
+        autofillAppInfo: AutofillAppInfo,
+        assistStructure: AssistStructure,
+    ): AutofillRequest =
+        parseInternal(
+            assistStructure = assistStructure,
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = null,
+        )
+
     /**
      * Parse the [AssistStructure] into an [AutofillRequest].
      */
     private fun parseInternal(
         assistStructure: AssistStructure,
         autofillAppInfo: AutofillAppInfo,
-        fillRequest: FillRequest,
+        fillRequest: FillRequest?,
     ): AutofillRequest {
         // Parse the `assistStructure` into internal models.
         val traversalDataList = assistStructure.traverse()

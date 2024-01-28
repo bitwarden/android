@@ -4,8 +4,11 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -48,6 +51,8 @@ import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultItemListingViewModelTest : BaseViewModelTest() {
+
+    private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
 
     private val clock: Clock = Clock.fixed(
         Instant.parse("2023-10-27T12:00:00Z"),
@@ -149,6 +154,35 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             vaultRepository.sync()
         }
     }
+
+    @Test
+    fun `ItemClick for vault item when autofill should post to the AutofillSelectionManager`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(number = 1)
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = mockk(),
+                    shouldFinishWhenComplete = true,
+                )
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+
+            autofillSelectionManager.autofillSelectionFlow.test {
+                viewModel.trySendAction(VaultItemListingsAction.ItemClick(id = "mockId-1"))
+                assertEquals(
+                    cipherView,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `ItemClick for vault item should emit NavigateToVaultItem`() = runTest {
@@ -943,6 +977,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
+            autofillSelectionManager = autofillSelectionManager,
             specialCircumstanceManager = specialCircumstanceManager,
         )
 
