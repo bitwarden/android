@@ -131,13 +131,21 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on approve login requests toggle off should send Disabled action`() {
+    fun `on approve login requests toggle off should send Disabled action and hide requests row`() {
+        composeTestRule
+            .onNodeWithText("Pending login requests")
+            .assertDoesNotExist()
+
         mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
 
         composeTestRule
             .onNodeWithText("Use this device to approve login requests made from other devices")
             .performScrollTo()
             .performClick()
+        composeTestRule
+            .onNodeWithText("Pending login requests")
+            .performScrollTo()
+            .assertIsDisplayed()
 
         verify {
             viewModel.trySendAction(
@@ -300,6 +308,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     @Test
     fun `on pending login requests click should send PendingLoginRequestsClick`() {
+        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
         composeTestRule
             .onNodeWithText("Pending login requests")
             .performScrollTo()
