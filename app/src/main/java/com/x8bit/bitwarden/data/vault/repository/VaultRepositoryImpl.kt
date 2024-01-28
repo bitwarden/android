@@ -351,7 +351,9 @@ class VaultRepositoryImpl(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>> {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return MutableStateFlow(
+            DataState.Error(IllegalStateException("No active user"), null),
+        )
         return vaultDataStateFlow
             .map { dataState ->
                 dataState.map { vaultData ->
@@ -392,7 +394,9 @@ class VaultRepositoryImpl(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getAuthCodeFlow(cipherId: String): StateFlow<DataState<VerificationCodeItem?>> {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return MutableStateFlow(
+            DataState.Error(IllegalStateException("No active user"), null),
+        )
         return getVaultItemStateFlow(cipherId)
             .flatMapLatest { cipherDataState ->
                 val cipher = cipherDataState.data
@@ -503,7 +507,7 @@ class VaultRepositoryImpl(
         )
 
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return CreateCipherResult.Error
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -527,7 +531,7 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun hardDeleteCipher(cipherId: String): DeleteCipherResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return DeleteCipherResult.Error
         return ciphersService
             .hardDeleteCipher(cipherId)
             .onSuccess { vaultDiskSource.deleteCipher(userId, cipherId) }
@@ -541,7 +545,7 @@ class VaultRepositoryImpl(
         cipherId: String,
         cipherView: CipherView,
     ): DeleteCipherResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return DeleteCipherResult.Error
         return ciphersService
             .softDeleteCipher(cipherId)
             .fold(
@@ -570,7 +574,7 @@ class VaultRepositoryImpl(
         attachmentId: String,
         cipherView: CipherView,
     ): DeleteAttachmentResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return DeleteAttachmentResult.Error
         return ciphersService
             .deleteCipherAttachment(
                 cipherId = cipherId,
@@ -603,7 +607,7 @@ class VaultRepositoryImpl(
         cipherId: String,
         cipherView: CipherView,
     ): RestoreCipherResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return RestoreCipherResult.Error
         return ciphersService
             .restoreCipher(cipherId)
             .flatMap {
@@ -630,7 +634,7 @@ class VaultRepositoryImpl(
         cipherId: String,
         cipherView: CipherView,
     ): UpdateCipherResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return UpdateCipherResult.Error(null)
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -664,7 +668,7 @@ class VaultRepositoryImpl(
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return ShareCipherResult.Error(null)
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -695,7 +699,7 @@ class VaultRepositoryImpl(
         fileName: String,
         fileUri: Uri,
     ): CreateAttachmentResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return CreateAttachmentResult.Error
         val attachmentView = AttachmentView(
             id = null,
             url = null,
@@ -757,7 +761,7 @@ class VaultRepositoryImpl(
         sendView: SendView,
         fileUri: Uri?,
     ): CreateSendResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return CreateSendResult.Error
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
@@ -817,7 +821,7 @@ class VaultRepositoryImpl(
         sendId: String,
         sendView: SendView,
     ): UpdateSendResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return UpdateSendResult.Error(null)
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
@@ -854,7 +858,7 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return RemovePasswordSendResult.Error(null)
         return sendsService
             .removeSendPassword(sendId = sendId)
             .fold(
@@ -882,7 +886,7 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun deleteSend(sendId: String): DeleteSendResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return DeleteSendResult.Error
         return sendsService
             .deleteSend(sendId)
             .onSuccess { vaultDiskSource.deleteSend(userId, sendId) }
@@ -896,7 +900,7 @@ class VaultRepositoryImpl(
         totpCode: String,
         time: DateTime,
     ): GenerateTotpResult {
-        val userId = requireNotNull(activeUserId)
+        val userId = activeUserId ?: return GenerateTotpResult.Error
         return vaultSdkSource.generateTotp(
             time = time,
             userId = userId,

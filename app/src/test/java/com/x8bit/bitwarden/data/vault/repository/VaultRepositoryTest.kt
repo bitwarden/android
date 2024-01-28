@@ -106,6 +106,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.net.UnknownHostException
@@ -1625,6 +1626,19 @@ class VaultRepositoryTest {
         }
 
     @Test
+    fun `createCipher with no active user should return CreateCipherResult failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.createCipher(cipherView = mockk())
+
+            assertEquals(
+                CreateCipherResult.Error,
+                result,
+            )
+        }
+
+    @Test
     fun `createCipher with encryptCipher failure should return CreateCipherResult failure`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -1697,6 +1711,22 @@ class VaultRepositoryTest {
 
             assertEquals(
                 CreateCipherResult.Success,
+                result,
+            )
+        }
+
+    @Test
+    fun `updateCipher with no active user should return UpdateCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.updateCipher(
+                cipherId = "cipherId",
+                cipherView = mockk(),
+            )
+
+            assertEquals(
+                UpdateCipherResult.Error(null),
                 result,
             )
         }
@@ -1829,6 +1859,21 @@ class VaultRepositoryTest {
             assertEquals(UpdateCipherResult.Success, result)
         }
 
+    @Test
+    fun `hardDeleteCipher with no active user should return DeleteCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.hardDeleteCipher(
+                cipherId = "cipherId",
+            )
+
+            assertEquals(
+                DeleteCipherResult.Error,
+                result,
+            )
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `hardDeleteCipher with ciphersService hardDeleteCipher failure should return DeleteCipherResult Error`() =
@@ -1857,6 +1902,22 @@ class VaultRepositoryTest {
             val result = vaultRepository.hardDeleteCipher(cipherId)
 
             assertEquals(DeleteCipherResult.Success, result)
+        }
+
+    @Test
+    fun `softDeleteCipher with no active user should return DeleteCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.softDeleteCipher(
+                cipherId = "cipherId",
+                cipherView = mockk(),
+            )
+
+            assertEquals(
+                DeleteCipherResult.Error,
+                result,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1917,6 +1978,23 @@ class VaultRepositoryTest {
             assertEquals(DeleteCipherResult.Success, result)
             unmockkStatic(Instant::class)
             unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        }
+
+    @Test
+    fun `deleteCipherAttachment with no active user should return DeleteAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.deleteCipherAttachment(
+                cipherId = "cipherId",
+                attachmentId = "attachmentId",
+                cipherView = mockk(),
+            )
+
+            assertEquals(
+                DeleteAttachmentResult.Error,
+                result,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -1990,6 +2068,22 @@ class VaultRepositoryTest {
             unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
         }
 
+    @Test
+    fun `restoreCipher with no active user should return RestoreCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.restoreCipher(
+                cipherId = "cipherId",
+                cipherView = mockk(),
+            )
+
+            assertEquals(
+                RestoreCipherResult.Error,
+                result,
+            )
+        }
+
     @Suppress("MaxLineLength")
     @Test
     fun `restoreCipher with ciphersService restoreCipher failure should return RestoreCipherResult Error`() =
@@ -2046,6 +2140,22 @@ class VaultRepositoryTest {
             )
 
             assertEquals(RestoreCipherResult.Success, result)
+        }
+
+    @Test
+    fun `createSend with no active user should return CreateSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.createSend(
+                sendView = mockk(),
+                fileUri = mockk(),
+            )
+
+            assertEquals(
+                CreateSendResult.Error,
+                result,
+            )
         }
 
     @Test
@@ -2238,6 +2348,22 @@ class VaultRepositoryTest {
         }
 
     @Test
+    fun `updateSend with no active user should return UpdateSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.updateSend(
+                sendId = "sendId",
+                sendView = mockk(),
+            )
+
+            assertEquals(
+                UpdateSendResult.Error(null),
+                result,
+            )
+        }
+
+    @Test
     fun `updateSend with encryptSend failure should return UpdateSendResult failure`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -2391,6 +2517,21 @@ class VaultRepositoryTest {
         }
 
     @Test
+    fun `removePasswordSend with no active user should return RemovePasswordSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.removePasswordSend(
+                sendId = "sendId",
+            )
+
+            assertEquals(
+                RemovePasswordSendResult.Error(null),
+                result,
+            )
+        }
+
+    @Test
     @Suppress("MaxLineLength")
     fun `removePasswordSend with sendsService removeSendPassword Error should return RemovePasswordSendResult Error`() =
         runTest {
@@ -2449,6 +2590,21 @@ class VaultRepositoryTest {
         }
 
     @Test
+    fun `deleteSend with no active user should return DeleteSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.deleteSend(
+                sendId = "sendId",
+            )
+
+            assertEquals(
+                DeleteSendResult.Error,
+                result,
+            )
+        }
+
+    @Test
     fun `deleteSend with sendsService deleteSend failure should return DeleteSendResult Error`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -2474,6 +2630,23 @@ class VaultRepositoryTest {
             val result = vaultRepository.deleteSend(sendId)
 
             assertEquals(DeleteSendResult.Success, result)
+        }
+
+    @Test
+    fun `shareCipher with no active user should return ShareCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.shareCipher(
+                cipherId = "cipherId",
+                cipherView = mockk(),
+                collectionIds = emptyList(),
+            )
+
+            assertEquals(
+                ShareCipherResult.Error(null),
+                result,
+            )
         }
 
     @Test
@@ -2577,6 +2750,25 @@ class VaultRepositoryTest {
 
             assertEquals(
                 ShareCipherResult.Error(errorMessage = null),
+                result,
+            )
+        }
+
+    @Test
+    fun `createAttachment with no active user should return CreateAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.createAttachment(
+                cipherId = "cipherId",
+                cipherView = mockk(),
+                fileSizeBytes = "mockFileSize",
+                fileName = "mockFileName",
+                fileUri = mockk(),
+            )
+
+            assertEquals(
+                CreateAttachmentResult.Error,
                 result,
             )
         }
@@ -2908,6 +3100,22 @@ class VaultRepositoryTest {
         }
 
     @Test
+    fun `generateTotp with no active user should return GenerateTotpResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.generateTotp(
+                totpCode = "totpCode",
+                time = DateTime.now(),
+            )
+
+            assertEquals(
+                GenerateTotpResult.Error,
+                result,
+            )
+        }
+
+    @Test
     fun `generateTotp should return a success result on getting a code`() = runTest {
         val totpResponse = TotpResponse("Testcode", 30u)
         coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns Result.success(
@@ -2931,7 +3139,14 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getVerificationCodeFlow for a single cipher should update data state when state changes`() =
+    fun `getAuthCodeFlow with no active user should emit an error`() = runTest {
+        fakeAuthDiskSource.userState = null
+        assertTrue(vaultRepository.getAuthCodeFlow(cipherId = "cipherId").value is DataState.Error)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthCodeFlow for a single cipher should update data state when state changes`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
@@ -2989,8 +3204,15 @@ class VaultRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getVerificationCodesFlow should update data state when state changes`() = runTest {
+    fun `getAuthCodesFlow with no active user should emit an error`() = runTest {
+        fakeAuthDiskSource.userState = null
+        assertTrue(vaultRepository.getAuthCodesFlow().value is DataState.Error)
+    }
+
+    @Test
+    fun `getAuthCodesFlow should update data state when state changes`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val userId = "mockId-1"
 
