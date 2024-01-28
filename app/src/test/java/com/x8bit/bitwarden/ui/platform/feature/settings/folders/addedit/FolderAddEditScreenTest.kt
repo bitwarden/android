@@ -65,8 +65,33 @@ class FolderAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `overflow menu should only be displayed in edit mode`() {
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .assertIsNotDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE_EDIT.copy(
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = "TestName",
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `clicking overflow menu and delete, and cancel should dismiss the dialog`() {
         val deleteText = "Do you really want to delete? This cannot be undone."
+        mutableStateFlow.update {
+            DEFAULT_STATE_EDIT.copy(
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = "TestName",
+                ),
+            )
+        }
 
         // Open the overflow menu
         composeTestRule
@@ -95,6 +120,14 @@ class FolderAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking overflow menu and delete, and delete confirmation again should send a DeleteClick Action`() {
         val deleteText = "Do you really want to delete? This cannot be undone."
+
+        mutableStateFlow.update {
+            DEFAULT_STATE_EDIT.copy(
+                viewState = FolderAddEditState.ViewState.Content(
+                    folderName = "TestName",
+                ),
+            )
+        }
 
         composeTestRule
             .onNodeWithContentDescription("More")

@@ -109,14 +109,16 @@ fun FolderAddEditScreen(
                             { viewModel.trySendAction(FolderAddEditAction.SaveClick) }
                         },
                     )
-                    BitwardenOverflowActionItem(
-                        menuItemDataList = persistentListOf(
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.delete),
-                                onClick = { shouldShowConfirmationDialog = true },
+                    if (state.shouldShowOverflowMenu) {
+                        BitwardenOverflowActionItem(
+                            menuItemDataList = persistentListOf(
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.delete),
+                                    onClick = { shouldShowConfirmationDialog = true },
+                                ),
                             ),
-                        ),
-                    )
+                        )
+                    }
                 },
             )
         },
