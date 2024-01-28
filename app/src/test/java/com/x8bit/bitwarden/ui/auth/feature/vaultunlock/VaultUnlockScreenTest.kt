@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -30,7 +31,10 @@ import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -45,12 +49,26 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
+    private val captureBiometricsSuccess = slot<() -> Unit>()
+    private val captureBiometricsLockOut = slot<() -> Unit>()
+    private val biometricsManager: BiometricsManager = mockk {
+        every { isBiometricsSupported } returns true
+        every {
+            promptBiometrics(
+                onSuccess = capture(captureBiometricsSuccess),
+                onCancel = any(),
+                onLockOut = capture(captureBiometricsLockOut),
+                onError = any(),
+            )
+        } just runs
+    }
 
     @Before
     fun setUp() {
         composeTestRule.setContent {
             VaultUnlockScreen(
                 viewModel = viewModel,
+                biometricsManager = biometricsManager,
             )
         }
     }
@@ -336,6 +354,32 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             .performTextInput(input)
         verify {
             viewModel.trySendAction(VaultUnlockAction.InputChanged(input))
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlock with biometrics click should send BiometricsUnlockClick on biometrics authentication success`() {
+        composeTestRule
+            .onNodeWithText("Use biometrics to unlock")
+            .performScrollTo()
+            .performClick()
+        captureBiometricsSuccess.captured()
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlock with biometrics click should send BiometricsLockOut on biometrics authentication lock out`() {
+        composeTestRule
+            .onNodeWithText("Use biometrics to unlock")
+            .performScrollTo()
+            .performClick()
+        captureBiometricsLockOut.captured()
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
         }
     }
 }
