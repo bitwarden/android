@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -29,6 +30,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -49,6 +51,21 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         every { startApplicationDetailsSettingsActivity() } just runs
     }
     private val permissionsManager = FakePermissionManager()
+    private val captureBiometricsSuccess = slot<() -> Unit>()
+    private val captureBiometricsCancel = slot<() -> Unit>()
+    private val captureBiometricsLockOut = slot<() -> Unit>()
+    private val captureBiometricsError = slot<() -> Unit>()
+    private val biometricsManager: BiometricsManager = mockk {
+        every { isBiometricsSupported } returns true
+        every {
+            promptBiometrics(
+                onSuccess = capture(captureBiometricsSuccess),
+                onCancel = capture(captureBiometricsCancel),
+                onLockOut = capture(captureBiometricsLockOut),
+                onError = capture(captureBiometricsError),
+            )
+        } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<AccountSecurityEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<AccountSecurityViewModel>(relaxed = true) {
@@ -64,6 +81,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
                 onNavigateToPendingRequests = { onNavigateToPendingRequestsCalled = true },
                 viewModel = viewModel,
+                biometricsManager = biometricsManager,
                 intentManager = intentManager,
                 permissionsManager = permissionsManager,
             )
@@ -290,12 +308,99 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle`() {
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle on success`() {
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
         composeTestRule
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true)) }
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsSuccess.captured()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should un-toggle on cancel`() {
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsCancel.captured()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should un-toggle on error`() {
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsError.captured()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should un-toggle on lock out`() {
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsLockOut.captured()
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
     }
 
     @Test
