@@ -1,13 +1,15 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.mockk
@@ -46,6 +48,26 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `dismissing error dialog should send ErrorDialogDismiss`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = LoginWithDeviceState.ViewState.Content(
+                    fingerprintPhrase = "",
+                    isResendNotificationLoading = false,
+                    shouldShowErrorDialog = true,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Ok")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(LoginWithDeviceAction.ErrorDialogDismiss)
+        }
+    }
+
+    @Test
     fun `resend notification click should send ResendNotificationClick action`() {
         composeTestRule.onNodeWithText("Resend notification").performClick()
         verify {
@@ -75,33 +97,9 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
         composeTestRule.onNode(isProgressBar).assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(viewState = LoginWithDeviceState.ViewState.Error("Failure".asText()))
-        }
-        composeTestRule.onNode(isProgressBar).assertDoesNotExist()
-
-        mutableStateFlow.update {
             it.copy(viewState = DEFAULT_STATE.viewState)
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
-    }
-
-    @Test
-    fun `error should be displayed according to state`() {
-        val errorMessage = "error"
-        mutableStateFlow.update {
-            it.copy(viewState = LoginWithDeviceState.ViewState.Loading)
-        }
-        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
-
-        mutableStateFlow.update {
-            it.copy(viewState = LoginWithDeviceState.ViewState.Error(errorMessage.asText()))
-        }
-        composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
-
-        mutableStateFlow.update {
-            it.copy(viewState = DEFAULT_STATE.viewState)
-        }
-        composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
     }
 
     companion object {
@@ -111,6 +109,7 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
             viewState = LoginWithDeviceState.ViewState.Content(
                 fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
                 isResendNotificationLoading = false,
+                shouldShowErrorDialog = false,
             ),
         )
     }

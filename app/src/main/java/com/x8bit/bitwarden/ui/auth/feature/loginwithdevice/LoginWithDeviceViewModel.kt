@@ -3,12 +3,9 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -38,6 +35,7 @@ class LoginWithDeviceViewModel @Inject constructor(
     override fun handleAction(action: LoginWithDeviceAction) {
         when (action) {
             LoginWithDeviceAction.CloseButtonClick -> handleCloseButtonClicked()
+            LoginWithDeviceAction.ErrorDialogDismiss -> handleErrorDialogDismissed()
             LoginWithDeviceAction.ResendNotificationClick -> handleResendNotificationClicked()
             LoginWithDeviceAction.ViewAllLogInOptionsClick -> handleViewAllLogInOptionsClicked()
 
@@ -49,6 +47,19 @@ class LoginWithDeviceViewModel @Inject constructor(
 
     private fun handleCloseButtonClicked() {
         sendEvent(LoginWithDeviceEvent.NavigateBack)
+    }
+
+    private fun handleErrorDialogDismissed() {
+        val viewState = mutableStateFlow.value.viewState as? LoginWithDeviceState.ViewState.Content
+        if (viewState != null) {
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = viewState.copy(
+                        shouldShowErrorDialog = false,
+                    ),
+                )
+            }
+        }
     }
 
     private fun handleResendNotificationClicked() {
@@ -69,17 +80,20 @@ class LoginWithDeviceViewModel @Inject constructor(
                         viewState = LoginWithDeviceState.ViewState.Content(
                             fingerprintPhrase = action.result.authRequest.fingerprint,
                             isResendNotificationLoading = false,
+                            shouldShowErrorDialog = false,
                         ),
                     )
                 }
             }
 
             is AuthRequestResult.Error -> {
-                // TODO BIT-1563 display error dialog
+
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = LoginWithDeviceState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                        viewState = LoginWithDeviceState.ViewState.Content(
+                            fingerprintPhrase = "",
+                            isResendNotificationLoading = false,
+                            shouldShowErrorDialog = true,
                         ),
                     )
                 }
@@ -137,17 +151,6 @@ data class LoginWithDeviceState(
         data object Loading : ViewState()
 
         /**
-         * Represents a state where the [LoginWithDeviceScreen] is unable to display data due to an
-         * error retrieving it.
-         *
-         * @property message The message to display on the error screen.
-         */
-        @Parcelize
-        data class Error(
-            val message: Text,
-        ) : ViewState()
-
-        /**
          * Content state for the [LoginWithDeviceScreen] showing the actual content or items.
          *
          * @property fingerprintPhrase The fingerprint phrase to present to the user.
@@ -156,6 +159,7 @@ data class LoginWithDeviceState(
         data class Content(
             val fingerprintPhrase: String,
             val isResendNotificationLoading: Boolean,
+            val shouldShowErrorDialog: Boolean,
         ) : ViewState()
     }
 }
@@ -185,6 +189,11 @@ sealed class LoginWithDeviceAction {
      * Indicates that the top-bar close button was clicked.
      */
     data object CloseButtonClick : LoginWithDeviceAction()
+
+    /**
+     * Indicates that the error dialog was dismissed.
+     */
+    data object ErrorDialogDismiss : LoginWithDeviceAction()
 
     /**
      * Indicates that the "Resend notification" text has been clicked.
