@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
@@ -220,9 +221,21 @@ class AccountSecurityViewModel @Inject constructor(
     private fun handleUnlockWithBiometricToggle(
         action: AccountSecurityAction.UnlockWithBiometricToggle,
     ) {
-        // TODO Display alert
-        mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = action.enabled) }
-        sendEvent(AccountSecurityEvent.ShowToast("Handle unlock with biometrics.".asText()))
+        if (action.enabled) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                    isUnlockWithBiometricsEnabled = true,
+                )
+            }
+            viewModelScope.launch {
+                val result = settingsRepository.setupBiometricsKey()
+                sendAction(AccountSecurityAction.Internal.BiometricsKeyResultReceive(result))
+            }
+        } else {
+            settingsRepository.clearBiometricsKey()
+            mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+        }
     }
 
     private fun handleUnlockWithPinToggle(action: AccountSecurityAction.UnlockWithPinToggle) {
@@ -248,8 +261,36 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleInternalAction(action: AccountSecurityAction.Internal) {
         when (action) {
+            is AccountSecurityAction.Internal.BiometricsKeyResultReceive -> {
+                handleBiometricsKeyResultReceive(action)
+            }
+
             is AccountSecurityAction.Internal.FingerprintResultReceive -> {
                 handleFingerprintResultReceived(action)
+            }
+        }
+    }
+
+    private fun handleBiometricsKeyResultReceive(
+        action: AccountSecurityAction.Internal.BiometricsKeyResultReceive,
+    ) {
+        when (action.result) {
+            BiometricsKeyResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = null,
+                        isUnlockWithBiometricsEnabled = false,
+                    )
+                }
+            }
+
+            BiometricsKeyResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = null,
+                        isUnlockWithBiometricsEnabled = true,
+                    )
+                }
             }
         }
     }
@@ -515,6 +556,13 @@ sealed class AccountSecurityAction {
      * Models actions that can be sent by the view model itself.
      */
     sealed class Internal : AccountSecurityAction() {
+        /**
+         * A biometrics key result has been received.
+         */
+        data class BiometricsKeyResultReceive(
+            val result: BiometricsKeyResult,
+        ) : Internal()
+
         /**
          * A fingerprint has been received.
          */

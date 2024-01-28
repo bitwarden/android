@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -259,20 +261,84 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `on UnlockWithBiometricToggle should emit ShowToast`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
+    fun `on UnlockWithBiometricToggle false should call clearBiometricsKey and update the state`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
+            every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
+            every { settingsRepository.clearBiometricsKey() } just runs
+            val viewModel = createViewModel(initialState)
+            assertEquals(initialState, viewModel.stateFlow.value)
+
+            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(false))
+
             assertEquals(
-                AccountSecurityEvent.ShowToast("Handle unlock with biometrics.".asText()),
-                awaitItem(),
+                initialState.copy(isUnlockWithBiometricsEnabled = false),
+                viewModel.stateFlow.value,
             )
+            verify(exactly = 1) {
+                settingsRepository.clearBiometricsKey()
+            }
         }
-        assertEquals(
-            DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true),
-            viewModel.stateFlow.value,
-        )
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on UnlockWithBiometricToggle true and setupBiometricsKey error should call update the state accordingly`() =
+        runTest {
+            coEvery { settingsRepository.setupBiometricsKey() } returns BiometricsKeyResult.Error
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                        isUnlockWithBiometricsEnabled = true,
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = null,
+                        isUnlockWithBiometricsEnabled = false,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                settingsRepository.setupBiometricsKey()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on UnlockWithBiometricToggle true and setupBiometricsKey success should call update the state accordingly`() =
+        runTest {
+            coEvery { settingsRepository.setupBiometricsKey() } returns BiometricsKeyResult.Success
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                        isUnlockWithBiometricsEnabled = true,
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = null,
+                        isUnlockWithBiometricsEnabled = true,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                settingsRepository.setupBiometricsKey()
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
