@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockLogin
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPasswordHistory
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSecureNote
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockUri
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCard
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
@@ -268,6 +269,31 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(
             FieldType.HIDDEN,
             sdkFieldType,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSortAlphabetically should sort ciphers by name`() {
+        val list = listOf(
+            createMockCipherView(1).copy(name = "c"),
+            createMockCipherView(1).copy(name = "B"),
+            createMockCipherView(1).copy(name = "z"),
+            createMockCipherView(1).copy(name = "A"),
+            createMockCipherView(1).copy(name = "D"),
+        )
+
+        val expected = listOf(
+            createMockCipherView(1).copy(name = "A"),
+            createMockCipherView(1).copy(name = "B"),
+            createMockCipherView(1).copy(name = "c"),
+            createMockCipherView(1).copy(name = "D"),
+            createMockCipherView(1).copy(name = "z"),
+        )
+
+        assertEquals(
+            expected,
+            list.sortAlphabetically(),
         )
     }
 }
