@@ -20,6 +20,22 @@ class FillRequestExtensionsTest {
     }
 
     @Test
+    fun `getInlinePresentationSpecs should return empty list when request is null`() {
+        // Setup
+        val autofillAppInfo: AutofillAppInfo = mockk()
+        val expected: List<InlinePresentationSpec> = emptyList()
+
+        // Test
+        val actual = null.getInlinePresentationSpecs(
+            autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = false,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun `getInlinePresentationSpecs should return empty list when disabled`() {
         // Setup
         val autofillAppInfo: AutofillAppInfo = mockk()
@@ -69,6 +85,22 @@ class FillRequestExtensionsTest {
         val actual = fillRequest.getInlinePresentationSpecs(
             autofillAppInfo = autofillAppInfo,
             isInlineAutofillEnabled = true,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `getMaxInlineSuggestionsCount should return 0 when request is null`() {
+        // Setup
+        val autofillAppInfo: AutofillAppInfo = mockk()
+        val expected = 0
+
+        // Test
+        val actual = null.getMaxInlineSuggestionsCount(
+            autofillAppInfo = autofillAppInfo,
+            isInlineAutofillEnabled = false,
         )
 
         // Verify

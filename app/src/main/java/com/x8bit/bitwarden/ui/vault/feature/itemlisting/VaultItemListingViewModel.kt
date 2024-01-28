@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -55,6 +56,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    private val autofillSelectionManager: AutofillSelectionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
@@ -180,6 +182,12 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleItemClick(action: VaultItemListingsAction.ItemClick) {
+        if (state.isAutofill) {
+            val cipherView = getCipherViewOrNull(action.id) ?: return
+            autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+            return
+        }
+
         val event = when (state.itemListingType) {
             is VaultItemListingState.ItemListingType.Vault -> {
                 VaultItemListingEvent.NavigateToVaultItem(id = action.id)
@@ -518,6 +526,14 @@ class VaultItemListingViewModel @Inject constructor(
             )
         }
     }
+
+    private fun getCipherViewOrNull(cipherId: String) =
+        vaultRepository
+            .vaultDataStateFlow
+            .value
+            .data
+            ?.cipherViewList
+            ?.firstOrNull { it.id == cipherId }
 }
 
 /**

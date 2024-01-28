@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -25,6 +27,7 @@ private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val autofillSelectionManager: AutofillSelectionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
@@ -49,6 +52,11 @@ class MainViewModel @Inject constructor(
             .onEach { specialCircumstance = it }
             .launchIn(viewModelScope)
 
+        autofillSelectionManager
+            .autofillSelectionFlow
+            .onEach { trySendAction(MainAction.Internal.AutofillSelectionReceive(it)) }
+            .launchIn(viewModelScope)
+
         settingsRepository
             .appThemeStateFlow
             .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
@@ -64,10 +72,20 @@ class MainViewModel @Inject constructor(
 
     override fun handleAction(action: MainAction) {
         when (action) {
+            is MainAction.Internal.AutofillSelectionReceive -> {
+                handleAutofillSelectionReceive(action)
+            }
+
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
         }
+    }
+
+    private fun handleAutofillSelectionReceive(
+        action: MainAction.Internal.AutofillSelectionReceive,
+    ) {
+        sendEvent(MainEvent.CompleteAutofill(cipherView = action.cipherView))
     }
 
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
@@ -145,6 +163,13 @@ sealed class MainAction {
      */
     sealed class Internal : MainAction() {
         /**
+         * Indicates the user has manually selected the given [cipherView] for autofill.
+         */
+        data class AutofillSelectionReceive(
+            val cipherView: CipherView,
+        ) : Internal()
+
+        /**
          * Indicates that the app theme has changed.
          */
         data class ThemeUpdate(
@@ -157,6 +182,11 @@ sealed class MainAction {
  * Represents events that are emitted by the [MainViewModel].
  */
 sealed class MainEvent {
+    /**
+     * Event indicating that the user has chosen the given [cipherView] for autofill and that the
+     * process is ready to complete.
+     */
+    data class CompleteAutofill(val cipherView: CipherView) : MainEvent()
 
     /**
      * Event indicating a change in the screen capture setting.

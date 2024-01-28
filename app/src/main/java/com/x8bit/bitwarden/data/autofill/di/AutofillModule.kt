@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilderImpl
+import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManagerImpl
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParserImpl
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
@@ -35,6 +37,17 @@ object AutofillModule {
     fun providesAutofillManager(
         @ApplicationContext context: Context,
     ): AutofillManager = context.getSystemService(AutofillManager::class.java)
+
+    @Singleton
+    @Provides
+    fun provideAutofillCompletionManager(
+        autofillParser: AutofillParser,
+        dispatcherManager: DispatcherManager,
+    ): AutofillCompletionManager =
+        AutofillCompletionManagerImpl(
+            autofillParser = autofillParser,
+            dispatcherManager = dispatcherManager,
+        )
 
     @Provides
     fun providesAutofillParser(
