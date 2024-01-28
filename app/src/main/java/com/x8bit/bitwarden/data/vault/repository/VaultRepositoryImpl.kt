@@ -425,6 +425,25 @@ class VaultRepositoryImpl(
     }
 
     @Suppress("ReturnCount")
+    override suspend fun unlockVaultWithBiometrics(): VaultUnlockResult {
+        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+        val biometricsKey = authDiskSource
+            .getUserBiometricUnlockKey(userId = userId)
+            ?: return VaultUnlockResult.InvalidStateError
+        return unlockVaultForUser(
+            userId = userId,
+            initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                decryptedUserKey = biometricsKey,
+            ),
+        )
+            .also {
+                if (it is VaultUnlockResult.Success) {
+                    deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
+                }
+            }
+    }
+
+    @Suppress("ReturnCount")
     override suspend fun unlockVaultWithMasterPassword(
         masterPassword: String,
     ): VaultUnlockResult {

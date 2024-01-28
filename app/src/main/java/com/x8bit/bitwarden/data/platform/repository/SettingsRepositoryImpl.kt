@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -347,6 +348,24 @@ class SettingsRepositoryImpl(
                 isPullToRefreshEnabled = isPullToRefreshEnabled,
             )
         }
+    }
+
+    override suspend fun setupBiometricsKey(): BiometricsKeyResult {
+        val userId = activeUserId ?: return BiometricsKeyResult.Error
+        return vaultSdkSource
+            .getUserEncryptionKey(userId = userId)
+            .onSuccess {
+                authDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = it)
+            }
+            .fold(
+                onSuccess = { BiometricsKeyResult.Success },
+                onFailure = { BiometricsKeyResult.Error },
+            )
+    }
+
+    override fun clearBiometricsKey() {
+        val userId = activeUserId ?: return
+        authDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
     }
 
     override fun storeUnlockPin(

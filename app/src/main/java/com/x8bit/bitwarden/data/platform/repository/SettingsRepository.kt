@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -168,6 +169,17 @@ interface SettingsRepository {
      * Stores the given [isPullToRefreshEnabled] for the active user.
      */
     fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean)
+
+    /**
+     * Clears any previously stored encrypted user key used with biometrics for the current user.
+     */
+    fun clearBiometricsKey()
+
+    /**
+     * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
+     * user's vault.
+     */
+    suspend fun setupBiometricsKey(): BiometricsKeyResult
 
     /**
      * Stores the given PIN, allowing it to be used to unlock the current user's vault.

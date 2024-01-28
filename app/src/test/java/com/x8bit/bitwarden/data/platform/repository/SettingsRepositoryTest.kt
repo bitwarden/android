@@ -10,9 +10,11 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
+import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -652,6 +654,70 @@ class SettingsRepositoryTest {
         settingsRepository.storePullToRefreshEnabled(true)
         assertEquals(true, fakeSettingsDiskSource.getPullToRefreshEnabled(userId = userId))
     }
+
+    @Test
+    fun `clearBiometricsKey should remove the stored biometrics key`() {
+        val userId = MOCK_USER_STATE.activeUserId
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        settingsRepository.clearBiometricsKey()
+
+        fakeAuthDiskSource.assertBiometricsKey(
+            userId = userId,
+            biometricsKey = null,
+        )
+    }
+
+    @Test
+    fun `setupBiometricsKey with missing user state should return BiometricsKeyResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = settingsRepository.setupBiometricsKey()
+
+            assertEquals(BiometricsKeyResult.Error, result)
+            coVerify(exactly = 0) {
+                vaultSdkSource.getUserEncryptionKey(userId = any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `setupBiometricsKey with getUserEncryptionKey failure should return BiometricsKeyResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
+            coEvery {
+                vaultSdkSource.getUserEncryptionKey(userId = userId)
+            } returns Throwable("Fail").asFailure()
+
+            val result = settingsRepository.setupBiometricsKey()
+
+            assertEquals(BiometricsKeyResult.Error, result)
+            coVerify(exactly = 1) {
+                vaultSdkSource.getUserEncryptionKey(userId = userId)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `setupBiometricsKey with getUserEncryptionKey success should return BiometricsKeyResult Success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
+            val encryptedKey = "asdf1234"
+            coEvery {
+                vaultSdkSource.getUserEncryptionKey(userId = userId)
+            } returns encryptedKey.asSuccess()
+
+            val result = settingsRepository.setupBiometricsKey()
+
+            assertEquals(BiometricsKeyResult.Success, result)
+            fakeAuthDiskSource.assertBiometricsKey(userId = userId, biometricsKey = encryptedKey)
+            coVerify(exactly = 1) {
+                vaultSdkSource.getUserEncryptionKey(userId = userId)
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
