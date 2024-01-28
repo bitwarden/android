@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -524,6 +525,154 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         coVerify {
             vaultRepository.unlockVaultWithPin(pin)
+        }
+    }
+
+    @Test
+    fun `on BiometricsLockOut should emit ShowToast`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
+            assertEquals(
+                VaultUnlockEvent.ShowToast("Lock out not yet implemented".asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on BiometricsUnlockClick should display error dialog on unlockVaultWithBiometrics AuthenticationError`() {
+        val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithBiometrics()
+        } returns VaultUnlockResult.AuthenticationError
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+
+        assertEquals(
+            initialState.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithBiometrics()
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on BiometricsUnlockClick should display error dialog on unlockVaultWithBiometrics GenericError`() {
+        val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithBiometrics()
+        } returns VaultUnlockResult.GenericError
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+
+        assertEquals(
+            initialState.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithBiometrics()
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on BiometricsUnlockClick should display error dialog on unlockVaultWithBiometrics InvalidStateError`() {
+        val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithBiometrics()
+        } returns VaultUnlockResult.InvalidStateError
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+
+        assertEquals(
+            initialState.copy(
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithBiometrics()
+        }
+    }
+
+    @Test
+    fun `on BiometricsUnlockClick should clear dialog on unlockVaultWithBiometrics success`() {
+        val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithBiometrics()
+        } returns VaultUnlockResult.Success
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+
+        assertEquals(
+            initialState.copy(dialog = null),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.unlockVaultWithBiometrics()
+        }
+    }
+
+    @Test
+    fun `on BiometricsUnlockClick should clear dialog when user has changed`() {
+        val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+        )
+        val resultFlow = bufferedMutableSharedFlow<VaultUnlockResult>()
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithBiometrics()
+        } coAnswers { resultFlow.first() }
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+
+        assertEquals(
+            initialState.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading),
+            viewModel.stateFlow.value,
+        )
+        val updatedUserId = "updatedUserId"
+        mutableUserStateFlow.update {
+            it?.copy(
+                activeUserId = updatedUserId,
+                accounts = listOf(DEFAULT_ACCOUNT.copy(userId = updatedUserId)),
+            )
+        }
+        resultFlow.tryEmit(VaultUnlockResult.GenericError)
+        assertEquals(initialState.copy(dialog = null), viewModel.stateFlow.value)
+        coVerify {
+            vaultRepository.unlockVaultWithBiometrics()
         }
     }
 

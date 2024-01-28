@@ -43,12 +43,15 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLogoutConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalBiometricsManager
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -60,6 +63,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun VaultUnlockScreen(
     viewModel: VaultUnlockViewModel = hiltViewModel(),
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -113,6 +117,12 @@ fun VaultUnlockScreen(
         )
     }
 
+    val onBiometricsUnlockClick: () -> Unit = remember(viewModel) {
+        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
+    }
+    val onBiometricsLockOut: () -> Unit = remember(viewModel) {
+        { viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut) }
+    }
     // Content
     BitwardenScaffold(
         modifier = Modifier
@@ -182,6 +192,27 @@ fun VaultUnlockScreen(
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
+                if (state.isBiometricEnabled) {
+                    BitwardenOutlinedButton(
+                        label = stringResource(id = R.string.use_biometrics_to_unlock),
+                        onClick = {
+                            biometricsManager.promptBiometrics(
+                                onSuccess = onBiometricsUnlockClick,
+                                onCancel = {
+                                    // no-op
+                                },
+                                onError = {
+                                    // no-op
+                                },
+                                onLockOut = onBiometricsLockOut,
+                            )
+                        },
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
                 BitwardenFilledButton(
                     label = stringResource(id = R.string.unlock),
                     onClick = remember(viewModel) {

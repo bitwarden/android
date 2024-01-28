@@ -87,6 +87,8 @@ class VaultUnlockViewModel @Inject constructor(
             is VaultUnlockAction.LockAccountClick -> handleLockAccountClick(action)
             is VaultUnlockAction.LogoutAccountClick -> handleLogoutAccountClick(action)
             is VaultUnlockAction.SwitchAccountClick -> handleSwitchAccountClick(action)
+            VaultUnlockAction.BiometricsLockOut -> handleBiometricsLockOut()
+            VaultUnlockAction.BiometricsUnlockClick -> handleBiometricsUnlockClick()
             VaultUnlockAction.UnlockClick -> handleUnlockClick()
             is VaultUnlockAction.Internal -> handleInternalAction(action)
         }
@@ -122,6 +124,26 @@ class VaultUnlockViewModel @Inject constructor(
         authRepository.switchAccount(userId = action.accountSummary.userId)
     }
 
+    private fun handleBiometricsLockOut() {
+        // TODO: Handle biometrics lockout (BIT-1451)
+        sendEvent(VaultUnlockEvent.ShowToast("Lock out not yet implemented".asText()))
+    }
+
+    private fun handleBiometricsUnlockClick() {
+        val activeUserId = authRepository.activeUserId ?: return
+        mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
+        viewModelScope.launch {
+            val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics()
+            sendAction(
+                VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
+                    userId = activeUserId,
+                    vaultUnlockResult = vaultUnlockResult,
+                    isBiometricLogin = true,
+                ),
+            )
+        }
+    }
+
     private fun handleUnlockClick() {
         val activeUserId = authRepository.activeUserId ?: return
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
@@ -143,6 +165,7 @@ class VaultUnlockViewModel @Inject constructor(
                 VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
                     userId = activeUserId,
                     vaultUnlockResult = vaultUnlockResult,
+                    isBiometricLogin = false,
                 ),
             )
         }
@@ -175,7 +198,11 @@ class VaultUnlockViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
-                            state.vaultUnlockType.unlockScreenErrorMessage,
+                            if (action.isBiometricLogin) {
+                                R.string.generic_error_message.asText()
+                            } else {
+                                state.vaultUnlockType.unlockScreenErrorMessage
+                            },
                         ),
                     )
                 }
@@ -328,6 +355,16 @@ sealed class VaultUnlockAction {
     ) : VaultUnlockAction()
 
     /**
+     * The user has clicked the biometrics button.
+     */
+    data object BiometricsUnlockClick : VaultUnlockAction()
+
+    /**
+     * The user has attempted to login with biometrics too many times and has been locked out.
+     */
+    data object BiometricsLockOut : VaultUnlockAction()
+
+    /**
      * The user has clicked the unlock button.
      */
     data object UnlockClick : VaultUnlockAction()
@@ -342,6 +379,7 @@ sealed class VaultUnlockAction {
         data class ReceiveVaultUnlockResult(
             val userId: String,
             val vaultUnlockResult: VaultUnlockResult,
+            val isBiometricLogin: Boolean,
         ) : Internal()
 
         /**
