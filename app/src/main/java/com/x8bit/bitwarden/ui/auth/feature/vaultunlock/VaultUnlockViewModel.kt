@@ -125,8 +125,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleBiometricsLockOut() {
-        // TODO: Handle biometrics lockout (BIT-1451)
-        sendEvent(VaultUnlockEvent.ShowToast("Lock out not yet implemented".asText()))
+        authRepository.logout()
     }
 
     private fun handleBiometricsUnlockClick() {

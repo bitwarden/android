@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
 import androidx.lifecycle.SavedStateHandle
-import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -529,15 +528,14 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on BiometricsLockOut should emit ShowToast`() = runTest {
+    fun `on BiometricsLockOut should log the current user out`() = runTest {
+        every { authRepository.logout() } just runs
         val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
-            assertEquals(
-                VaultUnlockEvent.ShowToast("Lock out not yet implemented".asText()),
-                awaitItem(),
-            )
+        viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
+
+        verify(exactly = 1) {
+            authRepository.logout()
         }
     }
 
