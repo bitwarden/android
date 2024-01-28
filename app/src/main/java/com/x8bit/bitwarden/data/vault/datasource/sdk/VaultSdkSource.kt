@@ -230,6 +230,18 @@ interface VaultSdkSource {
     ): Result<List<SendView>>
 
     /**
+     * Encrypts a [FolderView] for the user with the given [userId], returning a [Folder] wrapped
+     * in a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun encryptFolder(
+        userId: String,
+        folder: FolderView,
+    ): Result<Folder>
+
+    /**
      * Decrypts a [Folder] for the user with the given [userId], returning a [FolderView] wrapped
      * in a [Result].
      *

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
+import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import java.util.Locale
 
@@ -29,3 +30,10 @@ fun SyncResponseJson.Folder.toEncryptedSdkFolder(): Folder =
 @JvmName("toAlphabeticallySortedFolderList")
 fun List<FolderView>.sortAlphabetically(): List<FolderView> =
     this.sortedBy { it.name.uppercase(Locale.getDefault()) }
+
+/**
+ * Converts a Bitwarden SDK [Folder] objects to a corresponding
+ * [SyncResponseJson.Folder] object.
+ */
+fun Folder.toEncryptedNetworkFolder(): FolderJsonRequest =
+    FolderJsonRequest(name = name)

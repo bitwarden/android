@@ -13,9 +13,11 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -25,6 +27,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -283,4 +286,19 @@ interface VaultRepository : VaultLockManager {
         attachmentId: String,
         cipherView: CipherView,
     ): DeleteAttachmentResult
+
+    /**
+     * Attempt to create a folder.
+     */
+    suspend fun createFolder(folderView: FolderView): CreateFolderResult
+
+    /**
+     * Attempt to delete a folder.
+     */
+    suspend fun deleteFolder(folderId: String): DeleteFolderResult
+
+    /**
+     * Attempt to update a folder.
+     */
+    suspend fun updateFolder(folderId: String, folderView: FolderView): UpdateFolderResult
 }

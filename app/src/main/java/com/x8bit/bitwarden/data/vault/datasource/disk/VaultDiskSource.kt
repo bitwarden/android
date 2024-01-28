@@ -40,6 +40,11 @@ interface VaultDiskSource {
     fun getDomains(userId: String): Flow<SyncResponseJson.Domains>
 
     /**
+     * Deletes a folder from the data source for the given [userId] and [folderId].
+     */
+    suspend fun deleteFolder(userId: String, folderId: String)
+
+    /**
      * Saves a folder to the data source for the given [userId].
      */
     suspend fun saveFolder(userId: String, folder: SyncResponseJson.Folder)

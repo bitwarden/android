@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
+import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
@@ -56,6 +57,16 @@ class VaultSdkFolderExtensionsTest {
         assertEquals(
             expected,
             list.sortAlphabetically(),
+        )
+    }
+
+    @Test
+    fun `toEncryptedNetworkFolder should convert a SdkFolder to a NetworkFolder`() {
+        val sdkFolder = createMockSdkFolder(number = 1)
+        val syncFolder = sdkFolder.toEncryptedNetworkFolder()
+        assertEquals(
+            FolderJsonRequest(sdkFolder.name),
+            syncFolder,
         )
     }
 }
