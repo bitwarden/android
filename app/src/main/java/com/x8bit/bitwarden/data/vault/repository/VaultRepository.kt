@@ -156,6 +156,11 @@ interface VaultRepository : VaultLockManager {
     fun emitTotpCodeResult(totpCodeResult: TotpCodeResult)
 
     /**
+     * Attempt to unlock the vault using the stored biometric key for the currently active user.
+     */
+    suspend fun unlockVaultWithBiometrics(): VaultUnlockResult
+
+    /**
      * Attempt to unlock the vault with the given [masterPassword] and for the currently active
      * user.
      */

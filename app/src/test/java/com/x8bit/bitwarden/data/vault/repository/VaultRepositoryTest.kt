@@ -669,7 +669,171 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPassword with missing user state should return InvalidStateError `() =
+    fun `unlockVaultWithBiometrics with missing user state should return InvalidStateError`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+
+            val result = vaultRepository.unlockVaultWithBiometrics()
+
+            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithBiometrics with missing biometrics key should return InvalidStateError`() =
+        runTest {
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
+            fakeAuthDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
+
+            val result = vaultRepository.unlockVaultWithBiometrics()
+
+            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(
+                VaultState(
+                    unlockedVaultUserIds = emptySet(),
+                    unlockingVaultUserIds = emptySet(),
+                ),
+                vaultRepository.vaultStateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithBiometrics with VaultLockManager Success and no encrypted PIN should unlock for the current user and return Success`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val privateKey = "mockPrivateKey-1"
+            val biometricsKey = "asdf1234"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = biometricsKey,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            fakeAuthDiskSource.apply {
+                storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
+                storePrivateKey(userId = userId, privateKey = privateKey)
+            }
+
+            val result = vaultRepository.unlockVaultWithBiometrics()
+
+            assertEquals(VaultUnlockResult.Success, result)
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = biometricsKey,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+            coVerify(exactly = 0) {
+                vaultSdkSource.derivePinProtectedUserKey(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithBiometrics with VaultLockManager Success and a stored encrypted pin should unlock for the current user, derive a new pin-protected key, and return Success`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val encryptedPin = "encryptedPin"
+            val privateKey = "mockPrivateKey-1"
+            val pinProtectedUserKey = "pinProtectedUserkey"
+            val biometricsKey = "asdf1234"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.derivePinProtectedUserKey(
+                    userId = userId,
+                    encryptedPin = encryptedPin,
+                )
+            } returns pinProtectedUserKey.asSuccess()
+            coEvery {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = biometricsKey,
+                    ),
+                    organizationKeys = null,
+                )
+            } returns VaultUnlockResult.Success
+            fakeAuthDiskSource.apply {
+                storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
+                storePrivateKey(userId = userId, privateKey = privateKey)
+                storeEncryptedPin(userId = userId, encryptedPin = encryptedPin)
+                storePinProtectedUserKey(
+                    userId = userId,
+                    pinProtectedUserKey = null,
+                    inMemoryOnly = true,
+                )
+            }
+
+            val result = vaultRepository.unlockVaultWithBiometrics()
+
+            assertEquals(VaultUnlockResult.Success, result)
+            fakeAuthDiskSource.assertPinProtectedUserKey(
+                userId = userId,
+                pinProtectedUserKey = pinProtectedUserKey,
+                inMemoryOnly = true,
+            )
+            coVerify {
+                vaultLockManager.unlockVault(
+                    userId = userId,
+                    kdf = MOCK_PROFILE.toSdkParams(),
+                    email = "email",
+                    privateKey = "mockPrivateKey-1",
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                        decryptedUserKey = biometricsKey,
+                    ),
+                    organizationKeys = null,
+                )
+            }
+            coEvery {
+                vaultSdkSource.derivePinProtectedUserKey(
+                    userId = userId,
+                    encryptedPin = encryptedPin,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithMasterPassword with missing user state should return InvalidStateError`() =
         runTest {
             fakeAuthDiskSource.userState = null
             assertEquals(
@@ -697,7 +861,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPassword with missing user key should return InvalidStateError `() =
+    fun `unlockVaultWithMasterPassword with missing user key should return InvalidStateError`() =
         runTest {
             assertEquals(
                 VaultState(
@@ -732,7 +896,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithMasterPassword with missing private key should return InvalidStateError `() =
+    fun `unlockVaultWithMasterPassword with missing private key should return InvalidStateError`() =
         runTest {
             assertEquals(
                 VaultState(
@@ -907,7 +1071,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPin with missing user state should return InvalidStateError `() =
+    fun `unlockVaultWithPin with missing user state should return InvalidStateError`() =
         runTest {
             fakeAuthDiskSource.userState = null
             assertEquals(
@@ -935,7 +1099,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPin with missing pin-protected user key should return InvalidStateError `() =
+    fun `unlockVaultWithPin with missing pin-protected user key should return InvalidStateError`() =
         runTest {
             assertEquals(
                 VaultState(
@@ -970,7 +1134,7 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPin with missing private key should return InvalidStateError `() =
+    fun `unlockVaultWithPin with missing private key should return InvalidStateError`() =
         runTest {
             assertEquals(
                 VaultState(

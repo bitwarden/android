@@ -239,6 +239,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [biometricsKey] was stored successfully using the [userId].
+     */
+    fun assertBiometricsKey(userId: String, biometricsKey: String?) {
+        assertEquals(biometricsKey, storedBiometricKeys[userId])
+    }
+
+    /**
      * Assert that the [passwordHash] was stored successfully using the [userId].
      */
     fun assertMasterPasswordHash(userId: String, passwordHash: String?) {
