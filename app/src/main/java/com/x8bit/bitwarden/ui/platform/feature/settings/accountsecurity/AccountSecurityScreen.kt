@@ -49,8 +49,10 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
@@ -72,6 +74,7 @@ fun AccountSecurityScreen(
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToPendingRequests: () -> Unit,
     viewModel: AccountSecurityViewModel = hiltViewModel(),
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
 ) {
@@ -187,19 +190,12 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
-                label = stringResource(
-                    id = R.string.unlock_with,
-                    stringResource(id = R.string.biometrics),
-                ),
+            UnlockWithBiometricsRow(
                 isChecked = state.isUnlockWithBiometricsEnabled,
-                onCheckedChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            AccountSecurityAction.UnlockWithBiometricToggle(it),
-                        )
-                    }
+                onBiometricToggle = remember(viewModel) {
+                    { viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(it)) }
                 },
+                biometricsManager = biometricsManager,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -307,6 +303,41 @@ fun AccountSecurityScreen(
             )
         }
     }
+}
+
+@Composable
+private fun UnlockWithBiometricsRow(
+    isChecked: Boolean,
+    onBiometricToggle: (Boolean) -> Unit,
+    biometricsManager: BiometricsManager,
+    modifier: Modifier = Modifier,
+) {
+    if (!biometricsManager.isBiometricsSupported) return
+    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
+    BitwardenWideSwitch(
+        modifier = modifier,
+        label = stringResource(
+            id = R.string.unlock_with,
+            stringResource(id = R.string.biometrics),
+        ),
+        isChecked = isChecked || showBiometricsPrompt,
+        onCheckedChange = { toggled ->
+            if (toggled) {
+                showBiometricsPrompt = true
+                biometricsManager.promptBiometrics(
+                    onSuccess = {
+                        onBiometricToggle(true)
+                        showBiometricsPrompt = false
+                    },
+                    onCancel = { showBiometricsPrompt = false },
+                    onLockOut = { showBiometricsPrompt = false },
+                    onError = { showBiometricsPrompt = false },
+                )
+            } else {
+                onBiometricToggle(false)
+            }
+        },
+    )
 }
 
 @Suppress("LongMethod")

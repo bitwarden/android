@@ -99,7 +99,7 @@ class AccountSecurityViewModel @Inject constructor(
         is AccountSecurityAction.VaultTimeoutActionSelect -> handleVaultTimeoutActionSelect(action)
         AccountSecurityAction.TwoStepLoginClick -> handleTwoStepLoginClick()
         is AccountSecurityAction.UnlockWithBiometricToggle -> {
-            handleUnlockWithBiometricToggled(action)
+            handleUnlockWithBiometricToggle(action)
         }
 
         is AccountSecurityAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
@@ -229,7 +229,7 @@ class AccountSecurityViewModel @Inject constructor(
         sendEvent(AccountSecurityEvent.NavigateToTwoStepLogin(webSettingsUrl))
     }
 
-    private fun handleUnlockWithBiometricToggled(
+    private fun handleUnlockWithBiometricToggle(
         action: AccountSecurityAction.UnlockWithBiometricToggle,
     ) {
         // TODO Display alert
