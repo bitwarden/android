@@ -151,6 +151,11 @@ class SettingsRepositoryImpl(
             )
         }
 
+    override val isUnlockWithBiometricsEnabled: Boolean
+        get() = activeUserId
+            ?.let { authDiskSource.getUserBiometricUnlockKey(userId = it) != null }
+            ?: false
+
     override val isUnlockWithPinEnabled: Boolean
         get() = activeUserId
             ?.let { authDiskSource.getEncryptedPin(userId = it) != null }

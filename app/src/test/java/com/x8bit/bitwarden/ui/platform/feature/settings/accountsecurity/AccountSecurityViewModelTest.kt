@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -21,7 +20,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -31,12 +29,10 @@ import org.junit.jupiter.api.Test
 class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
-    private val authRepository: AuthRepository = mockk(relaxed = true) {
-        every { userStateFlow } returns mutableUserStateFlow
-    }
+    private val authRepository: AuthRepository = mockk(relaxed = true)
     private val vaultRepository: VaultRepository = mockk(relaxed = true)
     private val settingsRepository: SettingsRepository = mockk {
+        every { isUnlockWithBiometricsEnabled } returns false
         every { isApprovePasswordlessLoginsEnabled } returns false
         every { isUnlockWithPinEnabled } returns false
         every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
@@ -60,18 +56,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify { settingsRepository.getUserFingerprint() }
-    }
-
-    @Test
-    fun `userState with biometrics should update state`() {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
-            accounts = listOf(DEFAULT_USER_ACCOUNT.copy(isBiometricsEnabled = true)),
-        )
-        val viewModel = createViewModel(initialState = null)
-        assertEquals(
-            DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true),
-            viewModel.stateFlow.value,
-        )
     }
 
     @Test
@@ -465,22 +449,4 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     isUnlockWithPinEnabled = false,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
-)
-
-private val DEFAULT_USER_ACCOUNT: UserState.Account = UserState.Account(
-    userId = "activeUserId",
-    name = "Active User",
-    email = "active@bitwarden.com",
-    avatarColorHex = "#aa00aa",
-    environment = Environment.Us,
-    isPremium = true,
-    isLoggedIn = true,
-    isVaultUnlocked = true,
-    isBiometricsEnabled = false,
-    organizations = emptyList(),
-)
-
-private val DEFAULT_USER_STATE: UserState = UserState(
-    activeUserId = "activeUserId",
-    accounts = listOf(DEFAULT_USER_ACCOUNT),
 )

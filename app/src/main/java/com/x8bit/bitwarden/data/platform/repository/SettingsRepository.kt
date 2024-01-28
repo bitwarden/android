@@ -67,6 +67,11 @@ interface SettingsRepository {
     var defaultUriMatchType: UriMatchType
 
     /**
+     * Whether or not biometric unlocking is enabled for the current user.
+     */
+    val isUnlockWithBiometricsEnabled: Boolean
+
+    /**
      * Whether or not PIN unlocking is enabled for the current user.
      */
     val isUnlockWithPinEnabled: Boolean

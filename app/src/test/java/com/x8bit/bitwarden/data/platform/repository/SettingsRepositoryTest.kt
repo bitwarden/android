@@ -414,6 +414,24 @@ class SettingsRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `isUnlockWithBiometricsEnabled should return a value that tracks the existence of a biometrics key for the current user`() {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        fakeAuthDiskSource.storeUserBiometricUnlockKey(
+            userId = userId,
+            biometricsKey = null,
+        )
+        assertFalse(settingsRepository.isUnlockWithBiometricsEnabled)
+
+        fakeAuthDiskSource.storeUserBiometricUnlockKey(
+            userId = userId,
+            biometricsKey = "biometricsKey",
+        )
+        assertTrue(settingsRepository.isUnlockWithBiometricsEnabled)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `isUnlockWithPinEnabled should return a value that tracks the existence of an encrypted PIN for the current user`() {
         val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
