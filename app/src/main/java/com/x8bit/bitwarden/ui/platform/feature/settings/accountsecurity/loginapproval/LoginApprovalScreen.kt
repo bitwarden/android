@@ -29,6 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
@@ -60,6 +63,20 @@ fun LoginApprovalScreen(
             }
         }
     }
+
+    BitwardenBasicDialog(
+        visibilityState = if (state.shouldShowErrorDialog) {
+            BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.generic_error_message.asText(),
+            )
+        } else {
+            BasicDialogState.Hidden
+        },
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(LoginApprovalAction.ErrorDialogDismiss) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(

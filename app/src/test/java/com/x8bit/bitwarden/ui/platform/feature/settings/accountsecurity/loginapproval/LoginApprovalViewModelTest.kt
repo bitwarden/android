@@ -8,7 +8,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -82,21 +81,70 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on ApproveRequestClick should emit ShowToast`() = runTest {
+    fun `on ApproveRequestClick should approve auth request`() = runTest {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
-            assertEquals(LoginApprovalEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        coEvery {
+            mockAuthRepository.updateAuthRequest(
+                requestId = REQUEST_ID,
+                masterPasswordHash = PASSWORD_HASH,
+                publicKey = PUBLIC_KEY,
+                isApproved = true,
+            )
+        } returns AuthRequestResult.Success(AUTH_REQUEST)
+
+        viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
+
+        coVerify {
+            mockAuthRepository.updateAuthRequest(
+                requestId = REQUEST_ID,
+                masterPasswordHash = PASSWORD_HASH,
+                publicKey = PUBLIC_KEY,
+                isApproved = true,
+            )
         }
     }
 
     @Test
-    fun `on DeclineRequestClick should emit ShowToast`() = runTest {
+    fun `on DeclineRequestClick should deny auth request`() = runTest {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
-            assertEquals(LoginApprovalEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        coEvery {
+            mockAuthRepository.updateAuthRequest(
+                requestId = REQUEST_ID,
+                masterPasswordHash = PASSWORD_HASH,
+                publicKey = PUBLIC_KEY,
+                isApproved = false,
+            )
+        } returns AuthRequestResult.Success(AUTH_REQUEST)
+
+        viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
+
+        coVerify {
+            mockAuthRepository.updateAuthRequest(
+                requestId = REQUEST_ID,
+                masterPasswordHash = PASSWORD_HASH,
+                publicKey = PUBLIC_KEY,
+                isApproved = false,
+            )
         }
+    }
+
+    @Test
+    fun `on ErrorDialogDismiss should update state`() = runTest {
+        val viewModel = createViewModel()
+        coEvery {
+            mockAuthRepository.updateAuthRequest(
+                requestId = REQUEST_ID,
+                masterPasswordHash = PASSWORD_HASH,
+                publicKey = PUBLIC_KEY,
+                isApproved = false,
+            )
+        } returns AuthRequestResult.Error
+        viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
+
+        assertEquals(viewModel.stateFlow.value, DEFAULT_STATE.copy(shouldShowErrorDialog = true))
+        viewModel.trySendAction(LoginApprovalAction.ErrorDialogDismiss)
+
+        assertEquals(viewModel.stateFlow.value, DEFAULT_STATE.copy(shouldShowErrorDialog = false))
     }
 
     private fun createViewModel(
@@ -112,8 +160,15 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
 
 private const val EMAIL = "test@bitwarden.com"
 private const val FINGERPRINT = "fingerprint"
+private const val PASSWORD_HASH = "verySecureHash"
+private const val PUBLIC_KEY = "publicKey"
+private const val REQUEST_ID = "requestId"
 private val DEFAULT_STATE: LoginApprovalState = LoginApprovalState(
     fingerprint = FINGERPRINT,
+    masterPasswordHash = PASSWORD_HASH,
+    publicKey = PUBLIC_KEY,
+    requestId = REQUEST_ID,
+    shouldShowErrorDialog = false,
     viewState = LoginApprovalState.ViewState.Content(
         deviceType = "Android",
         domainUrl = "www.bitwarden.com",
@@ -142,12 +197,12 @@ private val DEFAULT_USER_STATE = UserState(
     ),
 )
 private val AUTH_REQUEST = AuthRequest(
-    id = "1",
-    publicKey = "2",
+    id = REQUEST_ID,
+    publicKey = PUBLIC_KEY,
     platform = "Android",
     ipAddress = "1.0.0.1",
     key = "public",
-    masterPasswordHash = "verySecureHash",
+    masterPasswordHash = PASSWORD_HASH,
     creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
     responseDate = null,
     requestApproved = true,

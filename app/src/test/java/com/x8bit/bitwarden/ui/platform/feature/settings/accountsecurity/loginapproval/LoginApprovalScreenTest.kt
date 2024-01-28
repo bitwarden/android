@@ -1,5 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval
 
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -43,20 +47,6 @@ class LoginApprovalScreenTest : BaseComposeTest() {
 
     @Test
     fun `on Confirm login should send ApproveRequestClick`() = runTest {
-        // Set to content state to show appropriate buttons
-        mutableStateFlow.tryEmit(
-            LoginApprovalState(
-                fingerprint = FINGERPRINT,
-                viewState = LoginApprovalState.ViewState.Content(
-                    deviceType = "Android",
-                    domainUrl = "bitwarden.com",
-                    email = "test@bitwarden.com",
-                    fingerprint = FINGERPRINT,
-                    ipAddress = "1.0.0.1",
-                    time = "now",
-                ),
-            ),
-        )
         composeTestRule
             .onNodeWithText("Confirm login")
             .performScrollTo()
@@ -69,20 +59,6 @@ class LoginApprovalScreenTest : BaseComposeTest() {
 
     @Test
     fun `on Deny login should send DeclineRequestClick`() = runTest {
-        // Set to content state to show appropriate buttons
-        mutableStateFlow.tryEmit(
-            LoginApprovalState(
-                fingerprint = FINGERPRINT,
-                viewState = LoginApprovalState.ViewState.Content(
-                    deviceType = "Android",
-                    domainUrl = "bitwarden.com",
-                    email = "test@bitwarden.com",
-                    fingerprint = FINGERPRINT,
-                    ipAddress = "1.0.0.1",
-                    time = "now",
-                ),
-            ),
-        )
         composeTestRule
             .onNodeWithText("Deny login")
             .performScrollTo()
@@ -91,10 +67,43 @@ class LoginApprovalScreenTest : BaseComposeTest() {
             viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
         }
     }
+
+    @Test
+    fun `on error dialog dismiss click should send ErrorDialogDismiss`() = runTest {
+        mutableStateFlow.tryEmit(
+            DEFAULT_STATE.copy(
+                shouldShowErrorDialog = true,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("An error has occurred.")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(LoginApprovalAction.ErrorDialogDismiss)
+        }
+    }
 }
 
 private const val FINGERPRINT = "fingerprint"
 private val DEFAULT_STATE: LoginApprovalState = LoginApprovalState(
     fingerprint = FINGERPRINT,
-    viewState = LoginApprovalState.ViewState.Loading,
+    masterPasswordHash = null,
+    publicKey = "publicKey",
+    requestId = "",
+    shouldShowErrorDialog = false,
+    viewState = LoginApprovalState.ViewState.Content(
+        deviceType = "Android",
+        domainUrl = "bitwarden.com",
+        email = "test@bitwarden.com",
+        fingerprint = FINGERPRINT,
+        ipAddress = "1.0.0.1",
+        time = "now",
+    ),
 )

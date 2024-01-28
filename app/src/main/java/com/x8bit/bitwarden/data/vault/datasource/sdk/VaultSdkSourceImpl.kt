@@ -56,6 +56,16 @@ class VaultSdkSourceImpl(
                 .derivePinUserKey(encryptedPin = encryptedPin)
         }
 
+    override suspend fun getAuthRequestKey(
+        publicKey: String,
+        userId: String,
+    ): Result<String> =
+        runCatching {
+            getClient(userId = userId)
+                .auth()
+                .approveAuthRequest(publicKey)
+        }
+
     override suspend fun getUserEncryptionKey(
         userId: String,
     ): Result<String> =

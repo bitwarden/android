@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +77,7 @@ import javax.inject.Singleton
 /**
  * Default implementation of [AuthRepository].
  */
-@Suppress("LongParameterList", "TooManyFunctions")
+@Suppress("LargeClass", "LongParameterList", "TooManyFunctions")
 @Singleton
 class AuthRepositoryImpl(
     private val accountsService: AccountsService,
@@ -87,6 +88,7 @@ class AuthRepositoryImpl(
     private val newAuthRequestService: NewAuthRequestService,
     private val organizationService: OrganizationService,
     private val authSdkSource: AuthSdkSource,
+    private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
@@ -692,6 +694,51 @@ class AuthRepositoryImpl(
                     )
                 },
             )
+
+    override suspend fun updateAuthRequest(
+        requestId: String,
+        masterPasswordHash: String?,
+        publicKey: String,
+        isApproved: Boolean,
+    ): AuthRequestResult {
+        val userId = activeUserId ?: return AuthRequestResult.Error
+        return vaultSdkSource
+            .getAuthRequestKey(
+                publicKey = publicKey,
+                userId = userId,
+            )
+            .flatMap {
+                authRequestsService
+                    .updateAuthRequest(
+                        requestId = requestId,
+                        key = it,
+                        deviceId = authDiskSource.uniqueAppId,
+                        masterPasswordHash = masterPasswordHash,
+                        isApproved = isApproved,
+                    )
+            }
+            .map { request ->
+                AuthRequestResult.Success(
+                    authRequest = AuthRequest(
+                        id = request.id,
+                        publicKey = request.publicKey,
+                        platform = request.platform,
+                        ipAddress = request.ipAddress,
+                        key = request.key,
+                        masterPasswordHash = request.masterPasswordHash,
+                        creationDate = request.creationDate,
+                        responseDate = request.responseDate,
+                        requestApproved = request.requestApproved ?: false,
+                        originUrl = request.originUrl,
+                        fingerprint = "",
+                    ),
+                )
+            }
+            .fold(
+                onFailure = { AuthRequestResult.Error },
+                onSuccess = { it },
+            )
+    }
 
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
         devicesService

@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -41,6 +42,7 @@ object AuthRepositoryModule {
         newAuthRequestService: NewAuthRequestService,
         organizationService: OrganizationService,
         authSdkSource: AuthSdkSource,
+        vaultSdkSource: VaultSdkSource,
         authDiskSource: AuthDiskSource,
         dispatchers: DispatcherManager,
         environmentRepository: EnvironmentRepository,
@@ -55,6 +57,7 @@ object AuthRepositoryModule {
         newAuthRequestService = newAuthRequestService,
         organizationService = organizationService,
         authSdkSource = authSdkSource,
+        vaultSdkSource = vaultSdkSource,
         authDiskSource = authDiskSource,
         haveIBeenPwnedService = haveIBeenPwnedService,
         dispatcherManager = dispatchers,

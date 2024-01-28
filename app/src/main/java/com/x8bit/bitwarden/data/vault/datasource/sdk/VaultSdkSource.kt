@@ -60,6 +60,14 @@ interface VaultSdkSource {
     ): Result<String>
 
     /**
+     * Gets the key for an auth request that is required to approve or decline it.
+     */
+    suspend fun getAuthRequestKey(
+        publicKey: String,
+        userId: String,
+    ): Result<String>
+
+    /**
      * Gets the user's encryption key, which can be used to later unlock their vault via a call to
      * [initializeCrypto] with [InitUserCryptoMethod.DecryptedKey].
      *

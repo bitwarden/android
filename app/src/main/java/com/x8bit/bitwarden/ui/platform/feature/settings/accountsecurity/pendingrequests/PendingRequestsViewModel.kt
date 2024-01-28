@@ -23,7 +23,7 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class PendingRequestsViewModel @Inject constructor(
-    authRepository: AuthRepository,
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
@@ -36,19 +36,14 @@ class PendingRequestsViewModel @Inject constructor(
             .withZone(TimeZone.getDefault().toZoneId())
 
     init {
-        viewModelScope.launch {
-            trySendAction(
-                PendingRequestsAction.Internal.AuthRequestsResultReceive(
-                    authRequestsResult = authRepository.getAuthRequests(),
-                ),
-            )
-        }
+        updateAuthRequestList()
     }
 
     override fun handleAction(action: PendingRequestsAction) {
         when (action) {
             PendingRequestsAction.CloseClick -> handleCloseClicked()
             PendingRequestsAction.DeclineAllRequestsClick -> handleDeclineAllRequestsClicked()
+            PendingRequestsAction.LifecycleResume -> handleOnLifecycleResumed()
             is PendingRequestsAction.PendingRequestRowClick -> {
                 handlePendingRequestRowClicked(action)
             }
@@ -65,6 +60,10 @@ class PendingRequestsViewModel @Inject constructor(
 
     private fun handleDeclineAllRequestsClicked() {
         sendEvent(PendingRequestsEvent.ShowToast("Not yet implemented.".asText()))
+    }
+
+    private fun handleOnLifecycleResumed() {
+        updateAuthRequestList()
     }
 
     private fun handlePendingRequestRowClicked(
@@ -99,6 +98,17 @@ class PendingRequestsViewModel @Inject constructor(
 
                     AuthRequestsResult.Error -> PendingRequestsState.ViewState.Error
                 },
+            )
+        }
+    }
+
+    private fun updateAuthRequestList() {
+        // TODO BIT-1574: Display pull to refresh
+        viewModelScope.launch {
+            trySendAction(
+                PendingRequestsAction.Internal.AuthRequestsResultReceive(
+                    authRequestsResult = authRepository.getAuthRequests(),
+                ),
             )
         }
     }
@@ -194,6 +204,11 @@ sealed class PendingRequestsAction {
      * The user has clicked to deny all login requests.
      */
     data object DeclineAllRequestsClick : PendingRequestsAction()
+
+    /**
+     * The screen has been re-opened and should be updated.
+     */
+    data object LifecycleResume : PendingRequestsAction()
 
     /**
      * The user has clicked one of the pending request rows.
