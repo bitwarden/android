@@ -1329,6 +1329,22 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `loading dialog should be displayed according to state`() {
+        val loadingMessage = "Loading"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = AccountSecurityDialog.Loading(loadingMessage.asText()))
+        }
+
+        composeTestRule
+            .onNodeWithText("Loading")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
     companion object {
         private val DEFAULT_STATE = AccountSecurityState(
             dialog = null,

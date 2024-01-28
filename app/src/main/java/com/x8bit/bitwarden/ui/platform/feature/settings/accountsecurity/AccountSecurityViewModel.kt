@@ -323,6 +323,14 @@ sealed class AccountSecurityDialog : Parcelable {
      */
     @Parcelize
     data object FingerprintPhrase : AccountSecurityDialog()
+
+    /**
+     * Displays a loading dialog.
+     */
+    @Parcelize
+    data class Loading(
+        val message: Text,
+    ) : AccountSecurityDialog()
 }
 
 /**
