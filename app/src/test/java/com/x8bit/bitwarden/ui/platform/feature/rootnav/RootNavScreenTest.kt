@@ -103,6 +103,7 @@ class RootNavScreenTest : BaseComposeTest() {
         // Make sure navigating to vault unlocked for autofill works as expected:
         rootNavStateFlow.value =
             RootNavState.VaultUnlockedForAutofillSelection(
+                activeUserId = "userId",
                 type = AutofillSelectionData.Type.LOGIN,
             )
         composeTestRule.runOnIdle {

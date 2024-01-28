@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -92,6 +93,9 @@ fun BitwardenTopAppBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
+                maxLines = 1,
+                softWrap = false,
+                overflow = TextOverflow.Ellipsis,
             )
         },
         actions = actions,

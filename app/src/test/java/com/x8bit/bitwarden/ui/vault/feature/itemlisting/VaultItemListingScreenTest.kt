@@ -19,32 +19,49 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
 import com.x8bit.bitwarden.ui.util.isProgressBar
+import com.x8bit.bitwarden.ui.util.performAccountClick
+import com.x8bit.bitwarden.ui.util.performAccountIconClick
+import com.x8bit.bitwarden.ui.util.performAccountLongClick
+import com.x8bit.bitwarden.ui.util.performLockAccountClick
+import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
+import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class VaultItemListingScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
@@ -68,6 +85,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
+        mockkStatic(String::toHostOrPathOrNull)
+        every { AUTOFILL_SELECTION_DATA.uri?.toHostOrPathOrNull() } returns "www.test.com"
         composeTestRule.setContent {
             VaultItemListingScreen(
                 viewModel = viewModel,
@@ -81,6 +100,172 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemScreenId = it },
             )
         }
+    }
+
+    @After
+    fun tearDown() {
+        unmockkStatic(String::toHostOrPathOrNull)
+    }
+
+    @Test
+    fun `the app bar title should update according to state`() {
+        composeTestRule
+            .onNodeWithText("Logins")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Items for www.test.com")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+
+        composeTestRule
+            .onNodeWithText("Logins")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Items for www.test.com")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `back button should update according to state`() {
+        composeTestRule
+            .onNodeWithContentDescription("Back")
+            .assertIsDisplayed()
+
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+
+        composeTestRule
+            .onNodeWithContentDescription("Back")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `overflow menu should update according to state`() {
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .assertIsDisplayed()
+
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `account icon should update according to state`() {
+        composeTestRule
+            .onNodeWithText("AU")
+            .assertDoesNotExist()
+
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+
+        composeTestRule
+            .onNodeWithText("AU")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `account icon click should show the account switcher`() {
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
+
+        composeTestRule.performAccountIconClick()
+
+        composeTestRule.assertSwitcherIsDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+            isAddAccountButtonVisible = false,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account click in the account switcher should send AccountSwitchClick and close switcher`() {
+        // Open the Account Switcher
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+        composeTestRule.performAccountIconClick()
+
+        composeTestRule.performAccountClick(accountSummary = LOCKED_ACCOUNT_SUMMARY)
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.SwitchAccountClick(LOCKED_ACCOUNT_SUMMARY),
+            )
+        }
+        composeTestRule.assertSwitcherIsNotDisplayed(
+            accountSummaries = ACCOUNT_SUMMARIES,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `account long click in the account switcher should show the lock-or-logout dialog and close the switcher`() {
+        // Show the account switcher
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+        composeTestRule.performAccountIconClick()
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule.performAccountLongClick(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+
+        composeTestRule.assertLockOrLogoutDialogIsDisplayed(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `lock button click in the lock-or-logout dialog should send LockAccountClick action and close the dialog`() {
+        // Show the lock-or-logout dialog
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+
+        composeTestRule.performLockAccountClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.LockAccountClick(ACTIVE_ACCOUNT_SUMMARY),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `logout button click in the lock-or-logout dialog should show the logout confirmation dialog and hide the lock-or-logout dialog`() {
+        // Show the lock-or-logout dialog
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+
+        composeTestRule.performLogoutAccountClick()
+
+        composeTestRule.assertLogoutConfirmationDialogIsDisplayed(
+            accountSummary = ACTIVE_ACCOUNT_SUMMARY,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `logout button click in the logout confirmation dialog should send LogoutAccountClick action and close the dialog`() {
+        // Show the logout confirmation dialog
+        mutableStateFlow.value = STATE_FOR_AUTOFILL
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
+        composeTestRule.performLogoutAccountClick()
+
+        composeTestRule.performLogoutAccountConfirmationClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.LogoutAccountClick(ACTIVE_ACCOUNT_SUMMARY),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
@@ -722,8 +907,43 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 }
 
+private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    avatarColorHex = "#aa00aa",
+    environmentLabel = "bitwarden.com",
+    isActive = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+)
+
+private val LOCKED_ACCOUNT_SUMMARY = AccountSummary(
+    userId = "lockedUserId",
+    name = "Locked User",
+    email = "locked@bitwarden.com",
+    avatarColorHex = "#00aaaa",
+    environmentLabel = "bitwarden.com",
+    isActive = false,
+    isLoggedIn = true,
+    isVaultUnlocked = false,
+)
+
+private val ACCOUNT_SUMMARIES = listOf(
+    ACTIVE_ACCOUNT_SUMMARY,
+    LOCKED_ACCOUNT_SUMMARY,
+)
+
+private val AUTOFILL_SELECTION_DATA =
+    AutofillSelectionData(
+        type = AutofillSelectionData.Type.LOGIN,
+        uri = "https:://www.test.com",
+    )
+
 private val DEFAULT_STATE = VaultItemListingState(
     itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+    activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY,
+    accountSummaries = ACCOUNT_SUMMARIES,
     viewState = VaultItemListingState.ViewState.Loading,
     vaultFilterType = VaultFilterType.AllVaults,
     baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
@@ -731,6 +951,10 @@ private val DEFAULT_STATE = VaultItemListingState(
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
     isPullToRefreshSettingEnabled = false,
     dialogState = null,
+)
+
+private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
+    autofillSelectionData = AUTOFILL_SELECTION_DATA,
 )
 
 private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =

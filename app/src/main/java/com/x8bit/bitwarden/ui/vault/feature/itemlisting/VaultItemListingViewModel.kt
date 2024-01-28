@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -22,6 +23,8 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
@@ -32,6 +35,8 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toSearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -53,6 +58,7 @@ class VaultItemListingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
+    private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
@@ -60,12 +66,17 @@ class VaultItemListingViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
+        val userState = requireNotNull(authRepository.userStateFlow.value)
+        val activeAccountSummary = userState.toActiveAccountSummary()
+        val accountSummaries = userState.toAccountSummaries()
         val specialCircumstance =
             specialCircumstanceManager.specialCircumstance as? SpecialCircumstance.AutofillSelection
         VaultItemListingState(
             itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
                 .vaultItemListingType
                 .toItemListingType(),
+            activeAccountSummary = activeAccountSummary,
+            accountSummaries = accountSummaries,
             viewState = VaultItemListingState.ViewState.Loading,
             vaultFilterType = vaultRepository.vaultFilterType,
             baseWebSendUrl = environmentRepository.environment.environmentUrlData.baseWebSendUrl,
@@ -99,6 +110,9 @@ class VaultItemListingViewModel @Inject constructor(
 
     override fun handleAction(action: VaultItemListingsAction) {
         when (action) {
+            is VaultItemListingsAction.LockAccountClick -> handleLockAccountClick(action)
+            is VaultItemListingsAction.LogoutAccountClick -> handleLogoutAccountClick(action)
+            is VaultItemListingsAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             is VaultItemListingsAction.DismissDialogClick -> handleDismissDialogClick()
             is VaultItemListingsAction.BackClick -> handleBackClick()
             is VaultItemListingsAction.LockClick -> handleLockClick()
@@ -114,6 +128,18 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     //region VaultItemListing Handlers
+    private fun handleLockAccountClick(action: VaultItemListingsAction.LockAccountClick) {
+        vaultRepository.lockVault(userId = action.accountSummary.userId)
+    }
+
+    private fun handleLogoutAccountClick(action: VaultItemListingsAction.LogoutAccountClick) {
+        authRepository.logout(userId = action.accountSummary.userId)
+    }
+
+    private fun handleSwitchAccountClick(action: VaultItemListingsAction.SwitchAccountClick) {
+        authRepository.switchAccount(userId = action.accountSummary.userId)
+    }
+
     private fun handleRefreshClick() {
         vaultRepository.sync()
     }
@@ -414,6 +440,12 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleVaultDataReceive(
         action: VaultItemListingsAction.Internal.VaultDataReceive,
     ) {
+        if (state.activeAccountSummary.userId != authRepository.userStateFlow.value?.activeUserId) {
+            // We are in the process of switching accounts, so we should ignore any updates here
+            // to avoid any unnecessary visual changes.
+            return
+        }
+
         when (val vaultData = action.vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
             is DataState.Loaded -> vaultLoadedReceive(vaultData = vaultData)
@@ -541,6 +573,8 @@ class VaultItemListingViewModel @Inject constructor(
  */
 data class VaultItemListingState(
     val itemListingType: ItemListingType,
+    val activeAccountSummary: AccountSummary,
+    val accountSummaries: List<AccountSummary>,
     val viewState: ViewState,
     val vaultFilterType: VaultFilterType,
     val baseWebSendUrl: String,
@@ -549,9 +583,24 @@ data class VaultItemListingState(
     val dialogState: DialogState?,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
-    private val autofillSelectionData: AutofillSelectionData? = null,
-    private val shouldFinishOnComplete: Boolean = false,
+    val autofillSelectionData: AutofillSelectionData? = null,
+    val shouldFinishOnComplete: Boolean = false,
 ) {
+    /**
+     * Whether or not this represents a listing screen for autofill.
+     */
+    val isAutofill: Boolean
+        get() = autofillSelectionData != null
+
+    /**
+     * A displayable title for the AppBar.
+     */
+    val appBarTitle: Text
+        get() = autofillSelectionData
+            ?.uri
+            ?.toHostOrPathOrNull()
+            ?.let { R.string.items_for_uri.asText(it) }
+            ?: itemListingType.titleText
 
     /**
      * Indicates that the pull-to-refresh should be enabled in the UI.
@@ -560,10 +609,19 @@ data class VaultItemListingState(
         get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
-     * Whether or not this represents a listing screen for autofill.
+     * Whether or not the account switcher should be shown.
      */
-    val isAutofill: Boolean
-        get() = autofillSelectionData != null
+    val shouldShowAccountSwitcher: Boolean get() = isAutofill
+
+    /**
+     * Whether or not the navigation icon should be shown.
+     */
+    val shouldShowNavigationIcon: Boolean get() = !isAutofill
+
+    /**
+     * Whether or not the overflow menu should be shown.
+     */
+    val shouldShowOverflowMenu: Boolean get() = !isAutofill
 
     /**
      * Represents the current state of any dialogs on the screen.
@@ -843,6 +901,28 @@ sealed class VaultItemListingEvent {
  * Models actions for the [VaultItemListingScreen].
  */
 sealed class VaultItemListingsAction {
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to lock
+     * the associated account's vault.
+     */
+    data class LockAccountClick(
+        val accountSummary: AccountSummary,
+    ) : VaultItemListingsAction()
+
+    /**
+     * Indicates the user has clicked on the given [accountSummary] information in order to log out
+     * of that account.
+     */
+    data class LogoutAccountClick(
+        val accountSummary: AccountSummary,
+    ) : VaultItemListingsAction()
+
+    /**
+     * The user has clicked the an account to switch too.
+     */
+    data class SwitchAccountClick(
+        val accountSummary: AccountSummary,
+    ) : VaultItemListingsAction()
 
     /**
      * Click to dismiss the dialog.

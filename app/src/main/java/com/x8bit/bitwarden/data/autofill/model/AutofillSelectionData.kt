@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
  * @property uri A URI representing the location where data should be filled (if available).
  */
 @Parcelize
-class AutofillSelectionData(
+data class AutofillSelectionData(
     val type: Type,
     val uri: String?,
 ) : Parcelable {

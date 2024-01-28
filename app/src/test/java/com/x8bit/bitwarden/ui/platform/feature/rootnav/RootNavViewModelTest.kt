@@ -180,6 +180,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.VaultUnlockedForAutofillSelection(
+                activeUserId = "activeUserId",
                 type = AutofillSelectionData.Type.LOGIN,
             ),
             viewModel.stateFlow.value,

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers
 
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingViewModel
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -9,6 +10,9 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
  * items.
  */
 data class VaultItemListingHandlers(
+    val switchAccountClick: (AccountSummary) -> Unit,
+    val lockAccountClick: (AccountSummary) -> Unit,
+    val logoutAccountClick: (AccountSummary) -> Unit,
     val backClick: () -> Unit,
     val searchIconClick: () -> Unit,
     val addVaultItemClick: () -> Unit,
@@ -27,6 +31,15 @@ data class VaultItemListingHandlers(
             viewModel: VaultItemListingViewModel,
         ): VaultItemListingHandlers =
             VaultItemListingHandlers(
+                switchAccountClick = {
+                    viewModel.trySendAction(VaultItemListingsAction.SwitchAccountClick(it))
+                },
+                lockAccountClick = {
+                    viewModel.trySendAction(VaultItemListingsAction.LockAccountClick(it))
+                },
+                logoutAccountClick = {
+                    viewModel.trySendAction(VaultItemListingsAction.LogoutAccountClick(it))
+                },
                 backClick = { viewModel.trySendAction(VaultItemListingsAction.BackClick) },
                 searchIconClick = {
                     viewModel.trySendAction(VaultItemListingsAction.SearchIconClick)
