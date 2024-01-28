@@ -4,6 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -26,10 +29,13 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.coEvery
 import io.mockk.every
@@ -63,11 +69,20 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { setText(any<String>()) } just runs
     }
 
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val authRepository = mockk<AuthRepository> {
+        every { activeUserId } answers { mutableUserStateFlow.value?.activeUserId }
+        every { userStateFlow } returns mutableUserStateFlow
+        every { logout() } just runs
+        every { logout(any()) } just runs
+        every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
+    }
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
+        every { lockVault(any()) } just runs
         every { sync() } just runs
     }
     private val environmentRepository: EnvironmentRepository = mockk {
@@ -96,6 +111,46 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 initialState, awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `on LockAccountClick should call lockVault for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createVaultItemListingViewModel()
+
+        viewModel.trySendAction(VaultItemListingsAction.LockAccountClick(accountSummary))
+
+        verify { vaultRepository.lockVault(userId = accountUserId) }
+    }
+
+    @Test
+    fun `on LogoutAccountClick should call logout for the given account`() {
+        val accountUserId = "userId"
+        val accountSummary = mockk<AccountSummary> {
+            every { userId } returns accountUserId
+        }
+        val viewModel = createVaultItemListingViewModel()
+
+        viewModel.trySendAction(VaultItemListingsAction.LogoutAccountClick(accountSummary))
+
+        verify { authRepository.logout(userId = accountUserId) }
+    }
+
+    @Test
+    fun `on SwitchAccountClick should switch to the given account`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+        val updatedUserId = "updatedUserId"
+        viewModel.trySendAction(
+            VaultItemListingsAction.SwitchAccountClick(
+                accountSummary = mockk {
+                    every { userId } returns updatedUserId
+                },
+            ),
+        )
+        verify { authRepository.switchAccount(userId = updatedUserId) }
     }
 
     @Test
@@ -889,6 +944,33 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `vaultDataStateFlow updates should do nothing when switching accounts`() {
+        val viewModel = createVaultItemListingViewModel()
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        // Log out the accounts
+        mutableUserStateFlow.value = null
+
+        // Emit fresh data
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            ),
+        )
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `icon loading state updates should update isIconLoadingDisabled`() = runTest {
         val viewModel = createVaultItemListingViewModel()
 
@@ -974,6 +1056,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             savedStateHandle = savedStateHandle,
             clock = clock,
             clipboardManager = clipboardManager,
+            authRepository = authRepository,
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
@@ -988,6 +1071,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     ): VaultItemListingState =
         VaultItemListingState(
             itemListingType = itemListingType,
+            activeAccountSummary = DEFAULT_USER_STATE.toActiveAccountSummary(),
+            accountSummaries = DEFAULT_USER_STATE.toAccountSummaries(),
             viewState = viewState,
             vaultFilterType = vaultRepository.vaultFilterType,
             baseWebSendUrl = Environment.Us.environmentUrlData.baseWebSendUrl,
@@ -999,3 +1084,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             shouldFinishOnComplete = false,
         )
 }
+
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(DEFAULT_ACCOUNT),
+)

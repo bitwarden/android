@@ -12,6 +12,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.core.graphics.toColorInt
 import java.net.URI
+import java.net.URISyntaxException
 import java.text.Normalizer
 import java.util.Locale
 import kotlin.math.floor
@@ -53,6 +54,19 @@ fun String.isValidUri(): Boolean =
     } catch (_: IllegalArgumentException) {
         false
     }
+
+/**
+ * Returns the host name (or path as a fallback) for the given [String] if it represents a
+ * well-formed URI, or `null` otherwise.
+ */
+fun String.toHostOrPathOrNull(): String? {
+    val uri = try {
+        URI(this)
+    } catch (e: URISyntaxException) {
+        return null
+    }
+    return uri.host ?: uri.path
+}
 
 /**
  * Returns the original [String] only if:

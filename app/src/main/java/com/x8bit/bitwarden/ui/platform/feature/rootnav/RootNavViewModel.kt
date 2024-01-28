@@ -67,6 +67,7 @@ class RootNavViewModel @Inject constructor(
                 when (specialCircumstance) {
                     is SpecialCircumstance.AutofillSelection -> {
                         RootNavState.VaultUnlockedForAutofillSelection(
+                            activeUserId = userState.activeAccount.userId,
                             type = specialCircumstance.autofillSelectionData.type,
                         )
                     }
@@ -122,6 +123,7 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data class VaultUnlockedForAutofillSelection(
+        val activeUserId: String,
         val type: AutofillSelectionData.Type,
     ) : RootNavState()
 

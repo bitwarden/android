@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.base.util
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -66,6 +67,42 @@ class StringExtensionsTest {
         )
             .forEach { badUri ->
                 assertFalse(badUri.isValidUri())
+            }
+    }
+
+    @Test
+    fun `toHostOrPathOrNull should return the correct value for an absolute URL`() {
+        assertEquals(
+            "www.abc.com",
+            "https://www.abc.com".toHostOrPathOrNull(),
+        )
+    }
+
+    @Test
+    fun `toHostOrPathOrNull should return the correct value for an absolute non-URL path`() {
+        assertEquals(
+            "/abc/com",
+            "file:///abc/com".toHostOrPathOrNull(),
+        )
+    }
+
+    @Test
+    fun `toHostOrPathOrNull should return the correct value for a relative URI`() {
+        assertEquals(
+            "abc.com",
+            "abc.com".toHostOrPathOrNull(),
+        )
+    }
+
+    @Test
+    fun `toHostOrPathOrNull should return null when there are invalid characters present`() {
+        listOf(
+            "abc com",
+            "abc<>com",
+            "abc[]com",
+        )
+            .forEach { badUri ->
+                assertNull(badUri.toHostOrPathOrNull())
             }
     }
 

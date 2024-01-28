@@ -15,7 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +29,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
@@ -35,12 +40,15 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays the vault item listing screen.
@@ -50,7 +58,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItem: (id: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
+    onNavigateToVaultEditItemScreen: (cipherVaultId: String) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -158,6 +166,7 @@ private fun VaultItemListingScaffold(
     pullToRefreshState: PullToRefreshState?,
     vaultItemListingHandlers: VaultItemListingHandlers,
 ) {
+    var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
@@ -165,28 +174,40 @@ private fun VaultItemListingScaffold(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = state.itemListingType.titleText(),
+                title = state.appBarTitle(),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_back),
-                navigationIconContentDescription = stringResource(id = R.string.back),
-                onNavigationIconClick = vaultItemListingHandlers.backClick,
+                navigationIcon = NavigationIcon(
+                    navigationIcon = painterResource(id = R.drawable.ic_back),
+                    navigationIconContentDescription = stringResource(id = R.string.back),
+                    onNavigationIconClick = vaultItemListingHandlers.backClick,
+                )
+                    .takeIf { state.shouldShowNavigationIcon },
                 actions = {
+                    if (state.shouldShowAccountSwitcher) {
+                        BitwardenAccountActionItem(
+                            initials = state.activeAccountSummary.initials,
+                            color = state.activeAccountSummary.avatarColor,
+                            onClick = { isAccountMenuVisible = !isAccountMenuVisible },
+                        )
+                    }
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = R.string.search_vault),
                         onClick = vaultItemListingHandlers.searchIconClick,
                     )
-                    BitwardenOverflowActionItem(
-                        menuItemDataList = persistentListOf(
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.sync),
-                                onClick = vaultItemListingHandlers.syncClick,
+                    if (state.shouldShowOverflowMenu) {
+                        BitwardenOverflowActionItem(
+                            menuItemDataList = persistentListOf(
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.sync),
+                                    onClick = vaultItemListingHandlers.syncClick,
+                                ),
+                                OverflowMenuItemData(
+                                    text = stringResource(id = R.string.lock),
+                                    onClick = vaultItemListingHandlers.lockClick,
+                                ),
                             ),
-                            OverflowMenuItemData(
-                                text = stringResource(id = R.string.lock),
-                                onClick = vaultItemListingHandlers.lockClick,
-                            ),
-                        ),
-                    )
+                        )
+                    }
                 },
             )
         },
@@ -239,5 +260,20 @@ private fun VaultItemListingScaffold(
                 BitwardenLoadingContent(modifier = modifier)
             }
         }
+
+        BitwardenAccountSwitcher(
+            isVisible = isAccountMenuVisible,
+            accountSummaries = state.accountSummaries.toImmutableList(),
+            onSwitchAccountClick = vaultItemListingHandlers.switchAccountClick,
+            onLockAccountClick = vaultItemListingHandlers.lockAccountClick,
+            onLogoutAccountClick = vaultItemListingHandlers.logoutAccountClick,
+            onAddAccountClick = {
+                // Not available
+            },
+            onDismissRequest = { isAccountMenuVisible = false },
+            isAddAccountAvailable = false,
+            topAppBarScrollBehavior = scrollBehavior,
+            modifier = modifier,
+        )
     }
 }
