@@ -39,8 +39,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
@@ -91,19 +93,15 @@ fun LoginWithDeviceScreen(
             is LoginWithDeviceState.ViewState.Content -> {
                 LoginWithDeviceScreenContent(
                     state = viewState,
+                    onErrorDialogDismiss = remember(viewModel) {
+                        { viewModel.trySendAction(LoginWithDeviceAction.ErrorDialogDismiss) }
+                    },
                     onResendNotificationClick = remember(viewModel) {
                         { viewModel.trySendAction(LoginWithDeviceAction.ResendNotificationClick) }
                     },
                     onViewAllLogInOptionsClick = remember(viewModel) {
                         { viewModel.trySendAction(LoginWithDeviceAction.ViewAllLogInOptionsClick) }
                     },
-                    modifier = modifier,
-                )
-            }
-
-            is LoginWithDeviceState.ViewState.Error -> {
-                BitwardenErrorContent(
-                    message = viewState.message(),
                     modifier = modifier,
                 )
             }
@@ -127,10 +125,23 @@ fun LoginWithDeviceScreen(
 @Composable
 private fun LoginWithDeviceScreenContent(
     state: LoginWithDeviceState.ViewState.Content,
+    onErrorDialogDismiss: () -> Unit,
     onResendNotificationClick: () -> Unit,
     onViewAllLogInOptionsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    BitwardenBasicDialog(
+        visibilityState = if (state.shouldShowErrorDialog) {
+            BasicDialogState.Shown(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.generic_error_message.asText(),
+            )
+        } else {
+            BasicDialogState.Hidden
+        },
+        onDismissRequest = onErrorDialogDismiss,
+    )
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -210,7 +221,7 @@ private fun LoginWithDeviceScreenContent(
                     modifier = Modifier
                         .padding(horizontal = 64.dp)
                         .size(size = 16.dp),
-                    )
+                )
             } else {
                 BitwardenClickableText(
                     modifier = Modifier

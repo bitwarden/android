@@ -2,12 +2,10 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -46,6 +44,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             viewState = LoginWithDeviceState.ViewState.Content(
                 fingerprintPhrase = FINGERPRINT,
                 isResendNotificationLoading = false,
+                shouldShowErrorDialog = false,
             ),
         )
         val viewModel = createViewModel(state)
@@ -82,6 +81,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 viewState = LoginWithDeviceState.ViewState.Content(
                     fingerprintPhrase = newFingerprint,
                     isResendNotificationLoading = false,
+                    shouldShowErrorDialog = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -120,6 +120,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 viewState = LoginWithDeviceState.ViewState.Content(
                     fingerprintPhrase = newFingerprint,
                     isResendNotificationLoading = false,
+                    shouldShowErrorDialog = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -127,7 +128,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on fingerprint result failure received should show error`() = runTest {
+    fun `on fingerprint result failure received should show error dialog`() = runTest {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         viewModel.actionChannel.trySend(
@@ -137,8 +138,10 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             DEFAULT_STATE.copy(
-                viewState = LoginWithDeviceState.ViewState.Error(
-                    message = R.string.generic_error_message.asText(),
+                viewState = LoginWithDeviceState.ViewState.Content(
+                    fingerprintPhrase = "",
+                    isResendNotificationLoading = false,
+                    shouldShowErrorDialog = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -161,6 +164,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             viewState = LoginWithDeviceState.ViewState.Content(
                 fingerprintPhrase = FINGERPRINT,
                 isResendNotificationLoading = false,
+                shouldShowErrorDialog = false,
             ),
         )
         private val AUTH_REQUEST = AuthRequest(
