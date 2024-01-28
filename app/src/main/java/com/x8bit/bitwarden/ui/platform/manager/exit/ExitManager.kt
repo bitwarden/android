@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.manager.exit
 
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import androidx.compose.runtime.Immutable
 
 /**
  * A manager class for handling the various ways to exit the app.
  */
-@OmitFromCoverage
+@Immutable
 interface ExitManager {
     /**
      * Finishes the activity.

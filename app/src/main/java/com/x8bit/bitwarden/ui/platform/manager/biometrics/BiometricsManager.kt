@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.manager.biometrics
 
+import androidx.compose.runtime.Immutable
+
 /**
  * Interface to manage biometrics within the app.
  */
+@Immutable
 interface BiometricsManager {
     /**
      * Returns `true` if the device supports string biometric authentication, `false` otherwise.
