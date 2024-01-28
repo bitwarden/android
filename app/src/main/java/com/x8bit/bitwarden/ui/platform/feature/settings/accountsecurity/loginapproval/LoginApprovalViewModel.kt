@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -29,6 +30,10 @@ class LoginApprovalViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: LoginApprovalState(
             fingerprint = LoginApprovalArgs(savedStateHandle).fingerprint,
+            masterPasswordHash = null,
+            publicKey = "",
+            requestId = "",
+            shouldShowErrorDialog = false,
             viewState = LoginApprovalState.ViewState.Loading,
         ),
 ) {
@@ -52,16 +57,35 @@ class LoginApprovalViewModel @Inject constructor(
             LoginApprovalAction.ApproveRequestClick -> handleApproveRequestClicked()
             LoginApprovalAction.CloseClick -> handleCloseClicked()
             LoginApprovalAction.DeclineRequestClick -> handleDeclineRequestClicked()
+            LoginApprovalAction.ErrorDialogDismiss -> handleErrorDialogDismissed()
+
+            is LoginApprovalAction.Internal.ApproveRequestResultReceive -> {
+                handleApproveRequestResultReceived(action)
+            }
 
             is LoginApprovalAction.Internal.AuthRequestResultReceive -> {
                 handleAuthRequestResultReceived(action)
+            }
+
+            is LoginApprovalAction.Internal.DeclineRequestResultReceive -> {
+                handleDeclineRequestResultReceived(action)
             }
         }
     }
 
     private fun handleApproveRequestClicked() {
-        // TODO BIT-1565 implement approve login request
-        sendEvent(LoginApprovalEvent.ShowToast("Not yet implemented".asText()))
+        viewModelScope.launch {
+            trySendAction(
+                LoginApprovalAction.Internal.DeclineRequestResultReceive(
+                    result = authRepository.updateAuthRequest(
+                        requestId = mutableStateFlow.value.requestId,
+                        masterPasswordHash = mutableStateFlow.value.masterPasswordHash,
+                        publicKey = mutableStateFlow.value.publicKey,
+                        isApproved = true,
+                    ),
+                ),
+            )
+        }
     }
 
     private fun handleCloseClicked() {
@@ -69,31 +93,85 @@ class LoginApprovalViewModel @Inject constructor(
     }
 
     private fun handleDeclineRequestClicked() {
-        // TODO BIT-1565 implement decline login request
-        sendEvent(LoginApprovalEvent.ShowToast("Not yet implemented".asText()))
+        viewModelScope.launch {
+            trySendAction(
+                LoginApprovalAction.Internal.DeclineRequestResultReceive(
+                    result = authRepository.updateAuthRequest(
+                        requestId = mutableStateFlow.value.requestId,
+                        masterPasswordHash = mutableStateFlow.value.masterPasswordHash,
+                        publicKey = mutableStateFlow.value.publicKey,
+                        isApproved = false,
+                    ),
+                ),
+            )
+        }
+    }
+
+    private fun handleErrorDialogDismissed() {
+        mutableStateFlow.update {
+            it.copy(shouldShowErrorDialog = false)
+        }
+    }
+
+    private fun handleApproveRequestResultReceived(
+        action: LoginApprovalAction.Internal.ApproveRequestResultReceive,
+    ) {
+        when (action.result) {
+            is AuthRequestResult.Success -> {
+                sendEvent(LoginApprovalEvent.ShowToast(R.string.login_approved.asText()))
+                sendEvent(LoginApprovalEvent.NavigateBack)
+            }
+
+            is AuthRequestResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(shouldShowErrorDialog = true)
+                }
+            }
+        }
     }
 
     private fun handleAuthRequestResultReceived(
         action: LoginApprovalAction.Internal.AuthRequestResultReceive,
     ) {
         val email = authRepository.userStateFlow.value?.activeAccount?.email ?: return
-        mutableStateFlow.update {
-            it.copy(
-                viewState = when (val result = action.authRequestResult) {
-                    is AuthRequestResult.Success -> {
-                        LoginApprovalState.ViewState.Content(
-                            deviceType = result.authRequest.platform,
-                            domainUrl = result.authRequest.originUrl,
-                            email = email,
-                            fingerprint = result.authRequest.fingerprint,
-                            ipAddress = result.authRequest.ipAddress,
-                            time = dateTimeFormatter.format(result.authRequest.creationDate),
-                        )
-                    }
+        when (val result = action.authRequestResult) {
+            is AuthRequestResult.Success -> mutableStateFlow.update {
+                it.copy(
+                    masterPasswordHash = result.authRequest.masterPasswordHash,
+                    publicKey = result.authRequest.publicKey,
+                    requestId = result.authRequest.id,
+                    viewState = LoginApprovalState.ViewState.Content(
+                        deviceType = result.authRequest.platform,
+                        domainUrl = result.authRequest.originUrl,
+                        email = email,
+                        fingerprint = result.authRequest.fingerprint,
+                        ipAddress = result.authRequest.ipAddress,
+                        time = dateTimeFormatter.format(result.authRequest.creationDate),
+                    ),
+                )
+            }
 
-                    is AuthRequestResult.Error -> LoginApprovalState.ViewState.Error
-                },
-            )
+            is AuthRequestResult.Error -> mutableStateFlow.update {
+                it.copy(
+                    viewState = LoginApprovalState.ViewState.Error,
+                )
+            }
+        }
+    }
+
+    private fun handleDeclineRequestResultReceived(
+        action: LoginApprovalAction.Internal.DeclineRequestResultReceive,
+    ) {
+        when (action.result) {
+            is AuthRequestResult.Success -> {
+                sendEvent(LoginApprovalEvent.NavigateBack)
+            }
+
+            is AuthRequestResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(shouldShowErrorDialog = true)
+                }
+            }
         }
     }
 }
@@ -103,8 +181,13 @@ class LoginApprovalViewModel @Inject constructor(
  */
 @Parcelize
 data class LoginApprovalState(
-    val fingerprint: String,
     val viewState: ViewState,
+    val shouldShowErrorDialog: Boolean,
+    // Internal
+    val fingerprint: String,
+    val masterPasswordHash: String?,
+    val publicKey: String,
+    val requestId: String,
 ) : Parcelable {
     /**
      * Represents the specific view states for the [LoginApprovalScreen].
@@ -177,14 +260,33 @@ sealed class LoginApprovalAction {
     data object DeclineRequestClick : LoginApprovalAction()
 
     /**
+     * User dismissed the error dialog.
+     */
+    data object ErrorDialogDismiss : LoginApprovalAction()
+
+    /**
      * Models action the view model could send itself.
      */
     sealed class Internal : LoginApprovalAction() {
+        /**
+         * A new result for a request to approve this request has been received.
+         */
+        data class ApproveRequestResultReceive(
+            val result: AuthRequestResult,
+        ) : Internal()
+
         /**
          * An auth request result has been received to populate the data on the screen.
          */
         data class AuthRequestResultReceive(
             val authRequestResult: AuthRequestResult,
+        ) : Internal()
+
+        /**
+         * A new result for a request to decline this request has been received.
+         */
+        data class DeclineRequestResultReceive(
+            val result: AuthRequestResult,
         ) : Internal()
     }
 }

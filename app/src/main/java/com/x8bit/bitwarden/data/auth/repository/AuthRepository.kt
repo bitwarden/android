@@ -197,6 +197,17 @@ interface AuthRepository : AuthenticatorProvider {
     suspend fun getAuthRequests(): AuthRequestsResult
 
     /**
+     * Approves or declines the request corresponding to this [requestId] based on [publicKey]
+     * according to [isApproved].
+     */
+    suspend fun updateAuthRequest(
+        requestId: String,
+        masterPasswordHash: String?,
+        publicKey: String,
+        isApproved: Boolean,
+    ): AuthRequestResult
+
+    /**
      * Get a [Boolean] indicating whether this is a known device.
      */
     suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult

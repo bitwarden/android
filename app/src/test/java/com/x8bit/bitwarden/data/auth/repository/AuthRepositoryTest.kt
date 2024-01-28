@@ -70,6 +70,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -158,6 +159,14 @@ class AuthRepositoryTest {
             ),
         )
     }
+    private val vaultSdkSource = mockk<VaultSdkSource> {
+        coEvery {
+            getAuthRequestKey(
+                publicKey = PUBLIC_KEY,
+                userId = USER_ID_1,
+            )
+        } returns "AsymmetricEncString".asSuccess()
+    }
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any()) } just runs
     }
@@ -173,6 +182,7 @@ class AuthRepositoryTest {
         newAuthRequestService = newAuthRequestService,
         organizationService = organizationService,
         authSdkSource = authSdkSource,
+        vaultSdkSource = vaultSdkSource,
         authDiskSource = fakeAuthDiskSource,
         environmentRepository = fakeEnvironmentRepository,
         settingsRepository = settingsRepository,
@@ -2409,6 +2419,143 @@ class AuthRepositoryTest {
 
         coVerify(exactly = 1) {
             authRequestsService.getAuthRequests()
+        }
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `updateAuthRequest should return failure when sdk returns failure`() = runTest {
+        coEvery {
+            vaultSdkSource.getAuthRequestKey(
+                publicKey = PUBLIC_KEY,
+                userId = USER_ID_1,
+            )
+        } returns Throwable("Fail").asFailure()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.updateAuthRequest(
+            requestId = "requestId",
+            masterPasswordHash = "masterPasswordHash",
+            publicKey = PUBLIC_KEY,
+            isApproved = false,
+        )
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.getAuthRequestKey(
+                publicKey = PUBLIC_KEY,
+                userId = USER_ID_1,
+            )
+        }
+        assertEquals(AuthRequestResult.Error, result)
+    }
+
+    @Test
+    fun `updateAuthRequest should return failure when service returns failure`() = runTest {
+        val requestId = "requestId"
+        val passwordHash = "masterPasswordHash"
+        val encodedKey = "encodedKey"
+        coEvery {
+            vaultSdkSource.getAuthRequestKey(
+                publicKey = PUBLIC_KEY,
+                userId = USER_ID_1,
+            )
+        } returns encodedKey.asSuccess()
+        coEvery {
+            authRequestsService.updateAuthRequest(
+                requestId = requestId,
+                masterPasswordHash = passwordHash,
+                key = encodedKey,
+                deviceId = UNIQUE_APP_ID,
+                isApproved = false,
+            )
+        } returns Throwable("Mission failed").asFailure()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.updateAuthRequest(
+            requestId = "requestId",
+            masterPasswordHash = "masterPasswordHash",
+            publicKey = PUBLIC_KEY,
+            isApproved = false,
+        )
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.getAuthRequestKey(
+                publicKey = PUBLIC_KEY,
+                userId = USER_ID_1,
+            )
+        }
+        assertEquals(AuthRequestResult.Error, result)
+    }
+
+    @Suppress("LongMethod")
+    @Test
+    fun `updateAuthRequest should return success when service & sdk return success`() = runTest {
+        val requestId = "requestId"
+        val passwordHash = "masterPasswordHash"
+        val encodedKey = "encodedKey"
+        val responseJson = AuthRequestsResponseJson.AuthRequest(
+            id = requestId,
+            publicKey = PUBLIC_KEY,
+            platform = "Android",
+            ipAddress = "192.168.0.1",
+            key = "key",
+            masterPasswordHash = passwordHash,
+            creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+            responseDate = null,
+            requestApproved = true,
+            originUrl = "www.bitwarden.com",
+        )
+        val expected = AuthRequestResult.Success(
+            authRequest = AuthRequest(
+                id = requestId,
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "key",
+                masterPasswordHash = passwordHash,
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = true,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "",
+            ),
+        )
+        coEvery {
+            vaultSdkSource.getAuthRequestKey(
+                publicKey = PUBLIC_KEY,
+                userId = USER_ID_1,
+            )
+        } returns encodedKey.asSuccess()
+        coEvery {
+            authRequestsService.updateAuthRequest(
+                requestId = requestId,
+                masterPasswordHash = passwordHash,
+                key = encodedKey,
+                deviceId = UNIQUE_APP_ID,
+                isApproved = false,
+            )
+        } returns responseJson.asSuccess()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        val result = repository.updateAuthRequest(
+            requestId = requestId,
+            masterPasswordHash = passwordHash,
+            publicKey = PUBLIC_KEY,
+            isApproved = false,
+        )
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.getAuthRequestKey(
+                publicKey = PUBLIC_KEY,
+                userId = USER_ID_1,
+            )
+            authRequestsService.updateAuthRequest(
+                requestId = requestId,
+                masterPasswordHash = passwordHash,
+                key = encodedKey,
+                deviceId = UNIQUE_APP_ID,
+                isApproved = false,
+            )
         }
         assertEquals(expected, result)
     }

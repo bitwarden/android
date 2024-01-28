@@ -177,6 +177,75 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("LongMethod")
+    @Test
+    fun `on LifecycleResume should update state`() = runTest {
+        coEvery {
+            authRepository.getAuthRequests()
+        } returns AuthRequestsResult.Success(emptyList())
+        val viewModel = createViewModel()
+
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+
+        coEvery {
+            authRepository.getAuthRequests()
+        } returns AuthRequestsResult.Success(
+            authRequests = listOf(
+                AuthRequest(
+                    id = "1",
+                    publicKey = "publicKey-1",
+                    platform = "Android",
+                    ipAddress = "192.168.0.1",
+                    key = "publicKey",
+                    masterPasswordHash = "verySecureHash",
+                    creationDate = ZonedDateTime.parse("2023-08-24T17:11Z"),
+                    responseDate = null,
+                    requestApproved = true,
+                    originUrl = "www.bitwarden.com",
+                    fingerprint = "pantry-overdue-survive-sleep-jab",
+                ),
+                AuthRequest(
+                    id = "2",
+                    publicKey = "publicKey-2",
+                    platform = "iOS",
+                    ipAddress = "192.168.0.2",
+                    key = "publicKey",
+                    masterPasswordHash = "verySecureHash",
+                    creationDate = ZonedDateTime.parse("2023-08-21T15:43Z"),
+                    responseDate = null,
+                    requestApproved = false,
+                    originUrl = "www.bitwarden.com",
+                    fingerprint = "erupt-anew-matchbook-disk-student",
+                ),
+            ),
+        )
+        val expected = DEFAULT_STATE.copy(
+            viewState = PendingRequestsState.ViewState.Content(
+                requests = listOf(
+                    PendingRequestsState.ViewState.Content.PendingLoginRequest(
+                        fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
+                        platform = "Android",
+                        timestamp = "8/24/23 05:11 PM",
+                    ),
+                    PendingRequestsState.ViewState.Content.PendingLoginRequest(
+                        fingerprintPhrase = "erupt-anew-matchbook-disk-student",
+                        platform = "iOS",
+                        timestamp = "8/21/23 03:43 PM",
+                    ),
+                ),
+            ),
+        )
+        viewModel.trySendAction(PendingRequestsAction.LifecycleResume)
+        assertEquals(expected, viewModel.stateFlow.value)
+
+        coVerify(exactly = 2) {
+            authRepository.getAuthRequests()
+        }
+    }
+
     private fun createViewModel(
         state: PendingRequestsState? = DEFAULT_STATE,
     ): PendingRequestsViewModel = PendingRequestsViewModel(
