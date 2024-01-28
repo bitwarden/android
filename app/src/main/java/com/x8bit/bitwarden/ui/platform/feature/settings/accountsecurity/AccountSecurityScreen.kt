@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLogoutConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
@@ -48,6 +49,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTimePickerDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -111,28 +113,18 @@ fun AccountSecurityScreen(
         }
     }
 
-    when (state.dialog) {
-        AccountSecurityDialog.ConfirmLogout -> BitwardenLogoutConfirmationDialog(
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
-            },
-            onConfirmClick = remember(viewModel) {
-                { viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick) }
-            },
-        )
-
-        AccountSecurityDialog.FingerprintPhrase -> FingerPrintPhraseDialog(
-            fingerprintPhrase = state.fingerprintPhrase,
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
-            },
-            onLearnMore = remember(viewModel) {
-                { viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick) }
-            },
-        )
-
-        null -> Unit
-    }
+    AccountSecurityDialogs(
+        state = state,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(AccountSecurityAction.DismissDialog) }
+        },
+        onConfirmLogoutClick = remember(viewModel) {
+            { viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick) }
+        },
+        onFingerprintLearnMore = remember(viewModel) {
+            { viewModel.trySendAction(AccountSecurityAction.FingerPrintLearnMoreClick) }
+        },
+    )
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
@@ -304,6 +296,33 @@ fun AccountSecurityScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+    }
+}
+
+@Composable
+private fun AccountSecurityDialogs(
+    state: AccountSecurityState,
+    onDismissRequest: () -> Unit,
+    onConfirmLogoutClick: () -> Unit,
+    onFingerprintLearnMore: () -> Unit,
+) {
+    when (val dialogState = state.dialog) {
+        AccountSecurityDialog.ConfirmLogout -> BitwardenLogoutConfirmationDialog(
+            onDismissRequest = onDismissRequest,
+            onConfirmClick = onConfirmLogoutClick,
+        )
+
+        AccountSecurityDialog.FingerprintPhrase -> FingerPrintPhraseDialog(
+            fingerprintPhrase = state.fingerprintPhrase,
+            onDismissRequest = onDismissRequest,
+            onLearnMore = onFingerprintLearnMore,
+        )
+
+        is AccountSecurityDialog.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(text = dialogState.message),
+        )
+
+        null -> Unit
     }
 }
 
