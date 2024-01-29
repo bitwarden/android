@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -655,7 +656,15 @@ data class VaultState(
              */
             abstract val name: Text
 
+            /**
+             * The icon at the start of the item.
+             */
             abstract val startIcon: IconData
+
+            /**
+             * The icons shown after the item name.
+             */
+            abstract val extraIconList: List<IconRes>
 
             /**
              * An optional supporting label for the vault item that provides additional information.
@@ -679,6 +688,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
+                override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 val username: Text?,
             ) : VaultItem() {
@@ -696,6 +706,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_card_item),
+                override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 val brand: Text? = null,
                 val lastFourDigits: Text? = null,
@@ -723,6 +734,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_identity_item),
+                override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 val firstName: Text?,
             ) : VaultItem() {
@@ -738,6 +750,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_secure_note_item),
+                override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null

@@ -7,7 +7,9 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockIdentityVie
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSecureNoteView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -201,5 +203,84 @@ class CipherViewExtensionsTest {
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
             result,
         )
+    }
+
+    @Test
+    fun `toTrailingIcons should return collection icon if collectionId is not empty`() {
+        val cipher = createMockCipherView(1).copy(
+            organizationId = null,
+            attachments = null,
+        )
+
+        val expected = listOf(VaultTrailingIcon.COLLECTION).map {
+            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+        }
+
+        val result = cipher.toLabelIcons()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `toTrailingIcons should return collection icon if organizationId is not null`() {
+        val cipher = createMockCipherView(1).copy(
+            collectionIds = listOf(),
+            attachments = null,
+        )
+
+        val expected = listOf(VaultTrailingIcon.COLLECTION).map {
+            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+        }
+
+        val result = cipher.toLabelIcons()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `toTrailingIcons should return attachment icon if attachments is not null`() {
+        val cipher = createMockCipherView(1).copy(
+            collectionIds = listOf(),
+            organizationId = null,
+        )
+
+        val expected = listOf(VaultTrailingIcon.ATTACHMENT).map {
+            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+        }
+
+        val result = cipher.toLabelIcons()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `toTrailingIcons should return trailing icons if cipher has correct data`() {
+        val cipher = createMockCipherView(1)
+
+        val expected = listOf(
+            VaultTrailingIcon.COLLECTION,
+            VaultTrailingIcon.ATTACHMENT,
+        ).map {
+            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+        }
+
+        val result = cipher.toLabelIcons()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `toTrailingIcons should return empty list if no data requires an extra icon`() {
+        val cipher = createMockCipherView(1).copy(
+            collectionIds = listOf(),
+            organizationId = null,
+            attachments = null,
+        )
+
+        val expected = listOf<IconRes>()
+
+        val result = cipher.toLabelIcons()
+
+        assertEquals(expected, result)
     }
 }

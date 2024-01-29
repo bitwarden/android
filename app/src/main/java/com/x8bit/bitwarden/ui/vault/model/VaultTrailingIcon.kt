@@ -1,0 +1,23 @@
+package com.x8bit.bitwarden.ui.vault.model
+
+import androidx.annotation.DrawableRes
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+
+/**
+ * Represents the icons displayed after the cipher name.
+ */
+enum class VaultTrailingIcon(
+    @DrawableRes val iconRes: Int,
+    val contentDescription: Text,
+) {
+    COLLECTION(
+        iconRes = R.drawable.ic_collection,
+        contentDescription = R.string.collections.asText(),
+    ),
+    ATTACHMENT(
+        iconRes = R.drawable.ic_attachment,
+        contentDescription = R.string.attachments.asText(),
+    ),
+}
