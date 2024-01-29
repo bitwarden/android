@@ -2820,6 +2820,9 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Kontynuować kontakt z pomocą techniczną?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Kontynuować do polityki prywatności?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Kontynuować do sklepu aplikacji?</value>
   </data>
@@ -2838,6 +2841,9 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Nie możesz znaleźć tego, czego szukasz? Skontaktuj się z pomocą na bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Sprawdź naszą politykę prywatności na bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Odkryj więcej funkcji swojego konta Bitwarden w aplikacji internetowej.</value>

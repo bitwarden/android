@@ -2821,6 +2821,9 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Pāriet uz sazināšanos ar atbalstu?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Pāriet uz privātuma nosacījumiem?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Pāriet uz lietotņu veikalu?</value>
   </data>
@@ -2839,6 +2842,9 @@ Vai pārslēgties uz šo kontu?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Meklējamais nav atrodams? Ir iespēja sazināties ar Bitwarden atbalstu bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Mūsu privātuma nosacījumi ir pārskatāmi bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Vairāk sava Bitwarden konta iespēju var izpētīt tīmekļa vietnē.</value>

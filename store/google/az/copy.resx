@@ -167,14 +167,14 @@ Bitwarden anbarındakı həssas verilənləri, istənilən brauzerdən, mobil ci
     <value>Anbarınızı barmaq izi, PIN kod və ana parol ilə qoruyun</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Brauzerinizdə və digər tətbiqlərdəki giriş sahələrinin cəld avto-doldurulması</value>
+    <value>Brauzerinizdə və digər tətbiqlərdəki giriş xanalarının cəld avto-doldurulması</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Anbarınıza bir neçə cihazdan eyniləşdirərək müraciət edin
+    <value>Anbarınıza bir neçə cihazdan sinxronlaşdırıb müraciət edin
 
 -Telefon
 -Planşet
 -Masaüstü
--Veb sayt</value>
+-Veb</value>
   </data>
 </root>

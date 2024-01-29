@@ -2821,6 +2821,9 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Vẫn liên hệ hỗ trợ?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Đồng ý với chính sách bảo mật?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Vẫn tiếp tục đến cửa hàng ứng dụng?</value>
   </data>
@@ -2839,6 +2842,9 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Không tìm thấy? Hãy liên hệ với bộ phận hỗ trợ của Bitwarden trên bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Đọc chính sách bảo mật trên bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Khám phá thêm các tính năng của tài khoản Bitwarden của bạn trên bản web.</value>

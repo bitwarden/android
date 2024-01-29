@@ -2822,6 +2822,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Обратиться в службу поддержки?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Перейти к политике конфиденциальности?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Перейти в магазин приложений?</value>
   </data>
@@ -2840,6 +2843,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Не можете найти то, что ищете? Обратитесь в службу поддержки Bitwarden на сайте bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Ознакомьтесь с нашей политикой конфиденциальности на сайте bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Изучите дополнительные возможности вашего аккаунта Bitwarden в веб-приложении.</value>
