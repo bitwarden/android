@@ -8,7 +8,10 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.util.subtitle
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
@@ -78,8 +81,10 @@ fun SendView.determineListingPredicate(
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
  */
 fun List<CipherView>.toViewState(
+    itemListingType: VaultItemListingState.ItemListingType.Vault,
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    autofillSelectionData: AutofillSelectionData?,
 ): VaultItemListingState.ViewState =
     if (isNotEmpty()) {
         VaultItemListingState.ViewState.Content(
@@ -89,7 +94,36 @@ fun List<CipherView>.toViewState(
             ),
         )
     } else {
-        VaultItemListingState.ViewState.NoItems
+        // Use the autofill empty message if necessary, otherwise use normal type-specific message
+        val message = autofillSelectionData
+            ?.uri
+            ?.toHostOrPathOrNull()
+            ?.let { R.string.no_items_for_uri.asText(it) }
+            ?: run {
+                when (itemListingType) {
+                    is VaultItemListingState.ItemListingType.Vault.Folder -> {
+                        R.string.no_items_folder
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.Trash -> {
+                        R.string.no_items_trash
+                    }
+
+                    else -> R.string.no_items
+                }
+                    .asText()
+            }
+        val shouldShowAddButton = when (itemListingType) {
+            is VaultItemListingState.ItemListingType.Vault.Folder,
+            VaultItemListingState.ItemListingType.Vault.Trash,
+            -> false
+
+            else -> true
+        }
+        VaultItemListingState.ViewState.NoItems(
+            message = message,
+            shouldShowAddButton = shouldShowAddButton,
+        )
     }
 
 /**
@@ -107,7 +141,10 @@ fun List<SendView>.toViewState(
             ),
         )
     } else {
-        VaultItemListingState.ViewState.NoItems
+        VaultItemListingState.ViewState.NoItems(
+            message = R.string.no_items.asText(),
+            shouldShowAddButton = true,
+        )
     }
 
 /** * Updates a [VaultItemListingState.ItemListingType] with the given data if necessary. */

@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.R
 fun VaultNoItems(
     addItemClickAction: () -> Unit,
     modifier: Modifier = Modifier,
+    message: String = stringResource(id = R.string.no_items),
 ) {
     Column(
         modifier = modifier,
@@ -36,7 +37,7 @@ fun VaultNoItems(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            text = stringResource(id = R.string.no_items),
+            text = message,
             style = MaterialTheme.typography.bodyMedium,
         )
 

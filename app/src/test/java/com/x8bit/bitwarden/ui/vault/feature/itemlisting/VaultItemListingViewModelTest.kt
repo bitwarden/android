@@ -621,7 +621,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(VaultItemListingEvent.DismissPullToRefresh, awaitItem())
             }
             assertEquals(
-                createVaultItemListingState(viewState = VaultItemListingState.ViewState.NoItems),
+                createVaultItemListingState(
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        message = R.string.no_items.asText(),
+                        shouldShowAddButton = true,
+                    ),
+                ),
                 viewModel.stateFlow.value,
             )
         }
@@ -645,7 +650,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
             assertEquals(
                 createVaultItemListingState(
-                    viewState = VaultItemListingState.ViewState.NoItems,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        message = R.string.no_items.asText(),
+                        shouldShowAddButton = true,
+                    ),
                 ),
                 viewModel.stateFlow.value,
             )
@@ -708,7 +716,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
 
         assertEquals(
-            createVaultItemListingState(viewState = VaultItemListingState.ViewState.NoItems),
+            createVaultItemListingState(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = R.string.no_items.asText(),
+                    shouldShowAddButton = true,
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -729,7 +742,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
 
         assertEquals(
-            createVaultItemListingState(viewState = VaultItemListingState.ViewState.NoItems),
+            createVaultItemListingState(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = R.string.no_items.asText(),
+                    shouldShowAddButton = true,
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -810,7 +828,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
         assertEquals(
             createVaultItemListingState(
-                viewState = VaultItemListingState.ViewState.NoItems,
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = R.string.no_items.asText(),
+                    shouldShowAddButton = true,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -836,7 +857,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
         assertEquals(
             createVaultItemListingState(
-                viewState = VaultItemListingState.ViewState.NoItems,
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = R.string.no_items.asText(),
+                    shouldShowAddButton = true,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -916,7 +940,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
         assertEquals(
             createVaultItemListingState(
-                viewState = VaultItemListingState.ViewState.NoItems,
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = R.string.no_items.asText(),
+                    shouldShowAddButton = true,
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -941,7 +968,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
         assertEquals(
             createVaultItemListingState(
-                viewState = VaultItemListingState.ViewState.NoItems,
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = R.string.no_items.asText(),
+                    shouldShowAddButton = true,
+                ),
             ),
             viewModel.stateFlow.value,
         )
