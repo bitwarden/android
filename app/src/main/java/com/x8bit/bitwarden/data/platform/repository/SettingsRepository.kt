@@ -52,6 +52,16 @@ interface SettingsRepository {
     val isIconLoadingDisabledFlow: Flow<Boolean>
 
     /**
+     * The current setting for crash logging.
+     */
+    var isCrashLoggingEnabled: Boolean
+
+    /**
+     * Emits updates that track the [isCrashLoggingEnabled] value.
+     */
+    val isCrashLoggingEnabledFlow: Flow<Boolean>
+
+    /**
      * The [VaultTimeout] for the current user.
      */
     var vaultTimeout: VaultTimeout
