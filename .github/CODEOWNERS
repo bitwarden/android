@@ -10,6 +10,13 @@
 # DevOps for Actions and other workflow changes
 .github/workflows @bitwarden/dept-devops
 
+# DevOps for Version Bumping
+src/Android/Properties/AndroidManifest.xml
+src/iOS.Autofill/Info.plist
+src/iOS.Extension/Info.plist
+src/iOS.ShareExtension/Info.plist
+src/iOS/Info.plist
+
 ## Auth team files ##
 
 ## Platform team files ##
