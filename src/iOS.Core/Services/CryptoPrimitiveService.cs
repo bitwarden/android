@@ -47,9 +47,8 @@ namespace Bit.iOS.Core.Services
             var passwordData = NSData.FromArray(password);
             var saltData = NSData.FromArray(salt);
 
-            // TODO: Uncomment (Testing if without loading argon2id we can disable UseInterpreter)
-            //argon2id_hash_raw(iterations, memory, parallelism, passwordData.Bytes, passwordData.Length,
-            //    saltData.Bytes, saltData.Length,  keyData.MutableBytes, keyData.Length);
+            argon2id_hash_raw(iterations, memory, parallelism, passwordData.Bytes, passwordData.Length,
+               saltData.Bytes, saltData.Length,  keyData.MutableBytes, keyData.Length);
 
             var keyBytes = new byte[keyData.Length];
             Marshal.Copy(keyData.Bytes, keyBytes, 0, Convert.ToInt32(keyData.Length));
@@ -61,9 +60,8 @@ namespace Bit.iOS.Core.Services
         private static extern int CCKeyCerivationPBKDF(uint algorithm, IntPtr password, nuint passwordLen,
             IntPtr salt, nuint saltLen, uint prf, nuint rounds, IntPtr derivedKey, nuint derivedKeyLength);
 
-        // TODO: Uncomment (Testing if without loading argon2id we can disable UseInterpreter)
-        //[DllImport("__Internal", EntryPoint = "argon2id_hash_raw")]
-        //private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, IntPtr pwd,
-        //    nuint pwdlen, IntPtr salt, nuint saltlen, IntPtr hash, nuint hashlen);
+        [DllImport("__Internal", EntryPoint = "argon2id_hash_raw")]
+        private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, IntPtr pwd,
+           nuint pwdlen, IntPtr salt, nuint saltlen, IntPtr hash, nuint hashlen);
     }
 }
