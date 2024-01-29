@@ -10,6 +10,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -26,6 +27,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.Year
+import java.time.ZoneOffset
 
 class AboutScreenTest : BaseComposeTest() {
     private var haveCalledNavigateBack = false
@@ -34,6 +39,7 @@ class AboutScreenTest : BaseComposeTest() {
         AboutState(
             version = "Version: 1.0.0 (1)".asText(),
             isSubmitCrashLogsEnabled = false,
+            copyrightInfo = "".asText(),
         ),
     )
     private val mutableEventFlow = bufferedMutableSharedFlow<AboutEvent>()
@@ -198,5 +204,19 @@ class AboutScreenTest : BaseComposeTest() {
         mutableStateFlow.update { it.copy(version = "Version: 1.1.0 (2)".asText()) }
 
         composeTestRule.onNodeWithText("Version: 1.1.0 (2)").assertIsDisplayed()
+    }
+
+    @Test
+    fun `copyright info should update according to the state`() = runTest {
+        val fixedClock = Clock.fixed(Instant.parse("2024-01-25T00:00:00Z"), ZoneOffset.UTC)
+        val currentYear = Year.now(fixedClock).value
+
+        mutableStateFlow.update {
+            it.copy(copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText())
+        }
+
+        composeTestRule.onNodeWithText("© Bitwarden Inc. 2015-$currentYear")
+            .performScrollTo()
+            .assertIsDisplayed()
     }
 }

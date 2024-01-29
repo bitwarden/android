@@ -203,7 +203,7 @@ private fun ContentColumn(
         ) {
             Text(
                 modifier = Modifier.padding(end = 16.dp),
-                text = "© Bitwarden Inc. 2015-2023",
+                text = state.copyrightInfo.invoke(),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface,
             )
