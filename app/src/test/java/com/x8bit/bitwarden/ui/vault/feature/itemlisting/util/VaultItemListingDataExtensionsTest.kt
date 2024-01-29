@@ -4,6 +4,8 @@ import android.net.Uri
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.SendType
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
@@ -12,13 +14,15 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -29,6 +33,12 @@ class VaultItemListingDataExtensionsTest {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Uri::class)
+        unmockkStatic(CipherView::subtitle)
+    }
 
     @Test
     @Suppress("MaxLineLength")
@@ -333,8 +343,10 @@ class VaultItemListingDataExtensionsTest {
         )
 
         val result = cipherViewList.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            autofillSelectionData = null,
         )
 
         assertEquals(
@@ -364,9 +376,73 @@ class VaultItemListingDataExtensionsTest {
             ),
             result,
         )
+    }
 
-        unmockkStatic(CipherView::subtitle)
-        unmockkStatic(Uri::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should transform an empty list of CipherViews into a NoItems ViewState with the appropriate data`() {
+        val cipherViewList = emptyList<CipherView>()
+
+        // Trash
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_items_trash.asText(),
+                shouldShowAddButton = false,
+            ),
+            cipherViewList.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                autofillSelectionData = null,
+            ),
+        )
+
+        // Folders
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_items_folder.asText(),
+                shouldShowAddButton = false,
+            ),
+            cipherViewList.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                    folderId = "folderId",
+                ),
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                autofillSelectionData = null,
+            ),
+        )
+
+        // Other ciphers
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_items.asText(),
+                shouldShowAddButton = true,
+            ),
+            cipherViewList.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                autofillSelectionData = null,
+            ),
+        )
+
+        // Autofill
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_items_for_uri.asText("www.test.com"),
+                shouldShowAddButton = true,
+            ),
+            cipherViewList.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                autofillSelectionData = AutofillSelectionData(
+                    type = AutofillSelectionData.Type.LOGIN,
+                    uri = "https://www.test.com",
+                ),
+            ),
+        )
     }
 
     @Test

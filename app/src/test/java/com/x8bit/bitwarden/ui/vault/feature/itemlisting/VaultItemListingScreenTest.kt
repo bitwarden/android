@@ -300,7 +300,14 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `add an item button click should send AddItemClick action`() {
-        mutableStateFlow.update { it.copy(viewState = VaultItemListingState.ViewState.NoItems) }
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = "There are no items in your vault.".asText(),
+                    shouldShowAddButton = true,
+                ),
+            )
+        }
         composeTestRule
             .onNodeWithText("Add an Item")
             .performClick()
@@ -385,7 +392,12 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(viewState = VaultItemListingState.ViewState.NoItems)
+            it.copy(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = "There are no items in your vault.".asText(),
+                    shouldShowAddButton = true,
+                ),
+            )
         }
 
         composeTestRule
@@ -401,7 +413,14 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .onNodeWithText(message)
             .assertIsNotDisplayed()
 
-        mutableStateFlow.update { it.copy(viewState = VaultItemListingState.ViewState.NoItems) }
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = "There are no items in your vault.".asText(),
+                    shouldShowAddButton = true,
+                ),
+            )
+        }
         composeTestRule
             .onNodeWithText(message)
             .assertIsNotDisplayed()
@@ -422,23 +441,23 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(viewState = VaultItemListingState.ViewState.NoItems)
+            it.copy(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = "There are no items in your vault.".asText(),
+                    shouldShowAddButton = true,
+                ),
+            )
         }
+
         composeTestRule
             .onNodeWithText(text = "Add an Item")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Trash)
-        }
-        composeTestRule
-            .onNodeWithText(text = "Add an Item")
-            .assertDoesNotExist()
-
-        mutableStateFlow.update {
             it.copy(
-                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
-                    folderId = null,
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = "There are no items in your vault.".asText(),
+                    shouldShowAddButton = false,
                 ),
             )
         }
@@ -450,28 +469,15 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `empty text should be displayed according to state`() {
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(viewState = VaultItemListingState.ViewState.NoItems)
-        }
-        composeTestRule
-            .onNodeWithText(text = "There are no items in your vault.")
-            .assertIsDisplayed()
-
-        mutableStateFlow.update {
-            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Trash)
-        }
-        composeTestRule
-            .onNodeWithText(text = "There are no items in the trash.")
-            .assertIsDisplayed()
-
-        mutableStateFlow.update {
             it.copy(
-                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
-                    folderId = null,
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = "There are no items in your vault.".asText(),
+                    shouldShowAddButton = true,
                 ),
             )
         }
         composeTestRule
-            .onNodeWithText(text = "There are no items in this folder.")
+            .onNodeWithText(text = "There are no items in your vault.")
             .assertIsDisplayed()
     }
 

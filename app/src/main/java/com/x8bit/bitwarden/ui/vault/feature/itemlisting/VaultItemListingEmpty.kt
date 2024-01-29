@@ -9,10 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultNoItems
 
 /**
@@ -20,31 +18,21 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultNoItems
  */
 @Composable
 fun VaultItemListingEmpty(
-    itemListingType: VaultItemListingState.ItemListingType,
+    state: VaultItemListingState.ViewState.NoItems,
     addItemClickAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (itemListingType) {
-        is VaultItemListingState.ItemListingType.Vault.Folder -> {
-            GenericNoItems(
-                modifier = modifier,
-                text = stringResource(id = R.string.no_items_folder),
-            )
-        }
-
-        is VaultItemListingState.ItemListingType.Vault.Trash -> {
-            GenericNoItems(
-                modifier = modifier,
-                text = stringResource(id = R.string.no_items_trash),
-            )
-        }
-
-        else -> {
-            VaultNoItems(
-                modifier = modifier,
-                addItemClickAction = addItemClickAction,
-            )
-        }
+    if (state.shouldShowAddButton) {
+        VaultNoItems(
+            message = state.message(),
+            modifier = modifier,
+            addItemClickAction = addItemClickAction,
+        )
+    } else {
+        GenericNoItems(
+            text = state.message(),
+            modifier = modifier,
+        )
     }
 }
 

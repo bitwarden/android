@@ -242,7 +242,7 @@ private fun VaultItemListingScaffold(
 
             is VaultItemListingState.ViewState.NoItems -> {
                 VaultItemListingEmpty(
-                    itemListingType = state.itemListingType,
+                    state = state.viewState,
                     addItemClickAction = vaultItemListingHandlers.addVaultItemClick,
                     modifier = modifier,
                 )

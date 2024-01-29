@@ -545,8 +545,10 @@ class VaultItemListingViewModel @Inject constructor(
                             }
                             .toFilteredList(state.vaultFilterType)
                             .toViewState(
+                                itemListingType = listingType,
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
+                                autofillSelectionData = state.autofillSelectionData,
                             )
                     }
 
@@ -702,7 +704,10 @@ data class VaultItemListingState(
         /**
          * Represents a state where the [VaultItemListingScreen] has no items to display.
          */
-        data object NoItems : ViewState() {
+        data class NoItems(
+            val message: Text,
+            val shouldShowAddButton: Boolean,
+        ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
         }
 
