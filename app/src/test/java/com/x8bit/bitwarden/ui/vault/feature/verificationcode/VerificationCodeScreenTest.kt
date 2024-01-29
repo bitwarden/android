@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 class VerificationCodeScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToSearchCalled = false
     private var onNavigateToVaultItemId: String? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VerificationCodeEvent>()
@@ -51,6 +52,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
+                onNavigateToSearch = { onNavigateToSearchCalled = true },
             )
         }
     }
@@ -59,6 +61,12 @@ class VerificationCodeScreenTest : BaseComposeTest() {
     fun `NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(VerificationCodeEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateToVaultSearchScreen event should invoke onNavigateToSearch`() {
+        mutableEventFlow.tryEmit(VerificationCodeEvent.NavigateToVaultSearchScreen)
+        assertTrue(onNavigateToSearchCalled)
     }
 
     @Test

@@ -57,6 +57,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.NoFolder -> this
         SearchTypeData.Vault.SecureNotes -> this
         SearchTypeData.Vault.Trash -> this
+        SearchTypeData.Vault.VerificationCodes -> this
     }
 
 /**
@@ -97,6 +98,7 @@ private fun CipherView.filterBySearchType(
         is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY
         is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN
         is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE
+        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
@@ -171,6 +173,7 @@ private fun CipherView.toDisplayItem(
         ),
         extraIconList = emptyList(),
         overflowOptions = toOverflowActions(),
+        totpCode = login?.totp,
     )
 
 private fun CipherView.toIconData(
@@ -302,6 +305,7 @@ private fun SendView.toDisplayItem(
         ),
         extraIconList = toLabelIcons(clock = clock),
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
+        totpCode = null,
     )
 
 private enum class SortPriority {

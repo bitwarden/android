@@ -23,6 +23,8 @@ private const val SEARCH_TYPE_VAULT_COLLECTION: String = "search_type_vault_coll
 private const val SEARCH_TYPE_VAULT_NO_FOLDER: String = "search_type_vault_no_folder"
 private const val SEARCH_TYPE_VAULT_FOLDER: String = "search_type_vault_folder"
 private const val SEARCH_TYPE_VAULT_TRASH: String = "search_type_vault_trash"
+private const val SEARCH_TYPE_VAULT_VERIFICATION_CODES: String =
+    "search_type_vault_verification_codes"
 private const val SEARCH_TYPE_ID: String = "search_type_id"
 
 private const val SEARCH_ROUTE_PREFIX: String = "search"
@@ -101,6 +103,7 @@ private fun determineSearchType(
         SEARCH_TYPE_VAULT_NO_FOLDER -> SearchType.Vault.NoFolder
         SEARCH_TYPE_VAULT_FOLDER -> SearchType.Vault.Folder(requireNotNull(id))
         SEARCH_TYPE_VAULT_TRASH -> SearchType.Vault.Trash
+        SEARCH_TYPE_VAULT_VERIFICATION_CODES -> SearchType.Vault.VerificationCodes
         else -> throw IllegalArgumentException("Invalid Search Type")
     }
 
@@ -118,6 +121,7 @@ private fun SearchType.toTypeString(): String =
         SearchType.Vault.NoFolder -> SEARCH_TYPE_VAULT_NO_FOLDER
         SearchType.Vault.SecureNotes -> SEARCH_TYPE_VAULT_SECURE_NOTES
         SearchType.Vault.Trash -> SEARCH_TYPE_VAULT_TRASH
+        SearchType.Vault.VerificationCodes -> SEARCH_TYPE_VAULT_VERIFICATION_CODES
     }
 
 private fun SearchType.toIdOrNull(): String? =
@@ -134,4 +138,5 @@ private fun SearchType.toIdOrNull(): String? =
         SearchType.Vault.NoFolder -> null
         SearchType.Vault.SecureNotes -> null
         SearchType.Vault.Trash -> null
+        SearchType.Vault.VerificationCodes -> null
     }

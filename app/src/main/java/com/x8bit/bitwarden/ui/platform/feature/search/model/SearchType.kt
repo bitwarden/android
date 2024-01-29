@@ -81,5 +81,10 @@ sealed class SearchType : Parcelable {
          * Indicates that we should be searching only ciphers in the trash.
          */
         data object Trash : Vault()
+
+        /**
+         * Indicates that we should be searching only for verification code items.
+         */
+        data object VerificationCodes : Vault()
     }
 }

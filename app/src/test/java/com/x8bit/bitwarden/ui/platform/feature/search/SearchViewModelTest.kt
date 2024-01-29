@@ -864,6 +864,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Vault.Logins -> "search_type_vault_logins"
                     SearchTypeData.Vault.NoFolder -> "search_type_vault_no_folder"
                     SearchTypeData.Vault.SecureNotes -> "search_type_vault_secure_notes"
+                    SearchTypeData.Vault.VerificationCodes -> "search_type_vault_verification_codes"
                     SearchTypeData.Vault.Trash -> "search_type_vault_trash"
                     null -> "search_type_vault_all"
                 },
@@ -882,6 +883,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     SearchTypeData.Vault.Logins -> null
                     SearchTypeData.Vault.NoFolder -> null
                     SearchTypeData.Vault.SecureNotes -> null
+                    SearchTypeData.Vault.VerificationCodes -> null
                     SearchTypeData.Vault.Trash -> null
                     null -> null
                 },

@@ -20,4 +20,5 @@ fun SearchType.toSearchTypeData(): SearchTypeData =
         SearchType.Vault.NoFolder -> SearchTypeData.Vault.NoFolder
         SearchType.Vault.SecureNotes -> SearchTypeData.Vault.SecureNotes
         SearchType.Vault.Trash -> SearchTypeData.Vault.Trash
+        SearchType.Vault.VerificationCodes -> SearchTypeData.Vault.VerificationCodes
     }

@@ -40,6 +40,7 @@ fun createMockDisplayItemForCipher(
                         url = "www.mockuri$number.com",
                     ),
                 ),
+                totpCode = "mockTotp-$number",
             )
         }
 
@@ -57,6 +58,7 @@ fun createMockDisplayItemForCipher(
                         notes = "mockNotes-$number",
                     ),
                 ),
+                totpCode = null,
             )
         }
 
@@ -77,6 +79,7 @@ fun createMockDisplayItemForCipher(
                         securityCode = "mockCode-$number",
                     ),
                 ),
+                totpCode = null,
             )
         }
 
@@ -91,6 +94,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
                     ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
                 ),
+                totpCode = null,
             )
         }
     }
@@ -131,6 +135,7 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
+                totpCode = null,
             )
         }
 
@@ -161,6 +166,7 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
+                totpCode = null,
             )
         }
     }

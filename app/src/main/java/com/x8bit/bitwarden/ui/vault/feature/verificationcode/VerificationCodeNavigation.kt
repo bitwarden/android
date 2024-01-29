@@ -12,6 +12,7 @@ private const val VERIFICATION_CODE_ROUTE: String = "verification_code"
  */
 fun NavGraphBuilder.vaultVerificationCodeDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToSearchVault: () -> Unit,
     onNavigateToVaultItemScreen: (String) -> Unit,
 ) {
     composableWithPushTransitions(
@@ -19,6 +20,7 @@ fun NavGraphBuilder.vaultVerificationCodeDestination(
     ) {
         VerificationCodeScreen(
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
+            onNavigateToSearch = onNavigateToSearchVault,
             onNavigateBack = onNavigateBack,
         )
     }
