@@ -32,7 +32,6 @@ namespace Bit.Core.Abstractions
         Task<byte[]> RsaDecryptAsync(byte[] data, byte[] privateKey, CryptoHashAlgorithm algorithm);
         Task<byte[]> RsaExtractPublicKeyAsync(byte[] privateKey);
         Task<Tuple<byte[], byte[]>> RsaGenerateKeyPairAsync(int length);
-        Task<(byte[] PublicKey, byte[] PrivateKey)> EcdsaGenerateKeyPairAsync(CryptoEcdsaAlgorithm algorithm);
         Task<byte[]> RandomBytesAsync(int length);
         byte[] RandomBytes(int length);
         Task<uint> RandomNumberAsync();

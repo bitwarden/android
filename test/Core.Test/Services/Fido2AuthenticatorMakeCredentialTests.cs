@@ -1,12 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
-using Bit.Core.Exceptions;
 using Bit.Core.Services;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Enums;
-using Bit.Core.Test.AutoFixture;
 using Bit.Core.Utilities.Fido2;
 using Bit.Test.Common.AutoFixture;
 using Bit.Test.Common.AutoFixture.Attributes;
@@ -16,8 +14,6 @@ using Xunit;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
-using NSubstitute.Extensions;
 using System.Formats.Cbor;
 
 namespace Bit.Core.Test.Services
@@ -183,8 +179,6 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
             sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
                 CipherId = null,
@@ -220,8 +214,6 @@ namespace Bit.Core.Test.Services
                 }
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
             sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
 
             // Arrange
@@ -249,8 +241,6 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
             _encryptedCipher.Key = null;
             _encryptedCipher.Attachments = [];
 
@@ -297,8 +287,6 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
 
             // Arrange
             sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedCipher.Id)).Returns(_encryptedCipher);
@@ -324,8 +312,6 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = true;
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
 
             // Arrange
             sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedCipher.Id)).Returns(_encryptedCipher);
@@ -351,8 +337,6 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
             _encryptedCipher.Reprompt = CipherRepromptType.Password;
 
             // Arrange
@@ -379,8 +363,6 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
 
             // Arrange
             sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedCipher.Id)).Returns(_encryptedCipher);
@@ -407,8 +389,6 @@ namespace Bit.Core.Test.Services
             ];
             mParams.RpEntity = new PublicKeyCredentialRpEntity { Id = "bitwarden.com" };
             mParams.RequireUserVerification = false;
-            sutProvider.GetDependency<ICryptoFunctionService>().EcdsaGenerateKeyPairAsync(Arg.Any<CryptoEcdsaAlgorithm>())
-                .Returns((RandomBytes(32), RandomBytes(32)));
             _encryptedCipher.Key = null;
             _encryptedCipher.Attachments = [];
 
@@ -416,7 +396,6 @@ namespace Bit.Core.Test.Services
             var rpIdHashMock = RandomBytes(32);
             mParams.RequireResidentKey = false;
             sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(mParams.RpEntity.Id, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
-            // sutProvider.GetDependency<ICipherService>().EncryptAsync(Arg.Any<CipherView>()).Returns(_encryptedCipher);
             sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedCipher.Id)).Returns(_encryptedCipher);
             sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
                 CipherId = _encryptedCipher.Id,
@@ -446,14 +425,13 @@ namespace Bit.Core.Test.Services
             // Unsure how to test public key
             // const publicKey = authData.Skip(71).ToArray(); // Key data is 77 bytes long
 
-            // Not implemented yet
-            // Assert.Equal(71 + 77, authData.Length);
-            // Assert.Equal(rpIdHashMock, rpIdHash);
-            // Assert.Equal([0b01000001], flags); // UP = true, AD = true
-            // Assert.Equal([0, 0, 0, 0], counter);
-            // Assert.Equal(Fido2AuthenticatorService.AAGUID, aaguid);
-            // Assert.Equal([0, 16], credentialIdLength); // 16 bytes because we're using GUIDs
-            // Assert.Equal(credentialIdBytes, credentialId);
+            Assert.Equal(71 + 77, authData.Length);
+            Assert.Equal(rpIdHashMock, rpIdHash);
+            Assert.Equal([0b01000001], flags); // UP = true, AD = true
+            Assert.Equal([0, 0, 0, 0], counter);
+            Assert.Equal(Fido2AuthenticatorService.AAGUID, aaguid);
+            Assert.Equal([0, 16], credentialIdLength); // 16 bytes because we're using GUIDs
+            Assert.Equal(credentialIdBytes, credentialId);
         }
 
         #endregion
@@ -494,16 +472,19 @@ namespace Bit.Core.Test.Services
             };
         }
 
-        private class AttestationObject
+        private struct AttestationObject
         {
-            public string Fmt { get; set; }
-            public object AttStmt { get; set; }
-            public byte[] AuthData { get; set; }
+            public string? Fmt { get; set; }
+            public object? AttStmt { get; set; }
+            public byte[]? AuthData { get; set; }
         }
 
         private AttestationObject DecodeAttestationObject(byte[] attestationObject) 
         {
-            var result = new AttestationObject();
+            string? fmt = null;
+            object? attStmt = null;
+            byte[]? authData = null;
+
             var reader = new CborReader(attestationObject, CborConformanceMode.Ctap2Canonical);
             reader.ReadStartMap();
 
@@ -513,21 +494,25 @@ namespace Bit.Core.Test.Services
                 switch (key)
                 {
                     case "fmt":
-                        result.Fmt = reader.ReadTextString();
+                        fmt = reader.ReadTextString();
                         break;
                     case "attStmt":
                         reader.ReadStartMap();
                         reader.ReadEndMap();
                         break;
                     case "authData":
-                        result.AuthData = reader.ReadByteString();
+                        authData = reader.ReadByteString();
                         break;
                     default:
                         throw new Exception("Unknown key");
                 }
             }
 
-            return result;
+            return new AttestationObject {
+                Fmt = fmt,
+                AttStmt = attStmt,
+                AuthData = authData
+            };
         }
     }
 }

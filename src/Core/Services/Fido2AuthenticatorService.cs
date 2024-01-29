@@ -70,8 +70,8 @@ namespace Bit.Core.Services
             }
             
             try {
-                var (publicKey, privateKey) = await _cryptoFunctionService.EcdsaGenerateKeyPairAsync(CryptoEcdsaAlgorithm.P256Sha256);
-                var fido2Credential = CreateCredentialView(makeCredentialParams, privateKey);
+                var keyPair = GenerateKeyPair();
+                var fido2Credential = CreateCredentialView(makeCredentialParams, keyPair.privateKey);
 
                 var encrypted = await _cipherService.GetAsync(cipherId);
                 var cipher = await encrypted.DecryptAsync();
@@ -94,8 +94,7 @@ namespace Bit.Core.Services
                     userPresence: true,
                     userVerification: userVerified,
                     credentialId: GuidToRawFormat(credentialId),
-                    publicKey: publicKey,
-                    privateKey: privateKey
+                    publicKey: keyPair.publicKey
                 );
 
                 return new Fido2AuthenticatorMakeCredentialResult
@@ -284,6 +283,24 @@ namespace Bit.Core.Services
             );
         }
 
+        // TODO: Move this to a separate service
+        private (PublicKey publicKey, byte[] privateKey) GenerateKeyPair()
+        {
+            using (System.Security.Cryptography.ECDsa dsa = System.Security.Cryptography.ECDsa.Create())
+            {
+                dsa.GenerateKey(System.Security.Cryptography.ECCurve.NamedCurves.nistP256);
+                var privateKey = dsa.ExportPkcs8PrivateKey();
+
+                System.Security.Cryptography.ECParameters parameters = dsa.ExportParameters(true);
+
+                return (
+                    new PublicKey {
+                        X = parameters.Q.X,
+                        Y = parameters.Q.Y
+                    }, privateKey);
+            }
+        }
+
         private Fido2CredentialView CreateCredentialView(Fido2AuthenticatorMakeCredentialParams makeCredentialsParams, byte[] privateKey)
         {
             return new Fido2CredentialView {
@@ -309,10 +326,9 @@ namespace Bit.Core.Services
             bool userPresence,
             int counter,
             byte[] credentialId = null,
-            byte[] publicKey = null,
-            byte[] privateKey = null
+            PublicKey? publicKey = null
         ) {
-            var isAttestation = credentialId != null && publicKey != null && privateKey != null;
+            var isAttestation = credentialId != null && publicKey.HasValue;
 
             List<byte> authData = new List<byte>();
 
@@ -347,25 +363,9 @@ namespace Bit.Core.Services
                 };
                 attestedCredentialData.AddRange(credentialIdLength);
                 attestedCredentialData.AddRange(credentialId);
+                attestedCredentialData.AddRange(publicKey.Value.ToCose());
 
-                var base64PrivateKey = CoreHelpers.Base64UrlEncode(privateKey);
-
-                // const publicKeyJwk = await crypto.subtle.exportKey("jwk", params.keyPair.publicKey);
-                // // COSE format of the EC256 key
-                // const keyX = Utils.fromUrlB64ToArray(publicKeyJwk.x);
-                // const keyY = Utils.fromUrlB64ToArray(publicKeyJwk.y);
-
-                // // Can't get `cbor-redux` to encode in CTAP2 canonical CBOR. So we do it manually:
-                // const coseBytes = new Uint8Array(77);
-                // coseBytes.set([0xa5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20], 0);
-                // coseBytes.set(keyX, 10);
-                // coseBytes.set([0x22, 0x58, 0x20], 10 + 32);
-                // coseBytes.set(keyY, 10 + 32 + 3);
-
-                // // credential public key - convert to array from CBOR encoded COSE key
-                // attestedCredentialData.push(...coseBytes);
-
-                // authData.push(...attestedCredentialData);
+                authData.AddRange(attestedCredentialData);
             }
 
             return authData.ToArray();
@@ -434,5 +434,40 @@ namespace Bit.Core.Services
             return Guid.Parse(guid).ToByteArray();
         }
 
+        private struct PublicKey
+        {
+            public byte[] X { get; set; }
+            public byte[] Y { get; set; }
+
+            public byte[] ToCose()
+            {
+                var result = new CborWriter(CborConformanceMode.Ctap2Canonical);
+                result.WriteStartMap(5);
+                
+                // kty = EC2
+                result.WriteInt32(1);
+                result.WriteInt32(2);
+
+                // alg = ES256
+                result.WriteInt32(3);
+                result.WriteInt32(-7);
+
+                // crv = P-256
+                result.WriteInt32(-1);
+                result.WriteInt32(1);
+
+                // x
+                result.WriteInt32(-2);
+                result.WriteByteString(X);
+
+                // y
+                result.WriteInt32(-3);
+                result.WriteByteString(Y);
+
+                result.WriteEndMap();
+
+                return result.Encode();
+            }
+        }
     }
 }
