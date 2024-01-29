@@ -182,7 +182,7 @@
   <string name="verification_code">Código de verificação</string>
   <string name="view_item">Ver item</string>
   <string name="web_vault">Cofre web Bitwarden</string>
-  <string name="lost2_fa_app">Perdeu a aplicação de autenticação?</string>
+  <string name="lost_2fa_app">Perdeu a aplicação de autenticação?</string>
   <string name="items">Itens</string>
   <string name="extension_activated">Extensão ativada!</string>
   <string name="icons">Ícones</string>
@@ -193,7 +193,7 @@
   <string name="bitwarden_autofill_service_notification_content">Toque nesta notificação para preencher automaticamente um item do seu cofre.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Abrir definições de acessibilidade</string>
   <string name="bitwarden_autofill_service_step1">1. No ecrã de Definições de Acessibilidade do Android, toque em \"Bitwarden\" debaixo do cabeçalho Serviços.</string>
-  <string name="bitwarden_autofill_service_step2">2. Ligue o interruptor e pressione OK para aceitar. </string>
+  <string name="bitwarden_autofill_service_step2">2. Ligue o interruptor e pressione OK para aceitar.</string>
   <string name="disabled">Desativado</string>
   <string name="enabled">Ativado</string>
   <string name="off" tools:override="true">Desligado</string>
@@ -231,7 +231,7 @@
   <string name="attachment_large_warning">O anexo tem %1$s de tamanho. Tem a certeza que deseja transferi-lo para o seu dispositivo?</string>
   <string name="authenticator_key">Chave de autenticação (TOTP)</string>
   <string name="verification_code_totp">Código de verificação (TOTP)</string>
-  <string name="authenticator_key_added">Chave de autenticador adicionada.</string>
+  <string name="authenticator_key_added">Chave de autenticação adicionada.</string>
   <string name="authenticator_key_read_error">Não é possível ler a chave de autenticação.</string>
   <string name="point_your_camera_at_the_qr_code">Aponte a sua câmara para o código QR.
 A leitura será efetuada automaticamente.</string>
@@ -527,16 +527,16 @@ A leitura será efetuada automaticamente.</string>
   <string name="accept_policies_error">Os Termos de utilização e a Política de privacidade não foram aceites.</string>
   <string name="terms_of_service">Termos de utilização</string>
   <string name="privacy_policy">Política de privacidade</string>
-  <string name="accessibility_draw_over_permission_alert">O Bitwarden precisa de atenção - Ative \"Aparecer sobre outras\" em \"Serviços de preenchimento automático\" nas definições do Bitwarden</string>
+  <string name="accessibility_draw_over_permission_alert">O Bitwarden precisa de atenção - Ative a definição \"Aparecer sobre outras\" em \"Serviços de preenchimento automático\" nas definições do Bitwarden</string>
   <string name="autofill_services">Serviços de preenchimento automático</string>
   <string name="inline_autofill">Utilizar o preenchimento automático em linha</string>
   <string name="inline_autofill_description">Utilize o preenchimento automático em linha se o IME (teclado) selecionado o suportar. Se a sua configuração não for suportada (ou se esta opção estiver desativada), será utilizada a sobreposição de preenchimento automático predefinida.</string>
   <string name="accessibility">Utilizar a acessibilidade</string>
   <string name="accessibility_description">Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na web. Quando configurado, exibiremos um pop-up quando os campos de início de sessão forem selecionados.</string>
-  <string name="accessibility_description2">Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na web. (Requer que a definição Aparecer sobre outras também esteja ativada)</string>
-  <string name="accessibility_description3">Utilize o Serviço de acessibilidade do Bitwarden para utilizar o botão de preenchimento automático do Painel instantâneo e/ou mostrar um pop-up utilizando a definição Aparecer sobre outras (se estiver ativada).</string>
-  <string name="accessibility_description4">Necessário para utilizar o botão de preenchimento automático do Painel instantâneo, ou para aumentar o serviço de preenchimento automático utilizando a definição Aparecer sobre outras (se estiver ativada).</string>
-  <string name="draw_over">Utilizar definição Aparecer sobre outras</string>
+  <string name="accessibility_description2">Utilize o Serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais em aplicações e na Web. (Requer que a definição \"Aparecer sobre outras\" também esteja ativada)</string>
+  <string name="accessibility_description3">Utilize o Serviço de acessibilidade do Bitwarden para utilizar o botão de preenchimento automático do Painel instantâneo e/ou mostrar um pop-up utilizando a definição \"Aparecer sobre outras\" (se estiver ativada).</string>
+  <string name="accessibility_description4">Necessário para utilizar o botão de preenchimento automático do Painel instantâneo, ou para aumentar o serviço de preenchimento automático utilizando a definição \"Aparecer sobre outras\" (se estiver ativada).</string>
+  <string name="draw_over">Utilizar a definição \"Aparecer sobre outras\"</string>
   <string name="draw_over_description">Permite que o Serviço de acessibilidade do Bitwarden apresente um pop-up quando os campos de início de sessão são selecionados.</string>
   <string name="draw_over_description2">Se estiver ativado, o Serviço de acessibilidade do Bitwarden apresentará um pop-up quando os campos de início de sessão forem selecionados para ajudar no preenchimento automático das suas credenciais.</string>
   <string name="draw_over_description3">Se estiver ativada, a acessibilidade mostrará um pop-up para aumentar o serviço de preenchimento automático para aplicações mais antigas que não suportam a Framework de preenchimento automático do Android.</string>
@@ -658,7 +658,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="options_collapsed">As opções foram fechadas, clique para expandir.</string>
   <string name="uppercase_ato_z">Maiúsculas (A-Z)</string>
   <string name="lowercase_ato_z">Minúsculas (a-z)</string>
-  <string name="numbers_zero_to_nine">Números (0–9)</string>
+  <string name="numbers_zero_to_nine">Números (0-9)</string>
   <string name="special_characters">Caracteres especiais (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Toque para voltar atrás</string>
   <string name="password_is_visible_tap_to_hide">A palavra-passe está visível, toque para a ocultar.</string>
@@ -671,9 +671,9 @@ A leitura será efetuada automaticamente.</string>
   <string name="totp">TOTP</string>
   <string name="verification_codes">Códigos de verificação</string>
   <string name="premium_subscription_required">É necessária uma subscrição Premium</string>
-  <string name="cannot_add_authenticator_key">Não é possível adicionar uma chave de autenticação? </string>
+  <string name="cannot_add_authenticator_key">Não é possível adicionar uma chave de autenticação?</string>
   <string name="scan_qr_code">Ler código QR</string>
-  <string name="cannot_scan_qr_code">Não consegue ler o código QR? </string>
+  <string name="cannot_scan_qr_code">Não consegue ler o código QR?</string>
   <string name="authenticator_key_scanner">Chave de autenticação</string>
   <string name="enter_key_manually">Introduzir chave manualmente</string>
   <string name="add_totp">Adicionar TOTP</string>
@@ -720,6 +720,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
+  <string name="forward_email">ForwardEmail</string>
   <string name="api_access_token">Token de acesso à API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Tem a certeza de que pretende substituir o nome de utilizador atual?</string>
   <string name="generate_username">Gerar nome de utilizador</string>
@@ -806,11 +807,11 @@ Deseja mudar para esta conta?</string>
   <string name="invalid_api_token">Token da API inválido</string>
   <string name="admin_approval_requested">Aprovação do administrador pedida</string>
   <string name="your_request_has_been_sent_to_your_admin">O seu pedido foi enviado ao seu administrador.</string>
-  <string name="you_will_be_notified_once_approved">Será notificado quando for aprovado. </string>
+  <string name="you_will_be_notified_once_approved">Será notificado quando for aprovado.</string>
   <string name="trouble_logging_in">Problemas a iniciar sessão?</string>
   <string name="logging_in_as_x">A iniciar sessão como %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Ação de tempo limite do cofre alterada para terminar sessão</string>
-  <string name="block_auto_fill">Bloquear preenchimento automático</string>
+  <string name="block_auto_fill">Bloquear o preenchimento automático</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">O preenchimento automático não será oferecido para estes URIs.</string>
   <string name="new_blocked_uri">Novo URI bloqueado</string>
   <string name="uri_saved">URI guardado</string>
@@ -851,12 +852,14 @@ Deseja mudar para esta conta?</string>
   <string name="continue_to_x">Continuar para %1$s?</string>
   <string name="continue_to_help_center">Continuar para o Centro de ajuda?</string>
   <string name="continue_to_contact_support">Continuar a contactar o apoio ao cliente?</string>
+  <string name="continue_to_privacy_policy">Continuar para a política de privacidade?</string>
   <string name="continue_to_app_store">Continuar para a loja de aplicações?</string>
   <string name="two_step_login_description_long">Torne a sua conta mais segura configurando o login em duas etapas na aplicação web Bitwarden.</string>
   <string name="change_master_password_description_long">Pode alterar a sua palavra-passe mestra na aplicação web Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Pode importar dados para o seu cofre em %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Saiba mais sobre como utilizar o Bitwarden no Centro de ajuda.</string>
   <string name="contact_support_description_long">Não consegue encontrar o que está a procurar? Entre em contacto com o suporte da Bitwarden em bitwarden.com.</string>
+  <string name="privacy_policy_description_long">Consulte a nossa política de privacidade em bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore mais funcionalidades da sua conta Bitwarden na aplicação web.</string>
   <string name="learn_about_organizations_description_long">O Bitwarden permite-lhe partilhar os seus itens do cofre com outras pessoas através da utilização de uma organização. Saiba mais no site bitwarden.com.</string>
   <string name="rate_app_description_long">Ajude outras pessoas a descobrir se o Bitwarden é adequado para elas. Visite a loja de aplicações e deixe uma avaliação agora.</string>
@@ -864,4 +867,7 @@ Deseja mudar para esta conta?</string>
   <string name="created_xy">Criada a %1$s, %2$s</string>
   <string name="too_many_attempts">Demasiadas tentativas</string>
   <string name="account_logged_out_biometric_exceeded">Conta com sessão terminada.</string>
+  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">As permissões da sua organização foram atualizadas, exigindo a definição de uma palavra-passe mestra.</string>
+  <string name="your_organization_requires_you_to_set_a_master_password">A sua organização exige a definição de uma palavra-passe mestra.</string>
+  <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</string>
 </resources>

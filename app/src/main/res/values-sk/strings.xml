@@ -182,7 +182,7 @@
   <string name="verification_code">Overovací kód</string>
   <string name="view_item">Zobraziť položku</string>
   <string name="web_vault">Webový trezor Bitwarden</string>
-  <string name="lost2_fa_app">Stratili ste overovaciu aplikáciu?</string>
+  <string name="lost_2fa_app">Stratili ste overovaciu aplikáciu?</string>
   <string name="items">Položky</string>
   <string name="extension_activated">Rozšírenie aktivované!</string>
   <string name="icons">Ikony</string>
@@ -610,7 +610,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="update_master_password">Aktualizovať hlavné heslo</string>
   <string name="update_master_password_warning">Vaše hlavné heslo nedávno zmenil správca vo vašej organizácii. Ak chcete získať prístup k trezoru, musíte aktualizovať vaše hlavné heslo teraz. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</string>
   <string name="updating_password">Aktualizácia hesla</string>
-  <string name="update_password_error">Aktuálne nie je možné heslo aktualizovať </string>
+  <string name="update_password_error">Aktuálne nie je možné heslo aktualizovať</string>
   <string name="remove_master_password">Odstrániť hlavné heslo</string>
   <string name="remove_master_password_warning">%1$s používa SSO so šifrovaním spravovaným zákazníkom. Pokračovaním sa z vášho účtu odstráni hlavné heslo a na prihlásenie sa bude vyžadovať SSO.</string>
   <string name="remove_master_password_warning2">Ak nechcete odstrániť svoje hlavné heslo, môžete opustiť túto organizáciu.</string>
@@ -671,9 +671,9 @@ Skenovanie prebehne automaticky.</string>
   <string name="totp">TOTP</string>
   <string name="verification_codes">Overovacie kódy</string>
   <string name="premium_subscription_required">Vyžaduje sa predplatné Prémium</string>
-  <string name="cannot_add_authenticator_key">Overovací kľúč sa nedá pridať? </string>
+  <string name="cannot_add_authenticator_key">Overovací kľúč sa nedá pridať?</string>
   <string name="scan_qr_code">Skenovať QR kód</string>
-  <string name="cannot_scan_qr_code">QR kód sa nedá skenovať? </string>
+  <string name="cannot_scan_qr_code">QR kód sa nedá skenovať?</string>
   <string name="authenticator_key_scanner">Kľúč z aplikácie Authenticator</string>
   <string name="enter_key_manually">Zadajte kľúč manuálne</string>
   <string name="add_totp">Pridať TOTP</string>
@@ -721,6 +721,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
+  <string name="forward_email">ForwardEmail</string>
   <string name="api_access_token">Prístupový token API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Naozaj chcete prepísať aktuálne používateľské meno?</string>
   <string name="generate_username">Vygenerovať používateľské meno</string>
@@ -807,7 +808,7 @@ Chcete prepnúť na toto konto?</string>
   <string name="invalid_api_token">Neplatný token API</string>
   <string name="admin_approval_requested">Vyžaduje sa schválenie správcom</string>
   <string name="your_request_has_been_sent_to_your_admin">Vaša žiadosť bola odoslaná správcovi.</string>
-  <string name="you_will_be_notified_once_approved">Po schválení budete informovaný. </string>
+  <string name="you_will_be_notified_once_approved">Po schválení budete informovaný.</string>
   <string name="trouble_logging_in">Máte problémy s prihlásením?</string>
   <string name="logging_in_as_x">Prihlasujete sa ako %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Akcia pri vypršaní času pre trezor zmenená na odhlásenie</string>
@@ -852,12 +853,14 @@ Chcete prepnúť na toto konto?</string>
   <string name="continue_to_x">Pokračovať v %1$s?</string>
   <string name="continue_to_help_center">Pokračovať v centre pomoci?</string>
   <string name="continue_to_contact_support">Pokračovať v kontaktovaní podpory?</string>
+  <string name="continue_to_privacy_policy">Pokračovať na zásady ochrany osobných údajov?</string>
   <string name="continue_to_app_store">Pokračovať v obchode s aplikáciami?</string>
   <string name="two_step_login_description_long">Zabezpečte svoje konto nastavením dvojstupňového prihlasovania vo webovej aplikácii Bitwarden.</string>
   <string name="change_master_password_description_long">Hlavné heslo si môžete zmeniť vo webovej aplikácii Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Údaje do trezora môžete importovať na %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Viac informácií o používaní Bitwardenu nájdete v centre pomoci.</string>
   <string name="contact_support_description_long">Nemôžete nájsť, čo hľadáte? Obráťte sa na podporu Bitwarden na stránke bitwarden.com.</string>
+  <string name="privacy_policy_description_long">Pozrite si naše zásady ochrany osobných údajov na bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Preskúmajte ďalšie funkcie svojho účtu na Bitwarden vo webovej aplikácii.</string>
   <string name="learn_about_organizations_description_long">Bitwarden vám umožňuje zdieľať vaše položky trezora s ostatnými pomocou organizácie. Viac informácií nájdete na webovej stránke bitwarden.com.</string>
   <string name="rate_app_description_long">Pomôžte ostatným zistiť, či je Bitwarden pre nich vhodný. Navštívte obchod s aplikáciami a pridajte hodnotenie.</string>
@@ -865,4 +868,7 @@ Chcete prepnúť na toto konto?</string>
   <string name="created_xy">Vytvorené %1$s, %2$s</string>
   <string name="too_many_attempts">Príliš veľa pokusov</string>
   <string name="account_logged_out_biometric_exceeded">Účet bol odhlásený.</string>
+  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Povolenia vašej organizácie boli aktualizované, čo si vyžaduje nastavenie hlavného hesla.</string>
+  <string name="your_organization_requires_you_to_set_a_master_password">Vaša organizácia vyžaduje, aby ste nastavili hlavné heslo.</string>
+  <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</string>
 </resources>

@@ -182,7 +182,7 @@
   <string name="verification_code">Ellenőrzőkód</string>
   <string name="view_item">Elem megtekintése</string>
   <string name="web_vault">Bitwarden webes széf</string>
-  <string name="lost2_fa_app">Elveszett hitelesítő alkalmazás?</string>
+  <string name="lost_2fa_app">Elveszett hitelesítő alkalmazás?</string>
   <string name="items">Elemek</string>
   <string name="extension_activated">A kiegészítő bekapcsolásra került.</string>
   <string name="icons">Ikonok</string>
@@ -657,7 +657,7 @@
   <string name="options_collapsed">Az opciók bezártak, koppintásra kinyílnak.</string>
   <string name="uppercase_ato_z">Nagybetűs (A-Z)</string>
   <string name="lowercase_ato_z">Kisbetűs (a-z)</string>
-  <string name="numbers_zero_to_nine">Számok (0–9)</string>
+  <string name="numbers_zero_to_nine">Számok (0-9)</string>
   <string name="special_characters">Speciális karakterek (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Koppintás a visszalépéshez</string>
   <string name="password_is_visible_tap_to_hide">A jelszó látható, koppintással elrejthető.</string>
@@ -672,7 +672,7 @@
   <string name="premium_subscription_required">Prémium előfizetés szükséges</string>
   <string name="cannot_add_authenticator_key">Nem lehet hozzáadni a hitelesítő kulcsot.</string>
   <string name="scan_qr_code">QR kód beolvasása</string>
-  <string name="cannot_scan_qr_code">Nem sikerül beolvasni a QR kódot? </string>
+  <string name="cannot_scan_qr_code">Nem sikerül beolvasni a QR kódot?</string>
   <string name="authenticator_key_scanner">Hitelesítő kulcs</string>
   <string name="enter_key_manually">Kód megadása manuálisan</string>
   <string name="add_totp">TOTP hozzáadása</string>
@@ -720,6 +720,7 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">FastMail</string>
+  <string name="forward_email">ForwardEmail</string>
   <string name="api_access_token">API hozzáférési vezérjel</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Biztosan felülírásra kerüljön az aktuális felhasználónév?</string>
   <string name="generate_username">Felhasználónév generálása</string>
@@ -851,12 +852,14 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="continue_to_x">Tovább: %1$s?</string>
   <string name="continue_to_help_center">Tovább a Segítség Központhoz?</string>
   <string name="continue_to_contact_support">Tovább az ügyfélszolgálathoz?</string>
+  <string name="continue_to_privacy_policy">Tovább az adatvédelmi szabályzathoz?</string>
   <string name="continue_to_app_store">Tovább az alkalmazásboltba?</string>
   <string name="two_step_login_description_long">Tegyük biztonságosabbá a fiókot a kétlépcsős bejelentkezés beállításával a Bitwarden webalkalmazásban.</string>
   <string name="change_master_password_description_long">A mesterjelszó a Bitwarden webalkalmazásban módosítható.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Adatokat importálhatunk a széfbe itt: %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">További információ a Bitwarden használatáról a Súgó Központban.</string>
   <string name="contact_support_description_long">Nem találjuk, amit keresünk? Lépjünk kapcsolatba a Bitwarden ügyfélszolgálatával a bitwarden.com oldalon.</string>
+  <string name="privacy_policy_description_long">Az adatvédelmi szabályzat megtekintése a bitwarden.com webhelyen.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Fedezzük fel a Bitwarden-fiók további funkcióit a webalkalmazásban.</string>
   <string name="learn_about_organizations_description_long">A Bitwarden lehetővé teszi a széf elemeinek megosztását másokkal egy szervezet használatával. További információ a bitwarden.com webhelyen.</string>
   <string name="rate_app_description_long">Segítsünk másoknak megtudni, hogy a Bitwarden megfelelő-e számukra. Látogassunk el az alkalmazásboltba és értékeljünk most.</string>
@@ -864,4 +867,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="created_xy">Létrehozta: %1$s, %2$s</string>
   <string name="too_many_attempts">Túl sok próbálkozás történt</string>
   <string name="account_logged_out_biometric_exceeded">A fiók kijelentkezett.</string>
+  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">A szervezeti jogosultságok frissítésre kerültek, ezért be kell állítani egy mesterjelszót.</string>
+  <string name="your_organization_requires_you_to_set_a_master_password">A szervezet megköveteli egy mesterjelszó beállítását.</string>
+  <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Állítsunk be egy feloldási módot a széf időkifutási műveletének módosításához.</string>
 </resources>

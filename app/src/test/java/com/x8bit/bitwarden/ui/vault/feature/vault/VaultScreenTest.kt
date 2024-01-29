@@ -426,7 +426,7 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Test
     fun `floating action button should be shown or hidden according to the state`() {
-        val fabDescription = "Add item"
+        val fabDescription = "Add Item"
 
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
         composeTestRule.onNodeWithContentDescription(fabDescription).assertDoesNotExist()
@@ -575,7 +575,7 @@ class VaultScreenTest : BaseComposeTest() {
     @Test
     fun `floating action button click should send AddItemClick action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
-        composeTestRule.onNodeWithContentDescription("Add item").performClick()
+        composeTestRule.onNodeWithContentDescription("Add Item").performClick()
         verify { viewModel.trySendAction(VaultAction.AddItemClick) }
     }
 

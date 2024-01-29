@@ -99,7 +99,7 @@ class BlockAutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `on FAB button click should send AddUriClick`() {
         composeTestRule
-            .onNodeWithContentDescription("Add item")
+            .onNodeWithContentDescription("Add Item")
             .performClick()
 
         verify { viewModel.trySendAction(BlockAutoFillAction.AddUriClick) }

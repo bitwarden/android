@@ -129,7 +129,7 @@
   <string name="immediately">Негайно</string>
   <string name="vault_timeout">Час очікування сховища</string>
   <string name="vault_timeout_action">Дія після часу очікування сховища</string>
-  <string name="vault_timeout_log_out_confirmation">Вихід скасує всі права доступу до вашого сховища і вимагатиме авторизації після завершення часу очікування. Ви дійсно хочете використати цей параметр?</string>
+  <string name="vault_timeout_log_out_confirmation">Вихід скасує всі права доступу до вашого сховища і вимагатиме автентифікацію після завершення часу очікування. Ви дійсно хочете використати цей параметр?</string>
   <string name="logging_in">Вхід...</string>
   <string name="login_or_create_new_account">Для доступу до сховища увійдіть в обліковий запис, або створіть новий.</string>
   <string name="manage">Керування</string>
@@ -182,7 +182,7 @@
   <string name="verification_code">Код підтвердження</string>
   <string name="view_item">Переглянути запис</string>
   <string name="web_vault">Веб сховище Bitwarden</string>
-  <string name="lost2_fa_app">Втратили доступ до програми перевірки?</string>
+  <string name="lost_2fa_app">Втратили доступ до програми автентифікації?</string>
   <string name="items">Записи</string>
   <string name="extension_activated">Розширення активовано!</string>
   <string name="icons">Піктограми</string>
@@ -209,11 +209,11 @@
   <string name="bitwarden_autofill_service_search">Ви шукаєте запис для \"%1$s\".</string>
   <string name="learn_org">Докладніше про організації</string>
   <string name="cannot_open_app">Не вдається відкрити програму \"%1$s\".</string>
-  <string name="authenticator_app_title">Програма авторизації</string>
-  <string name="enter_verification_code_app">Введіть 6-значний код підтвердження з програми авторизації.</string>
+  <string name="authenticator_app_title">Програма автентифікації</string>
+  <string name="enter_verification_code_app">Введіть 6-значний код підтвердження з програми автентифікації.</string>
   <string name="enter_verification_code_email">Введіть 6-значний код підтвердження, надісланий на %1$s.</string>
   <string name="login_unavailable">Вхід недоступний</string>
-  <string name="no_two_step_available">Цей обліковий запис має увімкнену двоетапну перевірку, однак, жоден із налаштованих провайдерів не підтримується на цьому пристрої. Будь ласка, скористайтеся підтримуваним пристроєм або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму авторизації).</string>
+  <string name="no_two_step_available">Цей обліковий запис має увімкнену двоетапну перевірку, однак жоден із налаштованих провайдерів не підтримується на цьому пристрої. Будь ласка, скористайтеся підтримуваним пристроєм або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму автентифікації).</string>
   <string name="recovery_code_title">Код відновлення</string>
   <string name="remember_me">Запам\'ятати мене</string>
   <string name="send_verification_code_again">Надіслати код підтвердження ще раз</string>
@@ -229,17 +229,17 @@
   <string name="unable_to_open_file">Ваш пристрій не може відкрити цей тип файлу.</string>
   <string name="downloading">Завантаження...</string>
   <string name="attachment_large_warning">Це вкладення має розмір %1$s. Ви дійсно хочете завантажити його на свій пристрій?</string>
-  <string name="authenticator_key">Ключ авторизації (TOTP)</string>
+  <string name="authenticator_key">Ключ автентифікації (TOTP)</string>
   <string name="verification_code_totp">Код підтвердження (TOTP)</string>
-  <string name="authenticator_key_added">Ключ авторизації додано.</string>
-  <string name="authenticator_key_read_error">Не вдається прочитати ключ авторизації.</string>
+  <string name="authenticator_key_added">Ключ автентифікації додано.</string>
+  <string name="authenticator_key_read_error">Не вдається прочитати ключ автентифікації.</string>
   <string name="point_your_camera_at_the_qr_code">Наведіть свою камеру на QR-код.
 Сканування відбудеться автоматично.</string>
   <string name="scan_qr_title">Сканувати QR-код</string>
   <string name="camera">Камера</string>
   <string name="photos">Фотографії</string>
   <string name="copy_totp">Копіювати TOTP</string>
-  <string name="copy_totp_automatically_description">Якщо запис має ключ авторизації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</string>
+  <string name="copy_totp_automatically_description">Якщо запис має ключ автентифікації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</string>
   <string name="copy_totp_automatically">Автоматично копіювати коди TOTP</string>
   <string name="premium_required">Для використання цієї функції необхідна передплата преміум.</string>
   <string name="attachement_added">Вкладення додано</string>
@@ -328,10 +328,10 @@
   <string name="autofill_service_description">Служба автозаповнення Bitwarden використовує Android Autofill Framework для введення облікових даних в інших програмах на вашому пристрої.</string>
   <string name="bitwarden_autofill_service_description">Використовуйте службу автозаповнення Bitwarden, щоб автоматично вводити облікові дані в інших програмах.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Відкрити налаштування автозаповнення</string>
-  <string name="face_id">Розпізнавання обличчя</string>
-  <string name="face_id_direction">Використовувати розпізнавання обличчя для підтвердження.</string>
+  <string name="face_id">Face ID</string>
+  <string name="face_id_direction">Використовувати Face ID для підтвердження.</string>
   <string name="use_face_id_to_unlock">Розблокування з Face ID</string>
-  <string name="verify_face_id">Підтвердження розпізнавання обличчя</string>
+  <string name="verify_face_id">Підтвердження Face ID</string>
   <string name="windows_hello">Windows Hello</string>
   <string name="bitwarden_autofill_go_to_settings">Нам не вдалося автоматично відкрити меню налаштувань автозаповнення Android. Ви можете перейти до меню налаштувань автозаповнення вручну в Налаштування &gt; Система &gt; Мова і введення &gt; Додатково &gt; Служба автозаповнення.</string>
   <string name="custom_field_name">Назва власного поля</string>
@@ -617,9 +617,9 @@
   <string name="leave_organization">Покинути організацію</string>
   <string name="leave_organization_name">Покинути %1$s?</string>
   <string name="fido2_title">FIDO2 WebAuthn</string>
-  <string name="fido2_instruction">Щоб продовжити, приготуйте свій увімкнений ключ безпеки FIDO2 WebAuthn, потім дотримуйтесь настанов після натискання \"Авторизація WebAuthn\" на наступному екрані.</string>
-  <string name="fido2_desc">Авторизація з використанням FIDO2 WebAuthn. Ви можете авторизуватися за допомогою зовнішнього ключа безпеки.</string>
-  <string name="fido2_authenticate_web_authn">Авторизація WebAuthn</string>
+  <string name="fido2_instruction">Щоб продовжити, приготуйте свій ключ безпеки FIDO2 WebAuthn, потім дотримуйтесь настанов після натискання \"Автентифікація WebAuthn\" на наступному екрані.</string>
+  <string name="fido2_desc">Автентифікація з використанням FIDO2 WebAuthn. Ви можете пройти автентифікацію за допомогою зовнішнього ключа безпеки.</string>
+  <string name="fido2_authenticate_web_authn">Автентифікація WebAuthn</string>
   <string name="fido2_return_to_app">Повернутися до програми</string>
   <string name="fido2_check_browser">Переконайтеся, що ваш браузер підтримує WebAuthn і спробуйте знову.</string>
   <string name="reset_password_auto_enroll_invite_warning">Ця організація має корпоративну політику, яка автоматично розгортає вас на скидання пароля. Розгортання дозволятиме адміністраторам організації змінювати ваш головний пароль.</string>
@@ -658,7 +658,7 @@
   <string name="options_collapsed">Налаштування згорнуто. Торкніться, щоб розгорнути.</string>
   <string name="uppercase_ato_z">Верхній регістр (A - Z)</string>
   <string name="lowercase_ato_z">Нижній регістр (A - Z)</string>
-  <string name="numbers_zero_to_nine">Числа (0 – 9)</string>
+  <string name="numbers_zero_to_nine">Числа (0 - 9)</string>
   <string name="special_characters">Спеціальні символи (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Торкніться, щоб повернутися</string>
   <string name="password_is_visible_tap_to_hide">Пароль видимий. Торкніться, щоб приховати.</string>
@@ -671,10 +671,10 @@
   <string name="totp">TOTP</string>
   <string name="verification_codes">Коди підтвердження</string>
   <string name="premium_subscription_required">Необхідна передплата преміум</string>
-  <string name="cannot_add_authenticator_key">Не вдається додати ключ авторизації? </string>
+  <string name="cannot_add_authenticator_key">Не вдається додати ключ автентифікації?</string>
   <string name="scan_qr_code">Сканувати QR-код</string>
-  <string name="cannot_scan_qr_code">Не вдається сканувати QR-код? </string>
-  <string name="authenticator_key_scanner">Ключ авторизації</string>
+  <string name="cannot_scan_qr_code">Не вдається сканувати QR-код?</string>
+  <string name="authenticator_key_scanner">Ключ автентифікації</string>
   <string name="enter_key_manually">Введіть ключ вручну</string>
   <string name="add_totp">Додати TOTP</string>
   <string name="setup_totp">Налаштувати TOTP</string>
@@ -699,7 +699,7 @@
   <string name="log_in_accepted">Вхід підтверджено</string>
   <string name="log_in_denied">Вхід заборонено</string>
   <string name="approve_login_requests">Схвалювати запити на вхід</string>
-  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Використовувати цей пристрій для схвалення запитів на вхід, виконаних з інших пристроїв</string>
+  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Схвалювати запити на вхід, виконані з інших пристроїв</string>
   <string name="allow_notifications">Дозволити сповіщення</string>
   <string name="receive_push_notifications_for_new_login_requests">Отримувати push-сповіщення про нові запити на вхід</string>
   <string name="no_thanks">Ні, дякую</string>
@@ -721,6 +721,7 @@
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
+  <string name="forward_email">ForwardEmail</string>
   <string name="api_access_token">Токен доступу до API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Ви дійсно бажаєте перезаписати поточне ім\'я користувача?</string>
   <string name="generate_username">Генерувати ім\'я користувача</string>
@@ -807,7 +808,7 @@
   <string name="invalid_api_token">Недійсний токен API</string>
   <string name="admin_approval_requested">Запитано затвердження адміністратором</string>
   <string name="your_request_has_been_sent_to_your_admin">Ваш запит відправлено адміністратору.</string>
-  <string name="you_will_be_notified_once_approved">Ви отримаєте сповіщення після затвердження. </string>
+  <string name="you_will_be_notified_once_approved">Ви отримаєте сповіщення після затвердження.</string>
   <string name="trouble_logging_in">Проблема під час входу?</string>
   <string name="logging_in_as_x">Вхід у систему як %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Час очікування сховища змінено на вихід</string>
@@ -852,12 +853,14 @@
   <string name="continue_to_x">Продовжити у %1$s?</string>
   <string name="continue_to_help_center">Перейти до довідкового центру?</string>
   <string name="continue_to_contact_support">Перейти до зв\'язку зі службою підтримки?</string>
+  <string name="continue_to_privacy_policy">Перейти до політики приватності?</string>
   <string name="continue_to_app_store">Продовжити в App Store?</string>
   <string name="two_step_login_description_long">Додайте вищий рівень захисту облікового запису, налаштувавши двоетапну перевірку у вебпрограмі Bitwarden.</string>
   <string name="change_master_password_description_long">Ви можете змінити головний пароль у вебпрограмі Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Ви можете імпортувати дані у своє сховище на %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Дізнайтеся більше про те, як використовувати Bitwarden в довідковому центрі.</string>
   <string name="contact_support_description_long">Не вдалося знайти те, що шукаєте? Зверніться до служби підтримки на bitwarden.com.</string>
+  <string name="privacy_policy_description_long">Ознайомтеся з нашою політикою приватності на bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Ознайомтеся з іншими функціями вашого облікового запису Bitwarden у вебпрограмі.</string>
   <string name="learn_about_organizations_description_long">Bitwarden дозволяє доступ до записів сховища спільно з іншими користувачами за допомогою організації. Дізнайтеся більше про це на вебсайті bitwarden.com.</string>
   <string name="rate_app_description_long">Допоможіть іншим дізнатися про Bitwarden. Оцініть програму в App Store.</string>
@@ -865,4 +868,7 @@
   <string name="created_xy">Створено %1$s, %2$s</string>
   <string name="too_many_attempts">Забагато спроб</string>
   <string name="account_logged_out_biometric_exceeded">Ви вийшли з облікового запису.</string>
+  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Оновлено дозволи вашої організації – вимагається встановлення головного пароля.</string>
+  <string name="your_organization_requires_you_to_set_a_master_password">Ваша організація вимагає, щоб ви встановили головний пароль.</string>
+  <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Налаштуйте спосіб розблокування, щоб змінити час очікування сховища.</string>
 </resources>
