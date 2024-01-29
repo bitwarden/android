@@ -102,7 +102,7 @@ namespace Bit.Core.Services
                     CredentialId = GuidToRawFormat(credentialId),
                     AttestationObject = EncodeAttestationObject(authData),
                     AuthData = authData,
-                    PublicKey = Array.Empty<byte>(),
+                    PublicKey = keyPair.publicKey.ExportDer(),
                     PublicKeyAlgorithm = (int) Fido2AlgorithmIdentifier.ES256,
                 };
             } catch (NotAllowedError) {
@@ -286,19 +286,11 @@ namespace Bit.Core.Services
         // TODO: Move this to a separate service
         private (PublicKey publicKey, byte[] privateKey) GenerateKeyPair()
         {
-            using (System.Security.Cryptography.ECDsa dsa = System.Security.Cryptography.ECDsa.Create())
-            {
-                dsa.GenerateKey(System.Security.Cryptography.ECCurve.NamedCurves.nistP256);
-                var privateKey = dsa.ExportPkcs8PrivateKey();
+            var dsa = System.Security.Cryptography.ECDsa.Create();
+            dsa.GenerateKey(System.Security.Cryptography.ECCurve.NamedCurves.nistP256);
+            var privateKey = dsa.ExportPkcs8PrivateKey();
 
-                System.Security.Cryptography.ECParameters parameters = dsa.ExportParameters(true);
-
-                return (
-                    new PublicKey {
-                        X = parameters.Q.X,
-                        Y = parameters.Q.Y
-                    }, privateKey);
-            }
+            return (new PublicKey(dsa), privateKey);
         }
 
         private Fido2CredentialView CreateCredentialView(Fido2AuthenticatorMakeCredentialParams makeCredentialsParams, byte[] privateKey)
@@ -326,9 +318,9 @@ namespace Bit.Core.Services
             bool userPresence,
             int counter,
             byte[] credentialId = null,
-            PublicKey? publicKey = null
+            PublicKey publicKey = null
         ) {
-            var isAttestation = credentialId != null && publicKey.HasValue;
+            var isAttestation = credentialId != null && publicKey != null;
 
             List<byte> authData = new List<byte>();
 
@@ -363,7 +355,7 @@ namespace Bit.Core.Services
                 };
                 attestedCredentialData.AddRange(credentialIdLength);
                 attestedCredentialData.AddRange(credentialId);
-                attestedCredentialData.AddRange(publicKey.Value.ToCose());
+                attestedCredentialData.AddRange(publicKey.ExportCose());
 
                 authData.AddRange(attestedCredentialData);
             }
@@ -434,12 +426,23 @@ namespace Bit.Core.Services
             return Guid.Parse(guid).ToByteArray();
         }
 
-        private struct PublicKey
+        private class PublicKey
         {
-            public byte[] X { get; set; }
-            public byte[] Y { get; set; }
+            private readonly System.Security.Cryptography.ECDsa _dsa;
 
-            public byte[] ToCose()
+            public PublicKey(System.Security.Cryptography.ECDsa dsa) {
+                _dsa = dsa;
+            }
+
+            public byte[] X => _dsa.ExportParameters(false).Q.X;
+            public byte[] Y => _dsa.ExportParameters(false).Q.Y;
+
+            public byte[] ExportDer()
+            {
+                return _dsa.ExportSubjectPublicKeyInfo();
+            }
+
+            public byte[] ExportCose()
             {
                 var result = new CborWriter(CborConformanceMode.Ctap2Canonical);
                 result.WriteStartMap(5);
