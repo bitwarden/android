@@ -18,3 +18,16 @@ val UriMatchType.displayLabel: Text
         UriMatchType.NEVER -> R.string.never
     }
         .asText()
+
+/**
+ * Convert this internal [UriMatchType] to the sdk model.
+ */
+fun UriMatchType.toSdkUriMatchType(): com.bitwarden.core.UriMatchType =
+    when (this) {
+        UriMatchType.DOMAIN -> com.bitwarden.core.UriMatchType.DOMAIN
+        UriMatchType.EXACT -> com.bitwarden.core.UriMatchType.EXACT
+        UriMatchType.HOST -> com.bitwarden.core.UriMatchType.HOST
+        UriMatchType.NEVER -> com.bitwarden.core.UriMatchType.NEVER
+        UriMatchType.REGULAR_EXPRESSION -> com.bitwarden.core.UriMatchType.REGULAR_EXPRESSION
+        UriMatchType.STARTS_WITH -> com.bitwarden.core.UriMatchType.STARTS_WITH
+    }

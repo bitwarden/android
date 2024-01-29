@@ -4,7 +4,7 @@ import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
-import com.x8bit.bitwarden.data.platform.util.takeIfUriMatches
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.flow.first
@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.first
  */
 class AutofillCipherProviderImpl(
     private val authRepository: AuthRepository,
+    private val cipherMatchingManager: CipherMatchingManager,
     private val vaultRepository: VaultRepository,
 ) : AutofillCipherProvider {
     private val activeUserId: String? get() = authRepository.activeUserId
@@ -35,7 +36,8 @@ class AutofillCipherProviderImpl(
         return cipherViews
             .mapNotNull { cipherView ->
                 cipherView
-                    .takeIf { cipherView.type == CipherType.CARD }
+                    // We only care about non-deleted card ciphers.
+                    .takeIf { cipherView.type == CipherType.CARD && cipherView.deletedDate == null }
                     ?.let { nonNullCipherView ->
                         AutofillCipher.Card(
                             name = nonNullCipherView.name,
@@ -54,24 +56,23 @@ class AutofillCipherProviderImpl(
         uri: String,
     ): List<AutofillCipher.Login> {
         val cipherViews = getUnlockedCiphersOrNull() ?: return emptyList()
+        // We only care about non-deleted login ciphers.
+        val loginCiphers = cipherViews
+            .filter { it.type == CipherType.LOGIN && it.deletedDate == null }
 
-        return cipherViews
-            .mapNotNull { cipherView ->
-                cipherView
-                    .takeIf { cipherView.type == CipherType.LOGIN }
-                    // TODO: Get global URI matching value from settings repo and
-                    // TODO: perform more complex URI matching here (BIT-1461).
-                    ?.takeIfUriMatches(
-                        uri = uri,
-                    )
-                    ?.let { nonNullCipherView ->
-                        AutofillCipher.Login(
-                            name = nonNullCipherView.name,
-                            password = nonNullCipherView.login?.password.orEmpty(),
-                            subtitle = nonNullCipherView.subtitle.orEmpty(),
-                            username = nonNullCipherView.login?.username.orEmpty(),
-                        )
-                    }
+        return cipherMatchingManager
+            // Filter for ciphers that match the uri in some way.
+            .filterCiphersForMatches(
+                ciphers = loginCiphers,
+                matchUri = uri,
+            )
+            .map { cipherView ->
+                AutofillCipher.Login(
+                    name = cipherView.name,
+                    password = cipherView.login?.password.orEmpty(),
+                    subtitle = cipherView.subtitle.orEmpty(),
+                    username = cipherView.login?.username.orEmpty(),
+                )
             }
     }
 

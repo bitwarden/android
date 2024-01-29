@@ -8,11 +8,13 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.x8bit.bitwarden.data.platform.util.takeIfUriMatches
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -37,6 +39,7 @@ class AutofillCipherProviderTest {
     }
     private val cardCipherView: CipherView = mockk {
         every { card } returns cardView
+        every { deletedDate } returns null
         every { name } returns CARD_NAME
         every { type } returns CipherType.CARD
     }
@@ -45,6 +48,7 @@ class AutofillCipherProviderTest {
         every { username } returns LOGIN_USERNAME
     }
     private val loginCipherView: CipherView = mockk {
+        every { deletedDate } returns null
         every { login } returns loginView
         every { name } returns LOGIN_NAME
         every { type } returns CipherType.LOGIN
@@ -52,6 +56,7 @@ class AutofillCipherProviderTest {
     private val authRepository: AuthRepository = mockk {
         every { activeUserId } returns ACTIVE_USER_ID
     }
+    private val cipherMatchingManager: CipherMatchingManager = mockk()
     private val mutableVaultStateFlow = MutableStateFlow(
         VaultState(
             unlockingVaultUserIds = emptySet(),
@@ -73,17 +78,16 @@ class AutofillCipherProviderTest {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(CipherView::takeIfUriMatches)
         mockkStatic(CipherView::subtitle)
         autofillCipherProvider = AutofillCipherProviderImpl(
             authRepository = authRepository,
+            cipherMatchingManager = cipherMatchingManager,
             vaultRepository = vaultRepository,
         )
     }
 
     @AfterEach
     fun teardown() {
-        unmockkStatic(CipherView::takeIfUriMatches)
         unmockkStatic(CipherView::subtitle)
     }
 
@@ -130,11 +134,17 @@ class AutofillCipherProviderTest {
             assertFalse(result.await())
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getCardAutofillCiphers when unlocked should return non-null card ciphers`() =
+    fun `getCardAutofillCiphers when unlocked should return non-null and non-deleted card ciphers`() =
         runTest {
+            val deletedCardCipherView: CipherView = mockk {
+                every { deletedDate } returns mockk()
+                every { type } returns CipherType.CARD
+            }
             val cipherViews = listOf(
                 cardCipherView,
+                deletedCardCipherView,
                 loginCipherView,
             )
             mutableCiphersStateFlow.value = DataState.Loaded(
@@ -168,18 +178,28 @@ class AutofillCipherProviderTest {
         assertEquals(emptyList<AutofillCipher.Card>(), actual)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getLoginAutofillCiphers when unlocked should return matching login ciphers`() =
+    fun `getLoginAutofillCiphers when unlocked should return matched, non-deleted, login ciphers`() =
         runTest {
-            val unmatchedLoginCipherView: CipherView = mockk {
-                every { takeIfUriMatches(URI) } returns null
+            val deletedLoginCipherView: CipherView = mockk {
+                every { deletedDate } returns mockk()
                 every { type } returns CipherType.LOGIN
             }
             val cipherViews = listOf(
                 cardCipherView,
                 loginCipherView,
-                unmatchedLoginCipherView,
+                deletedLoginCipherView,
             )
+            val filteredCipherViews = listOf(
+                loginCipherView,
+            )
+            coEvery {
+                cipherMatchingManager.filterCiphersForMatches(
+                    ciphers = filteredCipherViews,
+                    matchUri = URI,
+                )
+            } returns filteredCipherViews
             mutableCiphersStateFlow.value = DataState.Loaded(
                 data = cipherViews,
             )
@@ -191,14 +211,20 @@ class AutofillCipherProviderTest {
                 LOGIN_AUTOFILL_CIPHER,
             )
             every { loginCipherView.subtitle } returns LOGIN_SUBTITLE
-            every { loginCipherView.takeIfUriMatches(URI) } returns loginCipherView
 
-            // Test & Verify
+            // Test
             val actual = autofillCipherProvider.getLoginAutofillCiphers(
                 uri = URI,
             )
 
+            // Verify
             assertEquals(expected, actual)
+            coVerify {
+                cipherMatchingManager.filterCiphersForMatches(
+                    ciphers = filteredCipherViews,
+                    matchUri = URI,
+                )
+            }
         }
 
     @Test

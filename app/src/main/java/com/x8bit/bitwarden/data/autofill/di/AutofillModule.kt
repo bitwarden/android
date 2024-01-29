@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -60,10 +61,12 @@ object AutofillModule {
     @Provides
     fun providesAutofillCipherProvider(
         authRepository: AuthRepository,
+        cipherMatchingManager: CipherMatchingManager,
         vaultRepository: VaultRepository,
     ): AutofillCipherProvider =
         AutofillCipherProviderImpl(
             authRepository = authRepository,
+            cipherMatchingManager = cipherMatchingManager,
             vaultRepository = vaultRepository,
         )
 
