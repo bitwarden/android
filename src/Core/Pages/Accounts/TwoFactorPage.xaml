@@ -138,7 +138,8 @@
                     x:Name="_duoWebView"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
-                    HeightRequest="{Binding DuoWebViewHeight, Mode=OneWay}" />
+                    MinimumHeightRequest="{OnPlatform iOS=400}"
+                    HeightRequest="{OnPlatform Android={Binding DuoWebViewHeight, Mode=OneWay}}" />
                 <StackLayout StyleClass="box" VerticalOptions="End">
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
