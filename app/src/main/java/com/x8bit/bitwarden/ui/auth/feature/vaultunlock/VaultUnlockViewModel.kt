@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -39,12 +40,16 @@ class VaultUnlockViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
+    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     environmentRepo: EnvironmentRepository,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
         val accountSummaries = userState.toAccountSummaries()
         val activeAccountSummary = userState.toActiveAccountSummary()
+        val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
+            userId = userState.activeUserId,
+        )
         VaultUnlockState(
             accountSummaries = accountSummaries,
             avatarColorString = activeAccountSummary.avatarColorHex,
@@ -54,6 +59,7 @@ class VaultUnlockViewModel @Inject constructor(
             environmentUrl = environmentRepo.environment.label,
             input = "",
             isBiometricEnabled = userState.activeAccount.isBiometricsEnabled,
+            isBiometricsValid = isBiometricsValid,
             vaultUnlockType = userState.activeAccount.vaultUnlockType,
         )
     },
@@ -130,6 +136,10 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun handleBiometricsUnlockClick() {
         val activeUserId = authRepository.activeUserId ?: return
+        if (!biometricsEncryptionManager.isBiometricIntegrityValid(activeUserId)) {
+            mutableStateFlow.update { it.copy(isBiometricsValid = false) }
+            return
+        }
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
             val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics()
@@ -221,6 +231,9 @@ class VaultUnlockViewModel @Inject constructor(
 
             VaultUnlockResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
+                if (state.isBiometricEnabled && !state.isBiometricsValid) {
+                    biometricsEncryptionManager.setupBiometrics(action.userId)
+                }
                 // Don't do anything, we'll navigate to the right place.
             }
         }
@@ -263,6 +276,7 @@ data class VaultUnlockState(
     val environmentUrl: String,
     val dialog: VaultUnlockDialog?,
     val input: String,
+    val isBiometricsValid: Boolean,
     val isBiometricEnabled: Boolean,
     val vaultUnlockType: VaultUnlockType,
 ) : Parcelable {
@@ -271,6 +285,11 @@ data class VaultUnlockState(
      * The [Color] of the avatar.
      */
     val avatarColor: Color get() = avatarColorString.hexToColor()
+
+    /**
+     * Indicates if we should display the button login with biometrics.
+     */
+    val showBiometricLogin: Boolean get() = isBiometricEnabled && isBiometricsValid
 
     /**
      * Represents the various dialogs the vault unlock screen can display.

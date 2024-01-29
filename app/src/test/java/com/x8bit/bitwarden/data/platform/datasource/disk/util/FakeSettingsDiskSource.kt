@@ -48,6 +48,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var storedIsIconLoadingDisabled: Boolean? = null
     private val storedApprovePasswordLoginsEnabled = mutableMapOf<String, Boolean?>()
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
+    private var storedSystemBiometricIntegritySource: String? = null
+    private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
 
     override var appLanguage: AppLanguage? = null
 
@@ -63,6 +65,12 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(appTheme)
         }
 
+    override var systemBiometricIntegritySource: String?
+        get() = storedSystemBiometricIntegritySource
+        set(value) {
+            storedSystemBiometricIntegritySource = value
+        }
+
     override var isIconLoadingDisabled: Boolean?
         get() = storedIsIconLoadingDisabled
         set(value) {
@@ -74,6 +82,19 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableIsIconLoadingDisabled.onSubscription {
             emit(isIconLoadingDisabled)
         }
+
+    override fun getAccountBiometricIntegrityValidity(
+        userId: String,
+        systemBioIntegrityState: String,
+    ): Boolean? = storedAccountBiometricIntegrityValidity["${userId}_$systemBioIntegrityState"]
+
+    override fun storeAccountBiometricIntegrityValidity(
+        userId: String,
+        systemBioIntegrityState: String,
+        value: Boolean?,
+    ) {
+        storedAccountBiometricIntegrityValidity["${userId}_$systemBioIntegrityState"] = value
+    }
 
     override fun clearData(userId: String) {
         storedVaultTimeoutActions.remove(userId)

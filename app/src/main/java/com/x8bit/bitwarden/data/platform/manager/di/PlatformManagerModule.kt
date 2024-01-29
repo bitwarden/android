@@ -5,12 +5,15 @@ import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
@@ -48,6 +51,14 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideClock(): Clock = Clock.systemDefaultZone()
+
+    @Provides
+    @Singleton
+    fun provideBiometricsEncryptionManager(
+        settingsDiskSource: SettingsDiskSource,
+    ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(
+        settingsDiskSource = settingsDiskSource,
+    )
 
     @Provides
     @Singleton

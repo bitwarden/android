@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
@@ -45,6 +46,7 @@ object PlatformRepositoryModule {
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
         vaultSdkSource: VaultSdkSource,
+        encryptionManager: BiometricsEncryptionManager,
         dispatcherManager: DispatcherManager,
     ): SettingsRepository =
         SettingsRepositoryImpl(
@@ -53,6 +55,7 @@ object PlatformRepositoryModule {
             authDiskSource = authDiskSource,
             settingsDiskSource = settingsDiskSource,
             vaultSdkSource = vaultSdkSource,
+            biometricsEncryptionManager = encryptionManager,
             dispatcherManager = dispatcherManager,
         )
 }

@@ -192,7 +192,7 @@ fun VaultUnlockScreen(
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                if (state.isBiometricEnabled) {
+                if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
                     BitwardenOutlinedButton(
                         label = stringResource(id = R.string.use_biometrics_to_unlock),
                         onClick = {

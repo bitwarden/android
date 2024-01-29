@@ -29,6 +29,11 @@ interface SettingsDiskSource {
     val appThemeFlow: Flow<AppTheme>
 
     /**
+     * The currently persisted biometric integrity source for the system.
+     */
+    var systemBiometricIntegritySource: String?
+
+    /**
      * The currently persisted setting for getting login item icons (or `null` if not set).
      */
     var isIconLoadingDisabled: Boolean?
@@ -42,6 +47,24 @@ interface SettingsDiskSource {
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
+
+    /**
+     * Retrieves the biometric integrity validity for the given [userId] and
+     * [systemBioIntegrityState].
+     */
+    fun getAccountBiometricIntegrityValidity(
+        userId: String,
+        systemBioIntegrityState: String,
+    ): Boolean?
+
+    /**
+     * Stores the biometric integrity validity for the given [userId] and [systemBioIntegrityState].
+     */
+    fun storeAccountBiometricIntegrityValidity(
+        userId: String,
+        systemBioIntegrityState: String,
+        value: Boolean?,
+    )
 
     /**
      * Gets the last time the app synced the vault data for a given [userId] (or `null` if the

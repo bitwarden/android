@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -50,6 +51,7 @@ class SettingsRepositoryTest {
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()
+    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
 
     private var isAutofillEnabledAndSupported = false
 
@@ -59,6 +61,7 @@ class SettingsRepositoryTest {
         authDiskSource = fakeAuthDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
         vaultSdkSource = vaultSdkSource,
+        biometricsEncryptionManager = biometricsEncryptionManager,
         dispatcherManager = FakeDispatcherManager(),
     )
 
@@ -687,6 +690,7 @@ class SettingsRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = MOCK_USER_STATE.activeUserId
+            every { biometricsEncryptionManager.setupBiometrics(userId) } just runs
             coEvery {
                 vaultSdkSource.getUserEncryptionKey(userId = userId)
             } returns Throwable("Fail").asFailure()
@@ -694,6 +698,9 @@ class SettingsRepositoryTest {
             val result = settingsRepository.setupBiometricsKey()
 
             assertEquals(BiometricsKeyResult.Error, result)
+            verify(exactly = 1) {
+                biometricsEncryptionManager.setupBiometrics(userId)
+            }
             coVerify(exactly = 1) {
                 vaultSdkSource.getUserEncryptionKey(userId = userId)
             }
@@ -706,6 +713,7 @@ class SettingsRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = MOCK_USER_STATE.activeUserId
             val encryptedKey = "asdf1234"
+            every { biometricsEncryptionManager.setupBiometrics(userId) } just runs
             coEvery {
                 vaultSdkSource.getUserEncryptionKey(userId = userId)
             } returns encryptedKey.asSuccess()
@@ -714,6 +722,9 @@ class SettingsRepositoryTest {
 
             assertEquals(BiometricsKeyResult.Success, result)
             fakeAuthDiskSource.assertBiometricsKey(userId = userId, biometricsKey = encryptedKey)
+            verify(exactly = 1) {
+                biometricsEncryptionManager.setupBiometrics(userId)
+            }
             coVerify(exactly = 1) {
                 vaultSdkSource.getUserEncryptionKey(userId = userId)
             }
