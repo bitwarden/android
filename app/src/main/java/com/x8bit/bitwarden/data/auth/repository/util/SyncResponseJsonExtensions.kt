@@ -1,7 +1,10 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import kotlinx.serialization.json.Json
 
 /**
  * Maps the given [SyncResponseJson.Profile.Organization] to an [Organization].
@@ -18,3 +21,17 @@ fun SyncResponseJson.Profile.Organization.toOrganization(): Organization =
  */
 fun List<SyncResponseJson.Profile.Organization>.toOrganizations(): List<Organization> =
     this.map { it.toOrganization() }
+
+/**
+ * Convert the JSON data of the [SyncResponseJson.Policy] object into [PolicyInformation] data.
+ */
+val SyncResponseJson.Policy.policyInformation: PolicyInformation?
+    get() = data?.toString()?.let {
+        when (type) {
+            PolicyTypeJson.MASTER_PASSWORD -> {
+                Json.decodeFromString<PolicyInformation.MasterPassword>(it)
+            }
+
+            else -> null
+        }
+    }

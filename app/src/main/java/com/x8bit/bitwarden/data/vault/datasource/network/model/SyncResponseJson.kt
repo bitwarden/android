@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.model
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 import java.time.ZonedDateTime
 
 /**
@@ -101,6 +102,7 @@ data class SyncResponseJson(
      * @property id The ID of the policy.
      * @property type The type of policy.
      * @property isEnabled If the policy is enabled or not.
+     * @property data Any extra data about the policy, in the form of a JSON string.
      */
     @Serializable
     data class Policy(
@@ -115,6 +117,9 @@ data class SyncResponseJson(
 
         @SerialName("enabled")
         val isEnabled: Boolean,
+
+        @SerialName("data")
+        val data: JsonObject?,
     )
 
     /**
