@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -508,6 +509,51 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             verify(exactly = 1) {
                 clipboardManager.setText(securityCode)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode success should call setText on the ClipboardManager`() =
+        runTest {
+            val totpCode = "totpCode"
+            val code = "Code"
+
+            coEvery {
+                vaultRepository.generateTotp(totpCode, clock.instant())
+            } returns GenerateTotpResult.Success(code, 30)
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                ),
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(code)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode failure should not call setText on the ClipboardManager`() =
+        runTest {
+            val totpCode = "totpCode"
+
+            coEvery {
+                vaultRepository.generateTotp(totpCode, clock.instant())
+            } returns GenerateTotpResult.Error
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                ),
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(text = any<String>())
             }
         }
 

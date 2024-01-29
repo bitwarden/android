@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -256,6 +257,15 @@ class VaultItemListingViewModel @Inject constructor(
         clipboardManager.setText(action.securityCode)
     }
 
+    private fun handleCopyTotpClick(
+        action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
+    ) {
+        viewModelScope.launch {
+            val result = vaultRepository.generateTotp(action.totpCode, clock.instant())
+            sendAction(VaultItemListingsAction.Internal.GenerateTotpResultReceive(result))
+        }
+    }
+
     private fun handleCopyUsernameClick(
         action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
     ) {
@@ -347,6 +357,10 @@ class VaultItemListingViewModel @Inject constructor(
                 handleCopySecurityCodeClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.VaultAction.CopyTotpClick -> {
+                handleCopyTotpClick(overflowAction)
+            }
+
             is ListingItemOverflowAction.VaultAction.CopyUsernameClick -> {
                 handleCopyUsernameClick(overflowAction)
             }
@@ -382,6 +396,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
             is VaultItemListingsAction.Internal.IconLoadingSettingReceive -> {
                 handleIconsSettingReceived(action)
+            }
+
+            is VaultItemListingsAction.Internal.GenerateTotpResultReceive -> {
+                handleGenerateTotpResultReceive(action)
             }
         }
     }
@@ -441,6 +459,17 @@ class VaultItemListingViewModel @Inject constructor(
                         text = R.string.send_password_removed.asText(),
                     ),
                 )
+            }
+        }
+    }
+
+    private fun handleGenerateTotpResultReceive(
+        action: VaultItemListingsAction.Internal.GenerateTotpResultReceive,
+    ) {
+        when (val result = action.result) {
+            is GenerateTotpResult.Error -> Unit
+            is GenerateTotpResult.Success -> {
+                clipboardManager.setText(result.code)
             }
         }
     }
@@ -1032,6 +1061,13 @@ sealed class VaultItemListingsAction {
          * Indicates a result for deleting the send has been received.
          */
         data class DeleteSendResultReceive(val result: DeleteSendResult) : Internal()
+
+        /**
+         * Indicates a result for generating a verification code has been received.
+         */
+        data class GenerateTotpResultReceive(
+            val result: GenerateTotpResult,
+        ) : Internal()
 
         /**
          * Indicates a result for removing the password protection from a send has been received.

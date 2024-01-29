@@ -20,6 +20,7 @@ class CipherViewExtensionsTest {
         val id = "mockId-1"
         val username = "Bitwarden"
         val password = "password"
+        val totpCode = "mockTotp-1"
         val uri = "www.test.com"
         val cipher = createMockCipherView(number = 1, cipherType = CipherType.LOGIN).copy(
             id = id,
@@ -38,6 +39,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.EditClick(cipherId = id),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
                 ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
             ),
             result,
@@ -58,6 +60,7 @@ class CipherViewExtensionsTest {
                     username = null,
                     password = null,
                     uris = null,
+                    totp = null,
                 ),
             )
 

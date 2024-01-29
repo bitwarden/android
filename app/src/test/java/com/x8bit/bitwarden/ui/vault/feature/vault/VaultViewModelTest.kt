@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -25,6 +26,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -36,9 +38,16 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class VaultViewModelTest : BaseViewModelTest() {
+    private val clock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>()) } just runs
@@ -1110,6 +1119,51 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode success should call setText on the ClipboardManager`() =
+        runTest {
+            val totpCode = "totpCode"
+            val code = "Code"
+
+            coEvery {
+                vaultRepository.generateTotp(totpCode, clock.instant())
+            } returns GenerateTotpResult.Success(code, 30)
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                ),
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(code)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode failure should not call setText on the ClipboardManager`() =
+        runTest {
+            val totpCode = "totpCode"
+
+            coEvery {
+                vaultRepository.generateTotp(totpCode, clock.instant())
+            } returns GenerateTotpResult.Error
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                VaultAction.OverflowOptionClick(
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                ),
+            )
+
+            verify(exactly = 0) {
+                clipboardManager.setText(text = any<String>())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `OverflowOptionClick Vault CopySecurityCodeClick should call setText on the ClipboardManager`() =
         runTest {
             val securityCode = "234"
@@ -1188,8 +1242,9 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
-            clipboardManager = clipboardManager,
             authRepository = authRepository,
+            clipboardManager = clipboardManager,
+            clock = clock,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
         )

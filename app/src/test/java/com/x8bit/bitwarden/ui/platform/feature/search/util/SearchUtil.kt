@@ -45,6 +45,9 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = "mockPassword-$number",
                     ),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = "mockTotp-$number",
+                    ),
                     ListingItemOverflowAction.VaultAction.LaunchClick(
                         url = "www.mockuri$number.com",
                     ),
