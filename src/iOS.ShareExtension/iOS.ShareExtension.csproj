@@ -34,8 +34,8 @@
 	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
     <CreatePackage>false</CreatePackage>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Automatic:AppStore</CodesignProvision>
+    <CodesignProvision>$(ReleaseCodesignProvision)</CodesignProvision>
+    <CodesignKey>$(ReleaseCodesignKey)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
 	  <!-- <UseInterpreter>true</UseInterpreter>
