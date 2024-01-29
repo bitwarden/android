@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -776,6 +777,27 @@ class AuthRepositoryImpl(
                     PasswordStrengthResult.Error
                 },
             )
+
+    @Suppress("ReturnCount")
+    override suspend fun validatePassword(password: String): ValidatePasswordResult {
+        val userId = activeUserId ?: return ValidatePasswordResult.Error
+        val masterPasswordHash = authDiskSource.getMasterPasswordHash(userId = userId)
+            ?: return ValidatePasswordResult.Error
+        return vaultSdkSource
+            .validatePassword(
+                userId = userId,
+                password = password,
+                passwordHash = masterPasswordHash,
+            )
+            .fold(
+                onSuccess = {
+                    ValidatePasswordResult.Success(isValid = it)
+                },
+                onFailure = {
+                    ValidatePasswordResult.Error
+                },
+            )
+    }
 
     private suspend fun getFingerprintPhrase(
         publicKey: String,

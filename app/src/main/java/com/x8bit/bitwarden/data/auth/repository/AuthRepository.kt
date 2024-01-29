@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
@@ -221,4 +222,9 @@ interface AuthRepository : AuthenticatorProvider {
      * Get the password strength for the given [email] and [password] combo.
      */
     suspend fun getPasswordStrength(email: String, password: String): PasswordStrengthResult
+
+    /**
+     * Validates the master password for the current logged in user.
+     */
+    suspend fun validatePassword(password: String): ValidatePasswordResult
 }

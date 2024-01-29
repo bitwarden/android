@@ -39,7 +39,6 @@ import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
@@ -742,7 +741,7 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `validatePassword should call SDK and return the expected Boolean`() = runTest {
+    fun `validatePassword should call SDK and a Result with correct data`() = runTest {
         val userId = "userId"
         val password = "password"
         val passwordHash = "passwordHash"
@@ -758,6 +757,9 @@ class VaultSdkSourceTest {
             password = password,
             passwordHash = passwordHash,
         )
-        assertTrue(result)
+        assertEquals(
+            true.asSuccess(),
+            result,
+        )
     }
 }

@@ -311,5 +311,5 @@ interface VaultSdkSource {
         userId: String,
         password: String,
         passwordHash: String,
-    ): Boolean
+    ): Result<Boolean>
 }
