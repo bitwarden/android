@@ -182,6 +182,14 @@ class SendsServiceTest : BaseServiceTest() {
             )
         }
 
+    @Test
+    fun `getSend should return the correct response`() = runTest {
+        val response = createMockSend(number = 1)
+        server.enqueue(MockResponse().setBody(CREATE_UPDATE_SEND_SUCCESS_JSON))
+        val result = sendsService.getSend("mockId-1")
+        assertEquals(response, result.getOrThrow())
+    }
+
     private fun setupMockUri(
         url: String,
         queryParams: Map<String, String>,

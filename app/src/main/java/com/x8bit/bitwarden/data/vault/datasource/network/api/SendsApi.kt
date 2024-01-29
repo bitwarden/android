@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -59,4 +60,10 @@ interface SendsApi {
      */
     @PUT("sends/{sendId}/remove-password")
     suspend fun removeSendPassword(@Path("sendId") sendId: String): Result<SyncResponseJson.Send>
+
+    /**
+     * Gets a send.
+     */
+    @GET("sends/{sendId}")
+    suspend fun getSend(@Path("sendId") sendId: String): Result<SyncResponseJson.Send>
 }

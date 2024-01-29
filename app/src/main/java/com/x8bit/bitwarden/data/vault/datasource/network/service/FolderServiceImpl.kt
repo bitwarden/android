@@ -37,4 +37,9 @@ class FolderServiceImpl constructor(
 
     override suspend fun deleteFolder(folderId: String): Result<Unit> =
         foldersApi.deleteFolder(folderId = folderId)
+
+    override suspend fun getFolder(
+        folderId: String,
+    ): Result<SyncResponseJson.Folder> = foldersApi
+        .getFolder(folderId = folderId)
 }

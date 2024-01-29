@@ -25,4 +25,9 @@ interface FolderService {
      * Attempt to hard delete a folder.
      */
     suspend fun deleteFolder(folderId: String): Result<Unit>
+
+    /**
+     * Attempt to retrieve a folder.
+     */
+    suspend fun getFolder(folderId: String): Result<SyncResponseJson.Folder>
 }

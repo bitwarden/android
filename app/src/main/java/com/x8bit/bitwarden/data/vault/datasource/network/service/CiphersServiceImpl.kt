@@ -129,4 +129,9 @@ class CiphersServiceImpl(
 
     override suspend fun restoreCipher(cipherId: String): Result<Unit> =
         ciphersApi.restoreCipher(cipherId = cipherId)
+
+    override suspend fun getCipher(
+        cipherId: String,
+    ): Result<SyncResponseJson.Cipher> =
+        ciphersApi.getCipher(cipherId = cipherId)
 }

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
@@ -43,6 +44,7 @@ object VaultRepositoryModule {
         vaultLockManager: VaultLockManager,
         dispatcherManager: DispatcherManager,
         totpCodeManager: TotpCodeManager,
+        pushManager: PushManager,
         clock: Clock,
     ): VaultRepository = VaultRepositoryImpl(
         syncService = syncService,
@@ -57,6 +59,7 @@ object VaultRepositoryModule {
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
         totpCodeManager = totpCodeManager,
+        pushManager = pushManager,
         clock = clock,
     )
 }

@@ -202,6 +202,16 @@ class CiphersServiceTest : BaseServiceTest() {
         val result = ciphersService.restoreCipher(cipherId = cipherId)
         assertEquals(Unit, result.getOrThrow())
     }
+
+    @Test
+    fun `getCipher should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        val result = ciphersService.getCipher(cipherId = "mockId-1")
+        assertEquals(
+            createMockCipher(number = 1),
+            result.getOrThrow(),
+        )
+    }
 }
 
 private fun setupMockUri(

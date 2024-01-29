@@ -17,7 +17,11 @@ import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
@@ -97,6 +101,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -123,6 +128,7 @@ class VaultRepositoryImpl(
     private val fileManager: FileManager,
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
+    private val pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
@@ -229,6 +235,21 @@ class VaultRepositoryImpl(
                 observeVaultDiskSends(activeUserId)
             }
             .launchIn(unconfinedScope)
+
+        pushManager
+            .syncCipherUpsertFlow
+            .onEach(::syncCipherIfNecessary)
+            .launchIn(ioScope)
+
+        pushManager
+            .syncSendUpsertFlow
+            .onEach(::syncSendIfNecessary)
+            .launchIn(ioScope)
+
+        pushManager
+            .syncFolderUpsertFlow
+            .onEach(::syncFolderIfNecessary)
+            .launchIn(ioScope)
     }
 
     override fun clearUnlockedData() {
@@ -1209,6 +1230,80 @@ class VaultRepositoryImpl(
                     )
             }
             .onEach { mutableSendDataStateFlow.value = it }
+
+    //region Push notification helpers
+    /**
+     * Syncs an individual cipher contained in [syncCipherUpsertData] to disk if certain criteria
+     * are met. If the resource cannot be found cloud-side, and it was updated, delete it from disk
+     * for now.
+     */
+    private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
+        val userId = activeUserId ?: return
+
+        // TODO Handle other filtering logic including revision date comparison. This will still be
+        //  handled as part of BIT-1547.
+
+        val cipherId = syncCipherUpsertData.cipherId
+        val isUpdate = syncCipherUpsertData.isUpdate
+        ciphersService
+            .getCipher(cipherId)
+            .fold(
+                onSuccess = { vaultDiskSource.saveCipher(userId, it) },
+                onFailure = {
+                    // Delete any updates if it's missing from the server
+                    val httpException = it as? HttpException
+                    @Suppress("MagicNumber")
+                    if (httpException?.code() == 404 && isUpdate) {
+                        vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId)
+                    }
+                },
+            )
+    }
+
+    /**
+     * Syncs an individual send contained in [syncSendUpsertData] to disk if certain criteria are
+     * met. If the resource cannot be found cloud-side, and it was updated, delete it from disk for
+     * now.
+     */
+    private suspend fun syncSendIfNecessary(syncSendUpsertData: SyncSendUpsertData) {
+        val userId = activeUserId ?: return
+
+        // TODO Handle other filtering logic including revision date comparison. This will still be
+        //  handled as part of BIT-1547.
+
+        val sendId = syncSendUpsertData.sendId
+        val isUpdate = syncSendUpsertData.isUpdate
+        sendsService
+            .getSend(sendId)
+            .fold(
+                onSuccess = { vaultDiskSource.saveSend(userId, it) },
+                onFailure = {
+                    // Delete any updates if it's missing from the server
+                    val httpException = it as? HttpException
+                    @Suppress("MagicNumber")
+                    if (httpException?.code() == 404 && isUpdate) {
+                        vaultDiskSource.deleteSend(userId = userId, sendId = sendId)
+                    }
+                },
+            )
+    }
+
+    /**
+     * Syncs an individual folder contained in [syncFolderUpsertData] to disk if certain criteria
+     * are met.
+     */
+    private suspend fun syncFolderIfNecessary(syncFolderUpsertData: SyncFolderUpsertData) {
+        val userId = activeUserId ?: return
+
+        // TODO Handle other filtering logic including revision date comparison. This will still be
+        //  handled as part of BIT-1547.
+
+        val folderId = syncFolderUpsertData.folderId
+        folderService
+            .getFolder(folderId)
+            .onSuccess { vaultDiskSource.saveFolder(userId, it) }
+    }
+    //endregion Push Notification helpers
 }
 
 private fun <T> Throwable.toNetworkOrErrorState(data: T?): DataState<T> =

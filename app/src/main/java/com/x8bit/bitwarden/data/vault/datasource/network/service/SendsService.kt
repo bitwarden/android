@@ -52,4 +52,9 @@ interface SendsService {
     suspend fun removeSendPassword(
         sendId: String,
     ): Result<UpdateSendResponseJson>
+
+    /**
+     * Attempt to retrieve a send.
+     */
+    suspend fun getSend(sendId: String): Result<SyncResponseJson.Send>
 }
