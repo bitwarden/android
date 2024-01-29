@@ -545,6 +545,7 @@ data class SearchState(
         val id: String,
         val title: String,
         val subtitle: String?,
+        val totpCode: String?,
         val iconData: IconData,
         val extraIconList: List<IconRes>,
         val overflowOptions: List<ListingItemOverflowAction>,
@@ -683,6 +684,16 @@ sealed class SearchTypeData : Parcelable {
                 get() = R.string.search.asText()
                     .concat(" ".asText())
                     .concat(R.string.trash.asText())
+        }
+
+        /**
+         * Indicates that we should be searching only for verification code items.
+         */
+        data object VerificationCodes : Vault() {
+            override val title: Text
+                get() = R.string.search.asText()
+                    .concat(" ".asText())
+                    .concat(R.string.verification_codes.asText())
         }
     }
 }

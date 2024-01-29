@@ -223,6 +223,11 @@ class SearchScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText(text = "Search Trash").assertIsDisplayed()
 
         mutableStateFlow.update {
+            it.copy(searchType = SearchTypeData.Vault.VerificationCodes)
+        }
+        composeTestRule.onNodeWithText(text = "Search Verification codes").assertIsDisplayed()
+
+        mutableStateFlow.update {
             it.copy(
                 searchType = SearchTypeData.Vault.Folder(
                     folderId = "mockId",

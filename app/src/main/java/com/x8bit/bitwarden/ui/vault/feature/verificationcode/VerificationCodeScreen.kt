@@ -16,14 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.showNotYetImplementedToast
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
@@ -46,10 +44,10 @@ import kotlinx.collections.immutable.persistentListOf
 fun VerificationCodeScreen(
     viewModel: VerificationCodeViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    onNavigateToSearch: () -> Unit,
     onNavigateToVaultItemScreen: (String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
-    val context = LocalContext.current
     val verificationCodeHandler = remember(viewModel) {
         VerificationCodeHandlers.create(viewModel)
     }
@@ -67,7 +65,7 @@ fun VerificationCodeScreen(
             is VerificationCodeEvent.NavigateBack -> onNavigateBack()
             is VerificationCodeEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.id)
             is VerificationCodeEvent.NavigateToVaultSearchScreen -> {
-                showNotYetImplementedToast(context = context)
+                onNavigateToSearch()
             }
         }
     }

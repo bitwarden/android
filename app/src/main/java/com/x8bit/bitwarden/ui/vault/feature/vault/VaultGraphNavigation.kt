@@ -49,6 +49,9 @@ fun NavGraphBuilder.vaultGraph(
 
         vaultVerificationCodeDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToSearchVault = {
+                onNavigateToSearchVault(SearchType.Vault.VerificationCodes)
+            },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
         )
     }
