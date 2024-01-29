@@ -75,7 +75,7 @@ jobs:
           dotnet-version: '3.1.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
+        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402 # v1.3.2
 
       - name: Setup Windows builder
         run: choco install checksum --no-progress
@@ -147,7 +147,7 @@ jobs:
         run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx"
 
       - name: Report test results
-        uses: dorny/test-reporter@afe6793191b75b608954023a46831a3fe10048d4 # v1.7.0
+        uses: dorny/test-reporter@eaa763f6ffc21c7a37837f56cd5f9737f27fc6c8 # v1.8.0
         if: always()
         with:
           name: Test Results
@@ -296,7 +296,7 @@ jobs:
           nuget-version: 5.9.0
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
+        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402 # v1.3.2
 
       - name: Setup Windows builder
         run: choco install checksum --no-progress
