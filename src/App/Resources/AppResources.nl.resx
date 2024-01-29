@@ -2212,7 +2212,7 @@ Het scannen gebeurt automatisch.</value>
     <value>Er is een fout opgetreden tijdens het verzenden van een verificatiecode naar je e-mail. Probeer het opnieuw</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Voer de verificatiecode in die we naar je e-mail is gestuurd</value>
+    <value>Voer de verificatiecode in die naar je e-mail is gestuurd</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
     <value>Crashes rapporteren</value>

@@ -2844,7 +2844,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Vous ne trouvez pas ce que vous cherchez ? Contactez le support de Bitwarden sur bitwarden.com.</value>
   </data>
   <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
-    <value>Check out our privacy policy on bitwarden.com.</value>
+    <value>Consultez notre politique de confidentialité sur bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Explorez plus de fonctionnalités de votre compte Bitwarden sur l'application Web.</value>
