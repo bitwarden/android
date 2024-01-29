@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -92,4 +93,12 @@ interface CiphersApi {
     suspend fun restoreCipher(
         @Path("cipherId") cipherId: String,
     ): Result<Unit>
+
+    /**
+     * Gets a cipher.
+     */
+    @GET("ciphers/{cipherId}")
+    suspend fun getCipher(
+        @Path("cipherId") cipherId: String,
+    ): Result<SyncResponseJson.Cipher>
 }

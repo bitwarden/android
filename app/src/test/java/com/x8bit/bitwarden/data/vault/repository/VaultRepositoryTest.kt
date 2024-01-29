@@ -22,7 +22,11 @@ import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -117,6 +121,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import retrofit2.HttpException
 import java.net.UnknownHostException
 import java.time.Clock
 import java.time.Instant
@@ -157,6 +162,15 @@ class VaultRepositoryTest {
         every { lockVaultForCurrentUser() } just runs
     }
 
+    private val mutableSyncCipherUpsertFlow = bufferedMutableSharedFlow<SyncCipherUpsertData>()
+    private val mutableSyncSendUpsertFlow = bufferedMutableSharedFlow<SyncSendUpsertData>()
+    private val mutableSyncFolderUpsertFlow = bufferedMutableSharedFlow<SyncFolderUpsertData>()
+    private val pushManager: PushManager = mockk {
+        every { syncCipherUpsertFlow } returns mutableSyncCipherUpsertFlow
+        every { syncSendUpsertFlow } returns mutableSyncSendUpsertFlow
+        every { syncFolderUpsertFlow } returns mutableSyncFolderUpsertFlow
+    }
+
     private val vaultRepository = VaultRepositoryImpl(
         syncService = syncService,
         sendsService = sendsService,
@@ -169,6 +183,7 @@ class VaultRepositoryTest {
         vaultLockManager = vaultLockManager,
         dispatcherManager = dispatcherManager,
         totpCodeManager = totpCodeManager,
+        pushManager = pushManager,
         fileManager = fileManager,
         clock = clock,
     )
@@ -3653,6 +3668,243 @@ class VaultRepositoryTest {
             )
         }
     }
+
+    @Test
+    fun `syncCipherUpsertFlow success should make a request for a cipher and then store it`() =
+        runTest {
+            val cipherId = "mockId-1"
+            val cipher: SyncResponseJson.Cipher = mockk()
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            coEvery {
+                ciphersService.getCipher(cipherId)
+            } returns cipher.asSuccess()
+
+            coEvery {
+                vaultDiskSource.saveCipher(any(), any())
+            } just runs
+
+            mutableSyncCipherUpsertFlow.tryEmit(
+                SyncCipherUpsertData(
+                    cipherId = cipherId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = false,
+                ),
+            )
+            coVerify(exactly = 1) {
+                ciphersService.getCipher(cipherId)
+                vaultDiskSource.saveCipher(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipher = cipher,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncCipherUpsertFlow update failure with 404 code should make a request for a cipher and then delete it`() =
+        runTest {
+            every {
+                pushManager.syncCipherUpsertFlow
+            }
+
+            val cipherId = "mockId-1"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val response: HttpException = mockk {
+                every { code() } returns 404
+            }
+            coEvery {
+                ciphersService.getCipher(cipherId)
+            } returns response.asFailure()
+
+            coEvery {
+                vaultDiskSource.deleteCipher(any(), any())
+            } just runs
+
+            mutableSyncCipherUpsertFlow.tryEmit(
+                SyncCipherUpsertData(
+                    cipherId = cipherId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = true,
+                ),
+            )
+            coVerify(exactly = 1) {
+                ciphersService.getCipher(cipherId)
+                vaultDiskSource.deleteCipher(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherId = cipherId,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncCipherUpsertFlow create failure with 404 code should make a request for a cipher and do nothing`() =
+        runTest {
+            val cipherId = "mockId-1"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val response: HttpException = mockk {
+                every { code() } returns 404
+            }
+            coEvery {
+                ciphersService.getCipher(cipherId)
+            } returns response.asFailure()
+
+            mutableSyncCipherUpsertFlow.tryEmit(
+                SyncCipherUpsertData(
+                    cipherId = cipherId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = false,
+                ),
+            )
+            coVerify(exactly = 1) {
+                ciphersService.getCipher(cipherId)
+            }
+            coVerify(exactly = 0) {
+                vaultDiskSource.deleteCipher(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherId = cipherId,
+                )
+            }
+        }
+
+    @Test
+    fun `syncSendUpsertFlow success should make a request for a send and then store it`() =
+        runTest {
+            val sendId = "mockId-1"
+            val send: SyncResponseJson.Send = mockk()
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            coEvery {
+                sendsService.getSend(sendId)
+            } returns send.asSuccess()
+
+            coEvery {
+                vaultDiskSource.saveSend(any(), any())
+            } just runs
+
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = false,
+                ),
+            )
+            coVerify(exactly = 1) {
+                sendsService.getSend(sendId)
+                vaultDiskSource.saveSend(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    send = send,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncSendUpsertFlow update failure with 404 code should make a request for a send and then delete it`() =
+        runTest {
+            val sendId = "mockId-1"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val response: HttpException = mockk {
+                every { code() } returns 404
+            }
+            coEvery {
+                sendsService.getSend(sendId)
+            } returns response.asFailure()
+
+            coEvery {
+                vaultDiskSource.deleteSend(any(), any())
+            } just runs
+
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = true,
+                ),
+            )
+            coVerify(exactly = 1) {
+                sendsService.getSend(sendId)
+                vaultDiskSource.deleteSend(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    sendId = sendId,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncSendUpsertFlow create failure with 404 code should make a request for a send and do nothing`() =
+        runTest {
+            val sendId = "mockId-1"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val response: HttpException = mockk {
+                every { code() } returns 404
+            }
+            coEvery {
+                sendsService.getSend(sendId)
+            } returns response.asFailure()
+
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = false,
+                ),
+            )
+            coVerify(exactly = 1) {
+                sendsService.getSend(sendId)
+            }
+            coVerify(exactly = 0) {
+                vaultDiskSource.deleteSend(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    sendId = sendId,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `mutableSyncFolderUpsertFlow success should make a request for a folder and then store it`() =
+        runTest {
+            val folderId = "mockId-1"
+            val folder: SyncResponseJson.Folder = mockk()
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            coEvery {
+                folderService.getFolder(folderId)
+            } returns folder.asSuccess()
+
+            coEvery {
+                vaultDiskSource.saveFolder(any(), any())
+            } just runs
+
+            mutableSyncFolderUpsertFlow.tryEmit(
+                SyncFolderUpsertData(
+                    folderId = folderId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = false,
+                ),
+            )
+            coVerify(exactly = 1) {
+                folderService.getFolder(folderId)
+                vaultDiskSource.saveFolder(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    folder = folder,
+                )
+            }
+        }
 
     //region Helper functions
 

@@ -71,6 +71,16 @@ class FoldersServiceTest : BaseServiceTest() {
         val result = folderService.deleteFolder(DEFAULT_ID)
         assertEquals(Unit, result.getOrThrow())
     }
+
+    @Test
+    fun `getFolder should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody(CREATE_UPDATE_FOLDER_SUCCESS_JSON))
+        val result = folderService.getFolder("FolderId")
+        assertEquals(
+            DEFAULT_FOLDER,
+            result.getOrThrow(),
+        )
+    }
 }
 
 private const val DEFAULT_ID = "FolderId"

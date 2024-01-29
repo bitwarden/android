@@ -112,4 +112,9 @@ class SendsServiceImpl(
                     )
                     ?: throw throwable
             }
+
+    override suspend fun getSend(
+        sendId: String,
+    ): Result<SyncResponseJson.Send> =
+        sendsApi.getSend(sendId = sendId)
 }
