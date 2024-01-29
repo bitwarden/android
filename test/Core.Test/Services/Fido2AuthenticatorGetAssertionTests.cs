@@ -16,6 +16,7 @@ using Xunit;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Bit.Core.Test.Services
 {
@@ -290,7 +291,6 @@ namespace Bit.Core.Test.Services
 
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
-        // Spec: Increment the credential associated signature counter
         public async Task GetAssertionAsync_ReturnsAssertion(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams) {
             // Common Arrange
             var cipherView = CreateCipherView(null, "bitwarden.com", true);
@@ -303,34 +303,28 @@ namespace Bit.Core.Test.Services
             });
 
             // Arrange
+            var keyPair = GenerateKeyPair();
             var rpIdHashMock = RandomBytes(32);
+            aParams.Hash = RandomBytes(32);
             sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(aParams.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
             cipherView.Login.MainFido2Credential.CounterValue = 9000;
-            var signatureMock = RandomBytes(32);
-            sutProvider.GetDependency<ICryptoFunctionService>().SignAsync(
-                Arg.Any<byte[]>(),
-                Arg.Any<byte[]>(),
-                new CryptoSignEcdsaOptions {
-                    Algorithm = CryptoEcdsaAlgorithm.P256Sha256,
-                    SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
-                }
-            ).Returns(signatureMock);
+            cipherView.Login.MainFido2Credential.KeyValue = CoreHelpers.Base64UrlEncode(keyPair.ExportPkcs8PrivateKey());
             
             // Act
             var result = await sutProvider.Sut.GetAssertionAsync(aParams);
 
             // Assert
-            var encAuthData = result.AuthenticatorData;
-            var rpIdHash = encAuthData.Take(32);
-            var flags = encAuthData.Skip(32).Take(1);
-            var counter = encAuthData.Skip(33).Take(4);
+            var authData = result.AuthenticatorData;
+            var rpIdHash = authData.Take(32);
+            var flags = authData.Skip(32).Take(1);
+            var counter = authData.Skip(33).Take(4);
 
             Assert.Equal(Guid.Parse(cipherView.Login.MainFido2Credential.CredentialId).ToByteArray(), result.SelectedCredential.Id);
             Assert.Equal(CoreHelpers.Base64UrlDecode(cipherView.Login.MainFido2Credential.UserHandle), result.SelectedCredential.UserHandle);
             Assert.Equal(rpIdHashMock, rpIdHash);
             Assert.Equal(new byte[] { 0b00000101 }, flags); // UP = true, UV = true
             Assert.Equal(new byte[] { 0, 0, 0x23, 0x29 }, counter); // 9001 in binary big-endian format
-            Assert.Equal(signatureMock, result.Signature);
+            Assert.True(keyPair.VerifyData(authData.Concat(aParams.Hash).ToArray(), result.Signature, HashAlgorithmName.SHA256), "Signature verification failed");
         }
 
         [Theory]
@@ -364,6 +358,14 @@ namespace Bit.Core.Test.Services
             return bytes;
         }
 
+        private ECDsa GenerateKeyPair()
+        {
+            var dsa = ECDsa.Create();
+            dsa.GenerateKey(ECCurve.NamedCurves.nistP256);
+
+            return dsa;
+        }
+
         #nullable enable
         private CipherView CreateCipherView(string? credentialId, string? rpId, bool? discoverable)
         {
@@ -378,6 +380,7 @@ namespace Bit.Core.Test.Services
                             RpId = rpId ?? "bitwarden.com",
                             Discoverable = discoverable.HasValue ? discoverable.ToString() : "true",
                             UserHandleValue = RandomBytes(32),
+                            KeyValue = "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgO4wC7AlY4eJP7uedRUJGYsAIJAd6gN1Vp7uJh6xXAp6hRANCAARGvr56F_t27DEG1Tzl-qJRhrTUtC7jOEbasAEEZcE3TiMqoWCan0sxKDPylhRYk-1qyrBC_feN1UtGWH57sROa"
                         }
                     }
                 }

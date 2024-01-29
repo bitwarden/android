@@ -5,6 +5,7 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Utilities.Fido2;
 using Bit.Core.Utilities;
 using System.Formats.Cbor;
+using System.Security.Cryptography;
 
 namespace Bit.Core.Services
 {
@@ -184,7 +185,7 @@ namespace Bit.Core.Services
                     counter: selectedFido2Credential.CounterValue
                 );
 
-                var signature = await GenerateSignature(
+                var signature = GenerateSignature(
                     authData: authenticatorData,
                     clientDataHash: assertionParams.Hash,
                     privateKey: selectedFido2Credential.KeyBytes
@@ -286,8 +287,8 @@ namespace Bit.Core.Services
         // TODO: Move this to a separate service
         private (PublicKey publicKey, byte[] privateKey) GenerateKeyPair()
         {
-            var dsa = System.Security.Cryptography.ECDsa.Create();
-            dsa.GenerateKey(System.Security.Cryptography.ECCurve.NamedCurves.nistP256);
+            var dsa = ECDsa.Create();
+            dsa.GenerateKey(ECCurve.NamedCurves.nistP256);
             var privateKey = dsa.ExportPkcs8PrivateKey();
 
             return (new PublicKey(dsa), privateKey);
@@ -400,20 +401,19 @@ namespace Bit.Core.Services
             return attestationObject.Encode();
         }
 
-        private async Task<byte[]> GenerateSignature(
-            byte[] authData,
-            byte[] clientDataHash,
-            byte[] privateKey
-        )
+        // TODO: Move this to a separate service
+        private byte[] GenerateSignature(byte[] authData, byte[] clientDataHash, byte[] privateKey)
         {
             var sigBase = authData.Concat(clientDataHash).ToArray();
-            var signature = await _cryptoFunctionService.SignAsync(sigBase, privateKey, new CryptoSignEcdsaOptions
-            {
-                Algorithm = CryptoEcdsaAlgorithm.P256Sha256,
-                SignatureFormat = CryptoSignEcdsaOptions.DsaSignatureFormat.Rfc3279DerSequence
-            });
+            var dsa = ECDsa.Create();
+            dsa.ImportPkcs8PrivateKey(privateKey, out var bytesRead);
 
-            return signature;
+            if (bytesRead == 0) 
+            {
+                throw new Exception("Failed to import private key");
+            }
+
+            return dsa.SignData(sigBase, HashAlgorithmName.SHA256);
         }
 
         private string GuidToStandardFormat(byte[] bytes)
@@ -428,9 +428,9 @@ namespace Bit.Core.Services
 
         private class PublicKey
         {
-            private readonly System.Security.Cryptography.ECDsa _dsa;
+            private readonly ECDsa _dsa;
 
-            public PublicKey(System.Security.Cryptography.ECDsa dsa) {
+            public PublicKey(ECDsa dsa) {
                 _dsa = dsa;
             }
 

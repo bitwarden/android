@@ -456,7 +456,7 @@ namespace Bit.Core.Test.Services
                             CredentialId = credentialId ?? Guid.NewGuid().ToString(),
                             RpId = rpId ?? "bitwarden.com",
                             Discoverable = discoverable.HasValue ? discoverable.ToString() : "true",
-                            UserHandleValue = RandomBytes(32),
+                            UserHandleValue = RandomBytes(32)
                         }
                     } : null
                 }

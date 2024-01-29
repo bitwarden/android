@@ -122,16 +122,6 @@ namespace Bit.Core.Services
             return okm.Take(outputByteSize).ToArray();
         }
 
-        public Task<byte[]> SignAsync(byte[] data, byte[] privateKey, ICryptoSignOptions options)
-        {
-            throw new NotSupportedException();
-
-            // Not supported on iOS and Android
-            // var provider = AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.EcdsaP256Sha256);
-            // var cryptoKey = provider.ImportKeyPair(privateKey, CryptographicPrivateKeyBlobType.Pkcs8RawPrivateKeyInfo);
-            // return Task.FromResult(CryptographicEngine.Sign(cryptoKey, data));
-        }
-
         public Task<byte[]> HashAsync(string value, CryptoHashAlgorithm algorithm)
         {
             return HashAsync(Encoding.UTF8.GetBytes(value), algorithm);

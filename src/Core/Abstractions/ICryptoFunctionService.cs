@@ -21,7 +21,6 @@ namespace Bit.Core.Abstractions
         Task<byte[]> HkdfAsync(byte[] ikm, byte[] salt, byte[] info, int outputByteSize, HkdfAlgorithm algorithm);
         Task<byte[]> HkdfExpandAsync(byte[] prk, string info, int outputByteSize, HkdfAlgorithm algorithm);
         Task<byte[]> HkdfExpandAsync(byte[] prk, byte[] info, int outputByteSize, HkdfAlgorithm algorithm);
-        Task<byte[]> SignAsync(byte[] data, byte[] privateKey, ICryptoSignOptions options);
         Task<byte[]> HashAsync(string value, CryptoHashAlgorithm algorithm);
         Task<byte[]> HashAsync(byte[] value, CryptoHashAlgorithm algorithm);
         Task<byte[]> HmacAsync(byte[] value, byte[] key, CryptoHashAlgorithm algorithm);
