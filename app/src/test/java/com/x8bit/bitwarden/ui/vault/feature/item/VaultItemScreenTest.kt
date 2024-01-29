@@ -186,7 +186,11 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText("Master password confirmation").assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+            it.copy(
+                dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                    action = PasswordRepromptAction.DeleteClick,
+                ),
+            )
         }
 
         composeTestRule
@@ -198,8 +202,13 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `Ok click on master password dialog should emit DismissDialogClick`() {
         val enteredPassword = "pass1234"
+        val passwordRepromptAction = PasswordRepromptAction.EditClick
         mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.MasterPasswordDialog)
+            it.copy(
+                dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                    action = passwordRepromptAction,
+                ),
+            )
         }
 
         composeTestRule.onNodeWithText("Master password").performTextInput(enteredPassword)
@@ -209,7 +218,12 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(enteredPassword))
+            viewModel.trySendAction(
+                VaultItemAction.Common.MasterPasswordSubmit(
+                    masterPassword = enteredPassword,
+                    action = passwordRepromptAction,
+                ),
+            )
         }
     }
 

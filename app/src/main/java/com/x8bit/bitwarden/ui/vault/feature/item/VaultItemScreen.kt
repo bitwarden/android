@@ -114,7 +114,14 @@ fun VaultItemScreen(
             { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) }
         },
         onSubmitMasterPassword = remember(viewModel) {
-            { viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(it)) }
+            { masterPassword, action ->
+                viewModel.trySendAction(
+                    VaultItemAction.Common.MasterPasswordSubmit(
+                        masterPassword = masterPassword,
+                        action = action,
+                    ),
+                )
+            }
         },
     )
 
@@ -271,7 +278,7 @@ fun VaultItemScreen(
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
-    onSubmitMasterPassword: (String) -> Unit,
+    onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
 ) {
     when (dialog) {
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
@@ -286,9 +293,9 @@ private fun VaultItemDialogs(
             visibilityState = LoadingDialogState.Shown(text = dialog.message),
         )
 
-        VaultItemState.DialogState.MasterPasswordDialog -> {
+        is VaultItemState.DialogState.MasterPasswordDialog -> {
             BitwardenMasterPasswordDialog(
-                onConfirmClick = onSubmitMasterPassword,
+                onConfirmClick = { onSubmitMasterPassword(it, dialog.action) },
                 onDismissRequest = onDismissRequest,
             )
         }
