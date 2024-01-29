@@ -4,10 +4,7 @@ import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.IdentityView
-import com.bitwarden.core.LoginUriView
-import com.bitwarden.core.LoginView
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.x8bit.bitwarden.data.platform.util.takeIfUriMatches
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -328,54 +325,6 @@ class CipherViewExtensionsTest {
 
         // Test
         val actual = cipherView.subtitle
-
-        // Verify
-        assertNull(actual)
-    }
-
-    @Test
-    fun `takeIfUriMatches should return the CipherView if the URI matches`() {
-        // Setup
-        val testUri = "com.x8bit.bitwarden"
-        val loginUriView: LoginUriView = mockk {
-            every { uri } returns testUri
-        }
-        val loginView: LoginView = mockk {
-            every { uris } returns listOf(loginUriView)
-        }
-        val expected: CipherView = mockk {
-            every { login } returns loginView
-            every { type } returns CipherType.IDENTITY
-        }
-
-        // Test
-        val actual = expected.takeIfUriMatches(
-            uri = testUri,
-        )
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `takeIfUriMatches should return null if the URI doesn't match`() {
-        // Setup
-        val testUri = "com.x8bit.bitwarden"
-        val loginUriView: LoginUriView = mockk {
-            every { uri } returns "com.google"
-        }
-        val loginView: LoginView = mockk {
-            every { uris } returns listOf(loginUriView)
-        }
-        val cipherView: CipherView = mockk {
-            every { login } returns loginView
-            every { type } returns CipherType.IDENTITY
-        }
-
-        // Test
-        val actual = cipherView.takeIfUriMatches(
-            uri = testUri,
-        )
 
         // Verify
         assertNull(actual)

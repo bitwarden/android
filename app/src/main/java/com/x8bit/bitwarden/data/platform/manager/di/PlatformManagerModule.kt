@@ -22,11 +22,15 @@ import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,6 +51,19 @@ object PlatformManagerModule {
     @Singleton
     fun provideAppForegroundManager(): AppForegroundManager =
         AppForegroundManagerImpl()
+
+    @Provides
+    @Singleton
+    fun providesCipherMatchingManager(
+        @ApplicationContext context: Context,
+        settingsRepository: SettingsRepository,
+        vaultRepository: VaultRepository,
+    ): CipherMatchingManager =
+        CipherMatchingManagerImpl(
+            context = context,
+            settingsRepository = settingsRepository,
+            vaultRepository = vaultRepository,
+        )
 
     @Provides
     @Singleton
