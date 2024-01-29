@@ -885,7 +885,7 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Chave de autenticador adicionada.</value>
+    <value>Chave de autenticação adicionada.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Não é possível ler a chave de autenticação.</value>
@@ -2819,6 +2819,9 @@ Deseja mudar para esta conta?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Continuar a contactar o apoio ao cliente?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continuar para a política de privacidade?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continuar para a loja de aplicações?</value>
   </data>
@@ -2837,6 +2840,9 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Não consegue encontrar o que está a procurar? Entre em contacto com o suporte da Bitwarden em bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Consulte a nossa política de privacidade em bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Explore mais funcionalidades da sua conta Bitwarden na aplicação web.</value>

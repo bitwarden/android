@@ -2834,6 +2834,9 @@ Do you want to switch to this account?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Continue to contact support?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continue to app store?</value>
   </data>
@@ -2852,6 +2855,9 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Explore more features of your Bitwarden account on the web app.</value>

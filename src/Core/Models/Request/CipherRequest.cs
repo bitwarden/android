@@ -27,7 +27,7 @@ namespace Bit.Core.Models.Request
                     Login = new LoginApi
                     {
                         Uris = cipher.Login.Uris?.Select(
-                            u => new LoginUriApi { Match = u.Match, Uri = u.Uri?.EncryptedString }).ToList(),
+                            u => new LoginUriApi { Match = u.Match, Uri = u.Uri?.EncryptedString, UriChecksum = u.UriChecksum?.EncryptedString }).ToList(),
                         Username = cipher.Login.Username?.EncryptedString,
                         Password = cipher.Login.Password?.EncryptedString,
                         PasswordRevisionDate = cipher.Login.PasswordRevisionDate,

@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Copiar usuario</value>
+    <value>Copiar nombre de usuario</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -186,11 +186,11 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Correo electrónico</value>
+    <value>Dirección de correo electrónico</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Envíanos un correo</value>
+    <value>Envíanos correo electrónico</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>Envíanos un correo directamente para obtener ayuda o dejar tus comentarios.</value>
@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Reportar un fallo</value>
+    <value>Enviar un informe de error</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Abrir una incidencia en el repositorio de GitHub.</value>
@@ -229,10 +229,10 @@
     <value>Carpetas</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Carpeta actualizada.</value>
+    <value>Carpeta guardada</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Ir a la web</value>
+    <value>Ir al sitio web</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -285,7 +285,7 @@
     <value>Cuenta ya añadida</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>¿Quieres cambiarlo ahora?</value>
+    <value>¿Te gustaría cambiar a esa cuenta ahora?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Contraseña maestra</value>
@@ -342,7 +342,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>El elemento ha sido eliminado.</value>
+    <value>Elemento eliminado</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -375,7 +375,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} ha sido copiado.</value>
+    <value>{0} copiado</value>
     <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -419,16 +419,16 @@
     <value>Utiliza el servicio de accesibilidad de Bitwarden para autorellenar entradas entre aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Servicio de autorrellenado</value>
+    <value>Servicio de autocompletado</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evitar caracteres ambiguos</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Extensión de Aplicación de Bitwarden</value>
+    <value>Extensión de Aplicación Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>La forma más fácil de añadir nuevas entradas a su caja fuerte es utilizando la extensión de navegador de Bitwarden. Aprenda más sobre cómo utilizar este servicio en la sección de "Ajustes".</value>
+    <value>La manera más fácil de añadir nuevos inicios de sesión a tu caja fuerte es utilizando la extensión de la aplicación de Bitwarden. Aprenda más sobre cómo utilizar la extensión de la aplicación de Bitwarden accediendo al menú de "Ajustes".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Utiliza Bitwarden en Safari y otras aplicaciones para autorellenar tus entradas.</value>
@@ -471,13 +471,13 @@
     <value>Introduce el correo electrónico de tu cuenta para recibir la pista de tu contraseña maestra.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-activar Extension de Aplicación</value>
+    <value>Reactivar extensión de la aplicación</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>¡Casi estamos!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Activar Extensión de Aplicación</value>
+    <value>Activar extensión de la aplicación</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>En Safari, busca Bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
@@ -490,7 +490,7 @@
     <value>¡Ya estás identificado!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Sus entradas son ahora fácilmente accesibles desde Safari, Chrome y otras aplicaciones soportadas.</value>
+    <value>Sus inicios de sesión son ahora fácilmente accesibles desde Safari, Chrome y otras aplicaciones soportadas.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>En Safari y Chrome, busca Bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
@@ -553,7 +553,7 @@
     <value>Acción de tiempo de espera de la caja fuerte</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Cerrar sesión eliminará todo el acceso a su caja fuerte y requiere autenticación en línea después del período de espera. ¿Está seguro de que quiere usar esta configuración?</value>
+    <value>Cerrar sesión quitará todo el acceso a su caja fuerte y requiere autenticación en línea después del tiempo de espera. ¿Está seguro de que quiere usar este ajuste?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Iniciando sesión...</value>
@@ -598,7 +598,7 @@
     <value>Nunca</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nuevo elemento creado.</value>
+    <value>Elemento agregado</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>No hay favoritos en tu caja fuerte.</value>
@@ -626,7 +626,7 @@
     <value>Otro</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Contraseña generada.</value>
+    <value>Contraseña generada</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Generador de contraseñas</value>
@@ -641,7 +641,7 @@
     <value>¿Estás seguro de que quieres sobreescribir la contraseña actual?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden mantiene tu caja fuerte automáticamente sincronizada utilizando notificaciones push. Para tener la mejor experiencia posible, por favor, pulsa "Permitir" en la próxima notificación donde se te pregunta si quieres habilitar las notificaciones push.</value>
+    <value>Bitwarden mantiene tu caja fuerte automáticamente sincronizada utilizando notificaciones automáticas. Para tener la mejor experiencia posible, por favor, selecciona "Permitir" en la próxima notificación donde se te pregunta si quieres permitir las notificaciones automáticas.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -654,7 +654,7 @@
     <value>Regenerar contraseña</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Vuelve a escribir tu contraseña maestra</value>
+    <value>Reescribir contraseña maestra</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Buscar en caja fuerte</value>
@@ -675,7 +675,7 @@
     <value>Información del elemento</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Elemento actualizado.</value>
+    <value>Elemento guardado</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Enviando...</value>
@@ -686,10 +686,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Sincronización completada.</value>
+    <value>Sincronización completada</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Sincronizado fallida.</value>
+    <value>Error en la Sincronización</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
     <value>Sincronizar caja fuerte ahora</value>
@@ -745,7 +745,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Cuando seleccione un campo de entrada y vea un recuadro flotante de autorellenado de Bitwarden, puede pulsarlo para iniciar el servicio de autorellenado.</value>
+    <value>Cuando seleccione un campo de entrada y vea una superposición de autocompletado de Bitwarden, puede pulsarla para iniciar el servicio de autocompletado.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Pulsa en esta notificación para autorellenar una entrada desde tu caja fuerte.</value>
@@ -775,7 +775,7 @@
     <value>Estado</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>La forma más fácil de añadir nuevas entradas a su caja fuerte es utilizando el Servicio de Autorellenado de Bitwarden. Aprenda más sobre cómo utilizar este servicio en la sección de "Ajustes".</value>
+    <value>La forma más fácil de añadir nuevos inicios de sesión a tu caja fuerte es utilizando el Servicio de Autocompletar de Bitwarden. Aprenda más sobre cómo utilizar el Servicio de Autocompletar de Bitwarden en el menú "Ajustes".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Autorellenar</value>
@@ -787,10 +787,10 @@
     <value>¿Estás seguro de que quieres autorellenar esta entrada? No es una coincidencia completa para "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Elementos coincidientes</value>
+    <value>Elementos que coinciden</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Posibles elementos coincidientes</value>
+    <value>Posibles elementos que coinciden</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Buscar</value>
@@ -799,7 +799,7 @@
     <value>Estás buscando una entrada para autorellenar "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Aprenda sobre Organizaciones</value>
+    <value>Aprende sobre organizaciones</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>No se puede abrir la aplicación "{0}".</value>
@@ -818,11 +818,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Entrada no disponible</value>
+    <value>Inicio de sesión no disponible</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Esta cuenta tiene habilitada la autenticación en dos pasos, pero ninguna de los métodos configurados es soportado por este dispositivo. Por favor, utiliza un dispositivo soportado o/y añade proveedores adicionales que tengan un mejor soporte entre dispositivos (como una aplicación autenticadora).</value>
+    <value>Esta cuenta tiene configuración de inicio de sesión en dos pasos, sin embargo, ninguno de los proveedores de dos pasos configurados son soportados en este dispositivo. Por favor, utilice un dispositivo soportado y/o añada proveedores adicionales que sean mejor soportados entre los dispositivos (como una aplicación de autenticación).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Código de recuperación</value>
@@ -837,7 +837,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Opciones de la autenticación en dos pasos</value>
+    <value>Opciones de inicio de sesión en dos pasos</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Utilizar otro método de autenticación en dos pasos</value>
@@ -847,18 +847,18 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Correo de verificación enviado.</value>
+    <value>Correo de verificación enviado</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
     <value>Para continuar, mantén tu YubiKey NEO contra la parte trasera de tu dispositivo o inserta tu YubiKey en el puerto USB de tu dispositivo y luego pulsa su butón.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>Llave de Seguridad YubiKey</value>
+    <value>Clave de seguridad YubiKey</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Añadir nuevo adjunto</value>
+    <value>Añadir nuevo archivo adjunto</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>Adjuntos</value>
@@ -907,10 +907,10 @@ El escaneo se realizará automáticamente.</value>
     <value>Copiar código TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Si un inicio de sesión tiene una clave de autenticador, copie el código de verificación TOTP a su portapapeles cuando autorrellene el inicio de sesión.</value>
+    <value>Si un inicio de sesión tiene una clave de autenticador, copie el código de verificación TOTP a su portapapeles cuando autocomplete el inicio de sesión.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copiar automáticamente TOTP</value>
+    <value>Copiar TOTP automáticamente</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Se quiere membrasía Premium para poder utilizar esta característica.</value>
@@ -922,7 +922,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Adjunto eliminado</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Seleccionar archivo</value>
+    <value>Elegir archivo</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>Archivo</value>
@@ -937,7 +937,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Fuente de archivo</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Característica no disponible</value>
+    <value>Funcionalidad no disponible</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
     <value>El tamaño máximo de archivo es de 100MB.</value>
@@ -946,10 +946,10 @@ El escaneo se realizará automáticamente.</value>
     <value>No puedes usar esta característica hasta que actualices tu clave de cifrado.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>Se requiere migración de la clave de cifrado. Por favor, inicie sesión a través de la caja fuerte web para actualizar su clave de cifrado.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Aprender más</value>
+    <value>Aprende más</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
     <value>URL del servidor de la API</value>
@@ -1032,7 +1032,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Marca</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Nombre en la tarjeta</value>
+    <value>Nombre del propietario de la tarjeta</value>
   </data>
   <data name="CityTown" xml:space="preserve">
     <value>Ciudad / Pueblo</value>
@@ -1077,7 +1077,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Nombre completo</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>Nº de licencia</value>
+    <value>Número de licencia</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Marzo</value>
@@ -1086,7 +1086,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Mayo</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>2º nombre</value>
+    <value>Segundo nombre</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Sr</value>
@@ -1098,7 +1098,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Srta</value>
   </data>
   <data name="Mx" xml:space="preserve">
-    <value>"Mx" = "Sr./Sra</value>
+    <value>Mx</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Noviembre</value>
@@ -1107,7 +1107,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Octubre</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Nº de pasaporte</value>
+    <value>Número de pasaporte</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Teléfono</value>
@@ -1116,7 +1116,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Septiembre</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Nº de la seguridad social</value>
+    <value>Número de Seguro Social</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Estado / Provincia</value>
@@ -1167,7 +1167,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Servicio de accesibilidad de autorellenado</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>El servicio de autorellenado de Bitwarden utiliza el marco de autocompletado de Android para ayudarte a rellenar entradas, tarjetas de crédito e identidades en otras aplicaciones de tu dispositivo.</value>
+    <value>El servicio de autocompletar de Bitwarden utiliza el Marco de Autocompletar de Android para ayudarte a completar información de inicios de sesión en otras aplicaciones en tu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Utiliza el servicio de accesibilidad de Bitwarden para autorrellenar entradas.</value>
@@ -1246,14 +1246,14 @@ El escaneo se realizará automáticamente.</value>
     <value>Empieza con</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>Tipo de detección de URI</value>
+    <value>Detección de coincidencia URI</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Tipo de detección</value>
+    <value>Detección de coincidencia</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Sí y guardar</value>
+    <value>Sí, y guardar</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Autorellenar y guardar</value>
@@ -1289,7 +1289,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Debes identificarte en la aplicación principal de Bitwarden antes de poder utilizar Autorellenado.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Sus entradas son ahora fácilmente accesibles desde su teclado mientras se identifica en aplicaciones y sitios web.</value>
+    <value>Sus inicios de sesión ahora son fácilmente accesibles directamente desde su teclado mientras inician sesión en aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Te recomendamos deshabilitar cualquier otra aplicación de Autorellenado desde Ajustes si no piensas utilizarlas.</value>
@@ -1298,13 +1298,13 @@ El escaneo se realizará automáticamente.</value>
     <value>Accede a tu caja fuerte directamente desde tu teclado para autorellenar contraseñas rápidamente.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Para habilitar el Autorellenado de contraseña en su dispositivo, sigue estas instrucciones:</value>
+    <value>Para configurar autocompletar contraseña en tu dispositivo, sigue estas instrucciones:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Ve a la aplicación "Ajustes" de iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Pulsa en "Contraseñas y Cuentas"</value>
+    <value>2. Pulse "Contraseñas"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Pulsa en "Autorellenado de contraseñas"</value>
@@ -1316,10 +1316,10 @@ El escaneo se realizará automáticamente.</value>
     <value>5. Selecciona "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Autorellenado de contraseña</value>
+    <value>Autocompletar contraseña</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>La forma más fácil de añadir nuevas entradas a su caja fuerte es utilizando la extensión de Autorellenado de contraseñas de Bitwarden. Aprenda más sobre cómo utilizar la extensión de Autorellenado de contraseñas de Bitwarden en la sección de "Ajustes".</value>
+    <value>La manera más fácil de añadir nuevos inicios de sesión a tu caja fuerte es utilizando la extensión Autocompletar Contraseña de la aplicación Bitwarden. Aprenda más sobre cómo utilizar la extensión Autocompletar Contraseña de la aplicación de Bitwarden accediendo al menú de "Ajustes".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Dirección de correo electrónico inválida.</value>
@@ -1522,11 +1522,11 @@ El escaneo se realizará automáticamente.</value>
     <value>2 minutos</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Limpiar el Portapapeles</value>
+    <value>Limpiar el portapapeles</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Borrar automáticamente los valores copiados de su portapapeles.</value>
+    <value>Borrar automáticamente los valores copiados de tu portapapeles.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1534,14 +1534,14 @@ El escaneo se realizará automáticamente.</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Elija el método de detección por defecto de coincidencia de URI que se utilizará para acciones de inicio de sesión como autorrellenado.</value>
+    <value>Elija la forma por defecto en la que se maneja la detección de coincidencias URI para inicios de sesión cuando se realizan acciones tales como autocompletar.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Cambiar el tema de la aplicación.</value>
+    <value>Cambiar el color de la aplicación.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
     <value>Por defecto (Sistema)</value>
@@ -1550,7 +1550,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Tema oscuro por defecto</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copiar notas</value>
+    <value>Copiar nota</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Salir</value>
@@ -2630,16 +2630,16 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Aprobar con mi otro dispositivo</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Solicitar aprobación del administrador</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Aprobar con contraseña maestra</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Deshabilitar usando un dispositivo público</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Recordar este dispositivo</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2648,28 +2648,29 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Passkeys</value>
   </data>
   <data name="Application" xml:space="preserve">
-    <value>Application</value>
+    <value>Aplicación</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
-    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+    <value>No puedes editar la aplicación de contraseñas maestras porque podría invalidar la contraseña maestra</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>La contraseña maestra no será copiada</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
-    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+    <value>La contraseña maestra no será copiada al elemento clonado.
+¿Deseas continuar clonando este elemento?</value>
   </data>
   <data name="CopyApplication" xml:space="preserve">
-    <value>Copy application</value>
+    <value>Copiar aplicación</value>
   </data>
   <data name="AvailableForTwoStepLogin" xml:space="preserve">
-    <value>Available for two-step login</value>
+    <value>Disponible para inicio de sesión en dos pasos</value>
   </data>
   <data name="MasterPasswordRePromptHelp" xml:space="preserve">
     <value>Ayuda de volver a pedir contraseña maestra</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>El desbloqueo puede fallar por falta de memoria. Disminuye los ajustes de memoria KDF o configura el desbloqueo biométrico para resolverlo.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Clave API no válida</value>
@@ -2678,197 +2679,203 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Token de API no válido</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Aprobación del administrador solicitada</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Tu solicitud ha sido enviada a tu administrador.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Se te notificará una vez aprobada. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>¿Problema para iniciar sesión?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Iniciando sesión como {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>Acción después del tiempo de espera de la caja fuerte cambiado a cerrar sesión</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
-    <value>Block auto-fill</value>
+    <value>Bloquear autocompletar</value>
   </data>
   <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
-    <value>Auto-fill will not be offered for these URIs.</value>
+    <value>Autocompletar no se ofrecerá para estas URLs.</value>
   </data>
   <data name="NewBlockedURI" xml:space="preserve">
-    <value>New blocked URI</value>
+    <value>Nueva URI bloqueada</value>
   </data>
   <data name="URISaved" xml:space="preserve">
-    <value>URI saved</value>
+    <value>URI guardada</value>
   </data>
   <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
-    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <value>Formato no válido. Use https://, http://, o androidapp://</value>
     <comment>https://, http://, androidapp:// should not be translated</comment>
   </data>
   <data name="EditURI" xml:space="preserve">
-    <value>Edit URI</value>
+    <value>Editar URI</value>
   </data>
   <data name="EnterURI" xml:space="preserve">
-    <value>Enter URI</value>
+    <value>Escribir URI</value>
   </data>
   <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
-    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+    <value>Formato: {0}. Separar múltiples URIs con una coma.</value>
   </data>
   <data name="FormatX" xml:space="preserve">
-    <value>Format: {0}</value>
+    <value>Formato: {0}</value>
   </data>
   <data name="InvalidURI" xml:space="preserve">
-    <value>Invalid URI</value>
+    <value>URI no válida</value>
   </data>
   <data name="URIRemoved" xml:space="preserve">
-    <value>URI removed</value>
+    <value>URI eliminada</value>
   </data>
   <data name="ThereAreNoBlockedURIs" xml:space="preserve">
-    <value>There are no blocked URIs</value>
+    <value>No hay URIs bloqueadas</value>
   </data>
   <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
-    <value>The URI {0} is already blocked</value>
+    <value>El URI {0} ya está bloqueada</value>
   </data>
   <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
-    <value>Cannot edit multiple URIs at once</value>
+    <value>No se pueden editar múltiples URIs a la vez</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Inicio de sesión aprobado</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>Iniciar sesión con el dispositivo debe configurarse en los ajustes de la aplicación Bitwarden. ¿Necesitas otra opción?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Iniciar sesión con el dispositivo</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>Iniciando sesión en</value>
   </data>
   <data name="Vault" xml:space="preserve">
-    <value>Vault</value>
+    <value>Caja fuerte</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Apariencia</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
-    <value>Account security</value>
+    <value>Seguridad de la cuenta</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
-    <value>Bitwarden Help Center</value>
+    <value>Centro de ayuda de Bitwarden</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
-    <value>Contact Bitwarden support</value>
+    <value>Contactar al soporte de Bitwarden</value>
   </data>
   <data name="CopyAppInformation" xml:space="preserve">
-    <value>Copy app information</value>
+    <value>Copiar información de la aplicación</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>Sincronizar ahora</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Unlock options</value>
+    <value>Opciónes de desbloqueo</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
-    <value>Session timeout</value>
+    <value>Tiempo de espera de sesión</value>
   </data>
   <data name="SessionTimeoutAction" xml:space="preserve">
-    <value>Session timeout action</value>
+    <value>Acción de tiempo de espera de sesión</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>Account fingerprint phrase</value>
+    <value>Frase de huella digital de su cuenta</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
-    <value>One hour and one minute</value>
+    <value>Una hora y un minuto</value>
   </data>
   <data name="OneHourAndXMinute" xml:space="preserve">
-    <value>One hour and {0} minutes</value>
+    <value>Una hora y {0} minutos</value>
   </data>
   <data name="XHoursAndOneMinute" xml:space="preserve">
-    <value>{0} hours and one minute</value>
+    <value>{0} horas y un minuto</value>
   </data>
   <data name="XHoursAndYMinutes" xml:space="preserve">
-    <value>{0} hours and {1} minutes</value>
+    <value>{0} horas y {1} minutos</value>
   </data>
   <data name="XHours" xml:space="preserve">
-    <value>{0} hours</value>
+    <value>{0} horas</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
-    <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
+    <value>El Framework de Autofill de Android se utiliza para ayudar a rellenar información de inicio de sesión en otras aplicaciones en tu dispositivo.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+    <value>Utilice el autocompletado en línea si tu teclado seleccionado lo soporta. De otra manera, utilice la superposición por defecto.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
-    <value>Additional options</value>
+    <value>Opciones adicionales</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>Continue to web app?</value>
+    <value>¿Continuar a la aplicación web?</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
-    <value>Continue to {0}?</value>
+    <value>¿Continuar a {0}?</value>
     <comment>The parameter is an URL, like bitwarden.com.</comment>
   </data>
   <data name="ContinueToHelpCenter" xml:space="preserve">
-    <value>Continue to Help center?</value>
+    <value>¿Continuar al centro de ayuda?</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
-    <value>Continue to contact support?</value>
+    <value>¿Continuar con el servicio de asistencia?</value>
+  </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
-    <value>Continue to app store?</value>
+    <value>¿Continuar a la App Store?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+    <value>Haz tu cuenta más segura al configurar el inicio de sesión en dos pasos en la aplicación web de Bitwarden.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
-    <value>You can change your master password on the Bitwarden web app.</value>
+    <value>Puedes cambiar tu contraseña maestra en la aplicación web de Bitwarden.</value>
   </data>
   <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
-    <value>You can import data to your vault on {0}.</value>
+    <value>Puedes importar datos a tu caja fuerte en {0}.</value>
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>Learn more about how to use Bitwarden on the Help center.</value>
+    <value>Más información sobre cómo usar Bitwarden en el centro de Ayuda.</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
-    <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+    <value>¿No encuentras lo que estás buscando? Contacta con el soporte de Bitwarden en bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
-    <value>Explore more features of your Bitwarden account on the web app.</value>
+    <value>Explora más características de tu cuenta de Bitwarden en la aplicación web.</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</value>
+    <value>Bitwarden te permite compartir tus elementos de la caja fuerte con otros utilizando una organización. Más información en el sitio web de bitwarden.com.</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
-    <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
+    <value>Ayuda a otros a averiguar si Bitwarden es correcto para ellos. Visita la tienda de aplicaciones y deja una calificación ahora.</value>
   </data>
   <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
-    <value>Choose the dark theme to use when your device’s dark mode is in use</value>
+    <value>Elige el tema oscuro a usar cuando el modo oscuro de tu dispositivo esté en uso</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
     <value>Creado {0}, {1}</value>
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
-    <value>Too many attempts</value>
+    <value>Demasiados intentos</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
-    <value>Account logged out.</value>
+    <value>Sesión de la cuenta cerrada.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Los permisos de su organización han sido actualizados, requiriendo que establezca una contraseña maestra.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Tu organización requiere que establezcas una contraseña maestra.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
-    <value>Set up an unlock option to change your vault timeout action.</value>
+    <value>Configura una opción de desbloqueo para cambiar tu acción de tiempo de espera de tu caja fuerte.</value>
   </data>
 </root>

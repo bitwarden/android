@@ -553,7 +553,7 @@
     <value>Дія після часу очікування сховища</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Вихід скасує всі права доступу до вашого сховища і вимагатиме авторизації після завершення часу очікування. Ви дійсно хочете використати цей параметр?</value>
+    <value>Вихід скасує всі права доступу до вашого сховища і вимагатиме автентифікацію після завершення часу очікування. Ви дійсно хочете використати цей параметр?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Вхід...</value>
@@ -721,7 +721,7 @@
     <value>Веб сховище Bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Втратили доступ до програми перевірки?</value>
+    <value>Втратили доступ до програми автентифікації?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Записи</value>
@@ -806,11 +806,11 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Програма авторизації</value>
+    <value>Програма автентифікації</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Введіть 6-значний код підтвердження з програми авторизації.</value>
+    <value>Введіть 6-значний код підтвердження з програми автентифікації.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
@@ -822,7 +822,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Цей обліковий запис має увімкнену двоетапну перевірку, однак, жоден із налаштованих провайдерів не підтримується на цьому пристрої. Будь ласка, скористайтеся підтримуваним пристроєм або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму авторизації).</value>
+    <value>Цей обліковий запис має увімкнену двоетапну перевірку, однак жоден із налаштованих провайдерів не підтримується на цьому пристрої. Будь ласка, скористайтеся підтримуваним пристроєм або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму автентифікації).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Код відновлення</value>
@@ -878,17 +878,17 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Ключ авторизації (TOTP)</value>
+    <value>Ключ автентифікації (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Код підтвердження (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Ключ авторизації додано.</value>
+    <value>Ключ автентифікації додано.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Не вдається прочитати ключ авторизації.</value>
+    <value>Не вдається прочитати ключ автентифікації.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
     <value>Наведіть свою камеру на QR-код.
@@ -907,7 +907,7 @@
     <value>Копіювати TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Якщо запис має ключ авторизації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</value>
+    <value>Якщо запис має ключ автентифікації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Автоматично копіювати коди TOTP</value>
@@ -1176,17 +1176,17 @@
     <value>Відкрити налаштування автозаповнення</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Розпізнавання обличчя</value>
+    <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Використовувати розпізнавання обличчя для підтвердження.</value>
+    <value>Використовувати Face ID для підтвердження.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
     <value>Розблокування з Face ID</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Підтвердження розпізнавання обличчя</value>
+    <value>Підтвердження Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
@@ -2110,13 +2110,13 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>Щоб продовжити, приготуйте свій увімкнений ключ безпеки FIDO2 WebAuthn, потім дотримуйтесь настанов після натискання "Авторизація WebAuthn" на наступному екрані.</value>
+    <value>Щоб продовжити, приготуйте свій ключ безпеки FIDO2 WebAuthn, потім дотримуйтесь настанов після натискання "Автентифікація WebAuthn" на наступному екрані.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Авторизація з використанням FIDO2 WebAuthn. Ви можете авторизуватися за допомогою зовнішнього ключа безпеки.</value>
+    <value>Автентифікація з використанням FIDO2 WebAuthn. Ви можете пройти автентифікацію за допомогою зовнішнього ключа безпеки.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Авторизація WebAuthn</value>
+    <value>Автентифікація WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Повернутися до програми</value>
@@ -2272,7 +2272,7 @@
     <value>Необхідна передплата преміум</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Не вдається додати ключ авторизації? </value>
+    <value>Не вдається додати ключ автентифікації? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
     <value>Сканувати QR-код</value>
@@ -2281,7 +2281,7 @@
     <value>Не вдається сканувати QR-код? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Ключ авторизації</value>
+    <value>Ключ автентифікації</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
     <value>Введіть ключ вручну</value>
@@ -2354,7 +2354,7 @@
     <value>Схвалювати запити на вхід</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Використовувати цей пристрій для схвалення запитів на вхід, виконаних з інших пристроїв</value>
+    <value>Схвалювати запити на вхід, виконані з інших пристроїв</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Дозволити сповіщення</value>
@@ -2820,6 +2820,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Перейти до зв'язку зі службою підтримки?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Перейти до політики приватності?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Продовжити в App Store?</value>
   </data>
@@ -2838,6 +2841,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Не вдалося знайти те, що шукаєте? Зверніться до служби підтримки на bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Ознайомтеся з нашою політикою приватності на bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Ознайомтеся з іншими функціями вашого облікового запису Bitwarden у вебпрограмі.</value>
@@ -2862,10 +2868,10 @@
     <value>Ви вийшли з облікового запису.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Оновлено дозволи вашої організації – вимагається встановлення головного пароля.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Ваша організація вимагає, щоб ви встановили головний пароль.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Налаштуйте спосіб розблокування, щоб змінити час очікування сховища.</value>

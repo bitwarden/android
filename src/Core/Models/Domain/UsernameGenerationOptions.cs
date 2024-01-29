@@ -46,7 +46,11 @@ namespace Bit.Core.Models.Domain
                 case ForwardedEmailServiceType.DuckDuckGo:
                     return new ForwarderOptions { ApiKey = DuckDuckGoApiKey };
                 case ForwardedEmailServiceType.Fastmail:
-                    return new ForwarderOptions { ApiKey = FastMailApiKey };
+                    return new FastmailForwarderOptions
+                    {
+                        ApiKey = FastMailApiKey,
+                        Website = EmailWebsite
+                    };
                 case ForwardedEmailServiceType.FirefoxRelay:
                     return new ForwarderOptions { ApiKey = FirefoxRelayApiAccessToken };
                 case ForwardedEmailServiceType.SimpleLogin:

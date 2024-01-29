@@ -2821,6 +2821,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>مواصلة الاتصال بالدعم؟</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>هل تريد المتابعة إلى متجر التطبيقات؟</value>
   </data>
@@ -2839,6 +2842,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>لا يمكن العثور على ما تبحث عنه؟ قم بالتواصل مع دعم Bitwarden على bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>استكشف المزيد من الميزات لحساب Bitwarden الخاص بك على تطبيق الويب.</value>
@@ -2863,12 +2869,12 @@
     <value>تم تسجيل الخروج من الحساب.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>تم تحديث أذونات مؤسستك ، مما يتطلب عليك تعيين كلمة مرور رئيسية.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>تتطلب مؤسستك تعيين كلمة مرور رئيسية.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
-    <value>Set up an unlock option to change your vault timeout action.</value>
+    <value>أعدنّ ميزة إلغاء القُفْل لتغيير إجراء مهلة المخزن الخاص بك.</value>
   </data>
 </root>

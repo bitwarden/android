@@ -307,6 +307,7 @@ namespace Bit.App.Pages
         public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
+        public bool AllowTotpCopy => HasTotpValue && Cipher.ViewPassword;
         public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
         public bool ShowPasskeyInfo => Cipher?.HasFido2Credential == true && !CloneMode;
 

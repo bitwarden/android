@@ -292,7 +292,7 @@
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                             Command="{Binding CopyCommand}"
-                            IsVisible="{Binding HasTotpValue}"
+                            IsVisible="{Binding AllowTotpCopy}"
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"

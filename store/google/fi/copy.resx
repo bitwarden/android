@@ -136,7 +136,7 @@ Luo usein käyttämillesi sivustoille automaattisesti vahvoja, yksilöllisiä ja
 
 Bitwarden Send -ominaisuudella lähetät tietoa nopeasti salattuna — tiedostoja ja tekstiä — suoraan kenelle tahansa.
 
-Yritystoimintaan Bitwarden tarjoaa tilaukset Tiimeille ja Yrityksille, jotta salasanojen jakaminen kollegoiden kesken on turvallista.
+Yritystoimintaan Bitwarden tarjoaa yrityksille Teams- ja Enterprise-tilaukset, jotta salasanojen jakaminen kollegoiden kesken on turvallista.
 
 Miksi Bitwarden?:
 
@@ -167,7 +167,7 @@ Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimi
     <value>Suojaa holvisi sormenjäljellä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Täytä kirjautumistiedot automaattisesti ja nopeasti selaimessasi sekä muissa sovelluksissa</value>
+    <value>Täytä kirjautumistietoja nopeasti selaimeen ja muihin sovelluksiin</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synkronoi ja hallitse holviasi useilla laitteilla

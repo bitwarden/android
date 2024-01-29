@@ -425,7 +425,7 @@
     <value>あいまいな文字を避ける</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden App Extension</value>
+    <value>Bitwarden アプリ拡張機能</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>ログイン情報を保管庫に追加する一番簡単な方法はApp Extensionを使うことです。詳しくは「設定」画面に進んでください。</value>
@@ -2820,6 +2820,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>サポートに連絡しますか?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>プライバシーポリシーを確認しますか？</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>アプリストアに進みますか?</value>
   </data>
@@ -2838,6 +2841,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>お探しのものが見つかりませんか? bitwarden.com で Bitwarden のサポートにご連絡ください。</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>bitwarden.com でプライバシーポリシーをご覧ください。</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Bitwarden アカウントの機能をウェブアプリでご確認ください。</value>
@@ -2862,10 +2868,10 @@
     <value>アカウントからログアウトしました。</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>組織の権限が更新され、マスターパスワードの設定が必要になりました。</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>あなたの組織では、マスターパスワードの設定が義務付けられています。</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>保管庫のタイムアウト動作を変更するには、ロック解除方法を設定してください。</value>

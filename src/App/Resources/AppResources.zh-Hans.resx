@@ -273,13 +273,13 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>您确定要注销吗？</value>
+    <value>确定要注销吗？</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
     <value>移除账户</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>您确定要移除此账户吗？</value>
+    <value>确定要移除此账户吗？</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>账户已添加</value>
@@ -638,7 +638,7 @@
     <value>我们已经为您发送了包含主密码提示的邮件。</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>您确定要覆盖当前密码吗？</value>
+    <value>确定要覆盖当前密码吗？</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>Bitwarden 使用推送通知来自动同步您的密码库。为了获得最佳体验，接下来询问是否开启通知时，请选择「允许」。</value>
@@ -784,7 +784,7 @@
     <value>您想自动填充还是查看此项目？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>确定要自动填充吗？它与「{0}」并不完全匹配。</value>
+    <value>确定要自动填充此项目吗？它与「{0}」并不完全匹配。</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>匹配项目</value>
@@ -874,7 +874,7 @@
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>此附件大小是 {0} 。您确定要下载到设备吗？</value>
+    <value>此附件大小为 {0} 。确定要将其下载到您的设备上吗？</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -885,17 +885,17 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>验证器密钥已添加。</value>
+    <value>已添加验证器密钥。</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>无法读取验证器密钥。</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>将您的摄像头对准 QR 码。
+    <value>将您的摄像头对准二维码。
 扫描将自动完成。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>扫描 QR 码</value>
+    <value>扫描二维码</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>相机</value>
@@ -1556,7 +1556,7 @@
     <value>退出</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>您确定要退出 Bitwarden 吗？</value>
+    <value>确定要退出 Bitwarden 吗？</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>当应用程序重启时，要求使用主密码解锁吗？</value>
@@ -2098,7 +2098,7 @@
     <value>{0} 正在使用客户管理加密的 SSO。继续操作将删除您的账户主密码并要求 SSO 登录。</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>如果您不想移除您的主密码，您可以退出这个组织。</value>
+    <value>如果您不想移除您的主密码，您可以退出该组织。</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>退出组织</value>
@@ -2185,7 +2185,7 @@
     <value>无效的验证码</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>请求一次性密码</value>
+    <value>要求一次性密码</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>发送验证码</value>
@@ -2275,10 +2275,10 @@
     <value>无法添加验证器密钥？</value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>扫描 QR 码</value>
+    <value>扫描二维码</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>无法扫描 QR 码吗？ </value>
+    <value>无法扫描二维码吗？ </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
     <value>验证器密钥</value>
@@ -2432,7 +2432,7 @@
     <value>API 访问令牌</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>您确定要覆盖当前用户名吗？</value>
+    <value>确定要覆盖当前用户名吗？</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
     <value>生成用户名</value>
@@ -2527,7 +2527,7 @@
     <value>拒绝所有请求</value>
   </data>
   <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
-    <value>您确定要拒绝所有待处理的登录请求吗？</value>
+    <value>确定要拒绝所有待处理的登录请求吗？</value>
   </data>
   <data name="RequestsDeclined" xml:space="preserve">
     <value>请求被拒绝</value>
@@ -2780,7 +2780,7 @@
     <value>会话超时动作</value>
   </data>
   <data name="AccountFingerprintPhrase" xml:space="preserve">
-    <value>账户的指纹短语</value>
+    <value>账户指纹短语</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
@@ -2820,6 +2820,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>接下来要联系支持吗？</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>接下来查看隐私政策吗？</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>接下来前往 App Store 吗？</value>
   </data>
@@ -2838,6 +2841,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>找不到您想要的吗？请在 bitwarden.com 上联系 Bitwarden 支持。</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>在 bitwarden.com 上查看我们的隐私政策。</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>在网页应用上探索您的 Bitwarden 账户的更多功能。</value>
@@ -2862,10 +2868,10 @@
     <value>账户已注销。</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>您的组织权限已更新，要求您设置主密码。</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>您的组织要求您设置主密码。</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>设置解锁选项以更改您的密码库超时操作。</value>

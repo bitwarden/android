@@ -144,7 +144,7 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Yn ôl</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Copy password</value>
+    <value>Copïo'r cyfrinair</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Copy username</value>
+    <value>Copïo'r enw defnyddiwr</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>Mewngofnodi</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -282,7 +282,7 @@
     <value>Are you sure you want to remove this account?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account already added</value>
+    <value>Wedi'i ychwanegu eisoes</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
     <value>Would you like to switch to it now?</value>
@@ -308,7 +308,7 @@
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>Na</value>
   </data>
   <data name="Notes" xml:space="preserve">
     <value>Nodiadau</value>
@@ -327,7 +327,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Symud</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Yn cadw...</value>
@@ -391,7 +391,7 @@
     <value>Fersiwn</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>View</value>
+    <value>Gweld</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Visit our website</value>
@@ -401,7 +401,7 @@
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Ydw</value>
   </data>
   <data name="Account" xml:space="preserve">
     <value>Cyfrif</value>
@@ -455,7 +455,7 @@
     <value>Parhau</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Creu cyfrif</value>
+    <value>Crëwch gyfrif</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Wrthi'n creu cyfrif...</value>
@@ -484,13 +484,13 @@
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>Mynnwch fynediad i'ch cyfrineiriau ar unwaith!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Rydych chi'n barod i fewngofnodi!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
+    <value>Mae eich manylion mewngofnodi bellach yn hawdd i'w canfod o Safari, Chrome, ac apiau eraill.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
@@ -502,7 +502,7 @@
     <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorite</value>
+    <value>Ffefryn</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>Ôl bys</value>
@@ -511,7 +511,7 @@
     <value>Cynhyrchu cyfrinair</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Get your master password hint</value>
+    <value>Anfon awgrym o'ch prif gyfrinair</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Mewnforio eitemau</value>
@@ -572,27 +572,27 @@
     <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Master password hint (optional)</value>
+    <value>Awgrym o'ch prif gyfrinair (dewisol)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Gall awgrym o'ch prif gyfrinair eich helpu i'w gofio os ydych chi'n ei anghofio.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>Rhaid i'ch prif gyfrinair gynnwys o leiaf {0} nod.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Isafswm rhifau</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Isafswm arbennig</value>
+    <value>Isafswm nodau arbennig</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
     <value>Mwy o osodiadau</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use the extension.</value>
+    <value>Rhaid i chi fewngofnodi i brif ap Bitwarden cyn defnyddio'r estyniad.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>byth</value>
@@ -610,7 +610,7 @@
     <value>There are no items in your vault for this website/app. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>Does dim enw defnyddiwr na chyfrinair i'r manylyn mewngofnodi hwn.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Iawn, deall!</value>
@@ -623,7 +623,7 @@
     <value>Dewisiadau</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>Gosodiadau eraill</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
     <value>Password generated</value>
@@ -632,7 +632,7 @@
     <value>Cynhyrchydd cyfrineiriau</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password hint</value>
+    <value>Awgrym o'r cyfrinair</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
     <value>Rydym ni wedi anfon ebost atoch gydag awgrym ar gyfer eich prif gyfrinair.</value>
@@ -654,7 +654,7 @@
     <value>Ailgynhyrchu cyfrinair</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type master password</value>
+    <value>Aildeipio'r prif gyfrinair</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Chwilio'r gell</value>
@@ -672,7 +672,7 @@
     <value>Rhowch god PIN 4 nod i'w ddefnyddio i ddatgloi'r ap.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item information</value>
+    <value>Gwybodaeth am yr eitem</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
     <value>Eitem wedi'i chadw</value>
@@ -699,7 +699,7 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Two-step login</value>
+    <value>Mewngofnodi dau agm</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Datgloi â {0}</value>
@@ -715,7 +715,7 @@
     <value>Verification code</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View item</value>
+    <value>Gweld yr eitem</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Cell we Bitwarden</value>
@@ -837,10 +837,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step login options</value>
+    <value>Dewisiadau mewngofnodi dau gam</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Defnyddio dull mewngofnodi dau gam arall</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Could not send verification email. Try again.</value>
@@ -1005,10 +1005,10 @@ Scanning will happen automatically.</value>
     <value>Cerdyn</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Hunaniaeth</value>
+    <value>Eitem hunaniaeth</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Manylyn mewngofnodi</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Nodyn diogel</value>
@@ -1083,10 +1083,10 @@ Scanning will happen automatically.</value>
     <value>Mawrth</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Mai</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle name</value>
+    <value>Enw canol</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Mr</value>
@@ -1104,13 +1104,13 @@ Scanning will happen automatically.</value>
     <value>Tachwedd</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Hydref</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
     <value>Rhif pasbort</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Ffôn</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>Medi</value>
@@ -1137,7 +1137,7 @@ Scanning will happen automatically.</value>
     <value>Dangos eiconau gwefannau</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Show a recognizable image next to each login.</value>
+    <value>Dangos delwedd adnabyddadwy wrth ymyl pob eitem.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons server URL</value>
@@ -1158,10 +1158,10 @@ Scanning will happen automatically.</value>
     <value>There are no items in this collection.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Does dim eitemau yn y ffolder hon.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>Does dim eitemau yn y bin sbwriel.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Auto-fill Accessibility Service</value>
@@ -1266,7 +1266,7 @@ Scanning will happen automatically.</value>
     <value>Hold your Yubikey near the top of the device.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try again</value>
+    <value>Ceisio eto</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>To continue, hold your YubiKey NEO against the back of the device.</value>
@@ -1351,10 +1351,10 @@ Scanning will happen automatically.</value>
     <value>Gwirio a ydy'r cyfrinair wedi'i ddatgelu.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Mae'r cyfrinair hwn wedi cael ei ddatgelu {0} o weithiau mewn achosion o dorri data. Dylech chi ei newid.</value>
+    <value>Mae'r cyfrinair hwn wedi cael ei ddatgelu {0} o weithiau mewn achosion o ddatgelu data. Dylech chi ei newid.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Chafodd y cyfrinair hwn mo'i ganfod mewn unrhyw achos hysbys o ddatgelu data. Dylai fod yn iawn i'w ddefnyddio.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Identity name</value>
@@ -1366,13 +1366,13 @@ Scanning will happen automatically.</value>
     <value>Password history</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Mathau</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Dim cyfrineiriau i'w rhestru.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>Does dim eitemau i'w rhestu.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>Search collection</value>
@@ -1384,7 +1384,7 @@ Scanning will happen automatically.</value>
     <value>Search text Sends</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
-    <value>Search {0}</value>
+    <value>Chwilio {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
@@ -1451,7 +1451,7 @@ Scanning will happen automatically.</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>Does dim ffolderi i'w rhestru.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>Fingerprint phrase</value>
@@ -1522,11 +1522,11 @@ Scanning will happen automatically.</value>
     <value>ar ôl 2 funud</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear clipboard</value>
+    <value>Clirio'r clipfwrdd</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Clirio eitemau a gopïwyd o'ch clipfwrdd yn awtomatig.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1541,7 +1541,7 @@ Scanning will happen automatically.</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>Newid thema liwiau'r ap.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
     <value>Rhagosodiad (system)</value>
@@ -1550,13 +1550,13 @@ Scanning will happen automatically.</value>
     <value>Default dark theme</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy note</value>
+    <value>Copïo'r nodyn</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Gadael</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Ydych chi'n siŵr eich bod am adael Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>Do you want to require unlocking with your master password when the application is restarted?</value>
@@ -1599,7 +1599,7 @@ Scanning will happen automatically.</value>
     <value>Cynnwys rhif</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Lawrlwytho</value>
   </data>
   <data name="Shared" xml:space="preserve">
     <value>Shared</value>
@@ -1614,10 +1614,10 @@ Scanning will happen automatically.</value>
     <value>Biometric verification</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>biometreg</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use biometrics to unlock</value>
+    <value>Defnyddio biometreg i ddatgloi</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden settings</value>
@@ -1641,7 +1641,7 @@ Scanning will happen automatically.</value>
     <value>Granted</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File format</value>
+    <value>Fformat y ffeil</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Rhowch eich prif gyfrinair i allforio data eich cell.</value>
@@ -1692,7 +1692,7 @@ Scanning will happen automatically.</value>
     <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Cadwyd yr atodiad yn llwyddiannus</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
     <value>Please turn on "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
@@ -1701,11 +1701,11 @@ Scanning will happen automatically.</value>
     <value>No password fields detected</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>Yn anfon i'r bin sbwriel...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>Anfonwyd yr eitem i'r bin sbwriel.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
@@ -1713,7 +1713,7 @@ Scanning will happen automatically.</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>Yn adfer...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
@@ -1721,15 +1721,15 @@ Scanning will happen automatically.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>Bin sbwriel</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>Chwilio drwy'r bin sbwriel</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>Ydych chi wir eisiau dileu'r eitem hon? Allwch chi ddim dadwneud hyn.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
@@ -1737,7 +1737,7 @@ Scanning will happen automatically.</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>Ydych chi wir eisiau anfon yr eitem hon i'r bin sbwriel?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
@@ -1747,10 +1747,10 @@ Scanning will happen automatically.</value>
     <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Allow sync on refresh</value>
+    <value>Caniatáu cysoni wrth adnewyddu</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>Cysoni'r gell drwy dynnu i lawr.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
     <value>Enterprise single sign-on</value>
@@ -1765,7 +1765,7 @@ Scanning will happen automatically.</value>
     <value>Currently unable to login with SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set master password</value>
+    <value>Gosod prif gyfrinair</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
@@ -1798,7 +1798,7 @@ Scanning will happen automatically.</value>
     <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>Llwytho</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
     <value>By activating this switch you agree to the following:
@@ -1808,16 +1808,16 @@ Scanning will happen automatically.</value>
     <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Telerau gwasanaeth</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Polisi preifatrwydd</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - Turn on "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill services</value>
+    <value>Gwasanaethau llenwi awtomatig</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Use inline autofill</value>
@@ -2044,11 +2044,11 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>Ynghylch Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients</value>
+    <value>Cuddio fy nghyfeiriad ebost rhag derbynwyr</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies are affecting your Send options.</value>
@@ -2063,7 +2063,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Ailofyn am y prif gyfrinair</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>Master password confirmation</value>
@@ -2078,16 +2078,16 @@ Scanning will happen automatically.</value>
     <value>Captcha failed. Please try again.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated master password</value>
+    <value>Diweddarwyd y prif gyfrinair</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update master password</value>
+    <value>Diweddaru'r prif gyfrinair</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
     <value>Your master password was recently changed by an administrator in your organization. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating password</value>
+    <value>Yn diweddaru'r cyfrinair</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Currently unable to update password</value>
@@ -2105,7 +2105,7 @@ Scanning will happen automatically.</value>
     <value>Leave organization</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Gadael {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2120,7 +2120,7 @@ Scanning will happen automatically.</value>
     <value>Authenticate WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to app</value>
+    <value>Dychwelyd i'r ap</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
     <value>Please make sure your default browser supports WebAuthn and try again.</value>
@@ -2144,7 +2144,7 @@ Scanning will happen automatically.</value>
     <value>One or more organization policies prevents your from exporting your individual vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add account</value>
+    <value>Ychwanegu cyfrif</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
     <value>Unlocked</value>
@@ -2168,19 +2168,19 @@ Scanning will happen automatically.</value>
     <value>Account removed successfully</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete account</value>
+    <value>Dileu eich cyfrif</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
     <value>Deleting your account is permanent</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Your account and all vault data will be erased and unrecoverable. Are you sure you want to continue?</value>
+    <value>Caiff eich cyfrif a holl ddata'ch cell eu dileu mewn ffordd anadferadwy. Ydych chi'n siŵr yr hoffech chi barhau?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
     <value>Deleting your account</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>Mae eich cyfrif wedi cael ei ddileu'n barhaol</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid verification code</value>
@@ -2249,7 +2249,7 @@ Scanning will happen automatically.</value>
     <value>Password is not visible, tap to show.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Filter items by vault</value>
+    <value>Hidlo eitemau yn ôl cell</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
     <value>Pob cell</value>
@@ -2307,7 +2307,7 @@ select Add TOTP to store the key safely</value>
     <value>We were unable to process your request. Please try again or contact us.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>Caniatáu sgrinluniau</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Are you sure you want to turn on screen capture?</value>
@@ -2316,46 +2316,46 @@ select Add TOTP to store the key safely</value>
     <value>Login requested</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
-    <value>Are you trying to log in?</value>
+    <value>Ydych chi'n ceisio mewngofnodi?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Login attempt by {0} on {1}</value>
+    <value>Cais mewngofnodi gan {0} ar {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>Math o ddyfais</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
     <value>Cyfeiriad IP</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Amser</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>Gerllaw</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Confirm login</value>
+    <value>Cadarnhau'r mewngofnodi</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Deny login</value>
+    <value>Gwrthod y mewngofnodi</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just now</value>
+    <value>Ychydig yn ôl</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>{0} o funudau yn ôl</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Login confirmed</value>
+    <value>Cadarnhawyd y mewngofnodi</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Login denied</value>
+    <value>Gwrthodwyd y mewngofnodi</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
-    <value>Approve login requests</value>
+    <value>Cymeradwyo ceisiadau mewngofnodi</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Use this device to approve login requests made from other devices</value>
+    <value>Defnyddio'r ddyfais hon i gymeradwyo ceisiadau mewngofnodi gan ddyfeisiau eraill</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Caniatáu hysbysiadau</value>
@@ -2373,16 +2373,16 @@ select Add TOTP to store the key safely</value>
     <value>All notifications</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password type</value>
+    <value>Math o gyfrinair</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>Beth hoffech chi ei gynhyrchu?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
     <value>Math o enw defnyddiwr</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus addressed email</value>
+    <value>Is-gyfeiriad ebost</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
     <value>Catch-all email</value>
@@ -2391,13 +2391,13 @@ select Add TOTP to store the key safely</value>
     <value>Forwarded email alias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random word</value>
+    <value>Gair ar hap</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
     <value>Email (required)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain name (required)</value>
+    <value>Enw parth (gofynnol)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
     <value>API key (required)</value>
@@ -2442,13 +2442,13 @@ select Add TOTP to store the key safely</value>
     <value>Math o ebost</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Website (required)</value>
+    <value>Gwefan (gofynnol)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Unknown {0} error occurred.</value>
+    <value>Bu gwall anhysbys {0}.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>Defnyddio galluoedd is-gyfeirio darparwr eich cyfeiriad ebost ('plus addressing')</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
     <value>Use your domain's configured catch-all inbox.</value>
@@ -2457,7 +2457,7 @@ select Add TOTP to store the key safely</value>
     <value>Generate an email alias with an external forwarding service.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>Hap</value>
   </data>
   <data name="ConnectToWatch" xml:space="preserve">
     <value>Connect to Watch</value>
@@ -2469,10 +2469,10 @@ select Add TOTP to store the key safely</value>
     <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Derbyn</value>
   </data>
   <data name="Decline" xml:space="preserve">
-    <value>Decline</value>
+    <value>Gwrthod</value>
   </data>
   <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
     <value>Login request has already expired.</value>
@@ -2483,22 +2483,22 @@ select Add TOTP to store the key safely</value>
 Do you want to switch to this account?</value>
   </data>
   <data name="NewAroundHere" xml:space="preserve">
-    <value>New around here?</value>
+    <value>Ydych chi'n newydd?</value>
   </data>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
-    <value>Get master password hint</value>
+    <value>Anfon awgrym o'ch prif gyfrinair</value>
   </data>
   <data name="LoggingInAsXOnY" xml:space="preserve">
-    <value>Logging in as {0} on {1}</value>
+    <value>Yn mewngofnodi fel {0} ar {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>Not you?</value>
+    <value>Nid chi?</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
-    <value>Log in with master password</value>
+    <value>Mewngofnodi â'ch prif gyfrinair</value>
   </data>
   <data name="LogInWithAnotherDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Mewngofnodi â dyfais</value>
   </data>
   <data name="LogInInitiated" xml:space="preserve">
     <value>Login initiated</value>
@@ -2513,13 +2513,13 @@ Do you want to switch to this account?</value>
     <value>Resend notification</value>
   </data>
   <data name="NeedAnotherOption" xml:space="preserve">
-    <value>Need another option?</value>
+    <value>Angen opsiwn arall?</value>
   </data>
   <data name="ViewAllLoginOptions" xml:space="preserve">
     <value>View all log in options</value>
   </data>
   <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
-    <value>This request is no longer valid</value>
+    <value>Dyw'r cais hwn ddim yn ddilys bellach</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
     <value>Pending login requests</value>
@@ -2540,13 +2540,13 @@ Do you want to switch to this account?</value>
     <value>Enable camera permission to use the scanner</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Iaith</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>Cafodd yr iaith ei newid i {0}. Ailgychwynnwch yr ap i weld newidiadau</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
-    <value>Language change requires app restart</value>
+    <value>Bydd angen ailgychwyn yr ap</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
     <value>Default (System)</value>
@@ -2573,7 +2573,7 @@ Do you want to switch to this account?</value>
     <value>Cryf</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>Chwilio am achosion o ddatgelu data sy'n cynnwys y cyfrinair hwn</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Prif gyfrinair wedi'i ddatgelu</value>
@@ -2609,7 +2609,7 @@ Do you want to switch to this account?</value>
     <value>UE</value>
   </data>
   <data name="SelfHosted" xml:space="preserve">
-    <value>Hunangynhaliol</value>
+    <value>Gweinydd hunangynhaliol</value>
   </data>
   <data name="DataRegion" xml:space="preserve">
     <value>Lleoliad y data</value>
@@ -2639,7 +2639,7 @@ Do you want to switch to this account?</value>
     <value>Turn off using a public device</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Cofio'r ddyfais hon</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2690,7 +2690,7 @@ Do you want to switch to this account?</value>
     <value>Trouble logging in?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Yn mewngofnodi fel {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
@@ -2745,19 +2745,19 @@ Do you want to switch to this account?</value>
     <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Mewngofnodi â dyfais</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>Mewngofnodi ar</value>
   </data>
   <data name="Vault" xml:space="preserve">
-    <value>Vault</value>
+    <value>Cell</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Golwg</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
-    <value>Account security</value>
+    <value>Diogelwch eich cyfrif</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
     <value>Bitwarden Help Center</value>
@@ -2769,10 +2769,10 @@ Do you want to switch to this account?</value>
     <value>Copy app information</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>Cysoni nawr</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
-    <value>Unlock options</value>
+    <value>Dewisiadau datgloi</value>
   </data>
   <data name="SessionTimeout" xml:space="preserve">
     <value>Session timeout</value>
@@ -2806,10 +2806,10 @@ Do you want to switch to this account?</value>
     <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
-    <value>Additional options</value>
+    <value>Dewisiadau ychwanegol</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>Continue to web app?</value>
+    <value>Parhau i'r ap gwe?</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
     <value>Continue to {0}?</value>
@@ -2821,11 +2821,14 @@ Do you want to switch to this account?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Continue to contact support?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continue to app store?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+    <value>Gallwch wneud eich cyfrif yn fwy diogel drwy alluogi mewngofnodi dau gam yn ap gwe Bitwarden.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
     <value>You can change your master password on the Bitwarden web app.</value>
@@ -2839,6 +2842,9 @@ Do you want to switch to this account?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Explore more features of your Bitwarden account on the web app.</value>

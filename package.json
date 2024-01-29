@@ -6,6 +6,6 @@
     "clean:l10n": "git push origin --delete l10n_master"
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3"
+    "gh-pages": "3.2.3"
   }
 }

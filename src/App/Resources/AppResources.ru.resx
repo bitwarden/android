@@ -885,10 +885,10 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Ключ проверки подлинности добавлен.</value>
+    <value>Ключ аутентификатора добавлен.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Не удается прочитать ключ проверки подлинности.</value>
+    <value>Не удается прочитать ключ аутентификатора.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
     <value>Наведите камеру на QR-код.
@@ -2272,7 +2272,7 @@
     <value>Требуется подписка Премиум</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Не удается добавить ключ проверки подлинности? </value>
+    <value>Не удается добавить ключ аутентификатора? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
     <value>Сканировать QR-код</value>
@@ -2822,6 +2822,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Обратиться в службу поддержки?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Перейти к политике конфиденциальности?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Перейти в магазин приложений?</value>
   </data>
@@ -2840,6 +2843,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Не можете найти то, что ищете? Обратитесь в службу поддержки Bitwarden на сайте bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Ознакомьтесь с нашей политикой конфиденциальности на сайте bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Изучите дополнительные возможности вашего аккаунта Bitwarden в веб-приложении.</value>
@@ -2864,10 +2870,10 @@
     <value>Аккаунт не авторизован.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Права доступа организации были обновлены, требуется установить мастер-пароль.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Необходимо установить мастер-пароль для организации.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Настройте опцию разблокировки для изменения действия по тайм-ауту хранилища.</value>
