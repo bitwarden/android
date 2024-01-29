@@ -7,8 +7,11 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -30,6 +33,7 @@ fun VaultEntryListItem(
     overflowOptions: List<ListingItemOverflowAction.VaultAction>,
     onOverflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
     modifier: Modifier = Modifier,
+    trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
     supportingLabel: String? = null,
 ) {
     BitwardenListItem(
@@ -37,6 +41,7 @@ fun VaultEntryListItem(
         label = label,
         supportingLabel = supportingLabel,
         startIcon = startIcon,
+        trailingLabelIcons = trailingLabelIcons,
         onClick = onClick,
         selectionDataList = overflowOptions
             .map { option ->

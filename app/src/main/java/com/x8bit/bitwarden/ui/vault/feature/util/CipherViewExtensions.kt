@@ -2,7 +2,9 @@ package com.x8bit.bitwarden.ui.vault.feature.util
 
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 
 /**
  * Creates the list of overflow actions to be displayed for a [CipherView].
@@ -36,3 +38,18 @@ fun CipherView.toOverflowActions(): List<ListingItemOverflowAction.VaultAction> 
             )
         }
         .orEmpty()
+
+/**
+ * Checks if the list is empty and if not returns an icon in a list.
+ */
+fun CipherView.toLabelIcons(): List<IconRes> {
+    return listOfNotNull(
+        VaultTrailingIcon.COLLECTION.takeIf {
+            this.collectionIds.isNotEmpty() || this.organizationId?.isNotEmpty() == true
+        },
+        VaultTrailingIcon.ATTACHMENT.takeIf { this.attachments?.isNotEmpty() == true },
+    )
+        .map {
+            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+        }
+}

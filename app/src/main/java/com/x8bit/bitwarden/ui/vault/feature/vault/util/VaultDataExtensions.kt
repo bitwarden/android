@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -158,12 +159,14 @@ private fun CipherView.toVaultItemOrNull(
                 baseIconUrl = baseIconUrl,
             ),
             overflowOptions = toOverflowActions(),
+            extraIconList = toLabelIcons(),
         )
 
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
             id = id,
             name = name.asText(),
             overflowOptions = toOverflowActions(),
+            extraIconList = toLabelIcons(),
         )
 
         CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
@@ -174,6 +177,7 @@ private fun CipherView.toVaultItemOrNull(
                 ?.takeLast(4)
                 ?.asText(),
             overflowOptions = toOverflowActions(),
+            extraIconList = toLabelIcons(),
         )
 
         CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
@@ -181,6 +185,7 @@ private fun CipherView.toVaultItemOrNull(
             name = name.asText(),
             firstName = identity?.firstName?.asText(),
             overflowOptions = toOverflowActions(),
+            extraIconList = toLabelIcons(),
         )
     }
 }

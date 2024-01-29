@@ -16,7 +16,9 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
+import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * Content view for the [VaultScreen].
@@ -76,6 +78,10 @@ fun VaultContent(
             items(state.favoriteItems) { favoriteItem ->
                 VaultEntryListItem(
                     startIcon = favoriteItem.startIcon,
+                    trailingLabelIcons = favoriteItem
+                        .extraIconList
+                        .toIconResources()
+                        .toPersistentList(),
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
@@ -231,6 +237,10 @@ fun VaultContent(
             items(state.noFolderItems) { noFolderItem ->
                 VaultEntryListItem(
                     startIcon = noFolderItem.startIcon,
+                    trailingLabelIcons = noFolderItem
+                        .extraIconList
+                        .toIconResources()
+                        .toPersistentList(),
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(noFolderItem) },
