@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -37,7 +38,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 /**
@@ -46,10 +49,11 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
-    private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
-    private val vaultRepository: VaultRepository,
+    private val clipboardManager: BitwardenClipboardManager,
+    private val clock: Clock,
     private val settingsRepository: SettingsRepository,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -293,6 +297,10 @@ class VaultViewModel @Inject constructor(
                 handleCopySecurityCodeClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.VaultAction.CopyTotpClick -> {
+                handleCopyTotpClick(overflowAction)
+            }
+
             is ListingItemOverflowAction.VaultAction.CopyUsernameClick -> {
                 handleCopyUsernameClick(overflowAction)
             }
@@ -333,6 +341,15 @@ class VaultViewModel @Inject constructor(
         clipboardManager.setText(action.securityCode)
     }
 
+    private fun handleCopyTotpClick(
+        action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
+    ) {
+        viewModelScope.launch {
+            val result = vaultRepository.generateTotp(action.totpCode, clock.instant())
+            sendAction(VaultAction.Internal.GenerateTotpResultReceive(result))
+        }
+    }
+
     private fun handleCopyUsernameClick(
         action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
     ) {
@@ -353,6 +370,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleInternalAction(action: VaultAction.Internal) {
         when (action) {
+            is VaultAction.Internal.GenerateTotpResultReceive -> {
+                handleGenerateTotpResultReceive(action)
+            }
+
             is VaultAction.Internal.PullToRefreshEnableReceive -> {
                 handlePullToRefreshEnableReceive(action)
             }
@@ -362,6 +383,17 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.IconLoadingSettingReceive -> handleIconLoadingSettingReceive(
                 action,
             )
+        }
+    }
+
+    private fun handleGenerateTotpResultReceive(
+        action: VaultAction.Internal.GenerateTotpResultReceive,
+    ) {
+        when (val result = action.result) {
+            is GenerateTotpResult.Error -> Unit
+            is GenerateTotpResult.Success -> {
+                clipboardManager.setText(result.code)
+            }
         }
     }
 
@@ -1000,6 +1032,13 @@ sealed class VaultAction {
          */
         data class IconLoadingSettingReceive(
             val isIconLoadingDisabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates a result for generating a verification code has been received.
+         */
+        data class GenerateTotpResultReceive(
+            val result: GenerateTotpResult,
         ) : Internal()
 
         /**

@@ -98,6 +98,14 @@ sealed class ListingItemOverflowAction : Parcelable {
         }
 
         /**
+         * Click on the copy TOTP code overflow option.
+         */
+        @Parcelize
+        data class CopyTotpClick(val totpCode: String) : VaultAction() {
+            override val title: Text get() = R.string.copy_totp.asText()
+        }
+
+        /**
          * Click on the copy number overflow option.
          */
         @Parcelize

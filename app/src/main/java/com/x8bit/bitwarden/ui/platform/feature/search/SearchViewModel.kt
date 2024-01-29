@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -190,6 +191,10 @@ class SearchViewModel @Inject constructor(
             is ListingItemOverflowAction.VaultAction.ViewClick -> {
                 handleViewCipherClick(overflowAction)
             }
+
+            is ListingItemOverflowAction.VaultAction.CopyTotpClick -> {
+                handleCopyTotpClick(overflowAction)
+            }
         }
     }
 
@@ -209,6 +214,15 @@ class SearchViewModel @Inject constructor(
 
     private fun handleEditClick(action: ListingItemOverflowAction.SendAction.EditClick) {
         sendEvent(SearchEvent.NavigateToEditSend(action.sendId))
+    }
+
+    private fun handleCopyTotpClick(
+        action: ListingItemOverflowAction.VaultAction.CopyTotpClick,
+    ) {
+        viewModelScope.launch {
+            val result = vaultRepo.generateTotp(action.totpCode, clock.instant())
+            sendAction(SearchAction.Internal.GenerateTotpResultReceive(result))
+        }
     }
 
     private fun handleRemovePasswordClick(
@@ -283,6 +297,10 @@ class SearchViewModel @Inject constructor(
                 handleDeleteSendResultReceive(action)
             }
 
+            is SearchAction.Internal.GenerateTotpResultReceive -> {
+                handleGenerateTotpResultReceive(action)
+            }
+
             is SearchAction.Internal.RemovePasswordSendResultReceive -> {
                 handleRemovePasswordSendResultReceive(action)
             }
@@ -316,6 +334,17 @@ class SearchViewModel @Inject constructor(
             DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(SearchEvent.ShowToast(R.string.send_deleted.asText()))
+            }
+        }
+    }
+
+    private fun handleGenerateTotpResultReceive(
+        action: SearchAction.Internal.GenerateTotpResultReceive,
+    ) {
+        when (val result = action.result) {
+            is GenerateTotpResult.Error -> Unit
+            is GenerateTotpResult.Success -> {
+                clipboardManager.setText(result.code)
             }
         }
     }
@@ -756,6 +785,13 @@ sealed class SearchAction {
          */
         data class DeleteSendResultReceive(
             val result: DeleteSendResult,
+        ) : Internal()
+
+        /**
+         * Indicates a result for generating a verification code has been received.
+         */
+        data class GenerateTotpResultReceive(
+            val result: GenerateTotpResult,
         ) : Internal()
 
         /**
