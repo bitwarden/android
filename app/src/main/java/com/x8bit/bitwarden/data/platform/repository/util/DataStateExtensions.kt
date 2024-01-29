@@ -96,16 +96,14 @@ fun <T1, T2, R> combineDataStates(
 
         // Pending state for everything while any one piece of data is updating.
         dataState1 is DataState.Pending || dataState2 is DataState.Pending -> {
-            DataState.Pending(
-                transform(requireNotNull(dataState1.data), requireNotNull(dataState2.data)),
-            )
+            @Suppress("UNCHECKED_CAST")
+            DataState.Pending(transform(dataState1.data as T1, dataState2.data as T2))
         }
 
         // Both states are Loaded and have data
         else -> {
-            DataState.Loaded(
-                transform(requireNotNull(dataState1.data), requireNotNull(dataState2.data)),
-            )
+            @Suppress("UNCHECKED_CAST")
+            DataState.Loaded(transform(dataState1.data as T1, dataState2.data as T2))
         }
     }
 }

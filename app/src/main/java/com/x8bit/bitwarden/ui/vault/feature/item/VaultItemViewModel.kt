@@ -12,7 +12,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
-import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -76,7 +75,7 @@ class VaultItemViewModel @Inject constructor(
                 userState = userState,
                 vaultDataState = combineDataStates(
                     cipherViewState,
-                    authCodeState.map { Unit },
+                    authCodeState,
                 ) { vaultData, _ ->
                     VaultItemStateData(
                         cipher = vaultData,
