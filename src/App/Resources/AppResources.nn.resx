@@ -2822,7 +2822,7 @@ Do you want to switch to this account?</value>
     <value>Continue to contact support?</value>
   </data>
   <data name="ContinueToPrivacyPolicy" xml:space="preserve">
-    <value>Continue to privacy policy?</value>
+    <value>Fortset til personvernerklæringa?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continue to app store?</value>
@@ -2844,7 +2844,7 @@ Do you want to switch to this account?</value>
     <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
   </data>
   <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
-    <value>Check out our privacy policy on bitwarden.com.</value>
+    <value>Sjekk ut personvernerklæringa vår på bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Explore more features of your Bitwarden account on the web app.</value>
