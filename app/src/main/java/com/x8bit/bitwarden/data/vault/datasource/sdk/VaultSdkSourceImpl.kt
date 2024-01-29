@@ -320,13 +320,14 @@ class VaultSdkSourceImpl(
         userId: String,
         password: String,
         passwordHash: String,
-    ): Boolean =
+    ): Result<Boolean> = runCatching {
         getClient(userId = userId)
             .auth()
             .validatePassword(
                 password = password,
                 passwordHash = passwordHash,
             )
+    }
 
     private fun getClient(
         userId: String,

@@ -4,7 +4,8 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -24,7 +25,7 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class ExportVaultViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository,
+    private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ExportVaultState, ExportVaultEvent, ExportVaultAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -85,7 +86,7 @@ class ExportVaultViewModel @Inject constructor(
         viewModelScope.launch {
             sendAction(
                 ExportVaultAction.Internal.ReceiveValidatePasswordResult(
-                    isPasswordValid = settingsRepository.validatePassword(
+                    result = authRepository.validatePassword(
                         password = mutableStateFlow.value.passwordInput,
                     ),
                 ),
@@ -124,19 +125,34 @@ class ExportVaultViewModel @Inject constructor(
     private fun handleReceiveValidatePasswordResult(
         action: ExportVaultAction.Internal.ReceiveValidatePasswordResult,
     ) {
-        // Display an error dialog if the password is invalid.
-        if (!action.isPasswordValid) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = null,
-                        message = R.string.invalid_master_password.asText(),
-                    ),
-                )
+        when (action.result) {
+            ValidatePasswordResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = ExportVaultState.DialogState.Error(
+                            title = null,
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
             }
-        } else {
-            // TODO: BIT-1274, BIT-1275, and BIT-1276
-            sendEvent(ExportVaultEvent.ShowToast("Not yet implemented".asText()))
+
+            is ValidatePasswordResult.Success -> {
+                // Display an error dialog if the password is invalid.
+                if (!action.result.isValid) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = ExportVaultState.DialogState.Error(
+                                title = null,
+                                message = R.string.invalid_master_password.asText(),
+                            ),
+                        )
+                    }
+                } else {
+                    // TODO: BIT-1274, BIT-1275, and BIT-1276
+                    sendEvent(ExportVaultEvent.ShowToast("Not yet implemented".asText()))
+                }
+            }
         }
     }
 }
@@ -226,7 +242,7 @@ sealed class ExportVaultAction {
          * Indicates that a validate password result has been received.
          */
         data class ReceiveValidatePasswordResult(
-            val isPasswordValid: Boolean,
+            val result: ValidatePasswordResult,
         ) : Internal()
     }
 }

@@ -197,9 +197,4 @@ interface SettingsRepository {
      * Clears any previously set unlock PIN for the current user.
      */
     fun clearUnlockPin()
-
-    /**
-     * Validate the master password.
-     */
-    suspend fun validatePassword(password: String): Boolean
 }

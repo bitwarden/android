@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -2665,6 +2666,110 @@ class AuthRepositoryTest {
         assertEquals(
             PasswordStrengthResult.Success(LEVEL_4),
             repository.getPasswordStrength(EMAIL, "level_4"),
+        )
+    }
+
+    @Test
+    fun `validatePassword with no current user returns ValidatePasswordResult Error`() = runTest {
+        val userId = "userId"
+        val password = "password"
+        val passwordHash = "passwordHash"
+        fakeAuthDiskSource.userState = null
+        coEvery {
+            vaultSdkSource.validatePassword(
+                userId = userId,
+                password = password,
+                passwordHash = passwordHash,
+            )
+        } returns true.asSuccess()
+
+        val result = repository
+            .validatePassword(
+                password = password,
+            )
+
+        assertEquals(
+            ValidatePasswordResult.Error,
+            result,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validatePassword with no stored password hash returns ValidatePasswordResult Error`() =
+        runTest {
+            val userId = USER_ID_1
+            val password = "password"
+            val passwordHash = "passwordHash"
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            coEvery {
+                vaultSdkSource.validatePassword(
+                    userId = userId,
+                    password = password,
+                    passwordHash = passwordHash,
+                )
+            } returns true.asSuccess()
+
+            val result = repository
+                .validatePassword(
+                    password = password,
+                )
+
+            assertEquals(
+                ValidatePasswordResult.Error,
+                result,
+            )
+        }
+
+    @Test
+    fun `validatePassword with sdk failure returns a ValidatePasswordResult Error`() = runTest {
+        val userId = USER_ID_1
+        val password = "password"
+        val passwordHash = "passwordHash"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = passwordHash)
+        coEvery {
+            vaultSdkSource.validatePassword(
+                userId = userId,
+                password = password,
+                passwordHash = passwordHash,
+            )
+        } returns Throwable().asFailure()
+
+        val result = repository
+            .validatePassword(
+                password = password,
+            )
+
+        assertEquals(
+            ValidatePasswordResult.Error,
+            result,
+        )
+    }
+
+    @Test
+    fun `validatePassword with sdk success returns a ValidatePasswordResult Success`() = runTest {
+        val userId = USER_ID_1
+        val password = "password"
+        val passwordHash = "passwordHash"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = passwordHash)
+        coEvery {
+            vaultSdkSource.validatePassword(
+                userId = userId,
+                password = password,
+                passwordHash = passwordHash,
+            )
+        } returns true.asSuccess()
+
+        val result = repository
+            .validatePassword(
+                password = password,
+            )
+
+        assertEquals(
+            ValidatePasswordResult.Success(isValid = true),
+            result,
         )
     }
 
