@@ -253,6 +253,33 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `isCrashLoggingEnabled should pull from and update SharedPreferences`() {
+        val isCrashLoggingEnabled = "bwPreferencesStorage:crashLoggingEnabled"
+        val expected = false
+
+        assertNull(settingsDiskSource.isCrashLoggingEnabled)
+
+        fakeSharedPreferences
+            .edit {
+                putBoolean(
+                    isCrashLoggingEnabled,
+                    expected,
+                )
+            }
+        assertEquals(
+            expected,
+            settingsDiskSource.isCrashLoggingEnabled,
+        )
+
+        settingsDiskSource.isCrashLoggingEnabled = true
+        assertTrue(
+            fakeSharedPreferences.getBoolean(
+                isCrashLoggingEnabled, false,
+            ),
+        )
+    }
+
+    @Test
     fun `appTheme when values are present should pull from SharedPreferences`() {
         val appThemeBaseKey = "bwPreferencesStorage:appTheme"
         val appTheme = AppTheme.DEFAULT

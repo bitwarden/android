@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLang
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -110,6 +111,22 @@ class SettingsRepositoryImpl(
                 initialValue = settingsDiskSource
                     .isIconLoadingDisabled
                     ?: false,
+            )
+
+    override var isCrashLoggingEnabled: Boolean
+        get() = settingsDiskSource.isCrashLoggingEnabled ?: true
+        set(value) {
+            settingsDiskSource.isCrashLoggingEnabled = value
+        }
+
+    override val isCrashLoggingEnabledFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .isCrashLoggingEnabledFlow
+            .map { it ?: isCrashLoggingEnabled }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = isCrashLoggingEnabled,
             )
 
     override var vaultTimeout: VaultTimeout

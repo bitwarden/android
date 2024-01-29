@@ -29,6 +29,7 @@ private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "$BASE_KEY:approvePasswordle
 private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
 private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIntegritySource"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
+private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -54,6 +55,9 @@ class SettingsDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
     private val mutableIsIconLoadingDisabledFlow =
+        bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableIsCrashLoggingEnabledFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
@@ -105,6 +109,17 @@ class SettingsDiskSourceImpl(
     override val isIconLoadingDisabledFlow: Flow<Boolean?>
         get() = mutableIsIconLoadingDisabledFlow
             .onSubscription { emit(getBoolean(DISABLE_ICON_LOADING_KEY)) }
+
+    override var isCrashLoggingEnabled: Boolean?
+        get() = getBoolean(key = CRASH_LOGGING_ENABLED_KEY)
+        set(value) {
+            putBoolean(key = CRASH_LOGGING_ENABLED_KEY, value = value)
+            mutableIsCrashLoggingEnabledFlow.tryEmit(value)
+        }
+
+    override val isCrashLoggingEnabledFlow: Flow<Boolean?>
+        get() = mutableIsCrashLoggingEnabledFlow
+            .onSubscription { emit(getBoolean(CRASH_LOGGING_ENABLED_KEY)) }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)

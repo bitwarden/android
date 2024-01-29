@@ -44,6 +44,16 @@ interface SettingsDiskSource {
     val isIconLoadingDisabledFlow: Flow<Boolean?>
 
     /**
+     * The current setting for if crash logging is enabled.
+     */
+    var isCrashLoggingEnabled: Boolean?
+
+    /**
+     * The current setting for if crash logging is enabled.
+     */
+    val isCrashLoggingEnabledFlow: Flow<Boolean?>
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
