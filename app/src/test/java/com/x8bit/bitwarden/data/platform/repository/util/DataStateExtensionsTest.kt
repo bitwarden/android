@@ -234,6 +234,22 @@ class DataStateExtensionsTest {
         assertEquals(DataState.Pending("data" to 5), result)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `combineDataStates should return Pending when both dataStates are Pending with null data`() {
+        val dataState1: DataState<String?> = DataState.Pending(null)
+        val dataState2: DataState<Int?> = DataState.Pending(null)
+
+        val result = combineDataStates(
+            dataState1 = dataState1,
+            dataState2 = dataState2,
+        ) { data1, data2 ->
+            data1 to data2
+        }
+
+        assertEquals(DataState.Pending<Pair<String?, Int?>>(null to null), result)
+    }
+
     @Test
     fun `combineDataStates should return Loaded when the both dataStates are Loaded`() {
         val dataState1 = DataState.Loaded("data")
@@ -247,5 +263,20 @@ class DataStateExtensionsTest {
         }
 
         assertEquals(DataState.Loaded("data" to 5), result)
+    }
+
+    @Test
+    fun `combineDataStates should return Loaded when both dataStates are Loaded with null data`() {
+        val dataState1: DataState<String?> = DataState.Loaded(null)
+        val dataState2: DataState<Int?> = DataState.Loaded(null)
+
+        val result = combineDataStates(
+            dataState1 = dataState1,
+            dataState2 = dataState2,
+        ) { data1, data2 ->
+            data1 to data2
+        }
+
+        assertEquals(DataState.Loaded<Pair<String?, Int?>>(null to null), result)
     }
 }

@@ -437,11 +437,10 @@ class VaultRepositoryImpl(
                         cipher = cipher,
                     )
                     .map { totpCodeDataState ->
-                        val totpCodeData = totpCodeDataState.data
                         combineDataStates(
-                            totpCodeDataState.map { Unit },
+                            totpCodeDataState,
                             cipherDataState,
-                        ) { _, _ ->
+                        ) { totpCodeData, _ ->
                             // Just return the verification items; we are only combining the
                             // DataStates to know the overall state.
                             totpCodeData
