@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -337,46 +338,145 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
         }
 
+        @Suppress("MaxLineLength")
         @Test
-        fun `on MasterPasswordSubmit should verify the password`() = runTest {
-            val loginViewState = createViewState(
-                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-            )
-            val mockCipherView = mockk<CipherView> {
-                every {
-                    toViewState(
-                        isPremiumUser = true,
-                        totpCodeItemData = null,
+        fun `on MasterPasswordSubmit should disabled required prompt when validatePassword success with valid password`() =
+            runTest {
+                val loginViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginViewState
+                }
+                val password = "password"
+                coEvery {
+                    authRepo.validatePassword(password)
+                } returns ValidatePasswordResult.Success(isValid = true)
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
+                val viewModel = createViewModel(state = loginState)
+
+                viewModel.stateFlow.test {
+                    assertEquals(loginState, awaitItem())
+                    viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(password))
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.Loading(
+                                message = R.string.loading.asText(),
+                            ),
+                        ),
+                        awaitItem(),
                     )
-                } returns loginViewState
-            }
-            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
-
-            val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
-            val viewModel = createViewModel(state = loginState)
-
-            viewModel.stateFlow.test {
-                assertEquals(loginState, awaitItem())
-                viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit("password"))
-                assertEquals(
-                    loginState.copy(
-                        dialog = VaultItemState.DialogState.Loading(
-                            message = R.string.loading.asText(),
+                    assertEquals(
+                        loginState.copy(
+                            viewState = loginViewState.copy(
+                                common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                            ),
                         ),
-                    ),
-                    awaitItem(),
-                )
-                assertEquals(
-                    loginState.copy(
-                        viewState = loginViewState.copy(
-                            common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                        ),
-                    ),
-                    awaitItem(),
-                )
+                        awaitItem(),
+                    )
+                }
             }
-        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on MasterPasswordSubmit should show incorrect password dialog when validatePassword success with invalid password`() =
+            runTest {
+                val loginViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginViewState
+                }
+                val password = "password"
+                coEvery {
+                    authRepo.validatePassword(password)
+                } returns ValidatePasswordResult.Success(isValid = false)
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
+                val viewModel = createViewModel(state = loginState)
+
+                viewModel.stateFlow.test {
+                    assertEquals(loginState, awaitItem())
+                    viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(password))
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.Loading(
+                                message = R.string.loading.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.Generic(
+                                message = R.string.invalid_master_password.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        fun `on MasterPasswordSubmit should show error dialog when validatePassword Error`() =
+            runTest {
+                val loginViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginViewState
+                }
+                val password = "password"
+                coEvery {
+                    authRepo.validatePassword(password)
+                } returns ValidatePasswordResult.Error
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
+                val viewModel = createViewModel(state = loginState)
+
+                viewModel.stateFlow.test {
+                    assertEquals(loginState, awaitItem())
+                    viewModel.trySendAction(VaultItemAction.Common.MasterPasswordSubmit(password))
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.Loading(
+                                message = R.string.loading.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.Generic(
+                                message = R.string.generic_error_message.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
 
         @Test
         fun `on RefreshClick should sync`() = runTest {

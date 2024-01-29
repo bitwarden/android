@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.data.vault.repository.model.VerifyPasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -26,7 +26,6 @@ import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -160,17 +159,8 @@ class VaultItemViewModel @Inject constructor(
             it.copy(dialog = VaultItemState.DialogState.Loading(R.string.loading.asText()))
         }
         viewModelScope.launch {
-            @Suppress("MagicNumber")
-            delay(2_000)
-            // TODO: Actually verify the password (BIT-1213)
-            sendAction(
-                VaultItemAction.Internal.VerifyPasswordReceive(
-                    VerifyPasswordResult.Success(isVerified = true),
-                ),
-            )
-            sendEvent(
-                VaultItemEvent.ShowToast("Password verification not yet implemented.".asText()),
-            )
+            val result = authRepository.validatePassword(action.masterPassword)
+            sendAction(VaultItemAction.Internal.ValidatePasswordReceive(result))
         }
     }
 
@@ -479,7 +469,10 @@ class VaultItemViewModel @Inject constructor(
         when (action) {
             is VaultItemAction.Internal.PasswordBreachReceive -> handlePasswordBreachReceive(action)
             is VaultItemAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
-            is VaultItemAction.Internal.VerifyPasswordReceive -> handleVerifyPasswordReceive(action)
+            is VaultItemAction.Internal.ValidatePasswordReceive -> handleValidatePasswordReceive(
+                action,
+            )
+
             is VaultItemAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultItemAction.Internal.RestoreCipherReceive -> handleRestoreCipherReceive(action)
         }
@@ -574,29 +567,37 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleVerifyPasswordReceive(
-        action: VaultItemAction.Internal.VerifyPasswordReceive,
+    private fun handleValidatePasswordReceive(
+        action: VaultItemAction.Internal.ValidatePasswordReceive,
     ) {
         when (val result = action.result) {
-            VerifyPasswordResult.Error -> {
+            ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultItemState.DialogState.Generic(
-                            message = R.string.invalid_master_password.asText(),
+                            message = R.string.generic_error_message.asText(),
                         ),
                     )
                 }
             }
 
-            is VerifyPasswordResult.Success -> {
-                onContent { content ->
+            is ValidatePasswordResult.Success -> {
+                if (result.isValid) {
+                    onContent { content ->
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialog = null,
+                                viewState = content.copy(
+                                    common = content.common.copy(requiresReprompt = false),
+                                ),
+                            )
+                        }
+                    }
+                } else {
                     mutableStateFlow.update {
                         it.copy(
-                            dialog = null,
-                            viewState = content.copy(
-                                common = content.common.copy(
-                                    requiresReprompt = !result.isVerified,
-                                ),
+                            dialog = VaultItemState.DialogState.Generic(
+                                message = R.string.invalid_master_password.asText(),
                             ),
                         )
                     }
@@ -1198,8 +1199,8 @@ sealed class VaultItemAction {
         /**
          * Indicates that the verify password result has been received.
          */
-        data class VerifyPasswordReceive(
-            val result: VerifyPasswordResult,
+        data class ValidatePasswordReceive(
+            val result: ValidatePasswordResult,
         ) : Internal()
 
         /**
