@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
+import java.time.Year
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -26,8 +28,9 @@ private const val KEY_STATE = "state"
 class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
+    private val clock: Clock,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: INITIAL_STATE,
+    initialState = savedStateHandle[KEY_STATE] ?: createInitialState(clock = clock),
 ) {
     init {
         stateFlow
@@ -68,7 +71,9 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleVersionClick() {
-        clipboardManager.setText(text = state.version)
+        clipboardManager.setText(
+            text = state.copyrightInfo.concat("\n\n".asText()).concat(state.version),
+        )
     }
 
     private fun handleWebVaultClick() {
@@ -76,12 +81,21 @@ class AboutViewModel @Inject constructor(
     }
 
     companion object {
-        private val INITIAL_STATE: AboutState = AboutState(
-            version = R.string.version
-                .asText()
-                .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
-            isSubmitCrashLogsEnabled = false,
-        )
+        /**
+         * Create initial state for the About View model.
+         */
+        fun createInitialState(clock: Clock): AboutState {
+            val currentYear = Year.now(clock).value
+            val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
+
+            return AboutState(
+                version = R.string.version
+                    .asText()
+                    .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
+                isSubmitCrashLogsEnabled = false,
+                copyrightInfo = copyrightInfo,
+            )
+        }
     }
 }
 
@@ -92,6 +106,7 @@ class AboutViewModel @Inject constructor(
 data class AboutState(
     val version: Text,
     val isSubmitCrashLogsEnabled: Boolean,
+    val copyrightInfo: Text,
 ) : Parcelable
 
 /**
