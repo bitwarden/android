@@ -34,6 +34,7 @@ namespace Bit.App.Pages
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _enableContinue = false;
         private bool _showContinue = true;
+        private double _duoWebViewHeight;
 
         public TwoFactorPageViewModel()
         {
@@ -63,6 +64,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _totpInstruction, value);
         }
 
+        public double DuoWebViewHeight
+        {
+            get => _duoWebViewHeight;
+            set => SetProperty(ref _duoWebViewHeight, value);
+        }
+        
         public bool Remember { get; set; }
 
         public bool AuthingWithSso { get; set; }
@@ -172,6 +179,7 @@ namespace Bit.App.Pages
                     break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
+                    SetDuoWebViewHeight();
                     var host = WebUtility.UrlEncode(providerData["Host"] as string);
                     var req = WebUtility.UrlEncode(providerData["Signature"] as string);
                     page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
@@ -201,6 +209,12 @@ namespace Bit.App.Pages
                 _messagingService.Send("listenYubiKeyOTP", false);
             }
             ShowContinue = !(SelectedProviderType == null || DuoMethod || Fido2Method);
+        }
+
+        public void SetDuoWebViewHeight()
+        {
+            var screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+            DuoWebViewHeight = screenHeight > 0 ? (screenHeight / 8) * 6 : 400;
         }
 
         public async Task Fido2AuthenticateAsync(Dictionary<string, object> providerData = null)
