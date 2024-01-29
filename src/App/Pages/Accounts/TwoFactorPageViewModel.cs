@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -62,7 +63,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
-            DuoFramelessCommand = new Command(async () => await DuoFramelessAuthenticateAsync());
+            AuthenticateWithDuoFramelessCommand = CreateDefaultAsyncCommnad(DuoFramelessAuthenticateAsync);
             MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
         }
 
@@ -133,7 +134,7 @@ namespace Bit.App.Pages
             });
         }
         public Command SubmitCommand { get; }
-        public Command DuoFramelessCommand { get; }
+        public ICommand AuthenticateWithDuoFramelessCommand { get; }
         public ICommand MoreCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
         public Action LockAction { get; set; }
@@ -198,7 +199,17 @@ namespace Bit.App.Pages
                         page.DuoWebView.RegisterAction(sig =>
                         {
                             Token = sig;
-                            Device.BeginInvokeOnMainThread(async () => await SubmitAsync());
+                            MainThread.BeginInvokeOnMainThread(async () =>
+                            {
+                                try
+                                {
+                                    await SubmitAsync();
+                                }
+                                catch (Exception ex)
+                                {
+                                    HandleException(ex);
+                                }
+                            });
                         });
                     }
                     break;
@@ -227,15 +238,26 @@ namespace Bit.App.Pages
         private async Task DuoFramelessAuthenticateAsync()
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
-            var providerData = _authService.TwoFactorProvidersData[SelectedProviderType.Value];
-            var url = providerData["AuthUrl"] as string;
+
+            if (!_authService.TwoFactorProvidersData.TryGetValue(SelectedProviderType.Value, out var providerData) ||
+                !providerData.TryGetValue("AuthUrl", out var urlObject))
+            {
+                throw new InvalidOperationException("Duo authentication error: Could not get ProviderData or AuthUrl");
+            }
+
+            var url = urlObject as string;
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentNullException("Duo authentication error: Could not get valid auth url");
+            }
+
             WebAuthenticatorResult authResult;
             try
             {
                 authResult = await WebAuthenticator.AuthenticateAsync(new WebAuthenticatorOptions
                 {
                     Url = new Uri(url),
-                    CallbackUrl = new Uri("bitwarden://duo-callback")
+                    CallbackUrl = new Uri(Constants.DuoCallback)
                 });
             }
             catch (TaskCanceledException)
@@ -245,28 +267,32 @@ namespace Bit.App.Pages
                 return;
             }
 
-            string response = null;
-            if (authResult != null && authResult.Properties.TryGetValue("code", out var resultData))
+            await _deviceActionService.HideLoadingAsync();
+            if (authResult == null || authResult.Properties == null)
             {
-                response = Uri.UnescapeDataString(resultData);
+                throw new InvalidOperationException("Duo authentication error: Could not get result from authentication");
             }
-            if (!string.IsNullOrWhiteSpace(response))
+
+            if (authResult.Properties.TryGetValue("error", out var resultError))
             {
-                Token = response;
-                await SubmitAsync(false);
+                _logger.Error(resultError);
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
 
-            await _deviceActionService.HideLoadingAsync();
-            if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
+            string code = null;
+            if (authResult.Properties.TryGetValue("code", out var resultData))
             {
-                await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
+                code = Uri.UnescapeDataString(resultData);
             }
-            else
+
+            if (string.IsNullOrWhiteSpace(code))
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred, AppResources.Ok);
+                throw new ArgumentException("Duo authentication error: response code is null");
             }
+
+            Token = code;
+            await SubmitAsync(true);
         }
 
         public async Task Fido2AuthenticateAsync(Dictionary<string, object> providerData = null)
@@ -342,7 +368,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
@@ -425,7 +451,7 @@ namespace Bit.App.Pages
                             var authResult = await _authService.LogInPasswordlessAsync(true, await _stateService.GetActiveUserEmailAsync(), authRequest.RequestAccessCode, pendingRequest.Id, pendingRequest.PrivateKey, authRequest.Key, authRequest.MasterPasswordHash);
                             if (authResult == null && await _stateService.IsAuthenticatedAsync())
                             {
-                                await Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(
+                                await MainThread.InvokeOnMainThreadAsync(
                                  () => _platformUtilsService.ShowToast("info", null, AppResources.LoginApproved));
                                 await _stateService.SetPendingAdminAuthRequestAsync(null);
                                 _syncService.FullSyncAsync(true).FireAndForget();

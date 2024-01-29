@@ -135,32 +135,12 @@
                 Padding="0"
                 IsVisible="{Binding DuoMethod, Mode=OneWay}"
                 VerticalOptions="FillAndExpand">
-                <StackLayout
+                <Label
                     StyleClass="box"
-                    Margin="0, 21, 0, 0"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="FillAndExpand"
-                    Spacing="21"
-                    IsVisible="{Binding IsDuoFrameless}">
-                    <Label
-                        StyleClass="box-label-regular"
-                        Text="{Binding DuoFramelessLabel}"
-                        HorizontalOptions="StartAndExpand" />
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="{u:I18n RememberMe}"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding Remember}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
-                    </StackLayout>
-                    <Button Text="{u:I18n LaunchDuo}"
-                        StyleClass="btn-primary"
-                        Command="{Binding DuoFramelessCommand}"
-                        AutomationId="DuoFramelessButton"/>
-                </StackLayout>
+                    Text="{Binding DuoFramelessLabel}"
+                    HorizontalOptions="StartAndExpand" 
+                    Margin="10,21"
+                    IsVisible="{Binding IsDuoFrameless}"/>
                 <controls:HybridWebView
                     x:Name="_duoWebView"
                     HorizontalOptions="FillAndExpand"
@@ -169,8 +149,7 @@
                     IsVisible="{Binding IsDuoFrameless, Converter={StaticResource inverseBool}}"/>
                 <StackLayout
                     StyleClass="box"
-                    VerticalOptions="End"
-                    IsVisible="{Binding IsDuoFrameless, Converter={StaticResource inverseBool}}">
+                    VerticalOptions="End">
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n RememberMe}"
@@ -182,6 +161,12 @@
                             HorizontalOptions="End" />
                     </StackLayout>
                 </StackLayout>
+                <Button Text="{u:I18n LaunchDuo}"
+                    Margin="10,21"
+                    StyleClass="btn-primary"
+                    Command="{Binding AuthenticateWithDuoFramelessCommand}"
+                    AutomationId="DuoFramelessButton"
+                    IsVisible="{Binding IsDuoFrameless}"/>
             </StackLayout>
             <StackLayout
                 Spacing="0"
