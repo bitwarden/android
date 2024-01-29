@@ -179,7 +179,9 @@ namespace Bit.App.Pages
                     break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
+#if ANDROID
                     SetDuoWebViewHeight();
+#endif
                     var host = WebUtility.UrlEncode(providerData["Host"] as string);
                     var req = WebUtility.UrlEncode(providerData["Signature"] as string);
                     page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
