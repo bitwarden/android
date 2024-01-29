@@ -84,7 +84,7 @@ class AutoFillScreenTest : BaseComposeTest() {
             .onAllNodesWithText(
                 "We were unable to automatically open the Android autofill settings menu for " +
                     "you. You can navigate to the autofill settings menu manually from Android " +
-                    "Settings>System>Languages and input>Advanced>Autofill service.",
+                    "Settings > System > Languages and input > Advanced > Autofill service.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()

@@ -182,7 +182,7 @@
   <string name="verification_code">کد تأیید</string>
   <string name="view_item">مشاهده مورد</string>
   <string name="web_vault">گاوصندوق وب Bitwarden</string>
-  <string name="lost2_fa_app">برنامه احراز هویت را گم کرده اید؟</string>
+  <string name="lost_2fa_app">برنامه احراز هویت را گم کرده اید؟</string>
   <string name="items">موارد</string>
   <string name="extension_activated">افزونه فعال شد!</string>
   <string name="icons">نمادها</string>
@@ -333,7 +333,7 @@
   <string name="use_face_id_to_unlock">از Face ID برای قفل گشایی استفاده شود</string>
   <string name="verify_face_id">تأیید Face ID</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_autofill_go_to_settings">ما نتوانستیم به صورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما می‌توانید منوی تنظیمات را به صورت دستی مرور کنید. از تنظیمات اندروید &gt;سیستم &gt;زبان‌ها و ورودی &gt;پیشرفته &gt;سرویس پر کردن خودکار.</string>
+  <string name="bitwarden_autofill_go_to_settings">ما نتوانستیم به صورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما می‌توانید منوی تنظیمات را به صورت دستی مرور کنید. از تنظیمات اندروید &gt; سیستم &gt; زبان‌ها و ورودی &gt; پیشرفته &gt; سرویس پر کردن خودکار.</string>
   <string name="custom_field_name">نام فیلد سفارشی</string>
   <string name="field_type_boolean">منطقی</string>
   <string name="field_type_hidden">مخفی</string>
@@ -721,6 +721,7 @@
   <string name="simple_login">ورود ساده</string>
   <string name="duck_duck_go">داک داک گو</string>
   <string name="fastmail">Fastmail</string>
+  <string name="forward_email">ForwardEmail</string>
   <string name="api_access_token">توکن دسترسی API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">آیا از بازنویسی نام کاربری فعلی مطمئن هستید؟</string>
   <string name="generate_username">ایجاد نام کاربری</string>
@@ -807,7 +808,7 @@
   <string name="invalid_api_token">توکن API نامعتبر</string>
   <string name="admin_approval_requested">تایید مدیر در خواست شد</string>
   <string name="your_request_has_been_sent_to_your_admin">درخواست شما به مدیرتان فرستاده شد.</string>
-  <string name="you_will_be_notified_once_approved">به محض تایید مطلع خواهید شد. </string>
+  <string name="you_will_be_notified_once_approved">به محض تایید مطلع خواهید شد.</string>
   <string name="trouble_logging_in">در ورود مشکلی دارید؟</string>
   <string name="logging_in_as_x">ورود به عنوان %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">اقدام پایان زمان گاوصندوق به خروج تغییر کرد</string>
@@ -842,7 +843,7 @@
   <string name="account_fingerprint_phrase">عبارت اثر انگشت حساب</string>
   <string name="one_hour_and_one_minute">یک ساعت و یک دقیقه</string>
   <string name="one_hour_and_x_minute">یک ساعت و %1$s دقیقه</string>
-  <string name="x_hours_and_one_minute"> %1$s ساعت و یک دقیقه</string>
+  <string name="x_hours_and_one_minute">%1$s ساعت و یک دقیقه</string>
   <string name="x_hours_and_y_minutes">%1$s ساعت و %2$s دقیقه</string>
   <string name="x_hours">%1$s ساعت</string>
   <string name="autofill_services_explanation_long">چارچوب پر کردن خودکار اندروید برای کمک به پر کردن اطلاعات ورود به سیستم در سایر برنامه‌های دستگاه شما استفاده می‌شود.</string>
@@ -852,12 +853,14 @@
   <string name="continue_to_x">به %1$s ادامه می‌دهید؟</string>
   <string name="continue_to_help_center">به مرکز راهنمایی ادامه می‌دهید؟</string>
   <string name="continue_to_contact_support">می‌خواهید با پشتیبانی تماس بگیرید؟</string>
+  <string name="continue_to_privacy_policy">Continue to privacy policy?</string>
   <string name="continue_to_app_store">به فروشگاه برنامه ادامه می‌دهید؟</string>
   <string name="two_step_login_description_long">با راه‌اندازی ورود دو مرحله‌ای در برنامه وب Bitwarden، حساب خود را ایمن‌تر کنید.</string>
   <string name="change_master_password_description_long">می‌توانید کلمه عبور اصلی خود را در برنامه وب Bitwarden تغییر دهید.</string>
   <string name="you_can_import_data_to_your_vault_on_x">می‌توانید داده‌ها را در %1$s به گاوصندوق خود وارد کنید.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">درباره نحوه استفاده از Bitwarden در مرکز راهنمایی بیشتر بیاموزید.</string>
   <string name="contact_support_description_long">چیزی را که به دنبالش هستید پیدا نمی‌کنید؟ با پشتیبانی Bitwarden در bitwarden.com تماس بگیرید.</string>
+  <string name="privacy_policy_description_long">Check out our privacy policy on bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">ویژگی‌های بیشتر حساب Bitwarden خود را در برنامه وب کاوش کنید.</string>
   <string name="learn_about_organizations_description_long">Bitwarden به شما اجازه می‌دهد تا با استفاده از یک سازمان، موارد گاوصندوق خود را با دیگران به اشتراک بگذارید. در وب سایت bitwarden.com بیشتر بیاموزید.</string>
   <string name="rate_app_description_long">به دیگران کمک کنید بفهمند آیا Bitwarden برای آنها مناسب است یا خیر. از فروشگاه برنامه دیدن کنید و اکنون رتبه بندی کنید.</string>
@@ -865,4 +868,7 @@
   <string name="created_xy">ایجاد شده در %1$s، %2$s</string>
   <string name="too_many_attempts">تلاش‌ها بیش از حد مجاز بود</string>
   <string name="account_logged_out_biometric_exceeded">حساب از سیستم خارج شد.</string>
+  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Your organization permissions were updated, requiring you to set a master password.</string>
+  <string name="your_organization_requires_you_to_set_a_master_password">Your organization requires you to set a master password.</string>
+  <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Set up an unlock option to change your vault timeout action.</string>
 </resources>

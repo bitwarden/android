@@ -191,22 +191,22 @@ class SendScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Loading)
         }
-        composeTestRule.onNodeWithContentDescription("Add item").assertDoesNotExist()
+        composeTestRule.onNodeWithContentDescription("Add Item").assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Empty)
         }
-        composeTestRule.onNodeWithContentDescription("Add item").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Add Item").assertIsDisplayed()
 
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Error("Fail".asText()))
         }
-        composeTestRule.onNodeWithContentDescription("Add item").assertDoesNotExist()
+        composeTestRule.onNodeWithContentDescription("Add Item").assertDoesNotExist()
 
         mutableStateFlow.update {
             it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         }
-        composeTestRule.onNodeWithContentDescription("Add item").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Add Item").assertIsDisplayed()
     }
 
     @Test
@@ -215,7 +215,7 @@ class SendScreenTest : BaseComposeTest() {
             it.copy(viewState = SendState.ViewState.Empty)
         }
         composeTestRule
-            .onNodeWithContentDescription("Add item")
+            .onNodeWithContentDescription("Add Item")
             .performClick()
         verify { viewModel.trySendAction(SendAction.AddSendClick) }
     }

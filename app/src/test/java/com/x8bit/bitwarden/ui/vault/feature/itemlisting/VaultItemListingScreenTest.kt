@@ -293,7 +293,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `floating action button click should send AddItemClick action`() {
         composeTestRule
-            .onNodeWithContentDescription("Add item")
+            .onNodeWithContentDescription("Add Item")
             .performClick()
         verify { viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick) }
     }
@@ -486,7 +486,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update { DEFAULT_STATE }
 
         composeTestRule
-            .onNodeWithContentDescription("Add item")
+            .onNodeWithContentDescription("Add Item")
             .assertIsDisplayed()
 
         mutableStateFlow.update {

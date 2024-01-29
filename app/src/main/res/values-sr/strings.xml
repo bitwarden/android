@@ -182,7 +182,7 @@
   <string name="verification_code">Верификациони код</string>
   <string name="view_item">Види ставку</string>
   <string name="web_vault">Bitwarden Интернет Сеф</string>
-  <string name="lost2_fa_app">Изгубили сте апликацију за аутентификацију?</string>
+  <string name="lost_2fa_app">Изгубили сте апликацију за аутентификацију?</string>
   <string name="items">Ставке</string>
   <string name="extension_activated">Додатак активиран!</string>
   <string name="icons">Иконице</string>
@@ -594,7 +594,8 @@
   <string name="seven_days">7 дана</string>
   <string name="thirty_days">30 дана</string>
   <string name="custom">Друго</string>
-  <string name="share_on_save">Share this upon save.Поделите овај „Send“ после сачувања.</string>
+  <string name="share_on_save">Share this upon save.
+Поделите овај „Send“ после сачувања.</string>
   <string name="send_disabled_warning">Због полисе компаније, можеш само да бришеш постојећа слања.</string>
   <string name="about_send">О слању</string>
   <string name="hide_email">Сакриј моју е-адресу од примаоца.</string>
@@ -658,7 +659,7 @@
   <string name="options_collapsed">Опције су скупљене, додирните да бисте проширили.</string>
   <string name="uppercase_ato_z">Велика слова (A-Z)</string>
   <string name="lowercase_ato_z">Мала слова (A-Z)</string>
-  <string name="numbers_zero_to_nine">Цифре (0–9)</string>
+  <string name="numbers_zero_to_nine">Цифре (0-9)</string>
   <string name="special_characters">Специјална слова (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Додирните за уназад</string>
   <string name="password_is_visible_tap_to_hide">Лозинка се види, додирните да је сакријете.</string>
@@ -671,9 +672,9 @@
   <string name="totp">ТОТП</string>
   <string name="verification_codes">Верификациони кодови</string>
   <string name="premium_subscription_required">Premium претплата је потребна</string>
-  <string name="cannot_add_authenticator_key">Не може да се дода верификациони код? </string>
+  <string name="cannot_add_authenticator_key">Не може да се дода верификациони код?</string>
   <string name="scan_qr_code">Скенирај QR код</string>
-  <string name="cannot_scan_qr_code">Не мигу да скенирам QR код? </string>
+  <string name="cannot_scan_qr_code">Не мигу да скенирам QR код?</string>
   <string name="authenticator_key_scanner">Кључ аутентификатора</string>
   <string name="enter_key_manually">Унесите кључ ручно</string>
   <string name="add_totp">Додати ТОТП</string>
@@ -721,6 +722,7 @@
   <string name="simple_login">SimpleLogin</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
+  <string name="forward_email">ForwardEmail</string>
   <string name="api_access_token">Приступни АПИ токен</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Сигурно преписати тренутно име?</string>
   <string name="generate_username">Генериши име</string>
@@ -802,12 +804,12 @@
   <string name="copy_application">Копирај апликацију</string>
   <string name="available_for_two_step_login">Доступно за пријаву у два корака</string>
   <string name="master_password_re_prompt_help">Помоћ поновно тражење главне лозинке</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Откључавање можда неће успети због недовољне меморије. Умањите подешавање KDF меморије или подесите биометрију за решење.</string>
   <string name="invalid_api_key">Неисправан API кључ</string>
   <string name="invalid_api_token">Неисправан API токен</string>
   <string name="admin_approval_requested">Захтевано је одобрење администратора</string>
   <string name="your_request_has_been_sent_to_your_admin">Ваш захтев је послат вашем администратору.</string>
-  <string name="you_will_be_notified_once_approved">Бићете обавештени када буде одобрено. </string>
+  <string name="you_will_be_notified_once_approved">Бићете обавештени када буде одобрено.</string>
   <string name="trouble_logging_in">Имате проблема са пријављивањем?</string>
   <string name="logging_in_as_x">Пријављивање као %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Радња временског ограничења сефа је промењена за одјављивање</string>
@@ -828,7 +830,7 @@
   <string name="login_approved">Пријава је одобрена</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Пријава помоћу уређаја мора бити подешена у подешавањима Bitwarden апликације. Потребна је друга опција?</string>
   <string name="log_in_with_device">Пријавите се са уређајем</string>
-  <string name="logging_in_on">Logging in on</string>
+  <string name="logging_in_on">Пријављено на</string>
   <string name="vault">Сеф</string>
   <string name="appearance">Изглед</string>
   <string name="account_security">Безбедност налога</string>
@@ -852,12 +854,14 @@
   <string name="continue_to_x">Наставити на %1$s?</string>
   <string name="continue_to_help_center">Настави на помоћни центар?</string>
   <string name="continue_to_contact_support">Настави на подршку?</string>
+  <string name="continue_to_privacy_policy">Желите ли да наставите са политиком приватности?</string>
   <string name="continue_to_app_store">Настави на радњу апликације?</string>
   <string name="two_step_login_description_long">Учините свој налог сигурнијим подешавањем пријаве у два корака у Bitwarden веб апликацији.</string>
   <string name="change_master_password_description_long">Можете променити главну лозинку на Bitwarden веб апликацији.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Можете да увезете податке у свој сеф на %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden у помоћни центар.</string>
   <string name="contact_support_description_long">Не можете да пронађете оно што тражите? Контактирајте Bitwarden подршку на bitwarden.com.</string>
+  <string name="privacy_policy_description_long">Погледајте нашу политику приватности на bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Истражите више својстава на Bitwarden налогу на веб апликаији.</string>
   <string name="learn_about_organizations_description_long">Bitwarden вам омогућава да делите ставке сефа са другима користећи организацију. Сазнајте више на веб локацију bitwarden.com.</string>
   <string name="rate_app_description_long">Помозите другима да сазнају да ли је Bitwarden прави за њих. Посетите продавницу апликација и оставите оцену.</string>
@@ -865,4 +869,7 @@
   <string name="created_xy">Креирано %1$s, %2$s</string>
   <string name="too_many_attempts">Превише покушаја</string>
   <string name="account_logged_out_biometric_exceeded">Налог је одјављен.</string>
+  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Дозволе за вашу организацију су ажуриране, што захтева да поставите главну лозинку.</string>
+  <string name="your_organization_requires_you_to_set_a_master_password">Ваша организација захтева да поставите главну лозинку.</string>
+  <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Подесите опцију откључавања да бисте променили радњу временског ограничења сефа.</string>
 </resources>

@@ -73,7 +73,7 @@ class FoldersScreenTest : BaseComposeTest() {
 
     @Test
     fun `add folder button click should send AddFolderButtonClick`() {
-        composeTestRule.onNodeWithContentDescription("Add item").performClick()
+        composeTestRule.onNodeWithContentDescription("Add Item").performClick()
         verify {
             viewModel.trySendAction(FoldersAction.AddFolderButtonClick)
         }
