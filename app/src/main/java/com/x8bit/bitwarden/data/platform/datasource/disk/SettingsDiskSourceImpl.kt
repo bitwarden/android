@@ -27,6 +27,8 @@ private const val DISABLE_AUTOFILL_SAVE_PROMPT_KEY = "$BASE_KEY:autofillDisableS
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
 private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "$BASE_KEY:approvePasswordlessLogins"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
+private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIntegritySource"
+private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -67,6 +69,12 @@ class SettingsDiskSourceImpl(
                 key = APP_LANGUAGE_KEY,
                 value = value?.localeName,
             )
+        }
+
+    override var systemBiometricIntegritySource: String?
+        get() = getString(key = SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY)
+        set(value) {
+            putString(key = SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY, value = value)
         }
 
     override var appTheme: AppTheme
@@ -112,6 +120,26 @@ class SettingsDiskSourceImpl(
         )
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeScreenCaptureAllowed(userId = userId, isScreenCaptureAllowed = null)
+        removeWithPrefix(prefix = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_$userId")
+    }
+
+    override fun getAccountBiometricIntegrityValidity(
+        userId: String,
+        systemBioIntegrityState: String,
+    ): Boolean? =
+        getBoolean(
+            key = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_${userId}_$systemBioIntegrityState",
+        )
+
+    override fun storeAccountBiometricIntegrityValidity(
+        userId: String,
+        systemBioIntegrityState: String,
+        value: Boolean?,
+    ) {
+        putBoolean(
+            key = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_${userId}_$systemBioIntegrityState",
+            value = value,
+        )
     }
 
     override fun getLastSyncTime(userId: String): Instant? =

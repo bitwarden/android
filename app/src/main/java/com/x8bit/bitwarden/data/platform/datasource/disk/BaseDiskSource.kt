@@ -113,6 +113,14 @@ abstract class BaseDiskSource(
         value: String?,
     ): Unit = sharedPreferences.edit { putString(key, value) }
 
+    protected fun removeWithPrefix(prefix: String) {
+        sharedPreferences
+            .all
+            .keys
+            .filter { it.startsWith(prefix) }
+            .forEach { sharedPreferences.edit { remove(it) } }
+    }
+
     companion object {
         const val BASE_KEY: String = "bwPreferencesStorage"
     }

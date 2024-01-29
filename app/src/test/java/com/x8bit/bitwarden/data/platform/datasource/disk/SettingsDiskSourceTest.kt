@@ -66,6 +66,32 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `systemBiometricIntegritySource should pull from SharedPreferences`() {
+        val biometricIntegritySource = "bwPreferencesStorage:biometricIntegritySource"
+        val expected = "mockBiometricIntegritySource"
+
+        // Verify initial value is null and disk source matches shared preferences.
+        assertNull(fakeSharedPreferences.getString(biometricIntegritySource, null))
+        assertNull(settingsDiskSource.systemBiometricIntegritySource)
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences.edit {
+            putString(biometricIntegritySource, expected)
+        }
+        val actual = settingsDiskSource.systemBiometricIntegritySource
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `setting systemBiometricIntegritySource should update SharedPreferences`() {
+        val biometricIntegritySource = "bwPreferencesStorage:biometricIntegritySource"
+        val expected = "mockBiometricIntegritySource"
+        settingsDiskSource.systemBiometricIntegritySource = expected
+        val actual = fakeSharedPreferences.getString(biometricIntegritySource, null)
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun `clearData should clear all necessary data for the given user`() {
         val userId = "userId"
         settingsDiskSource.storeVaultTimeoutInMinutes(
@@ -108,6 +134,12 @@ class SettingsDiskSourceTest {
             userId = userId,
             isScreenCaptureAllowed = true,
         )
+        val systemBioIntegrityState = "system_biometrics_integrity_state"
+        settingsDiskSource.storeAccountBiometricIntegrityValidity(
+            userId = userId,
+            systemBioIntegrityState = systemBioIntegrityState,
+            value = true,
+        )
 
         settingsDiskSource.clearData(userId = userId)
 
@@ -121,6 +153,51 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId))
         assertNull(settingsDiskSource.getLastSyncTime(userId = userId))
         assertNull(settingsDiskSource.getScreenCaptureAllowed(userId = userId))
+        assertNull(
+            settingsDiskSource.getAccountBiometricIntegrityValidity(
+                userId = userId,
+                systemBioIntegrityState = systemBioIntegrityState,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAccountBiometricIntegrityValidity should pull from and update SharedPreferences`() {
+        val userId = "userId-1234"
+        val systemBiometricIntegritySource = "systemValidity"
+        val accountBioIntegrityValid =
+            "bwPreferencesStorage:accountBiometricIntegrityValid_${userId}_$systemBiometricIntegritySource"
+        val isValid = true
+
+        // Assert that the default value in disk source is null
+        assertNull(
+            settingsDiskSource.getAccountBiometricIntegrityValidity(
+                userId = userId,
+                systemBioIntegrityState = systemBiometricIntegritySource,
+            ),
+        )
+
+        // Updating the shared preferences should update disk source.
+        fakeSharedPreferences.edit { putBoolean(accountBioIntegrityValid, isValid) }
+        assertEquals(
+            isValid,
+            settingsDiskSource.getAccountBiometricIntegrityValidity(
+                userId = userId,
+                systemBioIntegrityState = systemBiometricIntegritySource,
+            ),
+        )
+
+        // Updating the disk source updates the shared preferences
+        settingsDiskSource.storeAccountBiometricIntegrityValidity(
+            userId = userId,
+            systemBioIntegrityState = systemBiometricIntegritySource,
+            value = isValid,
+        )
+        assertEquals(
+            fakeSharedPreferences.getBoolean(accountBioIntegrityValid, false),
+            isValid,
+        )
     }
 
     @Test

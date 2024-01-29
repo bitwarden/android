@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -35,13 +36,14 @@ private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
 /**
  * Primary implementation of [SettingsRepository].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 class SettingsRepositoryImpl(
     private val autofillManager: AutofillManager,
     private val appForegroundManager: AppForegroundManager,
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
+    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
@@ -352,6 +354,7 @@ class SettingsRepositoryImpl(
 
     override suspend fun setupBiometricsKey(): BiometricsKeyResult {
         val userId = activeUserId ?: return BiometricsKeyResult.Error
+        biometricsEncryptionManager.setupBiometrics(userId)
         return vaultSdkSource
             .getUserEncryptionKey(userId = userId)
             .onSuccess {

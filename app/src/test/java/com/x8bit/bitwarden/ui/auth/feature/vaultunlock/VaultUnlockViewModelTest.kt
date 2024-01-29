@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -45,6 +46,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
         every { lockVault(any()) } just runs
+    }
+    private val encryptionManager: BiometricsEncryptionManager = mockk {
+        every { isBiometricIntegrityValid(userId = DEFAULT_USER_STATE.activeUserId) } returns true
     }
 
     @Test
@@ -678,11 +682,13 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         state: VaultUnlockState? = DEFAULT_STATE,
         environmentRepo: EnvironmentRepository = environmentRepository,
         vaultRepo: VaultRepository = vaultRepository,
+        biometricsEncryptionManager: BiometricsEncryptionManager = encryptionManager,
     ): VaultUnlockViewModel = VaultUnlockViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
         authRepository = authRepository,
         vaultRepo = vaultRepo,
         environmentRepo = environmentRepo,
+        biometricsEncryptionManager = biometricsEncryptionManager,
     )
 }
 
@@ -705,6 +711,7 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     dialog = null,
     environmentUrl = Environment.Us.label,
     input = "",
+    isBiometricsValid = true,
     isBiometricEnabled = false,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )
