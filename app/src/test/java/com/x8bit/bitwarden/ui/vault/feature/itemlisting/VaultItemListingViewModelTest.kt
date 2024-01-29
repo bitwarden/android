@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -217,7 +218,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val cipherView = createMockCipherView(number = 1)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.AutofillSelection(
-                    autofillSelectionData = mockk(),
+                    autofillSelectionData = AutofillSelectionData(
+                        type = AutofillSelectionData.Type.LOGIN,
+                        uri = "https://www.test.com",
+                    ),
                     shouldFinishWhenComplete = true,
                 )
             mutableVaultDataStateFlow.value = DataState.Loaded(

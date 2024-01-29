@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -15,6 +16,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
@@ -104,7 +106,13 @@ class VaultItemListingViewModel @Inject constructor(
 
         vaultRepository
             .vaultDataStateFlow
-            .onEach { sendAction(VaultItemListingsAction.Internal.VaultDataReceive(it)) }
+            .onEach {
+                sendAction(
+                    VaultItemListingsAction.Internal.VaultDataReceive(
+                        it.filterForAutofillIfNecessary(),
+                    ),
+                )
+            }
             .launchIn(viewModelScope)
     }
 
@@ -566,6 +574,34 @@ class VaultItemListingViewModel @Inject constructor(
             .data
             ?.cipherViewList
             ?.firstOrNull { it.id == cipherId }
+
+    // TODO: Update to use correct logic (BIT-1641)
+    /**
+     * Takes the given vault data and filters it for autofill if necessary.
+     */
+    @OmitFromCoverage
+    private suspend fun DataState<VaultData>.filterForAutofillIfNecessary(): DataState<VaultData> {
+        val matchingUri = state
+            .autofillSelectionData
+            ?.uri
+            ?.toHostOrPathOrNull()
+            ?: return this
+        return this.map { vaultData ->
+            vaultData.copy(
+                cipherViewList = vaultData
+                    .cipherViewList
+                    .filter { cipherView ->
+                        cipherView
+                            .login
+                            ?.uris
+                            .orEmpty()
+                            .any {
+                                matchingUri in it.uri?.toHostOrPathOrNull().orEmpty()
+                            }
+                    },
+            )
+        }
+    }
 }
 
 /**
