@@ -3236,7 +3236,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forward Email.
+        ///   Looks up a localized string similar to ForwardEmail.
         /// </summary>
         internal static string ForwardEmail {
             get {
@@ -6228,15 +6228,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Muuta holvisi aikakatkaisutoimintoa määrittämällä lukituksen avaustapa..
-        /// </summary>
-        internal static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
-            get {
-                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Määritä TOTP.
         /// </summary>
         internal static string SetupTotp {
@@ -7772,24 +7763,6 @@ namespace Bit.App.Resources {
         internal static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Organisaatiosi käyttöoikeuksia muutettiin ja tämän seurauksena sinun on asetettava pääsalasana..
-        /// </summary>
-        internal static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Organisaatiosi edellyttää, että asetat pääsalasanan..
-        /// </summary>
-        internal static string YourOrganizationRequiresYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
             }
         }
         

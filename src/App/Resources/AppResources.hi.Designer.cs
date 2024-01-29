@@ -383,7 +383,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to नई अटैचमेंट जोडे.
+        ///   Looks up a localized string similar to Add new attachment.
         /// </summary>
         internal static string AddNewAttachment {
             get {
@@ -725,7 +725,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to अटैचमेंट डालि गई।.
+        ///   Looks up a localized string similar to Attachment added.
         /// </summary>
         internal static string AttachementAdded {
             get {
@@ -743,7 +743,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to इस अटैचमेंट की साईज {0} है. क्या आप निश्चित रूप से उसे अपने उपकरण में डाउनलोड करना चाहते हैं?.
+        ///   Looks up a localized string similar to This attachment is {0} in size. Are you sure you want to download it onto your device?.
         /// </summary>
         internal static string AttachmentLargeWarning {
             get {
@@ -5417,7 +5417,8 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to अपने कैमरे को QR CODE कि और रखें। स्कैन अपने आप होगा।.
+        ///   Looks up a localized string similar to Point your camera at the QR Code.
+        ///Scanning will happen automatically..
         /// </summary>
         internal static string PointYourCameraAtTheQRCode {
             get {
@@ -5489,7 +5490,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to इस सुविधा का उपयोग करने के लिए प्रीमियम सदस्यता की आवश्यकता होती है।.
+        ///   Looks up a localized string similar to A premium membership is required to use this feature..
         /// </summary>
         internal static string PremiumRequired {
             get {
@@ -6227,15 +6228,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set up an unlock option to change your vault timeout action..
-        /// </summary>
-        internal static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
-            get {
-                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Set up TOTP.
         /// </summary>
         internal static string SetupTotp {
@@ -6947,7 +6939,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to फाइल डाउनलोड करने में असफल.
+        ///   Looks up a localized string similar to Unable to download file..
         /// </summary>
         internal static string UnableToDownloadFile {
             get {
@@ -6956,7 +6948,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to आपका उपकरण इस तरह की फाइल नहीं खोल सकता.
+        ///   Looks up a localized string similar to Your device cannot open this type of file..
         /// </summary>
         internal static string UnableToOpenFile {
             get {
@@ -7442,7 +7434,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to जांच के लिए मेईल भेजने में असमर्थ। फिर से प्रयास करें ।.
+        ///   Looks up a localized string similar to Could not send verification email. Try again..
         /// </summary>
         internal static string VerificationEmailNotSent {
             get {
@@ -7451,7 +7443,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to जांच के लिए मेईल भेजा गया है.
+        ///   Looks up a localized string similar to Verification email sent.
         /// </summary>
         internal static string VerificationEmailSent {
             get {
@@ -7771,24 +7763,6 @@ namespace Bit.App.Resources {
         internal static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your organization permissions were updated, requiring you to set a master password..
-        /// </summary>
-        internal static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Your organization requires you to set a master password..
-        /// </summary>
-        internal static string YourOrganizationRequiresYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
             }
         }
         

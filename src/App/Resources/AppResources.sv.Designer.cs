@@ -1661,7 +1661,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kontakta Bitwarden support.
+        ///   Looks up a localized string similar to Contact Bitwarden support.
         /// </summary>
         internal static string ContactBitwardenSupport {
             get {
@@ -1868,7 +1868,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skapad {0}, {1}.
+        ///   Looks up a localized string similar to Created {0}, {1}.
         /// </summary>
         internal static string CreatedXY {
             get {
@@ -6229,15 +6229,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set up an unlock option to change your vault timeout action..
-        /// </summary>
-        internal static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
-            get {
-                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Ställ in TOTP.
         /// </summary>
         internal static string SetupTotp {
@@ -6994,7 +6985,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upplåsning kan misslyckas på grund av otillräckligt minne. Minska dina KDF-minnesinställningar för att lösa detta..
+        ///   Looks up a localized string similar to Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve..
         /// </summary>
         internal static string UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve {
             get {
@@ -7773,24 +7764,6 @@ namespace Bit.App.Resources {
         internal static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Din organisations behörigheter uppdaterades, vilket kräver att du anger ett huvudlösenord..
-        /// </summary>
-        internal static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Din organisation kräver att du anger ett huvudlösenord..
-        /// </summary>
-        internal static string YourOrganizationRequiresYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
             }
         }
         

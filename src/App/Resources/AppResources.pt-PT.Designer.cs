@@ -6226,15 +6226,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre..
-        /// </summary>
-        internal static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
-            get {
-                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Configurar TOTP.
         /// </summary>
         internal static string SetupTotp {
@@ -7770,24 +7761,6 @@ namespace Bit.App.Resources {
         internal static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to As permissões da sua organização foram atualizadas, exigindo a definição de uma palavra-passe mestra..
-        /// </summary>
-        internal static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A sua organização exige a definição de uma palavra-passe mestra..
-        /// </summary>
-        internal static string YourOrganizationRequiresYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
             }
         }
         

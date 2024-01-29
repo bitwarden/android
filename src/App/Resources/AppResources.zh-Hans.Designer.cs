@@ -670,7 +670,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 确定要拒绝所有待处理的登录请求吗？.
+        ///   Looks up a localized string similar to 您确定要拒绝所有待处理的登录请求吗？.
         /// </summary>
         internal static string AreYouSureYouWantToDeclineAllPendingLogInRequests {
             get {
@@ -688,7 +688,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 确定要覆盖当前用户名吗？.
+        ///   Looks up a localized string similar to 您确定要覆盖当前用户名吗？.
         /// </summary>
         internal static string AreYouSureYouWantToOverwriteTheCurrentUsername {
             get {
@@ -742,7 +742,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 此附件大小为 {0} 。确定要将其下载到您的设备上吗？.
+        ///   Looks up a localized string similar to 此附件大小是 {0} 。您确定要下载到设备吗？.
         /// </summary>
         internal static string AttachmentLargeWarning {
             get {
@@ -1210,7 +1210,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 确定要自动填充此项目吗？它与「{0}」并不完全匹配。.
+        ///   Looks up a localized string similar to 确定要自动填充吗？它与「{0}」并不完全匹配。.
         /// </summary>
         internal static string BitwardenAutofillServiceMatchConfirm {
             get {
@@ -2605,7 +2605,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 确定要退出 Bitwarden 吗？.
+        ///   Looks up a localized string similar to 您确定要退出 Bitwarden 吗？.
         /// </summary>
         internal static string ExitConfirmation {
             get {
@@ -4155,7 +4155,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 确定要注销吗？.
+        ///   Looks up a localized string similar to 您确定要注销吗？.
         /// </summary>
         internal static string LogoutConfirmation {
             get {
@@ -5281,7 +5281,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 确定要覆盖当前密码吗？.
+        ///   Looks up a localized string similar to 您确定要覆盖当前密码吗？.
         /// </summary>
         internal static string PasswordOverrideAlert {
             get {
@@ -5651,7 +5651,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 确定要移除此账户吗？.
+        ///   Looks up a localized string similar to 您确定要移除此账户吗？.
         /// </summary>
         internal static string RemoveAccountConfirmation {
             get {
@@ -5678,7 +5678,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 如果您不想移除您的主密码，您可以退出该组织。.
+        ///   Looks up a localized string similar to 如果您不想移除您的主密码，您可以退出这个组织。.
         /// </summary>
         internal static string RemoveMasterPasswordWarning2 {
             get {
@@ -6223,15 +6223,6 @@ namespace Bit.App.Resources {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 设置解锁选项以更改您的密码库超时操作。.
-        /// </summary>
-        internal static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
-            get {
-                return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
             }
         }
         
@@ -7771,24 +7762,6 @@ namespace Bit.App.Resources {
         internal static string YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum {
             get {
                 return ResourceManager.GetString("YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 您的组织权限已更新，要求您设置主密码。.
-        /// </summary>
-        internal static string YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 您的组织要求您设置主密码。.
-        /// </summary>
-        internal static string YourOrganizationRequiresYouToSetAMasterPassword {
-            get {
-                return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
             }
         }
         
