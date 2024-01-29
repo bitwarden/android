@@ -44,8 +44,6 @@
         x:Name="_iconImage"
         Grid.Column="0"
         BitmapOptimizations="True"
-        ErrorPlaceholder="login.png"
-        LoadingPlaceholder="login.png"
         HorizontalOptions="CenterAndExpand"
         VerticalOptions="CenterAndExpand"
         Margin="9"
@@ -56,6 +54,8 @@
         Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False"
         AutomationId="CipherWebsiteIcon" />
+        <!-- ErrorPlaceholder="login.png"
+        LoadingPlaceholder="login.png" -->
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
         <Grid.RowDefinitions>

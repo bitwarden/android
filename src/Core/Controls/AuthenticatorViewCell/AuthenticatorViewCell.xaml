@@ -31,8 +31,6 @@
     <controls:CachedImage
         Grid.Column="0"
         BitmapOptimizations="True"
-        ErrorPlaceholder="login.png"
-        LoadingPlaceholder="login.png"
         HorizontalOptions="Center"
         VerticalOptions="Center"
         WidthRequest="22"
@@ -41,6 +39,8 @@
         IsVisible="{Binding ShowIconImage}"
         Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False" />
+        <!-- ErrorPlaceholder="login.png"
+        LoadingPlaceholder="login.png" -->
 
     <Label
         LineBreakMode="TailTruncation"
