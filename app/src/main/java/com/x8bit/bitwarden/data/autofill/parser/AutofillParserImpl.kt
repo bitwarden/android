@@ -16,6 +16,16 @@ import com.x8bit.bitwarden.data.autofill.util.website
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 
 /**
+ * A list of URIs that should never be autofilled.
+ */
+private val BLOCK_LISTED_URIS: List<String> = listOf(
+    "androidapp://android",
+    "androidapp://com.android.settings",
+    "androidapp://com.x8bit.bitwarden",
+    "androidapp://com.oneplus.applocker",
+)
+
+/**
  * The default [AutofillParser] implementation for the app. This is a tool for parsing autofill data
  * from the OS into domain models.
  */
@@ -65,14 +75,18 @@ class AutofillParserImpl(
             .map { it.autofillViews }
             .flatten()
 
-        // Find the focused view (or indicate there is no fulfillment to be performed.)
-        val focusedView = autofillViews
-            .firstOrNull { it.data.isFocused }
-            ?: return AutofillRequest.Unfillable
+        // Find the focused view.
+        val focusedView = autofillViews.firstOrNull { it.data.isFocused }
 
         val uri = traversalDataList.buildUriOrNull(
             assistStructure = assistStructure,
         )
+
+        val blockListedURIs = settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS
+        if (focusedView == null || blockListedURIs.contains(uri)) {
+            // The view is unfillable if there are no focused views or the URI is block listed.
+            return AutofillRequest.Unfillable
+        }
 
         // Choose the first focused partition of data for fulfillment.
         val partition = when (focusedView) {
