@@ -1,40 +1,42 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
 /**
  * A collection of handler functions for managing actions common
  * within the context of adding items to a vault.
  *
  * @property onNameTextChange Handles the action when the name text is changed.
- * @property onFolderTextChange Handles the action when the folder text is changed.
+ * @property onFolderSelected Handles the action when a folder is selected.
  * @property onToggleFavorite Handles the action when the favorite toggle is changed.
  * @property onToggleMasterPasswordReprompt Handles the action when the master password
  * reprompt toggle is changed.
  * @property onNotesTextChange Handles the action when the notes text is changed.
- * @property onOwnershipTextChange Handles the action when the ownership text is changed.
+ * @property onOwnerSelected Handles the action when a owner is selected.
  * @property onTooltipClick Handles the action when the tooltip button is clicked.
  * @property onAddNewCustomFieldClick Handles the action when the add new custom field
  * button is clicked.
- * @property onCustomFieldValueChange Handles the action when the field's value changes
+ * @property onCustomFieldValueChange Handles the action when the field's value changes.
+ * @property onCollectionSelect Handles the action when a collection is selected.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditCommonHandlers(
     val onNameTextChange: (String) -> Unit,
-    val onFolderTextChange: (String) -> Unit,
+    val onFolderSelected: (VaultAddEditState.Folder) -> Unit,
     val onToggleFavorite: (Boolean) -> Unit,
     val onToggleMasterPasswordReprompt: (Boolean) -> Unit,
     val onNotesTextChange: (String) -> Unit,
-    val onOwnershipTextChange: (String) -> Unit,
+    val onOwnerSelected: (VaultAddEditState.Owner) -> Unit,
     val onTooltipClick: () -> Unit,
     val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
     val onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
     val onCustomFieldActionSelect: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
+    val onCollectionSelect: (VaultCollection) -> Unit,
 ) {
     companion object {
 
@@ -50,10 +52,10 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.NameTextChange(newName),
                     )
                 },
-                onFolderTextChange = { newFolder ->
+                onFolderSelected = { newFolder ->
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.FolderChange(
-                            newFolder.asText(),
+                            newFolder,
                         ),
                     )
                 },
@@ -74,7 +76,7 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.NotesTextChange(newNotes),
                     )
                 },
-                onOwnershipTextChange = { newOwnership ->
+                onOwnerSelected = { newOwnership ->
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.OwnershipChange(newOwnership),
                     )
@@ -104,6 +106,13 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.CustomFieldActionSelect(
                             customFieldAction,
                             field,
+                        ),
+                    )
+                },
+                onCollectionSelect = { selectedCollection ->
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.CollectionSelect(
+                            collection = selectedCollection,
                         ),
                     )
                 },

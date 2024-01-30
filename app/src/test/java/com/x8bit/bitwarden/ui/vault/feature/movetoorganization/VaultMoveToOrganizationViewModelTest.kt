@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -119,7 +120,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         mutableCollectionFlow.tryEmit(value = DataState.Loaded(DEFAULT_COLLECTIONS))
         mutableVaultItemFlow.tryEmit(value = DataState.Loaded(createMockCipherView(number = 1)))
         val unselectCollection1Action = VaultMoveToOrganizationAction.CollectionSelect(
-            VaultMoveToOrganizationState.ViewState.Content.Collection(
+            VaultCollection(
                 id = "mockId-1",
                 name = "mockName-1",
                 isSelected = true,

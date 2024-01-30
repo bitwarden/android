@@ -13,7 +13,6 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -61,11 +60,9 @@ class CipherViewExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
-                    folderName = R.string.folder_none.asText(),
                     favorite = false,
                     masterPasswordReprompt = true,
                     notes = "Lots of notes",
-                    ownership = "",
                     customFieldData = listOf(
                         VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
                         VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
@@ -105,11 +102,9 @@ class CipherViewExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
-                    folderName = R.string.folder_none.asText(),
                     favorite = false,
                     masterPasswordReprompt = true,
                     notes = "Lots of notes",
-                    ownership = "",
                     customFieldData = listOf(
                         VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
                         VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
@@ -154,11 +149,9 @@ class CipherViewExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
-                    folderName = R.string.folder_none.asText(),
                     favorite = false,
                     masterPasswordReprompt = true,
                     notes = "Lots of notes",
-                    ownership = "",
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                     customFieldData = listOf(
@@ -198,11 +191,9 @@ class CipherViewExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher",
-                    folderName = R.string.folder_none.asText(),
                     favorite = false,
                     masterPasswordReprompt = true,
                     notes = "Lots of notes",
-                    ownership = "",
                     customFieldData = listOf(
                         VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
                         VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
@@ -231,11 +222,9 @@ class CipherViewExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(
                     originalCipher = cipherView,
                     name = "cipher - Clone",
-                    folderName = R.string.folder_none.asText(),
                     favorite = false,
                     masterPasswordReprompt = true,
                     notes = "Lots of notes",
-                    ownership = "",
                     customFieldData = listOf(
                         VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
                         VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),

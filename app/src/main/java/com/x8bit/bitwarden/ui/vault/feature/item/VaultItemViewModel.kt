@@ -70,7 +70,6 @@ class VaultItemViewModel @Inject constructor(
                     verificationCode = it.code,
                 )
             }
-
             VaultItemAction.Internal.VaultDataReceive(
                 userState = userState,
                 vaultDataState = combineDataStates(

@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -199,9 +200,18 @@ fun LazyListScope.vaultAddEditLoginItems(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.folder),
-            options = commonState.availableFolders.map { it.invoke() }.toImmutableList(),
-            selectedOption = commonState.folderName.invoke(),
-            onOptionSelected = commonActionHandler.onFolderTextChange,
+            options = commonState
+                .availableFolders
+                .map { it.name }
+                .toImmutableList(),
+            selectedOption = commonState.selectedFolder?.name,
+            onOptionSelected = { selectedFolderName ->
+                commonActionHandler.onFolderSelected(
+                    commonState
+                        .availableFolders
+                        .first { it.name == selectedFolderName },
+                )
+            },
             modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
@@ -316,12 +326,28 @@ fun LazyListScope.vaultAddEditLoginItems(
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenMultiSelectButton(
                 label = stringResource(id = R.string.who_owns_this_item),
-                options = commonState.availableOwners.toImmutableList(),
-                selectedOption = commonState.ownership,
-                onOptionSelected = commonActionHandler.onOwnershipTextChange,
+                options = commonState
+                    .availableOwners
+                    .map { it.name }
+                    .toImmutableList(),
+                selectedOption = commonState.selectedOwner?.name,
+                onOptionSelected = { selectedOwnerName ->
+                    commonActionHandler.onOwnerSelected(
+                        commonState
+                            .availableOwners
+                            .first { it.name == selectedOwnerName },
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+            )
+        }
+
+        if (commonState.selectedOwnerId != null) {
+            collectionItemsSelector(
+                collectionList = commonState.selectedOwner?.collections,
+                onCollectionSelect = commonActionHandler.onCollectionSelect,
             )
         }
     }

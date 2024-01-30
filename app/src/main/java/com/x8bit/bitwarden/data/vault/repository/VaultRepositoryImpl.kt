@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
@@ -581,6 +582,32 @@ class VaultRepositoryImpl(
                     vaultDiskSource.saveCipher(userId = userId, cipher = it)
                     CreateCipherResult.Success
                 },
+            )
+    }
+
+    override suspend fun createCipherInOrganization(
+        cipherView: CipherView,
+        collectionIds: List<String>,
+    ): CreateCipherResult {
+        val userId = activeUserId ?: return CreateCipherResult.Error
+        return vaultSdkSource
+            .encryptCipher(
+                userId = userId,
+                cipherView = cipherView,
+            )
+            .flatMap { cipher ->
+                ciphersService
+                    .createCipherInOrganization(
+                        body = CreateCipherInOrganizationJsonRequest(
+                            cipher = cipher.toEncryptedNetworkCipher(),
+                            collectionIds = collectionIds,
+                        ),
+                    )
+            }
+            .onSuccess { vaultDiskSource.saveCipher(userId = userId, cipher = it) }
+            .fold(
+                onFailure = { CreateCipherResult.Error },
+                onSuccess = { CreateCipherResult.Success },
             )
     }
 

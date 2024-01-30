@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
+import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -17,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -57,14 +59,14 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         ) { cipherViewState, collectionsState, userState ->
             VaultMoveToOrganizationAction.Internal.VaultDataReceive(
                 vaultData = combineDataStates(
-                    dataState1 = cipherViewState,
+                    dataState1 = cipherViewState.map { Unit },
                     dataState2 = collectionsState,
-                    dataState3 = DataState.Loaded(userState),
-                ) { ciphersData, collectionsData, userData ->
+                    dataState3 = DataState.Loaded(userState).map { Unit },
+                ) { _, collectionsData, _ ->
                     Triple(
-                        first = ciphersData,
+                        first = cipherViewState.data,
                         second = collectionsData,
-                        third = userData,
+                        third = userState,
                     )
                 },
             )
@@ -378,21 +380,7 @@ data class VaultMoveToOrganizationState(
             data class Organization(
                 val id: String,
                 val name: String,
-                val collections: List<Collection>,
-            ) : Parcelable
-
-            /**
-             * Models a collection.
-             *
-             * @property id the collection id.
-             * @property name the collection name.
-             * @property isSelected if the collection is selected or not.
-             */
-            @Parcelize
-            data class Collection(
-                val id: String,
-                val name: String,
-                val isSelected: Boolean,
+                val collections: List<VaultCollection>,
             ) : Parcelable
         }
 
@@ -457,7 +445,7 @@ sealed class VaultMoveToOrganizationAction {
      * @property collection the collection to select.
      */
     data class CollectionSelect(
-        val collection: VaultMoveToOrganizationState.ViewState.Content.Collection,
+        val collection: VaultCollection,
     ) : VaultMoveToOrganizationAction()
 
     /**
@@ -495,9 +483,9 @@ private fun List<VaultMoveToOrganizationState.ViewState.Content.Organization>.to
         )
     }
 
-private fun List<VaultMoveToOrganizationState.ViewState.Content.Collection>.toUpdatedCollections(
+private fun List<VaultCollection>.toUpdatedCollections(
     selectedCollectionId: String,
-): List<VaultMoveToOrganizationState.ViewState.Content.Collection> =
+): List<VaultCollection> =
     map { collection ->
         collection.copy(
             isSelected = if (selectedCollectionId == collection.id) {

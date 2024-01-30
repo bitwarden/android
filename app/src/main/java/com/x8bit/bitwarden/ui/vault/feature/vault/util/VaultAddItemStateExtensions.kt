@@ -49,10 +49,8 @@ fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
         name = common.name,
         notes = common.notes.orNullIfBlank(),
         favorite = common.favorite,
-        // TODO Use real folder ID (BIT-528)
-        folderId = common.originalCipher?.folderId,
-        // TODO Use real organization ID (BIT-780)
-        organizationId = common.originalCipher?.organizationId,
+        folderId = common.selectedFolderId,
+        organizationId = common.selectedOwnerId,
         reprompt = common.toCipherRepromptType(),
         fields = common.customFieldData.map { it.toFieldView() },
     )

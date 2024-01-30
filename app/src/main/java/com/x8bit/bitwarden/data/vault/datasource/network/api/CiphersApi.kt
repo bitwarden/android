@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.api
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import okhttp3.MultipartBody
@@ -16,6 +17,7 @@ import retrofit2.http.Path
 /**
  * Defines raw calls under the /ciphers API with authentication applied.
  */
+@Suppress("TooManyFunctions")
 interface CiphersApi {
 
     /**
@@ -23,6 +25,14 @@ interface CiphersApi {
      */
     @POST("ciphers")
     suspend fun createCipher(@Body body: CipherJsonRequest): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Create a cipher that belongs to an organization.
+     */
+    @POST("ciphers/create")
+    suspend fun createCipherInOrganization(
+        @Body body: CreateCipherInOrganizationJsonRequest,
+    ): Result<SyncResponseJson.Cipher>
 
     /**
      * Associates an attachment with a cipher.

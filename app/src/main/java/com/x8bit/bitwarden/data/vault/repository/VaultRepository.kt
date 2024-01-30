@@ -201,6 +201,14 @@ interface VaultRepository : VaultLockManager {
     suspend fun createCipher(cipherView: CipherView): CreateCipherResult
 
     /**
+     * Attempt to create a cipher that belongs to an organization.
+     */
+    suspend fun createCipherInOrganization(
+        cipherView: CipherView,
+        collectionIds: List<String>,
+    ): CreateCipherResult
+
+    /**
      * Attempt to create an attachment for the given [cipherView].
      */
     suspend fun createAttachment(

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +15,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -29,7 +28,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun VaultMoveToOrganizationContent(
     state: VaultMoveToOrganizationState.ViewState.Content,
     organizationSelect: (VaultMoveToOrganizationState.ViewState.Content.Organization) -> Unit,
-    collectionSelect: (VaultMoveToOrganizationState.ViewState.Content.Collection) -> Unit,
+    collectionSelect: (VaultCollection) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -70,45 +69,9 @@ fun VaultMoveToOrganizationContent(
             }
         }
 
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.collections),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-        }
-        if (state.selectedOrganization.collections.isNotEmpty()) {
-            items(state.selectedOrganization.collections) {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenWideSwitch(
-                    label = it.name,
-                    isChecked = it.isSelected,
-                    onCheckedChange = { _ ->
-                        collectionSelect(it)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
-            }
-        } else {
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.no_collections_to_list),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                    )
-                }
-            }
-        }
+        collectionItemsSelector(
+            collectionList = state.selectedOrganization.collections,
+            onCollectionSelect = collectionSelect,
+        )
     }
 }
