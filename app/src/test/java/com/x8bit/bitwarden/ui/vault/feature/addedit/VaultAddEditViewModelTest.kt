@@ -2126,7 +2126,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             sendViewList = sendViewList,
         )
 
-    fun createUserState(): UserState =
+    private fun createUserState(): UserState =
         UserState(
             activeUserId = "activeUserId",
             accounts = listOf(
@@ -2139,6 +2139,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isPremium = true,
                     isLoggedIn = false,
                     isVaultUnlocked = false,
+                    isVaultPendingUnlock = false,
                     organizations = listOf(
                         Organization(
                             id = "organizationId",
