@@ -651,7 +651,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="resend_code">Code opnieuw versturen</string>
   <string name="a_verification_code_was_sent_to_your_email">Er is een verificatiecode naar je e-mailadres gestuurd.</string>
   <string name="an_error_occurred_while_sending_a_verification_code_to_your_email_please_try_again">Er is een fout opgetreden tijdens het verzenden van een verificatiecode naar je e-mail. Probeer het opnieuw</string>
-  <string name="enter_the_verification_code_that_was_sent_to_your_email">Voer de verificatiecode in die we naar je e-mail is gestuurd</string>
+  <string name="enter_the_verification_code_that_was_sent_to_your_email">Voer de verificatiecode in die naar je e-mail is gestuurd</string>
   <string name="submit_crash_logs">Crashes rapporteren</string>
   <string name="submit_crash_logs_description">Help Bitwarden de app-stabiliteit te verbeteren door crashrapporten te versturen.</string>
   <string name="options_expanded">Opties zijn uitgebreid, tik om te storten.</string>
