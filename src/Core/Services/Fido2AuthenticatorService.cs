@@ -194,6 +194,19 @@ namespace Bit.Core.Services
             }
         }
 
+        public async Task<Fido2AuthenticatorDiscoverableCredentialMetadata[]> SilentCredentialDiscoveryAsync(string rpId)
+        {
+            var credentials = (await FindCredentialsByRpAsync(rpId)).Select(cipher => new Fido2AuthenticatorDiscoverableCredentialMetadata {
+                Type = "public-key",
+                Id = GuidToRawFormat(cipher.Login.MainFido2Credential.CredentialId),
+                RpId = cipher.Login.MainFido2Credential.RpId,
+                UserHandle = cipher.Login.MainFido2Credential.UserHandleValue,
+                UserName = cipher.Login.MainFido2Credential.UserName
+            }).ToArray();
+
+            return credentials;
+        }
+
         ///<summary>
         /// Finds existing crendetials and returns the `CipherId` for each one
         ///</summary>

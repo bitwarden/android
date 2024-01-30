@@ -6,5 +6,7 @@ namespace Bit.Core.Abstractions
     {
         Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams);
         Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams);
+        // TODO: Should this return a List? Or maybe IEnumerable?
+        Task<Fido2AuthenticatorDiscoverableCredentialMetadata[]> SilentCredentialDiscoveryAsync(string rpId);
     }
 }
