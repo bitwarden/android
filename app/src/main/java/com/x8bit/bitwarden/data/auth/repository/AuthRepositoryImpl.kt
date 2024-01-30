@@ -14,7 +14,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -43,6 +44,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -121,7 +123,7 @@ class AuthRepositoryImpl(
     /**
      * The information necessary to resend the verification code email for two-factor login.
      */
-    private var resendEmailJsonRequest: ResendEmailJsonRequest? = null
+    private var resendEmailRequestJson: ResendEmailRequestJson? = null
 
     /**
      * The password that needs to be checked against any organization policies before
@@ -218,6 +220,15 @@ class AuthRepositoryImpl(
     override var hasPendingAccountAddition: Boolean
         by mutableHasPendingAccountAdditionStateFlow::value
 
+    override val passwordPolicies: List<PolicyInformation.MasterPassword>
+        get() = activeUserId?.let { userId ->
+            authDiskSource
+                .getPolicies(userId)
+                ?.filter { it.type == PolicyTypeJson.MASTER_PASSWORD && it.isEnabled }
+                ?.mapNotNull { it.policyInformation as? PolicyInformation.MasterPassword }
+                .orEmpty()
+        } ?: emptyList()
+
     init {
         pushManager
             .syncOrgKeysFlow
@@ -239,6 +250,10 @@ class AuthRepositoryImpl(
                 val userId = activeUserId ?: return@onEach
                 if (passwordPassesPolicies(policies)) {
                     vaultRepository.completeUnlock(userId = userId)
+                    storeUserResetPasswordReason(
+                        userId = userId,
+                        reason = null,
+                    )
                 } else {
                     storeUserResetPasswordReason(
                         userId = userId,
@@ -363,7 +378,7 @@ class AuthRepositoryImpl(
                         // Cache the data necessary for the remaining two-factor auth flow.
                         identityTokenAuthModel = authModel
                         twoFactorResponse = loginResponse
-                        resendEmailJsonRequest = ResendEmailJsonRequest(
+                        resendEmailRequestJson = ResendEmailRequestJson(
                             deviceIdentifier = authDiskSource.uniqueAppId,
                             email = email,
                             passwordHash = authModel.password,
@@ -399,7 +414,7 @@ class AuthRepositoryImpl(
                         // Remove any cached data after successfully logging in.
                         identityTokenAuthModel = null
                         twoFactorResponse = null
-                        resendEmailJsonRequest = null
+                        resendEmailRequestJson = null
 
                         // Attempt to unlock the vault if possible.
                         password?.let {
@@ -493,7 +508,7 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun resendVerificationCodeEmail(): ResendEmailResult =
-        resendEmailJsonRequest?.let { jsonRequest ->
+        resendEmailRequestJson?.let { jsonRequest ->
             accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
                 onFailure = { ResendEmailResult.Error(message = it.message) },
                 onSuccess = { ResendEmailResult.Success },
@@ -626,6 +641,76 @@ class AuthRepositoryImpl(
             },
             onFailure = { PasswordHintResult.Error(null) },
         )
+    }
+
+    @Suppress("ReturnCount")
+    override suspend fun resetPassword(
+        currentPassword: String,
+        newPassword: String,
+        passwordHint: String?,
+    ): ResetPasswordResult {
+        val activeAccount = authDiskSource
+            .userState
+            ?.activeAccount
+            ?: return ResetPasswordResult.Error
+        val currentPasswordHash = authSdkSource
+            .hashPassword(
+                email = activeAccount.profile.email,
+                password = currentPassword,
+                kdf = activeAccount.profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+            .fold(
+                onFailure = { return ResetPasswordResult.Error },
+                onSuccess = { it },
+            )
+        return authSdkSource
+            .makeRegisterKeys(
+                email = activeAccount.profile.email,
+                password = newPassword,
+                kdf = activeAccount.profile.toSdkParams(),
+            )
+            .flatMap { registerKeyResponse ->
+                accountsService.resetPassword(
+                    body = ResetPasswordRequestJson(
+                        currentPasswordHash = currentPasswordHash,
+                        newPasswordHash = registerKeyResponse.masterPasswordHash,
+                        passwordHint = passwordHint,
+                        key = registerKeyResponse.encryptedUserKey,
+                    ),
+                )
+            }
+            .fold(
+                onSuccess = {
+                    // Clear the password reset reason, since it's no longer relevant.
+                    storeUserResetPasswordReason(
+                        userId = activeAccount.profile.userId,
+                        reason = null,
+                    )
+
+                    // Update the saved master password hash.
+                    authSdkSource
+                        .hashPassword(
+                            email = activeAccount.profile.email,
+                            password = newPassword,
+                            kdf = activeAccount.profile.toSdkParams(),
+                            purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                        )
+                        .onSuccess { passwordHash ->
+                            authDiskSource.storeMasterPasswordHash(
+                                userId = activeAccount.profile.userId,
+                                passwordHash = passwordHash,
+                            )
+                        }
+
+                    // Complete the login flow.
+                    vaultRepository.completeUnlock(userId = activeAccount.profile.userId)
+
+                    // Return the success.
+                    ResetPasswordResult.Success
+                },
+                onFailure = { ResetPasswordResult.Error },
+            )
     }
 
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
@@ -854,7 +939,13 @@ class AuthRepositoryImpl(
     }
 
     @Suppress("CyclomaticComplexMethod", "ReturnCount")
-    override suspend fun validatePasswordAgainstPolicy(
+    override suspend fun validatePasswordAgainstPolicies(
+        password: String,
+    ): Boolean = passwordPolicies
+        .all { validatePasswordAgainstPolicy(password, it) }
+
+    @Suppress("CyclomaticComplexMethod", "ReturnCount")
+    private suspend fun validatePasswordAgainstPolicy(
         password: String,
         policy: PolicyInformation.MasterPassword,
     ): Boolean {
@@ -908,10 +999,9 @@ class AuthRepositoryImpl(
             .filter { it.enforceOnLogin == true }
 
         // Check the password against all the policies.
-        val failingPolicies = passwordPolicies.filter { policy ->
-            !validatePasswordAgainstPolicy(password, policy)
+        return passwordPolicies.all { policy ->
+            validatePasswordAgainstPolicy(password, policy)
         }
-        return failingPolicies.isEmpty()
     }
 
     private suspend fun getFingerprintPhrase(

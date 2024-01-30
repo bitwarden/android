@@ -7,7 +7,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -217,11 +218,26 @@ class AccountsServiceTest : BaseServiceTest() {
         val response = MockResponse().setBody("")
         server.enqueue(response)
         val result = service.resendVerificationCodeEmail(
-            body = ResendEmailJsonRequest(
+            body = ResendEmailRequestJson(
                 deviceIdentifier = "3",
                 email = "example@email.com",
                 passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
                 ssoToken = null,
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `resetPassword with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.resetPassword(
+            body = ResetPasswordRequestJson(
+                currentPasswordHash = "",
+                newPasswordHash = "",
+                passwordHint = null,
+                key = "",
             ),
         )
         assertTrue(result.isSuccess)

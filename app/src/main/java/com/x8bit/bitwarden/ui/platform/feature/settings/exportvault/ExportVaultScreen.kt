@@ -21,7 +21,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -71,7 +70,7 @@ fun ExportVaultScreen(
     }
 
     var shouldShowConfirmationDialog by remember { mutableStateOf(false) }
-    var confirmExportVaultClicked = remember(viewModel) {
+    val confirmExportVaultClicked = remember(viewModel) {
         { viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked) }
     }
     if (shouldShowConfirmationDialog) {
@@ -154,7 +153,6 @@ fun ExportVaultScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun ExportVaultScreenContent(
     state: ExportVaultState,

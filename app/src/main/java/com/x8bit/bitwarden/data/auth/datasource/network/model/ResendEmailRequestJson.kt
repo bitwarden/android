@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
  * @property ssoToken The sso token, if the user is logging in via single sign on.
  */
 @Serializable
-data class ResendEmailJsonRequest(
+data class ResendEmailRequestJson(
     @SerialName("DeviceIdentifier")
     val deviceIdentifier: String,
 

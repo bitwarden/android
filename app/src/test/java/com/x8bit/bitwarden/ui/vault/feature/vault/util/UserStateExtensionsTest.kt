@@ -70,6 +70,7 @@ class UserStateExtensionsTest {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
@@ -88,6 +89,7 @@ class UserStateExtensionsTest {
                         isLoggedIn = true,
                         isVaultUnlocked = false,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
@@ -110,6 +112,7 @@ class UserStateExtensionsTest {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
@@ -132,6 +135,7 @@ class UserStateExtensionsTest {
                         isLoggedIn = false,
                         isVaultUnlocked = false,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
@@ -169,6 +173,7 @@ class UserStateExtensionsTest {
                 isLoggedIn = true,
                 isVaultUnlocked = true,
                 isVaultPendingUnlock = false,
+                needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = listOf(
                     Organization(
@@ -204,6 +209,7 @@ class UserStateExtensionsTest {
                 isLoggedIn = true,
                 isVaultUnlocked = false,
                 isVaultPendingUnlock = false,
+                needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = listOf(
                     Organization(
@@ -243,6 +249,7 @@ class UserStateExtensionsTest {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
@@ -270,6 +277,7 @@ class UserStateExtensionsTest {
                 isLoggedIn = true,
                 isVaultUnlocked = true,
                 isVaultPendingUnlock = false,
+                needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = emptyList(),
             )
@@ -306,6 +314,7 @@ class UserStateExtensionsTest {
                 isLoggedIn = true,
                 isVaultUnlocked = true,
                 isVaultPendingUnlock = false,
+                needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = listOf(
                     Organization(

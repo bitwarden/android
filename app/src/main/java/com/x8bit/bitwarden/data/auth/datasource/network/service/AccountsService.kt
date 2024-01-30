@@ -4,7 +4,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 
 /**
  * Provides an API for querying accounts endpoints.
@@ -34,5 +35,10 @@ interface AccountsService {
     /**
      * Resend the email with the two-factor verification code.
      */
-    suspend fun resendVerificationCodeEmail(body: ResendEmailJsonRequest): Result<Unit>
+    suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit>
+
+    /**
+     * Reset the password.
+     */
+    suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit>
 }

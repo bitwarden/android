@@ -22,7 +22,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResp
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -53,11 +54,11 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.auth.repository.model.createMockMasterPasswordPolicy
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
@@ -1941,6 +1942,155 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `resetPassword Success should return Success`() = runTest {
+        val currentPassword = "currentPassword"
+        val currentPasswordHash = "hashedCurrentPassword"
+        val password = "password"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.hashPassword(
+                email = ACCOUNT_1.profile.email,
+                password = currentPassword,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns currentPasswordHash.asSuccess()
+        coEvery {
+            authSdkSource.makeRegisterKeys(
+                email = ACCOUNT_1.profile.email,
+                password = password,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+            )
+        } returns Result.success(
+            RegisterKeyResponse(
+                masterPasswordHash = PASSWORD_HASH,
+                encryptedUserKey = ENCRYPTED_USER_KEY,
+                keys = RsaKeyPair(
+                    public = PUBLIC_KEY,
+                    private = PRIVATE_KEY,
+                ),
+            ),
+        )
+        coEvery {
+            accountsService.resetPassword(
+                body = ResetPasswordRequestJson(
+                    currentPasswordHash = currentPasswordHash,
+                    newPasswordHash = PASSWORD_HASH,
+                    passwordHint = null,
+                    key = ENCRYPTED_USER_KEY,
+                ),
+            )
+        } returns Unit.asSuccess()
+
+        val result = repository.resetPassword(
+            currentPassword = currentPassword,
+            newPassword = password,
+            passwordHint = null,
+        )
+
+        assertEquals(
+            ResetPasswordResult.Success,
+            result,
+        )
+        coVerify {
+            authSdkSource.makeRegisterKeys(
+                email = ACCOUNT_1.profile.email,
+                password = password,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+            )
+            accountsService.resetPassword(
+                body = ResetPasswordRequestJson(
+                    currentPasswordHash = currentPasswordHash,
+                    newPasswordHash = PASSWORD_HASH,
+                    passwordHint = null,
+                    key = ENCRYPTED_USER_KEY,
+                ),
+            )
+        }
+        verify {
+            vaultRepository.completeUnlock(userId = USER_ID_1)
+        }
+        fakeAuthDiskSource.assertMasterPasswordHash(
+            userId = USER_ID_1,
+            passwordHash = PASSWORD_HASH,
+        )
+    }
+
+    @Test
+    fun `resetPassword Failure should return Error`() = runTest {
+        val currentPassword = "currentPassword"
+        val currentPasswordHash = "hashedCurrentPassword"
+        val password = "password"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.hashPassword(
+                email = ACCOUNT_1.profile.email,
+                password = currentPassword,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns currentPasswordHash.asSuccess()
+        coEvery {
+            authSdkSource.makeRegisterKeys(
+                email = ACCOUNT_1.profile.email,
+                password = password,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+            )
+        } returns Result.success(
+            RegisterKeyResponse(
+                masterPasswordHash = PASSWORD_HASH,
+                encryptedUserKey = ENCRYPTED_USER_KEY,
+                keys = RsaKeyPair(
+                    public = PUBLIC_KEY,
+                    private = PRIVATE_KEY,
+                ),
+            ),
+        )
+        coEvery {
+            accountsService.resetPassword(
+                body = ResetPasswordRequestJson(
+                    currentPasswordHash = currentPasswordHash,
+                    newPasswordHash = PASSWORD_HASH,
+                    passwordHint = null,
+                    key = ENCRYPTED_USER_KEY,
+                ),
+            )
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.resetPassword(
+            currentPassword = currentPassword,
+            newPassword = password,
+            passwordHint = null,
+        )
+
+        assertEquals(
+            ResetPasswordResult.Error,
+            result,
+        )
+        coVerify {
+            authSdkSource.hashPassword(
+                email = ACCOUNT_1.profile.email,
+                password = currentPassword,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+            authSdkSource.makeRegisterKeys(
+                email = ACCOUNT_1.profile.email,
+                password = password,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+            )
+            accountsService.resetPassword(
+                body = ResetPasswordRequestJson(
+                    currentPasswordHash = currentPasswordHash,
+                    newPasswordHash = PASSWORD_HASH,
+                    passwordHint = null,
+                    key = ENCRYPTED_USER_KEY,
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `passwordHintRequest with valid email should return Success`() = runTest {
         val email = "valid@example.com"
         coEvery {
@@ -2129,7 +2279,7 @@ class AuthRepositoryTest {
         // Resend the verification code email.
         coEvery {
             accountsService.resendVerificationCodeEmail(
-                body = ResendEmailJsonRequest(
+                body = ResendEmailRequestJson(
                     deviceIdentifier = UNIQUE_APP_ID,
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
@@ -2141,7 +2291,7 @@ class AuthRepositoryTest {
         assertEquals(ResendEmailResult.Success, resendEmailResult)
         coVerify {
             accountsService.resendVerificationCodeEmail(
-                body = ResendEmailJsonRequest(
+                body = ResendEmailRequestJson(
                     deviceIdentifier = UNIQUE_APP_ID,
                     email = EMAIL,
                     passwordHash = PASSWORD_HASH,
@@ -2944,34 +3094,61 @@ class AuthRepositoryTest {
 
     @Test
     fun `validatePasswordAgainstPolicy validates password against policy requirements`() = runTest {
-        var policy = createMockMasterPasswordPolicy(minLength = 10)
-        assertFalse(repository.validatePasswordAgainstPolicy(password = "123", policy = policy))
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        // A helper method to set a policy in the store with the given parameters.
+        fun setPolicy(
+            minLength: Int = 0,
+            minComplexity: Int? = null,
+            requireUpper: Boolean = false,
+            requireLower: Boolean = false,
+            requireNumbers: Boolean = false,
+            requireSpecial: Boolean = false,
+        ) {
+            fakeAuthDiskSource.storePolicies(
+                userId = USER_ID_1,
+                policies = listOf(
+                    createMockPolicy(
+                        type = PolicyTypeJson.MASTER_PASSWORD,
+                        isEnabled = true,
+                        data = buildJsonObject {
+                            put(key = "minLength", value = minLength)
+                            put(key = "minComplexity", value = minComplexity)
+                            put(key = "requireUpper", value = requireUpper)
+                            put(key = "requireLower", value = requireLower)
+                            put(key = "requireNumbers", value = requireNumbers)
+                            put(key = "requireSpecial", value = requireSpecial)
+                            put(key = "enforceOnLogin", value = true)
+                        },
+                    ),
+                ),
+            )
+        }
+
+        setPolicy(minLength = 10)
+        assertFalse(repository.validatePasswordAgainstPolicies(password = "123"))
 
         val password = "simple"
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.passwordStrength(
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 password = password,
             )
         } returns Result.success(LEVEL_0)
-        policy = createMockMasterPasswordPolicy(minComplexity = 1)
-        assertFalse(repository.validatePasswordAgainstPolicy(password = password, policy = policy))
+        setPolicy(minComplexity = 10)
+        assertFalse(repository.validatePasswordAgainstPolicies(password = password))
 
-        policy = createMockMasterPasswordPolicy(requireUpper = true)
-        assertFalse(repository.validatePasswordAgainstPolicy(password = "lower", policy = policy))
+        setPolicy(requireUpper = true)
+        assertFalse(repository.validatePasswordAgainstPolicies(password = "lower"))
 
-        policy = createMockMasterPasswordPolicy(requireLower = true)
-        assertFalse(repository.validatePasswordAgainstPolicy(password = "UPPER", policy = policy))
+        setPolicy(requireLower = true)
+        assertFalse(repository.validatePasswordAgainstPolicies(password = "UPPER"))
 
-        policy = createMockMasterPasswordPolicy(requireNumbers = true)
-        assertFalse(repository.validatePasswordAgainstPolicy(password = "letters", policy = policy))
+        setPolicy(requireNumbers = true)
+        assertFalse(repository.validatePasswordAgainstPolicies(password = "letters"))
 
-        policy = createMockMasterPasswordPolicy(requireSpecial = true)
-        assertFalse(repository.validatePasswordAgainstPolicy(password = "letters", policy = policy))
-
-        policy = createMockMasterPasswordPolicy(minLength = 5)
-        assertTrue(repository.validatePasswordAgainstPolicy(password = "password", policy = policy))
+        setPolicy(requireSpecial = true)
+        assertFalse(repository.validatePasswordAgainstPolicies(password = "letters"))
     }
 
     companion object {

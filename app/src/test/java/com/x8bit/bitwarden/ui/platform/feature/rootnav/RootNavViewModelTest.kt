@@ -31,7 +31,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
         assertEquals(RootNavState.Auth, viewModel.stateFlow.value)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `when the active user is not logged in the nav state should be Auth`() {
         mutableUserStateFlow.tryEmit(
@@ -48,6 +47,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isLoggedIn = false,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -56,6 +56,33 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel()
         assertEquals(RootNavState.Auth, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `when the active user needs a password reset the nav state should be ResetPassword`() {
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        isVaultPendingUnlock = true,
+                        needsPasswordReset = true,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(RootNavState.ResetPassword, viewModel.stateFlow.value)
     }
 
     @Suppress("MaxLineLength")
@@ -75,6 +102,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -102,6 +130,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isLoggedIn = true,
                         isVaultUnlocked = false,
                         isVaultPendingUnlock = true,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -131,6 +160,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -166,6 +196,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -205,6 +236,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -237,6 +269,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isLoggedIn = true,
                         isVaultUnlocked = false,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),

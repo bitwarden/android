@@ -42,6 +42,7 @@ data class UserState(
      * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
      * @property isVaultPendingUnlock Whether or not the user's vault is currently pending being
      * unlocked, such as when the password policy has not completed verification yet.
+     * @property needsPasswordReset If the user needs to reset their password.
      * @property organizations List of [Organization]s the user is associated with, if any.
      * @property isBiometricsEnabled Indicates that the biometrics mechanism for unlocking the
      * user's vault is enabled.
@@ -57,6 +58,7 @@ data class UserState(
         val isLoggedIn: Boolean,
         val isVaultUnlocked: Boolean,
         val isVaultPendingUnlock: Boolean,
+        val needsPasswordReset: Boolean,
         val organizations: List<Organization>,
         val isBiometricsEnabled: Boolean,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
