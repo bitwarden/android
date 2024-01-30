@@ -45,6 +45,28 @@ class NewAuthRequestServiceTest : BaseServiceTest() {
         )
         assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
     }
+
+    @Test
+    fun `getAuthRequestUpdate when request response is Failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+        val actual = service.getAuthRequestUpdate(
+            requestId = "1",
+            accessCode = "accessCode",
+        )
+        assertTrue(actual.isFailure)
+    }
+
+    @Test
+    fun `getAuthRequestUpdate when request response is Success should return Success`() = runTest {
+        val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
+        server.enqueue(response)
+        val actual = service.getAuthRequestUpdate(
+            requestId = "1",
+            accessCode = "accessCode",
+        )
+        assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
+    }
 }
 
 private const val AUTH_REQUEST_RESPONSE_JSON = """
