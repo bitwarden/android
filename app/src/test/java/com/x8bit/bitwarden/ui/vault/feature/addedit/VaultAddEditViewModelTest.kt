@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -306,7 +308,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     typeContentViewState = createLoginTypeContentViewState(
                         username = "mockUsername-1",
                         password = "mockPassword-1",
-                        uri = "www.mockuri1.com",
+                        uri = listOf(UriItem("testId", "www.mockuri1.com", UriMatchType.HOST)),
                         totpCode = "mockTotp-1",
                         canViewPassword = false,
                     ),
@@ -755,13 +757,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `UriTextChange should update uri in LoginItem`() = runTest {
-            val action = VaultAddEditAction.ItemType.LoginType.UriTextChange("newUri")
+            val action = VaultAddEditAction.ItemType.LoginType.UriTextChange(
+                UriItem("testId", "TestUri", null),
+            )
 
             viewModel.actionChannel.trySend(action)
 
             val expectedState = createVaultAddItemState(
                 typeContentViewState = createLoginTypeContentViewState(
-                    uri = "newUri",
+                    uri = listOf(UriItem("testId", "TestUri", null)),
                 ),
             )
 
@@ -985,18 +989,23 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `AddNewUriClick should emit ShowToast with 'Add New URI' message`() = runTest {
+        fun `AddNewUriClick should update state with another empty UriItem`() = runTest {
             val viewModel = createAddVaultItemViewModel()
+            every { UUID.randomUUID().toString() } returns "testId2"
 
-            viewModel.eventFlow.test {
-                viewModel
-                    .actionChannel
-                    .trySend(
-                        VaultAddEditAction.ItemType.LoginType.AddNewUriClick,
-                    )
+            viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.AddNewUriClick)
 
-                assertEquals(VaultAddEditEvent.ShowToast("Add New URI".asText()), awaitItem())
-            }
+            val expectedState = createVaultAddItemState(
+                typeContentViewState = createLoginTypeContentViewState().copy(
+                    uriList = listOf(UriItem("testId", "", null), UriItem("testId2", "", null)),
+                ),
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value,
+
+            )
         }
     }
 
@@ -1901,14 +1910,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private fun createLoginTypeContentViewState(
         username: String = "",
         password: String = "",
-        uri: String = "",
+        uri: List<UriItem> = listOf(UriItem("testId", "", null)),
         totpCode: String? = null,
         canViewPassword: Boolean = true,
     ): VaultAddEditState.ViewState.Content.ItemType.Login =
         VaultAddEditState.ViewState.Content.ItemType.Login(
             username = username,
             password = password,
-            uri = uri,
+            uriList = uri,
             totp = totpCode,
             canViewPassword = canViewPassword,
         )

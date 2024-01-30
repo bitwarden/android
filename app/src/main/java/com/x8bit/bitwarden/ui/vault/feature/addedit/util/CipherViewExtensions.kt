@@ -5,10 +5,12 @@ import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
+import com.bitwarden.core.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
@@ -29,7 +31,7 @@ fun CipherView.toViewState(
                 VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = login?.username.orEmpty(),
                     password = login?.password.orEmpty(),
-                    uri = login?.uris?.firstOrNull()?.uri.orEmpty(),
+                    uriList = login?.uris.toUriItems(),
                     totp = login?.totp,
                     canViewPassword = this.viewPassword,
                 )
@@ -137,4 +139,23 @@ private fun String.appendCloneTextIfRequired(
         plus(" - ${resourceManager.getString(R.string.clone)}")
     } else {
         this
+    }
+
+private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
+    if (this.isNullOrEmpty()) {
+        listOf(
+            UriItem(
+                id = UUID.randomUUID().toString(),
+                uri = "",
+                match = null,
+            ),
+        )
+    } else {
+        this.map { loginUriView ->
+            UriItem(
+                id = UUID.randomUUID().toString(),
+                uri = loginUriView.uri,
+                match = loginUriView.match,
+            )
+        }
     }

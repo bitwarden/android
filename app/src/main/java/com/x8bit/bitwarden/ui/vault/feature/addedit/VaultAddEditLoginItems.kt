@@ -153,12 +153,14 @@ fun LazyListScope.vaultAddEditLoginItems(
         )
     }
 
-    item {
+    items(loginState.uriList) { uriItem ->
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextFieldWithActions(
             label = stringResource(id = R.string.uri),
-            value = loginState.uri,
-            onValueChange = loginItemTypeHandlers.onUriTextChange,
+            value = uriItem.uri.orEmpty(),
+            onValueChange = {
+                loginItemTypeHandlers.onUriTextChange(uriItem.copy(uri = it))
+            },
             actions = {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(

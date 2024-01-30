@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
@@ -43,6 +44,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.util.Collections
+import java.util.UUID
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -545,7 +547,17 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.ItemType.LoginType.UriTextChange,
     ) {
         updateLoginContent { loginType ->
-            loginType.copy(uri = action.uri)
+            loginType.copy(
+                uriList = loginType
+                    .uriList
+                    .map { uriItem ->
+                        if (uriItem.id == action.uri.id) {
+                            action.uri
+                        } else {
+                            uriItem
+                        }
+                    },
+            )
         }
     }
 
@@ -603,10 +615,12 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleLoginAddNewUriClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = VaultAddEditEvent.ShowToast(
-                    message = "Add New URI".asText(),
+        updateLoginContent { loginType ->
+            loginType.copy(
+                uriList = loginType.uriList + UriItem(
+                    id = UUID.randomUUID().toString(),
+                    uri = "",
+                    match = null,
                 ),
             )
         }
@@ -1360,7 +1374,7 @@ data class VaultAddEditState(
                  *
                  * @property username The username required for the login item.
                  * @property password The password required for the login item.
-                 * @property uri The URI associated with the login item.
+                 * @property uriList The list of URIs associated with the login item.
                  * @property totp The current TOTP (if applicable).
                  * @property canViewPassword Indicates whether the current user can view and copy
                  * passwords associated with the login item.
@@ -1369,9 +1383,11 @@ data class VaultAddEditState(
                 data class Login(
                     val username: String = "",
                     val password: String = "",
-                    val uri: String = "",
                     val totp: String? = null,
                     val canViewPassword: Boolean = true,
+                    val uriList: List<UriItem> = listOf(
+                        UriItem(id = UUID.randomUUID().toString(), uri = "", match = null),
+                    ),
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.LOGIN
                 }
@@ -1744,7 +1760,7 @@ sealed class VaultAddEditAction {
              *
              * @property uri The new URI text.
              */
-            data class UriTextChange(val uri: String) : LoginType()
+            data class UriTextChange(val uri: UriItem) : LoginType()
 
             /**
              * Represents the action to set up TOTP.

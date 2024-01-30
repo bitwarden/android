@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 
 /**
  * A collection of handler functions specifically tailored for managing actions
@@ -27,7 +28,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
 data class VaultAddEditLoginTypeHandlers(
     val onUsernameTextChange: (String) -> Unit,
     val onPasswordTextChange: (String) -> Unit,
-    val onUriTextChange: (String) -> Unit,
+    val onUriTextChange: (UriItem) -> Unit,
     val onOpenUsernameGeneratorClick: () -> Unit,
     val onPasswordCheckerClick: () -> Unit,
     val onOpenPasswordGeneratorClick: () -> Unit,
