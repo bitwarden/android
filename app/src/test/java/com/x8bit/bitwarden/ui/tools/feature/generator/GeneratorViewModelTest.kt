@@ -1787,6 +1787,7 @@ private val DEFAULT_USER_STATE = UserState(
             isLoggedIn = true,
             isVaultUnlocked = true,
             isVaultPendingUnlock = false,
+            needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
         ),

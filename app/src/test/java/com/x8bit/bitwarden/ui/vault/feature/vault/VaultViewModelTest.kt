@@ -163,6 +163,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isLoggedIn = true,
                         isVaultUnlocked = true,
                         isVaultPendingUnlock = false,
+                        needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
                             Organization(
@@ -1281,6 +1282,7 @@ private val DEFAULT_USER_STATE = UserState(
             isLoggedIn = true,
             isVaultUnlocked = true,
             isVaultPendingUnlock = false,
+            needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
         ),
@@ -1294,6 +1296,7 @@ private val DEFAULT_USER_STATE = UserState(
             isLoggedIn = true,
             isVaultUnlocked = false,
             isVaultPendingUnlock = false,
+            needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
         ),

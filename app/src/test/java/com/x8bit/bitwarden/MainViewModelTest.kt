@@ -263,6 +263,7 @@ class MainViewModelTest : BaseViewModelTest() {
                     isLoggedIn = true,
                     isVaultUnlocked = true,
                     isVaultPendingUnlock = false,
+                    needsPasswordReset = false,
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
                 ),

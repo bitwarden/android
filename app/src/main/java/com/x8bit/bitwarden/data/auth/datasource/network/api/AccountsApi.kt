@@ -5,7 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -26,6 +26,6 @@ interface AccountsApi {
 
     @POST("/two-factor/send-email-login")
     suspend fun resendVerificationCodeEmail(
-        @Body body: ResendEmailJsonRequest,
+        @Body body: ResendEmailRequestJson,
     ): Result<Unit>
 }

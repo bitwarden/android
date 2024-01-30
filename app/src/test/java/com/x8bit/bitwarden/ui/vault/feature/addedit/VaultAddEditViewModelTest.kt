@@ -2140,6 +2140,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isLoggedIn = false,
                     isVaultUnlocked = false,
                     isVaultPendingUnlock = false,
+                    needsPasswordReset = false,
                     organizations = listOf(
                         Organization(
                             id = "organizationId",

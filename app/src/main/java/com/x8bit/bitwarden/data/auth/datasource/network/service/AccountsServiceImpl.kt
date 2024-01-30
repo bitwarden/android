@@ -9,7 +9,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailJsonRequest
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
@@ -60,6 +61,9 @@ class AccountsServiceImpl constructor(
                     ?: throw throwable
             }
 
-    override suspend fun resendVerificationCodeEmail(body: ResendEmailJsonRequest): Result<Unit> =
+    override suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit> =
         accountsApi.resendVerificationCodeEmail(body = body)
+
+    override suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit> =
+        authenticatedAccountsApi.resetPassword(body = body)
 }

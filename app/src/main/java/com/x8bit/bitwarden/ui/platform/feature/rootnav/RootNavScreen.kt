@@ -14,6 +14,9 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.RESET_PASSWORD_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordGraph
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
@@ -24,6 +27,8 @@ import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VAULT_UNLOCKED_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
+import com.x8bit.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
+import com.x8bit.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
@@ -35,7 +40,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Controls root level [NavHost] for the app.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
@@ -62,19 +67,21 @@ fun RootNavScreen(
     NavHost(
         navController = navController,
         startDestination = SPLASH_ROUTE,
-        enterTransition = RootTransitionProviders.Enter.fadeIn,
-        exitTransition = RootTransitionProviders.Exit.fadeOut,
-        popEnterTransition = RootTransitionProviders.Enter.fadeIn,
-        popExitTransition = RootTransitionProviders.Exit.fadeOut,
+        enterTransition = { this.targetState.destination.route.toEnterTransition()(this) },
+        exitTransition = { this.targetState.destination.route.toExitTransition()(this) },
+        popEnterTransition = { this.targetState.destination.route.toEnterTransition()(this) },
+        popExitTransition = { this.targetState.destination.route.toExitTransition()(this) },
     ) {
         splashDestination()
         authGraph(navController)
+        resetPasswordDestination()
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
     }
 
     val targetRoute = when (state) {
         RootNavState.Auth -> AUTH_GRAPH_ROUTE
+        RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
         RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
         is RootNavState.VaultUnlocked,
@@ -107,6 +114,7 @@ fun RootNavScreen(
 
     when (val currentState = state) {
         RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
+        RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
         RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
         RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
         is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(rootNavOptions)
@@ -143,4 +151,20 @@ private fun NavDestination?.rootLevelRoute(): String? {
         return route
     }
     return parent.rootLevelRoute()
+}
+
+/**
+ * Define the enter transition for each route.
+ */
+private fun String?.toEnterTransition(): NonNullEnterTransitionProvider = when (this) {
+    RESET_PASSWORD_ROUTE -> RootTransitionProviders.Enter.slideUp
+    else -> RootTransitionProviders.Enter.fadeIn
+}
+
+/**
+ * Define the exit transition for each route.
+ */
+private fun String?.toExitTransition(): NonNullExitTransitionProvider = when (this) {
+    RESET_PASSWORD_ROUTE -> RootTransitionProviders.Exit.slideDown
+    else -> RootTransitionProviders.Exit.fadeOut
 }

@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
+import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -77,6 +78,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Note that this call has no effect when there is no [UserState] information available.
      */
     var hasPendingAccountAddition: Boolean
+
+    /**
+     * Return the cached password policies for the current user.
+     */
+    val passwordPolicies: List<PolicyInformation.MasterPassword>
 
     /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
@@ -160,6 +166,16 @@ interface AuthRepository : AuthenticatorProvider {
     ): PasswordHintResult
 
     /**
+     * Resets the users password from the [currentPassword] to the [newPassword] and
+     * optional [passwordHint].
+     */
+    suspend fun resetPassword(
+        currentPassword: String,
+        newPassword: String,
+        passwordHint: String?,
+    ): ResetPasswordResult
+
+    /**
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
@@ -230,10 +246,8 @@ interface AuthRepository : AuthenticatorProvider {
     suspend fun validatePassword(password: String): ValidatePasswordResult
 
     /**
-     * Validates the given [password] against a MasterPassword [policy].
+     * Validates the given [password] against the master password
+     * policies for the current user.
      */
-    suspend fun validatePasswordAgainstPolicy(
-        password: String,
-        policy: PolicyInformation.MasterPassword,
-    ): Boolean
+    suspend fun validatePasswordAgainstPolicies(password: String): Boolean
 }
