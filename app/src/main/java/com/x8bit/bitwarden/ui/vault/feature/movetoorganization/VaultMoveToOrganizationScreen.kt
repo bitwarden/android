@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
 /**
  * Displays the vault move to organization screen.
@@ -78,7 +79,7 @@ private fun VaultMoveToOrganizationScaffold(
     moveClick: () -> Unit,
     dismissClick: () -> Unit,
     organizationSelect: (VaultMoveToOrganizationState.ViewState.Content.Organization) -> Unit,
-    collectionSelect: (VaultMoveToOrganizationState.ViewState.Content.Collection) -> Unit,
+    collectionSelect: (VaultCollection) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     when (val dialog = state.dialogState) {

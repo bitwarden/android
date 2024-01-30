@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -21,6 +22,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+@Suppress("TooManyFunctions")
 class CiphersServiceImpl(
     private val azureApi: AzureApi,
     private val ciphersApi: CiphersApi,
@@ -29,6 +31,10 @@ class CiphersServiceImpl(
 ) : CiphersService {
     override suspend fun createCipher(body: CipherJsonRequest): Result<SyncResponseJson.Cipher> =
         ciphersApi.createCipher(body = body)
+
+    override suspend fun createCipherInOrganization(
+        body: CreateCipherInOrganizationJsonRequest,
+    ): Result<SyncResponseJson.Cipher> = ciphersApi.createCipherInOrganization(body = body)
 
     override suspend fun createAttachment(
         cipherId: String,

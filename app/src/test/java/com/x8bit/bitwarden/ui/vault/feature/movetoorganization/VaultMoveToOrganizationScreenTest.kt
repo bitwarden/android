@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -100,7 +101,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
                         id = "mockOrganizationId-2",
                         name = "mockOrganizationName-2",
                         collections = listOf(
-                            VaultMoveToOrganizationState.ViewState.Content.Collection(
+                            VaultCollection(
                                 id = "mockId-2",
                                 name = "mockName-2",
                                 isSelected = false,
@@ -141,7 +142,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultMoveToOrganizationAction.CollectionSelect(
-                    VaultMoveToOrganizationState.ViewState.Content.Collection(
+                    VaultCollection(
                         id = "mockId-1",
                         name = "mockName-1",
                         isSelected = true,

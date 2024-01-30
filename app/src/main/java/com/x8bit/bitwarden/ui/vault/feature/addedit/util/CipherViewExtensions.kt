@@ -1,18 +1,25 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
+import com.bitwarden.core.FolderView
 import com.bitwarden.core.LoginUriView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
@@ -76,16 +83,106 @@ fun CipherView.toViewState(
             favorite = this.favorite,
             masterPasswordReprompt = this.reprompt == CipherRepromptType.PASSWORD,
             notes = this.notes.orEmpty(),
-            // TODO: Update these properties to pull folder from data layer (BIT-501)
-            folderName = this.folderId?.asText() ?: R.string.folder_none.asText(),
-            availableFolders = emptyList(),
-            // TODO: Update this property to pull owner from data layer (BIT-501)
-            ownership = "",
-            // TODO: Update this property to pull available owners from data layer (BIT-501)
             availableOwners = emptyList(),
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
         ),
     )
+
+/**
+ * Adds Folder and Owner data to [VaultAddEditState.ViewState].
+ */
+fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
+    folderViewList: List<FolderView>,
+    collectionViewList: List<CollectionView>,
+    activeAccount: UserState.Account,
+    resourceManager: ResourceManager,
+): VaultAddEditState.ViewState {
+    return (this as? VaultAddEditState.ViewState.Content)?.let { currentContentState ->
+        currentContentState.copy(
+            common = currentContentState.common.copy(
+                selectedFolderId = folderViewList.toSelectedFolderId(
+                    cipherView = currentContentState.common.originalCipher,
+                ),
+                availableFolders = folderViewList.toAvailableFolders(
+                    resourceManager = resourceManager,
+                ),
+                selectedOwnerId = activeAccount.toSelectedOwnerId(
+                    cipherView = currentContentState.common.originalCipher,
+                ),
+                availableOwners = activeAccount.toAvailableOwners(
+                    collectionViewList = collectionViewList,
+                ),
+            ),
+        )
+    } ?: this
+}
+
+/**
+ * Validates a [CipherView] otherwise returning a [VaultAddEditState.ViewState.Error].
+ */
+fun CipherView?.validateCipherOrReturnErrorState(
+    currentAccount: UserState.Account?,
+    vaultAddEditType: VaultAddEditType,
+    lambda: (
+        currentAccount: UserState.Account,
+        cipherView: CipherView?,
+    ) -> VaultAddEditState.ViewState,
+): VaultAddEditState.ViewState =
+    if (currentAccount == null ||
+        (vaultAddEditType is VaultAddEditType.EditItem && this == null)
+    ) {
+        VaultAddEditState.ViewState.Error(R.string.generic_error_message.asText())
+    } else {
+        lambda(currentAccount, this)
+    }
+
+private fun List<FolderView>.toSelectedFolderId(cipherView: CipherView?): String? =
+    cipherView
+        ?.folderId
+        ?.takeIf { id -> id in map { it.id } }
+
+private fun List<FolderView>.toAvailableFolders(
+    resourceManager: ResourceManager,
+): List<VaultAddEditState.Folder> =
+    listOf(
+        VaultAddEditState.Folder(
+            id = null,
+            name = resourceManager.getString(R.string.folder_none),
+        ),
+    )
+        .plus(
+            map { VaultAddEditState.Folder(name = it.name, id = it.id.toString()) },
+        )
+
+private fun UserState.Account.toSelectedOwnerId(cipherView: CipherView?): String? =
+    cipherView
+        ?.organizationId
+        ?.takeIf { id -> id in organizations.map { it.id } }
+
+private fun UserState.Account.toAvailableOwners(
+    collectionViewList: List<CollectionView>,
+): List<VaultAddEditState.Owner> =
+    listOf(VaultAddEditState.Owner(name = email, id = null, collections = emptyList()))
+        .plus(
+            organizations.map {
+                VaultAddEditState.Owner(
+                    name = it.name.orEmpty(),
+                    id = it.id,
+                    collections = collectionViewList
+                        .filter { collection ->
+                            collection.organizationId == it.id &&
+                                collection.id != null
+                        }
+                        .map { collection ->
+                            VaultCollection(
+                                id = collection.id.orEmpty(),
+                                name = collection.name,
+                                isSelected = false,
+                            )
+                        },
+                )
+            },
+        )
 
 private fun FieldView.toCustomField() =
     when (this.type) {

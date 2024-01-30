@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
@@ -1697,6 +1698,115 @@ class VaultRepositoryTest {
             coEvery { vaultDiskSource.saveCipher(userId, mockCipher) } just runs
 
             val result = vaultRepository.createCipher(cipherView = mockCipherView)
+
+            assertEquals(
+                CreateCipherResult.Success,
+                result,
+            )
+        }
+
+    @Test
+    fun `createCipherInOrganization with no active user should return CreateCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val result = vaultRepository.createCipherInOrganization(
+                cipherView = mockk(),
+                collectionIds = mockk(),
+            )
+
+            assertEquals(
+                CreateCipherResult.Error,
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createCipherInOrganization with encryptCipher failure should return CreateCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = mockCipherView,
+                )
+            } returns IllegalStateException().asFailure()
+
+            val result = vaultRepository.createCipherInOrganization(
+                cipherView = mockCipherView,
+                collectionIds = mockk(),
+            )
+
+            assertEquals(
+                CreateCipherResult.Error,
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createCipherInOrganization with ciphersService createCipher failure should return CreateCipherResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = mockCipherView,
+                )
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            coEvery {
+                ciphersService.createCipherInOrganization(
+                    body = CreateCipherInOrganizationJsonRequest(
+                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        collectionIds = listOf("mockId-1"),
+                    ),
+                )
+            } returns IllegalStateException().asFailure()
+
+            val result = vaultRepository.createCipherInOrganization(
+                cipherView = mockCipherView,
+                collectionIds = listOf("mockId-1"),
+            )
+
+            assertEquals(
+                CreateCipherResult.Error,
+                result,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createCipherInOrganization with ciphersService createCipher success should return CreateCipherResult success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = mockCipherView,
+                )
+            } returns createMockSdkCipher(number = 1).asSuccess()
+            val mockCipher = createMockCipher(number = 1)
+            coEvery {
+                ciphersService.createCipherInOrganization(
+                    body = CreateCipherInOrganizationJsonRequest(
+                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        collectionIds = listOf("mockId-1"),
+                    ),
+                )
+            } returns mockCipher.asSuccess()
+            coEvery { vaultDiskSource.saveCipher(userId, mockCipher) } just runs
+
+            val result = vaultRepository.createCipherInOrganization(
+                cipherView = mockCipherView,
+                collectionIds = listOf("mockId-1"),
+            )
 
             assertEquals(
                 CreateCipherResult.Success,

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util
 
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.VaultMoveToOrganizationState
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
 /**
  * Creates a list of mock [VaultMoveToOrganizationState.ViewState.Content.Organization].
@@ -24,7 +25,7 @@ fun createMockOrganization(
         id = "mockOrganizationId-$number",
         name = "mockOrganizationName-$number",
         collections = listOf(
-            VaultMoveToOrganizationState.ViewState.Content.Collection(
+            VaultCollection(
                 id = "mockId-$number",
                 name = "mockName-$number",
                 isSelected = isCollectionSelected,

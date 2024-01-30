@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
@@ -10,11 +11,19 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherRespo
 /**
  * Provides an API for querying ciphers endpoints.
  */
+@Suppress("TooManyFunctions")
 interface CiphersService {
     /**
      * Attempt to create a cipher.
      */
     suspend fun createCipher(body: CipherJsonRequest): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to create a cipher that belongs to an organization.
+     */
+    suspend fun createCipherInOrganization(
+        body: CreateCipherInOrganizationJsonRequest,
+    ): Result<SyncResponseJson.Cipher>
 
     /**
      * Attempt to upload an attachment file.

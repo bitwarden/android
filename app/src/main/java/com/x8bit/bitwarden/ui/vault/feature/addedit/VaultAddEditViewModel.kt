@@ -7,6 +7,7 @@ import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -20,6 +21,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -30,12 +32,15 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.appendFolderAndOwnerData
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -109,18 +114,17 @@ class VaultAddEditViewModel @Inject constructor(
     //region Initialization and Overrides
 
     init {
-        state
-            .vaultAddEditType
-            .vaultItemId
-            ?.let { itemId ->
-                vaultRepository
-                    .getVaultItemStateFlow(itemId)
-                    // We'll stop getting updates as soon as we get some loaded data.
-                    .takeUntilLoaded()
-                    .map { VaultAddEditAction.Internal.VaultDataReceive(it) }
-                    .onEach(::sendAction)
-                    .launchIn(viewModelScope)
+        vaultRepository
+            .vaultDataStateFlow
+            .takeUntilLoaded()
+            .map { vaultDataState ->
+                VaultAddEditAction.Internal.VaultDataReceive(
+                    vaultData = vaultDataState,
+                    userData = authRepository.userStateFlow.value,
+                )
             }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
 
         vaultRepository
             .totpCodeFlow
@@ -186,6 +190,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.CustomFieldActionSelect -> handleCustomFieldActionSelected(
                 action,
             )
+            is VaultAddEditAction.Common.CollectionSelect -> handleCollectionSelect(action)
         }
     }
 
@@ -246,6 +251,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
         if (content.common.name.isBlank()) {
             mutableStateFlow.update {
@@ -254,6 +260,19 @@ class VaultAddEditViewModel @Inject constructor(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required
                             .asText(R.string.name.asText()),
+                    ),
+                )
+            }
+            return@onContent
+        } else if (
+            content.common.selectedOwnerId != null &&
+            content.common.selectedOwner?.collections?.all { !it.isSelected } == true
+        ) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.select_one_collection.asText(),
                     ),
                 )
             }
@@ -271,7 +290,7 @@ class VaultAddEditViewModel @Inject constructor(
         viewModelScope.launch {
             when (val vaultAddEditType = state.vaultAddEditType) {
                 VaultAddEditType.AddItem -> {
-                    val result = vaultRepository.createCipher(cipherView = content.toCipherView())
+                    val result = content.createCipherForAddAndCloneItemStates()
                     sendAction(VaultAddEditAction.Internal.CreateCipherResultReceive(result))
                 }
 
@@ -284,7 +303,7 @@ class VaultAddEditViewModel @Inject constructor(
                 }
 
                 is VaultAddEditType.CloneItem -> {
-                    val result = vaultRepository.createCipher(cipherView = content.toCipherView())
+                    val result = content.createCipherForAddAndCloneItemStates()
                     sendAction(VaultAddEditAction.Internal.CreateCipherResultReceive(result))
                 }
             }
@@ -437,7 +456,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.FolderChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(folderName = action.folder)
+            commonContent.copy(selectedFolderId = action.folder.id)
         }
     }
 
@@ -469,7 +488,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.OwnershipChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(ownership = action.ownership)
+            commonContent.copy(selectedOwnerId = action.ownership.id)
         }
     }
 
@@ -488,6 +507,22 @@ class VaultAddEditViewModel @Inject constructor(
                 message = "Not yet implemented".asText(),
             ),
         )
+    }
+
+    @Suppress("MaxLineLength")
+    private fun handleCollectionSelect(
+        action: VaultAddEditAction.Common.CollectionSelect,
+    ) {
+        updateCommonContent { currentCommonContentState ->
+            currentCommonContentState.copy(
+                availableOwners = currentCommonContentState
+                    .availableOwners
+                    .toUpdatedOwners(
+                        selectedCollectionId = action.collection.id,
+                        selectedOwnerId = currentCommonContentState.selectedOwnerId,
+                    ),
+            )
+        }
     }
 
     //endregion Common Handlers
@@ -1000,7 +1035,7 @@ class VaultAddEditViewModel @Inject constructor(
 
     @Suppress("LongMethod")
     private fun handleVaultDataReceive(action: VaultAddEditAction.Internal.VaultDataReceive) {
-        when (val vaultDataState = action.vaultDataState) {
+        when (val vaultDataState = action.vaultData) {
             is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -1012,17 +1047,10 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is DataState.Loaded -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = vaultDataState
-                            .data
-                            ?.toViewState(
-                                isClone = it.isCloneMode,
-                                resourceManager = resourceManager,
-                            )
-                            ?: VaultAddEditState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
-                            ),
+                mutableStateFlow.update { currentState ->
+                    currentState.determineContentState(
+                        vaultData = vaultDataState.data,
+                        userData = action.userData,
                     )
                 }
             }
@@ -1046,22 +1074,42 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is DataState.Pending -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = vaultDataState
-                            .data
-                            ?.toViewState(
-                                isClone = it.isCloneMode,
-                                resourceManager = resourceManager,
-                            )
-                            ?: VaultAddEditState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
-                            ),
+                mutableStateFlow.update { currentState ->
+                    currentState.determineContentState(
+                        vaultData = vaultDataState.data,
+                        userData = action.userData,
                     )
                 }
             }
         }
     }
+
+    private fun VaultAddEditState.determineContentState(
+        vaultData: VaultData,
+        userData: UserState?,
+    ): VaultAddEditState =
+        copy(
+            viewState = vaultData.cipherViewList
+                .find { it.id == vaultAddEditType.vaultItemId }
+                .validateCipherOrReturnErrorState(
+                    currentAccount = userData?.activeAccount,
+                    vaultAddEditType = vaultAddEditType,
+                ) { currentAccount, cipherView ->
+                    // Derive the view state from the current Cipher for Edit mode
+                    // or use the current state for Add
+                    (cipherView?.toViewState(
+                        isClone = isCloneMode,
+                        resourceManager = resourceManager,
+                    ) ?: viewState)
+                        .appendFolderAndOwnerData(
+                            folderViewList = vaultData.folderViewList,
+                            collectionViewList = vaultData.collectionViewList
+                                .filter { !it.readOnly },
+                            activeAccount = currentAccount,
+                            resourceManager = resourceManager,
+                        )
+                },
+        )
 
     private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
         when (action.totpResult) {
@@ -1243,6 +1291,46 @@ class VaultAddEditViewModel @Inject constructor(
             },
         )
 
+    @Suppress("MaxLineLength")
+    private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
+        return common.selectedOwner?.collections
+            ?.filter { it.isSelected }
+            ?.map { it.id }
+            ?.let {
+                vaultRepository.createCipherInOrganization(
+                    cipherView = toCipherView(),
+                    collectionIds = it,
+                )
+            }
+            ?: vaultRepository.createCipher(cipherView = toCipherView())
+    }
+
+    private fun List<VaultAddEditState.Owner>.toUpdatedOwners(
+        selectedOwnerId: String?,
+        selectedCollectionId: String,
+    ): List<VaultAddEditState.Owner> =
+        map { owner ->
+            if (owner.id != selectedOwnerId) return@map owner
+            owner.copy(
+                collections = owner
+                    .collections
+                    .toUpdatedCollections(selectedCollectionId = selectedCollectionId),
+            )
+        }
+
+    private fun List<VaultCollection>.toUpdatedCollections(
+        selectedCollectionId: String,
+    ): List<VaultCollection> =
+        map { collection ->
+            collection.copy(
+                isSelected = if (selectedCollectionId == collection.id) {
+                    !collection.isSelected
+                } else {
+                    collection.isSelected
+                },
+            )
+        }
+
     //endregion Utility Functions
 }
 
@@ -1343,9 +1431,9 @@ data class VaultAddEditState(
              * @property favorite Indicates whether this item is marked as a favorite.
              * @property customFieldData Additional custom fields associated with the item.
              * @property notes Any additional notes or comments associated with the item.
-             * @property folderName The folder that this item belongs to.
+             * @property selectedFolderId The ID of the folder that this item belongs to.
              * @property availableFolders The list of folders that this item could be added too.
-             * @property ownership The ownership email associated with the item.
+             * @property selectedOwnerId The ID of the owner associated with the item.
              * @property availableOwners A list of available owners.
              */
             @Parcelize
@@ -1357,21 +1445,23 @@ data class VaultAddEditState(
                 val favorite: Boolean = false,
                 val customFieldData: List<Custom> = emptyList(),
                 val notes: String = "",
-                val folderName: Text = DEFAULT_FOLDER,
-                val availableFolders: List<Text> = listOf(
-                    "Folder 1".asText(),
-                    "Folder 2".asText(),
-                    "Folder 3".asText(),
-                ),
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                val ownership: String = DEFAULT_OWNERSHIP,
-                // TODO: Update this property to get available owners from the data layer (BIT-501)
-                val availableOwners: List<String> = listOf("a@b.com", "c@d.com"),
+                val selectedFolderId: String? = null,
+                val availableFolders: List<Folder> = emptyList(),
+                val selectedOwnerId: String? = null,
+                val availableOwners: List<Owner> = emptyList(),
             ) : Parcelable {
-                companion object {
-                    private val DEFAULT_FOLDER: Text = R.string.folder_none.asText()
-                    private const val DEFAULT_OWNERSHIP: String = "placeholder@email.com"
-                }
+
+                /**
+                 * Helper to provide the currently selected owner.
+                 */
+                val selectedOwner: Owner?
+                    get() = availableOwners.find { it.id == selectedOwnerId }
+
+                /**
+                 * Helper to provide the currently selected folder.
+                 */
+                val selectedFolder: Folder?
+                    get() = availableFolders.find { it.id == selectedFolderId }
             }
 
             /**
@@ -1548,6 +1638,32 @@ data class VaultAddEditState(
     }
 
     /**
+     * Models a folder that can be chosen by the user.
+     *
+     * @property id the folder id.
+     * @property name the folder name.
+     */
+    @Parcelize
+    data class Folder(
+        val id: String?,
+        val name: String,
+    ) : Parcelable
+
+    /**
+     * Models an owner that can be chosen by the user.
+     *
+     * @property id the id of the owner (nullable).
+     * @property name the name of the owner.
+     * @property collections the collections of the owner.
+     */
+    @Parcelize
+    data class Owner(
+        val id: String?,
+        val name: String,
+        val collections: List<VaultCollection>,
+    ) : Parcelable
+
+    /**
      * Displays a dialog.
      */
     @Parcelize
@@ -1691,7 +1807,7 @@ sealed class VaultAddEditAction {
          *
          * @property folder The new folder text.
          */
-        data class FolderChange(val folder: Text) : Common()
+        data class FolderChange(val folder: VaultAddEditState.Folder) : Common()
 
         /**
          * Fired when the Favorite toggle is changed.
@@ -1720,7 +1836,7 @@ sealed class VaultAddEditAction {
          *
          * @property ownership The new ownership text.
          */
-        data class OwnershipChange(val ownership: String) : Common()
+        data class OwnershipChange(val ownership: VaultAddEditState.Owner) : Common()
 
         /**
          * Represents the action to add a new custom field.
@@ -1747,6 +1863,15 @@ sealed class VaultAddEditAction {
          * Represents the action to open tooltip
          */
         data object TooltipClick : Common()
+
+        /**
+         * The user has selected a collection.
+         *
+         * @property collection the collection selected.
+         */
+        data class CollectionSelect(
+            val collection: VaultCollection,
+        ) : Common()
     }
 
     /**
@@ -2039,7 +2164,8 @@ sealed class VaultAddEditAction {
          * Indicates that the vault item data has been received.
          */
         data class VaultDataReceive(
-            val vaultDataState: DataState<CipherView?>,
+                val vaultData: DataState<VaultData>,
+                val userData: UserState?,
         ) : Internal()
 
         /**

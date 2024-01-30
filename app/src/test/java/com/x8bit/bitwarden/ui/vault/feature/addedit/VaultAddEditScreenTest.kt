@@ -1633,6 +1633,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking a Ownership option should send OwnershipChange action`() {
+        updateStateWithOwners()
+
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
@@ -1642,20 +1644,27 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         // Choose the option from the menu
         composeTestRule
-            .onAllNodesWithText(text = "a@b.com")
+            .onAllNodesWithText(text = "mockOwnerName-2")
             .onLast()
             .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.OwnershipChange("a@b.com"),
+                VaultAddEditAction.Common.OwnershipChange(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-2",
+                        name = "mockOwnerName-2",
+                        collections = emptyList(),
+                    ),
+                ),
             )
         }
     }
 
     @Test
     fun `the Ownership control should display the text provided by the state`() {
+        updateStateWithOwners()
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
                 label = "Who owns this item?, placeholder@email.com",
@@ -1663,11 +1672,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
-            updateCommonContent(currentState) { copy(ownership = "Owner 2") }
+            updateCommonContent(currentState) { copy(selectedOwnerId = "mockOwnerId-2") }
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, Owner 2")
+            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, mockOwnerName-2")
             .assertIsDisplayed()
     }
 
@@ -1705,7 +1714,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `clicking a Folder Option should send FolderChange action`() {
-        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+        updateStateWithFolders()
 
         // Opens the menu
         composeTestRule
@@ -1714,14 +1723,19 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         // Choose the option from the menu
         composeTestRule
-            .onAllNodesWithText(text = "Folder 1")
+            .onAllNodesWithText(text = "mockFolderName-1")
             .onLast()
             .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.FolderChange("Folder 1".asText()),
+                VaultAddEditAction.Common.FolderChange(
+                    VaultAddEditState.Folder(
+                        id = "mockFolderId-1",
+                        name = "mockFolderName-1",
+                    ),
+                ),
             )
         }
     }
@@ -1729,18 +1743,18 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `the folder control should display the text provided by the state`() {
-        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+        updateStateWithFolders()
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
-            updateCommonContent(currentState) { copy(folderName = "Folder 2".asText()) }
+            updateCommonContent(currentState) { copy(selectedFolderId = "mockFolderId-1") }
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Folder, Folder 2")
+            .onNodeWithContentDescriptionAfterScroll(label = "Folder, mockFolderName-1")
             .assertIsDisplayed()
     }
 
@@ -1870,7 +1884,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `Ownership option should send OwnershipChange action`() {
-        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+       mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        updateStateWithOwners()
 
         // Opens the menu
         composeTestRule
@@ -1879,14 +1895,20 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         // Choose the option from the menu
         composeTestRule
-            .onAllNodesWithText(text = "a@b.com")
+            .onAllNodesWithText(text = "mockOwnerName-2")
             .onLast()
             .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.OwnershipChange("a@b.com"),
+                VaultAddEditAction.Common.OwnershipChange(
+                    VaultAddEditState.Owner(
+                        id = "mockOwnerId-2",
+                        name = "mockOwnerName-2",
+                        collections = emptyList(),
+                    ),
+                ),
             )
         }
     }
@@ -1894,18 +1916,18 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes the Ownership control should display the text provided by the state`() {
-        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+        updateStateWithOwners()
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, placeholder@email.com")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
-            updateCommonContent(currentState) { copy(ownership = "Owner 2") }
+            updateCommonContent(currentState) { copy(selectedOwnerId = "mockOwnerId-2") }
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, Owner 2")
+            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, mockOwnerName-2")
             .assertIsDisplayed()
     }
 
@@ -2459,6 +2481,28 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         return currentState.copy(viewState = updatedType)
     }
 
+    private fun updateStateWithOwners() {
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) {
+                copy(
+                    selectedOwnerId = null,
+                    availableOwners = DEFAULT_OWNERS,
+                )
+            }
+        }
+    }
+
+    private fun updateStateWithFolders() {
+        mutableStateFlow.update {
+            updateCommonContent(it) {
+                copy(
+                    selectedFolderId = null,
+                    availableFolders = DEFAULT_FOLDERS,
+                )
+            }
+        }
+    }
+
     //endregion Helper functions
 
     companion object {
@@ -2525,6 +2569,39 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             ),
             dialog = null,
+        )
+
+        private val DEFAULT_OWNERS = listOf(
+            VaultAddEditState.Owner(
+                id = null,
+                name = "placeholder@email.com",
+                collections = emptyList(),
+            ),
+            VaultAddEditState.Owner(
+                id = "mockOwnerId-1",
+                name = "mockOwnerName-1",
+                collections = emptyList(),
+            ),
+            VaultAddEditState.Owner(
+                id = "mockOwnerId-2",
+                name = "mockOwnerName-2",
+                collections = emptyList(),
+            ),
+        )
+
+        private val DEFAULT_FOLDERS = listOf(
+            VaultAddEditState.Folder(
+                id = null,
+                name = "No Folder",
+            ),
+            VaultAddEditState.Folder(
+                id = "mockFolderId-1",
+                name = "mockFolderName-1",
+            ),
+            VaultAddEditState.Folder(
+                id = "mockFolderId-2",
+                name = "mockFolderName-2",
+            ),
         )
     }
 }

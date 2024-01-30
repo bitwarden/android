@@ -4,6 +4,7 @@ import android.net.Uri
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
@@ -56,6 +57,21 @@ class CiphersServiceTest : BaseServiceTest() {
         server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.createCipher(
             body = createMockCipherJsonRequest(number = 1),
+        )
+        assertEquals(
+            createMockCipher(number = 1),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `createCipherInOrganization should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        val result = ciphersService.createCipherInOrganization(
+            body = CreateCipherInOrganizationJsonRequest(
+                cipher = createMockCipherJsonRequest(number = 1),
+                collectionIds = listOf("12345"),
+            ),
         )
         assertEquals(
             createMockCipher(number = 1),

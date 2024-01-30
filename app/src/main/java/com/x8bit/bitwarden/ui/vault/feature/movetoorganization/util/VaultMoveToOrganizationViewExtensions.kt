@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.VaultMoveToOrganizationState
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 
 /**
  * Transforms a triple of [CipherView] (nullable), list of [CollectionView],
@@ -46,7 +47,7 @@ fun Triple<CipherView?, List<CollectionView>, UserState?>.toViewState():
                                     collection.id != null
                             }
                             .map { collection ->
-                                VaultMoveToOrganizationState.ViewState.Content.Collection(
+                                VaultCollection(
                                     id = collection.id.orEmpty(),
                                     name = collection.name,
                                     isSelected = currentCipher
