@@ -5,7 +5,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -29,8 +32,13 @@ class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val clock: Clock,
+    private val settingsRepository: SettingsRepository,
+    private val crashLogsManager: CrashLogsManager,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: createInitialState(clock = clock),
+    initialState = savedStateHandle[KEY_STATE] ?: createInitialState(
+        clock = clock,
+        isCrashLoggingEnabled = crashLogsManager.isEnabled,
+    ),
 ) {
     init {
         stateFlow
@@ -65,6 +73,7 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleSubmitCrashLogsClick(action: AboutAction.SubmitCrashLogsClick) {
+        crashLogsManager.isEnabled = action.enabled
         mutableStateFlow.update { currentState ->
             currentState.copy(isSubmitCrashLogsEnabled = action.enabled)
         }
@@ -84,7 +93,7 @@ class AboutViewModel @Inject constructor(
         /**
          * Create initial state for the About View model.
          */
-        fun createInitialState(clock: Clock): AboutState {
+        fun createInitialState(clock: Clock, isCrashLoggingEnabled: Boolean): AboutState {
             val currentYear = Year.now(clock).value
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
 
@@ -92,7 +101,8 @@ class AboutViewModel @Inject constructor(
                 version = R.string.version
                     .asText()
                     .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
-                isSubmitCrashLogsEnabled = false,
+                isSubmitCrashLogsEnabled = isCrashLoggingEnabled,
+                shouldShowCrashLogsButton = !isFdroid,
                 copyrightInfo = copyrightInfo,
             )
         }
@@ -106,6 +116,7 @@ class AboutViewModel @Inject constructor(
 data class AboutState(
     val version: Text,
     val isSubmitCrashLogsEnabled: Boolean,
+    val shouldShowCrashLogsButton: Boolean,
     val copyrightInfo: Text,
 ) : Parcelable
 

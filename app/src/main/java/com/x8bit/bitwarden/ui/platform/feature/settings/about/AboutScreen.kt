@@ -150,16 +150,18 @@ private fun ContentColumn(
             .verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-        BitwardenWideSwitch(
-            label = stringResource(id = R.string.submit_crash_logs),
-            isChecked = state.isSubmitCrashLogsEnabled,
-            onCheckedChange = onSubmitCrashLogsCheckedChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            contentDescription = stringResource(id = R.string.submit_crash_logs),
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+        if (state.shouldShowCrashLogsButton) {
+            BitwardenWideSwitch(
+                label = stringResource(id = R.string.submit_crash_logs),
+                isChecked = state.isSubmitCrashLogsEnabled,
+                onCheckedChange = onSubmitCrashLogsCheckedChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                contentDescription = stringResource(id = R.string.submit_crash_logs),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.bitwarden_help_center),
             onConfirmClick = onHelpCenterClick,

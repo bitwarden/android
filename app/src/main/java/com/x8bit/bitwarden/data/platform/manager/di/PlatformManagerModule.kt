@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
+import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
@@ -134,5 +136,13 @@ object PlatformManagerModule {
         dispatcherManager = dispatcherManager,
         clock = clock,
         json = json,
+    )
+
+    @Provides
+    @Singleton
+    fun provideCrashLogsManager(
+        settingsRepository: SettingsRepository,
+    ): CrashLogsManager = CrashLogsManagerImpl(
+        settingsRepository = settingsRepository,
     )
 }
