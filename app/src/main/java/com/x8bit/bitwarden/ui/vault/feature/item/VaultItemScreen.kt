@@ -61,7 +61,7 @@ fun VaultItemScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
     onNavigateToVaultAddEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
-    onNavigateToMoveToOrganization: (vaultItemId: String) -> Unit,
+    onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -94,12 +94,11 @@ fun VaultItemScreen(
             is VaultItemEvent.NavigateToAttachments -> onNavigateToAttachments(event.itemId)
 
             is VaultItemEvent.NavigateToMoveToOrganization -> {
-                onNavigateToMoveToOrganization(event.itemId)
+                onNavigateToMoveToOrganization(event.itemId, false)
             }
 
             is VaultItemEvent.NavigateToCollections -> {
-                // TODO implement Collections in BIT-1575
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+                onNavigateToMoveToOrganization(event.itemId, true)
             }
 
             is VaultItemEvent.ShowToast -> {

@@ -45,6 +45,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         ?: run {
             VaultMoveToOrganizationState(
                 vaultItemId = VaultMoveToOrganizationArgs(savedStateHandle).vaultItemId,
+                onlyShowCollections = VaultMoveToOrganizationArgs(savedStateHandle).showOnlyCollections,
                 viewState = VaultMoveToOrganizationState.ViewState.Loading,
                 dialogState = null,
             )
@@ -306,9 +307,24 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
 @Parcelize
 data class VaultMoveToOrganizationState(
     val vaultItemId: String,
+    val onlyShowCollections: Boolean,
     val viewState: ViewState,
     val dialogState: DialogState?,
 ) : Parcelable {
+
+    val appBarText: Text
+        get() = if (onlyShowCollections) {
+            R.string.collections.asText()
+        } else {
+            R.string.move_to_organization.asText()
+        }
+
+    val appBarButtonText: Text
+        get() = if (onlyShowCollections) {
+            R.string.save.asText()
+        } else {
+            R.string.move.asText()
+        }
 
     /**
      * Represents the current state of any dialogs on the screen.

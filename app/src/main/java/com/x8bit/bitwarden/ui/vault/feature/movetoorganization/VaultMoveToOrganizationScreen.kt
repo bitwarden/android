@@ -109,14 +109,14 @@ private fun VaultMoveToOrganizationScaffold(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.move_to_organization),
+                title = state.appBarText(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = closeClick,
                 actions = {
                     BitwardenTextButton(
-                        label = stringResource(id = R.string.move),
+                        label = state.appBarButtonText(),
                         onClick = moveClick,
                         isEnabled = state.viewState is
                             VaultMoveToOrganizationState.ViewState.Content,
@@ -134,6 +134,7 @@ private fun VaultMoveToOrganizationScaffold(
             is VaultMoveToOrganizationState.ViewState.Content -> {
                 VaultMoveToOrganizationContent(
                     state = state.viewState,
+                    showOnlyCollections = state.onlyShowCollections,
                     organizationSelect = organizationSelect,
                     collectionSelect = collectionSelect,
                     modifier = modifier,

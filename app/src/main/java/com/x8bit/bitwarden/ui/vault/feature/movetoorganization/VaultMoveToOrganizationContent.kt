@@ -27,6 +27,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun VaultMoveToOrganizationContent(
     state: VaultMoveToOrganizationState.ViewState.Content,
+    showOnlyCollections: Boolean,
     organizationSelect: (VaultMoveToOrganizationState.ViewState.Content.Organization) -> Unit,
     collectionSelect: (VaultCollection) -> Unit,
     modifier: Modifier = Modifier,
@@ -34,44 +35,47 @@ fun VaultMoveToOrganizationContent(
     LazyColumn(
         modifier = modifier,
     ) {
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenMultiSelectButton(
-                label = stringResource(id = R.string.organization),
-                options = state
-                    .organizations
-                    .map { it.name }
-                    .toImmutableList(),
-                selectedOption = state.selectedOrganization.name,
-                onOptionSelected = { selectedString ->
-                    organizationSelect(
-                        state
-                            .organizations
-                            .first { it.name == selectedString },
-                    )
-                },
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = stringResource(id = R.string.move_to_org_desc),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 32.dp),
+        if (!showOnlyCollections) {
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenMultiSelectButton(
+                    label = stringResource(id = R.string.organization),
+                    options = state
+                        .organizations
+                        .map { it.name }
+                        .toImmutableList(),
+                    selectedOption = state.selectedOrganization.name,
+                    onOptionSelected = { selectedString ->
+                        organizationSelect(
+                            state
+                                .organizations
+                                .first { it.name == selectedString },
+                        )
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(id = R.string.move_to_org_desc),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 12.sp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 32.dp),
+                    )
+                }
             }
         }
 
         collectionItemsSelector(
             collectionList = state.selectedOrganization.collections,
             onCollectionSelect = collectionSelect,
+            isCollectionsTitleVisible = !showOnlyCollections,
         )
     }
 }

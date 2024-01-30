@@ -391,9 +391,11 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
     private fun createSavedStateHandleWithState(
         state: VaultMoveToOrganizationState? = null,
         vaultItemId: String = "mockCipherId",
+        showOnlyCollections: Boolean = false,
     ) = SavedStateHandle().apply {
         set("state", state)
         set("vault_move_to_organization_id", vaultItemId)
+        set("vault_move_to_organization_only_collections", "$showOnlyCollections")
     }
 
     @Suppress("MaxLineLength")
@@ -405,6 +407,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         vaultItemId = vaultItemId,
         viewState = viewState,
         dialogState = dialogState,
+        onlyShowCollections = false,
     )
 }
 

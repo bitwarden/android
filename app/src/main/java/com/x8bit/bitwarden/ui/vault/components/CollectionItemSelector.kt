@@ -24,15 +24,19 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 fun LazyListScope.collectionItemsSelector(
     collectionList: List<VaultCollection>?,
     onCollectionSelect: (VaultCollection) -> Unit,
+    isCollectionsTitleVisible: Boolean = true,
 ) {
-    item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.collections),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
+
+    if (isCollectionsTitleVisible) {
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = R.string.collections),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
     }
 
     if (collectionList?.isNotEmpty() == true) {
@@ -54,14 +58,14 @@ fun LazyListScope.collectionItemsSelector(
             Spacer(modifier = Modifier.height(8.dp))
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             ) {
                 Text(
                     text = stringResource(id = R.string.no_collections_to_list),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
                 )
             }
         }

@@ -76,7 +76,9 @@ class VaultItemScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultAddEditItem = { id, _ -> onNavigateToVaultEditItemId = id },
-                onNavigateToMoveToOrganization = { onNavigateToMoveToOrganizationItemId = it },
+                onNavigateToMoveToOrganization = { id, _ ->
+                    onNavigateToMoveToOrganizationItemId = id
+                },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 intentManager = intentManager,
             )

@@ -51,6 +51,87 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `the app bar title should display according to state`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(viewState = VaultMoveToOrganizationState.ViewState.Loading)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Collections")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Move to Organization")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(onlyShowCollections = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Move to Organization")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Collections")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `the app bar button text should display according to state`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(viewState = VaultMoveToOrganizationState.ViewState.Loading)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Save")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Move")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(onlyShowCollections = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Move")
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Save")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `the organization option field should update according to state`() {
+        composeTestRule
+            .onNodeWithContentDescription(label = "Organization, mockOrganizationName-1")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(onlyShowCollections = true)
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Organization, mockOrganizationName-1")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `the organization option field description should update according to state`() {
+        composeTestRule
+            .onNodeWithText(text = "Choose an organization that", substring = true)
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            currentState.copy(onlyShowCollections = true)
+        }
+
+        composeTestRule
+        composeTestRule
+            .onNodeWithText(text = "Choose an organization that", substring = true)
+            .assertIsNotDisplayed()
+    }
+
+    @Test
     fun `on NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(VaultMoveToOrganizationEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
@@ -235,4 +316,5 @@ private fun createVaultMoveToOrganizationState(): VaultMoveToOrganizationState =
             selectedOrganizationId = "mockOrganizationId-1",
         ),
         dialogState = null,
+        onlyShowCollections = false,
     )
