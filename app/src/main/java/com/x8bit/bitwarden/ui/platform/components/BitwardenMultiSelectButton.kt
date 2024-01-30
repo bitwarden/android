@@ -49,6 +49,7 @@ import kotlinx.collections.immutable.persistentListOf
  * (or `null` if no option is selected).
  * @param onOptionSelected A lambda that is invoked when an option
  * is selected from the dropdown menu.
+ * @param isEnabled Whether or not the button is enabled.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param supportingText A optional supporting text that will appear below the text field.
  * @param tooltip A nullable [TooltipData], representing the tooltip icon.
@@ -60,6 +61,7 @@ fun BitwardenMultiSelectButton(
     options: ImmutableList<String>,
     selectedOption: String?,
     onOptionSelected: (String) -> Unit,
+    isEnabled: Boolean = true,
     modifier: Modifier = Modifier,
     supportingText: String? = null,
     tooltip: TooltipData? = null,
@@ -80,6 +82,7 @@ fun BitwardenMultiSelectButton(
                 .fillMaxWidth()
                 .clickable(
                     indication = null,
+                    enabled = isEnabled,
                     interactionSource = remember { MutableInteractionSource() },
                 ) {
                     shouldShowDialog = !shouldShowDialog
@@ -93,6 +96,7 @@ fun BitwardenMultiSelectButton(
                         Spacer(modifier = Modifier.width(3.dp))
                         IconButton(
                             onClick = it.onClick,
+                            enabled = isEnabled,
                             colors = IconButtonDefaults.iconButtonColors(
                                 contentColor = MaterialTheme.colorScheme.primary,
                             ),

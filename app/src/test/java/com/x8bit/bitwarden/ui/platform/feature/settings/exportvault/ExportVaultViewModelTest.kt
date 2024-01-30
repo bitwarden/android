@@ -9,21 +9,31 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class ExportVaultViewModelTest : BaseViewModelTest() {
-    private val authRepository: AuthRepository = mockk()
+    private val authRepository: AuthRepository = mockk {
+        every { hasExportVaultPoliciesEnabled } returns false
+    }
 
     private val savedStateHandle = SavedStateHandle()
 
     @Test
     fun `initial state should be correct`() = runTest {
+        every { authRepository.hasExportVaultPoliciesEnabled } returns true
+
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    policyPreventsExport = true,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -183,4 +193,5 @@ private val DEFAULT_STATE = ExportVaultState(
     dialogState = null,
     exportFormat = ExportVaultFormat.JSON,
     passwordInput = "",
+    policyPreventsExport = false,
 )

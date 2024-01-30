@@ -229,6 +229,14 @@ class AuthRepositoryImpl(
                 .orEmpty()
         } ?: emptyList()
 
+    override val hasExportVaultPoliciesEnabled: Boolean
+        get() = activeUserId?.let { userId ->
+            authDiskSource
+                .getPolicies(userId)
+                ?.any { it.type == PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT && it.isEnabled }
+                ?: false
+        } ?: false
+
     init {
         pushManager
             .syncOrgKeysFlow

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
 import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -154,6 +156,7 @@ fun ExportVaultScreen(
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun ExportVaultScreenContent(
     state: ExportVaultState,
     onExportFormatOptionSelected: (ExportVaultFormat) -> Unit,
@@ -168,6 +171,26 @@ private fun ExportVaultScreenContent(
             .verticalScroll(rememberScrollState()),
     ) {
 
+        if (state.policyPreventsExport) {
+            Text(
+                text = stringResource(id = R.string.disable_personal_vault_export_policy_in_effect),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(4.dp),
+                    )
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.file_format),
             options = ExportVaultFormat.entries.map { it.displayLabel }.toImmutableList(),
@@ -178,6 +201,7 @@ private fun ExportVaultScreenContent(
                     .first { it.displayLabel == selectedOptionLabel }
                 onExportFormatOptionSelected(selectedOption)
             },
+            isEnabled = !state.policyPreventsExport,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
@@ -188,6 +212,7 @@ private fun ExportVaultScreenContent(
         BitwardenPasswordField(
             label = stringResource(id = R.string.master_password),
             value = state.passwordInput,
+            readOnly = state.policyPreventsExport,
             onValueChange = onPasswordInputChanged,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -211,6 +236,7 @@ private fun ExportVaultScreenContent(
         BitwardenFilledTonalButton(
             label = stringResource(id = R.string.export_vault),
             onClick = onExportVaultClick,
+            isEnabled = !state.policyPreventsExport,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

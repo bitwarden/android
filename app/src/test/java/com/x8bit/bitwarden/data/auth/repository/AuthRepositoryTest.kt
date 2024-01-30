@@ -500,6 +500,38 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `hasExportVaultPoliciesEnabled checks if any export vault policies are enabled`() {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+        // No stored policies returns false.
+        assertFalse(repository.hasExportVaultPoliciesEnabled)
+
+        // Stored but disabled policies returns false.
+        fakeAuthDiskSource.storePolicies(
+            userId = USER_ID_1,
+            policies = listOf(
+                createMockPolicy(
+                    type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                    isEnabled = false,
+                ),
+            ),
+        )
+        assertFalse(repository.hasExportVaultPoliciesEnabled)
+
+        // Stored enabled policies returns true.
+        fakeAuthDiskSource.storePolicies(
+            userId = USER_ID_1,
+            policies = listOf(
+                createMockPolicy(
+                    type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
+                    isEnabled = true,
+                ),
+            ),
+        )
+        assertTrue(repository.hasExportVaultPoliciesEnabled)
+    }
+
+    @Test
     fun `clear Pending Account Deletion should unblock userState updates`() = runTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"

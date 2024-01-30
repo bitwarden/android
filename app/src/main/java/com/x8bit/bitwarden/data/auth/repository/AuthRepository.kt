@@ -85,6 +85,11 @@ interface AuthRepository : AuthenticatorProvider {
     val passwordPolicies: List<PolicyInformation.MasterPassword>
 
     /**
+     * Return whether there are any export vault policies enabled for the current user.
+     */
+    val hasExportVaultPoliciesEnabled: Boolean
+
+    /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
      */
     fun clearPendingAccountDeletion()

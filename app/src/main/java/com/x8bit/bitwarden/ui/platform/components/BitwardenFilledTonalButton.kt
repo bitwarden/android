@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param label The text to be displayed on the button.
  * @param onClick A lambda which will be invoked when the button is clicked.
+ * @param isEnabled Whether or not the button is enabled.
  * @param modifier A [Modifier] for this composable, allowing for adjustments to its appearance
  * or behavior. This can be used to apply padding, layout, and other Modifiers.
  */
@@ -27,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenFilledTonalButton(
     label: String,
     onClick: () -> Unit,
+    isEnabled: Boolean = true,
     modifier: Modifier,
 ) {
     Button(
@@ -35,6 +37,7 @@ fun BitwardenFilledTonalButton(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
+        enabled = isEnabled,
         colors = ButtonDefaults.filledTonalButtonColors(),
         modifier = modifier,
     ) {
