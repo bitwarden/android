@@ -64,10 +64,12 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
@@ -172,6 +174,13 @@ class AuthRepositoryTest {
         every { logout(any()) } just runs
     }
 
+    private val mutableLogoutFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableSyncOrgKeysFlow = bufferedMutableSharedFlow<Unit>()
+    private val pushManager: PushManager = mockk {
+        every { logoutFlow } returns mutableLogoutFlow
+        every { syncOrgKeysFlow } returns mutableSyncOrgKeysFlow
+    }
+
     private var elapsedRealtimeMillis = 123456789L
 
     private val repository = AuthRepositoryImpl(
@@ -190,6 +199,7 @@ class AuthRepositoryTest {
         vaultRepository = vaultRepository,
         userLogoutManager = userLogoutManager,
         dispatcherManager = dispatcherManager,
+        pushManager = pushManager,
         elapsedRealtimeMillisProvider = { elapsedRealtimeMillis },
     )
 
@@ -2768,6 +2778,43 @@ class AuthRepositoryTest {
             ValidatePasswordResult.Success(isValid = true),
             result,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `logOutFlow emission for action account should call logout on the UserLogoutManager and clear the user's in memory vault data`() {
+        val userId = USER_ID_1
+        fakeAuthDiskSource.userState = MULTI_USER_STATE
+
+        mutableLogoutFlow.tryEmit(Unit)
+
+        coVerify(exactly = 1) {
+            userLogoutManager.logout(userId = userId)
+            vaultRepository.clearUnlockedData()
+        }
+    }
+
+    @Test
+    fun `syncOrgKeysFlow emissions should refresh access token and sync`() {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+        } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
+        every {
+            REFRESH_TOKEN_RESPONSE_JSON.toUserStateJson(
+                userId = USER_ID_1,
+                previousUserState = SINGLE_USER_STATE_1,
+            )
+        } returns SINGLE_USER_STATE_1
+
+        coEvery { vaultRepository.sync() } just runs
+
+        mutableSyncOrgKeysFlow.tryEmit(Unit)
+
+        coVerify(exactly = 1) {
+            identityService.refreshTokenSynchronously(REFRESH_TOKEN)
+            vaultRepository.sync()
+        }
     }
 
     companion object {

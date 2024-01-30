@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
 import app.cash.turbine.test
+import app.cash.turbine.turbineScope
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
@@ -24,8 +25,11 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -115,6 +119,7 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -125,6 +130,7 @@ import retrofit2.HttpException
 import java.net.UnknownHostException
 import java.time.Clock
 import java.time.Instant
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -159,12 +165,20 @@ class VaultRepositoryTest {
         every { lockVaultForCurrentUser() } just runs
     }
 
+    private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableSyncCipherDeleteFlow = bufferedMutableSharedFlow<SyncCipherDeleteData>()
     private val mutableSyncCipherUpsertFlow = bufferedMutableSharedFlow<SyncCipherUpsertData>()
+    private val mutableSyncSendDeleteFlow = bufferedMutableSharedFlow<SyncSendDeleteData>()
     private val mutableSyncSendUpsertFlow = bufferedMutableSharedFlow<SyncSendUpsertData>()
+    private val mutableSyncFolderDeleteFlow = bufferedMutableSharedFlow<SyncFolderDeleteData>()
     private val mutableSyncFolderUpsertFlow = bufferedMutableSharedFlow<SyncFolderUpsertData>()
     private val pushManager: PushManager = mockk {
+        every { fullSyncFlow } returns mutableFullSyncFlow
+        every { syncCipherDeleteFlow } returns mutableSyncCipherDeleteFlow
         every { syncCipherUpsertFlow } returns mutableSyncCipherUpsertFlow
+        every { syncSendDeleteFlow } returns mutableSyncSendDeleteFlow
         every { syncSendUpsertFlow } returns mutableSyncSendUpsertFlow
+        every { syncFolderDeleteFlow } returns mutableSyncFolderDeleteFlow
         every { syncFolderUpsertFlow } returns mutableSyncFolderUpsertFlow
     }
 
@@ -3619,48 +3633,297 @@ class VaultRepositoryTest {
     }
 
     @Test
-    fun `syncCipherUpsertFlow success should make a request for a cipher and then store it`() =
-        runTest {
-            val cipherId = "mockId-1"
-            val cipher: SyncResponseJson.Cipher = mockk()
+    fun `fullSyncFlow emission should trigger sync if necessary`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId = userId)
+        } returns null
+        coEvery { syncService.sync() } just awaits
 
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
+        mutableFullSyncFlow.tryEmit(Unit)
 
-            coEvery {
-                ciphersService.getCipher(cipherId)
-            } returns cipher.asSuccess()
+        coVerify { syncService.sync() }
+    }
 
-            coEvery {
-                vaultDiskSource.saveCipher(any(), any())
-            } just runs
+    @Test
+    fun `syncCipherDeleteFlow should delete cipher from disk`() {
+        val userId = "mockId-1"
+        val cipherId = "mockId-1"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) } just runs
+
+        mutableSyncCipherDeleteFlow.tryEmit(
+            SyncCipherDeleteData(cipherId = cipherId),
+        )
+
+        coVerify { vaultDiskSource.deleteCipher(userId = userId, cipherId = cipherId) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncCipherUpsertFlow create with local cipher with no common collections should do nothing`() = runTest {
+        val number = 1
+        val cipherId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val cipherView = createMockCipherView(number = number)
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherList = listOf(createMockSdkCipher(number = number)),
+            )
+        } returns listOf(cipherView).asSuccess()
+
+        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+        setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+
+        vaultRepository.ciphersStateFlow.test {
+            // Populate and consume items related to the ciphers flow
+            awaitItem()
+            ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
+            awaitItem()
 
             mutableSyncCipherUpsertFlow.tryEmit(
                 SyncCipherUpsertData(
                     cipherId = cipherId,
                     revisionDate = ZonedDateTime.now(),
                     isUpdate = false,
+                    collectionIds = null,
+                    organizationId = null,
                 ),
             )
-            coVerify(exactly = 1) {
-                ciphersService.getCipher(cipherId)
-                vaultDiskSource.saveCipher(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    cipher = cipher,
-                )
-            }
         }
+
+        coVerify(exactly = 0) {
+            ciphersService.getCipher(any())
+            vaultDiskSource.saveCipher(any(), any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncCipherUpsertFlow create with local cipher, and with common collections, should make a request and save cipher to disk`() = runTest {
+        val number = 1
+        val cipherId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val cipherView = createMockCipherView(number = number)
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherList = listOf(createMockSdkCipher(number = number)),
+            )
+        } returns listOf(cipherView).asSuccess()
+        val collectionView = createMockCollectionView(number = number)
+        coEvery {
+            vaultSdkSource.decryptCollectionList(
+                userId = MOCK_USER_STATE.activeUserId,
+                collectionList = listOf(createMockSdkCollection(number = number)),
+            )
+        } returns listOf(collectionView).asSuccess()
+
+        val cipher: SyncResponseJson.Cipher = mockk()
+        coEvery {
+            ciphersService.getCipher(cipherId)
+        } returns cipher.asSuccess()
+        coEvery {
+            vaultDiskSource.saveCipher(userId = MOCK_USER_STATE.activeUserId, cipher = cipher)
+        } just runs
+
+        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+        val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
+        setupVaultDiskSourceFlows(
+            ciphersFlow = ciphersFlow,
+            collectionsFlow = collectionsFlow,
+        )
+
+        turbineScope {
+            val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
+            val collectionsStateFlow = vaultRepository.collectionsStateFlow.testIn(backgroundScope)
+
+            // Populate and consume items related to the ciphers flow
+            ciphersStateFlow.awaitItem()
+            ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
+            ciphersStateFlow.awaitItem()
+
+            // Populate and consume items related to the collections flow
+            collectionsStateFlow.awaitItem()
+            collectionsFlow.tryEmit(listOf(createMockCollection(number = number)))
+            collectionsStateFlow.awaitItem()
+
+            mutableSyncCipherUpsertFlow.tryEmit(
+                SyncCipherUpsertData(
+                    cipherId = cipherId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = false,
+                    collectionIds = listOf("mockId-1"),
+                    organizationId = "mock-id",
+                ),
+            )
+        }
+
+        coVerify(exactly = 1) {
+            ciphersService.getCipher(any())
+            vaultDiskSource.saveCipher(any(), any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncCipherUpsertFlow update with no local cipher, but with common collections, should make a request save cipher to disk`() = runTest {
+        val number = 1
+        val cipherId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherList = listOf(),
+            )
+        } returns listOf<CipherView>().asSuccess()
+        val collectionView = createMockCollectionView(number = number)
+        coEvery {
+            vaultSdkSource.decryptCollectionList(
+                userId = MOCK_USER_STATE.activeUserId,
+                collectionList = listOf(createMockSdkCollection(number = number)),
+            )
+        } returns listOf(collectionView).asSuccess()
+
+        val cipher: SyncResponseJson.Cipher = mockk()
+        coEvery {
+            ciphersService.getCipher(cipherId)
+        } returns cipher.asSuccess()
+        coEvery {
+            vaultDiskSource.saveCipher(userId = MOCK_USER_STATE.activeUserId, cipher = cipher)
+        } just runs
+
+        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+        val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
+        setupVaultDiskSourceFlows(
+            ciphersFlow = ciphersFlow,
+            collectionsFlow = collectionsFlow,
+        )
+
+        turbineScope {
+            val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
+            val collectionsStateFlow = vaultRepository.collectionsStateFlow.testIn(backgroundScope)
+
+            // Populate and consume items related to the ciphers flow
+            ciphersStateFlow.awaitItem()
+            ciphersFlow.tryEmit(listOf())
+            ciphersStateFlow.awaitItem()
+
+            // Populate and consume items related to the collections flow
+            collectionsStateFlow.awaitItem()
+            collectionsFlow.tryEmit(listOf(createMockCollection(number = number)))
+            collectionsStateFlow.awaitItem()
+
+            mutableSyncCipherUpsertFlow.tryEmit(
+                SyncCipherUpsertData(
+                    cipherId = cipherId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = true,
+                    collectionIds = listOf("mockId-1"),
+                    organizationId = "mock-id",
+                ),
+            )
+        }
+
+        coVerify(exactly = 1) {
+            ciphersService.getCipher(any())
+            vaultDiskSource.saveCipher(any(), any())
+        }
+    }
+
+    @Test
+    fun `syncCipherUpsertFlow update with no local cipher should do nothing`() = runTest {
+        val number = 1
+        val cipherId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherList = listOf(),
+            )
+        } returns listOf<CipherView>().asSuccess()
+
+        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+        setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+
+        vaultRepository.ciphersStateFlow.test {
+            // Populate and consume items related to the ciphers flow
+            awaitItem()
+            ciphersFlow.tryEmit(listOf())
+            awaitItem()
+
+            mutableSyncCipherUpsertFlow.tryEmit(
+                SyncCipherUpsertData(
+                    cipherId = cipherId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = true,
+                    collectionIds = null,
+                    organizationId = null,
+                ),
+            )
+        }
+
+        coVerify(exactly = 0) {
+            ciphersService.getCipher(any())
+            vaultDiskSource.saveCipher(any(), any())
+        }
+    }
+
+    @Test
+    fun `syncCipherUpsertFlow update with more recent local cipher should do nothing`() = runTest {
+        val number = 1
+        val cipherId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val cipherView = createMockCipherView(number = number)
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherList = listOf(createMockSdkCipher(number = number)),
+            )
+        } returns listOf(cipherView).asSuccess()
+
+        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+        setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+
+        vaultRepository.ciphersStateFlow.test {
+            // Populate and consume items related to the cipher flow
+            awaitItem()
+            ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
+            awaitItem()
+
+            mutableSyncCipherUpsertFlow.tryEmit(
+                SyncCipherUpsertData(
+                    cipherId = cipherId,
+                    revisionDate = ZonedDateTime.ofInstant(
+                        Instant.ofEpochSecond(0), ZoneId.of("UTC"),
+                    ),
+                    isUpdate = true,
+                    collectionIds = null,
+                    organizationId = null,
+                ),
+            )
+        }
+
+        coVerify(exactly = 0) {
+            ciphersService.getCipher(any())
+            vaultDiskSource.saveCipher(any(), any())
+        }
+    }
 
     @Suppress("MaxLineLength")
     @Test
     fun `syncCipherUpsertFlow update failure with 404 code should make a request for a cipher and then delete it`() =
         runTest {
-            every {
-                pushManager.syncCipherUpsertFlow
-            }
-
-            val cipherId = "mockId-1"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val number = 1
+            val cipherId = "mockId-$number"
 
             val response: HttpException = mockk {
                 every { code() } returns 404
@@ -3673,13 +3936,35 @@ class VaultRepositoryTest {
                 vaultDiskSource.deleteCipher(any(), any())
             } just runs
 
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = true,
-                ),
-            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherView = createMockCipherView(number = number)
+            coEvery {
+                vaultSdkSource.decryptCipherList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherList = listOf(createMockSdkCipher(number = number)),
+                )
+            } returns listOf(cipherView).asSuccess()
+
+            val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+            setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+
+            vaultRepository.ciphersStateFlow.test {
+                // Populate and consume items related to the ciphers flow
+                awaitItem()
+                ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
+                awaitItem()
+
+                mutableSyncCipherUpsertFlow.tryEmit(
+                    SyncCipherUpsertData(
+                        cipherId = cipherId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = true,
+                        collectionIds = null,
+                        organizationId = null,
+                    ),
+                )
+            }
+
             coVerify(exactly = 1) {
                 ciphersService.getCipher(cipherId)
                 vaultDiskSource.deleteCipher(
@@ -3704,13 +3989,33 @@ class VaultRepositoryTest {
                 ciphersService.getCipher(cipherId)
             } returns response.asFailure()
 
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = false,
-                ),
-            )
+            coEvery {
+                vaultSdkSource.decryptCipherList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherList = listOf(),
+                )
+            } returns emptyList<CipherView>().asSuccess()
+
+            val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+            setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+
+            vaultRepository.ciphersStateFlow.test {
+                // Populate and consume items related to the ciphers flow
+                awaitItem()
+                ciphersFlow.tryEmit(emptyList())
+                awaitItem()
+
+                mutableSyncCipherUpsertFlow.tryEmit(
+                    SyncCipherUpsertData(
+                        cipherId = cipherId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = false,
+                        collectionIds = null,
+                        organizationId = null,
+                    ),
+                )
+            }
+
             coVerify(exactly = 1) {
                 ciphersService.getCipher(cipherId)
             }
@@ -3722,21 +4027,150 @@ class VaultRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `syncSendUpsertFlow success should make a request for a send and then store it`() =
+    fun `syncCipherUpsertFlow valid create success should make a request for a cipher and then store it`() =
         runTest {
-            val sendId = "mockId-1"
-            val send: SyncResponseJson.Send = mockk()
+            val number = 1
+            val cipherId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.decryptCipherList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherList = listOf(),
+                )
+            } returns listOf<CipherView>().asSuccess()
+
+            val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+            setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+
+            val cipher: SyncResponseJson.Cipher = mockk()
+            coEvery {
+                ciphersService.getCipher(cipherId)
+            } returns cipher.asSuccess()
 
             coEvery {
-                sendsService.getSend(sendId)
-            } returns send.asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveSend(any(), any())
+                vaultDiskSource.saveCipher(any(), any())
             } just runs
+
+            vaultRepository.ciphersStateFlow.test {
+                // Populate and consume items related to the ciphers flow
+                awaitItem()
+                ciphersFlow.tryEmit(listOf())
+                awaitItem()
+
+                mutableSyncCipherUpsertFlow.tryEmit(
+                    SyncCipherUpsertData(
+                        cipherId = cipherId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = false,
+                        collectionIds = null,
+                        organizationId = null,
+                    ),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                ciphersService.getCipher(cipherId)
+                vaultDiskSource.saveCipher(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipher = cipher,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncCipherUpsertFlow valid update success should make a request for a cipher and then store it`() =
+        runTest {
+            val number = 1
+            val cipherId = "mockId-$number"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherView = createMockCipherView(number = number)
+            coEvery {
+                vaultSdkSource.decryptCipherList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherList = listOf(createMockSdkCipher(number = number)),
+                )
+            } returns listOf(cipherView).asSuccess()
+
+            val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+            setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+
+            val cipher: SyncResponseJson.Cipher = mockk()
+            coEvery {
+                ciphersService.getCipher(cipherId)
+            } returns cipher.asSuccess()
+
+            coEvery {
+                vaultDiskSource.saveCipher(any(), any())
+            } just runs
+
+            vaultRepository.ciphersStateFlow.test {
+                // Populate and consume items related to the ciphers flow
+                awaitItem()
+                ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
+                awaitItem()
+
+                mutableSyncCipherUpsertFlow.tryEmit(
+                    SyncCipherUpsertData(
+                        cipherId = cipherId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = true,
+                        collectionIds = null,
+                        organizationId = null,
+                    ),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                ciphersService.getCipher(cipherId)
+                vaultDiskSource.saveCipher(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipher = cipher,
+                )
+            }
+        }
+
+    @Test
+    fun `syncSendDeleteFlow should delete send from disk`() {
+        val userId = "mockId-1"
+        val sendId = "mockId-1"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { vaultDiskSource.deleteSend(userId = userId, sendId = sendId) } just runs
+
+        mutableSyncSendDeleteFlow.tryEmit(
+            SyncSendDeleteData(sendId = sendId),
+        )
+
+        coVerify { vaultDiskSource.deleteSend(userId = userId, sendId = sendId) }
+    }
+
+    @Test
+    fun `syncSendUpsertFlow create with local send should do nothing`() = runTest {
+        val number = 1
+        val sendId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val sendView = createMockSendView(number = number)
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = MOCK_USER_STATE.activeUserId,
+                sendList = listOf(createMockSdkSend(number = number)),
+            )
+        } returns listOf(sendView).asSuccess()
+
+        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+        vaultRepository.sendDataStateFlow.test {
+            // Populate and consume items related to the sends flow
+            awaitItem()
+            sendsFlow.tryEmit(listOf(createMockSend(number = number)))
+            awaitItem()
 
             mutableSyncSendUpsertFlow.tryEmit(
                 SyncSendUpsertData(
@@ -3745,22 +4179,97 @@ class VaultRepositoryTest {
                     isUpdate = false,
                 ),
             )
-            coVerify(exactly = 1) {
-                sendsService.getSend(sendId)
-                vaultDiskSource.saveSend(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    send = send,
-                )
-            }
         }
+
+        coVerify(exactly = 0) {
+            sendsService.getSend(any())
+            vaultDiskSource.saveSend(any(), any())
+        }
+    }
+
+    @Test
+    fun `syncSendUpsertFlow update with no local send should do nothing`() = runTest {
+        val number = 1
+        val sendId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = MOCK_USER_STATE.activeUserId,
+                sendList = listOf(),
+            )
+        } returns listOf<SendView>().asSuccess()
+
+        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+        vaultRepository.sendDataStateFlow.test {
+            // Populate and consume items related to the sends flow
+            awaitItem()
+            sendsFlow.tryEmit(listOf())
+            awaitItem()
+
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = true,
+                ),
+            )
+        }
+
+        coVerify(exactly = 0) {
+            sendsService.getSend(any())
+            vaultDiskSource.saveSend(any(), any())
+        }
+    }
+
+    @Test
+    fun `syncSendUpsertFlow update with more recent local send should do nothing`() = runTest {
+        val number = 1
+        val sendId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val sendView = createMockSendView(number = number)
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = MOCK_USER_STATE.activeUserId,
+                sendList = listOf(createMockSdkSend(number = number)),
+            )
+        } returns listOf(sendView).asSuccess()
+
+        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+        vaultRepository.sendDataStateFlow.test {
+            // Populate and consume items related to the send flow
+            awaitItem()
+            sendsFlow.tryEmit(listOf(createMockSend(number = number)))
+            awaitItem()
+
+            mutableSyncSendUpsertFlow.tryEmit(
+                SyncSendUpsertData(
+                    sendId = sendId,
+                    revisionDate = ZonedDateTime.ofInstant(
+                        Instant.ofEpochSecond(0), ZoneId.of("UTC"),
+                    ),
+                    isUpdate = true,
+                ),
+            )
+        }
+
+        coVerify(exactly = 0) {
+            sendsService.getSend(any())
+            vaultDiskSource.saveSend(any(), any())
+        }
+    }
 
     @Suppress("MaxLineLength")
     @Test
     fun `syncSendUpsertFlow update failure with 404 code should make a request for a send and then delete it`() =
         runTest {
-            val sendId = "mockId-1"
-
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val number = 1
+            val sendId = "mockId-$number"
 
             val response: HttpException = mockk {
                 every { code() } returns 404
@@ -3773,13 +4282,33 @@ class VaultRepositoryTest {
                 vaultDiskSource.deleteSend(any(), any())
             } just runs
 
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = true,
-                ),
-            )
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val sendView = createMockSendView(number = number)
+            coEvery {
+                vaultSdkSource.decryptSendList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    sendList = listOf(createMockSdkSend(number = number)),
+                )
+            } returns listOf(sendView).asSuccess()
+
+            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+            vaultRepository.sendDataStateFlow.test {
+                // Populate and consume items related to the sends flow
+                awaitItem()
+                sendsFlow.tryEmit(listOf(createMockSend(number = number)))
+                awaitItem()
+
+                mutableSyncSendUpsertFlow.tryEmit(
+                    SyncSendUpsertData(
+                        sendId = sendId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = true,
+                    ),
+                )
+            }
+
             coVerify(exactly = 1) {
                 sendsService.getSend(sendId)
                 vaultDiskSource.deleteSend(
@@ -3804,13 +4333,31 @@ class VaultRepositoryTest {
                 sendsService.getSend(sendId)
             } returns response.asFailure()
 
-            mutableSyncSendUpsertFlow.tryEmit(
-                SyncSendUpsertData(
-                    sendId = sendId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = false,
-                ),
-            )
+            coEvery {
+                vaultSdkSource.decryptSendList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    sendList = listOf(),
+                )
+            } returns emptyList<SendView>().asSuccess()
+
+            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+            vaultRepository.sendDataStateFlow.test {
+                // Populate and consume items related to the sends flow
+                awaitItem()
+                sendsFlow.tryEmit(emptyList())
+                awaitItem()
+
+                mutableSyncSendUpsertFlow.tryEmit(
+                    SyncSendUpsertData(
+                        sendId = sendId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = false,
+                    ),
+                )
+            }
+
             coVerify(exactly = 1) {
                 sendsService.getSend(sendId)
             }
@@ -3824,20 +4371,150 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `mutableSyncFolderUpsertFlow success should make a request for a folder and then store it`() =
+    fun `syncSendUpsertFlow valid create success should make a request for a send and then store it`() =
         runTest {
-            val folderId = "mockId-1"
-            val folder: SyncResponseJson.Folder = mockk()
+            val number = 1
+            val sendId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.decryptSendList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    sendList = listOf(),
+                )
+            } returns listOf<SendView>().asSuccess()
+
+            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+            val send: SyncResponseJson.Send = mockk()
+            coEvery {
+                sendsService.getSend(sendId)
+            } returns send.asSuccess()
 
             coEvery {
-                folderService.getFolder(folderId)
-            } returns folder.asSuccess()
-
-            coEvery {
-                vaultDiskSource.saveFolder(any(), any())
+                vaultDiskSource.saveSend(any(), any())
             } just runs
+
+            vaultRepository.sendDataStateFlow.test {
+                // Populate and consume items related to the sends flow
+                awaitItem()
+                sendsFlow.tryEmit(listOf())
+                awaitItem()
+
+                mutableSyncSendUpsertFlow.tryEmit(
+                    SyncSendUpsertData(
+                        sendId = sendId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = false,
+                    ),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                sendsService.getSend(sendId)
+                vaultDiskSource.saveSend(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    send = send,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncSendUpsertFlow valid update success should make a request for a send and then store it`() =
+        runTest {
+            val number = 1
+            val sendId = "mockId-$number"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val sendView = createMockSendView(number = number)
+            coEvery {
+                vaultSdkSource.decryptSendList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    sendList = listOf(createMockSdkSend(number = number)),
+                )
+            } returns listOf(sendView).asSuccess()
+
+            val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+            setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
+
+            val send: SyncResponseJson.Send = mockk()
+            coEvery {
+                sendsService.getSend(sendId)
+            } returns send.asSuccess()
+
+            coEvery {
+                vaultDiskSource.saveSend(any(), any())
+            } just runs
+
+            vaultRepository.sendDataStateFlow.test {
+                // Populate and consume items related to the sends flow
+                awaitItem()
+                sendsFlow.tryEmit(listOf(createMockSend(number = number)))
+                awaitItem()
+
+                mutableSyncSendUpsertFlow.tryEmit(
+                    SyncSendUpsertData(
+                        sendId = sendId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = true,
+                    ),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                sendsService.getSend(sendId)
+                vaultDiskSource.saveSend(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    send = send,
+                )
+            }
+        }
+
+    @Test
+    fun `syncFolderDeleteFlow should delete folder from disk and update ciphers`() {
+        val userId = "mockId-1"
+        val folderId = "mockId-1"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { vaultDiskSource.deleteFolder(userId = userId, folderId = folderId) } just runs
+        coEvery {
+            vaultDiskSource.getCiphers(userId)
+        } returns flowOf()
+
+        mutableSyncFolderDeleteFlow.tryEmit(
+            SyncFolderDeleteData(folderId = folderId),
+        )
+
+        coVerify {
+            vaultDiskSource.deleteFolder(userId = userId, folderId = folderId)
+            vaultDiskSource.getCiphers(userId)
+        }
+    }
+
+    @Test
+    fun `syncFolderUpsertFlow create with local folder should do nothing`() = runTest {
+        val number = 1
+        val folderId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val folderView = createMockFolderView(number = number)
+        coEvery {
+            vaultSdkSource.decryptFolderList(
+                userId = MOCK_USER_STATE.activeUserId,
+                folderList = listOf(createMockSdkFolder(number = number)),
+            )
+        } returns listOf(folderView).asSuccess()
+
+        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+        setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
+
+        vaultRepository.foldersStateFlow.test {
+            // Populate and consume items related to the folders flow
+            awaitItem()
+            foldersFlow.tryEmit(listOf(createMockFolder(number = number)))
+            awaitItem()
 
             mutableSyncFolderUpsertFlow.tryEmit(
                 SyncFolderUpsertData(
@@ -3846,6 +4523,185 @@ class VaultRepositoryTest {
                     isUpdate = false,
                 ),
             )
+        }
+
+        coVerify(exactly = 0) {
+            folderService.getFolder(any())
+            vaultDiskSource.saveFolder(any(), any())
+        }
+    }
+
+    @Test
+    fun `syncFolderUpsertFlow update with no local folder should do nothing`() = runTest {
+        val number = 1
+        val folderId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery {
+            vaultSdkSource.decryptFolderList(
+                userId = MOCK_USER_STATE.activeUserId,
+                folderList = listOf(),
+            )
+        } returns listOf<FolderView>().asSuccess()
+
+        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+        setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
+
+        vaultRepository.foldersStateFlow.test {
+            // Populate and consume items related to the folders flow
+            awaitItem()
+            foldersFlow.tryEmit(listOf())
+            awaitItem()
+
+            mutableSyncFolderUpsertFlow.tryEmit(
+                SyncFolderUpsertData(
+                    folderId = folderId,
+                    revisionDate = ZonedDateTime.now(),
+                    isUpdate = true,
+                ),
+            )
+        }
+
+        coVerify(exactly = 0) {
+            folderService.getFolder(any())
+            vaultDiskSource.saveFolder(any(), any())
+        }
+    }
+
+    @Test
+    fun `syncFolderUpsertFlow update with more recent local folder should do nothing`() = runTest {
+        val number = 1
+        val folderId = "mockId-$number"
+
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val folderView = createMockFolderView(number = number)
+        coEvery {
+            vaultSdkSource.decryptFolderList(
+                userId = MOCK_USER_STATE.activeUserId,
+                folderList = listOf(createMockSdkFolder(number = number)),
+            )
+        } returns listOf(folderView).asSuccess()
+
+        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+        setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
+
+        vaultRepository.foldersStateFlow.test {
+            // Populate and consume items related to the folders flow
+            awaitItem()
+            foldersFlow.tryEmit(listOf(createMockFolder(number = number)))
+            awaitItem()
+
+            mutableSyncFolderUpsertFlow.tryEmit(
+                SyncFolderUpsertData(
+                    folderId = folderId,
+                    revisionDate = ZonedDateTime.ofInstant(
+                        Instant.ofEpochSecond(0), ZoneId.of("UTC"),
+                    ),
+                    isUpdate = true,
+                ),
+            )
+        }
+
+        coVerify(exactly = 0) {
+            folderService.getFolder(any())
+            vaultDiskSource.saveFolder(any(), any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncFolderUpsertFlow valid create success should make a request for a folder and then store it`() =
+        runTest {
+            val number = 1
+            val folderId = "mockId-$number"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.decryptFolderList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    folderList = listOf(),
+                )
+            } returns listOf<FolderView>().asSuccess()
+
+            val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+            setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
+
+            val folder: SyncResponseJson.Folder = mockk()
+            coEvery {
+                folderService.getFolder(folderId)
+            } returns folder.asSuccess()
+
+            coEvery {
+                vaultDiskSource.saveFolder(any(), any())
+            } just runs
+
+            vaultRepository.foldersStateFlow.test {
+                // Populate and consume items related to the folders flow
+                awaitItem()
+                foldersFlow.tryEmit(listOf())
+                awaitItem()
+
+                mutableSyncFolderUpsertFlow.tryEmit(
+                    SyncFolderUpsertData(
+                        folderId = folderId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = false,
+                    ),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                folderService.getFolder(folderId)
+                vaultDiskSource.saveFolder(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    folder = folder,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncFolderUpsertFlow valid update success should make a request for a folder and then store it`() =
+        runTest {
+            val number = 1
+            val folderId = "mockId-$number"
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val folderView = createMockFolderView(number = number)
+            coEvery {
+                vaultSdkSource.decryptFolderList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    folderList = listOf(createMockSdkFolder(number = number)),
+                )
+            } returns listOf(folderView).asSuccess()
+
+            val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+            setupVaultDiskSourceFlows(foldersFlow = foldersFlow)
+
+            val folder: SyncResponseJson.Folder = mockk()
+            coEvery {
+                folderService.getFolder(folderId)
+            } returns folder.asSuccess()
+
+            coEvery {
+                vaultDiskSource.saveFolder(any(), any())
+            } just runs
+
+            vaultRepository.foldersStateFlow.test {
+                // Populate and consume items related to the folders flow
+                awaitItem()
+                foldersFlow.tryEmit(listOf(createMockFolder(number = number)))
+                awaitItem()
+
+                mutableSyncFolderUpsertFlow.tryEmit(
+                    SyncFolderUpsertData(
+                        folderId = folderId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = true,
+                    ),
+                )
+            }
+
             coVerify(exactly = 1) {
                 folderService.getFolder(folderId)
                 vaultDiskSource.saveFolder(

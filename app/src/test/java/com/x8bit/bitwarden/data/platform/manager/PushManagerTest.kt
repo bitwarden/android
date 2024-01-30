@@ -184,6 +184,8 @@ class PushManagerTest {
                         assertEquals(
                             SyncCipherUpsertData(
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                                organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
+                                collectionIds = listOf(),
                                 revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = false,
                             ),
@@ -214,6 +216,8 @@ class PushManagerTest {
                         assertEquals(
                             SyncCipherUpsertData(
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                                organizationId = "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
+                                collectionIds = listOf(),
                                 revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
                                 isUpdate = true,
                             ),

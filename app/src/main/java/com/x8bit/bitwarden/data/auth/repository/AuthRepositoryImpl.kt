@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -71,7 +72,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Singleton
 
@@ -95,6 +98,7 @@ class AuthRepositoryImpl(
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val userLogoutManager: UserLogoutManager,
+    private val pushManager: PushManager,
     dispatcherManager: DispatcherManager,
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository {
@@ -117,7 +121,9 @@ class AuthRepositoryImpl(
      * use of [Dispatchers.Unconfined] allows for this to happen synchronously whenever any of
      * these flows changes.
      */
-    private val collectionScope = CoroutineScope(dispatcherManager.unconfined)
+    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     override var twoFactorResponse: TwoFactorRequired? = null
 
@@ -136,7 +142,7 @@ class AuthRepositoryImpl(
                 ?: AuthState.Unauthenticated
         }
         .stateIn(
-            scope = collectionScope,
+            scope = unconfinedScope,
             started = SharingStarted.Eagerly,
             initialValue = AuthState.Uninitialized,
         )
@@ -169,7 +175,7 @@ class AuthRepositoryImpl(
             !mutableHasPendingAccountDeletionStateFlow.value
         }
         .stateIn(
-            scope = collectionScope,
+            scope = unconfinedScope,
             started = SharingStarted.Eagerly,
             initialValue = authDiskSource
                 .userState
@@ -198,6 +204,22 @@ class AuthRepositoryImpl(
 
     override var hasPendingAccountAddition: Boolean
         by mutableHasPendingAccountAdditionStateFlow::value
+
+    init {
+        pushManager
+            .syncOrgKeysFlow
+            .onEach {
+                val userId = activeUserId ?: return@onEach
+                refreshAccessTokenSynchronously(userId)
+                vaultRepository.sync()
+            }
+            .launchIn(ioScope)
+
+        pushManager
+            .logoutFlow
+            .onEach { logout() }
+            .launchIn(unconfinedScope)
+    }
 
     override fun clearPendingAccountDeletion() {
         mutableHasPendingAccountDeletionStateFlow.value = false

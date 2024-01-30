@@ -19,8 +19,11 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
+import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -91,11 +94,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -237,14 +242,34 @@ class VaultRepositoryImpl(
             .launchIn(unconfinedScope)
 
         pushManager
+            .fullSyncFlow
+            .onEach { syncIfNecessary() }
+            .launchIn(unconfinedScope)
+
+        pushManager
+            .syncCipherDeleteFlow
+            .onEach(::deleteCipher)
+            .launchIn(unconfinedScope)
+
+        pushManager
             .syncCipherUpsertFlow
             .onEach(::syncCipherIfNecessary)
             .launchIn(ioScope)
 
         pushManager
+            .syncSendDeleteFlow
+            .onEach(::deleteSend)
+            .launchIn(unconfinedScope)
+
+        pushManager
             .syncSendUpsertFlow
             .onEach(::syncSendIfNecessary)
             .launchIn(ioScope)
+
+        pushManager
+            .syncFolderDeleteFlow
+            .onEach(::deleteFolder)
+            .launchIn(unconfinedScope)
 
         pushManager
             .syncFolderUpsertFlow
@@ -1232,18 +1257,75 @@ class VaultRepositoryImpl(
 
     //region Push notification helpers
     /**
+     * Deletes the cipher specified by [syncCipherDeleteData] from disk.
+     */
+    private suspend fun deleteCipher(syncCipherDeleteData: SyncCipherDeleteData) {
+        val userId = activeUserId ?: return
+
+        val cipherId = syncCipherDeleteData.cipherId
+        vaultDiskSource.deleteCipher(
+            userId = userId,
+            cipherId = cipherId,
+        )
+    }
+
+    /**
      * Syncs an individual cipher contained in [syncCipherUpsertData] to disk if certain criteria
      * are met. If the resource cannot be found cloud-side, and it was updated, delete it from disk
      * for now.
      */
+    @Suppress("ReturnCount")
     private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
         val userId = activeUserId ?: return
-
-        // TODO Handle other filtering logic including revision date comparison. This will still be
-        //  handled as part of BIT-1547.
-
         val cipherId = syncCipherUpsertData.cipherId
+        val organizationId = syncCipherUpsertData.organizationId
+        val collectionIds = syncCipherUpsertData.collectionIds
+        val revisionDate = syncCipherUpsertData.revisionDate
         val isUpdate = syncCipherUpsertData.isUpdate
+
+        val localCipher = ciphersStateFlow
+            .mapNotNull { it.data }
+            .first()
+            .find { it.id == cipherId }
+
+        // Return if local cipher is more recent
+        if (localCipher != null &&
+            localCipher.revisionDate.epochSecond > revisionDate.toEpochSecond()
+        ) {
+            return
+        }
+
+        var shouldUpdate: Boolean
+        val shouldCheckCollections: Boolean
+
+        when {
+            isUpdate -> {
+                shouldUpdate = localCipher != null
+                shouldCheckCollections = true
+            }
+
+            collectionIds == null || organizationId == null -> {
+                shouldUpdate = localCipher == null
+                shouldCheckCollections = false
+            }
+
+            else -> {
+                shouldUpdate = false
+                shouldCheckCollections = true
+            }
+        }
+
+        if (!shouldUpdate && shouldCheckCollections && organizationId != null) {
+            // Check if there are any collections in common
+            shouldUpdate = collectionsStateFlow
+                .mapNotNull { it.data }
+                .first()
+                .mapNotNull { it.id }
+                .any { collectionIds?.contains(it) == true } == true
+        }
+
+        if (!shouldUpdate) return
+
         ciphersService
             .getCipher(cipherId)
             .fold(
@@ -1260,18 +1342,41 @@ class VaultRepositoryImpl(
     }
 
     /**
+     * Deletes the send specified by [syncSendDeleteData] from disk.
+     */
+    private suspend fun deleteSend(syncSendDeleteData: SyncSendDeleteData) {
+        val userId = activeUserId ?: return
+
+        val sendId = syncSendDeleteData.sendId
+        vaultDiskSource.deleteSend(
+            userId = userId,
+            sendId = sendId,
+        )
+    }
+
+    /**
      * Syncs an individual send contained in [syncSendUpsertData] to disk if certain criteria are
      * met. If the resource cannot be found cloud-side, and it was updated, delete it from disk for
      * now.
      */
     private suspend fun syncSendIfNecessary(syncSendUpsertData: SyncSendUpsertData) {
         val userId = activeUserId ?: return
-
-        // TODO Handle other filtering logic including revision date comparison. This will still be
-        //  handled as part of BIT-1547.
-
         val sendId = syncSendUpsertData.sendId
         val isUpdate = syncSendUpsertData.isUpdate
+        val revisionDate = syncSendUpsertData.revisionDate
+
+        val localSend = sendDataStateFlow
+            .mapNotNull { it.data }
+            .first()
+            .sendViewList
+            .find { it.id == sendId }
+        val isValidCreate = !isUpdate && localSend == null
+        val isValidUpdate = isUpdate &&
+            localSend != null &&
+            localSend.revisionDate.epochSecond < revisionDate.toEpochSecond()
+
+        if (!isValidCreate && !isValidUpdate) return
+
         sendsService
             .getSend(sendId)
             .fold(
@@ -1288,16 +1393,43 @@ class VaultRepositoryImpl(
     }
 
     /**
+     * Deletes the folder specified by [syncFolderDeleteData] from disk.
+     */
+    private suspend fun deleteFolder(syncFolderDeleteData: SyncFolderDeleteData) {
+        val userId = activeUserId ?: return
+
+        val folderId = syncFolderDeleteData.folderId
+        clearFolderIdFromCiphers(
+            folderId = folderId,
+            userId = userId,
+        )
+        vaultDiskSource.deleteFolder(
+            folderId = folderId,
+            userId = userId,
+        )
+    }
+
+    /**
      * Syncs an individual folder contained in [syncFolderUpsertData] to disk if certain criteria
      * are met.
      */
     private suspend fun syncFolderIfNecessary(syncFolderUpsertData: SyncFolderUpsertData) {
         val userId = activeUserId ?: return
-
-        // TODO Handle other filtering logic including revision date comparison. This will still be
-        //  handled as part of BIT-1547.
-
         val folderId = syncFolderUpsertData.folderId
+        val isUpdate = syncFolderUpsertData.isUpdate
+        val revisionDate = syncFolderUpsertData.revisionDate
+
+        val localFolder = foldersStateFlow
+            .mapNotNull { it.data }
+            .first()
+            .find { it.id == folderId }
+        val isValidCreate = !isUpdate && localFolder == null
+        val isValidUpdate = isUpdate &&
+            localFolder != null &&
+            localFolder.revisionDate.epochSecond < revisionDate.toEpochSecond()
+
+        if (!isValidCreate && !isValidUpdate) return
+
         folderService
             .getFolder(folderId)
             .onSuccess { vaultDiskSource.saveFolder(userId, it) }
