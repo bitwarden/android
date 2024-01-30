@@ -6,11 +6,11 @@ import com.bitwarden.core.DerivePinKeyResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
-import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
@@ -27,7 +27,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -39,25 +38,17 @@ import java.time.Instant
 @Suppress("LargeClass")
 class SettingsRepositoryTest {
     private val autofillManager: AutofillManager = mockk {
-        every { hasEnabledAutofillServices() } answers { isAutofillEnabledAndSupported }
-        every { isAutofillSupported } answers { isAutofillEnabledAndSupported }
-        every { isEnabled } answers { isAutofillEnabledAndSupported }
         every { disableAutofillServices() } just runs
     }
-    private val mutableAppForegroundStateFlow = MutableStateFlow(AppForegroundState.BACKGROUNDED)
-    private val appForegroundManager: AppForegroundManager = mockk {
-        every { appForegroundStateFlow } returns mutableAppForegroundStateFlow
-    }
+    private val autofillEnabledManager: AutofillEnabledManager = AutofillEnabledManagerImpl()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
 
-    private var isAutofillEnabledAndSupported = false
-
     private val settingsRepository = SettingsRepositoryImpl(
         autofillManager = autofillManager,
-        appForegroundManager = appForegroundManager,
+        autofillEnabledManager = autofillEnabledManager,
         authDiskSource = fakeAuthDiskSource,
         settingsDiskSource = fakeSettingsDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -534,42 +525,15 @@ class SettingsRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isAutofillEnabledStateFlow should emit updates if necessary when the app foreground state changes and disableAutofill is called`() =
+    fun `isAutofillEnabledStateFlow should emit whenever the AutofillEnabledManager does`() =
         runTest {
-            // Updates are not received without an isAutofillEnabledStateFlow subscriber.
-            isAutofillEnabledAndSupported = true
-            mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
-            assertFalse(settingsRepository.isAutofillEnabledStateFlow.value)
-
-            // Revert back to initial state.
-            isAutofillEnabledAndSupported = false
-            mutableAppForegroundStateFlow.value = AppForegroundState.BACKGROUNDED
-
             settingsRepository.isAutofillEnabledStateFlow.test {
                 assertFalse(awaitItem())
 
-                // An update is received when both the autofill state and foreground state change
-                isAutofillEnabledAndSupported = true
-                mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
+                autofillEnabledManager.isAutofillEnabled = true
                 assertTrue(awaitItem())
 
-                // An update is not received when only the foreground state changes
-                mutableAppForegroundStateFlow.value = AppForegroundState.BACKGROUNDED
-                expectNoEvents()
-
-                // An update is not received when only the autofill state changes
-                isAutofillEnabledAndSupported = false
-                expectNoEvents()
-
-                // An update is received after both states have changed
-                mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
-                assertFalse(awaitItem())
-
-                // Calling disableAutofill will result in an emission of false
-                isAutofillEnabledAndSupported = true
-                mutableAppForegroundStateFlow.value = AppForegroundState.BACKGROUNDED
-                assertTrue(awaitItem())
-                settingsRepository.disableAutofill()
+                autofillEnabledManager.isAutofillEnabled = false
                 assertFalse(awaitItem())
             }
         }
@@ -579,8 +543,7 @@ class SettingsRepositoryTest {
     fun `disableAutofill should trigger an emission of false from isAutofillEnabledStateFlow and disable autofill with the OS`() =
         runTest {
             // Start in a state where autofill is enabled
-            isAutofillEnabledAndSupported = true
-            mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
+            autofillEnabledManager.isAutofillEnabled = true
             settingsRepository.isAutofillEnabledStateFlow.test {
                 assertTrue(awaitItem())
                 expectNoEvents()
@@ -589,6 +552,7 @@ class SettingsRepositoryTest {
             settingsRepository.disableAutofill()
 
             assertFalse(settingsRepository.isAutofillEnabledStateFlow.value)
+            assertFalse(autofillEnabledManager.isAutofillEnabled)
             verify { autofillManager.disableAutofillServices() }
         }
 
