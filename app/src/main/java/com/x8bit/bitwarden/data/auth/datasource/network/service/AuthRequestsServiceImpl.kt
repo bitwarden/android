@@ -10,6 +10,11 @@ class AuthRequestsServiceImpl(
     override suspend fun getAuthRequests(): Result<AuthRequestsResponseJson> =
         authenticatedAuthRequestsApi.getAuthRequests()
 
+    override suspend fun getAuthRequest(
+        requestId: String,
+    ): Result<AuthRequestsResponseJson.AuthRequest> =
+        authenticatedAuthRequestsApi.getAuthRequest(requestId = requestId)
+
     override suspend fun updateAuthRequest(
         requestId: String,
         key: String,

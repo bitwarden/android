@@ -26,4 +26,12 @@ interface AuthenticatedAuthRequestsApi {
      */
     @GET("/auth-requests")
     suspend fun getAuthRequests(): Result<AuthRequestsResponseJson>
+
+    /**
+     * Retrieves an existing authentication request by ID.
+     */
+    @GET("/auth-requests/{requestId}")
+    suspend fun getAuthRequest(
+        @Path("requestId") requestId: String,
+    ): Result<AuthRequestsResponseJson.AuthRequest>
 }
