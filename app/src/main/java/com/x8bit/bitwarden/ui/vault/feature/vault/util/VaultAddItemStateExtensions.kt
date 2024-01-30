@@ -11,9 +11,9 @@ import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
-import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
@@ -124,14 +124,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
             username = it.username,
             password = it.password,
             passwordRevisionDate = common.originalCipher?.login?.passwordRevisionDate,
-            uris = listOf(
-                // TODO Implement URI list (BIT-1094)
-                LoginUriView(
-                    uri = it.uri,
-                    // TODO Implement URI settings in (BIT-1094)
-                    match = UriMatchType.DOMAIN,
-                ),
-            ),
+            uris = it.uriList.toLoginUriView(),
             totp = it.totp,
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
         )
@@ -190,3 +183,9 @@ private fun VaultAddEditState.Custom.toFieldView(): FieldView =
             )
         }
     }
+
+private fun List<UriItem>?.toLoginUriView(): List<LoginUriView>? =
+    this
+        ?.filter { it.uri?.isNotBlank() == true }
+        ?.map { LoginUriView(uri = it.uri.orEmpty(), match = it.match) }
+        .takeUnless { it.isNullOrEmpty() }

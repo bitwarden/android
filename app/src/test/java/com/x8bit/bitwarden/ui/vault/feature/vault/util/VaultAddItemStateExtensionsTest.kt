@@ -14,6 +14,7 @@ import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
@@ -50,7 +51,7 @@ class VaultAddItemStateExtensionsTest {
             type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
-                uri = "mockUri-1",
+                uriList = listOf(UriItem("testId", "mockUri-1", UriMatchType.DOMAIN)),
                 totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
             ),
         )
@@ -127,7 +128,7 @@ class VaultAddItemStateExtensionsTest {
             type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
-                uri = "mockUri-1",
+                uriList = listOf(UriItem("TestId", "mockUri-1", null)),
                 totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
             ),
         )
@@ -147,7 +148,7 @@ class VaultAddItemStateExtensionsTest {
                     uris = listOf(
                         LoginUriView(
                             uri = "mockUri-1",
-                            match = UriMatchType.DOMAIN,
+                            match = null,
                         ),
                     ),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",

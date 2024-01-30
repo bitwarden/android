@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
@@ -174,7 +175,7 @@ class CipherViewExtensionsTest {
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = "username",
                     password = "password",
-                    uri = "www.example.com",
+                    uriList = listOf(UriItem(TEST_ID, "www.example.com", null)),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     canViewPassword = false,
                 ),

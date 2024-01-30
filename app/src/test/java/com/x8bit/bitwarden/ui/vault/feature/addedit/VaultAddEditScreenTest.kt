@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
@@ -720,13 +721,21 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `in ItemType_Login state changing URI text field should trigger UriTextChange`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(uriList = listOf(UriItem("TestId", "URI", null)))
+            }
+        }
+
         composeTestRule
             .onNodeWithTextAfterScroll("URI")
-            .performTextInput("TestURI")
+            .performTextInput("Test")
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.ItemType.LoginType.UriTextChange("TestURI"),
+                VaultAddEditAction.ItemType.LoginType.UriTextChange(
+                    UriItem("TestId", "TestURI", null),
+                ),
             )
         }
     }
@@ -738,7 +747,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(uri = "NewURI") }
+            updateLoginType(currentState) {
+                copy(uriList = listOf(UriItem("TestId", "NewURI", null)))
+            }
         }
 
         composeTestRule
