@@ -63,6 +63,7 @@ class AutofillParserTests {
     private val inlinePresentationSpecs: List<InlinePresentationSpec> = mockk()
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } answers { mockIsInlineAutofillEnabled }
+        every { blockedAutofillUris } returns emptyList()
     }
 
     private var mockIsInlineAutofillEnabled = true
@@ -483,6 +484,57 @@ class AutofillParserTests {
         }
     }
 
+    @Test
+    fun `parse should skip block listed URIs Login when a Login view is focused`() {
+        // Setup all tests
+        setupAssistStructureWithAllAutofillViewTypes()
+        val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
+            data = AutofillView.Data(
+                autofillId = cardAutofillId,
+                isFocused = true,
+            ),
+        )
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                isFocused = true,
+            ),
+        )
+        val remoteBlockList = listOf(
+            "blockListedUri.com",
+            "blockListedAgainUri.com",
+        )
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
+        every { settingsRepository.blockedAutofillUris } returns remoteBlockList
+
+        // A function for asserting that a block listed URI results in an unfillable request.
+        fun testBlockListedUri(blockListedUri: String) {
+            // Setup
+            every {
+                any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            } returns blockListedUri
+
+            // Test
+            val actual = parser.parse(
+                autofillAppInfo = autofillAppInfo,
+                fillRequest = fillRequest,
+            )
+
+            // Verify
+            assertEquals(AutofillRequest.Unfillable, actual)
+        }
+
+        // Test all block listed URIs
+        BLOCK_LISTED_URIS.forEach(::testBlockListedUri)
+        remoteBlockList.forEach(::testBlockListedUri)
+
+        // Verify all tests
+        verify(exactly = BLOCK_LISTED_URIS.size + remoteBlockList.size) {
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+        }
+    }
+
     /**
      * Setup [assistStructure] to return window nodes with each [AutofillView] type (card and login)
      * so we can test how different window node configurations produce different partitions.
@@ -494,7 +546,13 @@ class AutofillParserTests {
     }
 }
 
+private val BLOCK_LISTED_URIS: List<String> = listOf(
+    "androidapp://android",
+    "androidapp://com.android.settings",
+    "androidapp://com.x8bit.bitwarden",
+    "androidapp://com.oneplus.applocker",
+)
 private const val ID_PACKAGE: String = "com.x8bit.bitwarden"
 private const val MAX_INLINE_SUGGESTION_COUNT: Int = 42
-private const val URI: String = "androidapp://com.x8bit.bitwarden"
+private const val URI: String = "androidapp://com.google"
 private const val WEBSITE: String = "https://www.google.com"
