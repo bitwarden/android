@@ -16,4 +16,12 @@ interface NewAuthRequestService {
         accessCode: String,
         fingerprint: String,
     ): Result<AuthRequestsResponseJson.AuthRequest>
+
+    /**
+     * Queries for updates to a given auth request.
+     */
+    suspend fun getAuthRequestUpdate(
+        requestId: String,
+        accessCode: String,
+    ): Result<AuthRequestsResponseJson.AuthRequest>
 }

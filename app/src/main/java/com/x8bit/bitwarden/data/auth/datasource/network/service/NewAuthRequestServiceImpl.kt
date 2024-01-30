@@ -28,4 +28,13 @@ class NewAuthRequestServiceImpl(
                 type = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
             ),
         )
+
+    override suspend fun getAuthRequestUpdate(
+        requestId: String,
+        accessCode: String,
+    ): Result<AuthRequestsResponseJson.AuthRequest> =
+        unauthenticatedAuthRequestsApi.getAuthRequestUpdate(
+            requestId = requestId,
+            accessCode = accessCode,
+        )
 }
