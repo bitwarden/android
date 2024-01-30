@@ -52,7 +52,11 @@ class IntentManagerImpl(
     private val clock: Clock = Clock.systemDefaultZone(),
 ) : IntentManager {
     override fun startActivity(intent: Intent) {
-        context.startActivity(intent)
+        try {
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // no-op
+        }
     }
 
     @Composable
