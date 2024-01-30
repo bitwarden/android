@@ -7,7 +7,10 @@ import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -27,6 +30,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -59,27 +63,41 @@ private const val KEY_STATE = "state"
  * @param savedStateHandle Handles the navigation arguments of this ViewModel.
  */
 @HiltViewModel
-@Suppress("TooManyFunctions", "LargeClass")
+@Suppress("TooManyFunctions", "LargeClass", "LongParameterList")
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
     private val generatorRepository: GeneratorRepository,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val resourceManager: ResourceManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val vaultAddEditType = VaultAddEditArgs(savedStateHandle).vaultAddEditType
+
+            // Check for autofill data to pre-populate
+            val autofillSelectionData: AutofillSelectionData? =
+                when (val specialCircumstance = specialCircumstanceManager.specialCircumstance) {
+                    is SpecialCircumstance.AutofillSelection -> {
+                        specialCircumstance.autofillSelectionData
+                    }
+
+                    else -> null
+                }
+            val defaultAddTypeContent = autofillSelectionData
+                ?.toDefaultAddTypeContent()
+                ?: VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                )
+
             VaultAddEditState(
                 vaultAddEditType = vaultAddEditType,
                 viewState = when (vaultAddEditType) {
-                    VaultAddEditType.AddItem -> VaultAddEditState.ViewState.Content(
-                        common = VaultAddEditState.ViewState.Content.Common(),
-                        type = VaultAddEditState.ViewState.Content.ItemType.Login(),
-                    )
-
+                    VaultAddEditType.AddItem -> defaultAddTypeContent
                     is VaultAddEditType.EditItem -> VaultAddEditState.ViewState.Loading
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
