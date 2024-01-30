@@ -65,32 +65,7 @@ class AuthRequestsServiceTest : BaseServiceTest() {
 
     @Test
     fun `updateAuthRequest when request response is Success should return Success`() = runTest {
-        val json = """
-            {
-              "id": "1",
-              "publicKey": "2",
-              "requestDeviceType": "Android",
-              "requestIpAddress": "1.0.0.1",
-              "key": "key",
-              "masterPasswordHash": "verySecureHash",
-              "creationDate": "2024-09-13T01:00:00.00Z",
-              "requestApproved": true,
-              "origin": "www.bitwarden.com"
-            }
-            """
-        val expected = AuthRequestsResponseJson.AuthRequest(
-            id = "1",
-            publicKey = "2",
-            platform = "Android",
-            ipAddress = "1.0.0.1",
-            key = "key",
-            masterPasswordHash = "verySecureHash",
-            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
-            responseDate = null,
-            requestApproved = true,
-            originUrl = "www.bitwarden.com",
-        )
-        val response = MockResponse().setBody(json).setResponseCode(200)
+        val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
         server.enqueue(response)
         val actual = service.updateAuthRequest(
             requestId = "userId",
@@ -99,6 +74,49 @@ class AuthRequestsServiceTest : BaseServiceTest() {
             masterPasswordHash = "verySecureHash",
             isApproved = true,
         )
-        assertEquals(Result.success(expected), actual)
+        assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
+    }
+
+    @Test
+    fun `getAuthRequest when request response is Failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+        val actual = service.getAuthRequest(requestId = "1")
+        assertTrue(actual.isFailure)
+    }
+
+    @Test
+    fun `getAuthRequest when request response is Success should return Success`() = runTest {
+        val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
+        server.enqueue(response)
+        val actual = service.getAuthRequest(requestId = "1")
+        assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
     }
 }
+
+private const val AUTH_REQUEST_RESPONSE_JSON = """
+{
+  "id": "1",
+  "publicKey": "2",
+  "requestDeviceType": "Android",
+  "requestIpAddress": "1.0.0.1",
+  "key": "key",
+  "masterPasswordHash": "verySecureHash",
+  "creationDate": "2024-09-13T01:00:00.00Z",
+  "requestApproved": true,
+  "origin": "www.bitwarden.com"
+}
+"""
+
+private val AUTH_REQUEST_RESPONSE = AuthRequestsResponseJson.AuthRequest(
+    id = "1",
+    publicKey = "2",
+    platform = "Android",
+    ipAddress = "1.0.0.1",
+    key = "key",
+    masterPasswordHash = "verySecureHash",
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+    responseDate = null,
+    requestApproved = true,
+    originUrl = "www.bitwarden.com",
+)

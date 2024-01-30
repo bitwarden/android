@@ -12,6 +12,13 @@ interface AuthRequestsService {
     suspend fun getAuthRequests(): Result<AuthRequestsResponseJson>
 
     /**
+     * Retrieves an existing auth request to see if a device has approved it.
+     */
+    suspend fun getAuthRequest(
+        requestId: String,
+    ): Result<AuthRequestsResponseJson.AuthRequest>
+
+    /**
      * Updates an approval request.
      */
     suspend fun updateAuthRequest(
