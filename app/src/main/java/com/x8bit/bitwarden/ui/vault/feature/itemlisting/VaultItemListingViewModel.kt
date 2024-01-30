@@ -8,8 +8,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -67,6 +67,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val autofillSelectionManager: AutofillSelectionManager,
+    private val cipherMatchingManager: CipherMatchingManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
@@ -665,30 +666,20 @@ class VaultItemListingViewModel @Inject constructor(
             ?.cipherViewList
             ?.firstOrNull { it.id == cipherId }
 
-    // TODO: Update to use correct logic (BIT-1641)
     /**
      * Takes the given vault data and filters it for autofill if necessary.
      */
-    @OmitFromCoverage
     private suspend fun DataState<VaultData>.filterForAutofillIfNecessary(): DataState<VaultData> {
-        val matchingUri = state
+        val matchUri = state
             .autofillSelectionData
             ?.uri
-            ?.toHostOrPathOrNull()
             ?: return this
         return this.map { vaultData ->
             vaultData.copy(
-                cipherViewList = vaultData
-                    .cipherViewList
-                    .filter { cipherView ->
-                        cipherView
-                            .login
-                            ?.uris
-                            .orEmpty()
-                            .any {
-                                matchingUri in it.uri?.toHostOrPathOrNull().orEmpty()
-                            }
-                    },
+                cipherViewList = cipherMatchingManager.filterCiphersForMatches(
+                    ciphers = vaultData.cipherViewList,
+                    matchUri = matchUri,
+                ),
             )
         }
     }

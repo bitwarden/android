@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
@@ -12,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -62,6 +64,15 @@ import java.time.ZoneOffset
 class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
+
+    private var mockFilteredCiphers: List<CipherView>? = null
+    private val cipherMatchingManager: CipherMatchingManager = object : CipherMatchingManager {
+        // Just do no-op filtering unless we have mock filtered data
+        override suspend fun filterCiphersForMatches(
+            ciphers: List<CipherView>,
+            matchUri: String,
+        ): List<CipherView> = mockFilteredCiphers ?: ciphers
+    }
 
     private val clock: Clock = Clock.fixed(
         Instant.parse("2023-10-27T12:00:00Z"),
@@ -786,6 +797,56 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with items and autofill filtering should update ViewState to Content with filtered data`() =
+        runTest {
+            setupMockUri()
+
+            val cipherView1 = createMockCipherView(number = 1)
+            val cipherView2 = createMockCipherView(number = 2)
+
+            // Set up the data to be filtered
+            mockFilteredCiphers = listOf(cipherView1)
+
+            val autofillSelectionData = AutofillSelectionData(
+                type = AutofillSelectionData.Type.LOGIN,
+                uri = "https://www.test.com",
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = autofillSelectionData,
+                    shouldFinishWhenComplete = true,
+                )
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+
+            mutableVaultDataStateFlow.value = dataState
+
+            assertEquals(
+                createVaultItemListingState(
+                    viewState = VaultItemListingState.ViewState.Content(
+                        displayItemList = listOf(
+                            createMockDisplayItemForCipher(number = 1),
+                        ),
+                    ),
+                )
+                    .copy(
+                        autofillSelectionData = autofillSelectionData,
+                        shouldFinishOnComplete = true,
+                    ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Test
     fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems`() =
         runTest {
@@ -1277,6 +1338,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
             autofillSelectionManager = autofillSelectionManager,
+            cipherMatchingManager = cipherMatchingManager,
             specialCircumstanceManager = specialCircumstanceManager,
         )
 
