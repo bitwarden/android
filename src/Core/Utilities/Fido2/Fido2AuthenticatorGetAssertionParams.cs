@@ -6,17 +6,21 @@
         public string RpId { get; set; }
 
         /** The hash of the serialized client data, provided by the client. */
-        public byte[] Hash {get; set;}
+        public byte[] ClientDataHash { get; set; }
 
-        public PublicKeyCredentialDescriptor[] AllowCredentialDescriptorList {get; set;}
+        public PublicKeyCredentialDescriptor[] AllowCredentialDescriptorList { get; set; }
 
-        /** The effective user verification requirement for assertion, a Boolean value provided by the client. */
-        public bool RequireUserVerification {get; set;}
+        /// <summary>
+        /// Instructs the authenticator to require a user-verifying gesture in order to complete the request. Examples of such gestures are fingerprint scan or a PIN.
+        /// </summary>
+        public bool RequireUserVerification { get; set; }
         
-        /** CTAP2 authenticators support setting this to false, but we only support the WebAuthn authenticator model which does not have that option. */
-        // public bool RequireUserPresence {get; set;} // Always required
+        /// <summary>
+        /// Instructs the authenticator to require user consent to complete the operation.
+        /// </summary>
+        public bool RequireUserPresence { get; set; }
 
-        public object Extensions {get; set;}
+        public object Extensions { get; set; }
     }
 }
 

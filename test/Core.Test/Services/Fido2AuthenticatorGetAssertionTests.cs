@@ -6,7 +6,6 @@ using Bit.Core.Services;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Enums;
-using Bit.Core.Test.AutoFixture;
 using Bit.Core.Utilities.Fido2;
 using Bit.Test.Common.AutoFixture;
 using Bit.Test.Common.AutoFixture.Attributes;
@@ -34,7 +33,7 @@ namespace Bit.Core.Test.Services
 
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
-        public async Task GetAssertionAsync_Throws_CredentialExistsButRpIdDoesNotMatch(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
+        public async Task GetAssertionAsync_ThrowsNotAllowed_CredentialExistsButRpIdDoesNotMatch(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
         {
             var credentialId = Guid.NewGuid();
             aParams.RpId = "bitwarden.com";
@@ -305,7 +304,7 @@ namespace Bit.Core.Test.Services
             // Arrange
             var keyPair = GenerateKeyPair();
             var rpIdHashMock = RandomBytes(32);
-            aParams.Hash = RandomBytes(32);
+            aParams.ClientDataHash = RandomBytes(32);
             sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(aParams.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
             cipherView.Login.MainFido2Credential.CounterValue = 9000;
             cipherView.Login.MainFido2Credential.KeyValue = CoreHelpers.Base64UrlEncode(keyPair.ExportPkcs8PrivateKey());
@@ -324,7 +323,47 @@ namespace Bit.Core.Test.Services
             Assert.Equal(rpIdHashMock, rpIdHash);
             Assert.Equal(new byte[] { 0b00000101 }, flags); // UP = true, UV = true
             Assert.Equal(new byte[] { 0, 0, 0x23, 0x29 }, counter); // 9001 in binary big-endian format
-            Assert.True(keyPair.VerifyData(authData.Concat(aParams.Hash).ToArray(), result.Signature, HashAlgorithmName.SHA256), "Signature verification failed");
+            Assert.True(keyPair.VerifyData(authData.Concat(aParams.ClientDataHash).ToArray(), result.Signature, HashAlgorithmName.SHA256), "Signature verification failed");
+        }
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
+        public async Task GetAssertionAsync_DoesNotAskForConfirmation_ParamsContainsOneAllowedCredentialAndUserPresenceIsFalse(SutProvider<Fido2AuthenticatorService> sutProvider, Fido2AuthenticatorGetAssertionParams aParams)
+        {
+            // Common arrange
+            var credentialIds = new[] { Guid.NewGuid(), Guid.NewGuid() };
+            List<CipherView> ciphers = [
+                CreateCipherView(credentialIds[0].ToString(), "bitwarden.com", false),
+                CreateCipherView(credentialIds[1].ToString(), "bitwarden.com", true)
+            ];
+            var cipherView = ciphers[0];
+            aParams.RpId = "bitwarden.com";
+            aParams.RequireUserVerification = false;
+            aParams.RequireUserPresence = false;
+            aParams.AllowCredentialDescriptorList = [
+                new PublicKeyCredentialDescriptor {
+                    Id = credentialIds[1].ToByteArray(),
+                    Type = "public-key"
+                }
+            ];
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(ciphers);
+
+            // Arrange
+            var keyPair = GenerateKeyPair();
+            var rpIdHashMock = RandomBytes(32);
+            aParams.ClientDataHash = RandomBytes(32);
+            sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(aParams.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
+            cipherView.Login.MainFido2Credential.CounterValue = 9000;
+            cipherView.Login.MainFido2Credential.KeyValue = CoreHelpers.Base64UrlEncode(keyPair.ExportPkcs8PrivateKey());
+            
+            // Act
+            var result = await sutProvider.Sut.GetAssertionAsync(aParams);
+
+            // Assert
+            await sutProvider.GetDependency<IFido2UserInterface>().DidNotReceive().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>());
+            var authData = result.AuthenticatorData;
+            var flags = authData.Skip(32).Take(1);
+            Assert.Equal(new byte[] { 0b00000000 }, flags); // UP = false, UV = false
         }
 
         [Theory]

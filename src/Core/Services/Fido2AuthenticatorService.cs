@@ -126,17 +126,38 @@ namespace Bit.Core.Services
                 throw new NotAllowedError();
             }
 
-            var response = await _userInterface.PickCredentialAsync(new Fido2PickCredentialParams {
-                CipherIds = cipherOptions.Select((cipher) => cipher.Id).ToArray(),
-                UserVerification = assertionParams.RequireUserVerification
-            });
-            var selectedCipherId = response.CipherId;
-            var userVerified = response.UserVerified;
-            var selectedCipher = cipherOptions.FirstOrDefault((c) => c.Id == selectedCipherId);
+            string selectedCipherId;
+            bool userVerified;
+            bool userPresence;
+            if (assertionParams.AllowCredentialDescriptorList?.Length == 1 && assertionParams.RequireUserPresence == false)
+            {
+                selectedCipherId = cipherOptions[0].Id;
+                userVerified = false;
+                userPresence = false;
+            }
+            else
+            {
+                var response = await _userInterface.PickCredentialAsync(new Fido2PickCredentialParams {
+                    CipherIds = cipherOptions.Select((cipher) => cipher.Id).ToArray(),
+                    UserVerification = assertionParams.RequireUserVerification
+                });
+                selectedCipherId = response.CipherId;
+                userVerified = response.UserVerified;
+                userPresence = true;
+            }
 
+            var selectedCipher = cipherOptions.FirstOrDefault((c) => c.Id == selectedCipherId);
             if (selectedCipher == null) {
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting because the selected credential could not be found."
+                // );
+
+                throw new NotAllowedError();
+            }
+
+            if (!userPresence && assertionParams.RequireUserPresence) {
+                // _logService.Info(
+                //     "[Fido2Authenticator] Aborting because user presence was required but not detected."
                 // );
 
                 throw new NotAllowedError();
@@ -164,14 +185,14 @@ namespace Bit.Core.Services
 
                 var authenticatorData = await GenerateAuthDataAsync(
                     rpId: selectedFido2Credential.RpId,
-                    userPresence: true,
+                    userPresence: userPresence,
                     userVerification: userVerified,
                     counter: selectedFido2Credential.CounterValue
                 );
 
                 var signature = GenerateSignature(
                     authData: authenticatorData,
-                    clientDataHash: assertionParams.Hash,
+                    clientDataHash: assertionParams.ClientDataHash,
                     privateKey: selectedFido2Credential.KeyBytes
                 );
 
@@ -207,9 +228,9 @@ namespace Bit.Core.Services
             return credentials;
         }
 
-        ///<summary>
+        /// <summary>
         /// Finds existing crendetials and returns the `CipherId` for each one
-        ///</summary>
+        /// </summary>
         private async Task<string[]> FindExcludedCredentialsAsync(
             PublicKeyCredentialDescriptor[] credentials
         ) {
