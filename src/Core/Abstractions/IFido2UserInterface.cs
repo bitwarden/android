@@ -87,5 +87,12 @@ namespace Bit.Core.Abstractions
         /// <param name="confirmNewCredentialParams">The parameters to use when asking the user to confirm the creation of a new credential.</param>
         /// <returns>The ID of the cipher where the new credential should be saved.</returns>
         Task<Fido2ConfirmNewCredentialResult> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams);
+
+        /// <summary>
+        /// Make sure that the vault is unlocked.
+        /// This should open a window and ask the user to login or unlock the vault if necessary.
+        /// </summary>
+        /// <returns>When vault has been unlocked.</returns>
+        Task EnsureUnlockedVaultAsync();
     }
 }

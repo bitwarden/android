@@ -24,7 +24,7 @@ namespace Bit.Core.Services
                 throw new NotSupportedError();
             }
 
-            // await _userInterface.EnsureUnlockedVault();
+            await _userInterface.EnsureUnlockedVaultAsync();
             await _syncService.FullSyncAsync(false);
 
             var existingCipherIds = await FindExcludedCredentialsAsync(
@@ -105,8 +105,7 @@ namespace Bit.Core.Services
         {
             List<CipherView> cipherOptions;
 
-            // TODO: Unlock vault somehow
-            // await userInterfaceSession.ensureUnlockedVault();
+            await _userInterface.EnsureUnlockedVaultAsync();
             await _syncService.FullSyncAsync(false);
 
             if (assertionParams.AllowCredentialDescriptorList?.Length > 0) {
