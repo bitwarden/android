@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthRequestsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAuthRequestsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import kotlinx.coroutines.test.runTest
@@ -13,9 +13,9 @@ import java.time.ZonedDateTime
 
 class NewAuthRequestServiceTest : BaseServiceTest() {
 
-    private val authRequestsApi: AuthRequestsApi = retrofit.create()
+    private val authRequestsApi: UnauthenticatedAuthRequestsApi = retrofit.create()
     private val service = NewAuthRequestServiceImpl(
-        authRequestsApi = authRequestsApi,
+        unauthenticatedAuthRequestsApi = authRequestsApi,
     )
 
     @Test

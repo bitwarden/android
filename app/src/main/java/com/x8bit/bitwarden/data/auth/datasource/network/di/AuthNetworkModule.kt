@@ -46,7 +46,7 @@ object AuthNetworkModule {
     fun providesAuthRequestsService(
         retrofits: Retrofits,
     ): AuthRequestsService = AuthRequestsServiceImpl(
-        authRequestsApi = retrofits.authenticatedApiRetrofit.create(),
+        authenticatedAuthRequestsApi = retrofits.authenticatedApiRetrofit.create(),
     )
 
     @Provides
@@ -84,7 +84,7 @@ object AuthNetworkModule {
     fun providesNewAuthRequestService(
         retrofits: Retrofits,
     ): NewAuthRequestService = NewAuthRequestServiceImpl(
-        authRequestsApi = retrofits.unauthenticatedApiRetrofit.create(),
+        unauthenticatedAuthRequestsApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 
     @Provides
@@ -92,6 +92,6 @@ object AuthNetworkModule {
     fun providesOrganizationService(
         retrofits: Retrofits,
     ): OrganizationService = OrganizationServiceImpl(
-         organizationApi = retrofits.unauthenticatedApiRetrofit.create(),
+        organizationApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 }
