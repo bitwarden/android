@@ -8,23 +8,10 @@ using System.Security.Cryptography;
 
 namespace Bit.Core.Services
 {
-    public class Fido2AuthenticatorService : IFido2AuthenticatorService
+    public class Fido2AuthenticatorService(ICipherService _cipherService, ISyncService _syncService, ICryptoFunctionService _cryptoFunctionService, IFido2UserInterface _userInterface) : IFido2AuthenticatorService
     {
         // AAGUID: d548826e-79b4-db40-a3d8-11116f7e8349
         public static readonly byte[] AAGUID = [ 0xd5, 0x48, 0x82, 0x6e, 0x79, 0xb4, 0xdb, 0x40, 0xa3, 0xd8, 0x11, 0x11, 0x6f, 0x7e, 0x83, 0x49 ];
-
-        private ICipherService _cipherService;
-        private ISyncService _syncService;
-        private ICryptoFunctionService _cryptoFunctionService;
-        private IFido2UserInterface _userInterface;
-        
-        public Fido2AuthenticatorService(ICipherService cipherService, ISyncService syncService, ICryptoFunctionService cryptoFunctionService, IFido2UserInterface userInterface)
-        {
-            _cipherService = cipherService;
-            _syncService = syncService;
-            _cryptoFunctionService = cryptoFunctionService;
-            _userInterface = userInterface;
-        }
 
         public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) 
         {
