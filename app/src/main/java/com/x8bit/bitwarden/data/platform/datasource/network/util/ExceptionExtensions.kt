@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.util
 
 import com.x8bit.bitwarden.data.platform.datasource.network.model.BitwardenError
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 
@@ -21,11 +22,7 @@ inline fun <reified T> BitwardenError.parseErrorBodyOrNull(codes: List<Int>, jso
         ?.takeIf { codes.any { it == this.code } }
         ?.responseBodyString
         ?.let { responseBody ->
-            try {
-                json.decodeFromString(responseBody)
-            } catch (_: Exception) {
-                null
-            }
+            json.decodeFromStringOrNull(responseBody)
         }
 
 /**

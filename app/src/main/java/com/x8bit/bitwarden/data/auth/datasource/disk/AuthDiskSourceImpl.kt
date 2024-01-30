@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource.Companion.ENCRYPTED_BASE_KEY
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -82,7 +83,7 @@ class AuthDiskSourceImpl(
         }
 
     override var userState: UserStateJson?
-        get() = getString(key = STATE_KEY)?.let { json.decodeFromString(it) }
+        get() = getString(key = STATE_KEY)?.let { json.decodeFromStringOrNull(it) }
         set(value) {
             putString(
                 key = STATE_KEY,
@@ -229,7 +230,7 @@ class AuthDiskSourceImpl(
 
     override fun getOrganizationKeys(userId: String): Map<String, String>? =
         getString(key = "${ORGANIZATION_KEYS_KEY}_$userId")
-            ?.let { json.decodeFromString(it) }
+            ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storeOrganizationKeys(
         userId: String,
@@ -247,9 +248,9 @@ class AuthDiskSourceImpl(
         getString(key = "${ORGANIZATIONS_KEY}_$userId")
             ?.let {
                 // The organizations are stored as a map
-                val organizationMap: Map<String, SyncResponseJson.Profile.Organization> =
-                    json.decodeFromString(it)
-                organizationMap.values.toList()
+                val organizationMap: Map<String, SyncResponseJson.Profile.Organization>? =
+                    json.decodeFromStringOrNull(it)
+                organizationMap?.values?.toList()
             }
 
     override fun getOrganizationsFlow(
@@ -284,9 +285,9 @@ class AuthDiskSourceImpl(
         getString(key = "${POLICIES_KEY}_$userId")
             ?.let {
                 // The policies are stored as a map.
-                val policiesMap: Map<String, SyncResponseJson.Policy> =
-                    json.decodeFromString(it)
-                policiesMap.values.toList()
+                val policiesMap: Map<String, SyncResponseJson.Policy>? =
+                    json.decodeFromStringOrNull(it)
+                policiesMap?.values?.toList()
             }
 
     override fun getPoliciesFlow(
