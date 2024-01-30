@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
@@ -129,6 +130,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.SearchIconClick -> handleSearchIconClick()
             is VaultItemListingsAction.OverflowOptionClick -> handleOverflowOptionClick(action)
             is VaultItemListingsAction.ItemClick -> handleItemClick(action)
+            is VaultItemListingsAction.MasterPasswordRepromptSubmit -> {
+                handleMasterPasswordRepromptSubmit(action)
+            }
+
             is VaultItemListingsAction.AddVaultItemClick -> handleAddVaultItemClick()
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
             is VaultItemListingsAction.RefreshPull -> handleRefreshPull()
@@ -233,6 +238,20 @@ class VaultItemListingViewModel @Inject constructor(
             }
         }
         sendEvent(event)
+    }
+
+    private fun handleMasterPasswordRepromptSubmit(
+        action: VaultItemListingsAction.MasterPasswordRepromptSubmit,
+    ) {
+        viewModelScope.launch {
+            val result = authRepository.validatePassword(action.password)
+            sendAction(
+                VaultItemListingsAction.Internal.ValidatePasswordResultReceive(
+                    cipherId = action.cipherId,
+                    result = result,
+                ),
+            )
+        }
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
@@ -401,6 +420,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.GenerateTotpResultReceive -> {
                 handleGenerateTotpResultReceive(action)
             }
+
+            is VaultItemListingsAction.Internal.ValidatePasswordResultReceive -> {
+                handleMasterPasswordRepromptResultReceive(action)
+            }
         }
     }
 
@@ -501,6 +524,42 @@ class VaultItemListingViewModel @Inject constructor(
 
         vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
             updateStateWithVaultData(vaultData, clearDialogState = false)
+        }
+    }
+
+    private fun handleMasterPasswordRepromptResultReceive(
+        action: VaultItemListingsAction.Internal.ValidatePasswordResultReceive,
+    ) {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+
+        when (val result = action.result) {
+            ValidatePasswordResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.Error(
+                            title = null,
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is ValidatePasswordResult.Success -> {
+                if (!result.isValid) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = VaultItemListingState.DialogState.Error(
+                                title = null,
+                                message = R.string.invalid_master_password.asText(),
+                            ),
+                        )
+                    }
+                    return
+                }
+                // Complete the autofill selection flow
+                val cipherView = getCipherViewOrNull(cipherId = action.cipherId) ?: return
+                autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+            }
         }
     }
     //endregion VaultItemListing Handlers
@@ -779,6 +838,7 @@ data class VaultItemListingState(
         val iconData: IconData,
         val extraIconList: List<IconRes>,
         val overflowOptions: List<ListingItemOverflowAction>,
+        val shouldShowMasterPasswordReprompt: Boolean,
     )
 
     /**
@@ -1044,6 +1104,15 @@ sealed class VaultItemListingsAction {
     data class ItemClick(val id: String) : VaultItemListingsAction()
 
     /**
+     * A master password prompt was encountered when trying to access the cipher with the given
+     * [cipherId] and the given [password] was submitted.
+     */
+    data class MasterPasswordRepromptSubmit(
+        val cipherId: String,
+        val password: String,
+    ) : VaultItemListingsAction()
+
+    /**
      * User has triggered a pull to refresh.
      */
     data object RefreshPull : VaultItemListingsAction()
@@ -1088,6 +1157,14 @@ sealed class VaultItemListingsAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
+        ) : Internal()
+
+        /**
+         * Indicates that a result for verifying the user's master password has been received.
+         */
+        data class ValidatePasswordResultReceive(
+            val cipherId: String,
+            val result: ValidatePasswordResult,
         ) : Internal()
     }
 }

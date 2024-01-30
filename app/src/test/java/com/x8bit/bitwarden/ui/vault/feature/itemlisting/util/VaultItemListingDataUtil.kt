@@ -53,6 +53,7 @@ fun createMockDisplayItemForCipher(
                         url = "www.mockuri$number.com",
                     ),
                 ),
+                shouldShowMasterPasswordReprompt = false,
             )
         }
 
@@ -79,6 +80,7 @@ fun createMockDisplayItemForCipher(
                         notes = "mockNotes-$number",
                     ),
                 ),
+                shouldShowMasterPasswordReprompt = false,
             )
         }
 
@@ -108,6 +110,7 @@ fun createMockDisplayItemForCipher(
                         securityCode = "mockCode-$number",
                     ),
                 ),
+                shouldShowMasterPasswordReprompt = false,
             )
         }
 
@@ -131,6 +134,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
                     ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
                 ),
+                shouldShowMasterPasswordReprompt = false,
             )
         }
     }
@@ -171,6 +175,7 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
+                shouldShowMasterPasswordReprompt = false,
             )
         }
 
@@ -201,6 +206,7 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
+                shouldShowMasterPasswordReprompt = false,
             )
         }
     }
