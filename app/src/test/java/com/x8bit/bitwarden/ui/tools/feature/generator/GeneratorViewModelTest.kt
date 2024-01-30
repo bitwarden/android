@@ -527,6 +527,18 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
+    @Test
+    fun `TooltipClick should emit NavigateToTooltip event`() = runTest {
+        val viewModel = createViewModel(initialUsernameState)
+
+        viewModel.actionChannel.trySend(GeneratorAction.MainType.Username.UsernameType.TooltipClick)
+
+        viewModel.eventFlow.test {
+            val event = awaitItem()
+            assertEquals(GeneratorEvent.NavigateToTooltip, event)
+        }
+    }
+
     @Nested
     inner class PasswordActions {
         private val defaultPasswordState = createPasswordState()

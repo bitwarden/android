@@ -46,6 +46,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
@@ -68,7 +69,9 @@ import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
@@ -92,6 +95,7 @@ fun GeneratorScreen(
     viewModel: GeneratorViewModel = hiltViewModel(),
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateBack: () -> Unit,
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -106,6 +110,12 @@ fun GeneratorScreen(
                 snackbarHostState.showSnackbar(
                     message = event.message(resources).toString(),
                     duration = SnackbarDuration.Short,
+                )
+            }
+
+            is GeneratorEvent.NavigateToTooltip -> {
+                intentManager.launchUri(
+                    "https://bitwarden.com/help/generator/#username-types".toUri(),
                 )
             }
 
@@ -153,6 +163,10 @@ fun GeneratorScreen(
 
     val passphraseHandlers = remember(viewModel) {
         PassphraseHandlers.create(viewModel = viewModel)
+    }
+
+    val usernameTypeHandlers = remember(viewModel) {
+        UsernameTypeHandlers.create(viewModel = viewModel)
     }
 
     val forwardedEmailAliasHandlers = remember(viewModel) {
@@ -216,6 +230,7 @@ fun GeneratorScreen(
             onUsernameSubStateOptionClicked = onUsernameOptionClicked,
             passwordHandlers = passwordHandlers,
             passphraseHandlers = passphraseHandlers,
+            usernameTypeHandlers = usernameTypeHandlers,
             forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
             plusAddressedEmailHandlers = plusAddressedEmailHandlers,
             catchAllEmailHandlers = catchAllEmailHandlers,
@@ -287,6 +302,7 @@ private fun ScrollContent(
     onUsernameSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
     passwordHandlers: PasswordHandlers,
     passphraseHandlers: PassphraseHandlers,
+    usernameTypeHandlers: UsernameTypeHandlers,
     forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
@@ -339,6 +355,7 @@ private fun ScrollContent(
             is GeneratorState.MainType.Username -> {
                 UsernameTypeItems(
                     usernameState = selectedType,
+                    usernameTypeHandlers = usernameTypeHandlers,
                     onSubStateOptionClicked = onUsernameSubStateOptionClicked,
                     forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
                     plusAddressedEmailHandlers = plusAddressedEmailHandlers,
@@ -821,12 +838,13 @@ private fun PassphraseIncludeNumberToggleItem(
 private fun ColumnScope.UsernameTypeItems(
     usernameState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
+    usernameTypeHandlers: UsernameTypeHandlers,
     forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
 ) {
-    UsernameOptionsItem(usernameState, onSubStateOptionClicked)
+    UsernameOptionsItem(usernameState, onSubStateOptionClicked, usernameTypeHandlers)
 
     when (val selectedType = usernameState.selectedType) {
         is GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail -> {
@@ -863,6 +881,7 @@ private fun ColumnScope.UsernameTypeItems(
 private fun UsernameOptionsItem(
     currentSubState: GeneratorState.MainType.Username,
     onSubStateOptionClicked: (GeneratorState.MainType.Username.UsernameTypeOption) -> Unit,
+    usernameTypeHandlers: UsernameTypeHandlers,
 ) {
     val possibleSubStates = GeneratorState.MainType.Username.UsernameTypeOption.entries
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
@@ -884,9 +903,7 @@ private fun UsernameOptionsItem(
             stringResource(id = it)
         },
         tooltip = TooltipData(
-            onClick = {
-                // TODO: "?" icon redirects user to appropriate link (BIT-1087)
-            },
+            onClick = usernameTypeHandlers.onUsernameTooltipClicked,
             contentDescription = stringResource(id = R.string.learn_more),
         ),
     )
@@ -1306,6 +1323,28 @@ private data class PassphraseHandlers(
             )
         }
     }
+}
+
+/**
+ * A class dedicated to handling user interactions related to all username configurations.
+ * Each lambda corresponds to a specific user action, allowing for easy delegation of
+ * logic when user input is detected.
+ */
+@Suppress("LongParameterList")
+private data class UsernameTypeHandlers(
+    val onUsernameTooltipClicked: () -> Unit,
+) {
+   companion object {
+       fun create(viewModel: GeneratorViewModel): UsernameTypeHandlers {
+           return UsernameTypeHandlers(
+               onUsernameTooltipClicked = {
+                   viewModel.trySendAction(
+                       GeneratorAction.MainType.Username.UsernameType.TooltipClick,
+                   )
+               },
+           )
+       }
+   }
 }
 
 /**

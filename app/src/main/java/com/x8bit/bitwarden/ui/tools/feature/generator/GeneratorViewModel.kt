@@ -163,6 +163,10 @@ class GeneratorViewModel @Inject constructor(
                 handleUsernameTypeOptionSelect(action)
             }
 
+            is GeneratorAction.MainType.Username.UsernameType.TooltipClick -> {
+                handleTooltipClick()
+            }
+
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOptionSelect -> {
                 handleServiceTypeOptionSelect(action)
             }
@@ -501,6 +505,10 @@ class GeneratorViewModel @Inject constructor(
 
     private fun handleCopyClick() {
         clipboardManager.setText(text = state.generatedText)
+    }
+
+    private fun handleTooltipClick() {
+        sendEvent(GeneratorEvent.NavigateToTooltip)
     }
 
     private fun handleUpdateGeneratedPasswordResult(
@@ -2024,6 +2032,11 @@ sealed class GeneratorAction {
             sealed class UsernameType : Username() {
 
                 /**
+                 * Represents the action to learn more.
+                 */
+                data object TooltipClick : GeneratorAction()
+
+                /**
                  * Represents actions specifically related to Forwarded Email Alias.
                  */
                 sealed class ForwardedEmailAlias : UsernameType() {
@@ -2229,6 +2242,11 @@ sealed class GeneratorEvent {
      * Navigate back to previous screen.
      */
     data object NavigateBack : GeneratorEvent()
+
+    /**
+     * Navigate back to learn more screen.
+     */
+    data object NavigateToTooltip : GeneratorEvent()
 
     /**
      * Displays the message in a snackbar.
