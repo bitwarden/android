@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
 class PendingRequestsViewModelTest : BaseViewModelTest() {
@@ -48,52 +49,80 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("LongMethod")
     @Test
-    fun `getPendingResults success with content should update state`() {
+    fun `getPendingResults success with content should update state with some requests filtered`() {
+        val dateTimeFormatter = DateTimeFormatter
+            .ofPattern("M/d/yy hh:mm a")
+            .withZone(TimeZone.getDefault().toZoneId())
+        val nowZonedDateTime = ZonedDateTime.now()
+        val requestList = listOf(
+            AuthRequest(
+                id = "1",
+                publicKey = "publicKey-1",
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "publicKey",
+                masterPasswordHash = "verySecureHash",
+                creationDate = nowZonedDateTime,
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "pantry-overdue-survive-sleep-jab",
+            ),
+            AuthRequest(
+                id = "2",
+                publicKey = "publicKey-2",
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "publicKey",
+                masterPasswordHash = "verySecureHash",
+                creationDate = nowZonedDateTime,
+                responseDate = null,
+                requestApproved = true,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "fingerprint",
+            ),
+            AuthRequest(
+                id = "3",
+                publicKey = "publicKey-3",
+                platform = "iOS",
+                ipAddress = "192.168.0.2",
+                key = "publicKey",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.now().minusMinutes(10),
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "erupt-anew-matchbook-disk-student",
+            ),
+            AuthRequest(
+                id = "4",
+                publicKey = "publicKey-4",
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "publicKey",
+                masterPasswordHash = "verySecureHash",
+                creationDate = nowZonedDateTime,
+                responseDate = nowZonedDateTime,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "fingerprint",
+            ),
+        )
         coEvery {
             authRepository.getAuthRequests()
         } returns AuthRequestsResult.Success(
-            authRequests = listOf(
-                AuthRequest(
-                    id = "1",
-                    publicKey = "publicKey-1",
-                    platform = "Android",
-                    ipAddress = "192.168.0.1",
-                    key = "publicKey",
-                    masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2023-08-24T17:11Z"),
-                    responseDate = null,
-                    requestApproved = true,
-                    originUrl = "www.bitwarden.com",
-                    fingerprint = "pantry-overdue-survive-sleep-jab",
-                ),
-                AuthRequest(
-                    id = "2",
-                    publicKey = "publicKey-2",
-                    platform = "iOS",
-                    ipAddress = "192.168.0.2",
-                    key = "publicKey",
-                    masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2023-08-21T15:43Z"),
-                    responseDate = null,
-                    requestApproved = false,
-                    originUrl = "www.bitwarden.com",
-                    fingerprint = "erupt-anew-matchbook-disk-student",
-                ),
-            ),
+            authRequests = requestList,
         )
         val expected = DEFAULT_STATE.copy(
+            authRequests = requestList,
             viewState = PendingRequestsState.ViewState.Content(
                 requests = listOf(
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
                         platform = "Android",
-                        timestamp = "8/24/23 05:11 PM",
-                    ),
-                    PendingRequestsState.ViewState.Content.PendingLoginRequest(
-                        fingerprintPhrase = "erupt-anew-matchbook-disk-student",
-                        platform = "iOS",
-                        timestamp = "8/21/23 03:43 PM",
+                        timestamp = nowZonedDateTime.format(dateTimeFormatter),
                     ),
                 ),
             ),
@@ -159,20 +188,82 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("LongMethod")
     @Test
-    fun `on DeclineAllRequestsClick should send ShowToast event`() = runTest {
+    fun `on DeclineAllRequestsConfirm should update all auth requests to declined`() = runTest {
+        val authRequest1 = AuthRequest(
+            id = "2",
+            publicKey = "publicKey-2",
+            platform = "iOS",
+            ipAddress = "192.168.0.2",
+            key = "publicKey",
+            masterPasswordHash = "verySecureHash",
+            creationDate = ZonedDateTime.now().minusMinutes(5),
+            responseDate = null,
+            requestApproved = false,
+            originUrl = "www.bitwarden.com",
+            fingerprint = "erupt-anew-matchbook-disk-student",
+        )
+        val authRequest2 = AuthRequest(
+            id = "3",
+            publicKey = "publicKey-3",
+            platform = "Android",
+            ipAddress = "192.168.0.3",
+            key = "publicKey",
+            masterPasswordHash = "verySecureHash",
+            creationDate = ZonedDateTime.now(),
+            responseDate = null,
+            requestApproved = false,
+            originUrl = "www.bitwarden.com",
+            fingerprint = "pantry-overdue-survive-sleep-jab",
+        )
         coEvery {
             authRepository.getAuthRequests()
         } returns AuthRequestsResult.Success(
-            authRequests = emptyList(),
+            authRequests = listOf(
+                authRequest1,
+                authRequest2,
+            ),
+        )
+        coEvery {
+            authRepository.updateAuthRequest(
+                requestId = "2",
+                masterPasswordHash = "verySecureHash",
+                publicKey = "publicKey-2",
+                isApproved = false,
+            )
+        } returns AuthRequestResult.Success(
+            authRequest1.copy(
+                responseDate = ZonedDateTime.now(),
+            ),
+        )
+        coEvery {
+            authRepository.updateAuthRequest(
+                requestId = "3",
+                masterPasswordHash = "verySecureHash",
+                publicKey = "publicKey-3",
+                isApproved = false,
+            )
+        } returns AuthRequestResult.Success(
+            authRequest2.copy(
+                responseDate = ZonedDateTime.now(),
+            ),
         )
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(PendingRequestsAction.DeclineAllRequestsClick)
-            assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-            assertEquals(
-                PendingRequestsEvent.ShowToast("Not yet implemented.".asText()),
-                awaitItem(),
+        viewModel.actionChannel.trySend(PendingRequestsAction.DeclineAllRequestsConfirm)
+
+        coVerify {
+            authRepository.updateAuthRequest(
+                requestId = "2",
+                masterPasswordHash = "verySecureHash",
+                publicKey = "publicKey-2",
+                isApproved = false,
+            )
+            authRepository.updateAuthRequest(
+                requestId = "3",
+                masterPasswordHash = "verySecureHash",
+                publicKey = "publicKey-3",
+                isApproved = false,
             )
         }
     }
@@ -180,6 +271,53 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     @Suppress("LongMethod")
     @Test
     fun `on LifecycleResume should update state`() = runTest {
+        val dateTimeFormatter = DateTimeFormatter
+            .ofPattern("M/d/yy hh:mm a")
+            .withZone(TimeZone.getDefault().toZoneId())
+        val nowZonedDateTime = ZonedDateTime.now()
+        val fiveMinZonedDateTime = ZonedDateTime.now().minusMinutes(5)
+        val sixMinZonedDateTime = ZonedDateTime.now().minusMinutes(6)
+        val requestList = listOf(
+            AuthRequest(
+                id = "1",
+                publicKey = "publicKey-1",
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "publicKey",
+                masterPasswordHash = "verySecureHash",
+                creationDate = sixMinZonedDateTime,
+                responseDate = null,
+                requestApproved = true,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "fingerprint",
+            ),
+            AuthRequest(
+                id = "2",
+                publicKey = "publicKey-2",
+                platform = "iOS",
+                ipAddress = "192.168.0.2",
+                key = "publicKey",
+                masterPasswordHash = "verySecureHash",
+                creationDate = fiveMinZonedDateTime,
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "erupt-anew-matchbook-disk-student",
+            ),
+            AuthRequest(
+                id = "3",
+                publicKey = "publicKey-3",
+                platform = "Android",
+                ipAddress = "192.168.0.3",
+                key = "publicKey",
+                masterPasswordHash = "verySecureHash",
+                creationDate = nowZonedDateTime,
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+                fingerprint = "pantry-overdue-survive-sleep-jab",
+            ),
+        )
         coEvery {
             authRepository.getAuthRequests()
         } returns AuthRequestsResult.Success(emptyList())
@@ -193,47 +331,21 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.getAuthRequests()
         } returns AuthRequestsResult.Success(
-            authRequests = listOf(
-                AuthRequest(
-                    id = "1",
-                    publicKey = "publicKey-1",
-                    platform = "Android",
-                    ipAddress = "192.168.0.1",
-                    key = "publicKey",
-                    masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2023-08-24T17:11Z"),
-                    responseDate = null,
-                    requestApproved = true,
-                    originUrl = "www.bitwarden.com",
-                    fingerprint = "pantry-overdue-survive-sleep-jab",
-                ),
-                AuthRequest(
-                    id = "2",
-                    publicKey = "publicKey-2",
-                    platform = "iOS",
-                    ipAddress = "192.168.0.2",
-                    key = "publicKey",
-                    masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2023-08-21T15:43Z"),
-                    responseDate = null,
-                    requestApproved = false,
-                    originUrl = "www.bitwarden.com",
-                    fingerprint = "erupt-anew-matchbook-disk-student",
-                ),
-            ),
+            authRequests = requestList,
         )
         val expected = DEFAULT_STATE.copy(
+            authRequests = requestList,
             viewState = PendingRequestsState.ViewState.Content(
                 requests = listOf(
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
                         platform = "Android",
-                        timestamp = "8/24/23 05:11 PM",
+                        timestamp = nowZonedDateTime.format(dateTimeFormatter),
                     ),
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "erupt-anew-matchbook-disk-student",
                         platform = "iOS",
-                        timestamp = "8/21/23 03:43 PM",
+                        timestamp = fiveMinZonedDateTime.format(dateTimeFormatter),
                     ),
                 ),
             ),
@@ -255,6 +367,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
 
     companion object {
         val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
+            authRequests = emptyList(),
             viewState = PendingRequestsState.ViewState.Empty,
         )
     }

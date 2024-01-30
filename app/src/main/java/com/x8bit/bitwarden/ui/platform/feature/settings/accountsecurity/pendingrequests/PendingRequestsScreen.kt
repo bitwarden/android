@@ -25,7 +25,9 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -44,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButtonWith
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
@@ -79,6 +82,7 @@ fun PendingRequestsScreen(
             Lifecycle.Event.ON_RESUME -> {
                 viewModel.trySendAction(PendingRequestsAction.LifecycleResume)
             }
+
             else -> Unit
         }
     }
@@ -107,10 +111,10 @@ fun PendingRequestsScreen(
                         .padding(innerPadding)
                         .fillMaxSize(),
                     state = viewState,
-                    onDeclineAllRequestsClick = remember(viewModel) {
+                    onDeclineAllRequestsConfirm = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                PendingRequestsAction.DeclineAllRequestsClick,
+                                PendingRequestsAction.DeclineAllRequestsConfirm,
                             )
                         }
                     },
@@ -152,13 +156,31 @@ fun PendingRequestsScreen(
 @Composable
 private fun PendingRequestsContent(
     state: PendingRequestsState.ViewState.Content,
-    onDeclineAllRequestsClick: () -> Unit,
+    onDeclineAllRequestsConfirm: () -> Unit,
     onNavigateToLoginApproval: (fingerprint: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
     ) {
+        var shouldShowDeclineAllRequestsConfirm by remember { mutableStateOf(false) }
+
+        if (shouldShowDeclineAllRequestsConfirm) {
+            BitwardenTwoButtonDialog(
+                title = stringResource(R.string.decline_all_requests),
+                message = stringResource(
+                    id = R.string.are_you_sure_you_want_to_decline_all_pending_log_in_requests,
+                ),
+                confirmButtonText = stringResource(R.string.yes),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = {
+                    onDeclineAllRequestsConfirm()
+                    shouldShowDeclineAllRequestsConfirm = false
+                },
+                onDismissClick = { shouldShowDeclineAllRequestsConfirm = false },
+                onDismissRequest = { shouldShowDeclineAllRequestsConfirm = false },
+            )
+        }
 
         LazyColumn(
             Modifier.padding(bottom = 16.dp),
@@ -181,7 +203,7 @@ private fun PendingRequestsContent(
         BitwardenFilledTonalButtonWithIcon(
             label = stringResource(id = R.string.decline_all_requests),
             icon = painterResource(id = R.drawable.ic_trash),
-            onClick = onDeclineAllRequestsClick,
+            onClick = { shouldShowDeclineAllRequestsConfirm = true },
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
 /**
@@ -17,6 +19,7 @@ import java.time.ZonedDateTime
  * @param originUrl The origin URL of this auth request.
  * @param fingerprint The fingerprint of this auth request.
  */
+@Parcelize
 data class AuthRequest(
     val id: String,
     val publicKey: String,
@@ -29,4 +32,4 @@ data class AuthRequest(
     val requestApproved: Boolean,
     val originUrl: String,
     val fingerprint: String,
-)
+) : Parcelable
