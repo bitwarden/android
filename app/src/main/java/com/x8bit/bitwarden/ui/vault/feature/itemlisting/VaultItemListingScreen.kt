@@ -235,6 +235,8 @@ private fun VaultItemListingScaffold(
                 VaultItemListingContent(
                     state = state.viewState,
                     vaultItemClick = vaultItemListingHandlers.itemClick,
+                    masterPasswordRepromptSubmit =
+                    vaultItemListingHandlers.masterPasswordRepromptSubmit,
                     onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,
                     modifier = modifier,
                 )

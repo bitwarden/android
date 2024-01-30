@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
@@ -32,6 +34,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
     vaultItemClick: (id: String) -> Unit,
+    masterPasswordRepromptSubmit: (id: String, password: String) -> Unit,
     onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -71,6 +74,24 @@ fun VaultItemListingContent(
         -> Unit
     }
 
+    var masterPasswordRepromptCipherId by remember { mutableStateOf<String?>(null) }
+    if (masterPasswordRepromptCipherId != null) {
+        BitwardenMasterPasswordDialog(
+            onConfirmClick = {
+                val cipherId = masterPasswordRepromptCipherId
+                    ?: return@BitwardenMasterPasswordDialog
+                masterPasswordRepromptCipherId = null
+                masterPasswordRepromptSubmit(
+                    cipherId,
+                    it,
+                )
+            },
+            onDismissRequest = {
+                masterPasswordRepromptCipherId = null
+            },
+        )
+    }
+
     LazyColumn(
         modifier = modifier,
     ) {
@@ -88,7 +109,13 @@ fun VaultItemListingContent(
                 startIcon = it.iconData,
                 label = it.title,
                 supportingLabel = it.subtitle,
-                onClick = { vaultItemClick(it.id) },
+                onClick = {
+                    if (it.shouldShowMasterPasswordReprompt) {
+                        masterPasswordRepromptCipherId = it.id
+                    } else {
+                        vaultItemClick(it.id)
+                    }
+                },
                 trailingLabelIcons = it
                     .extraIconList
                     .toIconResources()

@@ -17,6 +17,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -602,13 +603,15 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `clicking on a display item should send ItemClick action`() {
+    fun `clicking on a display item when master password reprompt is not required should send ItemClick action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
-                        createDisplayItem(number = 1),
+                        createDisplayItem(number = 1)
+                            .copy(shouldShowMasterPasswordReprompt = false),
                     ),
                 ),
             )
@@ -621,6 +624,117 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(VaultItemListingsAction.ItemClick("mockId-1"))
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on a display item when master password reprompt is required should show the master password dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(
+                        createDisplayItem(number = 1)
+                            .copy(shouldShowMasterPasswordReprompt = true),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "mockTitle-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
+    @Test
+    fun `clicking cancel on the master password dialog should close the dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(
+                        createDisplayItem(number = 1)
+                            .copy(shouldShowMasterPasswordReprompt = true),
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "mockTitle-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking submit on the master password dialog should close the dialog and send MasterPasswordRepromptSubmit`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(
+                        createDisplayItem(number = 1)
+                            .copy(shouldShowMasterPasswordReprompt = true),
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(text = "mockTitle-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("password")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.MasterPasswordRepromptSubmit(
+                    cipherId = "mockId-1",
+                    password = "password",
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
@@ -998,4 +1112,5 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
             ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
             ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
         ),
+        shouldShowMasterPasswordReprompt = false,
     )

@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -263,6 +264,141 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(VaultItemListingEvent.NavigateToSendItem(id = "mock"), awaitItem())
         }
     }
+
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(number = 1)
+            val cipherId = "mockId-1"
+            val password = "password"
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Error
+            val initialState = createVaultItemListingState(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(
+                        createMockDisplayItemForCipher(number = 1),
+                    ),
+                ),
+            )
+            assertEquals(
+                initialState,
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.MasterPasswordRepromptSubmit(
+                    cipherId = cipherId,
+                    password = password,
+                ),
+            )
+
+            assertEquals(
+                initialState.copy(
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        title = null,
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with an invalid password should show an invalid password dialog`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(number = 1)
+            val cipherId = "mockId-1"
+            val password = "password"
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val initialState = createVaultItemListingState(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(
+                        createMockDisplayItemForCipher(number = 1),
+                    ),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = false)
+
+            assertEquals(
+                initialState,
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.MasterPasswordRepromptSubmit(
+                    cipherId = cipherId,
+                    password = password,
+                ),
+            )
+
+            assertEquals(
+                initialState.copy(
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        title = null,
+                        message = R.string.invalid_master_password.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password should should post to the AutofillSelectionManager`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(number = 1)
+            val cipherId = "mockId-1"
+            val password = "password"
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            autofillSelectionManager.autofillSelectionFlow.test {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.MasterPasswordRepromptSubmit(
+                        cipherId = cipherId,
+                        password = password,
+                    ),
+                )
+                assertEquals(
+                    cipherView,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {

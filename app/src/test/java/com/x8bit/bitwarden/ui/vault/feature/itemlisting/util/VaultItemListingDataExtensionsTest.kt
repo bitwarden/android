@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import android.net.Uri
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.SendType
@@ -311,7 +312,7 @@ class VaultItemListingDataExtensionsTest {
     }
 
     @Test
-    fun `toViewState should transform a list of CipherViews into a ViewState`() {
+    fun `toViewState should transform a list of CipherViews into a ViewState when not autofill`() {
         mockkStatic(CipherView::subtitle)
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
@@ -324,7 +325,8 @@ class VaultItemListingDataExtensionsTest {
                 number = 1,
                 isDeleted = false,
                 cipherType = CipherType.LOGIN,
-            ),
+            )
+                .copy(reprompt = CipherRepromptType.PASSWORD),
             createMockCipherView(
                 number = 2,
                 isDeleted = false,
@@ -370,6 +372,59 @@ class VaultItemListingDataExtensionsTest {
                     createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherType.IDENTITY,
+                        subtitle = null,
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toViewState should transform a list of CipherViews into a ViewState when autofill`() {
+        mockkStatic(CipherView::subtitle)
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
+        val cipherViewList = listOf(
+            createMockCipherView(
+                number = 1,
+                isDeleted = false,
+                cipherType = CipherType.LOGIN,
+            )
+                .copy(reprompt = CipherRepromptType.PASSWORD),
+            createMockCipherView(
+                number = 2,
+                isDeleted = false,
+                cipherType = CipherType.CARD,
+            ),
+        )
+
+        val result = cipherViewList.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            autofillSelectionData = AutofillSelectionData(
+                type = AutofillSelectionData.Type.LOGIN,
+                uri = null,
+            ),
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(
+                    createMockDisplayItemForCipher(
+                        number = 1,
+                        cipherType = CipherType.LOGIN,
+                        subtitle = null,
+                    )
+                        .copy(shouldShowMasterPasswordReprompt = true),
+                    createMockDisplayItemForCipher(
+                        number = 2,
+                        cipherType = CipherType.CARD,
                         subtitle = null,
                     ),
                 ),

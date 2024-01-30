@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
@@ -92,6 +93,7 @@ fun List<CipherView>.toViewState(
             displayItemList = toDisplayItemList(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
+                isAutofill = autofillSelectionData != null,
             ),
         )
     } else {
@@ -180,11 +182,13 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    isAutofill: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
+            isAutofill = isAutofill,
         )
     }
 
@@ -202,6 +206,7 @@ private fun List<SendView>.toDisplayItemList(
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    isAutofill: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -213,6 +218,7 @@ private fun CipherView.toDisplayItem(
         ),
         extraIconList = toLabelIcons(),
         overflowOptions = toOverflowActions(),
+        shouldShowMasterPasswordReprompt = isAutofill && reprompt == CipherRepromptType.PASSWORD,
     )
 
 private fun CipherView.toIconData(
@@ -249,6 +255,7 @@ private fun SendView.toDisplayItem(
         ),
         extraIconList = toLabelIcons(clock = clock),
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
+        shouldShowMasterPasswordReprompt = false,
     )
 
 @get:DrawableRes
