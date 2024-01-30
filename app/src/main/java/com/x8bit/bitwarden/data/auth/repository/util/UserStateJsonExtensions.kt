@@ -6,7 +6,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
+import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.ui.platform.base.util.toHexColorRepresentation
 
 /**
@@ -44,7 +45,7 @@ fun UserStateJson.toUpdatedUserStateJson(
  * Converts the given [UserStateJson] to a [UserState] using the given [vaultState].
  */
 fun UserStateJson.toUserState(
-    vaultState: VaultState,
+    vaultState: List<VaultUnlockData>,
     userOrganizationsList: List<UserOrganizations>,
     hasPendingAccountAddition: Boolean,
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
@@ -69,7 +70,8 @@ fun UserStateJson.toUserState(
                         .toEnvironmentUrlsOrDefault(),
                     isPremium = accountJson.profile.hasPremium == true,
                     isLoggedIn = accountJson.isLoggedIn,
-                    isVaultUnlocked = userId in vaultState.unlockedVaultUserIds,
+                    isVaultUnlocked = vaultState.statusFor(userId) ==
+                        VaultUnlockData.Status.UNLOCKED,
                     organizations = userOrganizationsList
                         .find { it.userId == userId }
                         ?.organizations

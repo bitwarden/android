@@ -73,7 +73,7 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -108,7 +108,7 @@ class AuthRepositoryTest {
     private val organizationService: OrganizationService = mockk()
     private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
     private val vaultRepository: VaultRepository = mockk {
-        every { vaultStateFlow } returns mutableVaultStateFlow
+        every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
         every { deleteVaultData(any()) } just runs
         every { clearUnlockedData() } just runs
     }
@@ -295,10 +295,7 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
 
-        val emptyVaultState = VaultState(
-            unlockedVaultUserIds = emptySet(),
-            unlockingVaultUserIds = emptySet(),
-        )
+        val emptyVaultState = emptyList<VaultUnlockData>()
         mutableVaultStateFlow.value = emptyVaultState
         assertEquals(
             MULTI_USER_STATE.toUserState(
@@ -2915,9 +2912,11 @@ class AuthRepositoryTest {
                 organizations = ORGANIZATIONS.toOrganizations(),
             ),
         )
-        private val VAULT_STATE = VaultState(
-            unlockedVaultUserIds = setOf(USER_ID_1),
-            unlockingVaultUserIds = emptySet(),
+        private val VAULT_STATE = listOf(
+            VaultUnlockData(
+                userId = USER_ID_1,
+                status = VaultUnlockData.Status.UNLOCKED,
+            ),
         )
     }
 }

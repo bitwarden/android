@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -140,9 +140,11 @@ class UserStateJsonExtensionsTest {
                 ),
             )
                 .toUserState(
-                    vaultState = VaultState(
-                        unlockedVaultUserIds = setOf("activeUserId"),
-                        unlockingVaultUserIds = emptySet(),
+                    vaultState = listOf(
+                        VaultUnlockData(
+                            userId = "activeUserId",
+                            status = VaultUnlockData.Status.UNLOCKED,
+                        ),
                     ),
                     userOrganizationsList = listOf(
                         UserOrganizations(
@@ -212,10 +214,7 @@ class UserStateJsonExtensionsTest {
                 ),
             )
                 .toUserState(
-                    vaultState = VaultState(
-                        unlockedVaultUserIds = emptySet(),
-                        unlockingVaultUserIds = emptySet(),
-                    ),
+                    vaultState = emptyList(),
                     userOrganizationsList = listOf(
                         UserOrganizations(
                             userId = "activeUserId",

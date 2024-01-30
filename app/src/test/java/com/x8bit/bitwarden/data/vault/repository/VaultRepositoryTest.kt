@@ -91,7 +91,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.model.createMockDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
@@ -148,14 +148,11 @@ class VaultRepositoryTest {
     private val vaultSdkSource: VaultSdkSource = mockk {
         every { clearCrypto(userId = any()) } just runs
     }
-    private val mutableVaultStateFlow = MutableStateFlow(
-        VaultState(
-            unlockedVaultUserIds = emptySet(),
-            unlockingVaultUserIds = emptySet(),
-        ),
+    private val mutableVaultStateFlow = MutableStateFlow<List<VaultUnlockData>>(
+        emptyList(),
     )
     private val vaultLockManager: VaultLockManager = mockk {
-        every { vaultStateFlow } returns mutableVaultStateFlow
+        every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
         every { isVaultUnlocked(any()) } returns false
         every { isVaultUnlocking(any()) } returns false
         every { lockVault(any()) } just runs
@@ -700,22 +697,16 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = null
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
 
             val result = vaultRepository.unlockVaultWithBiometrics()
 
             assertEquals(VaultUnlockResult.InvalidStateError, result)
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 
@@ -724,11 +715,8 @@ class VaultRepositoryTest {
     fun `unlockVaultWithBiometrics with missing biometrics key should return InvalidStateError`() =
         runTest {
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = MOCK_USER_STATE.activeUserId
@@ -738,11 +726,8 @@ class VaultRepositoryTest {
 
             assertEquals(VaultUnlockResult.InvalidStateError, result)
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 
@@ -864,11 +849,8 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = null
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
 
             val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
@@ -878,11 +860,8 @@ class VaultRepositoryTest {
                 result,
             )
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 
@@ -891,11 +870,8 @@ class VaultRepositoryTest {
     fun `unlockVaultWithMasterPassword with missing user key should return InvalidStateError`() =
         runTest {
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
 
             val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
@@ -913,11 +889,8 @@ class VaultRepositoryTest {
                 result,
             )
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 
@@ -926,11 +899,8 @@ class VaultRepositoryTest {
     fun `unlockVaultWithMasterPassword with missing private key should return InvalidStateError`() =
         runTest {
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
             val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
             fakeAuthDiskSource.storeUserKey(
@@ -948,11 +918,8 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 
@@ -1102,11 +1069,8 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = null
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
 
             val result = vaultRepository.unlockVaultWithPin(pin = "1234")
@@ -1116,11 +1080,8 @@ class VaultRepositoryTest {
                 result,
             )
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 
@@ -1129,11 +1090,8 @@ class VaultRepositoryTest {
     fun `unlockVaultWithPin with missing pin-protected user key should return InvalidStateError`() =
         runTest {
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
 
             val result = vaultRepository.unlockVaultWithPin(pin = "1234")
@@ -1151,11 +1109,8 @@ class VaultRepositoryTest {
                 result,
             )
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 
@@ -1164,11 +1119,8 @@ class VaultRepositoryTest {
     fun `unlockVaultWithPin with missing private key should return InvalidStateError`() =
         runTest {
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
             val result = vaultRepository.unlockVaultWithPin(pin = "1234")
             fakeAuthDiskSource.storePinProtectedUserKey(
@@ -1185,11 +1137,8 @@ class VaultRepositoryTest {
                 result,
             )
             assertEquals(
-                VaultState(
-                    unlockedVaultUserIds = emptySet(),
-                    unlockingVaultUserIds = emptySet(),
-                ),
-                vaultRepository.vaultStateFlow.value,
+                emptyList<VaultUnlockData>(),
+                vaultRepository.vaultUnlockDataStateFlow.value,
             )
         }
 

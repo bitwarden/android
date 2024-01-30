@@ -20,9 +20,11 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
+import com.x8bit.bitwarden.data.vault.repository.util.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,16 +70,11 @@ class VaultLockManagerImpl(
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
     private val userIds: Set<String> get() = authDiskSource.userState?.accounts?.keys.orEmpty()
 
-    private val mutableVaultStateStateFlow =
-        MutableStateFlow(
-            VaultState(
-                unlockedVaultUserIds = emptySet(),
-                unlockingVaultUserIds = emptySet(),
-            ),
-        )
+    private val mutableVaultUnlockDataStateFlow =
+        MutableStateFlow<List<VaultUnlockData>>(emptyList())
 
-    override val vaultStateFlow: StateFlow<VaultState>
-        get() = mutableVaultStateStateFlow.asStateFlow()
+    override val vaultUnlockDataStateFlow: StateFlow<List<VaultUnlockData>>
+        get() = mutableVaultUnlockDataStateFlow.asStateFlow()
 
     init {
         observeAppForegroundChanges()
@@ -86,10 +83,10 @@ class VaultLockManagerImpl(
     }
 
     override fun isVaultUnlocked(userId: String): Boolean =
-        userId in mutableVaultStateStateFlow.value.unlockedVaultUserIds
+        mutableVaultUnlockDataStateFlow.value.statusFor(userId) == VaultUnlockData.Status.UNLOCKED
 
     override fun isVaultUnlocking(userId: String): Boolean =
-        userId in mutableVaultStateStateFlow.value.unlockingVaultUserIds
+        mutableVaultUnlockDataStateFlow.value.statusFor(userId) == VaultUnlockData.Status.UNLOCKING
 
     override fun lockVault(userId: String) {
         setVaultToLocked(userId = userId)
@@ -205,10 +202,8 @@ class VaultLockManagerImpl(
     }
 
     private fun setVaultToUnlocked(userId: String) {
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockedVaultUserIds = it.unlockedVaultUserIds + userId,
-            )
+        mutableVaultUnlockDataStateFlow.update {
+            it.update(userId, VaultUnlockData.Status.UNLOCKED)
         }
         // If we are unlocking an account with a timeout of Never, we should make sure to store the
         // auto-unlock key.
@@ -217,10 +212,8 @@ class VaultLockManagerImpl(
 
     private fun setVaultToLocked(userId: String) {
         vaultSdkSource.clearCrypto(userId = userId)
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockedVaultUserIds = it.unlockedVaultUserIds - userId,
-            )
+        mutableVaultUnlockDataStateFlow.update {
+            it.update(userId, null)
         }
         authDiskSource.storeUserAutoUnlockKey(
             userId = userId,
@@ -229,18 +222,16 @@ class VaultLockManagerImpl(
     }
 
     private fun setVaultToUnlocking(userId: String) {
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockingVaultUserIds = it.unlockingVaultUserIds + userId,
-            )
+        mutableVaultUnlockDataStateFlow.update {
+            it.update(userId, VaultUnlockData.Status.UNLOCKING)
         }
     }
 
     private fun setVaultToNotUnlocking(userId: String) {
-        mutableVaultStateStateFlow.update {
-            it.copy(
-                unlockingVaultUserIds = it.unlockingVaultUserIds - userId,
-            )
+        val status = mutableVaultUnlockDataStateFlow.value.statusFor(userId)
+        if (status != VaultUnlockData.Status.UNLOCKING) return
+        mutableVaultUnlockDataStateFlow.update {
+            it.update(userId, null)
         }
     }
 

@@ -144,7 +144,7 @@ class AuthRepositoryImpl(
     override val userStateFlow: StateFlow<UserState?> = combine(
         authDiskSource.userStateFlow,
         authDiskSource.userOrganizationsListFlow,
-        vaultRepository.vaultStateFlow,
+        vaultRepository.vaultUnlockDataStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
         mutableHasPendingAccountDeletionStateFlow,
     ) {
@@ -174,7 +174,7 @@ class AuthRepositoryImpl(
             initialValue = authDiskSource
                 .userState
                 ?.toUserState(
-                    vaultState = vaultRepository.vaultStateFlow.value,
+                    vaultState = vaultRepository.vaultUnlockDataStateFlow.value,
                     userOrganizationsList = authDiskSource.userOrganizationsList,
                     hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
