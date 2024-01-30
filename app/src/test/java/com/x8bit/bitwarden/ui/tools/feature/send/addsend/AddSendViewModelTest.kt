@@ -1002,6 +1002,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             isPremium = false,
             isLoggedIn = true,
             isVaultUnlocked = true,
+            isVaultPendingUnlock = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
         )

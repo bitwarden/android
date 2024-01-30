@@ -8,6 +8,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
@@ -56,6 +57,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.createMockMasterPasswordPolicy
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
@@ -72,7 +74,9 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -88,6 +92,9 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -108,9 +115,10 @@ class AuthRepositoryTest {
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
     private val newAuthRequestService: NewAuthRequestService = mockk()
     private val organizationService: OrganizationService = mockk()
-    private val mutableVaultStateFlow = MutableStateFlow(VAULT_STATE)
+    private val mutableVaultUnlockDataStateFlow = MutableStateFlow(VAULT_UNLOCK_DATA)
     private val vaultRepository: VaultRepository = mockk {
-        every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
+        every { vaultUnlockDataStateFlow } returns mutableVaultUnlockDataStateFlow
+        every { completeUnlock(any()) } just runs
         every { deleteVaultData(any()) } just runs
         every { clearUnlockedData() } just runs
     }
@@ -270,11 +278,11 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
 
-        mutableVaultStateFlow.value = VAULT_STATE
+        mutableVaultUnlockDataStateFlow.value = VAULT_UNLOCK_DATA
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
             SINGLE_USER_STATE_1.toUserState(
-                vaultState = VAULT_STATE,
+                vaultState = VAULT_UNLOCK_DATA,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
@@ -296,7 +304,7 @@ class AuthRepositoryTest {
         }
         assertEquals(
             MULTI_USER_STATE.toUserState(
-                vaultState = VAULT_STATE,
+                vaultState = VAULT_UNLOCK_DATA,
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
@@ -306,7 +314,7 @@ class AuthRepositoryTest {
         )
 
         val emptyVaultState = emptyList<VaultUnlockData>()
-        mutableVaultStateFlow.value = emptyVaultState
+        mutableVaultUnlockDataStateFlow.value = emptyVaultState
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
@@ -345,6 +353,122 @@ class AuthRepositoryTest {
     }
 
     @Test
+    @OptIn(ExperimentalSerializationApi::class)
+    @Suppress("MaxLineLength")
+    fun `loading the policies should emit masterPasswordPolicyFlow if the password fails any checks`() =
+        runTest {
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                accountsService.preLogin(email = EMAIL)
+            } returns Result.success(PRE_LOGIN_SUCCESS)
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns Result.success(successResponse)
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationKeys = null,
+                    masterPassword = PASSWORD,
+                )
+            } returns VaultUnlockResult.Success
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+
+            // Start the login flow so that all the necessary data is cached.
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+
+            // Set policies that will fail the password.
+            fakeAuthDiskSource.storePolicies(
+                userId = USER_ID_1,
+                policies = listOf(
+                    createMockPolicy(
+                        type = PolicyTypeJson.MASTER_PASSWORD,
+                        isEnabled = true,
+                        data = buildJsonObject {
+                            put(key = "minLength", value = 100)
+                            put(key = "minComplexity", value = null)
+                            put(key = "requireUpper", value = null)
+                            put(key = "requireLower", value = null)
+                            put(key = "requireNumbers", value = null)
+                            put(key = "requireSpecial", value = null)
+                            put(key = "enforceOnLogin", value = true)
+                        },
+                    ),
+                ),
+            )
+
+            // Verify the results.
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            coVerify { accountsService.preLogin(email = EMAIL) }
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = USER_ID_1,
+                passwordHash = PASSWORD_HASH,
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = successResponse.key,
+                    privateKey = successResponse.privateKey,
+                    organizationKeys = null,
+                    masterPassword = PASSWORD,
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(
+                UserStateJson(
+                    activeUserId = USER_ID_1,
+                    accounts = mapOf(
+                        USER_ID_1 to ACCOUNT_1.copy(
+                            profile = ACCOUNT_1.profile.copy(
+                                forcePasswordResetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
+                            ),
+                        ),
+                    ),
+                ),
+                fakeAuthDiskSource.userState,
+            )
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            verify { vaultRepository.clearUnlockedData() }
+        }
+
+    @Test
     fun `rememberedEmailAddress should pull from and update AuthDiskSource`() {
         // AuthDiskSource and the repository start with the same value.
         assertNull(repository.rememberedEmailAddress)
@@ -379,14 +503,14 @@ class AuthRepositoryTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
-            vaultState = VAULT_STATE,
+            vaultState = VAULT_UNLOCK_DATA,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
-            vaultState = VAULT_STATE,
+            vaultState = VAULT_UNLOCK_DATA,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
@@ -700,6 +824,7 @@ class AuthRepositoryTest {
             )
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
             verify { vaultRepository.clearUnlockedData() }
+            verify { vaultRepository.completeUnlock(userId = USER_ID_1) }
         }
 
     @Suppress("MaxLineLength")
@@ -2053,7 +2178,7 @@ class AuthRepositoryTest {
     fun `switchAccount when the given userId is the same as the current activeUserId should reset any pending account additions`() {
         val originalUserId = USER_ID_1
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
-            vaultState = VAULT_STATE,
+            vaultState = VAULT_UNLOCK_DATA,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
@@ -2084,7 +2209,7 @@ class AuthRepositoryTest {
     fun `switchAccount when the given userId does not correspond to a saved account should do nothing`() {
         val invalidId = "invalidId"
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
-            vaultState = VAULT_STATE,
+            vaultState = VAULT_UNLOCK_DATA,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
@@ -2113,7 +2238,7 @@ class AuthRepositoryTest {
     fun `switchAccount when the userId is valid should update the current UserState, clear the previously unlocked data, and reset any pending account additions`() {
         val updatedUserId = USER_ID_2
         val originalUserState = MULTI_USER_STATE.toUserState(
-            vaultState = VAULT_STATE,
+            vaultState = VAULT_UNLOCK_DATA,
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
@@ -2817,6 +2942,38 @@ class AuthRepositoryTest {
         }
     }
 
+    @Test
+    fun `validatePasswordAgainstPolicy validates password against policy requirements`() = runTest {
+        var policy = createMockMasterPasswordPolicy(minLength = 10)
+        assertFalse(repository.validatePasswordAgainstPolicy(password = "123", policy = policy))
+
+        val password = "simple"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.passwordStrength(
+                email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                password = password,
+            )
+        } returns Result.success(LEVEL_0)
+        policy = createMockMasterPasswordPolicy(minComplexity = 1)
+        assertFalse(repository.validatePasswordAgainstPolicy(password = password, policy = policy))
+
+        policy = createMockMasterPasswordPolicy(requireUpper = true)
+        assertFalse(repository.validatePasswordAgainstPolicy(password = "lower", policy = policy))
+
+        policy = createMockMasterPasswordPolicy(requireLower = true)
+        assertFalse(repository.validatePasswordAgainstPolicy(password = "UPPER", policy = policy))
+
+        policy = createMockMasterPasswordPolicy(requireNumbers = true)
+        assertFalse(repository.validatePasswordAgainstPolicy(password = "letters", policy = policy))
+
+        policy = createMockMasterPasswordPolicy(requireSpecial = true)
+        assertFalse(repository.validatePasswordAgainstPolicy(password = "letters", policy = policy))
+
+        policy = createMockMasterPasswordPolicy(minLength = 5)
+        assertTrue(repository.validatePasswordAgainstPolicy(password = "password", policy = policy))
+    }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val EMAIL = "test@bitwarden.com"
@@ -2959,7 +3116,7 @@ class AuthRepositoryTest {
                 organizations = ORGANIZATIONS.toOrganizations(),
             ),
         )
-        private val VAULT_STATE = listOf(
+        private val VAULT_UNLOCK_DATA = listOf(
             VaultUnlockData(
                 userId = USER_ID_1,
                 status = VaultUnlockData.Status.UNLOCKED,

@@ -4,6 +4,7 @@ import android.os.SystemClock
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
@@ -37,6 +39,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
@@ -47,6 +50,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.currentUserPoliciesListFlow
+import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
@@ -61,6 +66,8 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
@@ -115,6 +122,12 @@ class AuthRepositoryImpl(
      * The information necessary to resend the verification code email for two-factor login.
      */
     private var resendEmailJsonRequest: ResendEmailJsonRequest? = null
+
+    /**
+     * The password that needs to be checked against any organization policies before
+     * the user can complete the login flow.
+     */
+    private var passwordToCheck: String? = null
 
     /**
      * A scope intended for use when simply collecting multiple flows in order to combine them. The
@@ -218,6 +231,21 @@ class AuthRepositoryImpl(
         pushManager
             .logoutFlow
             .onEach { logout() }
+            .launchIn(unconfinedScope)
+
+        // When the policies for the user have been set, complete the login process.
+        authDiskSource.currentUserPoliciesListFlow
+            .onEach { policies ->
+                val userId = activeUserId ?: return@onEach
+                if (passwordPassesPolicies(policies)) {
+                    vaultRepository.completeUnlock(userId = userId)
+                } else {
+                    storeUserResetPasswordReason(
+                        userId = userId,
+                        reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
+                    )
+                }
+            }
             .launchIn(unconfinedScope)
     }
 
@@ -402,6 +430,10 @@ class AuthRepositoryImpl(
                                         passwordHash = passwordHash,
                                     )
                                 }
+
+                            // Cache the password to verify against any password policies
+                            // after the sync completes.
+                            passwordToCheck = password
                         }
 
                         authDiskSource.userState = userStateJson
@@ -821,6 +853,67 @@ class AuthRepositoryImpl(
             )
     }
 
+    @Suppress("CyclomaticComplexMethod", "ReturnCount")
+    override suspend fun validatePasswordAgainstPolicy(
+        password: String,
+        policy: PolicyInformation.MasterPassword,
+    ): Boolean {
+        // Check the password against all the enforced rules in the policy.
+        policy.minLength?.let { minLength ->
+            if (minLength > 0 && password.length < minLength) return false
+        }
+        policy.minComplexity?.let { minComplexity ->
+            // If there was a problem checking the complexity of the password, ignore
+            // the complexity checks and continue checking the other aspects of the policy.
+            val profile = authDiskSource.userState?.activeAccount?.profile ?: return@let
+            val passwordStrengthResult = getPasswordStrength(profile.email, password)
+            val passwordStrength = (passwordStrengthResult as? PasswordStrengthResult.Success)
+                ?.passwordStrength
+                ?.toInt()
+                ?: return@let
+            if (minComplexity > 0 && passwordStrength < minComplexity) return false
+        }
+        policy.requireUpper?.let { requiresUpper ->
+            if (requiresUpper && !password.any { it.isUpperCase() }) return false
+        }
+        policy.requireLower?.let { requiresLower ->
+            if (requiresLower && !password.any { it.isLowerCase() }) return false
+        }
+        policy.requireNumbers?.let { requiresNumbers ->
+            if (requiresNumbers && !password.any { it.isDigit() }) return false
+        }
+        policy.requireSpecial?.let { requiresSpecial ->
+            if (requiresSpecial && !password.contains("^.*[!@#$%\\^&*].*$".toRegex())) return false
+        }
+
+        return true
+    }
+
+    /**
+     * Return true if there are any [PolicyInformation.MasterPassword] policies that the user's
+     * master password has failed to pass.
+     */
+    @Suppress("ReturnCount")
+    private suspend fun passwordPassesPolicies(policies: List<SyncResponseJson.Policy>?): Boolean {
+        // If the user is logging on without a password or if there are no policies,
+        // the check should complete.
+        val password = passwordToCheck ?: return true
+        val policyList = policies ?: return true
+
+        // If there are no master password policies that are enabled and should be
+        // enforced on login, the check should complete.
+        val passwordPolicies = policyList
+            .filter { it.type == PolicyTypeJson.MASTER_PASSWORD && it.isEnabled }
+            .mapNotNull { it.policyInformation as? PolicyInformation.MasterPassword }
+            .filter { it.enforceOnLogin == true }
+
+        // Check the password against all the policies.
+        val failingPolicies = passwordPolicies.filter { policy ->
+            !validatePasswordAgainstPolicy(password, policy)
+        }
+        return failingPolicies.isEmpty()
+    }
+
     private suspend fun getFingerprintPhrase(
         publicKey: String,
     ): UserFingerprintResult {
@@ -866,4 +959,23 @@ class AuthRepositoryImpl(
                 VaultUnlockType.MASTER_PASSWORD
             }
         }
+
+    /**
+     * Update the saved state with the force password reset reason.
+     */
+    private fun storeUserResetPasswordReason(userId: String, reason: ForcePasswordResetReason?) {
+        val accounts = authDiskSource
+            .userState
+            ?.accounts
+            ?.toMutableMap()
+            ?: return
+        val account = accounts[userId] ?: return
+        val updatedProfile = account
+            .profile
+            .copy(forcePasswordResetReason = reason)
+        accounts[userId] = account.copy(profile = updatedProfile)
+        authDiskSource.userState = authDiskSource
+            .userState
+            ?.copy(accounts = accounts)
+    }
 }

@@ -72,6 +72,9 @@ fun UserStateJson.toUserState(
                     isLoggedIn = accountJson.isLoggedIn,
                     isVaultUnlocked = vaultState.statusFor(userId) ==
                         VaultUnlockData.Status.UNLOCKED,
+                    isVaultPendingUnlock = vaultState.statusFor(userId) ==
+                        VaultUnlockData.Status.PENDING ||
+                        accountJson.profile.forcePasswordResetReason != null,
                     organizations = userOrganizationsList
                         .find { it.userId == userId }
                         ?.organizations

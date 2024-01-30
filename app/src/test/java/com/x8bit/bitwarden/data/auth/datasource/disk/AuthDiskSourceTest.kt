@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -184,6 +185,10 @@ class AuthDiskSourceTest {
             userId = userId,
             organizations = listOf(createMockOrganization(1)),
         )
+        authDiskSource.storePolicies(
+            userId = userId,
+            policies = listOf(createMockPolicy()),
+        )
 
         authDiskSource.clearData(userId = userId)
 
@@ -195,6 +200,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getPrivateKey(userId = userId))
         assertNull(authDiskSource.getOrganizationKeys(userId = userId))
         assertNull(authDiskSource.getOrganizations(userId = userId))
+        assertNull(authDiskSource.getPolicies(userId = userId))
     }
 
     @Test
@@ -750,6 +756,73 @@ class AuthDiskSourceTest {
         assertEquals(
             mockPasswordHash,
             actual,
+        )
+    }
+
+    @Test
+    fun `getPolicies should pull from SharedPreferences`() {
+        val policiesBaseKey = "bwPreferencesStorage:policies"
+        val mockUserId = "mockUserId"
+        val mockPolicies = listOf(
+            createMockPolicy(number = 0),
+            createMockPolicy(number = 1),
+        )
+        val mockPoliciesMap = mockPolicies.associateBy { it.id }
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    "${policiesBaseKey}_$mockUserId",
+                    json.encodeToString(mockPoliciesMap),
+                )
+            }
+        val actual = authDiskSource.getPolicies(userId = mockUserId)
+        assertEquals(
+            mockPolicies,
+            actual,
+        )
+    }
+
+    @Test
+    fun `getPoliciesFlow should react to changes in getOrganizations`() = runTest {
+        val mockUserId = "mockUserId"
+        val mockPolicies = listOf(
+            createMockPolicy(number = 0),
+            createMockPolicy(number = 1),
+        )
+        authDiskSource.getPoliciesFlow(userId = mockUserId).test {
+            // The initial values of the Flow and the property are in sync
+            assertNull(authDiskSource.getPolicies(userId = mockUserId))
+            assertNull(awaitItem())
+
+            // Updating the repository updates shared preferences
+            authDiskSource.storePolicies(
+                userId = mockUserId,
+                policies = mockPolicies,
+            )
+            assertEquals(mockPolicies, awaitItem())
+        }
+    }
+
+    @Test
+    fun `storePolicies should update SharedPreferences`() {
+        val policiesBaseKey = "bwPreferencesStorage:policies"
+        val mockUserId = "mockUserId"
+        val mockPolicies = listOf(
+            createMockPolicy(number = 0),
+            createMockPolicy(number = 1),
+        )
+        val mockPoliciesMap = mockPolicies.associateBy { it.id }
+        authDiskSource.storePolicies(
+            userId = mockUserId,
+            policies = mockPolicies,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "${policiesBaseKey}_$mockUserId",
+            null,
+        )
+        assertEquals(
+            json.encodeToJsonElement(mockPoliciesMap),
+            json.parseToJsonElement(requireNotNull(actual)),
         )
     }
 }

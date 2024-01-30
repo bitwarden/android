@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 
@@ -51,5 +53,24 @@ val AuthDiskSource.userOrganizationsListFlow: Flow<List<UserOrganizations>>
                                 }
                         },
                 ) { values -> values.toList() }
+            }
+            .distinctUntilChanged()
+
+/**
+ * Returns a [Flow] that emits distinct updates to the
+ * current user's [SyncResponseJson.Policy] list.
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
+val AuthDiskSource.currentUserPoliciesListFlow: Flow<List<SyncResponseJson.Policy>?>
+    get() =
+        this
+            .userStateFlow
+            .flatMapLatest { userStateJson ->
+                userStateJson
+                    ?.activeUserId
+                    ?.let { activeUserId ->
+                        this.getPoliciesFlow(activeUserId)
+                    }
+                    ?: emptyFlow()
             }
             .distinctUntilChanged()

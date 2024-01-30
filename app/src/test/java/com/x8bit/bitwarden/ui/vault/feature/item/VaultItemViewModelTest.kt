@@ -1497,6 +1497,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isPremium = true,
                     isLoggedIn = true,
                     isVaultUnlocked = true,
+                    isVaultPendingUnlock = false,
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
                 ),

@@ -107,6 +107,7 @@ class UserStateJsonExtensionsTest {
                         isPremium = false,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isVaultPendingUnlock = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -128,6 +129,7 @@ class UserStateJsonExtensionsTest {
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns "activeAvatarColorHex"
                             every { hasPremium } returns null
+                            every { forcePasswordResetReason } returns null
                         },
                         tokens = AccountJson.Tokens(
                             accessToken = "accessToken",
@@ -180,6 +182,7 @@ class UserStateJsonExtensionsTest {
                         isPremium = true,
                         isLoggedIn = false,
                         isVaultUnlocked = false,
+                        isVaultPendingUnlock = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -202,6 +205,7 @@ class UserStateJsonExtensionsTest {
                             every { email } returns "activeEmail"
                             every { avatarColorHex } returns null
                             every { hasPremium } returns true
+                            every { forcePasswordResetReason } returns null
                         },
                         tokens = AccountJson.Tokens(
                             accessToken = null,

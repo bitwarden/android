@@ -56,6 +56,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockDomains
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
@@ -513,6 +514,10 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.assertOrganizations(
                 userId = "mockId-1",
                 organizations = listOf(createMockOrganization(number = 1)),
+            )
+            fakeAuthDiskSource.assertPolicies(
+                userId = "mockId-1",
+                policies = listOf(createMockPolicy(number = 1)),
             )
             coVerify {
                 vaultDiskSource.replaceVaultData(

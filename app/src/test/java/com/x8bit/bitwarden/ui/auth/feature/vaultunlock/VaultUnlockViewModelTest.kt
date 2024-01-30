@@ -116,6 +116,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -149,6 +150,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = false,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = true,
                         organizations = emptyList(),
                     ),
@@ -725,6 +727,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isPremium = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
+    isVaultPendingUnlock = false,
     isBiometricsEnabled = false,
     organizations = emptyList(),
 )

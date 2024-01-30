@@ -1372,6 +1372,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isPremium = true,
     isLoggedIn = true,
     isVaultUnlocked = true,
+    isVaultPendingUnlock = false,
     isBiometricsEnabled = false,
     organizations = emptyList(),
 )

@@ -31,6 +31,7 @@ private const val ORGANIZATIONS_KEY = "$BASE_KEY:organizations"
 private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 private const val TWO_FACTOR_TOKEN_KEY = "$BASE_KEY:twoFactorToken"
 private const val MASTER_PASSWORD_HASH_KEY = "$BASE_KEY:keyHash"
+private const val POLICIES_KEY = "$BASE_KEY:policies"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -56,6 +57,8 @@ class AuthDiskSourceImpl(
     private val inMemoryPinProtectedUserKeys = mutableMapOf<String, String?>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
+    private val mutablePoliciesFlowMap =
+        mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Policy>?>>()
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
@@ -106,6 +109,7 @@ class AuthDiskSourceImpl(
         storeOrganizations(userId = userId, organizations = null)
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
+        storePolicies(userId = userId, policies = null)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
@@ -276,6 +280,33 @@ class AuthDiskSourceImpl(
         putString(key = "${MASTER_PASSWORD_HASH_KEY}_$userId", value = passwordHash)
     }
 
+    override fun getPolicies(userId: String): List<SyncResponseJson.Policy>? =
+        getString(key = "${POLICIES_KEY}_$userId")
+            ?.let {
+                // The policies are stored as a map.
+                val policiesMap: Map<String, SyncResponseJson.Policy> =
+                    json.decodeFromString(it)
+                policiesMap.values.toList()
+            }
+
+    override fun getPoliciesFlow(
+        userId: String,
+    ): Flow<List<SyncResponseJson.Policy>?> =
+        getMutablePoliciesFlow(userId = userId)
+            .onSubscription { emit(getPolicies(userId = userId)) }
+
+    override fun storePolicies(userId: String, policies: List<SyncResponseJson.Policy>?) {
+        putString(
+            key = "${POLICIES_KEY}_$userId",
+            value = policies?.let { nonNullPolicies ->
+                // The policies are stored as a map.
+                val policiesMap = nonNullPolicies.associateBy { it.id }
+                json.encodeToString(policiesMap)
+            },
+        )
+        getMutablePoliciesFlow(userId = userId).tryEmit(policies)
+    }
+
     private fun generateAndStoreUniqueAppId(): String =
         UUID
             .randomUUID()
@@ -288,6 +319,13 @@ class AuthDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?> =
         mutableOrganizationsFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePoliciesFlow(
+        userId: String,
+    ): MutableSharedFlow<List<SyncResponseJson.Policy>?> =
+        mutablePoliciesFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 }

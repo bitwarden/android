@@ -47,6 +47,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = false,
                         isVaultUnlocked = true,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -73,6 +74,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -82,6 +84,35 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel()
         assertEquals(RootNavState.Auth, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `when the active user has a pending unlocked vault the nav state should be Auth`() {
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = false,
+                        isVaultPendingUnlock = true,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.Auth,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -99,6 +130,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -133,6 +165,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -171,6 +204,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),
@@ -202,6 +236,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = false,
+                        isVaultPendingUnlock = false,
                         isBiometricsEnabled = false,
                         organizations = emptyList(),
                     ),

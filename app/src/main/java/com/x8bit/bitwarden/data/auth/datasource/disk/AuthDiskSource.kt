@@ -178,6 +178,14 @@ interface AuthDiskSource {
     fun getOrganizationsFlow(userId: String): Flow<List<SyncResponseJson.Profile.Organization>?>
 
     /**
+     * Stores the organization data for the given [userId].
+     */
+    fun storeOrganizations(
+        userId: String,
+        organizations: List<SyncResponseJson.Profile.Organization>?,
+    )
+
+    /**
      * Gets the master password hash for the given [userId].
      */
     fun getMasterPasswordHash(userId: String): String?
@@ -188,10 +196,17 @@ interface AuthDiskSource {
     fun storeMasterPasswordHash(userId: String, passwordHash: String?)
 
     /**
-     * Stores the organization data for the given [userId].
+     * Gets the policies for the given [userId].
      */
-    fun storeOrganizations(
-        userId: String,
-        organizations: List<SyncResponseJson.Profile.Organization>?,
-    )
+    fun getPolicies(userId: String): List<SyncResponseJson.Policy>?
+
+    /**
+     * Emits updates that track [getPolicies]. This will replay the last known value, if any.
+     */
+    fun getPoliciesFlow(userId: String): Flow<List<SyncResponseJson.Policy>?>
+
+    /**
+     * Stores the [policies] for the given [userId].
+     */
+    fun storePolicies(userId: String, policies: List<SyncResponseJson.Policy>?)
 }
