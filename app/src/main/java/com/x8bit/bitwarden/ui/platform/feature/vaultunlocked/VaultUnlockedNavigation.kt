@@ -108,8 +108,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToGeneratorModal = { navController.navigateToGeneratorModal(mode = it) },
             onNavigateToAttachments = { navController.navigateToAttachment(it) },
-            onNavigateToMoveToOrganization = {
-                navController.navigateToVaultMoveToOrganization(it)
+            onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
+                navController.navigateToVaultMoveToOrganization(
+                    vaultItemId = vaultItemId,
+                    showOnlyCollections = showOnlyCollections,
+                )
             },
         )
         vaultMoveToOrganizationDestination(
@@ -126,8 +129,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     },
                 )
             },
-            onNavigateToMoveToOrganization = {
-                navController.navigateToVaultMoveToOrganization(it)
+            onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
+                navController.navigateToVaultMoveToOrganization(
+                    vaultItemId = vaultItemId,
+                    showOnlyCollections = showOnlyCollections,
+                )
             },
             onNavigateToAttachments = { navController.navigateToAttachment(it) },
         )

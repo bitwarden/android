@@ -89,7 +89,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 },
                 onNavigateToGeneratorModal = { onNavigateToGeneratorModalType = it },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
-                onNavigateToMoveToOrganization = { onNavigateToMoveToOrganizationId = it },
+                onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 viewModel = viewModel,
                 permissionsManager = fakePermissionManager,
             )

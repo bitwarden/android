@@ -57,7 +57,7 @@ fun VaultAddEditScreen(
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
     onNavigateToAttachments: (cipherId: String) -> Unit,
-    onNavigateToMoveToOrganization: (cipherId: String) -> Unit,
+    onNavigateToMoveToOrganization: (cipherId: String, showOnlyCollections: Boolean) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -83,12 +83,11 @@ fun VaultAddEditScreen(
 
             is VaultAddEditEvent.NavigateToAttachments -> onNavigateToAttachments(event.cipherId)
             is VaultAddEditEvent.NavigateToMoveToOrganization -> {
-                onNavigateToMoveToOrganization(event.cipherId)
+                onNavigateToMoveToOrganization(event.cipherId, false)
             }
 
             is VaultAddEditEvent.NavigateToCollections -> {
-                // TODO implement Collections in BIT-1575
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+                onNavigateToMoveToOrganization(event.cipherId, true)
             }
 
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
