@@ -50,16 +50,7 @@ class LoginWithDeviceViewModel @Inject constructor(
     }
 
     private fun handleErrorDialogDismissed() {
-        val viewState = mutableStateFlow.value.viewState as? LoginWithDeviceState.ViewState.Content
-        if (viewState != null) {
-            mutableStateFlow.update {
-                it.copy(
-                    viewState = viewState.copy(
-                        shouldShowErrorDialog = false,
-                    ),
-                )
-            }
-        }
+        updateContent { it.copy(shouldShowErrorDialog = false) }
     }
 
     private fun handleResendNotificationClicked() {
@@ -87,7 +78,6 @@ class LoginWithDeviceViewModel @Inject constructor(
             }
 
             is AuthRequestResult.Error -> {
-
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
@@ -115,18 +105,19 @@ class LoginWithDeviceViewModel @Inject constructor(
     }
 
     private fun setIsResendNotificationLoading(isLoading: Boolean) {
-        when (val viewState = mutableStateFlow.value.viewState) {
-            is LoginWithDeviceState.ViewState.Content -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = viewState.copy(
-                            isResendNotificationLoading = isLoading,
-                        ),
-                    )
-                }
-            }
-            else -> Unit
-        }
+        updateContent { it.copy(isResendNotificationLoading = isLoading) }
+    }
+
+    private inline fun updateContent(
+        crossinline block: (
+            LoginWithDeviceState.ViewState.Content,
+        ) -> LoginWithDeviceState.ViewState.Content?,
+    ) {
+        val currentViewState = state.viewState
+        val updatedContent = (currentViewState as? LoginWithDeviceState.ViewState.Content)
+            ?.let(block)
+            ?: return
+        mutableStateFlow.update { it.copy(viewState = updatedContent) }
     }
 }
 
