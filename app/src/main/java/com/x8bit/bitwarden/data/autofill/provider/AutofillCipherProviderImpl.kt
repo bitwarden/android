@@ -7,10 +7,12 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
+import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import kotlinx.coroutines.flow.first
 
 /**
- * The default [AutofillCipherProvider] implementation. This service is used for getting currrent
+ * The default [AutofillCipherProvider] implementation. This service is used for getting current
  * [AutofillCipher]s.
  */
 class AutofillCipherProviderImpl(
@@ -25,7 +27,9 @@ class AutofillCipherProviderImpl(
 
         // Wait for any unlocking actions to finish. This can be relevant on startup for Never lock
         // accounts.
-        vaultRepository.vaultStateFlow.first { userId !in it.unlockingVaultUserIds }
+        vaultRepository.vaultUnlockDataStateFlow.first {
+            it.statusFor(userId) != VaultUnlockData.Status.UNLOCKING
+        }
 
         return !vaultRepository.isVaultUnlocked(userId = userId)
     }

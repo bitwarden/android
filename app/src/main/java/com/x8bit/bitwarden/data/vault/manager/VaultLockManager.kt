@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.flow.StateFlow
 
@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
  */
 interface VaultLockManager {
     /**
-     * Flow that represents the current vault state.
+     * Flow that represents the current vault lock state for each user.
      */
-    val vaultStateFlow: StateFlow<VaultState>
+    val vaultUnlockDataStateFlow: StateFlow<List<VaultUnlockData>>
 
     /**
      * Whether or not the vault is currently locked for the given [userId].

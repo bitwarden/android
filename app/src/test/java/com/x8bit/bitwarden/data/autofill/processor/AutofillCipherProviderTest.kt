@@ -12,7 +12,8 @@ import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingMa
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultState
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
+import com.x8bit.bitwarden.data.vault.repository.util.statusFor
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -57,20 +58,17 @@ class AutofillCipherProviderTest {
         every { activeUserId } returns ACTIVE_USER_ID
     }
     private val cipherMatchingManager: CipherMatchingManager = mockk()
-    private val mutableVaultStateFlow = MutableStateFlow(
-        VaultState(
-            unlockingVaultUserIds = emptySet(),
-            unlockedVaultUserIds = emptySet(),
-        ),
+    private val mutableVaultStateFlow = MutableStateFlow<List<VaultUnlockData>>(
+        emptyList(),
     )
     private val mutableCiphersStateFlow = MutableStateFlow<DataState<List<CipherView>>>(
         DataState.Loading,
     )
     private val vaultRepository: VaultRepository = mockk {
         every { ciphersStateFlow } returns mutableCiphersStateFlow
-        every { vaultStateFlow } returns mutableVaultStateFlow
+        every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
         every { isVaultUnlocked(ACTIVE_USER_ID) } answers {
-            ACTIVE_USER_ID in mutableVaultStateFlow.value.unlockedVaultUserIds
+            mutableVaultStateFlow.value.statusFor(ACTIVE_USER_ID) == VaultUnlockData.Status.UNLOCKED
         }
     }
 
@@ -111,9 +109,11 @@ class AutofillCipherProviderTest {
     fun `isVaultLocked when there is an active user should wait for pending unlocking to finish and return the locked state for that user`() =
         runTest {
             every { authRepository.activeUserId } returns ACTIVE_USER_ID
-            mutableVaultStateFlow.value = VaultState(
-                unlockedVaultUserIds = emptySet(),
-                unlockingVaultUserIds = setOf(ACTIVE_USER_ID),
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKING,
+                ),
             )
 
             val result = async {
@@ -123,9 +123,11 @@ class AutofillCipherProviderTest {
             testScheduler.advanceUntilIdle()
             assertFalse(result.isCompleted)
 
-            mutableVaultStateFlow.value = VaultState(
-                unlockedVaultUserIds = setOf(ACTIVE_USER_ID),
-                unlockingVaultUserIds = emptySet(),
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
             )
 
             testScheduler.advanceUntilIdle()
@@ -150,9 +152,11 @@ class AutofillCipherProviderTest {
             mutableCiphersStateFlow.value = DataState.Loaded(
                 data = cipherViews,
             )
-            mutableVaultStateFlow.value = VaultState(
-                unlockedVaultUserIds = setOf(ACTIVE_USER_ID),
-                unlockingVaultUserIds = emptySet(),
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
             )
             val expected = listOf(
                 CARD_AUTOFILL_CIPHER,
@@ -167,10 +171,7 @@ class AutofillCipherProviderTest {
 
     @Test
     fun `getCardAutofillCiphers when locked should return an empty list`() = runTest {
-        mutableVaultStateFlow.value = VaultState(
-            unlockedVaultUserIds = emptySet(),
-            unlockingVaultUserIds = emptySet(),
-        )
+        mutableVaultStateFlow.value = emptyList()
 
         // Test & Verify
         val actual = autofillCipherProvider.getCardAutofillCiphers()
@@ -203,9 +204,11 @@ class AutofillCipherProviderTest {
             mutableCiphersStateFlow.value = DataState.Loaded(
                 data = cipherViews,
             )
-            mutableVaultStateFlow.value = VaultState(
-                unlockedVaultUserIds = setOf(ACTIVE_USER_ID),
-                unlockingVaultUserIds = emptySet(),
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKED,
+                ),
             )
             val expected = listOf(
                 LOGIN_AUTOFILL_CIPHER,
@@ -229,10 +232,7 @@ class AutofillCipherProviderTest {
 
     @Test
     fun `getLoginAutofillCiphers when locked should return an empty list`() = runTest {
-        mutableVaultStateFlow.value = VaultState(
-            unlockedVaultUserIds = emptySet(),
-            unlockingVaultUserIds = emptySet(),
-        )
+        mutableVaultStateFlow.value = emptyList()
 
         // Test & Verify
         val actual = autofillCipherProvider.getLoginAutofillCiphers(
