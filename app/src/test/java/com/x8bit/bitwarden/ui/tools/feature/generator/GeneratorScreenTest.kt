@@ -10,10 +10,12 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasProgressBarRangeInfo
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -24,12 +26,16 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
@@ -47,6 +53,9 @@ class GeneratorScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
+    private val intentManager: IntentManager = mockk {
+        every { launchUri(any()) } just runs
+    }
 
     @Before
     fun setup() {
@@ -55,6 +64,7 @@ class GeneratorScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
                 onNavigateBack = {},
+                intentManager = intentManager,
             )
         }
     }
@@ -1176,6 +1186,43 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     //endregion SimpleLogin Service Type Tests
+
+    //region Username Type Tests
+
+    @Test
+    fun `in Username state, clicking the toolitp icon should send the TooltipClick action`() {
+        updateState(DEFAULT_STATE.copy(selectedType = GeneratorState.MainType.Username()))
+
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Username type, Plus addressed email",
+                useUnmergedTree = true,
+            )
+            // Find the button
+            .onChildren()
+            .filterToOne(hasClickAction())
+            // Find the content description
+            .onChildren()
+            .filterToOne(hasContentDescription("Learn more"))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Username.UsernameType.TooltipClick,
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToTooltip should call launchUri on IntentManager`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.NavigateToTooltip)
+        verify {
+            intentManager.launchUri("https://bitwarden.com/help/generator/#username-types".toUri())
+        }
+    }
+
+    //endregion Username Type Tests
 
     //region Username Plus Addressed Email Tests
 
