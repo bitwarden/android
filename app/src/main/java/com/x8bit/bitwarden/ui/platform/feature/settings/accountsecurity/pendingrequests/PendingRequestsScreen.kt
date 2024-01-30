@@ -21,12 +21,15 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,8 +67,17 @@ fun PendingRequestsScreen(
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
     val resources = context.resources
+    val pullToRefreshState by rememberUpdatedState(
+        newValue = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled },
+    )
+    LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
+        if (pullToRefreshState?.isRefreshing == true) {
+            viewModel.trySendAction(PendingRequestsAction.RefreshPull)
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            PendingRequestsEvent.DismissPullToRefresh -> pullToRefreshState?.endRefresh()
             PendingRequestsEvent.NavigateBack -> onNavigateBack()
             is PendingRequestsEvent.NavigateToLoginApproval -> {
                 onNavigateToLoginApproval(event.fingerprint)
@@ -103,6 +115,7 @@ fun PendingRequestsScreen(
                 },
             )
         },
+        pullToRefreshState = pullToRefreshState,
     ) { innerPadding ->
         when (val viewState = state.viewState) {
             is PendingRequestsState.ViewState.Content -> {

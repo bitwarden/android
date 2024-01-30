@@ -6,10 +6,15 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -21,7 +26,14 @@ import java.util.TimeZone
 
 class PendingRequestsViewModelTest : BaseViewModelTest() {
 
-    private val authRepository = mockk<AuthRepository>()
+    private val authRepository = mockk<AuthRepository> {
+        // This is called during init, anything that cares about this will handle it
+        coEvery { getAuthRequests() } just awaits
+    }
+    private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
+    private val settingsRepository = mockk<SettingsRepository> {
+        every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshStateFlow
+    }
 
     @BeforeEach
     fun setup() {
@@ -159,11 +171,6 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on CloseClick should emit NavigateBack`() = runTest {
-        coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Success(
-            authRequests = emptyList(),
-        )
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(PendingRequestsAction.CloseClick)
@@ -172,13 +179,31 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on RefreshPull should make auth request`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(PendingRequestsAction.RefreshPull)
+        coVerify(exactly = 2) {
+            // This should be called twice since we also call it on init
+            authRepository.getAuthRequests()
+        }
+    }
+
+    @Test
+    fun `updates to pull-to-refresh enabled state should update isPullToRefreshEnabled`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutablePullToRefreshStateFlow.value = true
+                assertEquals(DEFAULT_STATE.copy(isPullToRefreshSettingEnabled = true), awaitItem())
+                mutablePullToRefreshStateFlow.value = false
+                assertEquals(DEFAULT_STATE.copy(isPullToRefreshSettingEnabled = false), awaitItem())
+            }
+        }
+
+    @Test
     fun `on PendingRequestRowClick should emit NavigateToLoginApproval`() = runTest {
         val fingerprint = "fingerprint"
-        coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Success(
-            authRequests = emptyList(),
-        )
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -362,6 +387,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         state: PendingRequestsState? = DEFAULT_STATE,
     ): PendingRequestsViewModel = PendingRequestsViewModel(
         authRepository = authRepository,
+        settingsRepository = settingsRepository,
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
 
@@ -369,6 +395,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
             authRequests = emptyList(),
             viewState = PendingRequestsState.ViewState.Empty,
+            isPullToRefreshSettingEnabled = false,
         )
     }
 }
