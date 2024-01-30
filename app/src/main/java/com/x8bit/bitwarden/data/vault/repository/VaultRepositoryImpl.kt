@@ -314,6 +314,10 @@ class VaultRepositoryImpl(
 
                         unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                         storeProfileData(syncResponse = syncResponse)
+                        authDiskSource.storePolicies(
+                            userId = userId,
+                            policies = syncResponse.policies,
+                        )
                         vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                         settingsDiskSource.storeLastSyncTime(userId = userId, clock.instant())
                     },

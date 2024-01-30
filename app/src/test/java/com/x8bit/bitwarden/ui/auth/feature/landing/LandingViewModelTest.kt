@@ -71,6 +71,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     isPremium = true,
                     isLoggedIn = true,
                     isVaultUnlocked = true,
+                    isVaultPendingUnlock = false,
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
                 ),
@@ -202,6 +203,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isPremium = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
+            isVaultPendingUnlock = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
         )
@@ -252,6 +254,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isPremium = true,
                 isLoggedIn = false,
                 isVaultUnlocked = true,
+                isVaultPendingUnlock = false,
                 isBiometricsEnabled = false,
                 organizations = emptyList(),
             )

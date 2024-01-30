@@ -8,12 +8,13 @@ import kotlinx.serialization.json.JsonObject
 fun createMockPolicy(
     number: Int = 1,
     type: PolicyTypeJson = PolicyTypeJson.MASTER_PASSWORD,
+    isEnabled: Boolean = false,
     data: JsonObject? = null,
 ): SyncResponseJson.Policy =
     SyncResponseJson.Policy(
         organizationId = "mockOrganizationId-$number",
         id = "mockId-$number",
         type = type,
-        isEnabled = false,
+        isEnabled = isEnabled,
         data = data,
     )

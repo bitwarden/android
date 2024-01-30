@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
@@ -227,4 +228,12 @@ interface AuthRepository : AuthenticatorProvider {
      * Validates the master password for the current logged in user.
      */
     suspend fun validatePassword(password: String): ValidatePasswordResult
+
+    /**
+     * Validates the given [password] against a MasterPassword [policy].
+     */
+    suspend fun validatePasswordAgainstPolicy(
+        password: String,
+        policy: PolicyInformation.MasterPassword,
+    ): Boolean
 }

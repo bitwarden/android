@@ -18,6 +18,8 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
+    private val mutablePoliciesFlowMap =
+        mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Policy>?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     private val storedLastActiveTimeMillis = mutableMapOf<String, Long?>()
@@ -33,6 +35,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
+    private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -53,10 +56,11 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPinProtectedUserKeys.remove(userId)
         storedEncryptedPins.remove(userId)
         storedOrganizations.remove(userId)
+        storedPolicies.remove(userId)
         storedBiometricKeys.remove(userId)
-
         storedOrganizationKeys.remove(userId)
         mutableOrganizationsFlowMap.remove(userId)
+        mutablePoliciesFlowMap.remove(userId)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
@@ -164,6 +168,18 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedMasterPasswordHashes[userId] = passwordHash
     }
 
+    override fun getPolicies(
+        userId: String,
+    ): List<SyncResponseJson.Policy>? = storedPolicies[userId]
+
+    override fun getPoliciesFlow(userId: String): Flow<List<SyncResponseJson.Policy>?> =
+        getMutablePoliciesFlow(userId = userId).onSubscription { emit(getPolicies(userId)) }
+
+    override fun storePolicies(userId: String, policies: List<SyncResponseJson.Policy>?) {
+        storedPolicies[userId] = policies
+        getMutablePoliciesFlow(userId = userId).tryEmit(policies)
+    }
+
     /**
      * Assert that the given [userState] matches the currently tracked value.
      */
@@ -262,12 +278,29 @@ class FakeAuthDiskSource : AuthDiskSource {
         assertEquals(organizations, storedOrganizations[userId])
     }
 
+    /**
+     * Assert that the [policies] were stored successfully using the [userId].
+     */
+    fun assertPolicies(
+        userId: String,
+        policies: List<SyncResponseJson.Policy>?,
+    ) {
+        assertEquals(policies, storedPolicies[userId])
+    }
+
     //region Private helper functions
 
     private fun getMutableOrganizationsFlow(
         userId: String,
     ): MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?> =
         mutableOrganizationsFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutablePoliciesFlow(
+        userId: String,
+    ): MutableSharedFlow<List<SyncResponseJson.Policy>?> =
+        mutablePoliciesFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 

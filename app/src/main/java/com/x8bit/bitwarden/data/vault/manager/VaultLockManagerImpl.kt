@@ -92,6 +92,10 @@ class VaultLockManagerImpl(
         setVaultToLocked(userId = userId)
     }
 
+    override fun completeUnlock(userId: String) {
+        setVaultToUnlocked(userId = userId)
+    }
+
     override fun lockVaultForCurrentUser() {
         activeUserId?.let {
             lockVault(it)
@@ -164,7 +168,7 @@ class VaultLockManagerImpl(
                                 .also {
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
-                                        setVaultToUnlocked(userId = userId)
+                                        setVaultToPendingUnlocked(userId = userId)
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
                                     }
@@ -208,6 +212,12 @@ class VaultLockManagerImpl(
         // If we are unlocking an account with a timeout of Never, we should make sure to store the
         // auto-unlock key.
         storeUserAutoUnlockKeyIfNecessary(userId = userId)
+    }
+
+    private fun setVaultToPendingUnlocked(userId: String) {
+        mutableVaultUnlockDataStateFlow.update {
+            it.update(userId, VaultUnlockData.Status.PENDING)
+        }
     }
 
     private fun setVaultToLocked(userId: String) {
