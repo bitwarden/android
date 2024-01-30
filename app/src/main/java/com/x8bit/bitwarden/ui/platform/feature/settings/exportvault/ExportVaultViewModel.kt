@@ -33,6 +33,7 @@ class ExportVaultViewModel @Inject constructor(
             dialogState = null,
             exportFormat = ExportVaultFormat.JSON,
             passwordInput = "",
+            policyPreventsExport = authRepository.hasExportVaultPoliciesEnabled,
         ),
 ) {
     init {
@@ -165,6 +166,7 @@ data class ExportVaultState(
     val dialogState: DialogState?,
     val exportFormat: ExportVaultFormat,
     val passwordInput: String,
+    val policyPreventsExport: Boolean,
 ) : Parcelable {
     /**
      * Represents the current state of any dialogs on the screen.
