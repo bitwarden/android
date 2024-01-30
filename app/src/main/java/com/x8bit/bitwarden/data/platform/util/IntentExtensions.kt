@@ -5,7 +5,6 @@ package com.x8bit.bitwarden.data.platform.util
 import android.content.Intent
 import android.os.Build
 import android.os.Parcelable
-import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
@@ -19,5 +18,5 @@ inline fun <reified T> Intent.getSafeParcelableExtra(name: String): T? =
             T::class.java,
         )
     } else {
-        getParcelableExtra(AutofillManager.EXTRA_ASSIST_STRUCTURE)
+        getParcelableExtra(name)
     }
