@@ -7,7 +7,11 @@ import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -27,6 +31,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -74,6 +79,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { getVaultItemStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableVaultItemFlow
         every { totpCodeFlow } returns totpTestCodeFlow
     }
+    private val specialCircumstanceManager: SpecialCircumstanceManager =
+        SpecialCircumstanceManagerImpl()
 
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
 
@@ -107,9 +114,38 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `initial add state should be correct`() = runTest {
+    fun `initial add state should be correct when not autofill`() = runTest {
         val vaultAddEditType = VaultAddEditType.AddItem
         val initState = createVaultAddItemState(vaultAddEditType = vaultAddEditType)
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(initState, viewModel.stateFlow.value)
+        verify(exactly = 0) {
+            vaultRepository.getVaultItemStateFlow(DEFAULT_EDIT_ITEM_ID)
+        }
+    }
+
+    @Test
+    fun `initial add state should be correct when autofill`() = runTest {
+        val autofillSelectionData = AutofillSelectionData(
+            type = AutofillSelectionData.Type.LOGIN,
+            uri = "https://www.test.com",
+        )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(
+            autofillSelectionData = autofillSelectionData,
+            shouldFinishWhenComplete = true,
+        )
+        val autofillContentState = autofillSelectionData.toDefaultAddTypeContent()
+        val vaultAddEditType = VaultAddEditType.AddItem
+        val initState = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = autofillContentState.common,
+            typeContentViewState = autofillContentState.type,
+        )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
                 state = initState,
@@ -1430,6 +1466,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 clipboardManager = clipboardManager,
                 vaultRepository = vaultRepository,
                 generatorRepository = generatorRepository,
+                specialCircumstanceManager = specialCircumstanceManager,
                 resourceManager = resourceManager,
                 authRepository = authRepository,
             )
@@ -1950,6 +1987,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             clipboardManager = bitwardenClipboardManager,
             vaultRepository = vaultRepo,
             generatorRepository = generatorRepo,
+            specialCircumstanceManager = specialCircumstanceManager,
             resourceManager = bitwardenResourceManager,
             authRepository = authRepository,
         )
