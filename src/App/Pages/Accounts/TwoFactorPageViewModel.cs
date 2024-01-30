@@ -288,7 +288,7 @@ namespace Bit.App.Pages
 
             if (string.IsNullOrWhiteSpace(code))
             {
-                throw new ArgumentException("Duo authentication error: response code is null");
+                throw new ArgumentException("Duo authentication error: response code is null or empty/whitespace");
             }
 
             Token = code;
