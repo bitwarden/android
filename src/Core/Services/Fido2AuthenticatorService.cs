@@ -27,7 +27,7 @@ namespace Bit.Core.Services
             // await _userInterface.EnsureUnlockedVault();
             await _syncService.FullSyncAsync(false);
 
-            var existingCipherIds = await FindExcludedCredentials(
+            var existingCipherIds = await FindExcludedCredentialsAsync(
                 makeCredentialParams.ExcludeCredentialDescriptorList
             );
             if (existingCipherIds.Length > 0) {
@@ -73,7 +73,7 @@ namespace Bit.Core.Services
                 await _cipherService.SaveWithServerAsync(reencrypted);
                 credentialId = fido2Credential.CredentialId;
 
-                var authData = await GenerateAuthData(
+                var authData = await GenerateAuthDataAsync(
                     rpId: makeCredentialParams.RpEntity.Id,
                     counter: fido2Credential.CounterValue,
                     userPresence: true,
@@ -110,12 +110,12 @@ namespace Bit.Core.Services
             await _syncService.FullSyncAsync(false);
 
             if (assertionParams.AllowCredentialDescriptorList?.Length > 0) {
-                cipherOptions = await FindCredentialsById(
+                cipherOptions = await FindCredentialsByIdAsync(
                     assertionParams.AllowCredentialDescriptorList,
                     assertionParams.RpId
                 );
             } else {
-                cipherOptions = await FindCredentialsByRp(assertionParams.RpId);
+                cipherOptions = await FindCredentialsByRpAsync(assertionParams.RpId);
             }
 
             if (cipherOptions.Count == 0) {
@@ -162,7 +162,7 @@ namespace Bit.Core.Services
                 var encrypted = await _cipherService.EncryptAsync(selectedCipher);
                 await _cipherService.SaveWithServerAsync(encrypted);
 
-                var authenticatorData = await GenerateAuthData(
+                var authenticatorData = await GenerateAuthDataAsync(
                     rpId: selectedFido2Credential.RpId,
                     userPresence: true,
                     userVerification: userVerified,
@@ -197,7 +197,7 @@ namespace Bit.Core.Services
         ///<summary>
         /// Finds existing crendetials and returns the `CipherId` for each one
         ///</summary>
-        private async Task<string[]> FindExcludedCredentials(
+        private async Task<string[]> FindExcludedCredentialsAsync(
             PublicKeyCredentialDescriptor[] credentials
         ) {
             var ids = new List<string>();
@@ -228,7 +228,7 @@ namespace Bit.Core.Services
                 .ToArray();
         }
 
-        private async Task<List<CipherView>> FindCredentialsById(PublicKeyCredentialDescriptor[] credentials, string rpId)
+        private async Task<List<CipherView>> FindCredentialsByIdAsync(PublicKeyCredentialDescriptor[] credentials, string rpId)
         {
             var ids = new List<string>();
 
@@ -256,7 +256,7 @@ namespace Bit.Core.Services
             );
         }
 
-        private async Task<List<CipherView>> FindCredentialsByRp(string rpId)
+        private async Task<List<CipherView>> FindCredentialsByRpAsync(string rpId)
         {
             var ciphers = await _cipherService.GetAllDecryptedAsync();
             return ciphers.FindAll((cipher) =>
@@ -297,7 +297,7 @@ namespace Bit.Core.Services
             };
         }
 
-        private async Task<byte[]> GenerateAuthData(
+        private async Task<byte[]> GenerateAuthDataAsync(
             string rpId,
             bool userVerification,
             bool userPresence,
