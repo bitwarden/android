@@ -4,10 +4,11 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.isOverFiveMinutesOld
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,6 +28,7 @@ class PendingRequestsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
+        authRequests = emptyList(),
         viewState = PendingRequestsState.ViewState.Loading,
     ),
 ) {
@@ -42,7 +44,7 @@ class PendingRequestsViewModel @Inject constructor(
     override fun handleAction(action: PendingRequestsAction) {
         when (action) {
             PendingRequestsAction.CloseClick -> handleCloseClicked()
-            PendingRequestsAction.DeclineAllRequestsClick -> handleDeclineAllRequestsClicked()
+            PendingRequestsAction.DeclineAllRequestsConfirm -> handleDeclineAllRequestsConfirmed()
             PendingRequestsAction.LifecycleResume -> handleOnLifecycleResumed()
             is PendingRequestsAction.PendingRequestRowClick -> {
                 handlePendingRequestRowClicked(action)
@@ -58,8 +60,23 @@ class PendingRequestsViewModel @Inject constructor(
         sendEvent(PendingRequestsEvent.NavigateBack)
     }
 
-    private fun handleDeclineAllRequestsClicked() {
-        sendEvent(PendingRequestsEvent.ShowToast("Not yet implemented.".asText()))
+    private fun handleDeclineAllRequestsConfirmed() {
+        viewModelScope.launch {
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = PendingRequestsState.ViewState.Loading,
+                )
+            }
+            mutableStateFlow.value.authRequests.forEach { request ->
+                authRepository.updateAuthRequest(
+                    requestId = request.id,
+                    masterPasswordHash = request.masterPasswordHash,
+                    publicKey = request.publicKey,
+                    isApproved = false,
+                )
+            }
+            updateAuthRequestList()
+        }
     }
 
     private fun handleOnLifecycleResumed() {
@@ -75,30 +92,48 @@ class PendingRequestsViewModel @Inject constructor(
     private fun handleAuthRequestsResultReceived(
         action: PendingRequestsAction.Internal.AuthRequestsResultReceive,
     ) {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = when (val result = action.authRequestsResult) {
-                    is AuthRequestsResult.Success -> {
-                        if (result.authRequests.isEmpty()) {
-                            PendingRequestsState.ViewState.Empty
-                        } else {
-                            PendingRequestsState.ViewState.Content(
-                                requests = result.authRequests.map { authRequest ->
-                                    PendingRequestsState.ViewState.Content.PendingLoginRequest(
-                                        fingerprintPhrase = authRequest.fingerprint,
-                                        platform = authRequest.platform,
-                                        timestamp = dateTimeFormatter.format(
-                                            authRequest.creationDate,
-                                        ),
-                                    )
-                                },
-                            )
-                        }
+        when (val result = action.authRequestsResult) {
+            is AuthRequestsResult.Success -> {
+                val requests = result
+                    .authRequests
+                    .filterRespondedAndExpired()
+                    .sortedByDescending { request -> request.creationDate }
+                    .map { request ->
+                        PendingRequestsState.ViewState.Content.PendingLoginRequest(
+                            fingerprintPhrase = request.fingerprint,
+                            platform = request.platform,
+                            timestamp = dateTimeFormatter.format(
+                                request.creationDate,
+                            ),
+                        )
                     }
+                if (requests.isEmpty()) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            authRequests = emptyList(),
+                            viewState = PendingRequestsState.ViewState.Empty,
+                        )
+                    }
+                } else {
+                    mutableStateFlow.update {
+                        it.copy(
+                            authRequests = result.authRequests,
+                            viewState = PendingRequestsState.ViewState.Content(
+                                requests = requests,
+                            ),
+                        )
+                    }
+                }
+            }
 
-                    AuthRequestsResult.Error -> PendingRequestsState.ViewState.Error
-                },
-            )
+            AuthRequestsResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        authRequests = emptyList(),
+                        viewState = PendingRequestsState.ViewState.Error,
+                    )
+                }
+            }
         }
     }
 
@@ -119,6 +154,7 @@ class PendingRequestsViewModel @Inject constructor(
  */
 @Parcelize
 data class PendingRequestsState(
+    val authRequests: List<AuthRequest>,
     val viewState: ViewState,
 ) : Parcelable {
     /**
@@ -201,9 +237,9 @@ sealed class PendingRequestsAction {
     data object CloseClick : PendingRequestsAction()
 
     /**
-     * The user has clicked to deny all login requests.
+     * The user has confirmed they want to deny all login requests.
      */
-    data object DeclineAllRequestsClick : PendingRequestsAction()
+    data object DeclineAllRequestsConfirm : PendingRequestsAction()
 
     /**
      * The screen has been re-opened and should be updated.
@@ -229,3 +265,16 @@ sealed class PendingRequestsAction {
         ) : Internal()
     }
 }
+
+/**
+ * Filters out [AuthRequest]s that match one of the following criteria:
+ * * The request has been approved.
+ * * The request has been declined (indicated by it not being approved & having a responseDate).
+ * * The request has expired (it is at least 5 minutes old).
+ */
+private fun List<AuthRequest>.filterRespondedAndExpired() =
+    filterNot { request ->
+        request.requestApproved ||
+            request.responseDate != null ||
+            request.creationDate.isOverFiveMinutesOld()
+    }
