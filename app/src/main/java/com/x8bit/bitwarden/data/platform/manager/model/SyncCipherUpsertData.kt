@@ -13,5 +13,7 @@ import java.time.ZonedDateTime
 data class SyncCipherUpsertData(
     val cipherId: String,
     val revisionDate: ZonedDateTime,
+    val organizationId: String?,
+    val collectionIds: List<String>?,
     val isUpdate: Boolean,
 )

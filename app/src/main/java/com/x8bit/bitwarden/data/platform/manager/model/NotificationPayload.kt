@@ -23,7 +23,7 @@ sealed class NotificationPayload {
         @SerialName("id") val id: String,
         @SerialName("userId") override val userId: String?,
         @SerialName("organizationId") val organizationId: String?,
-        @SerialName("collectionIds") val collectionIds: List<String>,
+        @SerialName("collectionIds") val collectionIds: List<String>?,
         @Contextual
         @SerialName("revisionDate") val revisionDate: ZonedDateTime,
     ) : NotificationPayload()

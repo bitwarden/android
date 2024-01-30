@@ -149,6 +149,8 @@ class PushManagerImpl @Inject constructor(
                     SyncCipherUpsertData(
                         cipherId = payload.id,
                         revisionDate = payload.revisionDate,
+                        organizationId = payload.organizationId,
+                        collectionIds = payload.collectionIds,
                         isUpdate = type == NotificationType.SYNC_CIPHER_UPDATE,
                     ),
                 )
