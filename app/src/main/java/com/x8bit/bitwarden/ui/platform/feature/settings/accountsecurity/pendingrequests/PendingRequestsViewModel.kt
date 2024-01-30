@@ -6,10 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.isOverFiveMinutesOld
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -25,11 +29,13 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class PendingRequestsViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val settingsRepository: SettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(
         authRequests = emptyList(),
         viewState = PendingRequestsState.ViewState.Loading,
+        isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
     ),
 ) {
     private val dateTimeFormatter
@@ -39,6 +45,11 @@ class PendingRequestsViewModel @Inject constructor(
 
     init {
         updateAuthRequestList()
+        settingsRepository
+            .getPullToRefreshEnabledFlow()
+            .map { PendingRequestsAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: PendingRequestsAction) {
@@ -46,13 +57,12 @@ class PendingRequestsViewModel @Inject constructor(
             PendingRequestsAction.CloseClick -> handleCloseClicked()
             PendingRequestsAction.DeclineAllRequestsConfirm -> handleDeclineAllRequestsConfirmed()
             PendingRequestsAction.LifecycleResume -> handleOnLifecycleResumed()
+            PendingRequestsAction.RefreshPull -> handleRefreshPull()
             is PendingRequestsAction.PendingRequestRowClick -> {
                 handlePendingRequestRowClicked(action)
             }
 
-            is PendingRequestsAction.Internal.AuthRequestsResultReceive -> {
-                handleAuthRequestsResultReceived(action)
-            }
+            is PendingRequestsAction.Internal -> handleInternalAction(action)
         }
     }
 
@@ -83,10 +93,34 @@ class PendingRequestsViewModel @Inject constructor(
         updateAuthRequestList()
     }
 
+    private fun handleRefreshPull() {
+        updateAuthRequestList()
+    }
+
     private fun handlePendingRequestRowClicked(
         action: PendingRequestsAction.PendingRequestRowClick,
     ) {
         sendEvent(PendingRequestsEvent.NavigateToLoginApproval(action.fingerprint))
+    }
+
+    private fun handleInternalAction(action: PendingRequestsAction.Internal) {
+        when (action) {
+            is PendingRequestsAction.Internal.PullToRefreshEnableReceive -> {
+                handlePullToRefreshEnableReceive(action)
+            }
+
+            is PendingRequestsAction.Internal.AuthRequestsResultReceive -> {
+                handleAuthRequestsResultReceived(action)
+            }
+        }
+    }
+
+    private fun handlePullToRefreshEnableReceive(
+        action: PendingRequestsAction.Internal.PullToRefreshEnableReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isPullToRefreshSettingEnabled = action.isPullToRefreshEnabled)
+        }
     }
 
     private fun handleAuthRequestsResultReceived(
@@ -135,10 +169,10 @@ class PendingRequestsViewModel @Inject constructor(
                 }
             }
         }
+        sendEvent(PendingRequestsEvent.DismissPullToRefresh)
     }
 
     private fun updateAuthRequestList() {
-        // TODO BIT-1574: Display pull to refresh
         viewModelScope.launch {
             trySendAction(
                 PendingRequestsAction.Internal.AuthRequestsResultReceive(
@@ -156,12 +190,24 @@ class PendingRequestsViewModel @Inject constructor(
 data class PendingRequestsState(
     val authRequests: List<AuthRequest>,
     val viewState: ViewState,
+    private val isPullToRefreshSettingEnabled: Boolean,
 ) : Parcelable {
+    /**
+     * Indicates that the pull-to-refresh should be enabled in the UI.
+     */
+    val isPullToRefreshEnabled: Boolean
+        get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
+
     /**
      * Represents the specific view states for the [PendingRequestsScreen].
      */
     @Parcelize
     sealed class ViewState : Parcelable {
+        /**
+         * Indicates the pull-to-refresh feature should be available during the current state.
+         */
+        abstract val isPullToRefreshEnabled: Boolean
+
         /**
          * Content state for the [PendingRequestsScreen] listing pending request items.
          */
@@ -169,6 +215,8 @@ data class PendingRequestsState(
         data class Content(
             val requests: List<PendingLoginRequest>,
         ) : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
+
             /**
              * Models the data for a pending login request.
              */
@@ -184,21 +232,27 @@ data class PendingRequestsState(
          * Represents the state wherein there are no pending login requests.
          */
         @Parcelize
-        data object Empty : ViewState()
+        data object Empty : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
+        }
 
         /**
          * Represents a state where the [PendingRequestsScreen] is unable to display data due to an
          * error retrieving it.
          */
         @Parcelize
-        data object Error : ViewState()
+        data object Error : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = true
+        }
 
         /**
          * Loading state for the [PendingRequestsScreen], signifying that the content is being
          * processed.
          */
         @Parcelize
-        data object Loading : ViewState()
+        data object Loading : ViewState() {
+            override val isPullToRefreshEnabled: Boolean get() = false
+        }
     }
 }
 
@@ -206,6 +260,11 @@ data class PendingRequestsState(
  * Models events for the delete account screen.
  */
 sealed class PendingRequestsEvent {
+    /**
+     * Dismisses the pull-to-refresh indicator.
+     */
+    data object DismissPullToRefresh : PendingRequestsEvent()
+
     /**
      * Navigates back.
      */
@@ -254,9 +313,21 @@ sealed class PendingRequestsAction {
     ) : PendingRequestsAction()
 
     /**
+     * User has triggered a pull to refresh.
+     */
+    data object RefreshPull : PendingRequestsAction()
+
+    /**
      * Models actions sent by the view model itself.
      */
     sealed class Internal : PendingRequestsAction() {
+        /**
+         * Indicates that the pull to refresh feature toggle has changed.
+         */
+        data class PullToRefreshEnableReceive(
+            val isPullToRefreshEnabled: Boolean,
+        ) : Internal()
+
         /**
          * Indicates that a new auth requests result has been received.
          */

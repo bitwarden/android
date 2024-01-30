@@ -55,8 +55,7 @@ class PendingRequestsScreenTest : BaseComposeTest() {
     @Test
     fun `on decline all requests confirmation should send DeclineAllRequestsConfirm`() = runTest {
         // set content so the Decline all requests button appears
-        mutableStateFlow.value = PendingRequestsState(
-            authRequests = listOf(),
+        mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = PendingRequestsState.ViewState.Content(
                 requests = listOf(
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
@@ -87,8 +86,7 @@ class PendingRequestsScreenTest : BaseComposeTest() {
     @Test
     fun `on decline all requests cancel should hide confirmation dialog`() = runTest {
         // set content so the Decline all requests button appears
-        mutableStateFlow.value = PendingRequestsState(
-            authRequests = listOf(),
+        mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = PendingRequestsState.ViewState.Content(
                 requests = listOf(
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
@@ -120,6 +118,7 @@ class PendingRequestsScreenTest : BaseComposeTest() {
         val DEFAULT_STATE: PendingRequestsState = PendingRequestsState(
             authRequests = emptyList(),
             viewState = PendingRequestsState.ViewState.Loading,
+            isPullToRefreshSettingEnabled = false,
         )
     }
 }
