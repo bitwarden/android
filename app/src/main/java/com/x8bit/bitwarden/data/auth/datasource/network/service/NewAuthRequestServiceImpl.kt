@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthRequestsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAuthRequestsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsRespon
  * The default implementation of the [NewAuthRequestService].
  */
 class NewAuthRequestServiceImpl(
-    private val authRequestsApi: AuthRequestsApi,
+    private val unauthenticatedAuthRequestsApi: UnauthenticatedAuthRequestsApi,
 ) : NewAuthRequestService {
     override suspend fun createAuthRequest(
         email: String,
@@ -18,7 +18,7 @@ class NewAuthRequestServiceImpl(
         accessCode: String,
         fingerprint: String,
     ): Result<AuthRequestsResponseJson.AuthRequest> =
-        authRequestsApi.createAuthRequest(
+        unauthenticatedAuthRequestsApi.createAuthRequest(
             AuthRequestRequestJson(
                 email = email,
                 publicKey = publicKey,

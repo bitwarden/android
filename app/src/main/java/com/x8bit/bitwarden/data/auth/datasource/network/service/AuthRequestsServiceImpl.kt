@@ -1,14 +1,14 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthRequestsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAuthRequestsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestUpdateRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 
 class AuthRequestsServiceImpl(
-    private val authRequestsApi: AuthRequestsApi,
+    private val authenticatedAuthRequestsApi: AuthenticatedAuthRequestsApi,
 ) : AuthRequestsService {
     override suspend fun getAuthRequests(): Result<AuthRequestsResponseJson> =
-        authRequestsApi.getAuthRequests()
+        authenticatedAuthRequestsApi.getAuthRequests()
 
     override suspend fun updateAuthRequest(
         requestId: String,
@@ -17,7 +17,7 @@ class AuthRequestsServiceImpl(
         deviceId: String,
         isApproved: Boolean,
     ): Result<AuthRequestsResponseJson.AuthRequest> =
-        authRequestsApi.updateAuthRequest(
+        authenticatedAuthRequestsApi.updateAuthRequest(
             userId = requestId,
             body = AuthRequestUpdateRequestJson(
                 key = key,
