@@ -4,8 +4,8 @@ import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -21,13 +21,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -40,7 +36,7 @@ private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
 @Suppress("TooManyFunctions", "LongParameterList")
 class SettingsRepositoryImpl(
     private val autofillManager: AutofillManager,
-    private val appForegroundManager: AppForegroundManager,
+    private val autofillEnabledManager: AutofillEnabledManager,
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -50,13 +46,6 @@ class SettingsRepositoryImpl(
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
-
-    private val isAutofillEnabledAndSupported: Boolean
-        get() = autofillManager.isEnabled &&
-            autofillManager.hasEnabledAutofillServices() &&
-            autofillManager.isAutofillSupported
-
-    private val mutableIsAutofillEnabledStateFlow = MutableStateFlow(isAutofillEnabledAndSupported)
 
     override var appLanguage: AppLanguage
         get() = settingsDiskSource.appLanguage ?: AppLanguage.DEFAULT
@@ -231,7 +220,7 @@ class SettingsRepositoryImpl(
             )
         }
     override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
-        mutableIsAutofillEnabledStateFlow.asStateFlow()
+        autofillEnabledManager.isAutofillEnabledStateFlow
 
     override var isScreenCaptureAllowed: Boolean
         get() = activeUserId?.let {
@@ -266,16 +255,12 @@ class SettingsRepositoryImpl(
                     ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
             )
 
-    init {
-        observeAutofillEnabledChanges()
-    }
-
     override fun disableAutofill() {
         autofillManager.disableAutofillServices()
 
         // Manually indicate that autofill is no longer supported without needing a foreground state
         // change.
-        mutableIsAutofillEnabledStateFlow.value = false
+        autofillEnabledManager.isAutofillEnabled = false
     }
 
     @Suppress("ReturnCount")
@@ -434,21 +419,6 @@ class SettingsRepositoryImpl(
                 pinProtectedUserKey = null,
             )
         }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun observeAutofillEnabledChanges() {
-        mutableIsAutofillEnabledStateFlow
-            // Only observe when subscribed to.
-            .subscriptionCount.map { it > 0 }
-            .filter { hasSubscribers -> hasSubscribers }
-            .flatMapLatest {
-                appForegroundManager.appForegroundStateFlow
-            }
-            .onEach {
-                mutableIsAutofillEnabledStateFlow.value = isAutofillEnabledAndSupported
-            }
-            .launchIn(unconfinedScope)
     }
 }
 
