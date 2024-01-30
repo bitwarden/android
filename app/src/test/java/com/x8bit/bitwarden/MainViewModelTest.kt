@@ -32,6 +32,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
+    private val mutableCrashLoggingEnabledFlow = MutableStateFlow(true)
     val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
         every { activeUserId } returns USER_ID

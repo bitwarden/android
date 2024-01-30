@@ -3,10 +3,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.BuildConfig
+import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -25,6 +28,11 @@ import java.time.ZoneId
 class AboutViewModelTest : BaseViewModelTest() {
 
     private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val settingsRepository: SettingsRepository = mockk()
+    private val crashLogsManager: CrashLogsManager = mockk {
+        every { isEnabled } returns false
+        every { isEnabled = any() } just runs
+    }
 
     @Test
     fun `on BackClick should emit NavigateBack`() = runTest {
@@ -72,6 +80,15 @@ class AboutViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on SubmitCrashLogsClick should update crashLogsManager isEnabled`() = runTest {
+        val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
+
+        viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(true))
+
+        coVerify(exactly = 1) { crashLogsManager.isEnabled = true }
+    }
+
+    @Test
     fun `on VersionClick should call setText on the ClipboardManager with specific Text`() {
         val versionName = BuildConfig.VERSION_NAME
         val versionCode = BuildConfig.VERSION_CODE
@@ -108,6 +125,8 @@ class AboutViewModelTest : BaseViewModelTest() {
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
         clipboardManager = clipboardManager,
         clock = fixedClock,
+        settingsRepository = settingsRepository,
+        crashLogsManager = crashLogsManager,
     )
 }
 
@@ -121,4 +140,5 @@ private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
     copyrightInfo = "© Bitwarden Inc. 2015-"
         .asText()
         .concat(Year.now(fixedClock).value.toString().asText()),
+    shouldShowCrashLogsButton = true,
 )

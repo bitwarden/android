@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
@@ -40,6 +41,7 @@ class AboutScreenTest : BaseComposeTest() {
             version = "Version: 1.0.0 (1)".asText(),
             isSubmitCrashLogsEnabled = false,
             copyrightInfo = "".asText(),
+            shouldShowCrashLogsButton = true,
         ),
     )
     private val mutableEventFlow = bufferedMutableSharedFlow<AboutEvent>()
@@ -172,6 +174,21 @@ class AboutScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(AboutAction.RateAppClick)
         }
+    }
+
+    @Test
+    fun `submit crash logs switch should be displayed according to state`() {
+        mutableStateFlow.update { it.copy(shouldShowCrashLogsButton = true) }
+
+        composeTestRule
+            .onNodeWithText("Submit crash logs")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(shouldShowCrashLogsButton = false) }
+
+        composeTestRule
+            .onNodeWithText("Submit crash logs")
+            .assertIsNotDisplayed()
     }
 
     @Test
