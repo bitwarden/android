@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
@@ -20,7 +21,7 @@ class EnvironmentDiskSourceImpl(
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     EnvironmentDiskSource {
     override var preAuthEnvironmentUrlData: EnvironmentUrlDataJson?
-        get() = getString(key = PRE_AUTH_URLS_KEY)?.let { json.decodeFromString(it) }
+        get() = getString(key = PRE_AUTH_URLS_KEY)?.let { json.decodeFromStringOrNull(it) }
         set(value) {
             putString(
                 key = PRE_AUTH_URLS_KEY,

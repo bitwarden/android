@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companio
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
@@ -265,7 +266,7 @@ class SettingsDiskSourceImpl(
 
     override fun getBlockedAutofillUris(userId: String): List<String>? =
         getString(key = "${BLOCKED_AUTOFILL_URIS_KEY}_$userId")?.let {
-            json.decodeFromString(it)
+            json.decodeFromStringOrNull(it)
         }
 
     override fun storeBlockedAutofillUris(
