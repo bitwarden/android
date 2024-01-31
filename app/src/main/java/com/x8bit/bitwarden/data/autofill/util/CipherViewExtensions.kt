@@ -16,6 +16,7 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
             val card = this@toAutofillCipherProvider.card ?: return emptyList()
             return listOf(
                 AutofillCipher.Card(
+                    cipherId = id,
                     name = name,
                     subtitle = subtitle.orEmpty(),
                     cardholderName = card.cardholderName.orEmpty(),
@@ -33,6 +34,8 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
             val login = this@toAutofillCipherProvider.login ?: return emptyList()
             return listOf(
                 AutofillCipher.Login(
+                    cipherId = id,
+                    isTotpEnabled = login.totp != null,
                     name = name,
                     password = login.password.orEmpty(),
                     subtitle = subtitle.orEmpty(),

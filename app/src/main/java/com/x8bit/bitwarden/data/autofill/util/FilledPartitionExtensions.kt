@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.annotation.SuppressLint
+import android.content.IntentSender
 import android.os.Build
 import android.service.autofill.Dataset
 import android.service.autofill.Presentations
@@ -13,10 +14,11 @@ import com.x8bit.bitwarden.ui.autofill.util.createCipherInlinePresentationOrNull
 
 /**
  * Build a [Dataset] to represent the [FilledPartition]. This dataset includes an overlay UI
- * presentation for each filled item.
+ * presentation for each filled item. If an [authIntentSender] is present, add it to the dataset.
  */
 @SuppressLint("NewApi")
 fun FilledPartition.buildDataset(
+    authIntentSender: IntentSender?,
     autofillAppInfo: AutofillAppInfo,
 ): Dataset {
     val remoteViewsPlaceholder = buildAutofillRemoteViews(
@@ -24,6 +26,11 @@ fun FilledPartition.buildDataset(
         autofillCipher = autofillCipher,
     )
     val datasetBuilder = Dataset.Builder()
+
+    authIntentSender
+        ?.let { intentSender ->
+            datasetBuilder.setAuthentication(intentSender)
+        }
 
     if (autofillAppInfo.sdkInt >= Build.VERSION_CODES.TIRAMISU) {
         applyToDatasetPostTiramisu(

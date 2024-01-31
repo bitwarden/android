@@ -12,11 +12,12 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toAutofillCipherProvider should return a provider with the correct data for a Login type`() =
+    fun `toAutofillCipherProvider should return a provider with the correct data for a Login type without TOTP`() =
         runTest {
             val cipherView = createMockCipherView(
                 number = 1,
                 cipherType = CipherType.LOGIN,
+                totp = null,
             )
 
             val autofillCipherProvider = cipherView.toAutofillCipherProvider()
@@ -29,6 +30,40 @@ class CipherViewExtensionsTest {
             assertEquals(
                 listOf(
                     AutofillCipher.Login(
+                        cipherId = "mockId-1",
+                        isTotpEnabled = false,
+                        name = "mockName-1",
+                        subtitle = "mockUsername-1",
+                        password = "mockPassword-1",
+                        username = "mockUsername-1",
+                    ),
+                ),
+                autofillCipherProvider.getLoginAutofillCiphers(uri = "uri"),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillCipherProvider should return a provider with the correct data for a Login type with TOTP`() =
+        runTest {
+            val cipherView = createMockCipherView(
+                number = 1,
+                cipherType = CipherType.LOGIN,
+                totp = "mockkTotp-1",
+            )
+
+            val autofillCipherProvider = cipherView.toAutofillCipherProvider()
+
+            assertFalse(autofillCipherProvider.isVaultLocked())
+            assertEquals(
+                emptyList<AutofillCipher.Card>(),
+                autofillCipherProvider.getCardAutofillCiphers(),
+            )
+            assertEquals(
+                listOf(
+                    AutofillCipher.Login(
+                        cipherId = "mockId-1",
+                        isTotpEnabled = true,
                         name = "mockName-1",
                         subtitle = "mockUsername-1",
                         password = "mockPassword-1",
@@ -58,6 +93,7 @@ class CipherViewExtensionsTest {
             assertEquals(
                 listOf(
                     AutofillCipher.Card(
+                        cipherId = "mockId-1",
                         name = "mockName-1",
                         subtitle = "mockBrand-1, *er-1",
                         cardholderName = "mockCardholderName-1",

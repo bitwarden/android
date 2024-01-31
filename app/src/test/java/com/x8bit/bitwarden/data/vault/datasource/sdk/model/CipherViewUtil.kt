@@ -27,6 +27,7 @@ fun createMockCipherView(
     number: Int,
     isDeleted: Boolean = false,
     cipherType: CipherType = CipherType.LOGIN,
+    totp: String? = "mockTotp-$number",
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -37,7 +38,11 @@ fun createMockCipherView(
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = cipherType,
-        login = createMockLoginView(number = number).takeIf { cipherType == CipherType.LOGIN },
+        login = createMockLoginView(
+            number = number,
+            totp = totp,
+        )
+            .takeIf { cipherType == CipherType.LOGIN },
         creationDate = ZonedDateTime
             .parse("2023-10-27T12:00:00Z")
             .toInstant(),
@@ -70,7 +75,10 @@ fun createMockCipherView(
 /**
  * Create a mock [LoginView] with a given [number].
  */
-fun createMockLoginView(number: Int): LoginView =
+fun createMockLoginView(
+    number: Int,
+    totp: String? = "mockTotp-$number",
+): LoginView =
     LoginView(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
@@ -79,7 +87,7 @@ fun createMockLoginView(number: Int): LoginView =
             .toInstant(),
         autofillOnPageLoad = false,
         uris = listOf(createMockUriView(number = number)),
-        totp = "mockTotp-$number",
+        totp = totp,
     )
 
 /**

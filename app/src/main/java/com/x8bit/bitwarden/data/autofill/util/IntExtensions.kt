@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.data.autofill.util
 
+import android.app.PendingIntent
+import android.os.Build
 import android.text.InputType
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
  * Whether this [Int] is a password [InputType].
@@ -29,3 +32,15 @@ val Int.isUsernameInputType: Boolean
  * Whether this [Int] contains [flag].
  */
 private fun Int.hasFlag(flag: Int): Boolean = (this and flag) == flag
+
+/**
+ * Starting from an initial pending intent flag. (ex: [PendingIntent.FLAG_CANCEL_CURRENT])
+ */
+@OmitFromCoverage
+fun Int.toPendingIntentMutabilityFlag(): Int =
+    // Mutable flag was added on API level 31
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        this or PendingIntent.FLAG_MUTABLE
+    } else {
+        this
+    }

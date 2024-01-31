@@ -160,15 +160,3 @@ private fun Dataset.Builder.addVaultItemDataPreTiramisu(
         }
     return this
 }
-
-/**
- * Starting from an initial pending intent flag (ex: [PendingIntent.FLAG_CANCEL_CURRENT], derives
- * a new flag with the correct mutability determined by [isMutable].
- */
-private fun Int.toPendingIntentMutabilityFlag(): Int =
-    // Mutable flag was added on API level 31
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        this or PendingIntent.FLAG_MUTABLE
-    } else {
-        this
-    }

@@ -1,16 +1,19 @@
 package com.x8bit.bitwarden.data.autofill.builder
 
 import android.content.Context
+import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.service.autofill.FillResponse
 import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
+import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.util.buildDataset
 import com.x8bit.bitwarden.data.autofill.util.buildVaultItemDataset
+import com.x8bit.bitwarden.data.autofill.util.createTotpCopyIntentSender
 import com.x8bit.bitwarden.data.util.mockBuilder
 import io.mockk.every
 import io.mockk.mockk
@@ -30,6 +33,7 @@ class FillResponseBuilderTest {
 
     private val context: Context = mockk()
     private val dataset: Dataset = mockk()
+    private val intentSender: IntentSender = mockk()
     private val vaultItemDataSet: Dataset = mockk()
     private val fillResponse: FillResponse = mockk()
     private val appInfo: AutofillAppInfo = AutofillAppInfo(
@@ -37,19 +41,47 @@ class FillResponseBuilderTest {
         packageName = PACKAGE_NAME,
         sdkInt = 17,
     )
+    private val autofillCipherValid: AutofillCipher = mockk {
+        every { cipherId } returns CIPHER_ID
+        every { isTotpEnabled } returns true
+    }
+    private val autofillCipherNoId: AutofillCipher = mockk {
+        every { cipherId } returns null
+        every { isTotpEnabled } returns true
+    }
+    private val autofillCipherTotpDisabled: AutofillCipher = mockk {
+        every { cipherId } returns CIPHER_ID
+        every { isTotpEnabled } returns false
+    }
     private val filledPartitionOne: FilledPartition = mockk {
         every { this@mockk.filledItems } returns listOf(mockk())
+        every { this@mockk.autofillCipher } returns autofillCipherValid
     }
     private val filledPartitionTwo: FilledPartition = mockk {
         every { this@mockk.filledItems } returns emptyList()
+    }
+    private val filledPartitionThree: FilledPartition = mockk {
+        every { this@mockk.filledItems } returns listOf(mockk())
+        every { this@mockk.autofillCipher } returns autofillCipherNoId
+    }
+    private val filledPartitionFour: FilledPartition = mockk {
+        every { this@mockk.filledItems } returns listOf(mockk())
+        every { this@mockk.autofillCipher } returns autofillCipherTotpDisabled
     }
 
     @BeforeEach
     fun setup() {
         mockkConstructor(FillResponse.Builder::class)
+        mockkStatic(::createTotpCopyIntentSender)
         mockkStatic(FilledData::buildVaultItemDataset)
         mockkStatic(FilledPartition::buildDataset)
         every { anyConstructed<FillResponse.Builder>().build() } returns fillResponse
+        every {
+            createTotpCopyIntentSender(
+                cipherId = CIPHER_ID,
+                context = context,
+            )
+        } returns intentSender
 
         fillResponseBuilder = FillResponseBuilderImpl()
     }
@@ -57,6 +89,7 @@ class FillResponseBuilderTest {
     @AfterEach
     fun teardown() {
         unmockkConstructor(FillResponse.Builder::class)
+        unmockkStatic(::createTotpCopyIntentSender)
         unmockkStatic(FilledData::buildVaultItemDataset)
         unmockkStatic(FilledPartition::buildDataset)
     }
@@ -102,6 +135,8 @@ class FillResponseBuilderTest {
         val filledPartitions = listOf(
             filledPartitionOne,
             filledPartitionTwo,
+            filledPartitionThree,
+            filledPartitionFour,
         )
         val filledData = FilledData(
             filledPartitions = filledPartitions,
@@ -122,6 +157,19 @@ class FillResponseBuilderTest {
         )
         every {
             filledPartitionOne.buildDataset(
+                authIntentSender = intentSender,
+                autofillAppInfo = appInfo,
+            )
+        } returns dataset
+        every {
+            filledPartitionThree.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = appInfo,
+            )
+        } returns dataset
+        every {
+            filledPartitionFour.buildDataset(
+                authIntentSender = null,
                 autofillAppInfo = appInfo,
             )
         } returns dataset
@@ -152,21 +200,33 @@ class FillResponseBuilderTest {
 
         verify(exactly = 1) {
             filledPartitionOne.buildDataset(
+                authIntentSender = intentSender,
+                autofillAppInfo = appInfo,
+            )
+            filledPartitionThree.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = appInfo,
+            )
+            filledPartitionFour.buildDataset(
+                authIntentSender = null,
                 autofillAppInfo = appInfo,
             )
             filledData.buildVaultItemDataset(
                 autofillAppInfo = appInfo,
             )
-            anyConstructed<FillResponse.Builder>().addDataset(dataset)
             anyConstructed<FillResponse.Builder>().addDataset(vaultItemDataSet)
             anyConstructed<FillResponse.Builder>().setIgnoredIds(
                 ignoredAutofillIdOne,
                 ignoredAutofillIdTwo,
             )
         }
+        verify(exactly = 3) {
+            anyConstructed<FillResponse.Builder>().addDataset(dataset)
+        }
     }
 
     companion object {
+        private const val CIPHER_ID: String = "1234567890"
         private const val PACKAGE_NAME: String = "com.x8bit.bitwarden"
     }
 }

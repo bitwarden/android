@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.content.Context
+import android.content.IntentSender
 import android.content.res.Resources
 import android.service.autofill.Dataset
 import android.service.autofill.InlinePresentation
@@ -70,8 +71,70 @@ class FilledPartitionExtensionsTest {
         unmockkStatic(InlinePresentationSpec::createCipherInlinePresentationOrNull)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `buildDataset should applyToDatasetPostTiramisu when sdkInt is at least 33`() {
+    fun `buildDataset should applyToDatasetPostTiramisu and set auth when sdkInt is at least 33 and has authIntentSender`() {
+        // Setup
+        val authIntentSender: IntentSender = mockk()
+        val autofillAppInfo = AutofillAppInfo(
+            context = context,
+            packageName = PACKAGE_NAME,
+            sdkInt = 34,
+        )
+        val inlinePresentation: InlinePresentation = mockk()
+        every {
+            buildAutofillRemoteViews(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+        } returns remoteViews
+        every {
+            inlinePresentationSpec.createCipherInlinePresentationOrNull(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+        } returns inlinePresentation
+        mockBuilder<Presentations.Builder> { it.setInlinePresentation(inlinePresentation) }
+        mockBuilder<Presentations.Builder> { it.setMenuPresentation(remoteViews) }
+        every {
+            filledItem.applyToDatasetPostTiramisu(
+                datasetBuilder = any(),
+                presentations = presentations,
+            )
+        } just runs
+        every { anyConstructed<Presentations.Builder>().build() } returns presentations
+
+        // Test
+        val actual = filledPartition.buildDataset(
+            authIntentSender = authIntentSender,
+            autofillAppInfo = autofillAppInfo,
+        )
+
+        // Verify
+        assertEquals(dataset, actual)
+        verify(exactly = 1) {
+            buildAutofillRemoteViews(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+            inlinePresentationSpec.createCipherInlinePresentationOrNull(
+                autofillAppInfo = autofillAppInfo,
+                autofillCipher = autofillCipher,
+            )
+            anyConstructed<Presentations.Builder>().setInlinePresentation(inlinePresentation)
+            anyConstructed<Presentations.Builder>().setMenuPresentation(remoteViews)
+            anyConstructed<Presentations.Builder>().build()
+            filledItem.applyToDatasetPostTiramisu(
+                datasetBuilder = any(),
+                presentations = presentations,
+            )
+            anyConstructed<Dataset.Builder>().build()
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `buildDataset should applyToDatasetPostTiramisu and doesn't set auth when sdkInt is at least 33 and null authIntentSender`() {
         // Setup
         val autofillAppInfo = AutofillAppInfo(
             context = context,
@@ -103,6 +166,7 @@ class FilledPartitionExtensionsTest {
 
         // Test
         val actual = filledPartition.buildDataset(
+            authIntentSender = null,
             autofillAppInfo = autofillAppInfo,
         )
 
@@ -152,6 +216,7 @@ class FilledPartitionExtensionsTest {
 
         // Test
         val actual = filledPartition.buildDataset(
+            authIntentSender = null,
             autofillAppInfo = autofillAppInfo,
         )
 
@@ -202,6 +267,7 @@ class FilledPartitionExtensionsTest {
 
         // Test
         val actual = filledPartition.buildDataset(
+            authIntentSender = null,
             autofillAppInfo = autofillAppInfo,
         )
 
