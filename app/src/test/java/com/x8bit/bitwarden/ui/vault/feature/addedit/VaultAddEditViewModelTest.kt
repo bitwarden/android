@@ -1170,7 +1170,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(
                 expectedState,
                 viewModel.stateFlow.value,
-
             )
         }
     }
@@ -2025,17 +2024,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `TooltipClick should emit ShowToast with 'Tooltip' message`() = runTest {
+        fun `TooltipClick should emit NavigateToToolTipUri`() = runTest {
             viewModel.eventFlow.test {
-                viewModel
-                    .actionChannel
-                    .trySend(
-                        VaultAddEditAction.Common.TooltipClick,
-                    )
+                viewModel.trySendAction(VaultAddEditAction.Common.TooltipClick)
                 assertEquals(
-                    VaultAddEditEvent.ShowToast(
-                        "Not yet implemented".asText(),
-                    ),
+                    VaultAddEditEvent.NavigateToTooltipUri,
                     awaitItem(),
                 )
             }

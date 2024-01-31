@@ -18,6 +18,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
@@ -34,7 +35,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -54,6 +57,7 @@ fun VaultAddEditScreen(
     onNavigateToQrCodeScanScreen: () -> Unit,
     viewModel: VaultAddEditViewModel = hiltViewModel(),
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
+    intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
     onNavigateToAttachments: (cipherId: String) -> Unit,
@@ -91,6 +95,12 @@ fun VaultAddEditScreen(
             }
 
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
+
+            is VaultAddEditEvent.NavigateToTooltipUri -> {
+                intentManager.launchUri(
+                    "https://bitwarden.com/help/managing-items/#protect-individual-items".toUri(),
+                )
+            }
         }
     }
 
