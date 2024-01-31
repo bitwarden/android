@@ -3,9 +3,15 @@ package com.x8bit.bitwarden.ui.platform.feature.search
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -15,6 +21,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -22,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toSearchTypeData
@@ -53,16 +61,22 @@ class SearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
+    private val autofillSelectionManager: AutofillSelectionManager,
     private val vaultRepo: VaultRepository,
-    authRepo: AuthRepository,
+    private val authRepo: AuthRepository,
     environmentRepo: EnvironmentRepository,
     settingsRepo: SettingsRepository,
+    specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<SearchState, SearchEvent, SearchAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val searchType = SearchArgs(savedStateHandle).type
             val userState = requireNotNull(authRepo.userStateFlow.value)
+            val autofillSelectionData = specialCircumstanceManager
+                .specialCircumstance
+                ?.toAutofillSelectionDataOrNull()
+
             SearchState(
                 searchTerm = "",
                 searchType = searchType.toSearchTypeData(),
@@ -75,6 +89,7 @@ class SearchViewModel @Inject constructor(
                 baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
                 baseIconUrl = environmentRepo.environment.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = settingsRepo.isIconLoadingDisabled,
+                autofillSelectionData = autofillSelectionData,
             )
         },
 ) {
@@ -97,6 +112,12 @@ class SearchViewModel @Inject constructor(
             SearchAction.BackClick -> handleBackClick()
             SearchAction.DismissDialogClick -> handleDismissClick()
             is SearchAction.ItemClick -> handleItemClick(action)
+            is SearchAction.AutofillItemClick -> handleAutofillItemClick(action)
+            is SearchAction.AutofillAndSaveItemClick -> handleAutofillAndSaveItemClick(action)
+            is SearchAction.MasterPasswordRepromptSubmit -> {
+                handleMasterPasswordRepromptSubmit(action)
+            }
+
             is SearchAction.SearchTermChange -> handleSearchTermChange(action)
             is SearchAction.VaultFilterSelect -> handleVaultFilterSelect(action)
             is SearchAction.OverflowOptionClick -> handleOverflowItemClick(action)
@@ -123,6 +144,60 @@ class SearchViewModel @Inject constructor(
             }
         }
         sendEvent(event)
+    }
+
+    private fun handleAutofillItemClick(action: SearchAction.AutofillItemClick) {
+        val cipherView = getCipherViewOrNull(cipherId = action.itemId) ?: return
+        autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+    }
+
+    private fun handleAutofillAndSaveItemClick(action: SearchAction.AutofillAndSaveItemClick) {
+        val cipherView = getCipherViewOrNull(cipherId = action.itemId) ?: return
+        val uris = cipherView.login?.uris.orEmpty()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SearchState.DialogState.Loading(
+                    message = R.string.loading.asText(),
+                ),
+            )
+        }
+
+        viewModelScope.launch {
+            val result = vaultRepo.updateCipher(
+                cipherId = action.itemId,
+                cipherView = cipherView.copy(
+                    login = cipherView
+                        .login
+                        ?.copy(
+                            uris = uris + LoginUriView(
+                                uri = state.autofillSelectionData?.uri,
+                                match = null,
+                            ),
+                        ),
+                ),
+            )
+            sendAction(
+                SearchAction.Internal.UpdateCipherResultReceive(
+                    cipherId = action.itemId,
+                    result = result,
+                ),
+            )
+        }
+    }
+
+    private fun handleMasterPasswordRepromptSubmit(
+        action: SearchAction.MasterPasswordRepromptSubmit,
+    ) {
+        viewModelScope.launch {
+            val result = authRepo.validatePassword(password = action.password)
+            sendAction(
+                SearchAction.Internal.ValidatePasswordResultReceive(
+                    masterPasswordRepromptData = action.masterPasswordRepromptData,
+                    result = result,
+                ),
+            )
+        }
     }
 
     private fun handleSearchTermChange(action: SearchAction.SearchTermChange) {
@@ -305,6 +380,14 @@ class SearchViewModel @Inject constructor(
                 handleRemovePasswordSendResultReceive(action)
             }
 
+            is SearchAction.Internal.UpdateCipherResultReceive -> {
+                handleUpdateCipherResultReceive(action)
+            }
+
+            is SearchAction.Internal.ValidatePasswordResultReceive -> {
+                handleValidatePasswordResultReceive(action)
+            }
+
             is SearchAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
         }
     }
@@ -370,6 +453,82 @@ class SearchViewModel @Inject constructor(
             is RemovePasswordSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(SearchEvent.ShowToast(R.string.send_password_removed.asText()))
+            }
+        }
+    }
+
+    private fun handleUpdateCipherResultReceive(
+        action: SearchAction.Internal.UpdateCipherResultReceive,
+    ) {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+
+        when (val result = action.result) {
+            is UpdateCipherResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SearchState.DialogState.Error(
+                            title = null,
+                            message = result.errorMessage?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            UpdateCipherResult.Success -> {
+                // Complete the autofill selection flow
+                val cipherView = getCipherViewOrNull(cipherId = action.cipherId) ?: return
+                autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+            }
+        }
+    }
+
+    private fun handleValidatePasswordResultReceive(
+        action: SearchAction.Internal.ValidatePasswordResultReceive,
+    ) {
+        when (action.result) {
+            ValidatePasswordResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SearchState.DialogState.Error(
+                            title = null,
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is ValidatePasswordResult.Success -> {
+                if (!action.result.isValid) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = SearchState.DialogState.Error(
+                                title = null,
+                                message = R.string.invalid_master_password.asText(),
+                            ),
+                        )
+                    }
+                    return
+                }
+
+                // Complete the deferred actions
+                when (action.masterPasswordRepromptData.type) {
+                    MasterPasswordRepromptData.Type.AUTOFILL -> {
+                        trySendAction(
+                            SearchAction.AutofillItemClick(
+                                itemId = action.masterPasswordRepromptData.cipherId,
+                            ),
+                        )
+                    }
+
+                    MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE -> {
+                        trySendAction(
+                            SearchAction.AutofillAndSaveItemClick(
+                                itemId = action.masterPasswordRepromptData.cipherId,
+                            ),
+                        )
+                    }
+                }
             }
         }
     }
@@ -462,6 +621,7 @@ class SearchViewModel @Inject constructor(
                                 searchTerm = state.searchTerm,
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
+                                isAutofill = state.isAutofill,
                             )
                     }
 
@@ -480,6 +640,14 @@ class SearchViewModel @Inject constructor(
             )
         }
     }
+
+    private fun getCipherViewOrNull(cipherId: String) =
+        vaultRepo
+            .vaultDataStateFlow
+            .value
+            .data
+            ?.cipherViewList
+            ?.firstOrNull { it.id == cipherId }
 }
 
 /**
@@ -495,7 +663,16 @@ data class SearchState(
     val baseWebSendUrl: String,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
+    // Internal
+    val autofillSelectionData: AutofillSelectionData? = null,
 ) : Parcelable {
+
+    /**
+     * Whether or not this represents an autofill selection flow.
+     */
+    val isAutofill: Boolean
+        get() = autofillSelectionData != null
+
     /**
      * Represents the specific view states for the search screen.
      */
@@ -578,6 +755,8 @@ data class SearchState(
         val iconData: IconData,
         val extraIconList: List<IconRes>,
         val overflowOptions: List<ListingItemOverflowAction>,
+        val autofillSelectionOptions: List<AutofillSelectionOption>,
+        val shouldDisplayMasterPasswordReprompt: Boolean,
     ) : Parcelable
 }
 
@@ -749,6 +928,28 @@ sealed class SearchAction {
     ) : SearchAction()
 
     /**
+     * User clicked a row item as an autofill selection.
+     */
+    data class AutofillItemClick(
+        val itemId: String,
+    ) : SearchAction()
+
+    /**
+     * User clicked a row item as an autofill-and-save selection.
+     */
+    data class AutofillAndSaveItemClick(
+        val itemId: String,
+    ) : SearchAction()
+
+    /**
+     * User clicked a row item for autofill but must satisfy the master password reprompt.
+     */
+    data class MasterPasswordRepromptSubmit(
+        val password: String,
+        val masterPasswordRepromptData: MasterPasswordRepromptData,
+    ) : SearchAction()
+
+    /**
      * User updated the search term.
      */
     data class SearchTermChange(
@@ -799,6 +1000,23 @@ sealed class SearchAction {
          */
         data class RemovePasswordSendResultReceive(
             val result: RemovePasswordSendResult,
+        ) : Internal()
+
+        /**
+         * Indicates a result for updating a cipher during the autofill-and-save process.
+         */
+        data class UpdateCipherResultReceive(
+            val cipherId: String,
+            val result: UpdateCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates a result for validating the user's master password during an autofill selection
+         * process.
+         */
+        data class ValidatePasswordResultReceive(
+            val masterPasswordRepromptData: MasterPasswordRepromptData,
+            val result: ValidatePasswordResult,
         ) : Internal()
 
         /**
@@ -860,4 +1078,23 @@ sealed class SearchEvent {
     data class ShowToast(
         val message: Text,
     ) : SearchEvent()
+}
+
+/**
+ * Data tracking the type of request that triggered a master password reprompt during an autofill
+ * selection process.
+ */
+@Parcelize
+data class MasterPasswordRepromptData(
+    val cipherId: String,
+    val type: Type,
+) : Parcelable {
+
+    /**
+     * The type of action that requires the prompt.
+     */
+    enum class Type {
+        AUTOFILL,
+        AUTOFILL_AND_SAVE,
+    }
 }

@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
@@ -16,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
+import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
@@ -130,6 +132,7 @@ fun List<CipherView>.toViewState(
     searchTerm: String,
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    isAutofill: Boolean,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -138,6 +141,7 @@ fun List<CipherView>.toViewState(
                 displayItems = toDisplayItemList(
                     baseIconUrl = baseIconUrl,
                     isIconLoadingDisabled = isIconLoadingDisabled,
+                    isAutofill = isAutofill,
                 ),
             )
         }
@@ -152,17 +156,20 @@ fun List<CipherView>.toViewState(
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    isAutofill: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
+            isAutofill = isAutofill,
         )
     }
 
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    isAutofill: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),
@@ -175,6 +182,15 @@ private fun CipherView.toDisplayItem(
         extraIconList = toLabelIcons(),
         overflowOptions = toOverflowActions(),
         totpCode = login?.totp,
+        autofillSelectionOptions = AutofillSelectionOption
+            .entries
+            // Only valid for autofill
+            .filter { isAutofill }
+            // Only Login types get the save option
+            .filter {
+                this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
+            },
+        shouldDisplayMasterPasswordReprompt = isAutofill && reprompt == CipherRepromptType.PASSWORD,
     )
 
 private fun CipherView.toIconData(
@@ -307,6 +323,8 @@ private fun SendView.toDisplayItem(
         extraIconList = toLabelIcons(clock = clock),
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
         totpCode = null,
+        autofillSelectionOptions = emptyList(),
+        shouldDisplayMasterPasswordReprompt = false,
     )
 
 private enum class SortPriority {

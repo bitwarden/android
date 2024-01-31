@@ -15,11 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
+import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList
 
@@ -69,6 +73,34 @@ fun SearchContent(
         -> Unit
     }
 
+    var autofillSelectionOptionsItem by rememberSaveable {
+        mutableStateOf<SearchState.DisplayItem?>(null)
+    }
+    var masterPasswordRepromptData by rememberSaveable {
+        mutableStateOf<MasterPasswordRepromptData?>(null)
+    }
+    autofillSelectionOptionsItem?.let { item ->
+        AutofillSelectionDialog(
+            displayItem = item,
+            onAutofillItemClick = searchHandlers.onAutofillItemClick,
+            onAutofillAndSaveItemClick = searchHandlers.onAutofillAndSaveItemClick,
+            onViewItemClick = searchHandlers.onItemClick,
+            onMasterPasswordRepromptRequest = { masterPasswordRepromptData = it },
+            onDismissRequest = { autofillSelectionOptionsItem = null },
+        )
+    }
+    masterPasswordRepromptData?.let { data ->
+        BitwardenMasterPasswordDialog(
+            onConfirmClick = { password ->
+                searchHandlers.onMasterPasswordRepromptSubmit(password, data)
+                masterPasswordRepromptData = null
+            },
+            onDismissRequest = {
+                masterPasswordRepromptData = null
+            },
+        )
+    }
+
     LazyColumn(
         modifier = modifier,
     ) {
@@ -77,7 +109,13 @@ fun SearchContent(
                 startIcon = it.iconData,
                 label = it.title,
                 supportingLabel = it.subtitle,
-                onClick = { searchHandlers.onItemClick(it.id) },
+                onClick = {
+                    if (it.autofillSelectionOptions.isNotEmpty()) {
+                        autofillSelectionOptionsItem = it
+                    } else {
+                        searchHandlers.onItemClick(it.id)
+                    }
+                },
                 trailingLabelIcons = it
                     .extraIconList
                     .toIconResources()
@@ -114,4 +152,75 @@ fun SearchContent(
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun AutofillSelectionDialog(
+    displayItem: SearchState.DisplayItem,
+    onAutofillItemClick: (cipherId: String) -> Unit,
+    onAutofillAndSaveItemClick: (cipherId: String) -> Unit,
+    onViewItemClick: (cipherId: String) -> Unit,
+    onMasterPasswordRepromptRequest: (MasterPasswordRepromptData) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    val selectionCallback: (SearchState.DisplayItem, MasterPasswordRepromptData.Type) -> Unit =
+        { item, type ->
+            onDismissRequest()
+            if (item.shouldDisplayMasterPasswordReprompt) {
+                onMasterPasswordRepromptRequest(
+                    MasterPasswordRepromptData(
+                        cipherId = item.id,
+                        type = type,
+                    ),
+                )
+            } else {
+                when (type) {
+                    MasterPasswordRepromptData.Type.AUTOFILL -> {
+                        onAutofillItemClick(item.id)
+                    }
+
+                    MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE -> {
+                        onAutofillAndSaveItemClick(item.id)
+                    }
+                }
+            }
+        }
+    BitwardenSelectionDialog(
+        title = stringResource(id = R.string.autofill_or_view),
+        onDismissRequest = onDismissRequest,
+        selectionItems = {
+            if (AutofillSelectionOption.AUTOFILL in displayItem.autofillSelectionOptions) {
+                BitwardenBasicDialogRow(
+                    text = stringResource(id = R.string.autofill),
+                    onClick = {
+                        selectionCallback(
+                            displayItem,
+                            MasterPasswordRepromptData.Type.AUTOFILL,
+                        )
+                    },
+                )
+            }
+            if (AutofillSelectionOption.AUTOFILL_AND_SAVE in displayItem.autofillSelectionOptions) {
+                BitwardenBasicDialogRow(
+                    text = stringResource(id = R.string.autofill_and_save),
+                    onClick = {
+                        selectionCallback(
+                            displayItem,
+                            MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE,
+                        )
+                    },
+                )
+            }
+            if (AutofillSelectionOption.VIEW in displayItem.autofillSelectionOptions) {
+                BitwardenBasicDialogRow(
+                    text = stringResource(id = R.string.view),
+                    onClick = {
+                        onDismissRequest()
+                        onViewItemClick(displayItem.id)
+                    },
+                )
+            }
+        },
+    )
 }
