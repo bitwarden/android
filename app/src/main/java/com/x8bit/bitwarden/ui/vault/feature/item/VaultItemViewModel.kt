@@ -297,7 +297,11 @@ class VaultItemViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialog = VaultItemState.DialogState.Loading(
-                        R.string.soft_deleting.asText(),
+                        if (state.isCipherDeleted) {
+                            R.string.deleting.asText()
+                        } else {
+                            R.string.soft_deleting.asText()
+                        },
                     ),
                 )
             }
@@ -305,10 +309,16 @@ class VaultItemViewModel @Inject constructor(
                 viewModelScope.launch {
                     trySendAction(
                         VaultItemAction.Internal.DeleteCipherReceive(
-                            result = vaultRepository.softDeleteCipher(
-                                cipherId = state.vaultItemId,
-                                cipherView = cipher,
-                            ),
+                            if (state.isCipherDeleted) {
+                                vaultRepository.hardDeleteCipher(
+                                    cipherId = state.vaultItemId,
+                                )
+                            } else {
+                                vaultRepository.softDeleteCipher(
+                                    cipherId = state.vaultItemId,
+                                    cipherView = cipher,
+                                )
+                            },
                         ),
                     )
                 }
@@ -693,7 +703,15 @@ class VaultItemViewModel @Inject constructor(
 
             DeleteCipherResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(VaultItemEvent.ShowToast(message = R.string.item_soft_deleted.asText()))
+                sendEvent(
+                    VaultItemEvent.ShowToast(
+                        message = if (state.isCipherDeleted) {
+                            R.string.item_deleted.asText()
+                        } else {
+                            R.string.item_soft_deleted.asText()
+                        },
+                    ),
+                )
                 sendEvent(VaultItemEvent.NavigateBack)
             }
         }
@@ -793,6 +811,17 @@ data class VaultItemState(
             ?.collectionIds
             ?.isNotEmpty()
             ?: false
+
+    /**
+     * The text to display on the deletion confirmation dialog.
+     */
+    val deletionConfirmationText: Text
+        get() = if (isCipherDeleted) {
+            R.string.do_you_really_want_to_permanently_delete_cipher
+        } else {
+            R.string.do_you_really_want_to_soft_delete_cipher
+        }
+            .asText()
 
     /**
      * Represents the specific view states for the [VaultItemScreen].
