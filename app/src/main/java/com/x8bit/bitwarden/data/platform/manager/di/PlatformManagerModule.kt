@@ -128,6 +128,7 @@ object PlatformManagerModule {
     @Singleton
     fun providePushManager(
         authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
         pushDiskSource: PushDiskSource,
         pushService: PushService,
         dispatcherManager: DispatcherManager,
@@ -135,6 +136,7 @@ object PlatformManagerModule {
         json: Json,
     ): PushManager = PushManagerImpl(
         authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
         pushDiskSource = pushDiskSource,
         pushService = pushService,
         dispatcherManager = dispatcherManager,
