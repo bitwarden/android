@@ -257,6 +257,7 @@ private fun DefaultAppBar(
                     OverflowMenuItemData(
                         text = stringResource(id = R.string.password_history),
                         onClick = onPasswordHistoryClick,
+                        testTag = "Options",
                     ),
                 ),
             )
@@ -779,7 +780,11 @@ private fun PassphraseNumWordsCounterItem(
         value = numWords,
         range = PASSPHRASE_MIN_NUMBER_OF_WORDS..PASSPHRASE_MAX_NUMBER_OF_WORDS,
         onValueChange = onPassphraseNumWordsCounterChange,
-        modifier = Modifier.padding(horizontal = 16.dp),
+        increaseButtonTestTag = "NumberOfWordsIncreaseButton",
+        decreaseButtonTestTag = "NumberOfWordsDecreaseButton",
+        modifier = Modifier
+            .semantics { testTag = "NumberOfWordsLabel" }
+            .padding(horizontal = 16.dp),
     )
 }
 
@@ -795,6 +800,7 @@ private fun PassphraseWordSeparatorInputItem(
             onPassphraseWordSeparatorChange(it.toCharArray().firstOrNull())
         },
         modifier = Modifier
+            .semantics { testTag = "WordSeparatorEntry" }
             .width(267.dp)
             .padding(horizontal = 16.dp),
     )
@@ -810,6 +816,7 @@ private fun PassphraseCapitalizeToggleItem(
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
         modifier = Modifier
+            .semantics { testTag = "CapitalizePassphraseToggle" }
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     )
@@ -825,6 +832,7 @@ private fun PassphraseIncludeNumberToggleItem(
         isChecked = includeNumber,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
         modifier = Modifier
+            .semantics { testTag = "IncludeNumbersToggle" }
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     )

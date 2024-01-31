@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.platform.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
@@ -24,6 +26,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
  * @param textFieldReadOnly whether or not the text field should be read only. The stepper
  * increment and decrement buttons function regardless of this value.
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenStepper(
     label: String,
@@ -34,6 +37,8 @@ fun BitwardenStepper(
     isIncrementEnabled: Boolean = true,
     isDecrementEnabled: Boolean = true,
     textFieldReadOnly: Boolean = true,
+    increaseButtonTestTag: String? = null,
+    decreaseButtonTestTag: String? = null,
 ) {
     val clampedValue = value?.coerceIn(range)
     if (clampedValue != value && clampedValue != null) {
@@ -59,6 +64,11 @@ fun BitwardenStepper(
                     }
                 },
                 isEnabled = isDecrementEnabled,
+                modifier = Modifier.semantics {
+                    if (decreaseButtonTestTag != null) {
+                        testTag = decreaseButtonTestTag
+                    }
+                },
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
@@ -72,6 +82,11 @@ fun BitwardenStepper(
                     }
                 },
                 isEnabled = isIncrementEnabled,
+                modifier = Modifier.semantics {
+                    if (increaseButtonTestTag != null) {
+                        testTag = increaseButtonTestTag
+                    }
+                },
             )
         },
         readOnly = textFieldReadOnly,
