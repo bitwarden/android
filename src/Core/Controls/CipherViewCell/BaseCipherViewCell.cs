@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Bit.App.Pages;
+﻿using Bit.App.Pages;
 
 namespace Bit.App.Controls
 {
@@ -48,7 +47,7 @@ namespace Bit.App.Controls
             });
         }
 
-        protected void Icon_Success(object sender, FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs e)
+        public void Icon_Success(object sender, FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs e)
         {
             if (BindingContext is CipherItemViewModel cipherItemVM)
             {
@@ -61,7 +60,7 @@ namespace Bit.App.Controls
             });
         }
 
-        protected void Icon_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
+        public void Icon_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
         {
             if (BindingContext is CipherItemViewModel cipherItemVM)
             {
@@ -72,6 +71,33 @@ namespace Bit.App.Controls
                 Icon.IsVisible = false;
                 IconPlaceholder.IsVisible = true;
             });
+        }
+    }
+
+    public class StubBaseCipherViewCellSoLinkerDoesntRemoveMethods : BaseCipherViewCell
+    {
+        protected override CachedImage Icon => new CachedImage();
+        protected override IconLabel IconPlaceholder => new IconLabel();
+
+        public static void CallThisSoLinkerDoesntRemoveMethods()
+        {
+            var stub = new StubBaseCipherViewCellSoLinkerDoesntRemoveMethods();
+
+            try
+            {
+                stub.Icon_Success(stub, new FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs(new FFImageLoading.Work.ImageInformation(), FFImageLoading.Work.LoadingResult.Disk));
+            }
+            catch (Exception)
+            {
+            }
+
+            try
+            {
+                stub.Icon_Error(stub, new FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs(new InvalidOperationException("stub")));
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
