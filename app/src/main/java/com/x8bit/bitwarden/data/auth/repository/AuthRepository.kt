@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -208,6 +209,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Creates a new authentication request.
      */
     suspend fun createAuthRequest(email: String): AuthRequestResult
+
+    /**
+     * Creates a new authentication request and then continues to emit updates over time.
+     */
+    fun createAuthRequestWithUpdates(email: String): Flow<CreateAuthRequestResult>
 
     /**
      * Get an auth request by its [fingerprint].
