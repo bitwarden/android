@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
@@ -1984,7 +1985,9 @@ class AuthRepositoryTest {
     fun `resetPassword Success should return Success`() = runTest {
         val currentPassword = "currentPassword"
         val currentPasswordHash = "hashedCurrentPassword"
-        val password = "password"
+        val newPassword = "newPassword"
+        val newPasswordHash = "newPasswordHash"
+        val newKey = "newKey"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.hashPassword(
@@ -1995,35 +1998,38 @@ class AuthRepositoryTest {
             )
         } returns currentPasswordHash.asSuccess()
         coEvery {
-            authSdkSource.makeRegisterKeys(
-                email = ACCOUNT_1.profile.email,
-                password = password,
-                kdf = ACCOUNT_1.profile.toSdkParams(),
+            vaultSdkSource.updatePassword(
+                userId = ACCOUNT_1.profile.userId,
+                newPassword = newPassword,
             )
         } returns Result.success(
-            RegisterKeyResponse(
-                masterPasswordHash = PASSWORD_HASH,
-                encryptedUserKey = ENCRYPTED_USER_KEY,
-                keys = RsaKeyPair(
-                    public = PUBLIC_KEY,
-                    private = PRIVATE_KEY,
-                ),
+            UpdatePasswordResponse(
+                passwordHash = newPasswordHash,
+                newKey = newKey,
             ),
         )
         coEvery {
             accountsService.resetPassword(
                 body = ResetPasswordRequestJson(
                     currentPasswordHash = currentPasswordHash,
-                    newPasswordHash = PASSWORD_HASH,
+                    newPasswordHash = newPasswordHash,
                     passwordHint = null,
-                    key = ENCRYPTED_USER_KEY,
+                    key = newKey,
                 ),
             )
         } returns Unit.asSuccess()
+        coEvery {
+            authSdkSource.hashPassword(
+                email = ACCOUNT_1.profile.email,
+                password = newPassword,
+                kdf = ACCOUNT_1.profile.toSdkParams(),
+                purpose = HashPurpose.LOCAL_AUTHORIZATION,
+            )
+        } returns newPasswordHash.asSuccess()
 
         val result = repository.resetPassword(
             currentPassword = currentPassword,
-            newPassword = password,
+            newPassword = newPassword,
             passwordHint = null,
         )
 
@@ -2032,23 +2038,28 @@ class AuthRepositoryTest {
             result,
         )
         coVerify {
-            authSdkSource.makeRegisterKeys(
+            authSdkSource.hashPassword(
                 email = ACCOUNT_1.profile.email,
-                password = password,
+                password = currentPassword,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+            vaultSdkSource.updatePassword(
+                userId = ACCOUNT_1.profile.userId,
+                newPassword = newPassword,
             )
             accountsService.resetPassword(
                 body = ResetPasswordRequestJson(
                     currentPasswordHash = currentPasswordHash,
-                    newPasswordHash = PASSWORD_HASH,
+                    newPasswordHash = newPasswordHash,
                     passwordHint = null,
-                    key = ENCRYPTED_USER_KEY,
+                    key = newKey,
                 ),
             )
         }
         fakeAuthDiskSource.assertMasterPasswordHash(
             userId = USER_ID_1,
-            passwordHash = PASSWORD_HASH,
+            passwordHash = newPasswordHash,
         )
     }
 
@@ -2056,7 +2067,7 @@ class AuthRepositoryTest {
     fun `resetPassword Failure should return Error`() = runTest {
         val currentPassword = "currentPassword"
         val currentPasswordHash = "hashedCurrentPassword"
-        val password = "password"
+        val newPassword = "newPassword"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.hashPassword(
@@ -2067,35 +2078,15 @@ class AuthRepositoryTest {
             )
         } returns currentPasswordHash.asSuccess()
         coEvery {
-            authSdkSource.makeRegisterKeys(
-                email = ACCOUNT_1.profile.email,
-                password = password,
-                kdf = ACCOUNT_1.profile.toSdkParams(),
-            )
-        } returns Result.success(
-            RegisterKeyResponse(
-                masterPasswordHash = PASSWORD_HASH,
-                encryptedUserKey = ENCRYPTED_USER_KEY,
-                keys = RsaKeyPair(
-                    public = PUBLIC_KEY,
-                    private = PRIVATE_KEY,
-                ),
-            ),
-        )
-        coEvery {
-            accountsService.resetPassword(
-                body = ResetPasswordRequestJson(
-                    currentPasswordHash = currentPasswordHash,
-                    newPasswordHash = PASSWORD_HASH,
-                    passwordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                ),
+            vaultSdkSource.updatePassword(
+                userId = ACCOUNT_1.profile.userId,
+                newPassword = newPassword,
             )
         } returns Throwable("Fail").asFailure()
 
         val result = repository.resetPassword(
             currentPassword = currentPassword,
-            newPassword = password,
+            newPassword = newPassword,
             passwordHint = null,
         )
 
@@ -2110,18 +2101,9 @@ class AuthRepositoryTest {
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
-            authSdkSource.makeRegisterKeys(
-                email = ACCOUNT_1.profile.email,
-                password = password,
-                kdf = ACCOUNT_1.profile.toSdkParams(),
-            )
-            accountsService.resetPassword(
-                body = ResetPasswordRequestJson(
-                    currentPasswordHash = currentPasswordHash,
-                    newPasswordHash = PASSWORD_HASH,
-                    passwordHint = null,
-                    key = ENCRYPTED_USER_KEY,
-                ),
+            vaultSdkSource.updatePassword(
+                userId = ACCOUNT_1.profile.userId,
+                newPassword = newPassword,
             )
         }
     }

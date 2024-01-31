@@ -678,21 +678,21 @@ class AuthRepositoryImpl(
                 onFailure = { return ResetPasswordResult.Error },
                 onSuccess = { it },
             )
-        return authSdkSource
-            .makeRegisterKeys(
-                email = activeAccount.profile.email,
-                password = newPassword,
-                kdf = activeAccount.profile.toSdkParams(),
+        return vaultSdkSource
+            .updatePassword(
+                userId = activeAccount.profile.userId,
+                newPassword = newPassword,
             )
-            .flatMap { registerKeyResponse ->
-                accountsService.resetPassword(
-                    body = ResetPasswordRequestJson(
-                        currentPasswordHash = currentPasswordHash,
-                        newPasswordHash = registerKeyResponse.masterPasswordHash,
-                        passwordHint = passwordHint,
-                        key = registerKeyResponse.encryptedUserKey,
-                    ),
-                )
+            .flatMap { updatePasswordResponse ->
+                accountsService
+                    .resetPassword(
+                        body = ResetPasswordRequestJson(
+                            currentPasswordHash = currentPasswordHash,
+                            newPasswordHash = updatePasswordResponse.passwordHash,
+                            passwordHint = passwordHint,
+                            key = updatePasswordResponse.newKey,
+                        ),
+                    )
             }
             .fold(
                 onSuccess = {

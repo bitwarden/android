@@ -19,6 +19,7 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
+import com.bitwarden.core.UpdatePasswordResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 
 /**
@@ -312,4 +313,12 @@ interface VaultSdkSource {
         password: String,
         passwordHash: String,
     ): Result<Boolean>
+
+    /**
+     * Get the keys needed to update the user's password.
+     */
+    suspend fun updatePassword(
+        userId: String,
+        newPassword: String,
+    ): Result<UpdatePasswordResponse>
 }
