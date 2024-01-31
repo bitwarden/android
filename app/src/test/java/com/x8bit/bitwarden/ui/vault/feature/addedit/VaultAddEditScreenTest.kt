@@ -29,11 +29,13 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
+import androidx.core.net.toUri
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -50,7 +52,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -79,6 +83,10 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
 
+    private val intentManager: IntentManager = mockk {
+        every { launchUri(any()) } just runs
+    }
+
     @Before
     fun setup() {
         composeTestRule.setContent {
@@ -93,6 +101,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 viewModel = viewModel,
                 permissionsManager = fakePermissionManager,
+                intentManager = intentManager,
             )
         }
     }
@@ -101,6 +110,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `on NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToTooltipUri Event should invoke IntentManager`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToTooltipUri)
+        verify {
+            intentManager.launchUri(
+                "https://bitwarden.com/help/managing-items/#protect-individual-items".toUri(),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")

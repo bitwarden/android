@@ -502,12 +502,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleTooltipClick() {
-        // TODO Add the text for the prompt (BIT-1079)
-        sendEvent(
-            event = VaultAddEditEvent.ShowToast(
-                message = "Not yet implemented".asText(),
-            ),
-        )
+        sendEvent(VaultAddEditEvent.NavigateToTooltipUri)
     }
 
     @Suppress("MaxLineLength")
@@ -1734,6 +1729,12 @@ sealed class VaultAddEditEvent {
     data class NavigateToCollections(
         val cipherId: String,
     ) : VaultAddEditEvent()
+
+    /**
+     * Navigate the user to the tooltip URI.
+     */
+    data object NavigateToTooltipUri :
+        VaultAddEditEvent()
 
     /**
      * Navigate to the QR code scan screen.
