@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import io.mockk.mockk
@@ -10,7 +11,37 @@ import org.junit.jupiter.api.Test
 class SpecialCircumstanceExtensionsTest {
 
     @Test
-    fun `toAutofillSelectionDataOrNull should a non-null value for AutofillSelection`() {
+    fun `toAutofillSaveItemOrNull should return a non-null value for AutofillSave`() {
+        val autofillSaveItem: AutofillSaveItem = mockk()
+        assertEquals(
+            autofillSaveItem,
+            SpecialCircumstance
+                .AutofillSave(
+                    autofillSaveItem = autofillSaveItem,
+                )
+                .toAutofillSaveItemOrNull(),
+        )
+    }
+
+    @Test
+    fun `toAutofillSaveItemOrNull should return a null value for other types`() {
+        listOf(
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.ShareNewSend(
+                data = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+        )
+            .forEach { specialCircumstance ->
+                assertNull(specialCircumstance.toAutofillSaveItemOrNull())
+            }
+    }
+
+    @Test
+    fun `toAutofillSelectionDataOrNull should return a non-null value for AutofillSelection`() {
         val autofillSelectionData = AutofillSelectionData(
             type = AutofillSelectionData.Type.LOGIN,
             uri = "uri",
@@ -27,7 +58,7 @@ class SpecialCircumstanceExtensionsTest {
     }
 
     @Test
-    fun `toAutofillSelectionDataOrNull should a null value for other types`() {
+    fun `toAutofillSelectionDataOrNull should return a null value for other types`() {
         listOf(
             SpecialCircumstance.AutofillSave(
                 autofillSaveItem = mockk(),

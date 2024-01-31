@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -82,7 +83,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
-
+    private val exitManager: ExitManager = mockk {
+        every { exitApplication() } just runs
+    }
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
@@ -101,9 +104,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 viewModel = viewModel,
                 permissionsManager = fakePermissionManager,
+                exitManager = exitManager,
                 intentManager = intentManager,
             )
         }
+    }
+
+    @Test
+    fun `on ExitApp event should call the exitApplication of ExitManager`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.ExitApp)
+        verify { exitManager.exitApplication() }
     }
 
     @Test
@@ -171,6 +181,17 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
         )
         assertEquals(GeneratorMode.Modal.Username, onNavigateToGeneratorModalType)
+    }
+
+    @Test
+    fun `close button should update according to state`() {
+        composeTestRule.onNodeWithContentDescription("Close").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(shouldShowCloseButton = false)
+        }
+
+        composeTestRule.onNodeWithContentDescription("Close").assertDoesNotExist()
     }
 
     @Test

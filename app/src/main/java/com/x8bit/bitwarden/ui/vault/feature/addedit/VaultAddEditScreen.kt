@@ -34,9 +34,12 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
@@ -58,6 +61,7 @@ fun VaultAddEditScreen(
     viewModel: VaultAddEditViewModel = hiltViewModel(),
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
+    exitManager: ExitManager = LocalExitManager.current,
     onNavigateToManualCodeEntryScreen: () -> Unit,
     onNavigateToGeneratorModal: (GeneratorMode.Modal) -> Unit,
     onNavigateToAttachments: (cipherId: String) -> Unit,
@@ -94,6 +98,7 @@ fun VaultAddEditScreen(
                 onNavigateToMoveToOrganization(event.cipherId, true)
             }
 
+            VaultAddEditEvent.ExitApp -> exitManager.exitApplication()
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
 
             is VaultAddEditEvent.NavigateToTooltipUri -> {
@@ -156,11 +161,14 @@ fun VaultAddEditScreen(
         topBar = {
             BitwardenTopAppBar(
                 title = state.screenDisplayName(),
-                navigationIcon = painterResource(id = R.drawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
-                },
+                navigationIcon = NavigationIcon(
+                    navigationIcon = painterResource(id = R.drawable.ic_close),
+                    navigationIconContentDescription = stringResource(id = R.string.close),
+                    onNavigationIconClick = remember(viewModel) {
+                        { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
+                    },
+                )
+                    .takeIf { state.shouldShowCloseButton },
                 scrollBehavior = scrollBehavior,
                 actions = {
                     BitwardenTextButton(

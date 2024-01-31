@@ -1,7 +1,18 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+
+/**
+ * Returns [AutofillSaveItem] when contained in the given [SpecialCircumstance].
+ */
+fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
+    when (this) {
+        is SpecialCircumstance.AutofillSave -> this.autofillSaveItem
+        is SpecialCircumstance.AutofillSelection -> null
+        is SpecialCircumstance.ShareNewSend -> null
+    }
 
 /**
  * Returns [AutofillSelectionData] when contained in the given [SpecialCircumstance].

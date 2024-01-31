@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import app.cash.turbine.turbineScope
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -59,6 +61,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -119,7 +122,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         viewModel.stateFlow.test {
             assertEquals(
-                loginInitialState.copy(viewState = VaultAddEditState.ViewState.Loading),
+                createVaultAddItemState(
+                    commonContentViewState = VaultAddEditState.ViewState.Content.Common(),
+                    typeContentViewState = createLoginTypeContentViewState(),
+                ),
                 awaitItem(),
             )
         }
@@ -136,7 +142,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            initState.copy(viewState = VaultAddEditState.ViewState.Loading),
+            initState,
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
@@ -145,7 +151,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `initial add state should be correct when autofill`() = runTest {
+    fun `initial add state should be correct when autofill selection`() = runTest {
         val autofillSelectionData = AutofillSelectionData(
             type = AutofillSelectionData.Type.LOGIN,
             uri = "https://www.test.com",
@@ -168,7 +174,39 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            initState.copy(viewState = VaultAddEditState.ViewState.Loading),
+            initState,
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            vaultRepository.vaultDataStateFlow
+        }
+    }
+
+    @Test
+    fun `initial add state should be correct when autofill save`() = runTest {
+        val autofillSaveItem = AutofillSaveItem.Login(
+            username = "username",
+            password = "password",
+            uri = "https://www.test.com",
+        )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSave(
+            autofillSaveItem = autofillSaveItem,
+        )
+        val autofillContentState = autofillSaveItem.toDefaultAddTypeContent()
+        val vaultAddEditType = VaultAddEditType.AddItem
+        val initState = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = autofillContentState.common,
+            typeContentViewState = autofillContentState.type,
+        )
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            initState,
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
@@ -375,8 +413,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `in add mode, SaveClick should show dialog, and remove it once an item is saved`() =
+    fun `in add mode, SaveClick should show dialog, remove it once an item is saved, and emit NavigateBack`() =
         runTest {
             val stateWithDialog = createVaultAddItemState(
                 vaultAddEditType = VaultAddEditType.AddItem,
@@ -387,36 +426,104 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     name = "mockName-1",
                 ),
             )
-
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = VaultAddEditType.AddItem,
                 commonContentViewState = createCommonContentViewState(
                     name = "mockName-1",
                 ),
             )
-
             mutableVaultDataFlow.value = DataState.Loaded(
                 createVaultData(),
             )
-
             val viewModel = createAddVaultItemViewModel(
                 createSavedStateHandleWithState(
                     state = stateWithName,
                     vaultAddEditType = VaultAddEditType.AddItem,
                 ),
             )
-
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
             } returns CreateCipherResult.Success
 
-            viewModel.stateFlow.test {
-                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
-                assertEquals(stateWithName, awaitItem())
-                assertEquals(stateWithDialog, awaitItem())
-                assertEquals(stateWithName, awaitItem())
-            }
+            turbineScope {
+                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
+                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
 
+                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+
+                assertEquals(
+                    VaultAddEditEvent.NavigateBack,
+                    eventTurbine.awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultRepository.createCipherInOrganization(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode during autofill, SaveClick should show dialog, remove it once an item is saved, and emit ExitApp`() =
+        runTest {
+            val autofillSaveItem = AutofillSaveItem.Login(
+                username = null,
+                password = null,
+                uri = null,
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSave(
+                    autofillSaveItem = autofillSaveItem,
+                )
+            val stateWithDialog = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem,
+                dialogState = VaultAddEditState.DialogState.Loading(
+                    R.string.saving.asText(),
+                ),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+                .copy(shouldExitOnSave = true)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+                .copy(shouldExitOnSave = true)
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                ),
+            )
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Success
+
+            turbineScope {
+                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
+                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
+
+                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+
+                assertEquals(
+                    VaultAddEditEvent.ExitApp,
+                    eventTurbine.awaitItem(),
+                )
+            }
+            assertNull(specialCircumstanceManager.specialCircumstance)
             coVerify(exactly = 1) {
                 vaultRepository.createCipherInOrganization(any(), any())
             }
