@@ -36,12 +36,14 @@ fun NavController.navigateToLoginWithDevice(
  */
 fun NavGraphBuilder.loginWithDeviceDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = LOGIN_WITH_DEVICE_ROUTE,
     ) {
         LoginWithDeviceScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToTwoFactorLogin = onNavigateToTwoFactorLogin,
         )
     }
 }

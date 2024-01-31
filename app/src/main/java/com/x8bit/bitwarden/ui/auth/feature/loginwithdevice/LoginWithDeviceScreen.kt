@@ -42,8 +42,12 @@ import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
@@ -55,13 +59,23 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 @Composable
 fun LoginWithDeviceScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
     viewModel: LoginWithDeviceViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             LoginWithDeviceEvent.NavigateBack -> onNavigateBack()
+            is LoginWithDeviceEvent.NavigateToCaptcha -> {
+                intentManager.startCustomTabsActivity(uri = event.uri)
+            }
+
+            is LoginWithDeviceEvent.NavigateToTwoFactorLogin -> {
+                onNavigateToTwoFactorLogin(event.emailAddress)
+            }
+
             is LoginWithDeviceEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
             }
@@ -250,6 +264,10 @@ private fun LoginWithDeviceDialogs(
     onDismissDialog: () -> Unit,
 ) {
     when (state) {
+        is LoginWithDeviceState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(text = state.message),
+        )
+
         is LoginWithDeviceState.DialogState.Error -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = state.title,

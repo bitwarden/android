@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
+import android.net.Uri
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
@@ -12,18 +13,27 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
-import junit.framework.TestCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class LoginWithDeviceScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
+    private var onNavigateToTwoFactorLoginEmail: String? = null
+
+    private val intentManager: IntentManager = mockk {
+        every { startCustomTabsActivity(any()) } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<LoginWithDeviceEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LoginWithDeviceViewModel>(relaxed = true) {
@@ -36,7 +46,9 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             LoginWithDeviceScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToTwoFactorLogin = { onNavigateToTwoFactorLoginEmail = it },
                 viewModel = viewModel,
+                intentManager = intentManager,
             )
         }
     }
@@ -87,7 +99,23 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(LoginWithDeviceEvent.NavigateBack)
-        TestCase.assertTrue(onNavigateBackCalled)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `NavigateBack should call onNavigateToTwoFactorLoginEmail`() {
+        val email = "test@email.com"
+        mutableEventFlow.tryEmit(LoginWithDeviceEvent.NavigateToTwoFactorLogin(email))
+        assertEquals(email, onNavigateToTwoFactorLoginEmail)
+    }
+
+    @Test
+    fun `NavigateToCaptcha should call launchUri on intentManager`() {
+        val uri = mockk<Uri>()
+        mutableEventFlow.tryEmit(LoginWithDeviceEvent.NavigateToCaptcha(uri))
+        verify(exactly = 1) {
+            intentManager.startCustomTabsActivity(uri)
+        }
     }
 
     @Test
@@ -101,6 +129,43 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
             it.copy(viewState = DEFAULT_STATE.viewState)
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
+    }
+
+    @Test
+    fun `progress dialog should be displayed according to state`() {
+        val loadingMessage = "loading..."
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = LoginWithDeviceState.DialogState.Loading(loadingMessage.asText()),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+    }
+
+    @Test
+    fun `error dialog should be displayed according to state`() {
+        val errorMessage = "Error"
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = LoginWithDeviceState.DialogState.Error(
+                    title = null,
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(errorMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
     }
 }
 
