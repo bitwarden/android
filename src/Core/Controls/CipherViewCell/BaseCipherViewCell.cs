@@ -1,4 +1,5 @@
-﻿using Bit.App.Pages;
+﻿using System.Diagnostics.CodeAnalysis;
+using Bit.App.Pages;
 
 namespace Bit.App.Controls
 {
@@ -47,7 +48,7 @@ namespace Bit.App.Controls
             });
         }
 
-        void Icon_Success(object sender, FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs e)
+        protected void Icon_Success(object sender, FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs e)
         {
             if (BindingContext is CipherItemViewModel cipherItemVM)
             {
@@ -60,7 +61,7 @@ namespace Bit.App.Controls
             });
         }
 
-        void Icon_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
+        protected void Icon_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
         {
             if (BindingContext is CipherItemViewModel cipherItemVM)
             {
