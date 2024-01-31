@@ -7,11 +7,15 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -23,10 +27,13 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     private val mutableCreateAuthRequestWithUpdatesFlow =
         bufferedMutableSharedFlow<CreateAuthRequestResult>()
+    private val mutableCaptchaTokenResultFlow =
+        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val authRepository = mockk<AuthRepository> {
         coEvery {
             createAuthRequestWithUpdates(EMAIL)
         } returns mutableCreateAuthRequestWithUpdatesFlow
+        coEvery { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
     }
 
     @Test
@@ -128,20 +135,219 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on createAuthRequestWithUpdates Success received should show content`() {
+    fun `on createAuthRequestWithUpdates Success and login success should update the state`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = DEFAULT_LOGIN_DATA.requestId,
+                    accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                    masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                    captchaToken = null,
+                )
+            } returns LoginResult.Success
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                    CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                            fingerprintPhrase = "",
+                        ),
+                        loginData = DEFAULT_LOGIN_DATA,
+                        dialogState = LoginWithDeviceState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                            fingerprintPhrase = "",
+                        ),
+                        dialogState = null,
+                        loginData = DEFAULT_LOGIN_DATA,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = AUTH_REQUEST.id,
+                    accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                    asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                    requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                    masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on createAuthRequestWithUpdates Success and login two factor required should emit NavigateToTwoFactorLogin`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = DEFAULT_LOGIN_DATA.requestId,
+                    accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                    masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                    captchaToken = null,
+                )
+            } returns LoginResult.TwoFactorRequired
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                    CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                )
+                assertEquals(
+                    LoginWithDeviceEvent.NavigateToTwoFactorLogin(emailAddress = EMAIL),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = AUTH_REQUEST.id,
+                    accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                    asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                    requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                    masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Test
+    fun `on createAuthRequestWithUpdates Success and login error should should update the state`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = DEFAULT_LOGIN_DATA.requestId,
+                    accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                    masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                    captchaToken = null,
+                )
+            } returns LoginResult.Error(null)
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.stateFlow.test {
+                    assertEquals(DEFAULT_STATE, awaitItem())
+                    mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                        CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                            dialogState = LoginWithDeviceState.DialogState.Loading(
+                                message = R.string.logging_in.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            dialogState = LoginWithDeviceState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.generic_error_message.asText(),
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = AUTH_REQUEST.id,
+                    accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                    asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                    requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                    masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Test
+    fun `on captchaTokenResultFlow missing token should should display error dialog`() = runTest {
         val viewModel = createViewModel()
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
-            CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
-        )
+        mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.MissingToken)
         assertEquals(
             DEFAULT_STATE.copy(
-                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    fingerprintPhrase = "",
+                dialogState = LoginWithDeviceState.DialogState.Error(
+                    title = R.string.log_in_denied.asText(),
+                    message = R.string.captcha_failed.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Test
+    fun `on captchaTokenResultFlow success should update the token`() = runTest {
+        val captchaToken = "captchaToken"
+        val initialState = DEFAULT_STATE.copy(loginData = DEFAULT_LOGIN_DATA)
+        coEvery {
+            authRepository.login(
+                email = EMAIL,
+                requestId = DEFAULT_LOGIN_DATA.requestId,
+                accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                captchaToken = captchaToken,
+            )
+        } just awaits
+        val viewModel = createViewModel(initialState)
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.Success(captchaToken))
+            assertEquals(
+                initialState.copy(
+                    loginData = DEFAULT_LOGIN_DATA.copy(captchaToken = captchaToken),
+                    dialogState = LoginWithDeviceState.DialogState.Loading(
+                        message = R.string.logging_in.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+
+        coVerify(exactly = 1) {
+            authRepository.login(
+                email = EMAIL,
+                requestId = AUTH_REQUEST.id,
+                accessCode = AUTH_REQUEST_RESPONSE.accessCode,
+                asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
+                masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                captchaToken = captchaToken,
+            )
+        }
     }
 
     @Test
@@ -229,6 +435,7 @@ private val DEFAULT_STATE = LoginWithDeviceState(
     emailAddress = EMAIL,
     viewState = DEFAULT_CONTENT_VIEW_STATE,
     dialogState = null,
+    loginData = null,
 )
 
 private val AUTH_REQUEST = AuthRequest(
@@ -250,4 +457,13 @@ private val AUTH_REQUEST_RESPONSE = AuthRequestResponse(
     publicKey = "public_key",
     accessCode = "accessCode",
     fingerprint = "fingerprint",
+)
+
+private val DEFAULT_LOGIN_DATA = LoginWithDeviceState.LoginData(
+    accessCode = "accessCode",
+    requestId = "1",
+    masterPasswordHash = "verySecureHash",
+    asymmetricalKey = "public",
+    privateKey = "private_key",
+    captchaToken = null,
 )
