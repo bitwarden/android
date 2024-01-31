@@ -31,6 +31,9 @@ val SyncResponseJson.Policy.policyInformation: PolicyInformation?
             PolicyTypeJson.MASTER_PASSWORD -> {
                 Json.decodeFromString<PolicyInformation.MasterPassword>(it)
             }
+            PolicyTypeJson.PASSWORD_GENERATOR -> {
+                Json.decodeFromString<PolicyInformation.PasswordGenerator>(it)
+            }
 
             else -> null
         }

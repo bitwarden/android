@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -32,6 +33,8 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAd
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -44,8 +47,12 @@ import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -759,6 +766,102 @@ class GeneratorRepositoryTest {
                 generatorDiskSource.storeUsernameGenerationOptions(any(), any())
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getPasswordGeneratorPolicy returns default settings when no policies are present`() = runTest {
+        val userId = "testUserId"
+        coEvery { authDiskSource.userState?.activeUserId } returns userId
+        coEvery { authDiskSource.getPolicies(userId) } returns emptyList()
+
+        val policy = repository.getPasswordGeneratorPolicy()
+
+        val expectedPolicy = PolicyInformation.PasswordGenerator(
+            defaultType = "password",
+            minLength = null,
+            useUpper = false,
+            useLower = false,
+            useNumbers = false,
+            useSpecial = false,
+            minNumbers = null,
+            minSpecial = null,
+            minNumberWords = null,
+            capitalize = false,
+            includeNumber = false,
+        )
+
+        assertNotNull(policy)
+        assertEquals(expectedPolicy, policy)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getPasswordGeneratorPolicy applies strictest settings from multiple policies`() = runTest {
+        val userId = "testUserId"
+        val policy1 = PolicyInformation.PasswordGenerator(
+            defaultType = "password",
+            minLength = 8,
+            useUpper = true,
+            useLower = true,
+            useNumbers = true,
+            useSpecial = false,
+            minNumbers = 1,
+            minSpecial = 1,
+            minNumberWords = 3,
+            capitalize = true,
+            includeNumber = true,
+        )
+        val policy2 = PolicyInformation.PasswordGenerator(
+            defaultType = "passphrase", // Different type, more specific in this context
+            minLength = 12, // More strict
+            useUpper = true,
+            useLower = true,
+            useNumbers = true,
+            useSpecial = true, // More strict
+            minNumbers = 2, // More strict
+            minSpecial = 2, // More strict
+            minNumberWords = 4, // More strict
+            capitalize = false, // Different, less strict, should not override
+            includeNumber = false, // Different, less strict, should not override
+        )
+        val policies = listOf(
+            SyncResponseJson.Policy(
+                id = "1",
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+                isEnabled = true,
+                data = Json.encodeToJsonElement(policy1).jsonObject,
+                organizationId = "id1",
+            ),
+            SyncResponseJson.Policy(
+                id = "2",
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+                isEnabled = true,
+                data = Json.encodeToJsonElement(policy2).jsonObject,
+                organizationId = "id2",
+            ),
+        )
+        coEvery { authDiskSource.userState?.activeUserId } returns userId
+        coEvery { authDiskSource.getPolicies(userId) } returns policies
+
+        val resultPolicy = repository.getPasswordGeneratorPolicy()
+
+        // The expected combined policy
+        val expectedPolicy = PolicyInformation.PasswordGenerator(
+            defaultType = "passphrase",
+            minLength = 12,
+            useUpper = true,
+            useLower = true,
+            useNumbers = true,
+            useSpecial = true,
+            minNumbers = 2,
+            minSpecial = 2,
+            minNumberWords = 4,
+            capitalize = true,
+            includeNumber = true,
+        )
+
+        assertEquals(expectedPolicy, resultPolicy)
+    }
 }
 
 private val USER_STATE = UserStateJson(

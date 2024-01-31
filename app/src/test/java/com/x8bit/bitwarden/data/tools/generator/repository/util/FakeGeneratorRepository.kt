@@ -4,6 +4,7 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -61,6 +62,8 @@ class FakeGeneratorRepository : GeneratorRepository {
         GeneratedForwardedServiceUsernameResult.Success(
             generatedEmailAddress = "updatedUsername",
         )
+
+    private var passwordGeneratorPolicy: PolicyInformation.PasswordGenerator? = null
 
     override val passwordHistoryStateFlow: StateFlow<LocalDataState<List<PasswordHistoryView>>>
         get() = mutablePasswordHistoryStateFlow
@@ -135,6 +138,10 @@ class FakeGeneratorRepository : GeneratorRepository {
         mutablePasswordHistoryStateFlow.value = LocalDataState.Loaded(emptyList())
     }
 
+    override fun getPasswordGeneratorPolicy(): PolicyInformation.PasswordGenerator? {
+        return passwordGeneratorPolicy
+    }
+
     /**
      * Sets the mock result for the generatePassword function.
      */
@@ -183,5 +190,9 @@ class FakeGeneratorRepository : GeneratorRepository {
      */
     fun setMockRandomWordResult(result: GeneratedRandomWordUsernameResult) {
         generateRandomWordUsernameResult = result
+    }
+
+    fun setMockPasswordGeneratorPolicy(policy: PolicyInformation.PasswordGenerator?) {
+        this.passwordGeneratorPolicy = policy
     }
 }
