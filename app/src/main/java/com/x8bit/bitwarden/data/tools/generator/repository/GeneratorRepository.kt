@@ -6,6 +6,7 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
@@ -83,6 +84,11 @@ interface GeneratorRepository {
     suspend fun generateForwardedServiceUsername(
         forwardedServiceGeneratorRequest: UsernameGeneratorRequest.Forwarded,
     ): GeneratedForwardedServiceUsernameResult
+
+    /**
+     * Get the policy for password generation.
+     */
+    fun getPasswordGeneratorPolicy(): PolicyInformation.PasswordGenerator?
 
     /**
      * Get the [PasscodeGenerationOptions] for the current user.

@@ -42,4 +42,60 @@ sealed class PolicyInformation {
         @SerialName("enforceOnLogin")
         val enforceOnLogin: Boolean?,
     ) : PolicyInformation()
+
+    /**
+     * Represents a policy enforcing rules on the password generator.
+     *
+     * @property defaultType The default type of password to be generated.
+     * @property minLength The minimum length of the password.
+     * @property useUpper Whether the password requires upper case letters.
+     * @property useLower Whether the password requires lower case letters.
+     * @property useNumbers Whether the password requires numbers.
+     * @property useSpecial Whether the password requires special characters.
+     * @property minNumbers The minimum number of digits in the password.
+     * @property minSpecial The minimum number of special characters in the password.
+     * @property minNumberWords The minimum number of words in a passphrase.
+     * @property capitalize Whether to capitalize the first character of each word in a passphrase.
+     * @property includeNumber Whether to include a number at the end of a passphrase.
+     */
+    @Serializable
+    data class PasswordGenerator(
+        @SerialName("defaultType")
+        val defaultType: String?,
+
+        @SerialName("minLength")
+        val minLength: Int?,
+
+        @SerialName("useUpper")
+        val useUpper: Boolean?,
+
+        @SerialName("useLower")
+        val useLower: Boolean?,
+
+        @SerialName("useNumbers")
+        val useNumbers: Boolean?,
+
+        @SerialName("useSpecial")
+        val useSpecial: Boolean?,
+
+        @SerialName("minNumbers")
+        val minNumbers: Int?,
+
+        @SerialName("minSpecial")
+        val minSpecial: Int?,
+
+        @SerialName("minNumberWords")
+        val minNumberWords: Int?,
+
+        @SerialName("capitalize")
+        val capitalize: Boolean?,
+
+        @SerialName("includeNumber")
+        val includeNumber: Boolean?,
+    ) : PolicyInformation() {
+        companion object {
+            const val TYPE_PASSWORD: String = "password"
+            const val TYPE_PASSPHRASE: String = "passphrase"
+        }
+    }
 }
