@@ -47,6 +47,13 @@
         </activity>
 
         <activity
+            android:name=".AutofillTotpCopyActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@style/AutofillTotpCopyTheme" />
+
+        <activity
             android:name=".WebAuthCallbackActivity"
             android:exported="true"
             android:launchMode="singleTop"

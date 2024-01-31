@@ -44,6 +44,7 @@ class AutofillCipherProviderImpl(
                     .takeIf { cipherView.type == CipherType.CARD && cipherView.deletedDate == null }
                     ?.let { nonNullCipherView ->
                         AutofillCipher.Card(
+                            cipherId = cipherView.id,
                             name = nonNullCipherView.name,
                             subtitle = nonNullCipherView.subtitle.orEmpty(),
                             cardholderName = nonNullCipherView.card?.cardholderName.orEmpty(),
@@ -72,6 +73,8 @@ class AutofillCipherProviderImpl(
             )
             .map { cipherView ->
                 AutofillCipher.Login(
+                    cipherId = cipherView.id,
+                    isTotpEnabled = cipherView.login?.totp != null,
                     name = cipherView.name,
                     password = cipherView.login?.password.orEmpty(),
                     subtitle = cipherView.subtitle.orEmpty(),

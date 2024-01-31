@@ -41,16 +41,31 @@ class AutofillCipherProviderTest {
     private val cardCipherView: CipherView = mockk {
         every { card } returns cardView
         every { deletedDate } returns null
+        every { id } returns CIPHER_ID
         every { name } returns CARD_NAME
         every { type } returns CipherType.CARD
     }
-    private val loginView: LoginView = mockk {
+    private val loginViewWithoutTotp: LoginView = mockk {
         every { password } returns LOGIN_PASSWORD
         every { username } returns LOGIN_USERNAME
+        every { totp } returns null
     }
-    private val loginCipherView: CipherView = mockk {
+    private val loginCipherViewWithoutTotp: CipherView = mockk {
         every { deletedDate } returns null
-        every { login } returns loginView
+        every { id } returns CIPHER_ID
+        every { login } returns loginViewWithoutTotp
+        every { name } returns LOGIN_NAME
+        every { type } returns CipherType.LOGIN
+    }
+    private val loginViewWithTotp: LoginView = mockk {
+        every { password } returns LOGIN_PASSWORD
+        every { username } returns LOGIN_USERNAME
+        every { totp } returns "TOTP-CODE"
+    }
+    private val loginCipherViewWithTotp: CipherView = mockk {
+        every { deletedDate } returns null
+        every { id } returns CIPHER_ID
+        every { login } returns loginViewWithTotp
         every { name } returns LOGIN_NAME
         every { type } returns CipherType.LOGIN
     }
@@ -147,7 +162,8 @@ class AutofillCipherProviderTest {
             val cipherViews = listOf(
                 cardCipherView,
                 deletedCardCipherView,
-                loginCipherView,
+                loginCipherViewWithTotp,
+                loginCipherViewWithoutTotp,
             )
             mutableCiphersStateFlow.value = DataState.Loaded(
                 data = cipherViews,
@@ -189,11 +205,13 @@ class AutofillCipherProviderTest {
             }
             val cipherViews = listOf(
                 cardCipherView,
-                loginCipherView,
+                loginCipherViewWithTotp,
+                loginCipherViewWithoutTotp,
                 deletedLoginCipherView,
             )
             val filteredCipherViews = listOf(
-                loginCipherView,
+                loginCipherViewWithTotp,
+                loginCipherViewWithoutTotp,
             )
             coEvery {
                 cipherMatchingManager.filterCiphersForMatches(
@@ -211,9 +229,11 @@ class AutofillCipherProviderTest {
                 ),
             )
             val expected = listOf(
-                LOGIN_AUTOFILL_CIPHER,
+                LOGIN_AUTOFILL_CIPHER_WITH_TOTP,
+                LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP,
             )
-            every { loginCipherView.subtitle } returns LOGIN_SUBTITLE
+            every { loginCipherViewWithTotp.subtitle } returns LOGIN_SUBTITLE
+            every { loginCipherViewWithoutTotp.subtitle } returns LOGIN_SUBTITLE
 
             // Test
             val actual = autofillCipherProvider.getLoginAutofillCiphers(
@@ -251,8 +271,10 @@ private const val CARD_EXP_YEAR = "2029"
 private const val CARD_NAME = "John's Card"
 private const val CARD_NUMBER = "1234567890"
 private const val CARD_SUBTITLE = "7890"
+private const val CIPHER_ID = "1234567890"
 private val CARD_AUTOFILL_CIPHER = AutofillCipher.Card(
     cardholderName = CARD_CARDHOLDER_NAME,
+    cipherId = CIPHER_ID,
     code = CARD_CODE,
     expirationMonth = CARD_EXP_MONTH,
     expirationYear = CARD_EXP_YEAR,
@@ -264,14 +286,20 @@ private const val LOGIN_NAME = "John's Login"
 private const val LOGIN_PASSWORD = "Password123"
 private const val LOGIN_SUBTITLE = "John Doe"
 private const val LOGIN_USERNAME = "John-Bitwarden"
-private val LOGIN_AUTOFILL_CIPHER = AutofillCipher.Login(
+private val LOGIN_AUTOFILL_CIPHER_WITH_TOTP = AutofillCipher.Login(
+    cipherId = CIPHER_ID,
+    isTotpEnabled = true,
     name = LOGIN_NAME,
     password = LOGIN_PASSWORD,
     subtitle = LOGIN_SUBTITLE,
     username = LOGIN_USERNAME,
 )
-private val CIPHERS = listOf(
-    CARD_AUTOFILL_CIPHER,
-    LOGIN_AUTOFILL_CIPHER,
+private val LOGIN_AUTOFILL_CIPHER_WITHOUT_TOTP = AutofillCipher.Login(
+    cipherId = CIPHER_ID,
+    isTotpEnabled = false,
+    name = LOGIN_NAME,
+    password = LOGIN_PASSWORD,
+    subtitle = LOGIN_SUBTITLE,
+    username = LOGIN_USERNAME,
 )
 private const val URI: String = "androidapp://com.x8bit.bitwarden"

@@ -2,7 +2,11 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import android.app.Activity
 import android.content.Intent
+import android.widget.Toast
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.DateTime
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilderImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
@@ -12,7 +16,10 @@ import com.x8bit.bitwarden.data.autofill.util.createAutofillSelectionResultInten
 import com.x8bit.bitwarden.data.autofill.util.getAutofillAssistStructureOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.util.toAutofillCipherProvider
+import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -20,10 +27,13 @@ import kotlinx.coroutines.launch
  * Primary implementation of [AutofillCompletionManager].
  */
 class AutofillCompletionManagerImpl(
+    private val authRepository: AuthRepository,
     private val autofillParser: AutofillParser,
+    private val clipboardManager: BitwardenClipboardManager,
     private val dispatcherManager: DispatcherManager,
     private val filledDataBuilderProvider: (CipherView) -> FilledDataBuilder =
         { createSingleItemFilledDataBuilder(cipherView = it) },
+    private val vaultRepository: VaultRepository,
 ) : AutofillCompletionManager {
     private val mainScope = CoroutineScope(dispatcherManager.main)
 
@@ -58,13 +68,53 @@ class AutofillCompletionManagerImpl(
                 .build(autofillRequest)
                 .filledPartitions
                 .firstOrNull()
-                ?.buildDataset(autofillAppInfo = autofillAppInfo)
+                ?.buildDataset(
+                    autofillAppInfo = autofillAppInfo,
+                    authIntentSender = null,
+                )
                 ?: run {
                     activity.cancelAndFinish()
                     return@launch
                 }
+            tryCopyTotpToClipboard(
+                activity = activity,
+                cipherView = cipherView,
+            )
             val resultIntent = createAutofillSelectionResultIntent(dataset)
             activity.setResultAndFinish(resultIntent = resultIntent)
+        }
+    }
+
+    /**
+     * Attempt to copy the totp code to clipboard. If it succeeds show a toast.
+     *
+     * @param activity An activity for launching a toast.
+     * @param cipherView The [CipherView] for which to generate a TOTP code.
+     */
+    private suspend fun tryCopyTotpToClipboard(
+        activity: Activity,
+        cipherView: CipherView,
+    ) {
+        val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
+        val totpCode = cipherView.login?.totp
+
+        // TODO check global TOTP enabled status BIT-1093
+        if (isPremium && totpCode != null) {
+            val totpResult = vaultRepository.generateTotp(
+                time = DateTime.now(),
+                totpCode = totpCode,
+            )
+
+            if (totpResult is GenerateTotpResult.Success) {
+                clipboardManager.setText(totpResult.code)
+                Toast
+                    .makeText(
+                        activity.applicationContext,
+                        R.string.verification_code_totp,
+                        Toast.LENGTH_LONG,
+                    )
+                    .show()
+            }
         }
     }
 }

@@ -2,17 +2,22 @@
 
 package com.x8bit.bitwarden.data.autofill.util
 
+import android.app.PendingIntent
 import android.app.assist.AssistStructure
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
+import com.x8bit.bitwarden.AutofillTotpCopyActivity
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.getSafeParcelableExtra
 
 private const val AUTOFILL_SELECTION_DATA_KEY = "autofill-selection-data"
+private const val AUTOFILL_TOTP_COPY_DATA_KEY = "autofill-totp-copy-data"
 
 /**
  * Creates an [Intent] in order to send the user to a manual selection process for autofill.
@@ -35,6 +40,37 @@ fun createAutofillSelectionIntent(
                 ),
             )
         }
+
+/**
+ * Creates an [IntentSender] built with the data required for performing a TOTP copying during
+ * the autofill flow.
+ */
+fun createTotpCopyIntentSender(
+    cipherId: String,
+    context: Context,
+): IntentSender {
+    val intent = Intent(
+        context,
+        AutofillTotpCopyActivity::class.java,
+    )
+        .apply {
+            putExtra(
+                AUTOFILL_TOTP_COPY_DATA_KEY,
+                AutofillTotpCopyData(
+                    cipherId = cipherId,
+                ),
+            )
+        }
+
+    return PendingIntent
+        .getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_CANCEL_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+        .intentSender
+}
 
 /**
  * Creates an [Intent] in order to specify that there is a successful selection during a manual
@@ -61,3 +97,10 @@ fun Intent.getAutofillAssistStructureOrNull(): AssistStructure? =
  */
 fun Intent.getAutofillSelectionDataOrNull(): AutofillSelectionData? =
     this.getSafeParcelableExtra(AUTOFILL_SELECTION_DATA_KEY)
+
+/**
+ * Checks if the given [Intent] contains data for TOTP copying. The [AutofillTotpCopyData] will be
+ * returned when present.
+ */
+fun Intent.getTotpCopyIntentOrNull(): AutofillTotpCopyData? =
+    this.getSafeParcelableExtra(AUTOFILL_TOTP_COPY_DATA_KEY)

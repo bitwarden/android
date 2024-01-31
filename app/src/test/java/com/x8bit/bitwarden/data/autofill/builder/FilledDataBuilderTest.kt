@@ -59,7 +59,9 @@ class FilledDataBuilderTest {
         val password = "Password"
         val username = "johnDoe"
         val autofillCipher = AutofillCipher.Login(
+            cipherId = null,
             name = "Cipher One",
+            isTotpEnabled = false,
             password = password,
             username = username,
             subtitle = "Subtitle",
@@ -181,6 +183,7 @@ class FilledDataBuilderTest {
         val number = "1234567890"
         val autofillCipher = AutofillCipher.Card(
             cardholderName = "John",
+            cipherId = null,
             code = code,
             expirationMonth = expirationMonth,
             expirationYear = expirationYear,
@@ -273,6 +276,8 @@ class FilledDataBuilderTest {
             val password = "Password"
             val username = "johnDoe"
             val autofillCipher = AutofillCipher.Login(
+                cipherId = null,
+                isTotpEnabled = false,
                 name = "Cipher One",
                 password = password,
                 username = username,

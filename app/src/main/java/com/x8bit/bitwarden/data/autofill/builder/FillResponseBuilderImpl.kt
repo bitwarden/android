@@ -1,10 +1,13 @@
 package com.x8bit.bitwarden.data.autofill.builder
 
+import android.content.IntentSender
 import android.service.autofill.FillResponse
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.FilledData
+import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.util.buildDataset
 import com.x8bit.bitwarden.data.autofill.util.buildVaultItemDataset
+import com.x8bit.bitwarden.data.autofill.util.createTotpCopyIntentSender
 import com.x8bit.bitwarden.data.autofill.util.fillableAutofillIds
 
 /**
@@ -28,7 +31,11 @@ class FillResponseBuilderImpl : FillResponseBuilder {
                         // We build a dataset for each filled partition. A filled partition is a
                         // copy of all the views that we are going to fill, loaded with the data
                         // from one of the ciphers that can fulfill this partition type.
+                        val authIntentSender = filledPartition.toAuthIntentSenderOrNull(
+                            autofillAppInfo = autofillAppInfo,
+                        )
                         val dataset = filledPartition.buildDataset(
+                            authIntentSender = authIntentSender,
                             autofillAppInfo = autofillAppInfo,
                         )
 
@@ -55,4 +62,23 @@ class FillResponseBuilderImpl : FillResponseBuilder {
             // replace [FillResponse] with null in order to avoid this crash.
             null
         }
+}
+
+/**
+ * Convert this [FilledPartition] and [autofillAppInfo] into an [IntentSender] if totp is enabled
+ * and there the [FilledPartition.autofillCipher] has a valid cipher id.
+ */
+private fun FilledPartition.toAuthIntentSenderOrNull(
+    autofillAppInfo: AutofillAppInfo,
+): IntentSender? {
+    val isTotpEnabled = this.autofillCipher.isTotpEnabled
+    val cipherId = this.autofillCipher.cipherId
+    return if (isTotpEnabled && cipherId != null) {
+        createTotpCopyIntentSender(
+            cipherId = cipherId,
+            context = autofillAppInfo.context,
+        )
+    } else {
+        null
+    }
 }

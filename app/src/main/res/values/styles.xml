@@ -17,4 +17,14 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_rounded</item>
         <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
     </style>
+
+    <!-- A translucent theme for the autofill TOTP copy activity -->
+    <style name="AutofillTotpCopyTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="statusBarBackground">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>

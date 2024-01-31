@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.model
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.Uuid
 import com.x8bit.bitwarden.R
 
 /**
@@ -13,6 +14,11 @@ sealed class AutofillCipher {
     abstract val iconRes: Int
 
     /**
+     * Whether or not TOTP is enabled for this cipher.
+     */
+    abstract val isTotpEnabled: Boolean
+
+    /**
      * The name of the cipher.
      */
     abstract val name: String
@@ -23,10 +29,16 @@ sealed class AutofillCipher {
     abstract val subtitle: String
 
     /**
+     * The ID that corresponds to the CipherView used to create this [AutofillCipher].
+     */
+    abstract val cipherId: String?
+
+    /**
      * The card [AutofillCipher] model. This contains all of the data for building fulfilling a card
      * partition.
      */
     data class Card(
+        override val cipherId: String?,
         override val name: String,
         override val subtitle: String,
         val cardholderName: String,
@@ -37,6 +49,9 @@ sealed class AutofillCipher {
     ) : AutofillCipher() {
         override val iconRes: Int
             @DrawableRes get() = R.drawable.ic_card_item
+
+        override val isTotpEnabled: Boolean
+            get() = false
     }
 
     /**
@@ -44,6 +59,8 @@ sealed class AutofillCipher {
      * login partition.
      */
     data class Login(
+        override val cipherId: Uuid?,
+        override val isTotpEnabled: Boolean,
         override val name: String,
         override val subtitle: String,
         val password: String,
