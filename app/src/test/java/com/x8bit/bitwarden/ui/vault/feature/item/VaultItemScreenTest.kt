@@ -661,6 +661,44 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `Delete dialog text should display according to state`() {
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+        // Click on the delete item in the dropdown
+        composeTestRule
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Do you really want to send to the trash?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        currentCipher = createMockCipherView(
+                            number = 1,
+                            isDeleted = true,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(
+                text = "Do you really want to permanently delete? This cannot be undone.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `Restore click should send show restore confirmation dialog`() {
         mutableStateFlow.update {
             it.copy(

@@ -42,6 +42,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
 @Suppress("LargeClass")
 class VaultItemViewModelTest : BaseViewModelTest() {
@@ -238,6 +239,52 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     ),
                     viewModel.stateFlow.value,
                 )
+            }
+
+        @Test
+        fun `ConfirmDeleteClick with deleted cipher should should invoke hardDeleteCipher`() =
+            runTest {
+                val loginViewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON
+                        .copy(
+                            requiresReprompt = false,
+                            currentCipher = DEFAULT_COMMON
+                                .currentCipher
+                                ?.copy(deletedDate = Instant.MIN),
+                        ),
+                )
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = createTotpCodeData(),
+                        )
+                    } returns loginViewState
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value =
+                    DataState.Loaded(data = createVerificationCodeItem())
+
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                coEvery {
+                    vaultRepo.hardDeleteCipher(
+                        cipherId = VAULT_ITEM_ID,
+                    )
+                } returns DeleteCipherResult.Success
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
+
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VaultItemEvent.ShowToast(R.string.item_deleted.asText()),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        VaultItemEvent.NavigateBack,
+                        awaitItem(),
+                    )
+                }
+                coVerify { vaultRepo.hardDeleteCipher(cipherId = VAULT_ITEM_ID) }
             }
 
         @Test

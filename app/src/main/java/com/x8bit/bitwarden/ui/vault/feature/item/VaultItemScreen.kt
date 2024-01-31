@@ -127,7 +127,7 @@ fun VaultItemScreen(
     if (pendingDeleteCipher) {
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.delete),
-            message = stringResource(id = R.string.do_you_really_want_to_soft_delete_cipher),
+            message = state.deletionConfirmationText(),
             confirmButtonText = stringResource(id = R.string.ok),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {
@@ -182,7 +182,6 @@ fun VaultItemScreen(
                             onClick = { pendingRestoreCipher = true },
                         )
                     }
-                    // TODO make action list dependent on item being in an organization BIT-1446
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOfNotNull(
                             OverflowMenuItemData(
