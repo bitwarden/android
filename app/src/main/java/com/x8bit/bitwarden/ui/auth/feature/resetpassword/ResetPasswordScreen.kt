@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
@@ -164,8 +165,14 @@ private fun ResetPasswordScreeContent(
             .verticalScroll(rememberScrollState()),
     ) {
 
+        val instructionsTextId =
+            if (state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
+                R.string.update_weak_master_password_warning
+            } else {
+                R.string.update_master_password_warning
+            }
         Text(
-            text = stringResource(id = R.string.update_weak_master_password_warning),
+            text = stringResource(id = instructionsTextId),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -182,28 +189,29 @@ private fun ResetPasswordScreeContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        val passwordPolicyContent = listOf(
-            stringResource(id = R.string.master_password_policy_in_effect),
-        )
-            .plus(state.policies.map { it() })
-            .joinToString("\n  •  ")
-        Text(
-            text = passwordPolicyContent,
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(4.dp),
-                )
-                .padding(16.dp)
-                .fillMaxWidth(),
-        )
+        if (state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
+            val passwordPolicyContent = listOf(
+                stringResource(id = R.string.master_password_policy_in_effect),
+            )
+                .plus(state.policies.map { it() })
+                .joinToString("\n  •  ")
+            Text(
+                text = passwordPolicyContent,
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(4.dp),
+                    )
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenPasswordField(
             label = stringResource(id = R.string.current_master_password),
@@ -215,7 +223,8 @@ private fun ResetPasswordScreeContent(
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
         BitwardenPasswordField(
             label = stringResource(id = R.string.master_password),

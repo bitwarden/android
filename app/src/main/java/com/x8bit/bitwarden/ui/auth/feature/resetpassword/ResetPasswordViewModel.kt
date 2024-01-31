@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -11,6 +12,7 @@ import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,6 +22,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val MIN_PASSWORD_LENGTH = 12
 
 /**
  * Manages application state for the Reset Password screen.
@@ -33,6 +36,7 @@ class ResetPasswordViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: ResetPasswordState(
             policies = authRepository.passwordPolicies.toDisplayLabels(),
+            resetReason = authRepository.passwordResetReason,
             dialogState = null,
             currentPasswordInput = "",
             passwordInput = "",
@@ -93,8 +97,7 @@ class ResetPasswordViewModel @Inject constructor(
      */
     private fun handleSubmitClicked() {
         // Display an error dialog if the new password field is blank.
-        val password = state.passwordInput
-        if (password.isBlank()) {
+        if (state.passwordInput.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
                     dialogState = ResetPasswordState.DialogState.Error(
@@ -107,12 +110,35 @@ class ResetPasswordViewModel @Inject constructor(
             return
         }
 
-        // Check if the new password meets the policy requirements.
-        viewModelScope.launch {
-            val result = authRepository.validatePasswordAgainstPolicies(password)
-            sendAction(
-                ResetPasswordAction.Internal.ReceiveValidatePasswordAgainstPoliciesResult(result),
-            )
+        // Check if the new password meets the policy requirements, if applicable.
+        if (state.resetReason == ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN) {
+            viewModelScope.launch {
+                val result = authRepository.validatePasswordAgainstPolicies(state.passwordInput)
+                sendAction(
+                    ResetPasswordAction.Internal.ReceiveValidatePasswordAgainstPoliciesResult(
+                        result,
+                    ),
+                )
+            }
+        } else {
+            // Otherwise, simply verify that the password meets the minimum length requirement.
+            if (state.passwordInput.length < MIN_PASSWORD_LENGTH) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = ResetPasswordState.DialogState.Error(
+                            title = null,
+                            message = R.string.master_password_length_val_message_x
+                                .asText(MIN_PASSWORD_LENGTH),
+                        ),
+                    )
+                }
+            } else {
+                // Check that the re-typed password matches.
+                if (!checkRetypedPassword()) return
+
+                // Otherwise, if the password checks out, attempt to reset it.
+                resetPassword()
+            }
         }
     }
 
@@ -236,24 +262,7 @@ class ResetPasswordViewModel @Inject constructor(
                         )
                     }
                 } else {
-                    // Show the loading dialog.
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = ResetPasswordState.DialogState.Loading(
-                                message = R.string.updating_password.asText(),
-                            ),
-                        )
-                    }
-                    viewModelScope.launch {
-                        val result = authRepository.resetPassword(
-                            currentPassword = state.currentPasswordInput,
-                            newPassword = state.passwordInput,
-                            passwordHint = state.passwordHintInput,
-                        )
-                        trySendAction(
-                            ResetPasswordAction.Internal.ReceiveResetPasswordResult(result),
-                        )
-                    }
+                    resetPassword()
                 }
             }
         }
@@ -279,24 +288,56 @@ class ResetPasswordViewModel @Inject constructor(
             return
         }
 
-        // Display an error alert if the re-typed password doesn't match the new password.
-        if (state.passwordInput != state.retypePasswordInput) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = ResetPasswordState.DialogState.Error(
-                        title = null,
-                        message = R.string.master_password_confirmation_val_message.asText(),
-                    ),
-                )
-            }
-            return
-        }
+        // Check that the re-typed password matches.
+        if (!checkRetypedPassword()) return
 
         // Check that the entered current password is correct.
         viewModelScope.launch {
             val currentPassword = state.currentPasswordInput
             val result = authRepository.validatePassword(currentPassword)
             trySendAction(ResetPasswordAction.Internal.ReceiveValidatePasswordResult(result))
+        }
+    }
+
+    /**
+     * A helper function to determine if the re-typed password matches and
+     * display an alert if not. Returns true if the passwords match.
+     */
+    private fun checkRetypedPassword(): Boolean {
+        if (state.passwordInput == state.retypePasswordInput) return true
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = ResetPasswordState.DialogState.Error(
+                    title = null,
+                    message = R.string.master_password_confirmation_val_message.asText(),
+                ),
+            )
+        }
+        return false
+    }
+
+    /**
+     * A helper function to launch the reset password request.
+     */
+    private fun resetPassword() {
+        // Show the loading dialog.
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = ResetPasswordState.DialogState.Loading(
+                    message = R.string.updating_password.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            val result = authRepository.resetPassword(
+                currentPassword = state.currentPasswordInput.orNullIfBlank(),
+                newPassword = state.passwordInput,
+                passwordHint = state.passwordHintInput,
+            )
+            trySendAction(
+                ResetPasswordAction.Internal.ReceiveResetPasswordResult(result),
+            )
         }
     }
 }
@@ -307,6 +348,7 @@ class ResetPasswordViewModel @Inject constructor(
 @Parcelize
 data class ResetPasswordState(
     val policies: List<Text>,
+    val resetReason: ForcePasswordResetReason?,
     val dialogState: DialogState?,
     val currentPasswordInput: String,
     val passwordInput: String,

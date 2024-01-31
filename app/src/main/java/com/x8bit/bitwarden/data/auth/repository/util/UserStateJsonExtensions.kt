@@ -58,6 +58,9 @@ fun UserStateJson.toUserState(
             .values
             .map { accountJson ->
                 val userId = accountJson.profile.userId
+                val vaultUnlocked = vaultState.statusFor(userId) == VaultUnlockData.Status.UNLOCKED
+                val needsPasswordReset = accountJson.profile.forcePasswordResetReason != null
+
                 UserState.Account(
                     userId = accountJson.profile.userId,
                     name = accountJson.profile.name,
@@ -70,9 +73,8 @@ fun UserStateJson.toUserState(
                         .toEnvironmentUrlsOrDefault(),
                     isPremium = accountJson.profile.hasPremium == true,
                     isLoggedIn = accountJson.isLoggedIn,
-                    isVaultUnlocked = vaultState.statusFor(userId) ==
-                        VaultUnlockData.Status.UNLOCKED,
-                    needsPasswordReset = accountJson.profile.forcePasswordResetReason != null,
+                    isVaultUnlocked = vaultUnlocked && !needsPasswordReset,
+                    needsPasswordReset = needsPasswordReset,
                     organizations = userOrganizationsList
                         .find { it.userId == userId }
                         ?.organizations

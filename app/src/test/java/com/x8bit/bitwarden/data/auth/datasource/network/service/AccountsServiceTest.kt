@@ -243,6 +243,21 @@ class AccountsServiceTest : BaseServiceTest() {
         assertTrue(result.isSuccess)
     }
 
+    @Test
+    fun `resetPassword with empty response and null current password is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.resetPassword(
+            body = ResetPasswordRequestJson(
+                currentPasswordHash = null,
+                newPasswordHash = "",
+                passwordHint = null,
+                key = "",
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
+
     companion object {
         private const val EMAIL = "email"
         private val registerRequestBody = RegisterRequestJson(

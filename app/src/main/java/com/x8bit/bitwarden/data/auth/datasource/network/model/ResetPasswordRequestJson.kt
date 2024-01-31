@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ResetPasswordRequestJson(
     @SerialName("masterPasswordHash")
-    val currentPasswordHash: String,
+    val currentPasswordHash: String?,
 
     @SerialName("newMasterPasswordHash")
     val newPasswordHash: String,

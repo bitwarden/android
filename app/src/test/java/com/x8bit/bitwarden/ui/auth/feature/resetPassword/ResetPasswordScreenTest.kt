@@ -8,6 +8,7 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordAction
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordEvent
@@ -109,10 +110,37 @@ class ResetPasswordScreenTest : BaseComposeTest() {
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `password instructions should update according to state`() {
-        val baseString =
-            "One or more organization policies require your master password to meet the following requirements:"
+    fun `instructions text should update according to state`() {
+        val weakPasswordString = "Your master password does not meet one or more " +
+            "of your organization policies. In order to access the vault, you must " +
+            "update your master password now. Proceeding will log you out of your " +
+            "current session, requiring you to log back in. Active sessions on other " +
+            "devices may continue to remain active for up to one hour."
+        composeTestRule
+            .onNodeWithText(weakPasswordString)
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+            )
+        }
+
+        val adminChangeString =
+            "Your master password was recently changed by an administrator in " +
+                "your organization. In order to access the vault, you must update your master " +
+                "password now. Proceeding will log you out of your current session, " +
+                "requiring you to log back in. Active sessions on other devices may continue " +
+                "to remain active for up to one hour."
+        composeTestRule
+            .onNodeWithText(adminChangeString)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `detailed instructions should update according to state`() {
+        val baseString = "One or more organization policies require your master password to " +
+            "meet the following requirements:"
         composeTestRule
             .onNodeWithText(baseString)
             .assertIsDisplayed()
@@ -131,6 +159,16 @@ class ResetPasswordScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(updatedString)
             .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(baseString)
+            .assertDoesNotExist()
     }
 
     @Test
@@ -140,6 +178,23 @@ class ResetPasswordScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged("Test123"))
         }
+    }
+
+    @Test
+    fun `current password field should update according to state`() {
+        composeTestRule
+            .onNodeWithText("Current master password")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Current master password")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -172,6 +227,7 @@ class ResetPasswordScreenTest : BaseComposeTest() {
 
 private val DEFAULT_STATE = ResetPasswordState(
     policies = emptyList(),
+    resetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
     dialogState = null,
     currentPasswordInput = "",
     passwordInput = "",

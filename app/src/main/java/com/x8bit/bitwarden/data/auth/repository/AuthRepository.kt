@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
@@ -91,6 +92,11 @@ interface AuthRepository : AuthenticatorProvider {
     val hasExportVaultPoliciesEnabled: Boolean
 
     /**
+     * The reason for resetting the password.
+     */
+    val passwordResetReason: ForcePasswordResetReason?
+
+    /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
      */
     fun clearPendingAccountDeletion()
@@ -172,11 +178,11 @@ interface AuthRepository : AuthenticatorProvider {
     ): PasswordHintResult
 
     /**
-     * Resets the users password from the [currentPassword] to the [newPassword] and
-     * optional [passwordHint].
+     * Resets the users password from the [currentPassword] (or null for account recovery resets),
+     * to the [newPassword] and optional [passwordHint].
      */
     suspend fun resetPassword(
-        currentPassword: String,
+        currentPassword: String?,
         newPassword: String,
         passwordHint: String?,
     ): ResetPasswordResult

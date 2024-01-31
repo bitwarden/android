@@ -248,6 +248,13 @@ class AuthRepositoryImpl(
                 ?: false
         } ?: false
 
+    override val passwordResetReason: ForcePasswordResetReason?
+        get() = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?.forcePasswordResetReason
+
     init {
         pushManager
             .syncOrgKeysFlow
@@ -267,6 +274,13 @@ class AuthRepositoryImpl(
         authDiskSource.currentUserPoliciesListFlow
             .onEach { policies ->
                 val userId = activeUserId ?: return@onEach
+
+                // If the password already has to be reset for some other reason, there's no
+                // need to check the password policies.
+                if (passwordResetReason != null) return@onEach
+
+                // Otherwise check the user's password against the policies and set or
+                // clear the force reset reason accordingly.
                 storeUserResetPasswordReason(
                     userId = userId,
                     reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN
@@ -659,7 +673,7 @@ class AuthRepositoryImpl(
 
     @Suppress("ReturnCount")
     override suspend fun resetPassword(
-        currentPassword: String,
+        currentPassword: String?,
         newPassword: String,
         passwordHint: String?,
     ): ResetPasswordResult {
@@ -667,17 +681,19 @@ class AuthRepositoryImpl(
             .userState
             ?.activeAccount
             ?: return ResetPasswordResult.Error
-        val currentPasswordHash = authSdkSource
-            .hashPassword(
-                email = activeAccount.profile.email,
-                password = currentPassword,
-                kdf = activeAccount.profile.toSdkParams(),
-                purpose = HashPurpose.SERVER_AUTHORIZATION,
-            )
-            .fold(
-                onFailure = { return ResetPasswordResult.Error },
-                onSuccess = { it },
-            )
+        val currentPasswordHash = currentPassword?.let {
+            authSdkSource
+                .hashPassword(
+                    email = activeAccount.profile.email,
+                    password = it,
+                    kdf = activeAccount.profile.toSdkParams(),
+                    purpose = HashPurpose.SERVER_AUTHORIZATION,
+                )
+                .fold(
+                    onFailure = { return ResetPasswordResult.Error },
+                    onSuccess = { it },
+                )
+        }
         return vaultSdkSource
             .updatePassword(
                 userId = activeAccount.profile.userId,

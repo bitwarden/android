@@ -64,6 +64,11 @@ class AccountsServiceImpl constructor(
     override suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit> =
         accountsApi.resendVerificationCodeEmail(body = body)
 
-    override suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit> =
-        authenticatedAccountsApi.resetPassword(body = body)
+    override suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit> {
+        return if (body.currentPasswordHash == null) {
+            authenticatedAccountsApi.resetTempPassword(body = body)
+        } else {
+            authenticatedAccountsApi.resetPassword(body = body)
+        }
+    }
 }
