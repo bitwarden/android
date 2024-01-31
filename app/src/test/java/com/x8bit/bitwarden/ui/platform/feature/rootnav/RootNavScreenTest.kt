@@ -109,6 +109,18 @@ class RootNavScreenTest : BaseComposeTest() {
             )
         }
 
+        // Make sure navigating to vault unlocked for autofill save works as expected:
+        rootNavStateFlow.value =
+            RootNavState.VaultUnlockedForAutofillSave(
+                autofillSaveItem = mockk(),
+            )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_add_edit_item/add",
+                navOptions = expectedNavOptions,
+            )
+        }
+
         // Make sure navigating to vault unlocked for autofill works as expected:
         rootNavStateFlow.value =
             RootNavState.VaultUnlockedForAutofillSelection(

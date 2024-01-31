@@ -32,7 +32,9 @@ import com.x8bit.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
+import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
@@ -85,6 +87,7 @@ fun RootNavScreen(
         RootNavState.Splash -> SPLASH_ROUTE
         RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
         is RootNavState.VaultUnlocked,
+        is RootNavState.VaultUnlockedForAutofillSave,
         is RootNavState.VaultUnlockedForAutofillSelection,
         is RootNavState.VaultUnlockedForNewSend,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
@@ -122,6 +125,14 @@ fun RootNavScreen(
             navController.navigateToVaultUnlock(rootNavOptions)
             navController.navigateToAddSend(
                 sendAddType = AddSendType.AddItem,
+                navOptions = rootNavOptions,
+            )
+        }
+
+        is RootNavState.VaultUnlockedForAutofillSave -> {
+            navController.navigateToVaultUnlockedGraph(rootNavOptions)
+            navController.navigateToVaultAddEdit(
+                vaultAddEditType = VaultAddEditType.AddItem,
                 navOptions = rootNavOptions,
             )
         }

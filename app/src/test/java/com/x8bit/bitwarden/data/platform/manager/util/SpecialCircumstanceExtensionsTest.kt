@@ -27,14 +27,18 @@ class SpecialCircumstanceExtensionsTest {
     }
 
     @Test
-    fun `toAutofillSelectionDataOrNull should a non-null value for other types`() {
-        assertNull(
-            SpecialCircumstance
-                .ShareNewSend(
-                    data = mockk(),
-                    shouldFinishWhenComplete = true,
-                )
-                .toAutofillSelectionDataOrNull(),
+    fun `toAutofillSelectionDataOrNull should a null value for other types`() {
+        listOf(
+            SpecialCircumstance.AutofillSave(
+                autofillSaveItem = mockk(),
+            ),
+            SpecialCircumstance.ShareNewSend(
+                data = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
         )
+            .forEach { specialCircumstance ->
+                assertNull(specialCircumstance.toAutofillSelectionDataOrNull())
+            }
     }
 }
