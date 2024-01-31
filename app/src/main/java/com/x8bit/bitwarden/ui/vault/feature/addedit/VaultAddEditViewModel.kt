@@ -8,10 +8,10 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -84,16 +84,16 @@ class VaultAddEditViewModel @Inject constructor(
             val vaultAddEditType = VaultAddEditArgs(savedStateHandle).vaultAddEditType
 
             // Check for autofill data to pre-populate
-            val autofillSelectionData: AutofillSelectionData? =
-                when (val specialCircumstance = specialCircumstanceManager.specialCircumstance) {
-                    is SpecialCircumstance.AutofillSelection -> {
-                        specialCircumstance.autofillSelectionData
-                    }
-
-                    else -> null
-                }
+            val autofillSaveItem = specialCircumstanceManager
+                .specialCircumstance
+                ?.toAutofillSaveItemOrNull()
+            val autofillSelectionData = specialCircumstanceManager
+                .specialCircumstance
+                ?.toAutofillSelectionDataOrNull()
             val defaultAddTypeContent = autofillSelectionData
                 ?.toDefaultAddTypeContent()
+                ?: autofillSaveItem
+                    ?.toDefaultAddTypeContent()
                 ?: VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(),
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
@@ -107,6 +107,9 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = null,
+                // Set special conditions for autofill save
+                shouldShowCloseButton = autofillSaveItem == null,
+                shouldExitOnSave = autofillSaveItem != null,
             )
         },
 ) {
@@ -985,9 +988,16 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is CreateCipherResult.Success -> {
-                sendEvent(
-                    event = VaultAddEditEvent.NavigateBack,
-                )
+                if (state.shouldExitOnSave) {
+                    specialCircumstanceManager.specialCircumstance = null
+                    sendEvent(
+                        event = VaultAddEditEvent.ExitApp,
+                    )
+                } else {
+                    sendEvent(
+                        event = VaultAddEditEvent.NavigateBack,
+                    )
+                }
             }
         }
     }
@@ -1064,6 +1074,10 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             DataState.Loading -> {
+                // Skip loading states for add modes, since this will blow away any initial content
+                // or user-selected content.
+                if (state.isAddItemMode) return
+
                 mutableStateFlow.update {
                     it.copy(viewState = VaultAddEditState.ViewState.Loading)
                 }
@@ -1354,6 +1368,9 @@ data class VaultAddEditState(
     val vaultAddEditType: VaultAddEditType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val shouldShowCloseButton: Boolean = true,
+    // Internal
+    val shouldExitOnSave: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -1703,6 +1720,11 @@ sealed class VaultAddEditEvent {
      * Shows a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultAddEditEvent()
+
+    /**
+     * Leave the application.
+     */
+    data object ExitApp : VaultAddEditEvent()
 
     /**
      * Navigate back to previous screen.
