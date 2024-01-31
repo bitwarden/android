@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.resetpassword
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,11 +8,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -41,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
@@ -171,19 +169,12 @@ private fun ResetPasswordScreeContent(
             } else {
                 R.string.update_master_password_warning
             }
-        Text(
+        BitwardenPolicyWarningText(
             text = stringResource(id = instructionsTextId),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(4.dp),
-                )
-                .padding(16.dp)
                 .fillMaxWidth(),
         )
 
@@ -195,33 +186,26 @@ private fun ResetPasswordScreeContent(
             )
                 .plus(state.policies.map { it() })
                 .joinToString("\n  •  ")
-            Text(
+            BitwardenPolicyWarningText(
                 text = passwordPolicyContent,
                 textAlign = TextAlign.Start,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(4.dp),
-                    )
-                    .padding(16.dp)
                     .fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-        BitwardenPasswordField(
-            label = stringResource(id = R.string.current_master_password),
-            value = state.currentPasswordInput,
-            onValueChange = onCurrentPasswordInputChanged,
-            modifier = Modifier
-                .semantics { testTag = "MasterPasswordField" }
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.current_master_password),
+                value = state.currentPasswordInput,
+                onValueChange = onCurrentPasswordInputChanged,
+                modifier = Modifier
+                    .semantics { testTag = "MasterPasswordField" }
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
         }
