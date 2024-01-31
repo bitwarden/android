@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<controls:ExtendedGrid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<controls:BaseCipherViewCell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                        x:Class="Bit.App.Controls.AuthenticatorViewCell"
                        xmlns:controls="clr-namespace:Bit.App.Controls"
@@ -13,34 +13,33 @@
                        RowSpacing="0"
                        Padding="0,10,0,0"
                        RowDefinitions="*,*">
-    <Grid.Resources>
+    <controls:BaseCipherViewCell.Resources>
         <u:IconGlyphConverter x:Key="iconGlyphConverter" />
         <u:InverseBoolConverter x:Key="inverseBool" />
-    </Grid.Resources>
-
-    <controls:IconLabel
-        Grid.Column="0"
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        StyleClass="list-icon, list-icon-platform"
-        Grid.RowSpan="2"
-        IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
-        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
-        AutomationProperties.IsInAccessibleTree="False" />
+    </controls:BaseCipherViewCell.Resources>
 
     <controls:CachedImage
+        x:Name="_iconImage"
         Grid.Column="0"
+        Grid.RowSpan="2"
         BitmapOptimizations="True"
         HorizontalOptions="Center"
         VerticalOptions="Center"
         WidthRequest="22"
         HeightRequest="22"
-        Grid.RowSpan="2"
-        IsVisible="{Binding ShowIconImage}"
-        Source="{Binding IconImageSource, Mode=OneTime}"
+        Success="Icon_Success"
+        Error="Icon_Error"
         AutomationProperties.IsInAccessibleTree="False" />
-        <!-- ErrorPlaceholder="login.png"
-        LoadingPlaceholder="login.png" -->
+
+    <controls:IconLabel
+        x:Name="_iconPlaceholderImage"
+        Grid.Column="0"
+        Grid.RowSpan="2"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        StyleClass="list-icon, list-icon-platform"
+        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+        AutomationProperties.IsInAccessibleTree="False" />
 
     <Label
         LineBreakMode="TailTruncation"
@@ -124,4 +123,4 @@
         HorizontalOptions="Center"
         VerticalOptions="Center"
         SemanticProperties.Description="{u:I18n CopyTotp}" />
-</controls:ExtendedGrid>
+</controls:BaseCipherViewCell>

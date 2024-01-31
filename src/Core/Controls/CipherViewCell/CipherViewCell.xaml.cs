@@ -5,7 +5,7 @@ using Bit.Core.Utilities;
 
 namespace Bit.App.Controls
 {
-    public partial class CipherViewCell : ExtendedGrid
+    public partial class CipherViewCell : BaseCipherViewCell
     {
         private const int ICON_COLUMN_DEFAULT_WIDTH = 40;
         private const int ICON_IMAGE_DEFAULT_WIDTH = 22;
@@ -22,6 +22,10 @@ namespace Bit.App.Controls
             _iconImage.WidthRequest = ICON_IMAGE_DEFAULT_WIDTH * fontScale;
             _iconImage.HeightRequest = ICON_IMAGE_DEFAULT_WIDTH * fontScale;
         }
+
+        protected override CachedImage Icon => _iconImage;
+
+        protected override IconLabel IconPlaceholder => _iconPlaceholderImage;
 
         public ICommand ButtonCommand
         {
