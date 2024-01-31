@@ -979,12 +979,14 @@ class VaultAddEditViewModel @Inject constructor(
 
         when (action.createCipherResult) {
             is CreateCipherResult.Error -> {
-                // TODO Display error dialog BIT-501
-                sendEvent(
-                    event = VaultAddEditEvent.ShowToast(
-                        message = "Save Item Failure".asText(),
-                    ),
-                )
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.Generic(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
             }
 
             is CreateCipherResult.Success -> {
@@ -994,6 +996,9 @@ class VaultAddEditViewModel @Inject constructor(
                         event = VaultAddEditEvent.ExitApp,
                     )
                 } else {
+                    sendEvent(
+                        event = VaultAddEditEvent.ShowToast(R.string.new_item_created.asText()),
+                    )
                     sendEvent(
                         event = VaultAddEditEvent.NavigateBack,
                     )
@@ -1022,6 +1027,9 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is UpdateCipherResult.Success -> {
+                sendEvent(
+                    event = VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
+                )
                 sendEvent(VaultAddEditEvent.NavigateBack)
             }
         }

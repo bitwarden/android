@@ -456,6 +456,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateTurbine.awaitItem())
 
                 assertEquals(
+                    VaultAddEditEvent.ShowToast(
+                        R.string.new_item_created.asText(),
+                    ),
+                    eventTurbine.awaitItem(),
+                )
+                assertEquals(
                     VaultAddEditEvent.NavigateBack,
                     eventTurbine.awaitItem(),
                 )
@@ -530,34 +536,76 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `in add mode, SaveClick should update value to loading`() = runTest {
-        val stateWithName = createVaultAddItemState(
-            vaultAddEditType = VaultAddEditType.AddItem,
-            commonContentViewState = createCommonContentViewState(
-                name = "mockName-1",
-            ),
-        )
-
-        mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
-
-        val viewModel = createAddVaultItemViewModel(
-            createSavedStateHandleWithState(
-                state = stateWithName,
+    fun `in add mode, createCipherInOrganization success should ShowToast and NavigateBack`() =
+        runTest {
+            val stateWithName = createVaultAddItemState(
                 vaultAddEditType = VaultAddEditType.AddItem,
-            ),
-        )
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
 
-        coEvery {
-            vaultRepository.createCipherInOrganization(any(), any())
-        } returns CreateCipherResult.Success
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
-            assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Success
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(
+                        R.string.new_item_created.asText(),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
         }
-    }
 
     @Test
-    fun `in add mode, SaveClick createCipher error should emit ShowToast`() = runTest {
+    fun `in edit mode, updateCipher success should ShowToast and NavigateBack`() =
+        runTest {
+            val cipherView = createMockCipherView(1)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData(cipherView = cipherView))
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                ),
+            )
+
+            coEvery {
+                vaultRepository.updateCipher(any(), any())
+            } returns UpdateCipherResult.Success
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(
+                        R.string.item_updated.asText(),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+        }
+
+    @Test
+    fun `in add mode, SaveClick createCipher error should show error dialog`() = runTest {
 
         val stateWithName = createVaultAddItemState(
             vaultAddEditType = VaultAddEditType.AddItem,
@@ -577,10 +625,17 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         coEvery {
             vaultRepository.createCipherInOrganization(any(), any())
         } returns CreateCipherResult.Error
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
-            assertEquals(VaultAddEditEvent.ShowToast("Save Item Failure".asText()), awaitItem())
-        }
+        viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+
+        assertEquals(
+            stateWithName.copy(
+                dialog = VaultAddEditState.DialogState.Generic(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
