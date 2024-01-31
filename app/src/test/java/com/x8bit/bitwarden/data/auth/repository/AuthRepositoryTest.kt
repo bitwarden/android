@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.HashPurpose
@@ -1224,6 +1225,344 @@ class AuthRepositoryTest {
             captchaToken = null,
         )
         assertEquals(LoginResult.Error(errorMessage = null), result)
+    }
+
+    @Test
+    fun `login with device get token fails should return Error with no message`() = runTest {
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.AuthRequest(
+                    username = EMAIL,
+                    authRequestId = DEVICE_REQUEST_ID,
+                    accessCode = DEVICE_ACCESS_CODE,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        } returns Throwable("Fail").asFailure()
+        val result = repository.login(
+            email = EMAIL,
+            requestId = DEVICE_REQUEST_ID,
+            accessCode = DEVICE_ACCESS_CODE,
+            asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
+            requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+            masterPasswordHash = PASSWORD_HASH,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.AuthRequest(
+                    username = EMAIL,
+                    authRequestId = DEVICE_REQUEST_ID,
+                    accessCode = DEVICE_ACCESS_CODE,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+    }
+
+    @Test
+    fun `login with device get token returns Invalid should return Error with correct message`() =
+        runTest {
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns GetTokenResponseJson
+                .Invalid(
+                    errorModel = GetTokenResponseJson.Invalid.ErrorModel(
+                        errorMessage = "mock_error_message",
+                    ),
+                )
+                .asSuccess()
+
+            val result = repository.login(
+                email = EMAIL,
+                requestId = DEVICE_REQUEST_ID,
+                accessCode = DEVICE_ACCESS_CODE,
+                asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
+                requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                masterPasswordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+            assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `login with device get token succeeds should return Success, update AuthState, update stored keys, and sync`() =
+        runTest {
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.privateKey,
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                        protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
+                    ),
+                )
+            } returns VaultUnlockResult.Success
+            val result = repository.login(
+                email = EMAIL,
+                requestId = DEVICE_REQUEST_ID,
+                accessCode = DEVICE_ACCESS_CODE,
+                asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
+                requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                masterPasswordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.syncIfNecessary()
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.privateKey,
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                        protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
+                    ),
+                )
+            }
+            assertEquals(
+                SINGLE_USER_STATE_1,
+                fakeAuthDiskSource.userState,
+            )
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        }
+
+    @Test
+    fun `login with device get token returns captcha request should return CaptchaRequired`() =
+        runTest {
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY).asSuccess()
+            val result = repository.login(
+                email = EMAIL,
+                requestId = DEVICE_REQUEST_ID,
+                accessCode = DEVICE_ACCESS_CODE,
+                asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
+                requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                masterPasswordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+            assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+        }
+
+    @Test
+    fun `login with device get token returns two factor request should return TwoFactorRequired`() =
+        runTest {
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns GetTokenResponseJson
+                .TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null)
+                .asSuccess()
+            val result = repository.login(
+                email = EMAIL,
+                requestId = DEVICE_REQUEST_ID,
+                accessCode = DEVICE_ACCESS_CODE,
+                asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
+                requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                masterPasswordHash = PASSWORD_HASH,
+                captchaToken = null,
+            )
+            assertEquals(LoginResult.TwoFactorRequired, result)
+            assertEquals(
+                repository.twoFactorResponse,
+                GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
+            )
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+        }
+
+    @Test
+    fun `login with device two factor with remember saves two factor auth token`() = runTest {
+        // Attempt a normal login with a two factor error first, so that the auth
+        // data will be cached.
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.AuthRequest(
+                    username = EMAIL,
+                    authRequestId = DEVICE_REQUEST_ID,
+                    accessCode = DEVICE_ACCESS_CODE,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        } returns GetTokenResponseJson
+            .TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null)
+            .asSuccess()
+        val firstResult = repository.login(
+            email = EMAIL,
+            requestId = DEVICE_REQUEST_ID,
+            accessCode = DEVICE_ACCESS_CODE,
+            asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
+            requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+            masterPasswordHash = PASSWORD_HASH,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.TwoFactorRequired, firstResult)
+        coVerify {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.AuthRequest(
+                    username = EMAIL,
+                    authRequestId = DEVICE_REQUEST_ID,
+                    accessCode = DEVICE_ACCESS_CODE,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+            )
+        }
+
+        // Login with two factor data.
+        val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            twoFactorToken = "twoFactorTokenToStore",
+        )
+        coEvery {
+            identityService.getToken(
+                email = EMAIL,
+                authModel = IdentityTokenAuthModel.AuthRequest(
+                    username = EMAIL,
+                    authRequestId = DEVICE_REQUEST_ID,
+                    accessCode = DEVICE_ACCESS_CODE,
+                ),
+                captchaToken = null,
+                uniqueAppId = UNIQUE_APP_ID,
+                twoFactorData = TWO_FACTOR_DATA,
+            )
+        } returns successResponse.asSuccess()
+        coEvery { vaultRepository.syncIfNecessary() } just runs
+        every {
+            successResponse.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            )
+        } returns SINGLE_USER_STATE_1
+        val finalResult = repository.login(
+            email = EMAIL,
+            password = null,
+            twoFactorData = TWO_FACTOR_DATA,
+            captchaToken = null,
+        )
+        assertEquals(LoginResult.Success, finalResult)
+        assertNull(repository.twoFactorResponse)
+        fakeAuthDiskSource.assertTwoFactorToken(
+            email = EMAIL,
+            twoFactorToken = "twoFactorTokenToStore",
+        )
     }
 
     @Test
@@ -3441,6 +3780,10 @@ class AuthRepositoryTest {
         private const val SSO_CODE = "ssoCode"
         private const val SSO_CODE_VERIFIER = "ssoCodeVerifier"
         private const val SSO_REDIRECT_URI = "bitwarden://sso-test"
+        private const val DEVICE_ACCESS_CODE = "accessCode"
+        private const val DEVICE_REQUEST_ID = "authRequestId"
+        private const val DEVICE_ASYMMETRICAL_KEY = "asymmetricalKey"
+        private const val DEVICE_REQUEST_PRIVATE_KEY = "requestPrivateKey"
 
         private const val DEFAULT_KDF_ITERATIONS = 600000
         private const val ENCRYPTED_USER_KEY = "encryptedUserKey"

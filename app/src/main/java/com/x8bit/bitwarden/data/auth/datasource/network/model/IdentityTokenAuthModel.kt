@@ -35,6 +35,26 @@ sealed class IdentityTokenAuthModel {
     abstract val ssoRedirectUri: String?
 
     /**
+     * The ID of the auth request that granted this login.
+     */
+    abstract val authRequestId: String?
+
+    /**
+     * The data for logging in with a username and password.
+     */
+    data class AuthRequest(
+        override val username: String,
+        override val authRequestId: String,
+        val accessCode: String,
+    ) : IdentityTokenAuthModel() {
+        override val grantType: String get() = "password"
+        override val password: String get() = accessCode
+        override val ssoCode: String? get() = null
+        override val ssoCodeVerifier: String? get() = null
+        override val ssoRedirectUri: String? get() = null
+    }
+
+    /**
      * The data for logging in with a username and password.
      */
     data class MasterPassword(
@@ -42,6 +62,7 @@ sealed class IdentityTokenAuthModel {
         override val password: String,
     ) : IdentityTokenAuthModel() {
         override val grantType: String get() = "password"
+        override val authRequestId: String? get() = null
         override val ssoCode: String? get() = null
         override val ssoCodeVerifier: String? get() = null
         override val ssoRedirectUri: String? get() = null
@@ -56,6 +77,7 @@ sealed class IdentityTokenAuthModel {
         override val ssoRedirectUri: String,
     ) : IdentityTokenAuthModel() {
         override val grantType: String get() = "authorization_code"
+        override val authRequestId: String? get() = null
         override val username: String? get() = null
         override val password: String? get() = null
     }

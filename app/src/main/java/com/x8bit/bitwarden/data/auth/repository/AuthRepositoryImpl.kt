@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import android.os.SystemClock
 import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
@@ -76,6 +78,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -89,6 +92,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import java.time.Clock
@@ -214,10 +218,9 @@ class AuthRepositoryImpl(
                 ),
         )
 
-    private val mutableCaptchaTokenFlow =
-        bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
+    private val captchaTokenChannel = Channel<CaptchaCallbackTokenResult>(capacity = Int.MAX_VALUE)
     override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
-        mutableCaptchaTokenFlow.asSharedFlow()
+        captchaTokenChannel.receiveAsFlow()
 
     private val mutableSsoCallbackResultFlow =
         bufferedMutableSharedFlow<SsoCallbackResult>()
@@ -348,6 +351,31 @@ class AuthRepositoryImpl(
 
     override suspend fun login(
         email: String,
+        requestId: String,
+        accessCode: String,
+        asymmetricalKey: String,
+        requestPrivateKey: String,
+        masterPasswordHash: String?,
+        captchaToken: String?,
+    ): LoginResult =
+        loginCommon(
+            email = email,
+            authModel = IdentityTokenAuthModel.AuthRequest(
+                username = email,
+                authRequestId = requestId,
+                accessCode = accessCode,
+            ),
+            deviceData = DeviceDataModel(
+                accessCode = accessCode,
+                masterPasswordHash = masterPasswordHash,
+                asymmetricalKey = asymmetricalKey,
+                privateKey = requestPrivateKey,
+            ),
+            captchaToken = captchaToken,
+        )
+
+    override suspend fun login(
+        email: String,
         password: String?,
         twoFactorData: TwoFactorDataModel,
         captchaToken: String?,
@@ -387,6 +415,7 @@ class AuthRepositoryImpl(
         password: String? = null,
         authModel: IdentityTokenAuthModel,
         twoFactorData: TwoFactorDataModel? = null,
+        deviceData: DeviceDataModel? = null,
         captchaToken: String?,
     ): LoginResult = identityService
         .getToken(
@@ -444,7 +473,7 @@ class AuthRepositoryImpl(
                         twoFactorResponse = null
                         resendEmailRequestJson = null
 
-                        // Attempt to unlock the vault if possible.
+                        // Attempt to unlock the vault with password if possible.
                         password?.let {
                             vaultRepository.clearUnlockedData()
                             vaultRepository.unlockVault(
@@ -476,7 +505,29 @@ class AuthRepositoryImpl(
 
                             // Cache the password to verify against any password policies
                             // after the sync completes.
-                            passwordToCheck = password
+                            passwordToCheck = it
+                        }
+
+                        // Attempt to unlock the vault with auth request if possible.
+                        deviceData?.let {
+                            vaultRepository.clearUnlockedData()
+                            vaultRepository.unlockVault(
+                                userId = userStateJson.activeUserId,
+                                email = userStateJson.activeAccount.profile.email,
+                                kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                                privateKey = loginResponse.privateKey,
+                                initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                                    requestPrivateKey = it.privateKey,
+                                    protectedUserKey = it.asymmetricalKey,
+                                ),
+                                // We can separately unlock the vault for organization data after
+                                // receiving the sync response if this data is currently absent.
+                                organizationKeys = null,
+                            )
+                            authDiskSource.storeMasterPasswordHash(
+                                userId = userStateJson.activeUserId,
+                                passwordHash = it.masterPasswordHash,
+                            )
                         }
 
                         authDiskSource.userState = userStateJson
@@ -741,7 +792,7 @@ class AuthRepositoryImpl(
     }
 
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
-        mutableCaptchaTokenFlow.tryEmit(tokenResult)
+        captchaTokenChannel.trySend(tokenResult)
     }
 
     override suspend fun getOrganizationDomainSsoDetails(

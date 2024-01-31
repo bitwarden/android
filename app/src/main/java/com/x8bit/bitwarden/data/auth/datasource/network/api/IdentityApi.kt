@@ -36,6 +36,7 @@ interface IdentityApi {
         @Field(value = "twoFactorToken") twoFactorCode: String?,
         @Field(value = "twoFactorProvider") twoFactorMethod: String?,
         @Field(value = "twoFactorRemember") twoFactorRemember: String?,
+        @Field(value = "authRequest") authRequestId: String?,
     ): Result<GetTokenResponseJson.Success>
 
     @GET("/account/prevalidate")

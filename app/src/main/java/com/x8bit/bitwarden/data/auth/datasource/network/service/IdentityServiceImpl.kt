@@ -44,6 +44,7 @@ class IdentityServiceImpl constructor(
             twoFactorMethod = twoFactorData?.method,
             twoFactorRemember = twoFactorData?.remember?.let { if (it) "1" else "0 " },
             captchaResponse = captchaToken,
+            authRequestId = authModel.authRequestId,
         )
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()

@@ -7,6 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -24,6 +28,7 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the Login with Device screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class LoginWithDeviceViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -34,12 +39,18 @@ class LoginWithDeviceViewModel @Inject constructor(
             emailAddress = LoginWithDeviceArgs(savedStateHandle).emailAddress,
             viewState = LoginWithDeviceState.ViewState.Loading,
             dialogState = null,
+            loginData = null,
         ),
 ) {
     private var authJob: Job = Job().apply { complete() }
 
     init {
         sendNewAuthRequest(isResend = false)
+        authRepository
+            .captchaTokenResultFlow
+            .map { LoginWithDeviceAction.Internal.ReceiveCaptchaToken(tokenResult = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LoginWithDeviceAction) {
@@ -73,6 +84,14 @@ class LoginWithDeviceViewModel @Inject constructor(
             is LoginWithDeviceAction.Internal.NewAuthRequestResultReceive -> {
                 handleNewAuthRequestResultReceived(action)
             }
+
+            is LoginWithDeviceAction.Internal.ReceiveCaptchaToken -> {
+                handleReceiveCaptchaToken(action)
+            }
+
+            is LoginWithDeviceAction.Internal.ReceiveLoginResult -> {
+                handleReceiveLoginResult(action)
+            }
         }
     }
 
@@ -89,9 +108,17 @@ class LoginWithDeviceViewModel @Inject constructor(
                             isResendNotificationLoading = false,
                         ),
                         dialogState = null,
+                        loginData = LoginWithDeviceState.LoginData(
+                            accessCode = result.authRequestResponse.accessCode,
+                            requestId = result.authRequest.id,
+                            masterPasswordHash = result.authRequest.masterPasswordHash,
+                            asymmetricalKey = requireNotNull(result.authRequest.key),
+                            privateKey = result.authRequestResponse.privateKey,
+                            captchaToken = null,
+                        ),
                     )
                 }
-                // TODO: Unlock the vault (BIT-813)
+                attemptLogin()
             }
 
             is CreateAuthRequestResult.Update -> {
@@ -153,6 +180,95 @@ class LoginWithDeviceViewModel @Inject constructor(
         }
     }
 
+    private fun handleReceiveCaptchaToken(
+        action: LoginWithDeviceAction.Internal.ReceiveCaptchaToken,
+    ) {
+        when (val tokenResult = action.tokenResult) {
+            CaptchaCallbackTokenResult.MissingToken -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = R.string.log_in_denied.asText(),
+                            message = R.string.captcha_failed.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is CaptchaCallbackTokenResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(loginData = it.loginData?.copy(captchaToken = tokenResult.token))
+                }
+                attemptLogin()
+            }
+        }
+    }
+
+    private fun handleReceiveLoginResult(
+        action: LoginWithDeviceAction.Internal.ReceiveLoginResult,
+    ) {
+        when (val loginResult = action.loginResult) {
+            is LoginResult.CaptchaRequired -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    event = LoginWithDeviceEvent.NavigateToCaptcha(
+                        uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
+                    ),
+                )
+            }
+
+            is LoginResult.TwoFactorRequired -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    LoginWithDeviceEvent.NavigateToTwoFactorLogin(
+                        emailAddress = state.emailAddress,
+                    ),
+                )
+            }
+
+            is LoginResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = loginResult
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+            }
+        }
+    }
+
+    private fun attemptLogin() {
+        val loginData = state.loginData ?: return
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = LoginWithDeviceState.DialogState.Loading(
+                    message = R.string.logging_in.asText(),
+                ),
+            )
+        }
+        viewModelScope.launch {
+            val result = authRepository.login(
+                email = state.emailAddress,
+                requestId = loginData.requestId,
+                accessCode = loginData.accessCode,
+                asymmetricalKey = loginData.asymmetricalKey,
+                requestPrivateKey = loginData.privateKey,
+                masterPasswordHash = loginData.masterPasswordHash,
+                captchaToken = loginData.captchaToken,
+            )
+            sendAction(LoginWithDeviceAction.Internal.ReceiveLoginResult(result))
+        }
+    }
+
     private fun sendNewAuthRequest(isResend: Boolean) {
         setIsResendNotificationLoading(isResend)
         authJob.cancel()
@@ -188,6 +304,7 @@ data class LoginWithDeviceState(
     val emailAddress: String,
     val viewState: ViewState,
     val dialogState: DialogState?,
+    val loginData: LoginData?,
 ) : Parcelable {
     /**
      * Represents the specific view states for the [LoginWithDeviceScreen].
@@ -234,6 +351,19 @@ data class LoginWithDeviceState(
             val message: Text,
         ) : DialogState()
     }
+
+    /**
+     * Wrapper class containing all data needed to login.
+     */
+    @Parcelize
+    data class LoginData(
+        val accessCode: String,
+        val requestId: String,
+        val captchaToken: String?,
+        val masterPasswordHash: String?,
+        val asymmetricalKey: String,
+        val privateKey: String,
+    ) : Parcelable
 }
 
 /**
@@ -298,6 +428,20 @@ sealed class LoginWithDeviceAction {
          */
         data class NewAuthRequestResultReceive(
             val result: CreateAuthRequestResult,
+        ) : Internal()
+
+        /**
+         * Indicates a captcha callback token has been received.
+         */
+        data class ReceiveCaptchaToken(
+            val tokenResult: CaptchaCallbackTokenResult,
+        ) : Internal()
+
+        /**
+         * Indicates a login result has been received.
+         */
+        data class ReceiveLoginResult(
+            val loginResult: LoginResult,
         ) : Internal()
     }
 }

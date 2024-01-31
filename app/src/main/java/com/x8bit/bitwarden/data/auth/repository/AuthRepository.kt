@@ -117,6 +117,21 @@ interface AuthRepository : AuthenticatorProvider {
     ): LoginResult
 
     /**
+     * Attempt to login with the given email and auth request ID and access code. The updated
+     * access token will be reflected in [authStateFlow].
+     */
+    @Suppress("LongParameterList")
+    suspend fun login(
+        email: String,
+        requestId: String,
+        accessCode: String,
+        asymmetricalKey: String,
+        requestPrivateKey: String,
+        masterPasswordHash: String?,
+        captchaToken: String?,
+    ): LoginResult
+
+    /**
      * Repeat the previous login attempt but this time with Two-Factor authentication
      * information. Password is included if available to unlock the vault after
      * authentication. Updated access token will be reflected in [authStateFlow].

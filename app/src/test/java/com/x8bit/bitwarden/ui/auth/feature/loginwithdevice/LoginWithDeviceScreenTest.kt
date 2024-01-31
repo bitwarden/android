@@ -178,4 +178,5 @@ private val DEFAULT_STATE = LoginWithDeviceState(
         isResendNotificationLoading = false,
     ),
     dialogState = null,
+    loginData = null,
 )
