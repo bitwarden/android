@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -103,11 +104,18 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class AuthRepositoryTest {
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val accountsService: AccountsService = mockk()
     private val authRequestsService: AuthRequestsService = mockk()
@@ -192,6 +200,7 @@ class AuthRepositoryTest {
     private var elapsedRealtimeMillis = 123456789L
 
     private val repository = AuthRepositoryImpl(
+        clock = fixedClock,
         accountsService = accountsService,
         authRequestsService = authRequestsService,
         devicesService = devicesService,
@@ -2543,6 +2552,236 @@ class AuthRepositoryTest {
         }
         assertEquals(expected, result)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAuthRequestWithUpdates with authSdkSource getNewAuthRequest error should emit Error`() =
+        runTest {
+            val email = "email@email.com"
+            coEvery {
+                authSdkSource.getNewAuthRequest(email = email)
+            } returns Throwable("Fail").asFailure()
+
+            repository.createAuthRequestWithUpdates(email = email).test {
+                assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                awaitComplete()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAuthRequestWithUpdates with newAuthRequestService createAuthRequest error should emit Error`() =
+        runTest {
+            val email = "email@email.com"
+            val authRequestResponse = AUTH_REQUEST_RESPONSE
+            coEvery {
+                authSdkSource.getNewAuthRequest(email = email)
+            } returns authRequestResponse.asSuccess()
+            coEvery {
+                newAuthRequestService.createAuthRequest(
+                    email = email,
+                    publicKey = authRequestResponse.publicKey,
+                    deviceId = fakeAuthDiskSource.uniqueAppId,
+                    accessCode = authRequestResponse.accessCode,
+                    fingerprint = authRequestResponse.fingerprint,
+                )
+            } returns Throwable("Fail").asFailure()
+
+            repository.createAuthRequestWithUpdates(email = email).test {
+                assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                awaitComplete()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAuthRequestWithUpdates with createNewAuthRequest Success and getAuthRequestUpdate with approval should emit Success`() =
+        runTest {
+            val email = "email@email.com"
+            val authRequestResponse = AUTH_REQUEST_RESPONSE
+            val authRequestResponseJson = AuthRequestsResponseJson.AuthRequest(
+                id = "1",
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+            )
+            val updatedAuthRequestResponseJson = authRequestResponseJson.copy(
+                requestApproved = true,
+            )
+            val authRequest = AuthRequest(
+                id = authRequestResponseJson.id,
+                publicKey = authRequestResponseJson.publicKey,
+                platform = authRequestResponseJson.platform,
+                ipAddress = authRequestResponseJson.ipAddress,
+                key = authRequestResponseJson.key,
+                masterPasswordHash = authRequestResponseJson.masterPasswordHash,
+                creationDate = authRequestResponseJson.creationDate,
+                responseDate = authRequestResponseJson.responseDate,
+                requestApproved = authRequestResponseJson.requestApproved ?: false,
+                originUrl = authRequestResponseJson.originUrl,
+                fingerprint = authRequestResponse.fingerprint,
+            )
+            coEvery {
+                authSdkSource.getNewAuthRequest(email = email)
+            } returns authRequestResponse.asSuccess()
+            coEvery {
+                newAuthRequestService.createAuthRequest(
+                    email = email,
+                    publicKey = authRequestResponse.publicKey,
+                    deviceId = fakeAuthDiskSource.uniqueAppId,
+                    accessCode = authRequestResponse.accessCode,
+                    fingerprint = authRequestResponse.fingerprint,
+                )
+            } returns authRequestResponseJson.asSuccess()
+            coEvery {
+                newAuthRequestService.getAuthRequestUpdate(
+                    requestId = authRequest.id,
+                    accessCode = authRequestResponse.accessCode,
+                )
+            } returnsMany listOf(
+                authRequestResponseJson.asSuccess(),
+                updatedAuthRequestResponseJson.asSuccess(),
+            )
+
+            repository.createAuthRequestWithUpdates(email = email).test {
+                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                assertEquals(
+                    CreateAuthRequestResult.Success(
+                        authRequest = authRequest.copy(requestApproved = true),
+                        authRequestResponse = authRequestResponse,
+                    ),
+                    awaitItem(),
+                )
+                awaitComplete()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAuthRequestWithUpdates with createNewAuthRequest Success and getAuthRequestUpdate with response date and no approval should emit Declined`() =
+        runTest {
+            val email = "email@email.com"
+            val authRequestResponse = AUTH_REQUEST_RESPONSE
+            val authRequestResponseJson = AuthRequestsResponseJson.AuthRequest(
+                id = "1",
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+            )
+            val updatedAuthRequestResponseJson = authRequestResponseJson.copy(
+                responseDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+            )
+            val authRequest = AuthRequest(
+                id = authRequestResponseJson.id,
+                publicKey = authRequestResponseJson.publicKey,
+                platform = authRequestResponseJson.platform,
+                ipAddress = authRequestResponseJson.ipAddress,
+                key = authRequestResponseJson.key,
+                masterPasswordHash = authRequestResponseJson.masterPasswordHash,
+                creationDate = authRequestResponseJson.creationDate,
+                responseDate = authRequestResponseJson.responseDate,
+                requestApproved = authRequestResponseJson.requestApproved ?: false,
+                originUrl = authRequestResponseJson.originUrl,
+                fingerprint = authRequestResponse.fingerprint,
+            )
+            coEvery {
+                authSdkSource.getNewAuthRequest(email = email)
+            } returns authRequestResponse.asSuccess()
+            coEvery {
+                newAuthRequestService.createAuthRequest(
+                    email = email,
+                    publicKey = authRequestResponse.publicKey,
+                    deviceId = fakeAuthDiskSource.uniqueAppId,
+                    accessCode = authRequestResponse.accessCode,
+                    fingerprint = authRequestResponse.fingerprint,
+                )
+            } returns authRequestResponseJson.asSuccess()
+            coEvery {
+                newAuthRequestService.getAuthRequestUpdate(
+                    requestId = authRequest.id,
+                    accessCode = authRequestResponse.accessCode,
+                )
+            } returns updatedAuthRequestResponseJson.asSuccess()
+
+            repository.createAuthRequestWithUpdates(email = email).test {
+                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                assertEquals(CreateAuthRequestResult.Declined, awaitItem())
+                awaitComplete()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAuthRequestWithUpdates with createNewAuthRequest Success and getAuthRequestUpdate with old creation date should emit Expired`() =
+        runTest {
+            val email = "email@email.com"
+            val authRequestResponse = AUTH_REQUEST_RESPONSE
+            val authRequestResponseJson = AuthRequestsResponseJson.AuthRequest(
+                id = "1",
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = false,
+                originUrl = "www.bitwarden.com",
+            )
+            val updatedAuthRequestResponseJson = authRequestResponseJson.copy(
+                creationDate = ZonedDateTime.parse("2023-09-13T00:00Z"),
+            )
+            val authRequest = AuthRequest(
+                id = authRequestResponseJson.id,
+                publicKey = authRequestResponseJson.publicKey,
+                platform = authRequestResponseJson.platform,
+                ipAddress = authRequestResponseJson.ipAddress,
+                key = authRequestResponseJson.key,
+                masterPasswordHash = authRequestResponseJson.masterPasswordHash,
+                creationDate = authRequestResponseJson.creationDate,
+                responseDate = authRequestResponseJson.responseDate,
+                requestApproved = authRequestResponseJson.requestApproved ?: false,
+                originUrl = authRequestResponseJson.originUrl,
+                fingerprint = authRequestResponse.fingerprint,
+            )
+            coEvery {
+                authSdkSource.getNewAuthRequest(email = email)
+            } returns authRequestResponse.asSuccess()
+            coEvery {
+                newAuthRequestService.createAuthRequest(
+                    email = email,
+                    publicKey = authRequestResponse.publicKey,
+                    deviceId = fakeAuthDiskSource.uniqueAppId,
+                    accessCode = authRequestResponse.accessCode,
+                    fingerprint = authRequestResponse.fingerprint,
+                )
+            } returns authRequestResponseJson.asSuccess()
+            coEvery {
+                newAuthRequestService.getAuthRequestUpdate(
+                    requestId = authRequest.id,
+                    accessCode = authRequestResponse.accessCode,
+                )
+            } returns updatedAuthRequestResponseJson.asSuccess()
+
+            repository.createAuthRequestWithUpdates(email = email).test {
+                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                assertEquals(CreateAuthRequestResult.Expired, awaitItem())
+                awaitComplete()
+            }
+        }
 
     @Test
     fun `getAuthRequest should return failure when getAuthRequests returns failure`() = runTest {

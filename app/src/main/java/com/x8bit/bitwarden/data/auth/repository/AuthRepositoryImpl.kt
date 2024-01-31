@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import android.os.SystemClock
+import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -34,6 +35,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -74,6 +76,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -81,11 +85,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
+import java.time.Clock
 import javax.inject.Singleton
+
+private const val PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS: Long = 15L * 60L * 1_000L
+private const val PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS: Long = 4L * 1_000L
 
 /**
  * Default implementation of [AuthRepository].
@@ -93,6 +103,7 @@ import javax.inject.Singleton
 @Suppress("LargeClass", "LongParameterList", "TooManyFunctions")
 @Singleton
 class AuthRepositoryImpl(
+    private val clock: Clock,
     private val accountsService: AccountsService,
     private val authRequestsService: AuthRequestsService,
     private val devicesService: DevicesService,
@@ -789,6 +800,82 @@ class AuthRepositoryImpl(
                 onSuccess = { AuthRequestResult.Success(it) },
             )
 
+    @Suppress("LongMethod")
+    override fun createAuthRequestWithUpdates(
+        email: String,
+    ): Flow<CreateAuthRequestResult> = flow {
+        val initialResult = createNewAuthRequest(email)
+            .getOrNull()
+            ?: run {
+                emit(CreateAuthRequestResult.Error)
+                return@flow
+            }
+        val authRequestResponse = initialResult.authRequestResponse
+        var authRequest = initialResult.authRequest
+        emit(CreateAuthRequestResult.Update(authRequest))
+
+        var isComplete = false
+        while (currentCoroutineContext().isActive && !isComplete) {
+            delay(timeMillis = PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS)
+            newAuthRequestService
+                .getAuthRequestUpdate(
+                    requestId = authRequest.id,
+                    accessCode = authRequestResponse.accessCode,
+                )
+                .map { request ->
+                    AuthRequest(
+                        id = request.id,
+                        publicKey = request.publicKey,
+                        platform = request.platform,
+                        ipAddress = request.ipAddress,
+                        key = request.key,
+                        masterPasswordHash = request.masterPasswordHash,
+                        creationDate = request.creationDate,
+                        responseDate = request.responseDate,
+                        requestApproved = request.requestApproved ?: false,
+                        originUrl = request.originUrl,
+                        fingerprint = authRequest.fingerprint,
+                    )
+                }
+                .fold(
+                    onFailure = { emit(CreateAuthRequestResult.Error) },
+                    onSuccess = { updateAuthRequest ->
+                        when {
+                            updateAuthRequest.requestApproved -> {
+                                isComplete = true
+                                emit(
+                                    CreateAuthRequestResult.Success(
+                                        authRequest = updateAuthRequest,
+                                        authRequestResponse = authRequestResponse,
+                                    ),
+                                )
+                            }
+
+                            !updateAuthRequest.requestApproved &&
+                                updateAuthRequest.responseDate != null -> {
+                                isComplete = true
+                                emit(CreateAuthRequestResult.Declined)
+                            }
+
+                            updateAuthRequest
+                                .creationDate
+                                .toInstant()
+                                .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
+                                .isBefore(clock.instant()) -> {
+                                isComplete = true
+                                emit(CreateAuthRequestResult.Expired)
+                            }
+
+                            else -> {
+                                authRequest = updateAuthRequest
+                                emit(CreateAuthRequestResult.Update(authRequest))
+                            }
+                        }
+                    },
+                )
+        }
+    }
+
     override suspend fun getAuthRequest(
         fingerprint: String,
     ): AuthRequestResult =
@@ -1022,6 +1109,42 @@ class AuthRepositoryImpl(
     }
 
     /**
+     * Attempts to create a new auth request for the given email and returns a [NewAuthRequestData]
+     * with the [AuthRequest] and [AuthRequestResponse].
+     */
+    private suspend fun createNewAuthRequest(
+        email: String,
+    ): Result<NewAuthRequestData> =
+        authSdkSource
+            .getNewAuthRequest(email)
+            .flatMap { authRequestResponse ->
+                newAuthRequestService
+                    .createAuthRequest(
+                        email = email,
+                        publicKey = authRequestResponse.publicKey,
+                        deviceId = authDiskSource.uniqueAppId,
+                        accessCode = authRequestResponse.accessCode,
+                        fingerprint = authRequestResponse.fingerprint,
+                    )
+                    .map { request ->
+                        AuthRequest(
+                            id = request.id,
+                            publicKey = request.publicKey,
+                            platform = request.platform,
+                            ipAddress = request.ipAddress,
+                            key = request.key,
+                            masterPasswordHash = request.masterPasswordHash,
+                            creationDate = request.creationDate,
+                            responseDate = request.responseDate,
+                            requestApproved = request.requestApproved ?: false,
+                            originUrl = request.originUrl,
+                            fingerprint = authRequestResponse.fingerprint,
+                        )
+                    }
+                    .map { NewAuthRequestData(it, authRequestResponse) }
+            }
+
+    /**
      * Get the remembered two-factor token associated with the user's email, if applicable.
      */
     private fun getRememberedTwoFactorData(email: String): TwoFactorDataModel? =
@@ -1069,3 +1192,11 @@ class AuthRepositoryImpl(
             ?.copy(accounts = accounts)
     }
 }
+
+/**
+ * Wrapper class for the [AuthRequest] and [AuthRequestResponse] data.
+ */
+private data class NewAuthRequestData(
+    val authRequest: AuthRequest,
+    val authRequestResponse: AuthRequestResponse,
+)
