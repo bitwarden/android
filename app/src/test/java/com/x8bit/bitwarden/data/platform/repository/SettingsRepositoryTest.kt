@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -871,6 +872,31 @@ class SettingsRepositoryTest {
 
                 assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clearClipboardFrequency should pull from and update SettingsDiskSource`() =
+        runTest {
+            val userId = "userId"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            fakeSettingsDiskSource.storeClearClipboardFrequencySeconds(
+                userId,
+                ClearClipboardFrequency.ONE_MINUTE.frequencySeconds,
+            )
+
+            assertEquals(
+                ClearClipboardFrequency.ONE_MINUTE,
+                settingsRepository.clearClipboardFrequency,
+            )
+
+            settingsRepository.clearClipboardFrequency = ClearClipboardFrequency.TEN_SECONDS
+
+            assertEquals(
+                ClearClipboardFrequency.TEN_SECONDS,
+                settingsRepository.clearClipboardFrequency,
+            )
         }
 }
 

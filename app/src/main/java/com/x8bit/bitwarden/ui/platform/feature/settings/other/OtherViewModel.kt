@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -38,7 +39,7 @@ class OtherViewModel @Inject constructor(
         ?: OtherState(
             allowScreenCapture = settingsRepo.isScreenCaptureAllowed,
             allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
-            clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
+            clearClipboardFrequency = settingsRepo.clearClipboardFrequency,
             lastSyncTime = settingsRepo
                 .vaultLastSync
                 ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock.zone)
@@ -80,12 +81,10 @@ class OtherViewModel @Inject constructor(
     private fun handleClearClipboardFrequencyChanged(
         action: OtherAction.ClearClipboardFrequencyChange,
     ) {
-        // TODO BIT-1283 implement clear clipboard setting
         mutableStateFlow.update {
-            it.copy(
-                clearClipboardFrequency = action.clearClipboardFrequency,
-            )
+            it.copy(clearClipboardFrequency = action.clearClipboardFrequency)
         }
+        settingsRepo.clearClipboardFrequency = action.clearClipboardFrequency
     }
 
     private fun handleSyncNowButtonClicked() {
@@ -125,19 +124,6 @@ data class OtherState(
     val lastSyncTime: String,
     val dialogState: DialogState?,
 ) : Parcelable {
-    /**
-     * Represents the different frequencies with which the user clipboard can be cleared.
-     */
-    enum class ClearClipboardFrequency(val text: Text) {
-        DEFAULT(text = R.string.never.asText()),
-        TEN_SECONDS(text = R.string.ten_seconds.asText()),
-        TWENTY_SECONDS(text = R.string.twenty_seconds.asText()),
-        THIRTY_SECONDS(text = R.string.thirty_seconds.asText()),
-        ONE_MINUTE(text = R.string.one_minute.asText()),
-        TWO_MINUTES(text = R.string.two_minutes.asText()),
-        FIVE_MINUTES(text = R.string.five_minutes.asText()),
-    }
-
     /**
      * Represents the current state of any dialogs on the screen.
      */
@@ -189,7 +175,7 @@ sealed class OtherAction {
      * Indicates that the user changed the clear clipboard frequency.
      */
     data class ClearClipboardFrequencyChange(
-        val clearClipboardFrequency: OtherState.ClearClipboardFrequency,
+        val clearClipboardFrequency: ClearClipboardFrequency,
     ) : OtherAction()
 
     /**

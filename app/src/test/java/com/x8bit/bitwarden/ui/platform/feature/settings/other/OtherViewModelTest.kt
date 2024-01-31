@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -31,6 +32,8 @@ class OtherViewModelTest : BaseViewModelTest() {
     private val mutableVaultLastSyncStateFlow = MutableStateFlow(instant)
     private val mutableScreenCaptureAllowedStateFlow = MutableStateFlow(isAllowed)
     private val settingsRepository = mockk<SettingsRepository> {
+        every { clearClipboardFrequency } returns ClearClipboardFrequency.NEVER
+        every { clearClipboardFrequency = any() } just runs
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshStateFlow
         every { vaultLastSyncStateFlow } returns mutableVaultLastSyncStateFlow
         every { vaultLastSync } returns instant
@@ -49,7 +52,7 @@ class OtherViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when set`() {
         val state = DEFAULT_STATE.copy(
-            clearClipboardFrequency = OtherState.ClearClipboardFrequency.FIVE_MINUTES,
+            clearClipboardFrequency = ClearClipboardFrequency.FIVE_MINUTES,
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
@@ -57,23 +60,28 @@ class OtherViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on AllowScreenCaptureToggled should update value in state and SettingsRepository`() = runTest {
-        val viewModel = createViewModel()
-        val newScreenCaptureAllowedValue = true
+    fun `on AllowScreenCaptureToggled should update value in state and SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel()
+            val newScreenCaptureAllowedValue = true
 
-        viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(newScreenCaptureAllowedValue))
-
-        verify(exactly = 1) {
-            settingsRepository.isScreenCaptureAllowed = newScreenCaptureAllowedValue
-        }
-
-        viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE.copy(allowScreenCapture = true),
-                awaitItem(),
+            viewModel.trySendAction(
+                OtherAction.AllowScreenCaptureToggle(
+                    newScreenCaptureAllowedValue,
+                ),
             )
+
+            verify(exactly = 1) {
+                settingsRepository.isScreenCaptureAllowed = newScreenCaptureAllowedValue
+            }
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE.copy(allowScreenCapture = true),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
     fun `on AllowSyncToggled should update value in state`() {
@@ -110,12 +118,12 @@ class OtherViewModelTest : BaseViewModelTest() {
             )
             viewModel.trySendAction(
                 OtherAction.ClearClipboardFrequencyChange(
-                    clearClipboardFrequency = OtherState.ClearClipboardFrequency.ONE_MINUTE,
+                    clearClipboardFrequency = ClearClipboardFrequency.ONE_MINUTE,
                 ),
             )
             assertEquals(
                 DEFAULT_STATE.copy(
-                    clearClipboardFrequency = OtherState.ClearClipboardFrequency.ONE_MINUTE,
+                    clearClipboardFrequency = ClearClipboardFrequency.ONE_MINUTE,
                 ),
                 awaitItem(),
             )
@@ -173,7 +181,7 @@ class OtherViewModelTest : BaseViewModelTest() {
         private val DEFAULT_STATE = OtherState(
             allowScreenCapture = false,
             allowSyncOnRefresh = false,
-            clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
+            clearClipboardFrequency = ClearClipboardFrequency.NEVER,
             lastSyncTime = "10/26/2023 12:00 PM",
             dialogState = null,
         )
