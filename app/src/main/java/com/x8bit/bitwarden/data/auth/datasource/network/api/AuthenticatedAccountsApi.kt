@@ -16,6 +16,12 @@ interface AuthenticatedAccountsApi {
     suspend fun deleteAccount(@Body body: DeleteAccountRequestJson): Result<Unit>
 
     /**
+     * Resets the temporary password.
+     */
+    @HTTP(method = "PUT", path = "/accounts/update-temp-password", hasBody = true)
+    suspend fun resetTempPassword(@Body body: ResetPasswordRequestJson): Result<Unit>
+
+    /**
      * Resets the password.
      */
     @HTTP(method = "POST", path = "/accounts/password", hasBody = true)

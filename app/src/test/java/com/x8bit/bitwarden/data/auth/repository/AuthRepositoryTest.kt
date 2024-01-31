@@ -541,6 +541,25 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `passwordResetReason should pull from the user's profile in AuthDiskSource`() = runTest {
+        val updatedProfile = ACCOUNT_1.profile.copy(
+            forcePasswordResetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
+        )
+        fakeAuthDiskSource.userState = UserStateJson(
+            activeUserId = USER_ID_1,
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = updatedProfile,
+                ),
+            ),
+        )
+        assertEquals(
+            ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
+            repository.passwordResetReason,
+        )
+    }
+
+    @Test
     fun `clear Pending Account Deletion should unblock userState updates`() = runTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 
@@ -33,7 +34,11 @@ fun GetTokenResponseJson.Success.toUserState(
             organizationId = null,
             avatarColorHex = null,
             hasPremium = jwtTokenData.hasPremium,
-            forcePasswordResetReason = null,
+            forcePasswordResetReason = if (this.shouldForcePasswordReset) {
+                ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
+            } else {
+                null
+            },
             kdfType = this.kdfType,
             kdfIterations = this.kdfIterations,
             kdfMemory = this.kdfMemory,

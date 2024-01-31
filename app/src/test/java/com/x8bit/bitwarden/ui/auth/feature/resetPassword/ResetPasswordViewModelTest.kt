@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.resetPassword
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -23,8 +24,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class ResetPasswordViewModelTest : BaseViewModelTest() {
-    private val authRepository: AuthRepository = mockk() {
+    private val authRepository: AuthRepository = mockk {
         every { passwordPolicies } returns emptyList()
+        every { passwordResetReason } returns ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN
     }
 
     private val savedStateHandle = SavedStateHandle()
@@ -82,11 +84,37 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SubmitClicked with invalid password shows error alert`() = runTest {
+    fun `SubmitClicked with invalid password shows error alert for weak password reason`() =
+        runTest {
+            val password = "Test123"
+            coEvery {
+                authRepository.validatePasswordAgainstPolicies(password)
+            } returns false
+
+            val viewModel = createViewModel()
+            viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = ResetPasswordState.DialogState.Error(
+                            title = R.string.master_password_policy_validation_title.asText(),
+                            message = R.string.master_password_policy_validation_message.asText(),
+                        ),
+                        passwordInput = password,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+        }
+
+    @Test
+    fun `SubmitClicked with invalid password shows error alert for admin reset reason`() = runTest {
         val password = "Test123"
-        coEvery {
-            authRepository.validatePasswordAgainstPolicies(password)
-        } returns false
+        every {
+            authRepository.passwordResetReason
+        } returns ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
@@ -95,9 +123,11 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 DEFAULT_STATE.copy(
+                    resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
                     dialogState = ResetPasswordState.DialogState.Error(
-                        title = R.string.master_password_policy_validation_title.asText(),
-                        message = R.string.master_password_policy_validation_message.asText(),
+                        title = null,
+                        message = R.string.master_password_length_val_message_x
+                            .asText(MIN_PASSWORD_LENGTH),
                     ),
                     passwordInput = password,
                 ),
@@ -311,8 +341,10 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         )
 }
 
+private const val MIN_PASSWORD_LENGTH = 12
 private val DEFAULT_STATE = ResetPasswordState(
     policies = emptyList(),
+    resetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
     dialogState = null,
     currentPasswordInput = "",
     passwordInput = "",
