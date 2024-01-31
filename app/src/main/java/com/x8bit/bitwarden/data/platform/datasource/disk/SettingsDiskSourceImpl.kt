@@ -31,6 +31,7 @@ private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
 private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIntegritySource"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
 private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
+private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "$BASE_KEY:clearClipboard"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -136,6 +137,7 @@ class SettingsDiskSourceImpl(
         )
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeScreenCaptureAllowed(userId = userId, isScreenCaptureAllowed = null)
+        storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_$userId")
     }
 
@@ -189,6 +191,16 @@ class SettingsDiskSourceImpl(
             value = vaultTimeoutInMinutes,
         )
         getMutableVaultTimeoutInMinutesFlow(userId = userId).tryEmit(vaultTimeoutInMinutes)
+    }
+
+    override fun getClearClipboardFrequencySeconds(userId: String): Int? =
+        getInt(key = "${CLEAR_CLIPBOARD_INTERVAL_KEY}_$userId")
+
+    override fun storeClearClipboardFrequencySeconds(userId: String, frequency: Int?) {
+        putInt(
+            key = "${CLEAR_CLIPBOARD_INTERVAL_KEY}_$userId",
+            value = frequency,
+        )
     }
 
     override fun getVaultTimeoutAction(userId: String): VaultTimeoutAction? =

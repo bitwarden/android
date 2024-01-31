@@ -130,6 +130,16 @@ interface SettingsDiskSource {
     )
 
     /**
+     * Gets the clipboard clearing frequency in seconds for the given [userId].
+     */
+    fun getClearClipboardFrequencySeconds(userId: String): Int?
+
+    /**
+     * Stores the clipboard clearing frequency in seconds for the given [userId].
+     */
+    fun storeClearClipboardFrequencySeconds(userId: String, frequency: Int?)
+
+    /**
      * Gets the default [UriMatchType] for the given [userId].
      */
     fun getDefaultUriMatchType(userId: String): UriMatchType?

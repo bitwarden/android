@@ -4,6 +4,7 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -874,5 +875,65 @@ class SettingsDiskSourceTest {
             isScreenCaptureAllowed = null,
         )
         assertFalse(fakeSharedPreferences.contains(screenCaptureAllowKey))
+    }
+
+    @Test
+    fun `storeClearClipboardFrequency should update SharedPreferences`() {
+        val clearClipboardBaseKey = "bwPreferencesStorage:clearClipboard"
+        val mockUserId = "mockUserId"
+        val clearClipboardKey = "${clearClipboardBaseKey}_$mockUserId"
+
+        assertNull(settingsDiskSource.getClearClipboardFrequencySeconds(mockUserId))
+        assertEquals(fakeSharedPreferences.getInt(mockUserId, 0), 0)
+
+        // Updating the disk source updates shared preferences
+        settingsDiskSource.storeClearClipboardFrequencySeconds(
+            mockUserId,
+            ClearClipboardFrequency.ONE_MINUTE.frequencySeconds,
+        )
+
+        assertEquals(
+            ClearClipboardFrequency.ONE_MINUTE.frequencySeconds,
+            fakeSharedPreferences.getInt(clearClipboardKey, 0),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `storeClearClipboardFrequency should clear the SharedPreferences value if the value is null`() {
+        val clearClipboardBaseKey = "bwPreferencesStorage:clearClipboard"
+        val mockUserId = "mockUserId"
+        val clearClipboardKey = "${clearClipboardBaseKey}_$mockUserId"
+
+        assertNull(settingsDiskSource.getClearClipboardFrequencySeconds(mockUserId))
+        assertEquals(fakeSharedPreferences.getInt(mockUserId, 0), 0)
+
+        // Updating the disk source updates shared preferences
+        settingsDiskSource.storeClearClipboardFrequencySeconds(
+            mockUserId,
+            null,
+        )
+
+        assertFalse(fakeSharedPreferences.contains(clearClipboardKey))
+    }
+
+    @Test
+    fun `getClearClipboardFrequency should pull from SharedPreferences`() {
+        val clearClipboardBaseKey = "bwPreferencesStorage:clearClipboard"
+        val mockUserId = "mockUserId"
+        val expectedValue = 20
+        val clearClipboardKey = "${clearClipboardBaseKey}_$mockUserId"
+
+        assertNull(settingsDiskSource.getClearClipboardFrequencySeconds(mockUserId))
+        assertEquals(fakeSharedPreferences.getInt(mockUserId, 0), 0)
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit {
+            putInt(clearClipboardKey, expectedValue)
+        }
+        assertEquals(
+            expectedValue,
+            settingsDiskSource.getClearClipboardFrequencySeconds(mockUserId),
+        )
     }
 }

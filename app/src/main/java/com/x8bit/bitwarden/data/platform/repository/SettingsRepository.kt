@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -50,6 +51,11 @@ interface SettingsRepository {
      * Emits updates that track the [isIconLoadingDisabled] value.
      */
     val isIconLoadingDisabledFlow: Flow<Boolean>
+
+    /**
+     * The frequency in seconds at which we clear the clipboard.
+     */
+    var clearClipboardFrequency: ClearClipboardFrequency
 
     /**
      * The current setting for crash logging.

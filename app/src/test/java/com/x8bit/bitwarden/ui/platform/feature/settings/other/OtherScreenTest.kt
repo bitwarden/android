@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -103,7 +104,7 @@ class OtherScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 OtherAction.ClearClipboardFrequencyChange(
-                    clearClipboardFrequency = OtherState.ClearClipboardFrequency.TEN_SECONDS,
+                    clearClipboardFrequency = ClearClipboardFrequency.TEN_SECONDS,
                 ),
             )
         }
@@ -148,7 +149,7 @@ class OtherScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = OtherState(
     allowScreenCapture = false,
     allowSyncOnRefresh = false,
-    clearClipboardFrequency = OtherState.ClearClipboardFrequency.DEFAULT,
+    clearClipboardFrequency = ClearClipboardFrequency.NEVER,
     lastSyncTime = "5/14/2023 4:52 PM",
     dialogState = null,
 )

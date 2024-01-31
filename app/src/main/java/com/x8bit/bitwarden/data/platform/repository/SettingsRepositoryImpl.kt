@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -101,6 +102,18 @@ class SettingsRepositoryImpl(
                     .isIconLoadingDisabled
                     ?: false,
             )
+    override var clearClipboardFrequency: ClearClipboardFrequency
+        get() = activeUserId
+            ?.let { userId ->
+                settingsDiskSource
+                    .getClearClipboardFrequencySeconds(userId)
+                    .toClearClipboardFrequency()
+            }
+            ?: ClearClipboardFrequency.NEVER
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeClearClipboardFrequencySeconds(userId, value.frequencySeconds)
+        }
 
     override var isCrashLoggingEnabled: Boolean
         get() = settingsDiskSource.isCrashLoggingEnabled ?: true
@@ -438,6 +451,13 @@ private fun Int?.toVaultTimeout(): VaultTimeout =
         null -> VaultTimeout.Never
         else -> VaultTimeout.Custom(vaultTimeoutInMinutes = this)
     }
+
+/**
+ * Converts the given Int into a [ClearClipboardFrequency] item.
+ */
+private fun Int?.toClearClipboardFrequency(): ClearClipboardFrequency =
+    ClearClipboardFrequency.entries.firstOrNull { it.frequencySeconds == this }
+        ?: ClearClipboardFrequency.NEVER
 
 /**
  * Returns the given [VaultTimeoutAction] or a default value if `null`.

@@ -29,6 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
+import com.x8bit.bitwarden.data.platform.repository.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
@@ -191,8 +193,8 @@ private fun ScreenCaptureRow(
 
 @Composable
 private fun ClearClipboardFrequencyRow(
-    currentSelection: OtherState.ClearClipboardFrequency,
-    onFrequencySelection: (OtherState.ClearClipboardFrequency) -> Unit,
+    currentSelection: ClearClipboardFrequency,
+    onFrequencySelection: (ClearClipboardFrequency) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowClearClipboardDialog by remember { mutableStateOf(false) }
@@ -204,7 +206,7 @@ private fun ClearClipboardFrequencyRow(
         modifier = modifier,
     ) {
         Text(
-            text = currentSelection.text(),
+            text = currentSelection.displayLabel.invoke(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -215,14 +217,14 @@ private fun ClearClipboardFrequencyRow(
             title = stringResource(id = R.string.clear_clipboard),
             onDismissRequest = { shouldShowClearClipboardDialog = false },
         ) {
-            OtherState.ClearClipboardFrequency.entries.forEach { option ->
+            ClearClipboardFrequency.entries.forEach { option ->
                 BitwardenSelectionRow(
-                    text = option.text,
+                    text = option.displayLabel,
                     isSelected = option == currentSelection,
                     onClick = {
                         shouldShowClearClipboardDialog = false
                         onFrequencySelection(
-                            OtherState.ClearClipboardFrequency.entries.first { it == option },
+                            ClearClipboardFrequency.entries.first { it == option },
                         )
                     },
                 )

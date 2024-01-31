@@ -44,6 +44,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
     private val storedUriMatchTypes = mutableMapOf<String, UriMatchType?>()
+    private val storedClearClipboardFrequency = mutableMapOf<String, Int?>()
     private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
@@ -121,6 +122,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedInlineAutofillEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
         storedScreenCaptureAllowed.remove(userId)
+        storedClearClipboardFrequency.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
@@ -166,6 +168,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     ) {
         storedVaultTimeoutActions[userId] = vaultTimeoutAction
         getMutableVaultTimeoutActionsFlow(userId = userId).tryEmit(vaultTimeoutAction)
+    }
+
+    override fun getClearClipboardFrequencySeconds(userId: String): Int? =
+        storedClearClipboardFrequency[userId]
+
+    override fun storeClearClipboardFrequencySeconds(userId: String, frequency: Int?) {
+        storedClearClipboardFrequency[userId] = frequency
     }
 
     override fun getDefaultUriMatchType(userId: String): UriMatchType? =
