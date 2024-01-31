@@ -10,8 +10,7 @@ sealed class ShareCipherResult {
     data object Success : ShareCipherResult()
 
     /**
-     * Generic error while sharing cipher. The optional [errorMessage] may be displayed directly in
-     * the UI when present.
+     * Generic error while sharing cipher.
      */
-    data class Error(val errorMessage: String?) : ShareCipherResult()
+    data object Error : ShareCipherResult()
 }

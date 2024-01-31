@@ -60,14 +60,14 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         ) { cipherViewState, collectionsState, userState ->
             VaultMoveToOrganizationAction.Internal.VaultDataReceive(
                 vaultData = combineDataStates(
-                    dataState1 = cipherViewState.map { Unit },
+                    dataState1 = cipherViewState,
                     dataState2 = collectionsState,
-                    dataState3 = DataState.Loaded(userState).map { Unit },
-                ) { _, collectionsData, _ ->
+                    dataState3 = DataState.Loaded(userState),
+                ) { cipherData, collectionsData, userData ->
                     Triple(
-                        first = cipherViewState.data,
+                        first = cipherData,
                         second = collectionsData,
-                        third = userState,
+                        third = userData,
                     )
                 },
             )
@@ -270,6 +270,12 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         cipherView: CipherView,
         contentState: VaultMoveToOrganizationState.ViewState.Content,
     ) {
+        val collectionIds = contentState
+            .selectedOrganization
+            .collections
+            .filter { it.isSelected }
+            .map { it.id }
+
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultMoveToOrganizationState.DialogState.Loading(
@@ -280,17 +286,21 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         viewModelScope.launch {
             trySendAction(
                 VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
-                    vaultRepository.shareCipher(
-                        cipherId = mutableStateFlow.value.vaultItemId,
-                        cipherView = cipherView.copy(
-                            organizationId = contentState.selectedOrganizationId,
-                        ),
-                        collectionIds = contentState
-                            .selectedOrganization
-                            .collections
-                            .filter { it.isSelected }
-                            .map { it.id },
-                    ),
+                    if (state.onlyShowCollections) {
+                        vaultRepository.updateCipherCollections(
+                            cipherId = mutableStateFlow.value.vaultItemId,
+                            cipherView = cipherView,
+                            collectionIds = collectionIds,
+                        )
+                    } else {
+                        vaultRepository.shareCipher(
+                            cipherId = mutableStateFlow.value.vaultItemId,
+                            cipherView = cipherView.copy(
+                                organizationId = contentState.selectedOrganizationId,
+                            ),
+                            collectionIds = collectionIds,
+                        )
+                    },
                 ),
             )
         }

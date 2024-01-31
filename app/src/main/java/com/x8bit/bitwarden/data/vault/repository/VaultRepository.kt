@@ -258,6 +258,15 @@ interface VaultRepository : VaultLockManager {
     ): ShareCipherResult
 
     /**
+     * Attempt to update a cipher with the given collectionIds.
+     */
+    suspend fun updateCipherCollections(
+        cipherId: String,
+        cipherView: CipherView,
+        collectionIds: List<String>,
+    ): ShareCipherResult
+
+    /**
      * Attempt to create a send. The [fileUri] _must_ be present when the given [SendView] has a
      * [SendView.type] of [SendType.FILE].
      */

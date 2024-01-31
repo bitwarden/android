@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonReq
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
@@ -753,7 +754,7 @@ class VaultRepositoryImpl(
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult {
-        val userId = activeUserId ?: return ShareCipherResult.Error(null)
+        val userId = activeUserId ?: return ShareCipherResult.Error
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -768,12 +769,40 @@ class VaultRepositoryImpl(
                     ),
                 )
             }
+            .onSuccess { vaultDiskSource.saveCipher(userId = userId, cipher = it) }
             .fold(
-                onFailure = { ShareCipherResult.Error(errorMessage = null) },
-                onSuccess = {
-                    vaultDiskSource.saveCipher(userId = userId, cipher = it)
-                    ShareCipherResult.Success
-                },
+                onFailure = { ShareCipherResult.Error },
+                onSuccess = { ShareCipherResult.Success },
+            )
+    }
+
+    override suspend fun updateCipherCollections(
+        cipherId: String,
+        cipherView: CipherView,
+        collectionIds: List<String>,
+    ): ShareCipherResult {
+        val userId = activeUserId ?: return ShareCipherResult.Error
+        return ciphersService
+            .updateCipherCollections(
+                cipherId = cipherId,
+                body = UpdateCipherCollectionsJsonRequest(collectionIds = collectionIds),
+            )
+            .flatMap {
+                vaultSdkSource
+                    .encryptCipher(
+                        userId = userId,
+                        cipherView = cipherView.copy(collectionIds = collectionIds),
+                    )
+            }
+            .onSuccess { cipher ->
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = cipher.toEncryptedNetworkCipherResponse(),
+                )
+            }
+            .fold(
+                onSuccess = { ShareCipherResult.Success },
+                onFailure = { ShareCipherResult.Error },
             )
     }
 

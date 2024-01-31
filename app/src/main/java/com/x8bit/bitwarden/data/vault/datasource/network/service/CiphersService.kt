@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 
 /**
@@ -56,6 +57,14 @@ interface CiphersService {
         cipherId: String,
         body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to update a cipher's collections.
+     */
+    suspend fun updateCipherCollections(
+        cipherId: String,
+        body: UpdateCipherCollectionsJsonRequest,
+    ): Result<Unit>
 
     /**
      * Attempt to hard delete a cipher.
