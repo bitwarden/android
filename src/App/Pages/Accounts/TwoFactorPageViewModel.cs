@@ -112,7 +112,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isDuoFrameless, value, additionalPropertyNames: new string[] { nameof(DuoFramelessLabel) });
         }
 
-        public string DuoFramelessLabel => SelectedProviderType != TwoFactorProviderType.OrganizationDuo ?
+        public string DuoFramelessLabel => SelectedProviderType == TwoFactorProviderType.OrganizationDuo ?
             $"{AppResources.DUOTwoStepLoginIsRequiredForYourAccount} {AppResources.FollowTheStepsFromDUOToFinishLoggingIn}" :
             AppResources.FollowTheStepsFromDUOToFinishLoggingIn;
 
