@@ -5,13 +5,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -32,8 +35,10 @@ class LoginWithDeviceViewModel @Inject constructor(
             dialogState = null,
         ),
 ) {
+    private var authJob: Job = Job().apply { complete() }
+
     init {
-        sendNewAuthRequest()
+        sendNewAuthRequest(isResend = false)
     }
 
     override fun handleAction(action: LoginWithDeviceAction) {
@@ -58,22 +63,36 @@ class LoginWithDeviceViewModel @Inject constructor(
     }
 
     private fun handleResendNotificationClicked() {
-        sendNewAuthRequest()
+        sendNewAuthRequest(isResend = true)
     }
 
     private fun handleViewAllLogInOptionsClicked() {
         sendEvent(LoginWithDeviceEvent.NavigateBack)
     }
 
+    @Suppress("LongMethod")
     private fun handleNewAuthRequestResultReceived(
         action: LoginWithDeviceAction.Internal.NewAuthRequestResultReceive,
     ) {
-        when (action.result) {
-            is AuthRequestResult.Success -> {
+        when (val result = action.result) {
+            is CreateAuthRequestResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
-                            fingerprintPhrase = action.result.authRequest.fingerprint,
+                            fingerprintPhrase = "",
+                            isResendNotificationLoading = false,
+                        ),
+                        dialogState = null,
+                    )
+                }
+                // TODO: Unlock the vault (BIT-813)
+            }
+
+            is CreateAuthRequestResult.Update -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = LoginWithDeviceState.ViewState.Content(
+                            fingerprintPhrase = result.authRequest.fingerprint,
                             isResendNotificationLoading = false,
                         ),
                         dialogState = null,
@@ -81,7 +100,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                 }
             }
 
-            is AuthRequestResult.Error -> {
+            is CreateAuthRequestResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
@@ -95,24 +114,51 @@ class LoginWithDeviceViewModel @Inject constructor(
                     )
                 }
             }
+
+            CreateAuthRequestResult.Declined -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = LoginWithDeviceState.ViewState.Content(
+                            fingerprintPhrase = "",
+                            isResendNotificationLoading = false,
+                        ),
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = null,
+                            message = R.string.this_request_is_no_longer_valid.asText(),
+                        ),
+                    )
+                }
+            }
+
+            CreateAuthRequestResult.Expired -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = LoginWithDeviceState.ViewState.Content(
+                            fingerprintPhrase = "",
+                            isResendNotificationLoading = false,
+                        ),
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = null,
+                            message = R.string.login_request_has_already_expired.asText(),
+                        ),
+                    )
+                }
+            }
         }
     }
 
-    private fun sendNewAuthRequest() {
-        setIsResendNotificationLoading(true)
-        viewModelScope.launch {
-            trySendAction(
-                LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(
-                    result = authRepository.createAuthRequest(
-                        email = state.emailAddress,
-                    ),
-                ),
-            )
-        }
+    private fun sendNewAuthRequest(isResend: Boolean) {
+        setIsResendNotificationLoading(isResend)
+        authJob.cancel()
+        authJob = authRepository
+            .createAuthRequestWithUpdates(email = state.emailAddress)
+            .map { LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
-    private fun setIsResendNotificationLoading(isLoading: Boolean) {
-        updateContent { it.copy(isResendNotificationLoading = isLoading) }
+    private fun setIsResendNotificationLoading(isResend: Boolean) {
+        updateContent { it.copy(isResendNotificationLoading = isResend) }
     }
 
     private inline fun updateContent(
@@ -225,7 +271,7 @@ sealed class LoginWithDeviceAction {
          * A new auth request result was received.
          */
         data class NewAuthRequestResultReceive(
-            val result: AuthRequestResult,
+            val result: CreateAuthRequestResult,
         ) : Internal()
     }
 }

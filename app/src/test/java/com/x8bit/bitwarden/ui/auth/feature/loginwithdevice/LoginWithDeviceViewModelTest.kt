@@ -2,16 +2,18 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.AuthRequestResponse
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -19,35 +21,37 @@ import java.time.ZonedDateTime
 
 class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
+    private val mutableCreateAuthRequestWithUpdatesFlow =
+        bufferedMutableSharedFlow<CreateAuthRequestResult>()
     private val authRepository = mockk<AuthRepository> {
         coEvery {
-            createAuthRequest(EMAIL)
-        } returns AuthRequestResult.Success(AUTH_REQUEST)
+            createAuthRequestWithUpdates(EMAIL)
+        } returns mutableCreateAuthRequestWithUpdatesFlow
     }
 
     @Test
-    fun `initial state should be correct`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE, awaitItem())
+    fun `initial state should be correct`() {
+        val viewModel = createViewModel(state = null)
+        assertEquals(
+            DEFAULT_STATE.copy(viewState = LoginWithDeviceState.ViewState.Loading),
+            viewModel.stateFlow.value,
+        )
+        coVerify(exactly = 1) {
+            authRepository.createAuthRequestWithUpdates(EMAIL)
         }
-        coVerify { authRepository.createAuthRequest(EMAIL) }
     }
 
     @Test
-    fun `initial state should be correct when set`() = runTest {
+    fun `initial state should be correct when set`() {
         val newEmail = "newEmail@gmail.com"
-
-        coEvery {
-            authRepository.createAuthRequest(newEmail)
-        } returns AuthRequestResult.Success(AUTH_REQUEST)
         val state = DEFAULT_STATE.copy(emailAddress = newEmail)
-        val viewModel = createViewModel(state)
-        viewModel.stateFlow.test {
-            assertEquals(state, awaitItem())
-        }
-        coVerify {
-            authRepository.createAuthRequest(newEmail)
+        coEvery {
+            authRepository.createAuthRequestWithUpdates(newEmail)
+        } returns mutableCreateAuthRequestWithUpdatesFlow
+        val viewModel = createViewModel(state = state)
+        assertEquals(state, viewModel.stateFlow.value)
+        coVerify(exactly = 1) {
+            authRepository.createAuthRequestWithUpdates(newEmail)
         }
     }
 
@@ -64,7 +68,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `DismissDialog should clear the dialog state`() = runTest {
+    fun `DismissDialog should clear the dialog state`() {
         val initialState = DEFAULT_STATE.copy(
             dialogState = LoginWithDeviceState.DialogState.Error(
                 title = R.string.an_error_has_occurred.asText(),
@@ -77,21 +81,20 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ResendNotificationClick should create new auth request and update state`() = runTest {
-        val newFingerprint = "newFingerprint"
-        coEvery {
-            authRepository.createAuthRequest(EMAIL)
-        } returns AuthRequestResult.Success(AUTH_REQUEST.copy(fingerprint = newFingerprint))
+    fun `ResendNotificationClick should create new auth request and update state`() {
         val viewModel = createViewModel()
         viewModel.actionChannel.trySend(LoginWithDeviceAction.ResendNotificationClick)
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    fingerprintPhrase = newFingerprint,
+                    isResendNotificationLoading = true,
                 ),
             ),
             viewModel.stateFlow.value,
         )
+        verify(exactly = 2) {
+            authRepository.createAuthRequestWithUpdates(EMAIL)
+        }
     }
 
     @Test
@@ -108,23 +111,16 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on auth request result success received should show content`() = runTest {
-        val newFingerprint = "newFingerprint"
+    fun `on createAuthRequestWithUpdates Update received should show content`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        viewModel.actionChannel.trySend(
-            LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(
-                result = AuthRequestResult.Success(
-                    authRequest = mockk<AuthRequest> {
-                        every { fingerprint } returns newFingerprint
-                    },
-                ),
-            ),
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+            CreateAuthRequestResult.Update(AUTH_REQUEST),
         )
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
-                    fingerprintPhrase = newFingerprint,
+                    fingerprintPhrase = FINGERPRINT,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -132,17 +128,30 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on fingerprint result failure received should show error dialog`() = runTest {
+    fun `on createAuthRequestWithUpdates Success received should show content`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        viewModel.actionChannel.trySend(
-            LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(
-                result = AuthRequestResult.Error,
-            ),
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+            CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
         )
         assertEquals(
             DEFAULT_STATE.copy(
-                viewState = LoginWithDeviceState.ViewState.Content(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    fingerprintPhrase = "",
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `on createAuthRequestWithUpdates Error received should show content with error dialog`() {
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Error)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     fingerprintPhrase = "",
                     isResendNotificationLoading = false,
                 ),
@@ -155,12 +164,56 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on createAuthRequestWithUpdates Declined received should show content with error dialog`() {
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Declined)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    fingerprintPhrase = "",
+                    isResendNotificationLoading = false,
+                ),
+                dialogState = LoginWithDeviceState.DialogState.Error(
+                    title = null,
+                    message = R.string.this_request_is_no_longer_valid.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `on createAuthRequestWithUpdates Expired received should show content with error dialog`() {
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Expired)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    fingerprintPhrase = "",
+                    isResendNotificationLoading = false,
+                ),
+                dialogState = LoginWithDeviceState.DialogState.Error(
+                    title = null,
+                    message = R.string.login_request_has_already_expired.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     private fun createViewModel(
         state: LoginWithDeviceState? = DEFAULT_STATE,
     ): LoginWithDeviceViewModel =
         LoginWithDeviceViewModel(
             authRepository = authRepository,
-            savedStateHandle = SavedStateHandle().apply { set("state", state) },
+            savedStateHandle = SavedStateHandle().apply {
+                set("state", state)
+                set("email_address", state?.emailAddress ?: EMAIL)
+            },
         )
 }
 
@@ -190,4 +243,11 @@ private val AUTH_REQUEST = AuthRequest(
     requestApproved = true,
     originUrl = "www.bitwarden.com",
     fingerprint = FINGERPRINT,
+)
+
+private val AUTH_REQUEST_RESPONSE = AuthRequestResponse(
+    privateKey = "private_key",
+    publicKey = "public_key",
+    accessCode = "accessCode",
+    fingerprint = "fingerprint",
 )
