@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -39,10 +38,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenClickableText
+import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
@@ -69,6 +68,13 @@ fun LoginWithDeviceScreen(
         }
     }
 
+    LoginWithDeviceDialogs(
+        state = state.dialogState,
+        onDismissDialog = remember(viewModel) {
+            { viewModel.trySendAction(LoginWithDeviceAction.DismissDialog) }
+        },
+    )
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier
@@ -93,9 +99,6 @@ fun LoginWithDeviceScreen(
             is LoginWithDeviceState.ViewState.Content -> {
                 LoginWithDeviceScreenContent(
                     state = viewState,
-                    onErrorDialogDismiss = remember(viewModel) {
-                        { viewModel.trySendAction(LoginWithDeviceAction.ErrorDialogDismiss) }
-                    },
                     onResendNotificationClick = remember(viewModel) {
                         { viewModel.trySendAction(LoginWithDeviceAction.ResendNotificationClick) }
                     },
@@ -106,16 +109,9 @@ fun LoginWithDeviceScreen(
                 )
             }
 
-            LoginWithDeviceState.ViewState.Loading -> {
-                Column(
-                    modifier = modifier,
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    CircularProgressIndicator()
-                    Spacer(modifier = Modifier.navigationBarsPadding())
-                }
-            }
+            LoginWithDeviceState.ViewState.Loading -> BitwardenLoadingContent(
+                modifier = modifier,
+            )
         }
     }
 }
@@ -125,23 +121,10 @@ fun LoginWithDeviceScreen(
 @Composable
 private fun LoginWithDeviceScreenContent(
     state: LoginWithDeviceState.ViewState.Content,
-    onErrorDialogDismiss: () -> Unit,
     onResendNotificationClick: () -> Unit,
     onViewAllLogInOptionsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenBasicDialog(
-        visibilityState = if (state.shouldShowErrorDialog) {
-            BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.generic_error_message.asText(),
-            )
-        } else {
-            BasicDialogState.Hidden
-        },
-        onDismissRequest = onErrorDialogDismiss,
-    )
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -258,5 +241,23 @@ private fun LoginWithDeviceScreenContent(
         )
 
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Composable
+private fun LoginWithDeviceDialogs(
+    state: LoginWithDeviceState.DialogState?,
+    onDismissDialog: () -> Unit,
+) {
+    when (state) {
+        is LoginWithDeviceState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = state.title,
+                message = state.message,
+            ),
+            onDismissRequest = onDismissDialog,
+        )
+
+        null -> Unit
     }
 }

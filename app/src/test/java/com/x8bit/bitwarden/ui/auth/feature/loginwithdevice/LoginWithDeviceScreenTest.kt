@@ -8,8 +8,10 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.mockk
@@ -48,13 +50,12 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `dismissing error dialog should send ErrorDialogDismiss`() {
+    fun `dismissing dialog should send DismissDialog`() {
         mutableStateFlow.update {
             it.copy(
-                viewState = LoginWithDeviceState.ViewState.Content(
-                    fingerprintPhrase = "",
-                    isResendNotificationLoading = false,
-                    shouldShowErrorDialog = true,
+                dialogState = LoginWithDeviceState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
                 ),
             )
         }
@@ -63,7 +64,7 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
-            viewModel.trySendAction(LoginWithDeviceAction.ErrorDialogDismiss)
+            viewModel.trySendAction(LoginWithDeviceAction.DismissDialog)
         }
     }
 
@@ -101,16 +102,15 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
         }
         composeTestRule.onNode(isProgressBar).assertDoesNotExist()
     }
-
-    companion object {
-        private const val EMAIL = "test@gmail.com"
-        private val DEFAULT_STATE = LoginWithDeviceState(
-            emailAddress = EMAIL,
-            viewState = LoginWithDeviceState.ViewState.Content(
-                fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
-                isResendNotificationLoading = false,
-                shouldShowErrorDialog = false,
-            ),
-        )
-    }
 }
+
+private const val EMAIL = "test@gmail.com"
+
+private val DEFAULT_STATE = LoginWithDeviceState(
+    emailAddress = EMAIL,
+    viewState = LoginWithDeviceState.ViewState.Content(
+        fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
+        isResendNotificationLoading = false,
+    ),
+    dialogState = null,
+)
