@@ -190,6 +190,7 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.CustomFieldActionSelect -> handleCustomFieldActionSelected(
                 action,
             )
+
             is VaultAddEditAction.Common.CollectionSelect -> handleCollectionSelect(action)
         }
     }
@@ -542,8 +543,8 @@ class VaultAddEditViewModel @Inject constructor(
                 handleLoginPasswordTextInputChange(action)
             }
 
-            is VaultAddEditAction.ItemType.LoginType.UriTextChange -> {
-                handleLoginUriTextInputChange(action)
+            is VaultAddEditAction.ItemType.LoginType.UriValueChange -> {
+                handleLoginUriValueInputChange(action)
             }
 
             is VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick -> {
@@ -562,8 +563,8 @@ class VaultAddEditViewModel @Inject constructor(
                 handleLoginSetupTotpClick(action)
             }
 
-            is VaultAddEditAction.ItemType.LoginType.UriSettingsClick -> {
-                handleLoginUriSettingsClick()
+            is VaultAddEditAction.ItemType.LoginType.RemoveUriClick -> {
+                handleLoginRemoveUriClick(action)
             }
 
             is VaultAddEditAction.ItemType.LoginType.AddNewUriClick -> {
@@ -596,20 +597,32 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleLoginUriTextInputChange(
-        action: VaultAddEditAction.ItemType.LoginType.UriTextChange,
+    private fun handleLoginUriValueInputChange(
+        action: VaultAddEditAction.ItemType.LoginType.UriValueChange,
     ) {
         updateLoginContent { loginType ->
             loginType.copy(
                 uriList = loginType
                     .uriList
                     .map { uriItem ->
-                        if (uriItem.id == action.uri.id) {
-                            action.uri
+                        if (uriItem.id == action.uriItem.id) {
+                            action.uriItem
                         } else {
                             uriItem
                         }
                     },
+            )
+        }
+    }
+
+    private fun handleLoginRemoveUriClick(
+        action: VaultAddEditAction.ItemType.LoginType.RemoveUriClick,
+    ) {
+        updateLoginContent { loginType ->
+            loginType.copy(
+                uriList = loginType.uriList.filter {
+                    it != action.uriItem
+                },
             )
         }
     }
@@ -1899,11 +1912,11 @@ sealed class VaultAddEditAction {
             data class PasswordTextChange(val password: String) : LoginType()
 
             /**
-             * Fired when the URI text input is changed.
+             * Fired when the URI is changed.
              *
-             * @property uri The new URI text.
+             * @property uriItem The new URI.
              */
-            data class UriTextChange(val uri: UriItem) : LoginType()
+            data class UriValueChange(val uriItem: UriItem) : LoginType()
 
             /**
              * Represents the action to set up TOTP.
@@ -1940,9 +1953,9 @@ sealed class VaultAddEditAction {
             data object OpenPasswordGeneratorClick : LoginType()
 
             /**
-             * Represents the action of clicking TOTP settings
+             * Represents the action of removing a URI item.
              */
-            data object UriSettingsClick : LoginType()
+            data class RemoveUriClick(val uriItem: UriItem) : LoginType()
 
             /**
              * Represents the action to add a new URI field.
@@ -2164,8 +2177,8 @@ sealed class VaultAddEditAction {
          * Indicates that the vault item data has been received.
          */
         data class VaultDataReceive(
-                val vaultData: DataState<VaultData>,
-                val userData: UserState?,
+            val vaultData: DataState<VaultData>,
+            val userData: UserState?,
         ) : Internal()
 
         /**
