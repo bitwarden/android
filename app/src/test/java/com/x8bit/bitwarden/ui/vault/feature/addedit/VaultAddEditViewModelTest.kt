@@ -882,23 +882,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-        @Test
-        fun `UriTextChange should update uri in LoginItem`() = runTest {
-            val action = VaultAddEditAction.ItemType.LoginType.UriTextChange(
-                UriItem("testId", "TestUri", null),
-            )
-
-            viewModel.actionChannel.trySend(action)
-
-            val expectedState = createVaultAddItemState(
-                typeContentViewState = createLoginTypeContentViewState(
-                    uri = listOf(UriItem("testId", "TestUri", null)),
-                ),
-            )
-
-            assertEquals(expectedState, viewModel.stateFlow.value)
-        }
-
         @Suppress("MaxLineLength")
         @Test
         fun `OpenUsernameGeneratorClick should emit NavigateToGeneratorModal with username GeneratorMode`() =
@@ -1110,13 +1093,65 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UriSettingsClick should emit ShowToast with 'URI Settings' message`() = runTest {
-            val viewModel = createAddVaultItemViewModel()
+        fun `UriValueChange should update URI value in state`() = runTest {
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        typeContentViewState = createLoginTypeContentViewState(
+                            uri = listOf(UriItem("testID", null, null)),
+                        ),
+                    ),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                ),
+            )
+            val expectedState = loginInitialState.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(),
+                    type = createLoginTypeContentViewState(
+                        uri = listOf(UriItem("testID", "Test", null)),
+                    ),
+                ),
+            )
 
-            viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(VaultAddEditAction.ItemType.LoginType.UriSettingsClick)
-                assertEquals(VaultAddEditEvent.ShowToast("URI Settings".asText()), awaitItem())
-            }
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.UriValueChange(
+                    uriItem = UriItem("testID", "Test", null),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `RemoveUriClick should remove URI value in state`() = runTest {
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        typeContentViewState = createLoginTypeContentViewState(
+                            uri = listOf(UriItem("testID", null, null)),
+                        ),
+                    ),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                ),
+            )
+
+            val expectedState = loginInitialState.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(),
+                    type = createLoginTypeContentViewState(
+                        uri = listOf(),
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.RemoveUriClick(
+                    uriItem = UriItem("testID", null, null),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
         @Test

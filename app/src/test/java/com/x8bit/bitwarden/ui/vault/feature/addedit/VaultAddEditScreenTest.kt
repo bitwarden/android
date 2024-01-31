@@ -29,6 +29,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
+import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -720,7 +721,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in ItemType_Login state changing URI text field should trigger UriTextChange`() {
+    fun `in ItemType_Login state changing URI text field should trigger UriValueChange`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
                 copy(uriList = listOf(UriItem("TestId", "URI", null)))
@@ -733,7 +734,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.ItemType.LoginType.UriTextChange(
+                VaultAddEditAction.ItemType.LoginType.UriValueChange(
                     UriItem("TestId", "TestURI", null),
                 ),
             )
@@ -759,18 +760,182 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state clicking the URI settings action should trigger UriSettingsClick`() {
+    fun `in ItemType_Login Uri settings dialog should be dismissed on cancel click`() {
         composeTestRule
             .onNodeWithTextAfterScroll(text = "URI")
             .onSiblings()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
 
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login Uri settings dialog should send RemoveUriClick action if remove is clicked`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(uriList = listOf(UriItem("TestId", null, null)))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "URI")
+            .onSiblings()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Remove")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.ItemType.LoginType.UriSettingsClick,
+                VaultAddEditAction.ItemType.LoginType.RemoveUriClick(
+                    UriItem(
+                        "TestId",
+                        null,
+                        null,
+                    ),
+                ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login Uri settings dialog with open match detection click should open list of options`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "URI")
+            .onSiblings()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("URI match detection")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Default")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Base domain")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Host")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Starts with")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Regular expression")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Exact")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login on URI settings click and on match detection click and option click should emit UriValueChange action`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(uriList = listOf(UriItem("TestId", null, null)))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "URI")
+            .onSiblings()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("URI match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Exact")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.UriValueChange(
+                    UriItem(
+                        "TestId",
+                        null,
+                        UriMatchType.EXACT,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login on URI settings click and on match detection click and cancel click should dismiss the dialog`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(uriList = listOf(UriItem("TestId", null, null)))
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "URI")
+            .onSiblings()
+            .filterToOne(hasContentDescription(value = "Options"))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Match detection")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("URI match detection")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
@@ -1884,7 +2049,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `Ownership option should send OwnershipChange action`() {
-       mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         updateStateWithOwners()
 

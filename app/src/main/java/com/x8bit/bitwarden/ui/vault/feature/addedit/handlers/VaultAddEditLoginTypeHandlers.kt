@@ -10,8 +10,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  *
  * @property onUsernameTextChange Handles the action when the username text is changed.
  * @property onPasswordTextChange Handles the action when the password text is changed.
- * @property onUriTextChange Handles the action when the URI text is changed.
- * reprompt toggle is changed.
+ * @property onRemoveUriClick Handles the action when the URI is removed.
+ * @property onUriValueChange Handles the action when the URI value is changed.
  * @property onOpenUsernameGeneratorClick Handles the action when the username generator
  * button is clicked.
  * @property onPasswordCheckerClick Handles the action when the password checker
@@ -28,14 +28,14 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 data class VaultAddEditLoginTypeHandlers(
     val onUsernameTextChange: (String) -> Unit,
     val onPasswordTextChange: (String) -> Unit,
-    val onUriTextChange: (UriItem) -> Unit,
+    val onRemoveUriClick: (UriItem) -> Unit,
+    val onUriValueChange: (UriItem) -> Unit,
     val onOpenUsernameGeneratorClick: () -> Unit,
     val onPasswordCheckerClick: () -> Unit,
     val onOpenPasswordGeneratorClick: () -> Unit,
     val onSetupTotpClick: (Boolean) -> Unit,
     val onCopyTotpKeyClick: (String) -> Unit,
     val onClearTotpKeyClick: () -> Unit,
-    val onUriSettingsClick: () -> Unit,
     val onAddNewUriClick: () -> Unit,
 ) {
     companion object {
@@ -60,9 +60,9 @@ data class VaultAddEditLoginTypeHandlers(
                         VaultAddEditAction.ItemType.LoginType.PasswordTextChange(newPassword),
                     )
                 },
-                onUriTextChange = { newUri ->
+                onUriValueChange = { newUri ->
                     viewModel.trySendAction(
-                        VaultAddEditAction.ItemType.LoginType.UriTextChange(newUri),
+                        VaultAddEditAction.ItemType.LoginType.UriValueChange(newUri),
                     )
                 },
                 onOpenUsernameGeneratorClick = {
@@ -85,8 +85,12 @@ data class VaultAddEditLoginTypeHandlers(
                         VaultAddEditAction.ItemType.LoginType.SetupTotpClick(isGranted),
                     )
                 },
-                onUriSettingsClick = {
-                    viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.UriSettingsClick)
+                onRemoveUriClick = { uriItem ->
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.RemoveUriClick(
+                            uriItem,
+                        ),
+                    )
                 },
                 onAddNewUriClick = {
                     viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.AddNewUriClick)
