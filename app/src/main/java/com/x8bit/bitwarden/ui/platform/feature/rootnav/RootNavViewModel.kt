@@ -63,7 +63,6 @@ class RootNavViewModel @Inject constructor(
 
             userState == null ||
                 !userState.activeAccount.isLoggedIn ||
-                userState.activeAccount.isVaultPendingUnlock ||
                 userState.hasPendingAccountAddition -> RootNavState.Auth
 
             userState.activeAccount.isVaultUnlocked -> {

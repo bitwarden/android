@@ -262,7 +262,6 @@ class MainViewModelTest : BaseViewModelTest() {
                     isPremium = true,
                     isLoggedIn = true,
                     isVaultUnlocked = true,
-                    isVaultPendingUnlock = false,
                     needsPasswordReset = false,
                     isBiometricsEnabled = false,
                     organizations = emptyList(),

@@ -119,7 +119,6 @@ class AuthRepositoryTest {
     private val mutableVaultUnlockDataStateFlow = MutableStateFlow(VAULT_UNLOCK_DATA)
     private val vaultRepository: VaultRepository = mockk {
         every { vaultUnlockDataStateFlow } returns mutableVaultUnlockDataStateFlow
-        every { completeUnlock(any()) } just runs
         every { deleteVaultData(any()) } just runs
         every { clearUnlockedData() } just runs
     }
@@ -857,7 +856,6 @@ class AuthRepositoryTest {
             )
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
             verify { vaultRepository.clearUnlockedData() }
-            verify { vaultRepository.completeUnlock(userId = USER_ID_1) }
         }
 
     @Suppress("MaxLineLength")
@@ -2038,9 +2036,6 @@ class AuthRepositoryTest {
                     key = ENCRYPTED_USER_KEY,
                 ),
             )
-        }
-        verify {
-            vaultRepository.completeUnlock(userId = USER_ID_1)
         }
         fakeAuthDiskSource.assertMasterPasswordHash(
             userId = USER_ID_1,

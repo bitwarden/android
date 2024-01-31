@@ -69,7 +69,6 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
-                        isVaultPendingUnlock = false,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
@@ -88,7 +87,6 @@ class UserStateExtensionsTest {
                         isPremium = false,
                         isLoggedIn = true,
                         isVaultUnlocked = false,
-                        isVaultPendingUnlock = false,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
@@ -111,7 +109,6 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
-                        isVaultPendingUnlock = false,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
@@ -134,7 +131,6 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = false,
                         isVaultUnlocked = false,
-                        isVaultPendingUnlock = false,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
@@ -172,7 +168,6 @@ class UserStateExtensionsTest {
                 isPremium = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
-                isVaultPendingUnlock = false,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = listOf(
@@ -208,7 +203,6 @@ class UserStateExtensionsTest {
                 isPremium = false,
                 isLoggedIn = true,
                 isVaultUnlocked = false,
-                isVaultPendingUnlock = false,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = listOf(
@@ -248,7 +242,6 @@ class UserStateExtensionsTest {
                         isPremium = true,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
-                        isVaultPendingUnlock = false,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
                         organizations = listOf(
@@ -276,7 +269,6 @@ class UserStateExtensionsTest {
                 isPremium = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
-                isVaultPendingUnlock = false,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = emptyList(),
@@ -313,7 +305,6 @@ class UserStateExtensionsTest {
                 isPremium = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
-                isVaultPendingUnlock = false,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = listOf(

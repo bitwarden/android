@@ -256,18 +256,13 @@ class AuthRepositoryImpl(
         authDiskSource.currentUserPoliciesListFlow
             .onEach { policies ->
                 val userId = activeUserId ?: return@onEach
-                if (passwordPassesPolicies(policies)) {
-                    vaultRepository.completeUnlock(userId = userId)
-                    storeUserResetPasswordReason(
-                        userId = userId,
-                        reason = null,
-                    )
-                } else {
-                    storeUserResetPasswordReason(
-                        userId = userId,
-                        reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
-                    )
-                }
+                storeUserResetPasswordReason(
+                    userId = userId,
+                    reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN
+                        .takeIf {
+                            !passwordPassesPolicies(policies)
+                        },
+                )
             }
             .launchIn(unconfinedScope)
     }
@@ -710,9 +705,6 @@ class AuthRepositoryImpl(
                                 passwordHash = passwordHash,
                             )
                         }
-
-                    // Complete the login flow.
-                    vaultRepository.completeUnlock(userId = activeAccount.profile.userId)
 
                     // Return the success.
                     ResetPasswordResult.Success

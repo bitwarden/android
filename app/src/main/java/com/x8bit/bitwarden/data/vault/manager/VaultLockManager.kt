@@ -31,12 +31,6 @@ interface VaultLockManager {
     fun lockVault(userId: String)
 
     /**
-     * Complete the unlock flow for a given [userId], moving their pendingUnlock status
-     * to a full unlock.
-     */
-    fun completeUnlock(userId: String)
-
-    /**
      * Locks the vault for the current user if currently unlocked.
      */
     fun lockVaultForCurrentUser()
