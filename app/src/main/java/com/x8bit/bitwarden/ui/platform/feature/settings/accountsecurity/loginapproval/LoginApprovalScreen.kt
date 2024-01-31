@@ -19,11 +19,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -131,6 +135,7 @@ fun LoginApprovalScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 private fun LoginApprovalContent(
@@ -141,6 +146,7 @@ private fun LoginApprovalContent(
 ) {
     Column(
         modifier = modifier
+            .semantics { testTagsAsResourceId = true }
             .verticalScroll(state = rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(8.dp))
@@ -163,7 +169,8 @@ private fun LoginApprovalContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .semantics { testTag = "LogInAttemptByLabel" },
         )
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -173,7 +180,8 @@ private fun LoginApprovalContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .semantics { testTag = "FingerprintValueLabel" },
         )
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -184,7 +192,8 @@ private fun LoginApprovalContent(
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .semantics { testTag = "FingerprintValue" },
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -192,6 +201,7 @@ private fun LoginApprovalContent(
         LoginApprovalInfoColumn(
             label = stringResource(id = R.string.device_type),
             value = state.deviceType,
+            valueTestTag = "DeviceTypeValueLabel",
         )
 
         LoginApprovalInfoColumn(
@@ -211,7 +221,8 @@ private fun LoginApprovalContent(
             onClick = onConfirmLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .semantics { testTag = "ConfirmLoginButton" },
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -221,7 +232,8 @@ private fun LoginApprovalContent(
             onClick = onDeclineLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .semantics { testTag = "DenyLoginButton" },
         )
 
         Spacer(modifier = Modifier.navigationBarsPadding())
@@ -235,6 +247,7 @@ private fun LoginApprovalContent(
 private fun LoginApprovalInfoColumn(
     label: String,
     value: String,
+    valueTestTag: String? = null,
 ) {
     Spacer(modifier = Modifier.height(8.dp))
 
@@ -255,7 +268,12 @@ private fun LoginApprovalInfoColumn(
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .semantics {
+                if (valueTestTag != null) {
+                    testTag = valueTestTag
+                }
+            },
     )
 
     Spacer(modifier = Modifier.height(8.dp))
