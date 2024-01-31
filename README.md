@@ -97,6 +97,11 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Safely manage keys and encrypt files and sharedpreferences.
     - License: Apache 2.0
 
+- **AndroidX WorkManager**
+    - https://developer.android.com/jetpack/androidx/releases/work
+    - Purpose: The WorkManager is used to schedule deferrable, asynchronous tasks that must be run reliably.
+    - License: Apache 2.0
+
 - **Core SplashScreen**
     - https://developer.android.com/jetpack/androidx/releases/core
     - Purpose: Backwards compatible SplashScreen API implementation.

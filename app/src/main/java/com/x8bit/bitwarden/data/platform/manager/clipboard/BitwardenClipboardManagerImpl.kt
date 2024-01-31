@@ -8,10 +8,15 @@ import android.widget.Toast
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.getSystemService
 import androidx.core.os.persistableBundleOf
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
+import java.util.concurrent.TimeUnit
 
 /**
  * Default implementation of the [BitwardenClipboardManager] interface.
@@ -19,8 +24,12 @@ import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 @OmitFromCoverage
 class BitwardenClipboardManagerImpl(
     private val context: Context,
+    private val settingsRepository: SettingsRepository,
 ) : BitwardenClipboardManager {
     private val clipboardManager: ClipboardManager = requireNotNull(context.getSystemService())
+
+    private val clearClipboardFrequencySeconds: Int?
+        get() = settingsRepository.clearClipboardFrequency.frequencySeconds
 
     override fun setText(
         text: AnnotatedString,
@@ -46,6 +55,19 @@ class BitwardenClipboardManagerImpl(
                 )
                 .show()
         }
+
+        val frequency = clearClipboardFrequencySeconds ?: return
+        val clearClipboardRequest: OneTimeWorkRequest =
+            OneTimeWorkRequest
+                .Builder(ClearClipboardWorker::class.java)
+                .setInitialDelay(frequency.toLong(), TimeUnit.SECONDS)
+                .build()
+
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "ClearClipboard",
+            ExistingWorkPolicy.REPLACE,
+            clearClipboardRequest,
+        )
     }
 
     override fun setText(text: String, isSensitive: Boolean, toastDescriptorOverride: String?) {

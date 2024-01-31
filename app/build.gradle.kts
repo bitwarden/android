@@ -173,6 +173,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.splashscreen)
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
     implementation(libs.google.hilt.android)

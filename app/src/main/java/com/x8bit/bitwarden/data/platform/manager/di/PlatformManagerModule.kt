@@ -83,7 +83,11 @@ object PlatformManagerModule {
     @Singleton
     fun provideBitwardenClipboardManager(
         @ApplicationContext context: Context,
-    ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(context)
+        settingsRepository: SettingsRepository,
+    ): BitwardenClipboardManager = BitwardenClipboardManagerImpl(
+        context,
+        settingsRepository,
+    )
 
     @Provides
     @Singleton
