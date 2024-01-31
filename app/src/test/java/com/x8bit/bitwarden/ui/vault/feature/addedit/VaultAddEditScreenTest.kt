@@ -2311,8 +2311,17 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
+            .onAllNodesWithText("TestBoolean")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
             .onNodeWithText("Name")
-            .performTextInput("NewTestBooleanName")
+            .performTextClearance()
+
+        composeTestRule
+            .onNodeWithText("Name")
+            .performTextInput("Boolean")
 
         composeTestRule
             .onNodeWithText("Ok")
@@ -2321,7 +2330,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldValueChange(
-                    VaultAddEditState.Custom.BooleanField("Test ID 1", "NewTestBooleanName", false),
+                    VaultAddEditState.Custom.BooleanField("Test ID 1", "Boolean", false),
                 ),
             )
         }
