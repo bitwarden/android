@@ -2,10 +2,12 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -39,14 +41,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.createAuthRequest(newEmail)
         } returns AuthRequestResult.Success(AUTH_REQUEST)
-        val state = LoginWithDeviceState(
-            emailAddress = newEmail,
-            viewState = LoginWithDeviceState.ViewState.Content(
-                fingerprintPhrase = FINGERPRINT,
-                isResendNotificationLoading = false,
-                shouldShowErrorDialog = false,
-            ),
-        )
+        val state = DEFAULT_STATE.copy(emailAddress = newEmail)
         val viewModel = createViewModel(state)
         viewModel.stateFlow.test {
             assertEquals(state, awaitItem())
@@ -69,6 +64,19 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `DismissDialog should clear the dialog state`() = runTest {
+        val initialState = DEFAULT_STATE.copy(
+            dialogState = LoginWithDeviceState.DialogState.Error(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.generic_error_message.asText(),
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+        viewModel.actionChannel.trySend(LoginWithDeviceAction.DismissDialog)
+        assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `ResendNotificationClick should create new auth request and update state`() = runTest {
         val newFingerprint = "newFingerprint"
         coEvery {
@@ -78,10 +86,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         viewModel.actionChannel.trySend(LoginWithDeviceAction.ResendNotificationClick)
         assertEquals(
             DEFAULT_STATE.copy(
-                viewState = LoginWithDeviceState.ViewState.Content(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     fingerprintPhrase = newFingerprint,
-                    isResendNotificationLoading = false,
-                    shouldShowErrorDialog = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -117,10 +123,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             DEFAULT_STATE.copy(
-                viewState = LoginWithDeviceState.ViewState.Content(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     fingerprintPhrase = newFingerprint,
-                    isResendNotificationLoading = false,
-                    shouldShowErrorDialog = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -141,7 +145,10 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 viewState = LoginWithDeviceState.ViewState.Content(
                     fingerprintPhrase = "",
                     isResendNotificationLoading = false,
-                    shouldShowErrorDialog = true,
+                ),
+                dialogState = LoginWithDeviceState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -149,36 +156,38 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        state: LoginWithDeviceState = DEFAULT_STATE,
+        state: LoginWithDeviceState? = DEFAULT_STATE,
     ): LoginWithDeviceViewModel =
         LoginWithDeviceViewModel(
             authRepository = authRepository,
             savedStateHandle = SavedStateHandle().apply { set("state", state) },
         )
-
-    companion object {
-        private const val EMAIL = "test@gmail.com"
-        private const val FINGERPRINT = "fingerprint"
-        private val DEFAULT_STATE = LoginWithDeviceState(
-            emailAddress = EMAIL,
-            viewState = LoginWithDeviceState.ViewState.Content(
-                fingerprintPhrase = FINGERPRINT,
-                isResendNotificationLoading = false,
-                shouldShowErrorDialog = false,
-            ),
-        )
-        private val AUTH_REQUEST = AuthRequest(
-            id = "1",
-            publicKey = "2",
-            platform = "Android",
-            ipAddress = "192.168.0.1",
-            key = "public",
-            masterPasswordHash = "verySecureHash",
-            creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
-            responseDate = null,
-            requestApproved = true,
-            originUrl = "www.bitwarden.com",
-            fingerprint = FINGERPRINT,
-        )
-    }
 }
+
+private const val EMAIL = "test@gmail.com"
+private const val FINGERPRINT = "fingerprint"
+
+private val DEFAULT_CONTENT_VIEW_STATE = LoginWithDeviceState.ViewState.Content(
+    fingerprintPhrase = FINGERPRINT,
+    isResendNotificationLoading = false,
+)
+
+private val DEFAULT_STATE = LoginWithDeviceState(
+    emailAddress = EMAIL,
+    viewState = DEFAULT_CONTENT_VIEW_STATE,
+    dialogState = null,
+)
+
+private val AUTH_REQUEST = AuthRequest(
+    id = "1",
+    publicKey = "2",
+    platform = "Android",
+    ipAddress = "192.168.0.1",
+    key = "public",
+    masterPasswordHash = "verySecureHash",
+    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+    responseDate = null,
+    requestApproved = true,
+    originUrl = "www.bitwarden.com",
+    fingerprint = FINGERPRINT,
+)
