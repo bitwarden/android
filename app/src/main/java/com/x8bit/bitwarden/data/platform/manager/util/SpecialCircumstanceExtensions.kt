@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
  */
 fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? =
     when (this) {
+        is SpecialCircumstance.AutofillSave -> null
         is SpecialCircumstance.AutofillSelection -> this.autofillSelectionData
         is SpecialCircumstance.ShareNewSend -> null
     }

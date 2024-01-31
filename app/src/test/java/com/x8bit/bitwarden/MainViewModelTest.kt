@@ -8,7 +8,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -129,6 +131,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val shareData = mockk<IntentManager.ShareData>()
+        every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
 
@@ -152,6 +155,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val autofillSelectionData = mockk<AutofillSelectionData>()
+        every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
 
@@ -171,10 +175,34 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with an autofill save item should set the special circumstance to AutofillSave`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val autofillSaveItem = mockk<AutofillSaveItem>()
+        every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.AutofillSave(
+                autofillSaveItem = autofillSaveItem,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val shareData = mockk<IntentManager.ShareData>()
+        every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
 
@@ -198,6 +226,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val autofillSelectionData = mockk<AutofillSelectionData>()
+        every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
 
@@ -210,6 +239,29 @@ class MainViewModelTest : BaseViewModelTest() {
             SpecialCircumstance.AutofillSelection(
                 autofillSelectionData = autofillSelectionData,
                 shouldFinishWhenComplete = false,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with an autofill save item should set the special circumstance to AutofillSave`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val autofillSaveItem = mockk<AutofillSaveItem>()
+        every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.AutofillSave(
+                autofillSaveItem = autofillSaveItem,
             ),
             specialCircumstanceManager.specialCircumstance,
         )

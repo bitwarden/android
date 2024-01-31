@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
+import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -110,9 +111,17 @@ class MainViewModel @Inject constructor(
         intent: Intent,
         isFirstIntent: Boolean,
     ) {
+        val autofillSaveItem = intent.getAutofillSaveItemOrNull()
         val autofillSelectionData = intent.getAutofillSelectionDataOrNull()
         val shareData = intentManager.getShareDataFromIntent(intent)
         when {
+            autofillSaveItem != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.AutofillSave(
+                        autofillSaveItem = autofillSaveItem,
+                    )
+            }
+
             autofillSelectionData != null -> {
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.AutofillSelection(

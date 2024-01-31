@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -67,6 +68,12 @@ class RootNavViewModel @Inject constructor(
 
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
+                    is SpecialCircumstance.AutofillSave -> {
+                        RootNavState.VaultUnlockedForAutofillSave(
+                            autofillSaveItem = specialCircumstance.autofillSaveItem,
+                        )
+                    }
+
                     is SpecialCircumstance.AutofillSelection -> {
                         RootNavState.VaultUnlockedForAutofillSelection(
                             activeUserId = userState.activeAccount.userId,
@@ -124,6 +131,15 @@ sealed class RootNavState : Parcelable {
     @Parcelize
     data class VaultUnlocked(
         val activeUserId: String,
+    ) : RootNavState()
+
+    /**
+     * App should show an add item screen for a user to complete the saving of data collected by
+     * the autofill framework.
+     */
+    @Parcelize
+    data class VaultUnlockedForAutofillSave(
+        val autofillSaveItem: AutofillSaveItem,
     ) : RootNavState()
 
     /**
