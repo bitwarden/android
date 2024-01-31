@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
@@ -207,6 +208,22 @@ class CiphersServiceTest : BaseServiceTest() {
         )
         assertEquals(
             createMockCipher(number = 1),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `updateCipherCollections should execute the updateCipherCollections API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+
+        val result = ciphersService.updateCipherCollections(
+            cipherId = "mockId-1",
+            body = UpdateCipherCollectionsJsonRequest(
+                collectionIds = listOf("mockId-1"),
+            ),
+        )
+        assertEquals(
+            Unit,
             result.getOrThrow(),
         )
     }

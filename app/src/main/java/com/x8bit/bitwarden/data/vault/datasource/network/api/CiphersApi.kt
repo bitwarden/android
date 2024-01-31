@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -70,6 +71,15 @@ interface CiphersApi {
         @Path("cipherId") cipherId: String,
         @Body body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Updates a cipher's collections.
+     */
+    @PUT("ciphers/{cipherId}/collections")
+    suspend fun updateCipherCollections(
+        @Path("cipherId") cipherId: String,
+        @Body body: UpdateCipherCollectionsJsonRequest,
+    ): Result<Unit>
 
     /**
      * Hard deletes a cipher.

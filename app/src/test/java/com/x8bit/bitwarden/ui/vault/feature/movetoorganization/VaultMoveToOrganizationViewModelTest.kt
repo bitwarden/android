@@ -301,7 +301,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
-        } returns ShareCipherResult.Error(errorMessage = null)
+        } returns ShareCipherResult.Error
         viewModel.stateFlow.test {
             assertEquals(
                 initialState.copy(
@@ -378,6 +378,41 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `MoveClick with onlyShowCollections true should invoke updateCipherCollections`() =
+        runTest {
+            val viewModel = createViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultMoveToOrganizationState(
+                        onlyShowCollections = true,
+                    ),
+                ),
+            )
+            mutableCollectionFlow.tryEmit(value = DataState.Loaded(DEFAULT_COLLECTIONS))
+            mutableVaultItemFlow.tryEmit(value = DataState.Loaded(createMockCipherView(number = 1)))
+            coEvery {
+                vaultRepository.updateCipherCollections(
+                    cipherId = "mockCipherId",
+                    cipherView = createMockCipherView(number = 1),
+                    collectionIds = listOf("mockId-1"),
+                )
+            } returns ShareCipherResult.Success
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(VaultMoveToOrganizationAction.MoveClick)
+                assertEquals(
+                    VaultMoveToOrganizationEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                vaultRepository.updateCipherCollections(
+                    cipherId = "mockCipherId",
+                    cipherView = createMockCipherView(number = 1),
+                    collectionIds = listOf("mockId-1"),
+                )
+            }
+        }
+
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = initialSavedStateHandle,
         vaultRepo: VaultRepository = vaultRepository,
@@ -403,11 +438,12 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         viewState: VaultMoveToOrganizationState.ViewState = VaultMoveToOrganizationState.ViewState.Loading,
         vaultItemId: String = "mockCipherId",
         dialogState: VaultMoveToOrganizationState.DialogState? = null,
+        onlyShowCollections: Boolean = false,
     ): VaultMoveToOrganizationState = VaultMoveToOrganizationState(
         vaultItemId = vaultItemId,
         viewState = viewState,
         dialogState = dialogState,
-        onlyShowCollections = false,
+        onlyShowCollections = onlyShowCollections,
     )
 }
 

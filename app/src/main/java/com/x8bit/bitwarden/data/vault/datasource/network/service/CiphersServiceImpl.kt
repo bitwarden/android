@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrg
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -114,6 +115,15 @@ class CiphersServiceImpl(
         body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher> =
         ciphersApi.shareCipher(
+            cipherId = cipherId,
+            body = body,
+        )
+
+    override suspend fun updateCipherCollections(
+        cipherId: String,
+        body: UpdateCipherCollectionsJsonRequest,
+    ): Result<Unit> =
+        ciphersApi.updateCipherCollections(
             cipherId = cipherId,
             body = body,
         )
