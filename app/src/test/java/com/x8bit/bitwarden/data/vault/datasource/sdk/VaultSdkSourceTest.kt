@@ -18,6 +18,7 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
+import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
@@ -759,6 +760,32 @@ class VaultSdkSourceTest {
         )
         assertEquals(
             true.asSuccess(),
+            result,
+        )
+    }
+
+    @Test
+    fun `updatePassword should call SDK and a Result with correct data`() = runTest {
+        val userId = "userId"
+        val newPassword = "newPassword"
+        val passwordHash = "passwordHash"
+        val newKey = "newKey"
+        val updatePasswordResponse = UpdatePasswordResponse(
+            passwordHash = passwordHash,
+            newKey = newKey,
+        )
+        coEvery {
+            clientCrypto.updatePassword(
+                newPassword = newPassword,
+            )
+        } returns updatePasswordResponse
+
+        val result = vaultSdkSource.updatePassword(
+            userId = userId,
+            newPassword = newPassword,
+        )
+        assertEquals(
+            updatePasswordResponse.asSuccess(),
             result,
         )
     }

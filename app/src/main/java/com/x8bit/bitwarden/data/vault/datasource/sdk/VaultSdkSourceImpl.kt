@@ -18,6 +18,7 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
+import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
@@ -327,6 +328,15 @@ class VaultSdkSourceImpl(
                 password = password,
                 passwordHash = passwordHash,
             )
+    }
+
+    override suspend fun updatePassword(
+        userId: String,
+        newPassword: String,
+    ): Result<UpdatePasswordResponse> = runCatching {
+        getClient(userId = userId)
+            .crypto()
+            .updatePassword(newPassword)
     }
 
     private fun getClient(
