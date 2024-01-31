@@ -15,5 +15,6 @@
         public bool ManagePolicies { get; set; }
         public bool ManageSso { get; set; }
         public bool ManageUsers { get; set; }
+        public bool ManageResetPassword { get; set; }
     }
 }

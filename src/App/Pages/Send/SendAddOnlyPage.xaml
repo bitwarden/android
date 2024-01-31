@@ -25,7 +25,8 @@
             Priority="-2"
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Account}" />
+            AutomationProperties.Name="{u:I18n Account}"
+            AutomationId="AccountIconButton" />
         <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" x:Name="_closeItem" />
         <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" x:Name="_saveItem"/>
     </ContentPage.ToolbarItems>
@@ -93,13 +94,13 @@
                             LineBreakMode="CharacterWrap"
                             StyleClass="text-sm, text-muted"
                             HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="Center" />
+                            HorizontalTextAlignment="Start" />
                         <Label
                             Margin="0, 5, 0, 0"
                             Text="{u:I18n MaxFileSize}"
                             StyleClass="text-sm, text-muted"
                             HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="Center" />
+                            HorizontalTextAlignment="Start" />
                     </StackLayout>
                 </StackLayout>
                 <StackLayout
@@ -143,19 +144,6 @@
                             HorizontalOptions="End"
                             Margin="10,0,0,0" />
                     </StackLayout>
-                </StackLayout>
-                <StackLayout
-                    StyleClass="box-row, box-row-switch">
-                    <Label
-                        Text="{Binding ShareOnSaveText}"
-                        StyleClass="box-label-regular"
-                        VerticalOptions="Center"
-                        HorizontalOptions="StartAndExpand" />
-                    <Switch
-                        IsToggled="{Binding ShareOnSave}"
-                        IsEnabled="{Binding SendEnabled}"
-                        HorizontalOptions="End"
-                        Margin="10,0,0,0" />
                 </StackLayout>
                 <StackLayout
                     Orientation="Horizontal"

@@ -1,4 +1,5 @@
 ﻿using Bit.App.Resources;
+using Bit.App.Utilities.Automation;
 using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
@@ -113,6 +114,39 @@ namespace Bit.App.Pages
                     }
                 }
                 return _icon;
+            }
+        }
+
+        public string AutomationId
+        {
+            get
+            {
+                if (Type != null)
+                {
+                    return AutomationIdsHelper.AddSuffixFor(System.Enum.GetName(typeof(CipherType), Type.Value), SuffixType.Filter);
+                }
+
+                if (IsTrash)
+                {
+                    return AutomationIdsHelper.AddSuffixFor("Trash", SuffixType.Filter);
+                }
+
+                if (Folder != null)
+                {
+                    return AutomationIdsHelper.AddSuffixFor("Folder", SuffixType.Filter);
+                }
+
+                if (Collection != null)
+                {
+                    return AutomationIdsHelper.AddSuffixFor("Collection", SuffixType.Filter);
+                }
+
+                if (IsTotpCode)
+                {
+                    return AutomationIdsHelper.AddSuffixFor("TOTP", SuffixType.ListItem);
+                }
+
+                return null;
             }
         }
     }

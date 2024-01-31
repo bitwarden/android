@@ -145,7 +145,7 @@ namespace Bit.Core.Test.Services
             return;
 
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
-            sutProvider.GetDependency<ICryptoService>().HasKeyAsync().Returns(true);
+            sutProvider.GetDependency<ICryptoService>().HasUserKeyAsync().Returns(true);
             ServiceContainer.Register("cryptoService", sutProvider.GetDependency<ICryptoService>());
             sutProvider.GetDependency<II18nService>().StringComparer.Returns(StringComparer.CurrentCulture);
             sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);

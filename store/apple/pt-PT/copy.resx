@@ -118,55 +118,55 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden</value>
+    <value>Bitwarden - Gestor de Palavras-passe</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>A Bitwarden, Inc. é a empresa-mãe da 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+NOMEADO O MELHOR GESTOR DE PALAVRAS-PASSE PELO THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET E MUITO MAIS.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Gerir, armazenar, proteger e partilhar palavras-passe ilimitadas em dispositivos ilimitados a partir de qualquer lugar. O Bitwarden fornece soluções de gestão de senhas de código aberto para todos, seja em casa, no trabalho ou onde estiver.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Gera palavras-passe fortes, únicas e aleatórias com base em requisitos de segurança para todos os sites que frequenta.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+O Bitwarden Send transmite rapidamente informações encriptadas - ficheiros e texto simples - diretamente a qualquer pessoa.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+O Bitwarden oferece os planos Equipas e Empresarial destinados a empresas, para que possa partilhar de forma segura as palavras-passe com os seus colegas.
 
-Why Choose Bitwarden:
+Razões para escolher o Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Encriptação de classe mundial
+As palavras-passe são protegidas com encriptação avançada de ponta a ponta (AES-256 bit, salted hashtag e PBKDF2 SHA-256) para que os seus dados permaneçam seguros e privados.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Gerador de palavras-passe incorporado
+Gera palavras-passe fortes, únicas e aleatórias com base nos requisitos de segurança para todos os sites que frequenta.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Traduções globais
+O Bitwarden está traduzido em 40 idiomas e está a crescer, graças à nossa comunidade global.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+Aplicações multiplataforma
+Proteja e partilhe dados confidenciais no seu cofre Bitwarden a partir de qualquer navegador, dispositivo móvel ou sistema operativo de computador, e muito mais.
 </value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>bit warden,8bit,palavra-passe,gestor de palavras-passe gratuito,gestor de palavras-passe,gestor de credenciais</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gira todas as suas credenciais e palavras-passe a partir de um cofre seguro</value>
+    <value>Gira todos as suas credenciais e palavras-passe a partir de um cofre seguro</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Gira automaticamente palavras-passe fortes, aleatórias e seguras</value>
+    <value>Gera automaticamente palavras-passe fortes, aleatórias e seguras</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Proteja o seu cofre com Touch ID, código PIN, ou palavra-passe mestra</value>
+    <value>Proteja o seu cofre com Touch ID, código PIN ou palavra-passe mestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-preencha credenciais do Safari, Chrome, e centenas de outras aplicações</value>
+    <value>Preenchimento automático de credenciais no Safari, Chrome e centenas de outras aplicações</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincronize e aceda ao seu cofre através de múltiplos dispositivos</value>
+    <value>Sincronize e aceda ao seu cofre através de vários dispositivos</value>
   </data>
 </root>

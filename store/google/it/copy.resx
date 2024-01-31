@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Gestore di Password</value>
+    <value>Bitwarden Password Manager</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
@@ -134,14 +134,14 @@ Gestisci, archivia, proteggi, e condividi password illimitate su dispositivi ill
 
 Genera password forti, uniche, e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
 
-Bitwarden Send trasmette rapidamente informazioni criptate - via file e testo in chiaro - direttamente a chiunque.
+Bitwarden Send trasmette rapidamente informazioni crittate - via file e testo in chiaro - direttamente a chiunque.
 
 Bitwarden offre piani Teams ed Enterprise per le aziende così puoi condividere le password in modo sicuro con i tuoi colleghi.
 
 Perché Scegliere Bitwarden:
 
-Criptografia Di Livello Mondiale
-Le password sono protette con criptografia end-to-end avanzata (AES-256 bit, salted hashing, e PBKDF2 SHA-256) per tenere i tuoi dati al sicuro e privati.
+Crittografia Di Livello Mondiale
+Le password sono protette con crittografia end-to-end avanzata (AES-256 bit, salted hashing, e PBKDF2 SHA-256) per tenere i tuoi dati al sicuro e privati.
 
 Generatore Di Password Integrato
 Genera password forti, uniche e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
@@ -155,7 +155,7 @@ Proteggi e condividi i dati sensibili all'interno della tua cassaforte di Bitwar
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Un gestore di password sicuro e gratis per tutti i tuoi dispositivi</value>
+    <value>Un password manager sicuro e gratis per tutti i tuoi dispositivi</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Gestisci tutte le tue password e i tuoi login da una cassaforte sicura</value>

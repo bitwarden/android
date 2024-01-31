@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -28,6 +27,7 @@ namespace Bit.App.Pages
         private readonly IPolicyService _policyService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly II18nService _i18nService;
+        private readonly ISyncService _syncService;
 
         private bool _showPassword;
         private bool _isPolicyInEffect;
@@ -46,6 +46,7 @@ namespace Bit.App.Pages
             _passwordGenerationService =
                 ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _syncService = ServiceContainer.Resolve<ISyncService>();
 
             PageTitle = AppResources.SetMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -100,11 +101,17 @@ namespace Bit.App.Pages
         public Action CloseAction { get; set; }
         public string OrgIdentifier { get; set; }
         public string OrgId { get; set; }
+        public ForcePasswordResetReason? ForceSetPasswordReason { get; private set; }
+
+        public string SetMasterPasswordSummary => ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission
+                                                    ? AppResources.YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword
+                                                    : AppResources.YourOrganizationRequiresYouToSetAMasterPassword;
 
         public async Task InitAsync()
         {
             await CheckPasswordPolicy();
-
+            ForceSetPasswordReason = await _stateService.GetForcePasswordResetReasonAsync();
+            TriggerPropertyChanged(nameof(SetMasterPasswordSummary));
             try
             {
                 var response = await _apiService.GetOrganizationAutoEnrollStatusAsync(OrgIdentifier);
@@ -165,58 +172,52 @@ namespace Bit.App.Pages
 
             var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
             var email = await _stateService.GetEmailAsync();
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdfConfig);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
-            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
+            var newMasterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, email, kdfConfig);
+            var masterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.ServerAuthorization);
+            var localMasterPasswordHash = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey, HashPurpose.LocalAuthorization);
 
-            Tuple<SymmetricCryptoKey, EncString> encKey;
-            var existingEncKey = await _cryptoService.GetEncKeyAsync();
-            if (existingEncKey == null)
-            {
-                encKey = await _cryptoService.MakeEncKeyAsync(key);
-            }
-            else
-            {
-                encKey = await _cryptoService.RemakeEncKeyAsync(key);
-            }
-
-            var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(newMasterKey,
+                await _cryptoService.GetUserKeyAsync() ?? await _cryptoService.MakeUserKeyAsync());
+            var keysRequest = await GetKeysForSetPasswordRequestAsync(newUserKey);
             var request = new SetPasswordRequest
             {
                 MasterPasswordHash = masterPasswordHash,
-                Key = encKey.Item2.EncryptedString,
+                Key = newProtectedUserKey.EncryptedString,
                 MasterPasswordHint = Hint,
                 Kdf = kdfConfig.Type.GetValueOrDefault(KdfType.PBKDF2_SHA256),
                 KdfIterations = kdfConfig.Iterations.GetValueOrDefault(Constants.Pbkdf2Iterations),
                 KdfMemory = kdfConfig.Memory,
                 KdfParallelism = kdfConfig.Parallelism,
                 OrgIdentifier = OrgIdentifier,
-                Keys = new KeysRequest
-                {
-                    PublicKey = keys.Item1,
-                    EncryptedPrivateKey = keys.Item2.EncryptedString
-                }
+                Keys = keysRequest
             };
 
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _stateService.SetKdfConfigurationAsync(kdfConfig);
-                await _cryptoService.SetKeyAsync(key);
-                await _cryptoService.SetKeyHashAsync(localMasterPasswordHash);
-                await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
-                await _cryptoService.SetEncPrivateKeyAsync(keys.Item2.EncryptedString);
+                await _cryptoService.SetUserKeyAsync(newUserKey);
+                await _cryptoService.SetMasterKeyAsync(newMasterKey);
+                await _cryptoService.SetMasterKeyHashAsync(localMasterPasswordHash);
+                await _cryptoService.SetMasterKeyEncryptedUserKeyAsync(newProtectedUserKey.EncryptedString);
+
+                // Set private key only for new JIT provisioned users in MP encryption orgs
+                // Existing TDE users will have private key set on sync or on login
+                if (keysRequest != null)
+                {
+                    await _cryptoService.SetUserPrivateKeyAsync(keysRequest.EncryptedPrivateKey);
+                }
 
                 if (ResetPasswordAutoEnroll)
                 {
                     // Grab Organization Keys
                     var response = await _apiService.GetOrganizationKeysAsync(OrgId);
                     var publicKey = CoreHelpers.Base64UrlDecode(response.PublicKey);
-                    // Grab user's Encryption Key and encrypt with Org Public Key
-                    var userEncKey = await _cryptoService.GetEncKeyAsync();
-                    var encryptedKey = await _cryptoService.RsaEncryptAsync(userEncKey.Key, publicKey);
+                    // Grab User Key and encrypt with Org Public Key
+                    var userKey = await _cryptoService.GetUserKeyAsync();
+                    var encryptedKey = await _cryptoService.RsaEncryptAsync(userKey.Key, publicKey);
                     // Request
                     var resetRequest = new OrganizationUserResetPasswordEnrollmentRequest
                     {
@@ -228,6 +229,9 @@ namespace Bit.App.Pages
                     await _apiService.PutOrganizationUserResetPasswordEnrollmentAsync(OrgId, userId, resetRequest);
                 }
 
+                await _stateService.SetForcePasswordResetReasonAsync(null);
+                await _stateService.SetUserHasMasterPasswordAsync(true);
+                await _syncService.FullSyncAsync(true);
                 await _deviceActionService.HideLoadingAsync();
                 SetPasswordSuccessAction?.Invoke();
             }
@@ -240,6 +244,21 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+        }
+
+        private async Task<KeysRequest> GetKeysForSetPasswordRequestAsync(UserKey newUserKey)
+        {
+            if (ForceSetPasswordReason == ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission)
+            {
+                return null;
+            }
+
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
+            return new KeysRequest
+            {
+                PublicKey = newPublicKey,
+                EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
+            };
         }
 
         public void TogglePassword()

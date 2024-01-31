@@ -1,12 +1,18 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Models.Domain;
+using Bit.Core.Exceptions;
 
 namespace Bit.Core.Services
 {
+    public enum PinLockType
+    {
+        Disabled,
+        Persistent,
+        Transient
+    }
+
     public class VaultTimeoutService : IVaultTimeoutService
     {
         private readonly ICryptoService _cryptoService;
@@ -16,9 +22,8 @@ namespace Bit.Core.Services
         private readonly ICipherService _cipherService;
         private readonly ICollectionService _collectionService;
         private readonly ISearchService _searchService;
-        private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
-        private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IUserVerificationService _userVerificationService;
         private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
         private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
 
@@ -30,9 +35,8 @@ namespace Bit.Core.Services
             ICipherService cipherService,
             ICollectionService collectionService,
             ISearchService searchService,
-            IMessagingService messagingService,
             ITokenService tokenService,
-            IKeyConnectorService keyConnectorService,
+            IUserVerificationService userVerificationService,
             Func<Tuple<string, bool>, Task> lockedCallback,
             Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
         {
@@ -43,26 +47,55 @@ namespace Bit.Core.Services
             _cipherService = cipherService;
             _collectionService = collectionService;
             _searchService = searchService;
-            _messagingService = messagingService;
             _tokenService = tokenService;
-            _keyConnectorService = keyConnectorService;
+            _userVerificationService = userVerificationService;
             _lockedCallback = lockedCallback;
             _loggedOutCallback = loggedOutCallback;
         }
 
         public long? DelayLockAndLogoutMs { get; set; }
 
+        /// <summary>
+        /// Determine if the current or provided account is locked.
+        /// </summary>
+        /// <param name="userId">
+        /// Optional specified user, must be provided if not the current account.
+        /// </param>
         public async Task<bool> IsLockedAsync(string userId = null)
         {
-            var hasKey = await _cryptoService.HasKeyAsync(userId);
-            if (hasKey)
+            // If biometrics are used, we can use the flag to determine locked state taking into account the auto unlock key for vault timeout never.
+            var biometricSet = await IsBiometricLockSetAsync(userId);
+            var hasAutoUnlockKey = await _cryptoService.HasAutoUnlockKeyAsync(userId);
+            if (biometricSet && await _stateService.GetBiometricLockedAsync(userId) && !hasAutoUnlockKey)
             {
-                var biometricSet = await IsBiometricLockSetAsync(userId);
-                if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
+                return true;
+            }
+
+            if (!await _cryptoService.HasUserKeyAsync(userId))
+            {
+                try
                 {
-                    return true;
+                    // Filter out accounts without auto key
+                    if (!hasAutoUnlockKey)
+                    {
+                        return true;
+                    }
+                    // Inactive accounts with an auto key aren't locked, but we shouldn't set user key
+                    if (userId != null && await _stateService.GetActiveUserIdAsync() != userId)
+                    {
+                        return false;
+                    }
+                    await _cryptoService.SetUserKeyAsync(await _cryptoService.GetAutoUnlockKeyAsync(userId), userId);
+                }
+                catch (LegacyUserException)
+                {
+                    // Legacy users must migrate on web vault before login
+                    await LogOutAsync(false, userId);
                 }
             }
+
+            // Check again to verify auto key was set
+            var hasKey = await _cryptoService.HasUserKeyAsync(userId);
             return !hasKey;
         }
 
@@ -163,13 +196,15 @@ namespace Bit.Core.Services
                 userId = await _stateService.GetActiveUserIdAsync();
             }
 
-            if (await _keyConnectorService.GetUsesKeyConnector())
+            if (!await _userVerificationService.HasMasterPasswordAsync())
             {
-                var (isPinProtected, isPinProtectedWithKey) = await IsPinLockSetAsync(userId);
-                var pinLock = (isPinProtected && await _stateService.GetPinProtectedKeyAsync(userId) != null) ||
-                              isPinProtectedWithKey;
+                var pinStatus = await GetPinLockTypeAsync(userId);
+                var ephemeralPinSet = await _stateService.GetPinKeyEncryptedUserKeyEphemeralAsync()
+                    ?? await _stateService.GetPinProtectedKeyAsync();
+                var pinEnabled = (pinStatus == PinLockType.Transient && ephemeralPinSet != null) ||
+                          pinStatus == PinLockType.Persistent;
 
-                if (!pinLock && !await IsBiometricLockSetAsync())
+                if (!pinEnabled && !await IsBiometricLockSetAsync())
                 {
                     await LogOutAsync(userInitiated, userId);
                     return;
@@ -187,10 +222,11 @@ namespace Bit.Core.Services
                 }
             }
             await Task.WhenAll(
-                _cryptoService.ClearKeyAsync(userId),
+                _cryptoService.ClearUserKeyAsync(userId),
+                _cryptoService.ClearMasterKeyAsync(userId),
+                _stateService.SetUserKeyAutoUnlockAsync(null, userId),
                 _cryptoService.ClearOrgKeysAsync(true, userId),
-                _cryptoService.ClearKeyPairAsync(true, userId),
-                _cryptoService.ClearEncKeyAsync(true, userId));
+                _cryptoService.ClearKeyPairAsync(true, userId));
 
             if (isActiveAccount)
             {
@@ -214,15 +250,27 @@ namespace Bit.Core.Services
         {
             await _stateService.SetVaultTimeoutAsync(timeout);
             await _stateService.SetVaultTimeoutActionAsync(action);
-            await _cryptoService.ToggleKeyAsync();
+            await _cryptoService.RefreshKeysAsync();
             await _tokenService.ToggleTokensAsync();
         }
 
-        public async Task<Tuple<bool, bool>> IsPinLockSetAsync(string userId = null)
+        public async Task<PinLockType> GetPinLockTypeAsync(string userId = null)
         {
-            var protectedPin = await _stateService.GetProtectedPinAsync(userId);
-            var pinProtectedKey = await _stateService.GetPinProtectedAsync(userId);
-            return new Tuple<bool, bool>(protectedPin != null, pinProtectedKey != null);
+            // we can't depend on only the protected pin being set because old
+            // versions only used it for MP on Restart
+            var isPinEnabled = await _stateService.GetProtectedPinAsync(userId) != null;
+            var hasUserKeyPin = await _stateService.GetPinKeyEncryptedUserKeyAsync(userId) != null;
+            var hasOldUserKeyPin = await _stateService.GetPinProtectedAsync(userId) != null;
+
+            if (hasUserKeyPin || hasOldUserKeyPin)
+            {
+                return PinLockType.Persistent;
+            }
+            else if (isPinEnabled && !hasUserKeyPin && !hasOldUserKeyPin)
+            {
+                return PinLockType.Transient;
+            }
+            return PinLockType.Disabled;
         }
 
         public async Task<bool> IsBiometricLockSetAsync(string userId = null)
@@ -233,8 +281,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId = null)
         {
-            await _stateService.SetPinProtectedKeyAsync(null, userId);
-            await _stateService.SetProtectedPinAsync(null, userId);
+            await _cryptoService.ClearPinKeysAsync(userId);
         }
 
         public async Task<int?> GetVaultTimeout(string userId = null)

@@ -30,14 +30,14 @@ namespace Bit.App.Pages
 
         public async Task Init()
         {
-            Organization = await _keyConnectorService.GetManagingOrganization();
+            Organization = await _keyConnectorService.GetManagingOrganizationAsync();
         }
 
         public async Task MigrateAccount()
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
 
-            await _keyConnectorService.MigrateUser();
+            await _keyConnectorService.MigrateUserAsync();
             await _syncService.FullSyncAsync(true);
 
             await _deviceActionService.HideLoadingAsync();
@@ -47,7 +47,7 @@ namespace Bit.App.Pages
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
 
-            await _apiService.PostLeaveOrganization(Organization.Id);
+            await _apiService.PostLeaveOrganizationAsync(Organization.Id);
             await _syncService.FullSyncAsync(true);
 
             await _deviceActionService.HideLoadingAsync();

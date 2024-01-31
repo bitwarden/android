@@ -430,6 +430,22 @@
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
+           Class="box-row-button-muted">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderWidth"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
            Class="box-overlay">
         <Setter Property="BackgroundColor"
                 Value="Transparent" />
@@ -492,6 +508,7 @@
                 Value="{DynamicResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
            Class="box-footer-label">
         <Setter Property="FontSize"
                 Value="Small" />
@@ -573,4 +590,34 @@
         <Setter Property="StrongColor"
                 Value="{DynamicResource SuccessColor}" />
     </Style>
+
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="settings-navigatable-label">
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+        <Setter Property="Margin" Value="16,12" />
+    </Style>
+
+    <Style TargetType="controls:ExternalLinkItemView"
+           ApplyToDerivedTypes="True"
+           Class="settings-external-link-item">
+        <Setter Property="Padding" Value="16,12" />
+    </Style>
+
+    <Style TargetType="controls:BaseSettingItemView"
+           ApplyToDerivedTypes="True"
+           Class="settings-item-view">
+        <Setter Property="Padding" Value="16,12" />
+    </Style>
+
+    <Style TargetType="BoxView"
+           Class="settings-box-row-separator">
+        <Setter Property="HeightRequest"
+                Value="1" />
+        <Setter Property="Color"
+                Value="{DynamicResource BoxBorderColor}" />
+        <Setter Property="IsVisible"
+                Value="{OnPlatform Android=True, iOS=False}" />
+    </Style>
+    
 </ResourceDictionary>

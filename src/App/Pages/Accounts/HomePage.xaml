@@ -23,12 +23,9 @@
             Priority="-1"
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Account}" />
+            AutomationProperties.Name="{u:I18n Account}"
+            AutomationId="AccountIconButton" />
         <ToolbarItem x:Name="_closeButton" Text="{u:I18n Close}" Command="{Binding CloseCommand}" Order="Primary" Priority="-1"/>
-        <ToolbarItem
-            Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
-            AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Options}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -53,7 +50,9 @@
                         Keyboard="Email"
                         StyleClass="box-value"
                         ReturnType="Go"
-                        ReturnCommand="{Binding ContinueCommand}">
+                        ReturnCommand="{Binding ContinueCommand}"
+                        AutomationId="EmailAddressEntry"
+                        >
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Disabled">
@@ -66,7 +65,28 @@
                     </Entry>
                     <StackLayout
                         Orientation="Horizontal"
-                        Margin="0, 16, 0 ,0">
+                        Margin="0, 6, 0 ,0">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding ShowEnvironmentPickerCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <Label
+                            Text="{Binding RegionText}"
+                            FontSize="13"
+                            TextColor="{DynamicResource MutedColor}"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"/>
+                        <controls:IconLabel
+                            Text="{Binding SelectedEnvironmentName}"
+                            FontSize="13"
+                            TextColor="{DynamicResource PrimaryColor}"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            AutomationId="RegionSelectorDropdown"/>
+                    </StackLayout>
+                    <StackLayout
+                        Orientation="Horizontal"
+                        Margin="0, 20, 0 ,0">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer
                                 Command="{Binding RememberEmailCommand}" />
@@ -76,21 +96,27 @@
                             StyleClass="text-sm"
                             HorizontalOptions="FillAndExpand"
                             VerticalOptions="Center"
-                            VerticalTextAlignment="Center"/>
+                            VerticalTextAlignment="Center"
+                            />
                         <Switch
                             Scale="0.8"
                             IsToggled="{Binding RememberEmail}"
-                            VerticalOptions="Center"/>
+                            VerticalOptions="Center"
+                            AutomationId="RememberMeSwitch"
+                            />
                     </StackLayout>
                 </StackLayout>
                 <Button Text="{u:I18n Continue}"
                         StyleClass="btn-primary"
                         IsEnabled="{Binding CanContinue}"
-                        Command="{Binding ContinueCommand}" />
+                        Command="{Binding ContinueCommand}"
+                        AutomationId="ContinueButton"
+                        />
                         
                 <Label FormattedText="{Binding CreateAccountText}"
                        Margin="0, 10"
-                        StyleClass="box-footer-label">
+                        StyleClass="box-footer-label"
+                        AutomationId="CreateAccountLabel">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding CreateAccountCommand}" />
                     </Label.GestureRecognizers>
@@ -116,5 +142,4 @@
             MainPage="{Binding Source={x:Reference _page}}"
             BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
     </AbsoluteLayout>
-
 </pages:BaseContentPage>

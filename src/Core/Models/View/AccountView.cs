@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 
@@ -21,14 +22,7 @@ namespace Bit.Core.Models.View
             Email = a.Profile?.Email;
             Name = a.Profile?.Name;
             AvatarColor = a.Profile?.AvatarColor;
-            if (!string.IsNullOrWhiteSpace(a.Settings?.EnvironmentUrls?.WebVault))
-            {
-                Hostname = CoreHelpers.GetHostname(a.Settings?.EnvironmentUrls?.WebVault);
-            }
-            else if (!string.IsNullOrWhiteSpace(a.Settings?.EnvironmentUrls?.Base))
-            {
-                Hostname = CoreHelpers.GetHostname(a.Settings?.EnvironmentUrls?.Base);
-            }
+            Hostname = a.Settings?.EnvironmentUrls?.GetDomainOrHostname();
         }
 
         public bool IsAccount { get; set; }

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden – Salasanojen hallinta</value>
+    <value>Bitwarden – Salasanahallinta</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -132,7 +132,7 @@ Luo usein käyttämillesi sivustoille automaattisesti vahvoja, yksilöllisiä ja
 
 Bitwarden Send -ominaisuudella lähetät tietoa nopeasti salattuna — tiedostoja ja tekstiä — suoraan kenelle tahansa.
 
-Yritystoimintaan Bitwarden tarjoaa tilaukset Tiimeille ja Yrityksille, jotta salasanojen jakaminen kollegoiden kesken on turvallista.
+Yritystoimintaan Bitwarden tarjoaa yrityksille Teams- ja Enterprise-tilaukset, jotta salasanojen jakaminen kollegoiden kesken on turvallista.
 
 Miksi Bitwarden?:
 
@@ -151,7 +151,7 @@ Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimi
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,salasana,ilmainen salasanojen hallinta,salasanojen hallinta,käyttäjätunnusten hallinta</value>
+    <value>bitwarden,bit warden,8bit,salasana,ilmainen salasanahallinta,salasanojen hallinta,käyttäjätunnusten hallinta,tunnushallinta</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
@@ -164,7 +164,7 @@ Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimi
     <value>Suojaa holvisi Touch ID:llä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Täytä kirjautumistiedot automaattisesti Safarissa, Chromessa sekä lukuisissa muissa sovelluksissa</value>
+    <value>Täytä kirjautumistietoja Safariin, Chromeen ja moniin muihin sovelluksiin</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synkronoi ja hallitse holviasi useilla laitteilla</value>

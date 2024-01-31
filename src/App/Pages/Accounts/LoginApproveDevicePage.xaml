@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.LoginApproveDevicePage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:LoginApproveDeviceViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+    
+    <ContentPage.BindingContext>
+        <pages:LoginApproveDeviceViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout Padding="10, 10">
+        <StackLayout Padding="5, 10" Orientation="Horizontal">
+            <StackLayout HorizontalOptions="FillAndExpand">
+                <Label
+                    StyleClass="text-md"
+                    Text="{u:I18n RememberThisDevice}" />
+                <Label
+                    StyleClass="box-sub-label"
+                    Text="{u:I18n TurnOffUsingPublicDevice}" />
+            </StackLayout>
+            <Switch
+                Scale="0.8"
+                IsToggled="{Binding RememberThisDevice}"
+                AutomationId="RememberThisDeviceSwitch"
+                VerticalOptions="Center" />
+        </StackLayout>
+        <StackLayout Margin="0, 20, 0, 0">
+            <Button
+                x:Name="_continue"
+                Text="{u:I18n Continue}" 
+                StyleClass="btn-primary"
+                Command="{Binding ContinueCommand}"
+                IsVisible="{Binding IsNewUser}"
+                AutomationId="ContinueButton" />
+            <Button
+                x:Name="_approveWithMyOtherDevice"
+                Text="{u:I18n ApproveWithMyOtherDevice}" 
+                StyleClass="btn-primary"
+                Command="{Binding ApproveWithMyOtherDeviceCommand}"
+                IsVisible="{Binding ApproveWithMyOtherDeviceEnabled}"
+                AutomationId="ApproveWithMyOtherDeviceButton" />
+            <Button
+                x:Name="_requestAdminApproval"
+                Text="{u:I18n RequestAdminApproval}" 
+                StyleClass="box-button-row"
+                Command="{Binding RequestAdminApprovalCommand}"
+                IsVisible="{Binding RequestAdminApprovalEnabled}"
+                AutomationId="RequestAdminApprovalButton" />
+            <Button
+                x:Name="_approveWithMasterPassword"
+                Text="{u:I18n ApproveWithMasterPassword}" 
+                StyleClass="box-button-row"
+                Command="{Binding ApproveWithMasterPasswordCommand}"
+                IsVisible="{Binding ApproveWithMasterPasswordEnabled}"
+                AutomationId="ApproveWithMasterPasswordButton" />
+            <Label
+                Text="{Binding LoggingInAsText}"
+                StyleClass="text-sm"
+                Margin="0,40,0,0"
+                AutomationId="LoggingInAsLabel" />
+            <Label
+                Text="{u:I18n NotYou}"
+                StyleClass="text-md"
+                HorizontalOptions="Start"
+                TextColor="{DynamicResource HyperlinkColor}"
+                AutomationId="NotYouLabel">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding LogoutCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
+    </StackLayout>
+</pages:BaseContentPage>
+
+

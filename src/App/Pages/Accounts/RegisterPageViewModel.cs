@@ -177,25 +177,28 @@ namespace Bit.App.Pages
             Name = string.IsNullOrWhiteSpace(Name) ? null : Name;
             Email = Email.Trim().ToLower();
             var kdfConfig = new KdfConfig(KdfType.PBKDF2_SHA256, Constants.Pbkdf2Iterations, null, null);
-            var key = await _cryptoService.MakeKeyAsync(MasterPassword, Email, kdfConfig);
-            var encKey = await _cryptoService.MakeEncKeyAsync(key);
-            var hashedPassword = await _cryptoService.HashPasswordAsync(MasterPassword, key);
-            var keys = await _cryptoService.MakeKeyPairAsync(encKey.Item1);
+            var newMasterKey = await _cryptoService.MakeMasterKeyAsync(MasterPassword, Email, kdfConfig);
+            var (newUserKey, newProtectedUserKey) = await _cryptoService.EncryptUserKeyWithMasterKeyAsync(
+                newMasterKey,
+                await _cryptoService.MakeUserKeyAsync()
+            );
+            var hashedPassword = await _cryptoService.HashMasterKeyAsync(MasterPassword, newMasterKey);
+            var (newPublicKey, newProtectedPrivateKey) = await _cryptoService.MakeKeyPairAsync(newUserKey);
             var request = new RegisterRequest
             {
                 Email = Email,
                 Name = Name,
                 MasterPasswordHash = hashedPassword,
                 MasterPasswordHint = Hint,
-                Key = encKey.Item2.EncryptedString,
+                Key = newProtectedUserKey.EncryptedString,
                 Kdf = kdfConfig.Type,
                 KdfIterations = kdfConfig.Iterations,
                 KdfMemory = kdfConfig.Memory,
                 KdfParallelism = kdfConfig.Parallelism,
                 Keys = new KeysRequest
                 {
-                    PublicKey = keys.Item1,
-                    EncryptedPrivateKey = keys.Item2.EncryptedString
+                    PublicKey = newPublicKey,
+                    EncryptedPrivateKey = newProtectedPrivateKey.EncryptedString
                 },
                 CaptchaResponse = _captchaToken,
             };

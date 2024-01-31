@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -11,27 +12,16 @@ namespace Bit.App.Services
         private readonly IStorageService _preferencesStorageService;
         private readonly IStorageService _liteDbStorageService;
 
-        private readonly HashSet<string> _preferenceStorageKeys = new HashSet<string>
+        private readonly HashSet<string> _liteDbStorageKeys = new HashSet<string>
         {
-            Constants.StateVersionKey,
-            Constants.PreAuthEnvironmentUrlsKey,
-            Constants.AutofillTileAdded,
-            Constants.AddSitePromptShownKey,
-            Constants.PushInitialPromptShownKey,
-            Constants.LastFileCacheClearKey,
-            Constants.PushRegisteredTokenKey,
-            Constants.LastBuildKey,
-            Constants.ClearCiphersCacheKey,
-            Constants.BiometricIntegritySourceKey,
-            Constants.iOSExtensionActiveUserIdKey,
-            Constants.iOSAutoFillClearCiphersCacheKey,
-            Constants.iOSAutoFillBiometricIntegritySourceKey,
-            Constants.iOSExtensionClearCiphersCacheKey,
-            Constants.iOSExtensionBiometricIntegritySourceKey,
-            Constants.iOSShareExtensionClearCiphersCacheKey,
-            Constants.iOSShareExtensionBiometricIntegritySourceKey,
-            Constants.RememberedEmailKey,
-            Constants.RememberedOrgIdentifierKey
+            Constants.EventCollectionKey,
+            Constants.CiphersKey(""),
+            Constants.FoldersKey(""),
+            Constants.CollectionsKey(""),
+            Constants.CiphersLocalDataKey(""),
+            Constants.SendsKey(""),
+            Constants.PassGenHistoryKey(""),
+            Constants.SettingsKey(""),
         };
 
         public MobileStorageService(
@@ -44,29 +34,30 @@ namespace Bit.App.Services
 
         public async Task<T> GetAsync<T>(string key)
         {
-            if (_preferenceStorageKeys.Contains(key))
+            if (IsLiteDbKey(key))
             {
-                return await _preferencesStorageService.GetAsync<T>(key);
+                return await _liteDbStorageService.GetAsync<T>(key);
             }
-            return await _liteDbStorageService.GetAsync<T>(key);
+
+            return await _preferencesStorageService.GetAsync<T>(key) ?? await TryMigrateLiteDbToPrefsAsync<T>(key);
         }
 
         public Task SaveAsync<T>(string key, T obj)
         {
-            if (_preferenceStorageKeys.Contains(key))
+            if (IsLiteDbKey(key))
             {
-                return _preferencesStorageService.SaveAsync(key, obj);
+                return _liteDbStorageService.SaveAsync(key, obj);
             }
-            return _liteDbStorageService.SaveAsync(key, obj);
+            return _preferencesStorageService.SaveAsync(key, obj);
         }
 
         public Task RemoveAsync(string key)
         {
-            if (_preferenceStorageKeys.Contains(key))
+            if (IsLiteDbKey(key))
             {
-                return _preferencesStorageService.RemoveAsync(key);
+                return _liteDbStorageService.RemoveAsync(key);
             }
-            return _liteDbStorageService.RemoveAsync(key);
+            return _preferencesStorageService.RemoveAsync(key);
         }
 
         public void Dispose()
@@ -79,6 +70,26 @@ namespace Bit.App.Services
             {
                 disposablePrefService.Dispose();
             }
+        }
+
+        // Helpers
+
+        private bool IsLiteDbKey(string key)
+        {
+            return _liteDbStorageKeys.Any(key.StartsWith) ||
+                   _liteDbStorageKeys.Contains(key);
+        }
+
+        private async Task<T> TryMigrateLiteDbToPrefsAsync<T>(string key)
+        {
+            var currentValue = await _liteDbStorageService.GetAsync<T>(key);
+            if (currentValue != null)
+            {
+                await _preferencesStorageService.SaveAsync(key, currentValue);
+                await _liteDbStorageService.RemoveAsync(key);
+            }
+
+            return currentValue;
         }
     }
 }

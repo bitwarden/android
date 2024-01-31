@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "没有要列出的项目";
+"ToViewVerificationCodesUpgradeToPremium" = "要查看验证码，请升级到高级版";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "将双因素身份验证添加到项目以查看验证码";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "登录您 iPhone 上的 Bitwarden 以查看验证码";
+"SyncingItemsContainingVerificationCodes" = "正在同步包含验证码的项目";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "解锁您 iPhone 上的 Bitwarden 以查看验证码";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "设置 Bitwarden 以查看包含验证码的项目";
+"Search" = "搜索";
+"NoItemsFound" = "未找到任何条目";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "设置 Apple Watch 通行代码以使用 Bitwarden";

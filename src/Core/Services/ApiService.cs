@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
-using Bit.Core.Models.Domain;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
@@ -40,7 +42,7 @@ namespace Bit.Core.Services
             var device = (int)_platformUtilsService.GetDevice();
             _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
             _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Name", _platformUtilsService.GetClientType().GetString());
-            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Version", _platformUtilsService.GetApplicationVersion());
+            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Version", VersionHelpers.RemoveSuffix(_platformUtilsService.GetApplicationVersion()));
             if (!string.IsNullOrWhiteSpace(customUserAgent))
             {
                 _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(customUserAgent);
@@ -52,7 +54,7 @@ namespace Bit.Core.Services
         public string IdentityBaseUrl { get; set; }
         public string EventsBaseUrl { get; set; }
 
-        public void SetUrls(EnvironmentUrls urls)
+        public void SetUrls(EnvironmentUrlData urls)
         {
             UrlsSet = true;
             if (!string.IsNullOrWhiteSpace(urls.Base))
@@ -146,7 +148,7 @@ namespace Bit.Core.Services
         public Task<PreloginResponse> PostPreloginAsync(PreloginRequest request)
         {
             return SendAsync<PreloginRequest, PreloginResponse>(HttpMethod.Post, "/accounts/prelogin",
-                request, false, true);
+                request, false, true, sendToIdentity: true);
         }
 
         public Task<long> GetAccountRevisionDateAsync()
@@ -168,7 +170,7 @@ namespace Bit.Core.Services
 
         public Task PostRegisterAsync(RegisterRequest request)
         {
-            return SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false);
+            return SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false, sendToIdentity: true);
         }
 
         public Task PostAccountKeysAsync(KeysRequest request)
@@ -209,12 +211,12 @@ namespace Bit.Core.Services
             return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
         }
 
-        public Task PostConvertToKeyConnector()
+        public Task PostConvertToKeyConnectorAsync()
         {
             return SendAsync<object, object>(HttpMethod.Post, "/accounts/convert-to-key-connector", null, true, false);
         }
 
-        public Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
+        public Task PostSetKeyConnectorKeyAsync(SetKeyConnectorKeyRequest request)
         {
             return SendAsync<SetKeyConnectorKeyRequest>(HttpMethod.Post, "/accounts/set-key-connector-key", request, true);
         }
@@ -395,10 +397,36 @@ namespace Bit.Core.Services
 
         #region Device APIs
 
+
+        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
+        {
+            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
+            {
+                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
+                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
+            });
+        }
+
         public Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request)
         {
             return SendAsync<DeviceTokenRequest, object>(
                 HttpMethod.Put, $"/devices/identifier/{identifier}/token", request, true, false);
+        }
+
+        public Task<bool> GetDevicesExistenceByTypes(DeviceType[] deviceTypes)
+        {
+            return SendAsync<DeviceType[], bool>(
+                HttpMethod.Post, "/devices/exist-by-types", deviceTypes, true, true);
+        }
+
+        public Task<DeviceResponse> GetDeviceByIdentifierAsync(string deviceIdentifier)
+        {
+            return SendAsync<object, DeviceResponse>(HttpMethod.Get, $"/devices/identifier/{deviceIdentifier}", null, true, true);
+        }
+
+        public Task<DeviceResponse> UpdateTrustedDeviceKeysAsync(string deviceIdentifier, TrustedDeviceKeysRequest trustedDeviceKeysRequest)
+        {
+            return SendAsync<TrustedDeviceKeysRequest, DeviceResponse>(HttpMethod.Put, $"/devices/{deviceIdentifier}/keys", trustedDeviceKeysRequest, true, true);
         }
 
         #endregion
@@ -458,7 +486,7 @@ namespace Bit.Core.Services
                 $"/organizations/{identifier}/auto-enroll-status", null, true, true);
         }
 
-        public Task PostLeaveOrganization(string id)
+        public Task PostLeaveOrganizationAsync(string id)
         {
             return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
         }
@@ -483,7 +511,7 @@ namespace Bit.Core.Services
 
         #region Key Connector
 
-        public async Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
+        public async Task<KeyConnectorUserKeyResponse> GetMasterKeyFromKeyConnectorAsync(string keyConnectorUrl)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -513,7 +541,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
+        public async Task PostMasterKeyToKeyConnectorAsync(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -563,9 +591,10 @@ namespace Bit.Core.Services
             return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Get, $"/auth-requests/{id}/response?code={accessCode}", null, false, true);
         }
 
-        public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest)
+        public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest, AuthRequestType authRequestType)
         {
-            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, $"/auth-requests", passwordlessCreateLoginRequest, false, true);
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, authRequestType == AuthRequestType.AdminApproval ? "/auth-requests/admin-request" : "/auth-requests", passwordlessCreateLoginRequest, authRequestType == AuthRequestType.AdminApproval, true,
+                (message) => message.Headers.Add("Device-Identifier", passwordlessCreateLoginRequest.DeviceIdentifier));
         }
 
         public Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string encKey, string encMasterPasswordHash, string deviceIdentifier, bool requestApproved)
@@ -574,13 +603,14 @@ namespace Bit.Core.Services
             return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Put, $"/auth-requests/{id}", request, true, true);
         }
 
-        public Task<bool> GetKnownDeviceAsync(string email, string deviceIdentifier)
+        #endregion
+
+        #region Configs
+
+        public async Task<ConfigResponse> GetConfigsAsync()
         {
-            return SendAsync<object, bool>(HttpMethod.Get, "/devices/knowndevice", null, false, true, (message) =>
-            {
-                message.Headers.Add("X-Device-Identifier", deviceIdentifier);
-                message.Headers.Add("X-Request-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(email)));
-            });
+            var accessToken = await _tokenService.GetTokenAsync();
+            return await SendAsync<object, ConfigResponse>(HttpMethod.Get, "/config/", null, !string.IsNullOrEmpty(accessToken), true);
         }
 
         #endregion
@@ -598,9 +628,9 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
-        public async Task<SsoPrevalidateResponse> PreValidateSso(string identifier)
+        public async Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier)
         {
-            var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
+            var path = "/sso/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())
             {
                 requestMessage.Version = new Version(1, 0);
@@ -634,14 +664,15 @@ namespace Bit.Core.Services
         public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
             SendAsync<object, TResponse>(method, path, null, authed, true);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
-            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true)
+            bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest = null, bool logoutOnUnauthorized = true, bool sendToIdentity = false)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
+                var baseUrl = sendToIdentity ? IdentityBaseUrl : ApiBaseUrl;
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = method;
 
-                if (!Uri.IsWellFormedUriString(ApiBaseUrl, UriKind.Absolute))
+                if (!Uri.IsWellFormedUriString(baseUrl, UriKind.Absolute))
                 {
                     throw new ApiException(new ErrorResponse
                     {
@@ -651,7 +682,7 @@ namespace Bit.Core.Services
                     });
                 }
 
-                requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
+                requestMessage.RequestUri = new Uri(string.Concat(baseUrl, path));
 
                 if (body != null)
                 {
@@ -752,111 +783,29 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config)
+        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default)
         {
-            using (var requestMessage = new HttpRequestMessage())
+            HttpResponseMessage response;
+            try
             {
-                requestMessage.Version = new Version(1, 0);
-                requestMessage.Method = HttpMethod.Post;
-                requestMessage.RequestUri = new Uri(config.Url);
-                requestMessage.Headers.Add("Accept", "application/json");
-
-                switch (service)
-                {
-                    case ForwardedEmailServiceType.AnonAddy:
-                        requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
-                        requestMessage.Content = new FormUrlEncodedContent(new Dictionary<string, string>
-                        {
-                            ["domain"] = config.Domain
-                        });
-                        break;
-                    case ForwardedEmailServiceType.FirefoxRelay:
-                        requestMessage.Headers.Add("Authorization", $"Token {config.ApiToken}");
-                        requestMessage.Content = new StringContent(JsonConvert.SerializeObject(
-                            new
-                            {
-                                enabled = true,
-                                description = "Generated by Bitwarden."
-                            }), Encoding.UTF8, "application/json");
-                        break;
-                    case ForwardedEmailServiceType.SimpleLogin:
-                        requestMessage.Headers.Add("Authentication", config.ApiToken);
-                        break;
-                    case ForwardedEmailServiceType.DuckDuckGo:
-                        requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
-                        break;
-                    case ForwardedEmailServiceType.Fastmail:
-                        requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
-                        requestMessage.Content = new StringContent(await CreateFastmailRequest(config.ApiToken),
-                            Encoding.UTF8, "application/json");
-                        break;
-                }
-
-                HttpResponseMessage response;
-                try
-                {
-                    response = await _httpClient.SendAsync(requestMessage);
-                }
-                catch (Exception e)
-                {
-                    throw new ApiException(HandleWebError(e));
-                }
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ApiException(new ErrorResponse
-                    {
-                        StatusCode = response.StatusCode,
-                        Message = $"{service} error: {(int)response.StatusCode} {response.ReasonPhrase}."
-                    });
-                }
-                var responseJsonString = await response.Content.ReadAsStringAsync();
-                var result = JObject.Parse(responseJsonString);
-
-                switch (service)
-                {
-                    case ForwardedEmailServiceType.AnonAddy:
-                        return result["data"]?["email"]?.ToString();
-                    case ForwardedEmailServiceType.FirefoxRelay:
-                        return result["full_address"]?.ToString();
-                    case ForwardedEmailServiceType.SimpleLogin:
-                        return result["alias"]?.ToString();
-                    case ForwardedEmailServiceType.DuckDuckGo:
-                        return $"{result["address"]?.ToString()}@duck.com";
-                    case ForwardedEmailServiceType.Fastmail:
-                        return HandleFastMailResponse(result);
-                    default:
-                        return string.Empty;
-                }
+                response = await _httpClient.SendAsync(requestMessage, cancellationToken);
             }
+            catch (Exception e)
+            {
+                throw new ApiException(HandleWebError(e));
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException(new ErrorResponse
+                {
+                    StatusCode = response.StatusCode,
+                    Message = $"{requestMessage.RequestUri} error: {(int)response.StatusCode} {response.ReasonPhrase}."
+                });
+            }
+            return response;
         }
 
-        private string HandleFastMailResponse(JObject result)
-        {
-            if (result["methodResponses"] == null || !result["methodResponses"].HasValues ||
-                !result["methodResponses"][0].HasValues)
-            {
-                throw new Exception("Fastmail error: could not parse response.");
-            }
-            if (result["methodResponses"][0][0].ToString() == "MaskedEmail/set")
-            {
-                if (result["methodResponses"][0][1]?["created"]?["new-masked-email"] != null)
-                {
-                    return result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["email"].ToString();
-                }
-                if (result["methodResponses"][0][1]?["notCreated"]?["new-masked-email"] != null)
-                {
-                    throw new Exception("Fastmail error: " +
-                                        result["methodResponses"][0][1]?["created"]?["new-masked-email"]?["description"].ToString());
-                }
-            }
-            else if (result["methodResponses"][0][0].ToString() == "error")
-            {
-                throw new Exception("Fastmail error: " + result["methodResponses"][0][1]?["description"].ToString());
-            }
-            throw new Exception("Fastmail error: could not parse response.");
-        }
-
-        private async Task<string> CreateFastmailRequest(string apiKey)
+        public async Task<string> GetFastmailAccountIdAsync(string apiKey)
         {
             using (var httpclient = new HttpClient())
             {
@@ -880,36 +829,7 @@ namespace Bit.Core.Services
                     });
                 }
                 var result = JObject.Parse(await response.Content.ReadAsStringAsync());
-                var accountId = result["primaryAccounts"]?["https://www.fastmail.com/dev/maskedemail"]?.ToString();
-                var requestJObj = new JObject
-                {
-                    new JProperty("using",
-                        new JArray { "https://www.fastmail.com/dev/maskedemail", "urn:ietf:params:jmap:core" }),
-                    new JProperty("methodCalls",
-                        new JArray
-                        {
-                            new JArray
-                            {
-                                "MaskedEmail/set",
-                                new JObject
-                                {
-                                    ["accountId"] = accountId,
-                                    ["create"] = new JObject
-                                    {
-                                        ["new-masked-email"] = new JObject
-                                        {
-                                            ["state"] = "enabled",
-                                            ["description"] = "",
-                                            ["url"] = "",
-                                            ["emailPrefix"] = ""
-                                        }
-                                    }
-                                },
-                                "0"
-                            }
-                        })
-                };
-                return requestJObj.ToString();
+                return result["primaryAccounts"]?["https://www.fastmail.com/dev/maskedemail"]?.ToString();
             }
         }
 
@@ -965,7 +885,19 @@ namespace Bit.Core.Services
 
         private bool IsJsonResponse(HttpResponseMessage response)
         {
-            return (response.Content?.Headers?.ContentType?.MediaType ?? string.Empty) == "application/json";
+            if (response.Content?.Headers is null)
+            {
+                return false;
+            }
+
+            if (response.Content.Headers.ContentType?.MediaType == "application/json")
+            {
+                return true;
+            }
+
+            return response.Content.Headers.TryGetValues("Content-Type", out var vals)
+                   &&
+                   vals?.Any(v => v.Contains("application/json")) is true;
         }
 
         #endregion

@@ -59,7 +59,8 @@
                Margin="20, 0"
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
-               HorizontalTextAlignment="Center" />
+               HorizontalTextAlignment="Center"
+               AutomationId="NoSendDisplayedLabel" />
         <controls:ExtendedCollectionView
                IsVisible="{Binding ShowList}"
                ItemsSource="{Binding Sends}"
@@ -67,13 +68,15 @@
                SelectionMode="Single"
                SelectionChanged="RowSelected"
                StyleClass="list, list-platform"
-               ExtraDataForLogging="Sends Page">
+               ExtraDataForLogging="Sends Page"
+               AutomationId="SendCellList">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:SendView">
                     <controls:SendViewCell
                         Send="{Binding .}"
                         ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
-                        ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}" />
+                        ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}"
+                        AutomationId="SendCell" />
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </controls:ExtendedCollectionView>

@@ -183,6 +183,9 @@
     <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state-dark.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Empty-items-state.pdf" />
     <ImageAsset Include="Resources\Assets.xcassets\empty_items_state.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_login_requests.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_login_requests.imageset\empty_login_requests.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\empty_login_requests.imageset\empty_login_requests_dark.pdf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -195,7 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.7.5</Version>
+      <Version>1.8.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -421,7 +424,7 @@
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' AND Exists('$(WatchAppBundleFullPath)') ">
       <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' != 'Debug' ">
+  <ItemGroup Condition=" '$(Configuration)' != 'Debug' AND '$(Platform)' != 'iPhoneSimulator' ">
       <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(_ResolvedWatchAppReferences)' != '' ">

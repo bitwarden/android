@@ -22,18 +22,18 @@ namespace Bit.Core.Test.Services
     {
         [Theory, UserCipherAutoData]
         public async Task SaveWithServerAsync_PrefersFileUploadService(SutProvider<CipherService> sutProvider,
-            Cipher cipher, string fileName, EncByteArray data, AttachmentUploadDataResponse uploadDataResponse, EncString encKey)
+            Cipher cipher, CipherView cipherView, string fileName, EncByteArray data, AttachmentUploadDataResponse uploadDataResponse, EncString encKey)
         {
             var encFileName = new EncString(fileName);
             sutProvider.GetDependency<ICryptoService>().EncryptAsync(fileName, Arg.Any<SymmetricCryptoKey>())
                 .Returns(encFileName);
             sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(data.Buffer, Arg.Any<SymmetricCryptoKey>())
                 .Returns(data);
-            sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
+            sutProvider.GetDependency<ICryptoService>().MakeDataEncKeyAsync(Arg.Any<UserKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())
                 .Returns(uploadDataResponse);
 
-            await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, fileName, data.Buffer);
+            await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, cipherView, fileName, data.Buffer);
 
             await sutProvider.GetDependency<IFileUploadService>().Received(1)
                 .UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName, data);
@@ -43,20 +43,20 @@ namespace Bit.Core.Test.Services
         [InlineUserCipherAutoData(HttpStatusCode.NotFound)]
         [InlineUserCipherAutoData(HttpStatusCode.MethodNotAllowed)]
         public async Task SaveWithServerAsync_FallsBackToLegacyFormData(HttpStatusCode statusCode,
-            SutProvider<CipherService> sutProvider, Cipher cipher, string fileName, EncByteArray data,
+            SutProvider<CipherService> sutProvider, Cipher cipher, CipherView cipherView, string fileName, EncByteArray data,
             CipherResponse response, EncString encKey)
         {
             sutProvider.GetDependency<ICryptoService>().EncryptAsync(fileName, Arg.Any<SymmetricCryptoKey>())
                 .Returns(new EncString(fileName));
             sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(data.Buffer, Arg.Any<SymmetricCryptoKey>())
                 .Returns(data);
-            sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
+            sutProvider.GetDependency<ICryptoService>().MakeDataEncKeyAsync(Arg.Any<UserKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())
                 .Throws(new ApiException(new ErrorResponse { StatusCode = statusCode }));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentLegacyAsync(cipher.Id, Arg.Any<MultipartFormDataContent>())
                 .Returns(response);
 
-            await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, fileName, data.Buffer);
+            await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, cipherView, fileName, data.Buffer);
 
             await sutProvider.GetDependency<IApiService>().Received(1)
                 .PostCipherAttachmentLegacyAsync(cipher.Id, Arg.Any<MultipartFormDataContent>());
@@ -64,20 +64,20 @@ namespace Bit.Core.Test.Services
 
         [Theory, UserCipherAutoData]
         public async Task SaveWithServerAsync_ThrowsOnBadRequestApiException(SutProvider<CipherService> sutProvider,
-            Cipher cipher, string fileName, EncByteArray data, EncString encKey)
+            Cipher cipher, CipherView cipherView, string fileName, EncByteArray data, EncString encKey)
         {
             sutProvider.GetDependency<ICryptoService>().EncryptAsync(fileName, Arg.Any<SymmetricCryptoKey>())
                 .Returns(new EncString(fileName));
             sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(data.Buffer, Arg.Any<SymmetricCryptoKey>())
                 .Returns(data);
-            sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>())
+            sutProvider.GetDependency<ICryptoService>().MakeDataEncKeyAsync(Arg.Any<UserKey>())
                 .Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
             var expectedException = new ApiException(new ErrorResponse { StatusCode = HttpStatusCode.BadRequest });
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())
                 .Throws(expectedException);
 
             var actualException = await Assert.ThrowsAsync<ApiException>(async () =>
-                await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, fileName, data.Buffer));
+                await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, cipherView, fileName, data.Buffer));
 
             Assert.Equal(expectedException.Error.StatusCode, actualException.Error.StatusCode);
         }

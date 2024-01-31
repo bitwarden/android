@@ -1,22 +1,36 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-      "config:base",
-      "schedule:monthly",
-      ":maintainLockFilesMonthly",
-      ":preserveSemverRanges",
-      ":rebaseStalePrs",
-      ":disableDependencyDashboard"
-    ],
-    "enabledManagers": [
-      "nuget"
-    ],
-    "packageRules": [
-      {
-        "matchManagers": ["nuget"],
-        "groupName": "Nuget updates",
-        "groupSlug": "nuget",
-        "separateMajorMinor": false
-      }
-    ]
-  }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "github>bitwarden/renovate-config:pin-actions",
+    ":combinePatchMinorReleases",
+    ":dependencyDashboard",
+    ":maintainLockFilesWeekly",
+    ":pinAllExceptPeerDependencies",
+    ":prConcurrentLimit10",
+    ":rebaseStalePrs",
+    ":separateMajorReleases",
+    "group:monorepos",
+    "schedule:weekends"
+  ],
+  "enabledManagers": ["github-actions", "npm", "nuget"],
+  "commitMessagePrefix": "[deps]:",
+  "commitMessageTopic": "{{depName}}",
+  "packageRules": [
+    {
+      "groupName": "gh minor",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "npm minor",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "groupName": "nuget minor",
+      "matchManagers": ["nuget"],
+      "matchUpdateTypes": ["minor", "patch"]
+    }
+  ]
+}

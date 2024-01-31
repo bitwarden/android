@@ -1,0 +1,10 @@
+"ThereAreNoItemsToList" = "Keine Einträge zum Anzeigen vorhanden";
+"ToViewVerificationCodesUpgradeToPremium" = "Um Verifizierungscodes anzuzeigen, upgrade auf Premium";
+"Add2FactorAutenticationToAnItemToViewVerificationCodes" = "Füge eine Zwei-Faktor-Authentifizierung zu einem Eintrag hinzu, um die Verifizierungscodes anzuzeigen";
+"LogInToBitwardenOnYourIPhoneToViewVerificationCodes" = "Melde dich bei Bitwarden auf deinem iPhone an, um Verifizierungscodes anzuzeigen";
+"SyncingItemsContainingVerificationCodes" = "Synchronisieren von Einträgen, die Verifizierungscodes enthalten";
+"UnlockBitwardenOnYourIPhoneToViewVerificationCodes" = "Entsperre Bitwarden auf deinem iPhone, um Verifizierungscodes anzuzeigen";
+"SetUpBitwardenToViewItemsContainingVerificationCodes" = "Richte Bitwarden für die Anzeige von Einträgen mit Verifizierungscodes ein";
+"Search" = "Suche";
+"NoItemsFound" = "Keine Einträge gefunden";
+"SetUpAppleWatchPasscodeInOrderToUseBitwarden" = "Lege einen Apple Watch-Code fest, um Bitwarden zu verwenden";

@@ -235,34 +235,17 @@ namespace Bit.App.Pages
                 {
                     AddTotpGroupItem(groupedItems, uppercaseGroupNames);
 
-                    groupedItems.Add(new GroupingsPageListGroup(
-                        AppResources.Types, 4, uppercaseGroupNames, !hasFavorites)
+                    var types = new CipherType[] { CipherType.Login, CipherType.Card, CipherType.Identity, CipherType.SecureNote };
+                    var typesGroup = new GroupingsPageListGroup(AppResources.Types, types.Length, uppercaseGroupNames, !hasFavorites);
+                    foreach (CipherType t in types)
                     {
-                        new GroupingsPageListItem
+                        typesGroup.Add(new GroupingsPageListItem
                         {
-                            Type = CipherType.Login,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.Login) ?
-                                _typeCounts[CipherType.Login] : 0).ToString("N0")
-                        },
-                        new GroupingsPageListItem
-                        {
-                            Type = CipherType.Card,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.Card) ?
-                                _typeCounts[CipherType.Card] : 0).ToString("N0")
-                        },
-                        new GroupingsPageListItem
-                        {
-                            Type = CipherType.Identity,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.Identity) ?
-                                _typeCounts[CipherType.Identity] : 0).ToString("N0")
-                        },
-                        new GroupingsPageListItem
-                        {
-                            Type = CipherType.SecureNote,
-                            ItemCount = (_typeCounts.ContainsKey(CipherType.SecureNote) ?
-                                _typeCounts[CipherType.SecureNote] : 0).ToString("N0")
-                        },
-                    });
+                            Type = t,
+                            ItemCount = _typeCounts.GetValueOrDefault(t).ToString("N0")
+                        });
+                    }
+                    groupedItems.Add(typesGroup);
                 }
                 if (NestedFolders?.Any() ?? false)
                 {
@@ -330,13 +313,16 @@ namespace Bit.App.Pages
                         items.AddRange(itemGroup);
                     }
 
-                    if (Device.RuntimePlatform == Device.iOS)
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                        // because of update to XF v5.0.0.2401
-                        GroupedItems.Clear();
-                    }
-                    GroupedItems.ReplaceRange(items);
+                        if (Device.RuntimePlatform == Device.iOS)
+                        {
+                            // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
+                            // because of update to XF v5.0.0.2401
+                            GroupedItems.Clear();
+                        }
+                        GroupedItems.ReplaceRange(items);
+                    });
                 }
                 else
                 {
@@ -356,21 +342,24 @@ namespace Bit.App.Pages
                         items.AddRange(itemGroup);
                     }
 
-                    if (groupedItems.Any())
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        if (Device.RuntimePlatform == Device.iOS)
+                        if (groupedItems.Any())
                         {
-                            // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
-                            // because of update to XF v5.0.0.2401
+                            if (Device.RuntimePlatform == Device.iOS)
+                            {
+                                // HACK: [PS-536] Fix to avoid blank list after back navigation on unlocking with previous page info
+                                // because of update to XF v5.0.0.2401
+                                GroupedItems.Clear();
+                            }
+                            GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
+                            GroupedItems.AddRange(items);
+                        }
+                        else
+                        {
                             GroupedItems.Clear();
                         }
-                        GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
-                        GroupedItems.AddRange(items);
-                    }
-                    else
-                    {
-                        GroupedItems.Clear();
-                    }
+                    });
                 }
             }
             finally
@@ -378,9 +367,12 @@ namespace Bit.App.Pages
                 _doingLoad = false;
                 Loaded = true;
                 Loading = false;
-                ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
-                ShowList = !ShowNoData;
-                DisableRefreshing();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
+                    ShowList = !ShowNoData;
+                    DisableRefreshing();
+                });
             }
         }
 
@@ -575,7 +567,9 @@ namespace Bit.App.Pages
                 }
                 else if (Type != null)
                 {
-                    Filter = c => c.Type == Type.Value && !c.IsDeleted;
+                    Filter = c => !c.IsDeleted
+                                  &&
+                                  Type.Value == c.Type;
                 }
                 else if (FolderId != null)
                 {
@@ -642,14 +636,9 @@ namespace Bit.App.Pages
                         NoFolderCiphers.Add(c);
                     }
 
-                    if (_typeCounts.ContainsKey(c.Type))
-                    {
-                        _typeCounts[c.Type] = _typeCounts[c.Type] + 1;
-                    }
-                    else
-                    {
-                        _typeCounts.Add(c.Type, 1);
-                    }
+                    _typeCounts[c.Type] = _typeCounts.TryGetValue(c.Type, out var currentTypeCount)
+                                                ? currentTypeCount + 1
+                                                : 1;
                 }
 
                 if (c.IsDeleted)

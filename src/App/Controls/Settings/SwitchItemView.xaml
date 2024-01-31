@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<controls:BaseSettingItemView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:Class="Bit.App.Controls.SwitchItemView"
+    x:Name="_contentView"
+    ControlTemplate="{StaticResource SettingControlTemplate}">
+    <controls:BaseSettingItemView.GestureRecognizers>
+        <TapGestureRecognizer Tapped="ContentView_Tapped" />
+    </controls:BaseSettingItemView.GestureRecognizers>
+
+    <Switch
+        x:Name="_switch"
+        HeightRequest="20"
+        Scale="{OnPlatform iOS=0.8, Android=1}"
+        IsToggled="{Binding IsToggled, Mode=TwoWay, Source={x:Reference _contentView}}"
+        AutomationId="{Binding SwitchAutomationId, Mode=OneWay, Source={x:Reference _contentView}}"/>
+</controls:BaseSettingItemView>

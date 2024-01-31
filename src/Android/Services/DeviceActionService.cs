@@ -13,12 +13,13 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
+using Bit.App.Utilities.Prompts;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Utilities;
 using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
-using static Bit.App.Pages.SettingsPageViewModel;
+using Xamarin.Forms.Platform.Android;
 
 namespace Bit.Droid.Services
 {
@@ -209,10 +210,7 @@ namespace Bit.Droid.Services
             }
             if (numericKeyboard)
             {
-                input.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned;
-#pragma warning disable CS0618 // Type or member is obsolete
-                input.KeyListener = DigitsKeyListener.GetInstance(false, false);
-#pragma warning restore CS0618 // Type or member is obsolete
+                SetNumericKeyboardTo(input);
             }
             if (password)
             {
@@ -245,6 +243,83 @@ namespace Bit.Droid.Services
             {
                 input.RequestFocus();
             }
+            return result.Task;
+        }
+
+        public Task<ValidatablePromptResponse?> DisplayValidatablePromptAsync(ValidatablePromptConfig config)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if (activity == null)
+            {
+                return Task.FromResult<ValidatablePromptResponse?>(null);
+            }
+
+            var alertBuilder = new AlertDialog.Builder(activity);
+            alertBuilder.SetTitle(config.Title);
+            var view = activity.LayoutInflater.Inflate(Resource.Layout.validatable_input_dialog_layout, null);
+            alertBuilder.SetView(view);
+            
+            var result = new TaskCompletionSource<ValidatablePromptResponse?>();
+
+            alertBuilder.SetOnCancelListener(new BasicDialogWithResultCancelListener(result));
+            alertBuilder.SetPositiveButton(config.OkButtonText ?? AppResources.Ok, listener: null);
+            alertBuilder.SetNegativeButton(config.CancelButtonText ?? AppResources.Cancel, (sender, args) => result.TrySetResult(null));
+            if (!string.IsNullOrEmpty(config.ThirdButtonText))
+            {
+                alertBuilder.SetNeutralButton(config.ThirdButtonText, (sender, args) => result.TrySetResult(new ValidatablePromptResponse(null, true)));
+            }
+
+            var alert = alertBuilder.Create();
+
+            var input = view.FindViewById<EditText>(Resource.Id.txtValue);
+            var lblHeader = view.FindViewById<TextView>(Resource.Id.lblHeader);
+            var lblValueSubinfo = view.FindViewById<TextView>(Resource.Id.lblValueSubinfo);
+
+            lblHeader.Text = config.Subtitle;
+            lblValueSubinfo.Text = config.ValueSubInfo;
+
+            var defaultSubInfoColor = lblValueSubinfo.TextColors;
+
+            input.InputType = InputTypes.ClassText;
+
+            if (config.NumericKeyboard)
+            {
+                SetNumericKeyboardTo(input);
+            }
+
+            input.ImeOptions = input.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning | (ImeAction)ImeFlags.NoExtractUi;
+            input.Text = config.Text ?? string.Empty;
+            input.SetSelection(config.Text?.Length ?? 0);
+            input.AfterTextChanged += (sender, args) =>
+            {
+                if (lblValueSubinfo.Text != config.ValueSubInfo)
+                {
+                    lblValueSubinfo.Text = config.ValueSubInfo;
+                    lblHeader.SetTextColor(defaultSubInfoColor);
+                    lblValueSubinfo.SetTextColor(defaultSubInfoColor);
+                }
+            };
+
+            alert.Window.SetSoftInputMode(SoftInput.StateVisible);
+            alert.Show();
+
+            var positiveButton = alert.GetButton((int)DialogButtonType.Positive);
+            positiveButton.Click += (sender, args) =>
+            {
+                var error = config.ValidateText(input.Text);
+                if (error != null)
+                {
+                    lblHeader.SetTextColor(ThemeManager.GetResourceColor("DangerColor").ToAndroid());
+                    lblValueSubinfo.SetTextColor(ThemeManager.GetResourceColor("DangerColor").ToAndroid());
+                    lblValueSubinfo.Text = error;
+                    lblValueSubinfo.SendAccessibilityEvent(Android.Views.Accessibility.EventTypes.ViewFocused);
+                    return;
+                }
+
+                result.TrySetResult(new ValidatablePromptResponse(input.Text, false));
+                alert.Dismiss();
+            };
+
             return result.Task;
         }
 
@@ -472,6 +547,12 @@ namespace Bit.Droid.Services
             return true;
         }
 
+        public bool SupportsAutofillServices() => Build.VERSION.SdkInt >= BuildVersionCodes.O;
+
+        public bool SupportsInlineAutofill() => Build.VERSION.SdkInt >= BuildVersionCodes.R;
+
+        public bool SupportsDrawOver() => Build.VERSION.SdkInt >= BuildVersionCodes.M;
+
         private Intent RateIntentForUrl(string url, Activity activity)
         {
             var intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"{url}?id={activity.PackageName}"));
@@ -524,6 +605,62 @@ namespace Bit.Droid.Services
         {
             // only used by iOS
             throw new NotImplementedException();
+        }
+
+        public string GetAutofillAccessibilityDescription()
+        {
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.LollipopMr1)
+            {
+                return AppResources.AccessibilityDescription;
+            }
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.M)
+            {
+                return AppResources.AccessibilityDescription2;
+            }
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.NMr1)
+            {
+                return AppResources.AccessibilityDescription3;
+            }
+
+            return AppResources.AccessibilityDescription4;
+        }
+
+        public string GetAutofillDrawOverDescription()
+        {
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.M)
+            {
+                return AppResources.DrawOverDescription;
+            }
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.NMr1)
+            {
+                return AppResources.DrawOverDescription2;
+            }
+
+            return AppResources.DrawOverDescription3;
+        }
+
+        private void SetNumericKeyboardTo(EditText editText)
+        {
+            editText.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned;
+#pragma warning disable CS0618 // Type or member is obsolete
+            editText.KeyListener = DigitsKeyListener.GetInstance(false, false);
+#pragma warning restore CS0618 // Type or member is obsolete
+        }
+    }
+
+    class BasicDialogWithResultCancelListener : Java.Lang.Object, IDialogInterfaceOnCancelListener
+    {
+        private readonly TaskCompletionSource<ValidatablePromptResponse?> _taskCompletionSource;
+
+        public BasicDialogWithResultCancelListener(TaskCompletionSource<ValidatablePromptResponse?> taskCompletionSource)
+        {
+            _taskCompletionSource = taskCompletionSource;
+        }
+
+        public void OnCancel(IDialogInterface dialog)
+        {
+            _taskCompletionSource?.TrySetResult(null);
+            dialog?.Dismiss();
         }
     }
 }

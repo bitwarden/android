@@ -16,7 +16,7 @@ namespace Bit.Core.Models.Domain
 
         public SecureNoteType Type { get; set; }
 
-        public Task<SecureNoteView> DecryptAsync(string orgId)
+        public Task<SecureNoteView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
             return Task.FromResult(new SecureNoteView(this));
         }

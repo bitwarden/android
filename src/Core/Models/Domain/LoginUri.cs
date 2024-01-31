@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
@@ -10,7 +11,8 @@ namespace Bit.Core.Models.Domain
     {
         private HashSet<string> _map = new HashSet<string>
         {
-            "Uri"
+            nameof(Uri),
+            nameof(UriChecksum)
         };
 
         public LoginUri() { }
@@ -23,10 +25,11 @@ namespace Bit.Core.Models.Domain
 
         public EncString Uri { get; set; }
         public UriMatchType? Match { get; set; }
+        public EncString UriChecksum { get; set; }
 
-        public Task<LoginUriView> DecryptAsync(string orgId)
+        public Task<LoginUriView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
-            return DecryptObjAsync(new LoginUriView(this), this, _map, orgId);
+            return DecryptObjAsync(new LoginUriView(this), this, _map.Where(m => m != nameof(UriChecksum)).ToHashSet<string>(), orgId, key);
         }
 
         public LoginUriData ToLoginUriData()

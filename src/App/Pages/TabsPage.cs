@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -94,16 +97,43 @@ namespace Bit.App.Pages
                 }
             });
             await UpdateVaultButtonTitleAsync();
-            if (await _keyConnectorService.UserNeedsMigration())
+            if (await _keyConnectorService.UserNeedsMigrationAsync())
             {
                 _messagingService.Send("convertAccountToKeyConnector");
             }
 
-            var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
+            await ForcePasswordResetIfNeededAsync();
+        }
 
-            if (forcePasswordResetReason.HasValue)
+        private async Task ForcePasswordResetIfNeededAsync()
+        {
+            var forcePasswordResetReason = await _stateService.GetForcePasswordResetReasonAsync();
+            switch (forcePasswordResetReason)
             {
-                _messagingService.Send(Constants.ForceUpdatePassword);
+                case ForcePasswordResetReason.TdeUserWithoutPasswordHasPasswordResetPermission:
+                    // TDE users should only have one org
+                    var userOrgs = await _stateService.GetOrganizationsAsync();
+                    if (userOrgs != null && userOrgs.Any())
+                    {
+                        _messagingService.Send(Constants.ForceSetPassword, userOrgs.First().Value.Identifier);
+                        return;
+                    }
+                    _logger.Value.Error("TDE user needs to set password but has no organizations.");
+
+                    var rememberedOrg = _stateService.GetRememberedOrgIdentifierAsync();
+                    if (rememberedOrg == null)
+                    {
+                        _logger.Value.Error("TDE user needs to set password but has no organizations or remembered org identifier.");
+                        return;
+                    }
+                    _messagingService.Send(Constants.ForceSetPassword, rememberedOrg);
+                    return;
+                case ForcePasswordResetReason.AdminForcePasswordReset:
+                case ForcePasswordResetReason.WeakMasterPasswordOnLogin:
+                    _messagingService.Send(Constants.ForceUpdatePassword);
+                    break;
+                default:
+                    return;
             }
         }
 
@@ -137,7 +167,7 @@ namespace Bit.App.Pages
                     await groupingsPage.HideAccountSwitchingOverlayAsync();
                 }
 
-                _messagingService.Send("updatedTheme");
+                _messagingService.Send(ThemeManager.UPDATED_THEME_MESSAGE_KEY);
                 if (navPage.RootPage is GroupingsPage)
                 {
                     // Load something?
@@ -145,10 +175,6 @@ namespace Bit.App.Pages
                 else if (navPage.RootPage is GeneratorPage genPage)
                 {
                     await genPage.InitAsync();
-                }
-                else if (navPage.RootPage is SettingsPage settingsPage)
-                {
-                    await settingsPage.InitAsync();
                 }
             }
         }

@@ -60,7 +60,7 @@ namespace Bit.App.Pages
 
             var cipher = listItem.Cipher;
 
-            if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+            if (!await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(cipher.Reprompt))
             {
                 return;
             }

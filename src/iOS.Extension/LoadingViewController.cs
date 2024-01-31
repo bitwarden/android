@@ -20,6 +20,7 @@ using Bit.App.Pages;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.iOS.Core.Views;
+using Bit.Core.Enums;
 
 namespace Bit.iOS.Extension
 {
@@ -109,6 +110,7 @@ namespace Bit.iOS.Extension
                 else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.LoadingController = this;
+                    passwordViewController.LaunchHomePage = () => DismissViewController(false, () => LaunchHomePage());
                     segue.DestinationViewController.PresentationController.Delegate =
                         new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
                 }
@@ -519,7 +521,7 @@ namespace Bit.iOS.Extension
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
                 vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
-                vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(email));
+                vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, email));
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
@@ -532,11 +534,11 @@ namespace Bit.iOS.Extension
             LogoutIfAuthed();
         }
 
-        private void LaunchLoginWithDevice(string email = null)
+        private void LaunchLoginWithDevice(AuthRequestType authRequestType, string email = null, bool authingWithSso = false)
         {
             var appOptions = new AppOptions { IosExtension = true };
             var app = new App.App(appOptions);
-            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, appOptions);
+            var loginWithDevicePage = new LoginPasswordlessRequestPage(email, authRequestType, appOptions, authingWithSso);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginWithDevicePage);
             if (loginWithDevicePage.BindingContext is LoginPasswordlessRequestViewModel vm)
@@ -566,6 +568,7 @@ namespace Bit.iOS.Extension
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(true));
                 vm.StartSetPasswordAction = () => DismissViewController(false, () => LaunchSetPasswordFlow());
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
+                vm.StartDeviceApprovalOptionsAction = () => DismissViewController(false, () => LaunchDeviceApprovalOptionsFlow());
                 vm.SsoAuthSuccessAction = () => DismissLockAndContinue();
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
@@ -588,6 +591,7 @@ namespace Bit.iOS.Extension
             {
                 vm.TwoFactorAuthSuccessAction = () => DismissLockAndContinue();
                 vm.StartSetPasswordAction = () => DismissViewController(false, () => LaunchSetPasswordFlow());
+                vm.StartDeviceApprovalOptionsAction = () => DismissViewController(false, () => LaunchDeviceApprovalOptionsFlow());
                 if (authingWithSso)
                 {
                     vm.CloseAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
@@ -640,6 +644,25 @@ namespace Bit.iOS.Extension
             var updateTempPasswordController = navigationPage.CreateViewController();
             updateTempPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(updateTempPasswordController, true, null);
+        }
+
+        private void LaunchDeviceApprovalOptionsFlow()
+        {
+            var loginApproveDevicePage = new LoginApproveDevicePage();
+            var app = new App.App(new AppOptions { IosExtension = true });
+            ThemeManager.SetTheme(app.Resources);
+            ThemeManager.ApplyResourcesTo(loginApproveDevicePage);
+            if (loginApproveDevicePage.BindingContext is LoginApproveDeviceViewModel vm)
+            {
+                vm.LogInWithMasterPasswordAction = () => DismissViewController(false, () => PerformSegue("lockPasswordSegue", this));
+                vm.RequestAdminApprovalAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AdminApproval, vm.Email, true));
+                vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, vm.Email, true));
+            }
+
+            var navigationPage = new NavigationPage(loginApproveDevicePage);
+            var loginApproveDeviceController = navigationPage.CreateViewController();
+            loginApproveDeviceController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginApproveDeviceController, true, null);
         }
     }
 }

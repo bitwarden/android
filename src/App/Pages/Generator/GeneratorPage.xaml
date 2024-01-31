@@ -71,7 +71,8 @@
                         <Label
                             Text="{u:I18n PasswordGeneratorPolicyInEffect}"
                             StyleClass="text-muted, text-sm, text-bold"
-                            HorizontalTextAlignment="Center" />
+                            HorizontalTextAlignment="Center"
+                            AutomationId="PasswordGeneratorPolicyInEffectLabel" />
                     </Frame>
                 </Grid>
                 <Grid IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}"
@@ -82,21 +83,24 @@
                         x:Name="lblPassword"
                         StyleClass="text-lg, text-html"
                         Text="{Binding ColoredPassword, Mode=OneWay}"
-                        Margin="0, 20" />
+                        Margin="0, 20"
+                        AutomationId="GeneratedPasswordLabel" />
                     <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                         Command="{Binding CopyCommand}"
                         Grid.Column="1"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n CopyPassword}" />
+                        AutomationProperties.Name="{u:I18n CopyPassword}"
+                        AutomationId="CopyValueButton" />
                     <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
                         Command="{Binding RegenerateCommand}"
                         Grid.Column="2"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n GeneratePassword}" />
+                        AutomationProperties.Name="{u:I18n GeneratePassword}"
+                        AutomationId="RegenerateValueButton" />
                 </Grid>
                 <Grid IsVisible="{Binding IsUsername}"
                         StyleClass="box-row"                  
@@ -107,21 +111,24 @@
                         StyleClass="text-lg, text-html"
                         Text="{Binding ColoredUsername, Mode=OneWay}"
                         Margin="0, 20"
-                        HorizontalOptions="Start" />
+                        HorizontalOptions="Start"
+                        AutomationId="GeneratedPasswordLabel" />
                     <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                         Command="{Binding CopyCommand}"
                         Grid.Column="1"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n CopyUsername}" />
+                        AutomationProperties.Name="{u:I18n CopyUsername}"
+                        AutomationId="CopyValueButton" />
                     <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
                         Command="{Binding RegenerateUsernameCommand}"
                         Grid.Column="2"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n GenerateUsername}" />
+                        AutomationProperties.Name="{u:I18n GenerateUsername}"
+                        AutomationId="RegenerateValueButton" />
                 </Grid>
                 <BoxView StyleClass="box-row-separator"/>
                 <StackLayout StyleClass="box"
@@ -135,7 +142,8 @@
                         ItemsSource="{Binding GeneratorTypeOptions, Mode=OneTime}"
                         SelectedItem="{Binding GeneratorTypeSelected}"
                         ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="GeneratorTypePicker" />
                 </StackLayout>
                 <Label Text="{u:I18n Options, Header=True}"
                        StyleClass="box-header, box-header-platform"
@@ -161,7 +169,8 @@
                         ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
                         SelectedItem="{Binding UsernameTypeSelected}"
                         ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationId="UsernameTypePicker" />
                     <Label
                         StyleClass="box-footer-label"
                         Text="{Binding UsernameTypeDescriptionLabel}" />
@@ -172,7 +181,8 @@
                             StyleClass="box-label" />
                         <Entry x:Name="_plusAddressedEmailEntry"
                             Text="{Binding PlusAddressedEmail}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationId="PlusAddressedEmailEntry" />
                         <Label IsVisible="{Binding ShowUsernameEmailType}"
                             Text="{u:I18n EmailType}"
                             StyleClass="box-label"
@@ -203,7 +213,8 @@
                         <Entry
                             x:Name="_catchAllEmailDomainNameEntry"
                             Text="{Binding CatchAllEmailDomain}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationId="CatchAllEmailDomainEntry" />
                         <Label IsVisible="{Binding ShowUsernameEmailType}"
                             Text="{u:I18n EmailType}"
                             StyleClass="box-label" 
@@ -236,26 +247,27 @@
                             ItemsSource="{Binding ForwardedEmailServiceTypeOptions, Mode=OneTime}"
                             SelectedItem="{Binding ForwardedEmailServiceSelected}"
                             ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
-                            StyleClass="box-value" />
-                        <!--ANONADDY OPTIONS-->
-                        <Grid IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
-                              Grid.RowDefinitions="Auto,*"
-                              Grid.ColumnDefinitions="*,Auto">
+                            StyleClass="box-value"
+                            AutomationId="ServiceTypePicker" />
+                        <Grid 
+                            Grid.RowDefinitions="Auto,*"
+                            Grid.ColumnDefinitions="*,Auto">
                             <Label
                                 Margin="0,10,0,0"
-                                Text="{u:I18n APIAccessToken}"
+                                Text="{Binding ForwardedEmailApiSecretLabel}"
                                 StyleClass="box-label"/>
                             <Entry
-                                x:Name="_anonAddyApiAccessTokenEntry"
-                                Text="{Binding AnonAddyApiAccessToken}"
-                                IsPassword="{Binding ShowAnonAddyApiAccessToken, Converter={StaticResource inverseBool}}"
-                                Grid.Row="1"/>
+                                Text="{Binding ForwardedEmailApiSecret}"
+                                IsPassword="{Binding ShowForwardedEmailApiSecret, Converter={StaticResource inverseBool}}"
+                                Grid.Row="1"
+                                AutomationId="ForwardedEmailApiSecretEntry" />
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowAnonAddyApiAccessToken, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
+                                Text="{Binding ShowForwardedEmailApiSecret, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
                                 Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
                                 Grid.Row="1"
-                                Grid.Column="1"/>
+                                Grid.Column="1"
+                                AutomationId="ShowForwardedEmailApiSecretButton" />
                         </Grid>
                         <Label IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
                             Text="{u:I18n DomainNameRequiredParenthesis}"
@@ -263,92 +275,18 @@
                             Margin="0,10,0,0"/>
                         <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
                             x:Name="_anonAddyDomainNameEntry"
-                            Text="{Binding AnonAddyDomainName}"
-                            StyleClass="box-value"/>
-                        <!--FIREFOX RELAY OPTIONS-->
-                        <Grid StyleClass="box-row, box-row-input"
-                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.FirefoxRelay}}"
-                              Grid.RowDefinitions="Auto,*"
-                              Grid.ColumnDefinitions="*,Auto">
-                            <Label
-                                Text="{u:I18n APIAccessToken}"
-                                StyleClass="box-label"/>
-                            <Entry
-                                x:Name="_firefoxRelayApiAccessTokenEntry"
-                                Text="{Binding FirefoxRelayApiAccessToken}"
-                                StyleClass="box-value"
-                                Grid.Row="1"
-                                IsPassword="{Binding ShowFirefoxRelayApiAccessToken, Converter={StaticResource inverseBool}}"/>
-                            <controls:IconButton
-                                StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowFirefoxRelayApiAccessToken, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
-                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
-                                Grid.Row="1"
-                                Grid.Column="1"/>
-                        </Grid>
-                        <!--SIMPLELOGIN OPTIONS-->
-                        <Grid StyleClass="box-row, box-row-input"
-                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.SimpleLogin}}"
-                              Grid.RowDefinitions="Auto,*"
-                              Grid.ColumnDefinitions="*,Auto">
-                            <Label
-                                Text="{u:I18n APIKeyRequiredParenthesis}"
-                                StyleClass="box-label"/>
-                            <Entry
-                                x:Name="_simpleLoginApiKeyEntry"
-                                Text="{Binding SimpleLoginApiKey}"
-                                StyleClass="box-value" 
-                                Grid.Row="1"
-                                IsPassword="{Binding ShowSimpleLoginApiKey, Converter={StaticResource inverseBool}}"/>
-                            <controls:IconButton 
-                                StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowSimpleLoginApiKey, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
-                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
-                                Grid.Row="1"
-                                Grid.Column="1"/>
-                        </Grid>
-                        <!--DUCKDUCKGO OPTIONS-->
-                        <Grid StyleClass="box-row, box-row-input"
-                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.DuckDuckGo}}"
-                              Grid.RowDefinitions="Auto,*"
-                              Grid.ColumnDefinitions="*,Auto">
-                            <Label
-                                Text="{u:I18n APIKeyRequiredParenthesis}"
-                                StyleClass="box-label"/>
-                            <Entry
-                                x:Name="_duckDuckGoApiAccessTokenEntry"
-                                Text="{Binding DuckDuckGoApiKey}"
-                                StyleClass="box-value"
-                                Grid.Row="1"
-                                IsPassword="{Binding ShowDuckDuckGoApiKey, Converter={StaticResource inverseBool}}"/>
-                            <controls:IconButton
-                                StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowDuckDuckGoApiKey, Converter={StaticResource inverseBool, iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
-                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
-                                Grid.Row="1"
-                                Grid.Column="1"/>
-                        </Grid>
-                        <!--FASTMAIL OPTIONS-->
-                        <Grid StyleClass="box-row, box-row-input"
-                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.Fastmail}}"
-                              Grid.RowDefinitions="Auto,*"
-                              Grid.ColumnDefinitions="*,Auto">
-                            <Label
-                                Text="{u:I18n APIKeyRequiredParenthesis}"
-                                StyleClass="box-label"/>
-                            <Entry
-                                x:Name="_fastmailApiAccessTokenEntry"
-                                Text="{Binding FastmailApiKey}"
-                                StyleClass="box-value"
-                                Grid.Row="1"
-                                IsPassword="{Binding ShowFastmailApiKey, Converter={StaticResource inverseBool}}"/>
-                            <controls:IconButton
-                                StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding ShowFastmailApiKey, Converter={StaticResource iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
-                                Command="{Binding ToggleForwardedEmailHiddenValueCommand}"
-                                Grid.Row="1"
-                                Grid.Column="1"/>
-                        </Grid>
+                            Text="{Binding AddyIoDomainName}"
+                            StyleClass="box-value"
+                            AutomationId="AnonAddyDomainNameEntry" />
+                        <Label IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.ForwardEmail}}"
+                            Text="{u:I18n DomainNameRequiredParenthesis}"
+                            StyleClass="box-label"
+                            Margin="0,10,0,0"/>
+                        <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.ForwardEmail}}"
+                            x:Name="_forwardEmailDomainNameEntry"
+                            Text="{Binding ForwardEmailDomainName}"
+                            StyleClass="box-value"
+                            AutomationId="ForwardEmailDomainNameEntry" />
                     </StackLayout>                    
                     <!--RANDOM WORD OPTIONS-->
                     <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">
@@ -359,7 +297,8 @@
                         <Switch
                             IsToggled="{Binding CapitalizeRandomWordUsername}"
                             StyleClass="box-value"
-                            HorizontalOptions="End" />
+                            HorizontalOptions="End"
+                            AutomationId="CapitalizeRandomWordUsernameToggle" />
                     </Grid>
                     <BoxView IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}"
                         StyleClass="box-row-separator" />
@@ -371,7 +310,8 @@
                         <Switch
                             IsToggled="{Binding IncludeNumberRandomWordUsername}"
                             StyleClass="box-value"
-                            HorizontalOptions="End" />
+                            HorizontalOptions="End"
+                            AutomationId="IncludeNumberRandomWordUsernameToggle" />
                     </Grid>
                     <BoxView IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}"
                         StyleClass="box-row-separator" />
@@ -386,7 +326,8 @@
                             x:Name="_passwordTypePicker"
                             ItemsSource="{Binding PasswordTypeOptions, Mode=OneTime}"
                             SelectedIndex="{Binding PasswordTypeSelectedIndex}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            AutomationId="PasswordTypePicker" />
                     </StackLayout>
                     <StackLayout Spacing="0"
                                  Padding="0"
@@ -403,12 +344,14 @@
                                 HorizontalOptions="FillAndExpand"
                                 HorizontalTextAlignment="End"
                                 VerticalOptions="FillAndExpand"
-                                VerticalTextAlignment="Center" />
+                                VerticalTextAlignment="Center"
+                                AutomationId="NumberOfWordsLabel" />
                             <controls:ExtendedStepper
                                 Value="{Binding NumWords}"
                                 Maximum="20"
                                 Minimum="3"
-                                Increment="1" />
+                                Increment="1"
+                                AutomationId="NumberOfWordsStepper" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-input">
@@ -419,7 +362,8 @@
                                 Text="{Binding WordSeparator}"
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
-                                StyleClass="box-value">
+                                StyleClass="box-value"
+                                AutomationId="WordSeparatorEntry">
                                 <Entry.Effects>
                                     <effects:NoEmojiKeyboardEffect />
                                 </Entry.Effects>
@@ -435,7 +379,8 @@
                                 IsEnabled="{Binding EnforcedPolicyOptions.Capitalize,
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
-                                HorizontalOptions="End" />
+                                HorizontalOptions="End"
+                                AutomationId="CapitalizePassphraseToggle" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -448,7 +393,8 @@
                                 IsEnabled="{Binding EnforcedPolicyOptions.IncludeNumber,
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
-                                HorizontalOptions="End" />
+                                HorizontalOptions="End"
+                                AutomationId="IncludeNumbersToggle" />
                         </StackLayout>
                     </StackLayout>
                     <StackLayout Spacing="0" Padding="0" IsVisible="{Binding IsPassword}">
@@ -462,7 +408,8 @@
                                 StyleClass="box-sub-label"
                                 VerticalOptions="CenterAndExpand"
                                 HorizontalTextAlignment="End"
-                                WidthRequest="50" />
+                                WidthRequest="50"
+                                AutomationId="PasswordLengthLabel" />
                             <controls:ExtendedSlider
                                 DragCompleted="LengthSlider_DragCompleted"
                                 Value="{Binding Length}"
@@ -471,7 +418,8 @@
                                 VerticalOptions="CenterAndExpand"
                                 HorizontalOptions="FillAndExpand"
                                 Maximum="128"
-                                Minimum="5" />
+                                Minimum="5"
+                                AutomationId="PasswordLengthSlider" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -488,7 +436,8 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End" 
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n UppercaseAtoZ}"/>
+                                AutomationProperties.Name="{u:I18n UppercaseAtoZ}"
+                                AutomationId="UppercaseAtoZToggle" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -505,7 +454,8 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End"
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}"/>
+                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}"
+                                AutomationId="LowercaseAtoZToggle" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -522,7 +472,8 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End" 
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n NumbersZeroToNine}"/>
+                                AutomationProperties.Name="{u:I18n NumbersZeroToNine}"
+                                AutomationId="NumbersZeroToNineToggle" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -539,7 +490,8 @@
                                 StyleClass="box-value"
                                 HorizontalOptions="End"
                                 AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n SpecialCharacters}"/>
+                                AutomationProperties.Name="{u:I18n SpecialCharacters}"
+                                AutomationId="SpecialCharactersToggle" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-stepper">
@@ -554,12 +506,14 @@
                                 HorizontalOptions="FillAndExpand"
                                 HorizontalTextAlignment="End"
                                 VerticalOptions="FillAndExpand"
-                                VerticalTextAlignment="Center" />
+                                VerticalTextAlignment="Center"
+                                AutomationId="MinNumberValueLabel" />
                             <controls:ExtendedStepper
                                 Value="{Binding MinNumber}"
                                 Maximum="5"
                                 Minimum="0"
-                                Increment="1" />
+                                Increment="1"
+                                AutomationId="MinNumberStepper" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-stepper">
@@ -574,12 +528,14 @@
                                 HorizontalOptions="FillAndExpand"
                                 HorizontalTextAlignment="End"
                                 VerticalOptions="FillAndExpand"
-                                VerticalTextAlignment="Center" />
+                                VerticalTextAlignment="Center"
+                                AutomationId="MinSpecialValueLabel" />
                             <controls:ExtendedStepper
                                 Value="{Binding MinSpecial}"
                                 Maximum="5"
                                 Minimum="0"
-                                Increment="1" />
+                                Increment="1"
+                                AutomationId="MinSpecialStepper" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
@@ -590,7 +546,8 @@
                             <Switch
                                 IsToggled="{Binding AvoidAmbiguousChars}"
                                 StyleClass="box-value"
-                                HorizontalOptions="End" />
+                                HorizontalOptions="End"
+                                AutomationId="AvoidAmbiguousCharsToggle" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                     </StackLayout>

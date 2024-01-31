@@ -1,4 +1,7 @@
-﻿namespace Bit.Core.Enums
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Bit.Core.Enums
 {
     public enum DeviceType : byte
     {

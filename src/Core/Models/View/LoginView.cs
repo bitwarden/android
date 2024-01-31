@@ -20,12 +20,16 @@ namespace Bit.Core.Models.View
         public DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
         public List<LoginUriView> Uris { get; set; }
+        public List<Fido2CredentialView> Fido2Credentials { get; set; }
+
         public string Uri => HasUris ? Uris[0].Uri : null;
         public string MaskedPassword => Password != null ? "••••••••" : null;
         public override string SubTitle => Username;
         public bool CanLaunch => HasUris && Uris.Any(u => u.CanLaunch);
         public string LaunchUri => HasUris ? Uris.FirstOrDefault(u => u.CanLaunch)?.LaunchUri : null;
         public bool HasUris => (Uris?.Count ?? 0) > 0;
+        public bool HasFido2Credentials => Fido2Credentials?.Any() == true;
+        public Fido2CredentialView MainFido2Credential => HasFido2Credentials ? Fido2Credentials[0] : null;
 
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
         {

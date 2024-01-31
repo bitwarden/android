@@ -74,7 +74,7 @@ namespace Bit.App.Pages
             _cipherDomain = await _cipherService.GetAsync(CipherId);
             Cipher = await _cipherDomain.DecryptAsync();
             LoadAttachments();
-            _hasUpdatedKey = await _cryptoService.HasEncKeyAsync();
+            _hasUpdatedKey = await _cryptoService.HasUserKeyAsync();
             var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _canAccessAttachments = canAccessPremium || Cipher.OrganizationId != null;
             if (!_canAccessAttachments)
@@ -123,7 +123,7 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 _cipherDomain = await _cipherService.SaveAttachmentRawWithServerAsync(
-                    _cipherDomain, FileName, FileData);
+                    _cipherDomain, Cipher, FileName, FileData);
                 Cipher = await _cipherDomain.DecryptAsync();
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.AttachementAdded);

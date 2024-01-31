@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities.Prompts;
 using Bit.Core.Enums;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
@@ -145,6 +146,11 @@ namespace Bit.iOS.Core.Services
             });
             vc.PresentViewController(alert, true, null);
             return result.Task;
+        }
+
+        public Task<ValidatablePromptResponse?> DisplayValidatablePromptAsync(ValidatablePromptConfig config)
+        {
+            throw new NotImplementedException();
         }
 
         public void RateApp()
@@ -333,6 +339,10 @@ namespace Bit.iOS.Core.Services
             return false;
         }
 
+        public bool SupportsAutofillServices() => UIDevice.CurrentDevice.CheckSystemVersion(12, 0);
+        public bool SupportsInlineAutofill() => false;
+        public bool SupportsDrawOver() => false;
+
         private UIViewController GetPresentedViewController()
         {
             var window = UIApplication.SharedApplication.KeyWindow;
@@ -384,5 +394,8 @@ namespace Bit.iOS.Core.Services
         {
             GetPresentedViewController().DismissViewController(true, null);
         }
+
+        public string GetAutofillAccessibilityDescription() => null;
+        public string GetAutofillDrawOverDescription() => null;
     }
 }

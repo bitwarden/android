@@ -11,14 +11,18 @@ namespace Bit.Core.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly II18nService _i18nService;
         private readonly ICryptoService _cryptoService;
+        private readonly IStateService _stateService;
+        private readonly IKeyConnectorService _keyConnectorService;
 
         public UserVerificationService(IApiService apiService, IPlatformUtilsService platformUtilsService,
-            II18nService i18nService, ICryptoService cryptoService)
+            II18nService i18nService, ICryptoService cryptoService, IStateService stateService, IKeyConnectorService keyConnectorService)
         {
             _apiService = apiService;
             _platformUtilsService = platformUtilsService;
             _i18nService = i18nService;
             _cryptoService = cryptoService;
+            _stateService = stateService;
+            _keyConnectorService = keyConnectorService;
         }
 
         async public Task<bool> VerifyUser(string secret, VerificationType verificationType)
@@ -44,12 +48,14 @@ namespace Bit.Core.Services
             }
             else
             {
-                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(secret, null);
+                var masterKey = await _cryptoService.GetOrDeriveMasterKeyAsync(secret);
+                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(secret, masterKey);
                 if (!passwordValid)
                 {
                     await InvalidSecretErrorAsync(verificationType);
                     return false;
                 }
+                await _cryptoService.UpdateMasterKeyAndUserKeyAsync(masterKey);
             }
 
             return true;
@@ -62,6 +68,22 @@ namespace Bit.Core.Services
                 : _i18nService.T("InvalidMasterPassword");
 
             await _platformUtilsService.ShowDialogAsync(errorMessage);
+        }
+
+        public async Task<bool> HasMasterPasswordAsync(bool checkMasterKeyHash = false)
+        {
+            async Task<bool> CheckMasterKeyHashAsync()
+            {
+                return !checkMasterKeyHash || await _cryptoService.GetMasterKeyHashAsync() != null;
+            };
+
+            var decryptOptions = await _stateService.GetAccountDecryptionOptions();
+            if (decryptOptions != null)
+            {
+                return decryptOptions.HasMasterPassword && await CheckMasterKeyHashAsync();
+            }
+
+            return !await _keyConnectorService.GetUsesKeyConnectorAsync() && await CheckMasterKeyHashAsync();
         }
     }
 }

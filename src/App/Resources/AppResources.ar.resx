@@ -125,14 +125,14 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>مجلد مضاف</value>
+    <value>إضافة مجلّد</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>تمت إضافة العنصر</value>
+    <value>إضافة عنصر</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>كان هناك خطأ.</value>
+    <value>لقد حدث خطأ.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -156,11 +156,11 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>المصادقة باستخدام FIDO2 WebAuthn، يمكنك المصادقة باستخدام مفتاح أمان خارجي.</value>
+    <value>انسخ اسم المستخدم</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>شكر</value>
+    <value>شكر وتقدير</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -168,42 +168,42 @@
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>حذف ...</value>
+    <value>جارِ الحذف...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>هل أنت متأكد من أنك تريد الحذف؟ لا يمكن إلغاؤه</value>
+    <value>هل تريد حقا أن تحذف؟ هذا لا يمكن التراجع عنها.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>تعديل</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>تعديل مجلد</value>
+    <value>تحرير المجلد</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>بريد الكتروني</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>عنوان بريد الكتروني</value>
+    <value>عنوان البريد الإلكتروني</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>اكتب إلينا</value>
+    <value>راسلنا عبر البريد الإلكتروني</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>اتصل بنا مباشرة للحصول على المساعدة أو التعليق.</value>
+    <value>أرسل لنا رسالة مباشرة للحصول على المساعدة أو ترك ملاحظات.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>أدخل رقم التعريف الشخصي الخاص بك.</value>
+    <value>أدخل رَقم تعريفك الشخصي.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>المفضلات</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>إرسال تقرير خطأ</value>
+    <value>إرسال تقرير عن خطأ</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>افتح تذكرة في مستودع Github لدينا.</value>
@@ -212,42 +212,42 @@
     <value>استخدم بصمة إصبعك للتعريف بنفسك.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>مجلد</value>
+    <value>المجلد</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>مجلد جديد أنشئ</value>
+    <value>نشأ مجلد جديد.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>مجلد محذوف</value>
+    <value>حذفت المجلد.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>لا مجلد</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>مجلدات</value>
+    <value>المجلدات</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>مجلد محدّث</value>
+    <value>حُفظ المجلد</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>زر الموقع الالكتروني</value>
+    <value>الذهاب إلى الموقع الالكتروني</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>مساعدة ورجوع</value>
+    <value>المساعدة و الملاحظات</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>إخفاء</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>عليك الاتصال بالانترنت قبل المواصلة</value>
+    <value>عليك الاتصال بالإنترنت قبل المواصلة.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>اتصال بالانترنت مطلوب</value>
+    <value>الاتصال بالإنترنت مطلوب</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -261,11 +261,11 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>تعريف</value>
+    <value>تسجيل الدخول</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>اسم المستخدم</value>
+    <value>تسجيل الدخول</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -330,11 +330,11 @@
     <value>نقل</value>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>حفظ...</value>
+    <value>جارِ حفظ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>إعدادات</value>
+    <value>الإعدادات</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
@@ -360,7 +360,7 @@
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>الرابط</value>
+    <value>عنوان الـ URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -395,9 +395,6 @@
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>زيارة موقعنا على الانترنت</value>
-  </data>
-  <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>قم بزيارة موقعنا الإلكتروني للحصول على المساعدة، واقرأ الأخبار، واكتب لنا و/أو تعلم كيفية استخدام bitwarden بشكل أفضل.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>موقع الويب</value>
@@ -451,9 +448,6 @@
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>تغيير كلمة المرور الرئيسية</value>
   </data>
-  <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>يمكنك تغيير كلمة المرور الرئيسية من خزنة الويب في bitwarden.com. هل تريد زيارة الموقع الآن؟</value>
-  </data>
   <data name="Close" xml:space="preserve">
     <value>إغلاق</value>
   </data>
@@ -464,7 +458,7 @@
     <value>إنشاء حساب</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>إنشاء الحساب...</value>
+    <value>جارِ إنشاء الحساب...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
@@ -493,16 +487,16 @@
     <value>احصل على إمكانية الوصول الفوري إلى كلمات المرور الخاصة بك!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>أنت مستعد للتعريف بنفسك!</value>
+    <value>أنت مستعد لتسجيل الدخول!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>يمكن الآن الوصول إلى المعرفات الخاصة بك بسهولة من Safari وChrome والتطبيقات الأخرى المدعومة.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>في Safari و Chrome، ابحث عن bitwarden باستخدام رمز المشاركة (المساعدة: انتقل إلى اليمين في السطر السفلي من القائمة).</value>
+    <value>في Safari و Chrome، ابحث عن bitwarden باستخدام أيقونة المشاركة (المساعدة: انتقل إلى اليمين في السطر السفلي من القائمة).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>اضغط على رمز bitwarden في القائمة لإطلاق الملحق.</value>
+    <value>اضغط على أيقونة Bitwarden في القائمة لإطلاق الملحق.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
     <value>لتنشيط bitwarden على Safari والتطبيقات الأخرى، اضغط على رمز "المزيد" على السطر السفلي من القائمة.</value>
@@ -514,10 +508,10 @@
     <value>البصمة</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>إنشاء كلمة مرور</value>
+    <value>توليد كلمة مرور</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>الحصول على دليل كلمة المرور الرئيسية</value>
+    <value>احصل على تلميح لكلمة مرورك الرئيسية</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>استيراد العناصر</value>
@@ -532,7 +526,7 @@
     <value>آخر مزامنة:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>طول</value>
+    <value>الطول</value>
   </data>
   <data name="Lock" xml:space="preserve">
     <value>قفل</value>
@@ -562,11 +556,11 @@
     <value>سيؤدي تسجيل الخروج إلى إزالة جميع الوصول إلى الخزنة الخاصة بك ويتطلب المصادقة عبر الإنترنت بعد انتهاء المهلة. هل أنت متأكد من أنك تريد استخدام هذا الإعداد؟</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>تعريف...</value>
+    <value>جارِ تسجيل الدخول...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>قم بالتسجيل أو إنشاء حساب جديد للوصول إلى خزنتك الآمنة.</value>
+    <value>قم بتسجيل الدخول أو إنشاء حساب جديد للوصول إلى خزنتك الآمنة.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>إدارة</value>
@@ -598,7 +592,7 @@
     <value>المزيد من الإعدادات</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>تحتاج إلى التعريف بنفسك على التطبيق bitwarden الرئيسي قبل استخدام الامتداد.</value>
+    <value>يجب عليك تسجيل الدخول إلى تطبيق Bitwarden الرئيسي قبل استخدام الامتداد.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>أبداً</value>
@@ -623,25 +617,25 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>يتم تعيين الخيارات الافتراضية من أداة إنشاء كلمة المرور في تطبيق bitwarden الرئيسي.</value>
+    <value>يتم تعيين الخيارات الافتراضية من أداة إنشاء كلمة المرور في تطبيق Bitwarden الرئيسي.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>خيارات</value>
+    <value>الخيارات</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>الأخرى</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>كلمة المرور التي تم إنشاؤها.</value>
+    <value>كلمة المرور المولدة</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>مولد كلمة المرور</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>فهرس كلمة المرور</value>
+    <value>تلميح كلمة المرور</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>أرسلنا بريدًا إلكترونيًا مع دليل كلمة المرور الخاص بك.</value>
+    <value>لقد أرسلنا لك رسالة بريد إلكتروني تحتوي على تلميح لكلمة مرورك الرئيسية.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>هل أنت متأكد من أنك تريد سحق كلمة المرور الموجودة؟</value>
@@ -657,7 +651,7 @@
     <value>شكرا على مساعدتنا من خلال كتابة تعليق إيجابي!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>إعادة إنشاء كلمة مرور</value>
+    <value>إعادة توليد كلمة المرور</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>إعادة إدخال كلمة المرور الرئيسية</value>
@@ -684,11 +678,11 @@
     <value>تم تحديث العنصر</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>تقديم...</value>
+    <value>جارِ الإرسال...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>المزامنة...</value>
+    <value>جارِ المزامنة...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
@@ -701,14 +695,11 @@
     <value>مزامنة الخزنة الآن</value>
   </data>
   <data name="TouchID" xml:space="preserve">
-    <value>Touch ID معرف اتصال</value>
+    <value>Touch ID معرف اتصال البصمة</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
     <value>تحديد المصادقة الثنائية</value>
-  </data>
-  <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>تجعل المصادقة الثنائية المعامل حسابك أكثر أمانًا من خلال طلب إدخال رمز أمان مع كل معرف من تطبيق المصادقة. يمكن تنشيط تعريف العامل المزدوج في خزنة الويب في bitwarden.com. هل تريد زيارة الموقع الآن؟</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>فتح مع {0}</value>
@@ -879,7 +870,7 @@
     <value>لا يمكن لجهازك فتح هذا النوع من الملفات.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>تحميل...</value>
+    <value>جارِ التحميل...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
@@ -953,6 +944,9 @@
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>لا يمكنك استخدام هذه الميزة حتى تقوم بتحديث مفتاح التشفير الخاص بك.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>مطلوب ترحيل مفتاح التشفير. الرجاء تسجيل الدخول بواسطة مخزن الويب لتحديث مفتاح التشفير الخاص بك.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>اعرف المزيد</value>
@@ -1035,7 +1029,7 @@
     <value>أغسطس</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>العلامة</value>
+    <value>العلامة التجارية</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>اسم حامل البطاقة</value>
@@ -1077,7 +1071,7 @@
     <value>يونيو</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>اسم العائلة</value>
+    <value>الأسم الأخير</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>الاسم الكامل</value>
@@ -1337,7 +1331,7 @@
     <value>الهويات</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>معرفات</value>
+    <value>تسجيلات الدخول</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
     <value>ملاحظات آمنة</value>
@@ -1492,7 +1486,7 @@
     <value>تعيين رمز PIN الخاص بك لإلغاء قفل Bitwarden. سيتم إعادة تعيين إعدادات PIN الخاصة بك إذا قمت بتسجيل الخروج بالكامل من التطبيق.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>تم تسجيل الدخول كـ {0} في {1}.</value>
+    <value>مسجل الدخول كـ {0} على {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1555,9 +1549,6 @@
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>السمة المظلمة الافتراضية</value>
   </data>
-  <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>اختر السمة المظلمة لاستخدامها عند استخدام السمة الافتراضية (النظام) أثناء تمكين الوضع المظلم لجهازك</value>
-  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>نسخ الملاحظة</value>
   </data>
@@ -1584,9 +1575,6 @@
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>تعبئة العناوين المحجوبة تلقائياً</value>
-  </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>لن يتم عرض التعبئة التلقائية للعناوين المحجوبة. افصل عناوين متعددة بفاصلة. مثال: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>اطلب إضافة تسجيل الدخول</value>
@@ -1620,7 +1608,7 @@
     <value>إظهار / إخفاء</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>انتهت صلاحية جلسة تسجيل الدخول الخاصة بك.</value>
+    <value>انتهت صَلاحِيَة جَلسة تسجيل دخولك.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
     <value>المصادقة البيومترية</value>
@@ -1753,10 +1741,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>تم تعطيل فتح القفل الحيوي لهذا الحساب في انتظار التحقق من كلمة المرور الرئيسية.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>إلغاء القفل الحيوي للملء التلقائي لهذا الحساب معطل في انتظار التحقق من كلمة المرور الرئيسية.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>تمكين المزامنة عند التحديث</value>
@@ -2331,7 +2319,7 @@
     <value>هل تحاول تسجيل الدخول؟</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>محاولة تسجيل الدخول بواسطة {0} في {1}</value>
+    <value>محاولة تسجيل الدخول بواسطة {0} على {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
     <value>نوع الجهاز</value>
@@ -2417,9 +2405,9 @@
   <data name="Service" xml:space="preserve">
     <value>الخدمة</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>FirefoxRelay</value>
@@ -2436,6 +2424,10 @@
   <data name="Fastmail" xml:space="preserve">
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>رمز الوصول API</value>
@@ -2496,8 +2488,8 @@
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>احصل على تلميح كلمة المرور الرئيسية</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>تسجيل الدخول كـ {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>تسجيل الدخول كـ {0} في {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>ليس أنت؟</value>
@@ -2610,10 +2602,279 @@
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>لا توجد عناصر تطابق البحث</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>الولايات المتحدة</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>الاتحاد الأوروبي</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>استضافة ذاتية</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>منطقة البيانات</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>المنطقة</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
     <value>كلمة المرور الرئيسية الخاصة بك لا تفي بواحدة أو أكثر من سياسات مؤسستك. من أجل الوصول إلى الخزنة، يجب عليك تحديث كلمة المرور الرئيسية الآن. سيتم تسجيل خروجك من الجلسة الحالية، مما يتطلب منك تسجيل الدخول مرة أخرى. وقد تظل الجلسات النشطة على أجهزة أخرى نشطة لمدة تصل إلى ساعة واحدة.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>كلمة المرور الرئيسية الحالية</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>سجلت دخولك!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>الموافقة بجهازي الآخر</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>طلب موافقة المسؤول</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>الموافقة بكلمة مرور رئيسية</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>أوقف باستخدام جهاز عمومي</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>تذكر هذا الجهاز</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>مفتاح المرور</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>مفاتيح المرور</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>تطبيق</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>لا يمكنك تعديل تطبيق مفتاح المرور لأنه سيبطل مفتاح المرور</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>لن يتم نسخ مفتاح المرور</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>لن يتم نسخ مفتاح المرور إلى العنصر المستنسخ. هل تريد الاستمرار في استنساخ هذا العنصر؟</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>نسخ التطبيق</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>متاح لتسجيل الدخول بخطوتين</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>مساعدة إعادة طلب كلمة المرور الرئيسية</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>قد يفشل إلغاء القُفْل بسبب عدم كفاية الذاكرة. قم بتقليل إعدادات ذاكرة KDF أو قم بإعداد إلغاء القُفْل البيومتري لحل المشكلة.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>مفتاح API غير صالح</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>رمز API غير صالح</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>طلبت موافقة المسؤول</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>أرسلت طلبك إلى مسؤولك.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>سيتم إخطارك بمجرد الموافقة عليها. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>مشكلة في تسجيل الدخول؟</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>تسجيل الدخول كـ {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>تَغيير إجراء مهلة المخزن لتسجيل الخروج</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>حظر التعبئة التلقائية</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>لن يتم تقديم التعبئة التلقائية لعناوين الـ URIs هذه.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>عنوان URL جديد محظور</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>تم حفظ عنوان URI</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>تنسيق غير صالح. استخدم https:// أو http:// أو androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>تعديل عنوان URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>إدخال URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>التنسيق: {0}. افصل العديد من عناوين URIs بفاصلة.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>التنسيق: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>الرابط غير صالح</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>تم حذف الرابط</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>لا يوجد أي عناوين URIs محظورة</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>تم حظر URI {0} بالفعل</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>لا يمكن تعديل العديد من عناوين URIs في وقت واحد</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>تمت الموافقة على تسجيل الدخول</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>يجب إعداد تسجيل الدخول باستخدام الجهاز في إعدادات تطبيق Bitwarden. هل تحتاج إلى خِيار آخر؟</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>تسجيل الدخول بالجهاز</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>جارٍ تسجيل الدخول</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>الخزنة</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>المظهر</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>أمان الحساب</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>مركز المساعدة Bitwarden</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>اتصل بالدعم Bitwarden</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>نسخ معلومات التطبيق</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>المزامنة الآن</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>خيارات فتح القفل</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>مهلة الجلسة</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>إجراء مهلة الجلسة</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>عبارة بصمة الحساب</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>ساعة واحدة ودقيقة واحدة</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>ساعة واحدة و {0} دقيقة</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} ساعات ودقيقة واحدة</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} ساعات و {1} دقيقة</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} ساعات</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>يتم استخدام إطار التعبئة التلقائية لأندرويد للمساعدة في ملء معلومات تسجيل الدخول في تطبيقات أخرى على جهازك.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>استخدم التعبئة التلقائية المضمنة إذا كانت لوحة المفاتيح المحددة تدعمها. وإلا استخدم التراكب الافتراضي.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>خيارات إضافية</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>متابعة إلى تطبيق الويب؟</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>الإستمرار إلى {0}؟</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>هل تريد المتابعة إلى مركز المساعدة؟</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>مواصلة الاتصال بالدعم؟</value>
+  </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>هل تريد المتابعة إلى متجر التطبيقات؟</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>اجعل حسابك أكثر أمنا من خلال إعداد تسجيل الدخول بخطوتين في تطبيق Bitwarden على شبكة الإنترنت.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>يمكنك تغيير كلمة المرور الرئيسية الخاصة بك على تطبيق ويب Bitwarden.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>يمكنك استيراد البيانات إلى خزانتك على {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>تعرف على المزيد حول كيفية استخدام Bitwarden في مركز المساعدة.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>لا يمكن العثور على ما تبحث عنه؟ قم بالتواصل مع دعم Bitwarden على bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>استكشف المزيد من الميزات لحساب Bitwarden الخاص بك على تطبيق الويب.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>يتيح لك Bitwarden مشاركة عناصر خزنتك مع الآخرين باستخدام حساب المؤسسة. تعرف على المزيد على موقع bitwarden.com على شبكة الإنترنت.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>ساعد الآخرين في معرفة ما إذا كان Bitwarden مناسبا لهم. قم بزيارة متجر التطبيقات وترك التقييم الآن.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>اختر السمة المظلمة لاستخدامها عند استخدام الوضع المظلم لجهازك</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>أنشئ {0}، {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>لقد أجريت محاولات كثيرة</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>تم تسجيل الخروج من الحساب.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>تم تحديث أذونات مؤسستك ، مما يتطلب عليك تعيين كلمة مرور رئيسية.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>تتطلب مؤسستك تعيين كلمة مرور رئيسية.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>أعدنّ ميزة إلغاء القُفْل لتغيير إجراء مهلة المخزن الخاص بك.</value>
   </data>
 </root>

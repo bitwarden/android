@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden - Gestore di Password</value>
+    <value>Bitwarden Password Manager</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -130,14 +130,14 @@ Gestisci, archivia, proteggi, e condividi password illimitate su dispositivi ill
 
 Genera password forti, uniche, e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
 
-Bitwarden Send trasmette rapidamente informazioni criptate - via file e testo in chiaro - direttamente a chiunque.
+Bitwarden Send trasmette rapidamente informazioni crittate - via file e testo in chiaro - direttamente a chiunque.
 
 Bitwarden offre piani Teams ed Enterprise per le aziende così puoi condividere le password in modo sicuro con i tuoi colleghi.
 
 Perché Scegliere Bitwarden:
 
-Criptografia Di Livello Mondiale
-Le password sono protette con criptografia end-to-end avanzata (AES-256 bit, salted hashing, e PBKDF2 SHA-256) per tenere i tuoi dati al sicuro e privati.
+Crittografia Di Livello Mondiale
+Le password sono protette con crittografia end-to-end avanzata (AES-256 bit, salted hashing, e PBKDF2 SHA-256) per tenere i tuoi dati al sicuro e privati.
 
 Generatore Di Password Integrato
 Genera password forti, uniche e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
@@ -151,7 +151,7 @@ Proteggi e condividi i dati sensibili all'interno della tua cassaforte di Bitwar
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,gestore password gratis,gestore password,gestore login</value>
+    <value>bit warden,8bit,password,gestore password gratis,gestore password,gestore login,password manager,password manager gratis</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">

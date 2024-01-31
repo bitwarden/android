@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Bit.Core.Services.EmailForwarders;
 
 namespace Bit.Core.Models.Domain
 {
@@ -23,6 +24,46 @@ namespace Bit.Core.Models.Domain
         public string FastMailApiKey { get; set; }
         public string AnonAddyApiAccessToken { get; set; }
         public string AnonAddyDomainName { get; set; }
+        public string ForwardEmailApiAccessToken { get; set; }
+        public string ForwardEmailDomainName { get; set; }
         public string EmailWebsite { get; set; }
+
+        public ForwarderOptions GetForwarderOptions()
+        {
+            if (Type != UsernameType.ForwardedEmailAlias)
+            {
+                return null;
+            }
+
+            switch (ServiceType)
+            {
+                case ForwardedEmailServiceType.AnonAddy:
+                    return new AnonAddyForwarderOptions
+                    {
+                        ApiKey = AnonAddyApiAccessToken,
+                        DomainName = AnonAddyDomainName
+                    };
+                case ForwardedEmailServiceType.DuckDuckGo:
+                    return new ForwarderOptions { ApiKey = DuckDuckGoApiKey };
+                case ForwardedEmailServiceType.Fastmail:
+                    return new FastmailForwarderOptions
+                    {
+                        ApiKey = FastMailApiKey,
+                        Website = EmailWebsite
+                    };
+                case ForwardedEmailServiceType.FirefoxRelay:
+                    return new ForwarderOptions { ApiKey = FirefoxRelayApiAccessToken };
+                case ForwardedEmailServiceType.SimpleLogin:
+                    return new ForwarderOptions { ApiKey = SimpleLoginApiKey };
+                case ForwardedEmailServiceType.ForwardEmail:
+                    return new ForwardEmailForwarderOptions
+                    {
+                        ApiKey = ForwardEmailApiAccessToken,
+                        DomainName = ForwardEmailDomainName
+                    };
+                default:
+                    return null;
+            }
+        }
     }
 }

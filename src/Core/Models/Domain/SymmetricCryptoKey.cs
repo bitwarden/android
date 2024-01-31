@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Bit.Core.Enums;
 
 namespace Bit.Core.Models.Domain
@@ -73,5 +72,40 @@ namespace Bit.Core.Models.Domain
         public string KeyB64 { get; set; }
         public string EncKeyB64 { get; set; }
         public string MacKeyB64 { get; set; }
+    }
+
+    public class UserKey : SymmetricCryptoKey
+    {
+        public UserKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class MasterKey : SymmetricCryptoKey
+    {
+        public MasterKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class PinKey : SymmetricCryptoKey
+    {
+        public PinKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class OrgKey : SymmetricCryptoKey
+    {
+        public OrgKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
+    }
+
+    public class CipherKey : SymmetricCryptoKey
+    {
+        public CipherKey(byte[] key, EncryptionType? encType = null)
+            : base(key, encType)
+        { }
     }
 }

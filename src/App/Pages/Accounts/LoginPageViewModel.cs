@@ -41,6 +41,7 @@ namespace Bit.App.Pages
         private bool _isEmailEnabled;
         private bool _isKnownDevice;
         private bool _isExecutingLogin;
+        private string _environmentHostName;
 
         public LoginPageViewModel()
         {
@@ -115,6 +116,16 @@ namespace Bit.App.Pages
             set => SetProperty(ref _isKnownDevice, value);
         }
 
+        public string EnvironmentDomainName
+        {
+            get => _environmentHostName;
+            set => SetProperty(ref _environmentHostName, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(LoggingInAsText)
+                });
+        }
+
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
@@ -122,7 +133,7 @@ namespace Bit.App.Pages
         public ICommand LogInWithDeviceCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
-        public string LoggingInAsText => string.Format(AppResources.LoggingInAsX, Email);
+        public string LoggingInAsText => string.Format(AppResources.LoggingInAsXOnY, Email, EnvironmentDomainName);
         public bool IsIosExtension { get; set; }
         public bool CanRemoveAccount { get; set; }
         public Action StartTwoFactorAction { get; set; }
@@ -151,6 +162,7 @@ namespace Bit.App.Pages
                     Email = await _stateService.GetRememberedEmailAsync();
                 }
                 CanRemoveAccount = await _stateService.GetActiveUserEmailAsync() != Email;
+                EnvironmentDomainName = _environmentService.GetCurrentDomain();
                 IsKnownDevice = await _apiService.GetKnownDeviceAsync(Email, await _appIdService.GetAppIdAsync());
             }
             catch (ApiException apiEx) when (apiEx.Error.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -235,6 +247,14 @@ namespace Bit.App.Pages
                 _captchaToken = null;
 
                 await _deviceActionService.HideLoadingAsync();
+
+                if (response.RequiresEncryptionKeyMigration)
+                {
+                    // Legacy users must migrate on web vault.
+                    await _platformUtilsService.ShowDialogAsync(AppResources.EncryptionKeyMigrationRequiredDescriptionLong, AppResources.AnErrorHasOccurred,
+                        AppResources.Ok);
+                    return;
+                }
 
                 if (response.TwoFactor)
                 {

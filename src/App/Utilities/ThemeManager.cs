@@ -12,6 +12,8 @@ namespace Bit.App.Utilities
 {
     public static class ThemeManager
     {
+        public const string UPDATED_THEME_MESSAGE_KEY = "updatedTheme";
+
         public static bool UsingLightTheme = true;
         public static Func<ResourceDictionary> Resources = () => null;
 
@@ -58,11 +60,12 @@ namespace Bit.App.Utilities
 
                 // Base styles
                 resources.MergedDictionaries.Add(new Base());
+                resources.MergedDictionaries.Add(new ControlTemplates());
 
                 // Platform styles
                 if (Device.RuntimePlatform == Device.Android)
                 {
-                    resources.MergedDictionaries.Add(new Android());
+                    resources.MergedDictionaries.Add(new Styles.Android());
                 }
                 else if (Device.RuntimePlatform == Device.iOS)
                 {

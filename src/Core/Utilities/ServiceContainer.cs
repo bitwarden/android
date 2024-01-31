@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -44,8 +45,9 @@ namespace Bit.Core.Utilities
             var organizationService = new OrganizationService(stateService, apiService);
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
+            var configService = new ConfigService(apiService, stateService, logger);
             var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService,
-                fileUploadService, storageService, i18nService, () => searchService, clearCipherCacheKey,
+                fileUploadService, storageService, i18nService, () => searchService, configService, clearCipherCacheKey,
                 allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, stateService, apiService, i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, stateService, i18nService);
@@ -53,11 +55,12 @@ namespace Bit.Core.Utilities
                 cryptoFunctionService);
             searchService = new SearchService(cipherService, sendService);
             var policyService = new PolicyService(stateService, organizationService);
-            var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService,
+            var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService, cryptoFunctionService,
                 organizationService);
+            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
+                cryptoService, stateService, keyConnectorService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
-                folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                keyConnectorService,
+                folderService, cipherService, collectionService, searchService, tokenService, userVerificationService,
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);
@@ -77,15 +80,15 @@ namespace Bit.Core.Utilities
                 });
             var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService, policyService);
             var totpService = new TotpService(cryptoFunctionService);
+            var deviceTrustCryptoService = new DeviceTrustCryptoService(apiService, appIdService, cryptoFunctionService, cryptoService, stateService);
+            var passwordResetEnrollmentService = new PasswordResetEnrollmentService(apiService, cryptoService, organizationService, stateService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
-                tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,
-                keyConnectorService, passwordGenerationService, policyService);
+                tokenService, appIdService, i18nService, platformUtilsService, messagingService,
+                keyConnectorService, passwordGenerationService, policyService, deviceTrustCryptoService, passwordResetEnrollmentService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
-            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
-                cryptoService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
 
             Register<IConditionedAwaiterManager>(conditionedRunner);
@@ -94,6 +97,7 @@ namespace Bit.Core.Utilities
             Register<IAppIdService>("appIdService", appIdService);
             Register<IOrganizationService>("organizationService", organizationService);
             Register<ISettingsService>("settingsService", settingsService);
+            Register<IConfigService>(configService);
             Register<ICipherService>("cipherService", cipherService);
             Register<IFolderService>("folderService", folderService);
             Register<ICollectionService>("collectionService", collectionService);
@@ -101,6 +105,8 @@ namespace Bit.Core.Utilities
             Register<ISearchService>("searchService", searchService);
             Register<IPolicyService>("policyService", policyService);
             Register<ISyncService>("syncService", syncService);
+            Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
+            Register<IUserVerificationService>(userVerificationService);
             Register<IVaultTimeoutService>("vaultTimeoutService", vaultTimeoutService);
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
             Register<ITotpService>("totpService", totpService);
@@ -109,9 +115,9 @@ namespace Bit.Core.Utilities
             Register<IAuditService>("auditService", auditService);
             Register<IEnvironmentService>("environmentService", environmentService);
             Register<IEventService>("eventService", eventService);
-            Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
-            Register<IUserVerificationService>("userVerificationService", userVerificationService);
             Register<IUsernameGenerationService>(usernameGenerationService);
+            Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);
+            Register<IPasswordResetEnrollmentService>(passwordResetEnrollmentService);
         }
 
         public static void Register<T>(string serviceName, T obj)
@@ -223,7 +229,7 @@ namespace Bit.Core.Utilities
                 // and lower case the 2nd one (index 1)
                 indexToLowerCase = 1;
             }
-            sb.Append(char.ToLower(typeName[indexToLowerCase]));
+            sb.Append(char.ToLower(typeName[indexToLowerCase], new CultureInfo("en-US")));
             sb.Append(typeName.Substring(++indexToLowerCase));
             return sb.ToString();
         }

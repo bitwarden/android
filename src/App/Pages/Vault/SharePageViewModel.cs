@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
@@ -8,6 +9,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
 {
@@ -34,6 +36,8 @@ namespace Bit.App.Pages
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
             OrganizationOptions = new List<KeyValuePair<string, string>>();
             PageTitle = AppResources.MoveToOrganization;
+
+            MoveCommand = new AsyncCommand(MoveAsync, onException: ex => HandleException(ex), allowsMultipleExecutions: false);
         }
 
         public string CipherId { get; set; }
@@ -62,6 +66,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _hasOrganizations, value);
         }
 
+        public ICommand MoveCommand { get; }
+
         public async Task LoadAsync()
         {
             var allCollections = await _collectionService.GetAllDecryptedAsync();
@@ -84,7 +90,7 @@ namespace Bit.App.Pages
             FilterCollections();
         }
 
-        public async Task<bool> SubmitAsync()
+        public async Task<bool> MoveAsync()
         {
             var selectedCollectionIds = Collections?.Where(c => c.Checked).Select(c => c.Collection.Id);
             if (!selectedCollectionIds?.Any() ?? true)
@@ -109,6 +115,7 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 await _cipherService.ShareWithServerAsync(cipherView, OrganizationId, checkedCollectionIds);
                 await _deviceActionService.HideLoadingAsync();
+
                 var movedItemToOrgText = string.Format(AppResources.MovedItemToOrg, cipherView.Name,
                    (await _organizationService.GetAsync(OrganizationId)).Name);
                 _platformUtilsService.ShowToast("success", null, movedItemToOrgText);

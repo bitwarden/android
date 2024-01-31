@@ -360,7 +360,7 @@
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URI (länk)</value>
+    <value>URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -395,9 +395,6 @@
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Besök vår webbplats</value>
-  </data>
-  <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besök vår webbplats för att få hjälp, nyheter, mejla oss och/eller lära dig mer om hur du använder Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webbplats</value>
@@ -450,9 +447,6 @@
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Ändra huvudlösenord</value>
-  </data>
-  <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Du kan ändra ditt huvudlösenord på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Stäng</value>
@@ -707,9 +701,6 @@
   <data name="TwoStepLogin" xml:space="preserve">
     <value>Tvåfaktorsautentisering</value>
   </data>
-  <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
-  </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås upp med {0}</value>
   </data>
@@ -871,7 +862,7 @@ Vänligen använd en enhet som stöds och/eller lägg till fler metoder som har 
     <value>Lägg till ny bilaga</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Bifogade filer</value>
+    <value>Bilagor</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
     <value>Kunde ej hämta fil.</value>
@@ -954,6 +945,9 @@ Skanningen sker automatiskt.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>Du kan inte använda denna funktion förrän du uppdaterar din krypteringsnyckel.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Migrering av krypteringsnyckel krävs. Logga in på webbvalvet för att uppdatera din krypteringsnyckel.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Läs mer</value>
@@ -1556,9 +1550,6 @@ Skanningen sker automatiskt.</value>
   <data name="DefaultDarkTheme" xml:space="preserve">
     <value>Standard mörkt tema</value>
   </data>
-  <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Välj det mörka temat att använda när du använder standardtemat (System) medan din enhets mörka läge används.</value>
-  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiera anteckningar</value>
   </data>
@@ -1585,9 +1576,6 @@ Skanningen sker automatiskt.</value>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
     <value>Fyll automatiskt i blockerade URI:er</value>
-  </data>
-  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Automatisk ifyllnad kommer inte att erbjudas för blockerade URI:er. Separera flera URI:er med kommatecken. Till exempel: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Be om att lägga till inloggning</value>
@@ -1754,10 +1742,10 @@ Skanningen sker automatiskt.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Biometrisk upplåsning har inaktiverats för det här kontot tills huvudlösenordet har angetts.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
-    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Den biometriska upplåsningen av automatisk ifyllning för detta konto är inaktiverat i väntan på verifiering av huvudlösenordet.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktivera synkronisering vid uppdatering</value>
@@ -2145,10 +2133,10 @@ Skanningen sker automatiskt.</value>
     <value>Dina organisationsprinciper påverkar ditt valvs tid för timeout. Maximal tillåten tid innan timeout är {0} timme(ar) och {1} minut(er)</value>
   </data>
   <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+    <value>Dina organisationsprinciper påverkar ditt valvs tid för timeout. Maximal tillåten tid innan timeout är {0} timme(ar) och {1} minut(er). Ditt valvs timouttid är angivet som {2}.</value>
   </data>
   <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies have set your vault timeout action to {0}.</value>
+    <value>Dina organisationsprinciper har satt din timeout-åtgärd till {0}.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Ditt valvs tid för timeout överskrider de begränsningar som fastställts av din organisation.</value>
@@ -2418,9 +2406,9 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
   <data name="Service" xml:space="preserve">
     <value>Tjänst</value>
   </data>
-  <data name="AnonAddy" xml:space="preserve">
-    <value>AnonAddy</value>
-    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
@@ -2437,6 +2425,10 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
   <data name="Fastmail" xml:space="preserve">
     <value>Fastmail</value>
     <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API-åtkomsttoken</value>
@@ -2497,8 +2489,8 @@ Vill du byta till detta konto?</value>
   <data name="GetMasterPasswordwordHint" xml:space="preserve">
     <value>Hämta huvudlösenordsledtråd</value>
   </data>
-  <data name="LoggingInAsX" xml:space="preserve">
-    <value>Loggar in som {0}</value>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Loggar in som {0} på {1}</value>
   </data>
   <data name="NotYou" xml:space="preserve">
     <value>Är det inte du?</value>
@@ -2531,7 +2523,7 @@ Vill du byta till detta konto?</value>
     <value>Denna förfrågan är inte längre giltig</value>
   </data>
   <data name="PendingLogInRequests" xml:space="preserve">
-    <value>Väntande inloggningsbegäran</value>
+    <value>Väntande inloggningsförfrågningar</value>
   </data>
   <data name="DeclineAllRequests" xml:space="preserve">
     <value>Avvisa alla förfrågningar</value>
@@ -2564,13 +2556,13 @@ Vill du byta till detta konto?</value>
     <value>Viktigt</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Ditt huvudlösenord kan inte återställas om du glömmer det! Det måste innehålla minst {0} tecken.</value>
+    <value>Ditt huvudlösenord kan inte återställas om du glömmer det! Minst {0} tecken.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
     <value>Svagt huvudlösenord</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Lösenordet är svagt. Använd ett starkt lösenord för att skydda ditt konto. Är det säkert att du vill använda ett svagt lösenord?</value>
+    <value>Ett svagt lösenord upptäcktes. Skydda ditt konto med ett starkt lösenord. Är du säker på att du vill använda ett svagt lösenord?</value>
   </data>
   <data name="Weak" xml:space="preserve">
     <value>Svagt</value>
@@ -2611,10 +2603,279 @@ Vill du byta till detta konto?</value>
   <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
     <value>Det finns inga objekt som matchar sökningen</value>
   </data>
+  <data name="US" xml:space="preserve">
+    <value>USA</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Lokalt installerad</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Dataregion</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
   <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
-    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ditt huvudlösenord följer inte ett eller flera av din organisations regler. För att komma åt ditt valv så måste du ändra ditt huvudlösenord nu. Om du gör det kommer du att loggas du ut ur din nuvarande session så du måste logga in på nytt. Aktiva sessioner på andra enheter kommer fortsatt vara aktiva i upp till en timme.</value>
   </data>
   <data name="CurrentMasterPassword" xml:space="preserve">
     <value>Nuvarande huvudlösenord</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Inloggad!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Godkänn med min andra enhet</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Be om godkännande från administratör</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Godkänn med huvudlösenord</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Stäng av med en offentlig enhet</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Kom ihåg denna enhet</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Nyckel</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Nycklar</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Applikation</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Du kan inte ändra nyckelns applikation eftersom det skulle göra nyckeln ogiltig</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Nyckel kommer inte kopieras</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Nyckeln kommer inte att kopieras till det klonade objektet. Vill du klona det här objektet?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopiera applikation</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Tillgänglig för tvåstegsverifiering</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Återupprepa huvudlösenord hjälp</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Upplåsning kan misslyckas på grund av otillräckligt minne. Minska dina KDF-minnesinställningar för att lösa detta.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Ogiltig API-nyckel</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Ogiltig API-token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Godkännande från administratör har begärts</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Din begäran har skickats till din administratör.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Du kommer att meddelas vid godkännande. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Problem med att logga in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Loggar in som {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Tidsgränsåtgärd har ändrats till utloggning</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Blockera autofyll</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Autofyll kommer inte att erbjudas för dessa URI:er.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Ny blockerad URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI har sparats</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Ogiltigt format. Använd https://, http:// eller androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Redigera URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Ange URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Separera flera URI:er med ett kommatecken.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Ogiltig URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI har tagits bort</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Det finns inga blockerade URI:er</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI:n {0} har redan blockerats</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Det går inte att redigera flera URI:er samtidigt</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Inloggning godkänd</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>"Logga in med enhet" måste ställas in i inställningarna i Bitwardens app. Behöver du ett annat alternativ?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Logga in med enhet</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logga in på</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Valv</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Utseende</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Kontosäkerhet</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Bitwarden Hjälpcenter</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Kontakta Bitwarden support</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>Kopiera appinformation</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Synkronisera nu</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Upplåsning</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Tidsgräns för session</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Åtgärd när tidsgränsen uppnås</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Kontots fingeravtrycksfras</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>En timme och en minut</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>En timme och {0} minuter</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} timmar och en minut</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} timmar och {1} minuter</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} timmar</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>Androids autofyll-ramverk används för att fylla i inloggningsuppgifter i appar på din enhet.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Använd autofyll inbyggt i tangentbordet om ditt tangentbord stöder det. Annars, använd popup-fönstret.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Ytterligare alternativ</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Fortsätt till webbapp?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Fortsätt till {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Fortsätt till Hjälpcenter?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Fortsätt att kontakta supporten?</value>
+  </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Fortsätt till integritetspolicy?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Fortsätt till appbutiken?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Gör ditt konto säkrare genom att konfigurera tvåstegsverifiering i Bitwardens webbapp.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>Du kan ändra ditt huvudlösenord i Bitwardens webbapp.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>Du kan importera data till ditt valv på {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Läs mer om hur du använder Bitwarden i hjälpcentret.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>Hittar du inte det du söker? Hör av dig till Bitwardens support på bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Kolla in vår integritetspolicy på bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Utforska fler funktioner i ditt Bitwarden-konto i webbappen.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Bitwarden låter dig dela objekt i ditt valv med andra med hjälp av en organisation. Läs mer på webbplatsen bitwarden.com.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Hjälp andra att ta reda på om Bitwarden är rätt för dem. Besök appbutiken och lämna en recension nu.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Välj vilket tema som ska användas när enheten är i mörkt läge</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Skapad {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>För många försök</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Kontot har loggats ut.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Din organisations behörigheter uppdaterades, vilket kräver att du anger ett huvudlösenord.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Din organisation kräver att du anger ett huvudlösenord.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Ställ in ett upplåsningsalternativ för att ändra vad som händer när tidsgränsen uppnås.</value>
   </data>
 </root>

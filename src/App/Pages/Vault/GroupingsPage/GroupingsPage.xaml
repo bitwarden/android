@@ -25,7 +25,8 @@
             Priority="-1"
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Account}" />
+            AutomationProperties.Name="{u:I18n Account}"
+            AutomationId="AccountIconButton" />
         <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
                      AutomationProperties.IsInAccessibleTree="True"
                      AutomationProperties.Name="{u:I18n Search}" />
@@ -59,13 +60,14 @@
                 <controls:AuthenticatorViewCell 
                     Cipher="{Binding Cipher}"
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
-                    TotpSec="{Binding TotpSec}"/>
+                    TotpSec="{Binding TotpSec}" />
             </DataTemplate>
 
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
-                                                StyleClass="list-row, list-row-platform">
+                                                StyleClass="list-row, list-row-platform"
+                                                AutomationId="{Binding AutomationId}">
                     <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                         HorizontalOptions="Start"
                                         VerticalOptions="Center"
@@ -79,12 +81,14 @@
                             LineBreakMode="TailTruncation"
                             HorizontalOptions="FillAndExpand"
                             VerticalOptions="CenterAndExpand"
-                            StyleClass="list-title"/>
+                            StyleClass="list-title"
+                            AutomationId="ItemNameLabel" />
                     <Label Text="{Binding ItemCount, Mode=OneWay}"
                             HorizontalOptions="End"
                             VerticalOptions="CenterAndExpand"
                             HorizontalTextAlignment="End"
-                            StyleClass="list-sub"/>
+                            StyleClass="list-sub"
+                            AutomationId="ItemCountLabel" />
                 </controls:ExtendedStackLayout>
             </DataTemplate>
 
@@ -95,7 +99,8 @@
                     Spacing="0"
                     Padding="0"
                     VerticalOptions="FillAndExpand"
-                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    StyleClass="list-row-header-container, list-row-header-container-platform"
+                    AutomationId="{Binding AutomationId}">
                     <BoxView
                         StyleClass="list-section-separator-top, list-section-separator-top-platform" />
                     <StackLayout StyleClass="list-row-header, list-row-header-platform">
@@ -104,7 +109,8 @@
                             StyleClass="list-header, list-header-platform" />
                         <Label
                             Text="{Binding ItemCount}"
-                            StyleClass="list-header-sub" />
+                            StyleClass="list-header-sub"
+                            AutomationId="SectionItemCount" />
                     </StackLayout>
                     <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                 </StackLayout>
@@ -147,7 +153,8 @@
                     IsVisible="{Binding ShowNoData}">
                     <Label
                         Text="{Binding NoDataText}"
-                        HorizontalTextAlignment="Center"></Label>
+                        HorizontalTextAlignment="Center"
+                        AutomationId="NoDataDisplayed"></Label>
                     <Button
                         Text="{u:I18n AddAnItem}"
                         Clicked="AddButton_Clicked"

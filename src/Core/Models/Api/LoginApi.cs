@@ -10,5 +10,6 @@ namespace Bit.Core.Models.Api
         public string Password { get; set; }
         public DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
+        public List<Fido2CredentialApi> Fido2Credentials { get; set; }
     }
 }

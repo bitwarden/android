@@ -21,11 +21,14 @@ namespace Bit.Core.Models.Data
             OrganizationUseTotp = response.OrganizationUseTotp;
             Favorite = response.Favorite;
             RevisionDate = response.RevisionDate;
+            CreationDate = response.CreationDate;
+            DeletedDate = response.DeletedDate;
             Type = response.Type;
             Name = response.Name;
             Notes = response.Notes;
             CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
             Reprompt = response.Reprompt;
+            Key = response.Key;
 
             try // Added to address Issue (https://github.com/bitwarden/mobile/issues/1006)
             {
@@ -61,7 +64,6 @@ namespace Bit.Core.Models.Data
             Fields = response.Fields?.Select(f => new FieldData(f)).ToList();
             Attachments = response.Attachments?.Select(a => new AttachmentData(a)).ToList();
             PasswordHistory = response.PasswordHistory?.Select(ph => new PasswordHistoryData(ph)).ToList();
-            DeletedDate = response.DeletedDate;
         }
 
         public string Id { get; set; }
@@ -73,6 +75,8 @@ namespace Bit.Core.Models.Data
         public bool OrganizationUseTotp { get; set; }
         public bool Favorite { get; set; }
         public DateTime RevisionDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
         public Enums.CipherType Type { get; set; }
         public string Name { get; set; }
         public string Notes { get; set; }
@@ -84,7 +88,7 @@ namespace Bit.Core.Models.Data
         public List<AttachmentData> Attachments { get; set; }
         public List<PasswordHistoryData> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
-        public DateTime? DeletedDate { get; set; }
         public Enums.CipherRepromptType Reprompt { get; set; }
+        public string Key { get; set; }
     }
 }

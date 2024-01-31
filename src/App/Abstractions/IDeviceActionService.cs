@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Bit.App.Utilities.Prompts;
 using Bit.Core.Enums;
 using Bit.Core.Models;
 
@@ -18,6 +19,7 @@ namespace Bit.App.Abstractions
         Task<string> DisplayPromptAync(string title = null, string description = null, string text = null,
             string okButtonText = null, string cancelButtonText = null, bool numericKeyboard = false,
             bool autofocus = true, bool password = false);
+        Task<ValidatablePromptResponse?> DisplayValidatablePromptAsync(ValidatablePromptConfig config);
         Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons);
         Task<string> DisplayActionSheetAsync(string title, string cancel, string destruction, params string[] buttons);
 
@@ -26,6 +28,9 @@ namespace Bit.App.Abstractions
         bool SupportsNfc();
         bool SupportsCamera();
         bool SupportsFido2();
+        bool SupportsAutofillServices();
+        bool SupportsInlineAutofill();
+        bool SupportsDrawOver();
 
         bool LaunchApp(string appName);
         void RateApp();
@@ -39,5 +44,7 @@ namespace Bit.App.Abstractions
         Task SetScreenCaptureAllowedAsync();
         void OpenAppSettings();
         void CloseExtensionPopUp();
+        string GetAutofillAccessibilityDescription();
+        string GetAutofillDrawOverDescription();
     }
 }

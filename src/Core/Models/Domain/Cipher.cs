@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.Domain
 {
@@ -16,12 +18,12 @@ namespace Bit.Core.Models.Domain
         {
             BuildDomainModel(this, obj, new HashSet<string>
             {
-                "Id",
-                "OrganizationId",
-                "FolderId",
-                "Name",
-                "Notes"
-            }, alreadyEncrypted, new HashSet<string> { "Id", "OrganizationId", "FolderId" });
+                nameof(Id),
+                nameof(OrganizationId),
+                nameof(FolderId),
+                nameof(Name),
+                nameof(Notes)
+            }, alreadyEncrypted, new HashSet<string> { nameof(Id), nameof(OrganizationId), nameof(FolderId) });
 
             Type = obj.Type;
             Favorite = obj.Favorite;
@@ -29,9 +31,15 @@ namespace Bit.Core.Models.Domain
             Edit = obj.Edit;
             ViewPassword = obj.ViewPassword;
             RevisionDate = obj.RevisionDate;
+            CreationDate = obj.CreationDate;
             CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
             Reprompt = obj.Reprompt;
+
+            if (obj.Key != null)
+            {
+                Key = new EncString(obj.Key);
+            }
 
             switch (Type)
             {
@@ -62,12 +70,14 @@ namespace Bit.Core.Models.Domain
         public string FolderId { get; set; }
         public EncString Name { get; set; }
         public EncString Notes { get; set; }
-        public Enums.CipherType Type { get; set; }
+        public CipherType Type { get; set; }
         public bool Favorite { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; }
         public DateTime RevisionDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
         public Dictionary<string, object> LocalData { get; set; }
         public Login Login { get; set; }
         public Identity Identity { get; set; }
@@ -77,31 +87,44 @@ namespace Bit.Core.Models.Domain
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
-        public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
+        public EncString Key { get; set; }
 
         public async Task<CipherView> DecryptAsync()
         {
             var model = new CipherView(this);
+
+            if (Key != null)
+            {
+                // HACK: I don't like resolving this here but I can't see a better way without
+                // refactoring a lot of things.
+                var cryptoService = ServiceContainer.Resolve<ICryptoService>();
+
+                var orgKey = await cryptoService.GetOrgKeyAsync(OrganizationId);
+
+                var key = await cryptoService.DecryptToBytesAsync(Key, orgKey);
+                model.Key = new CipherKey(key);
+            }
+
             await DecryptObjAsync(model, this, new HashSet<string>
             {
-                "Name",
-                "Notes"
-            }, OrganizationId);
+                nameof(Name),
+                nameof(Notes)
+            }, OrganizationId, model.Key);
 
             switch (Type)
             {
                 case Enums.CipherType.Login:
-                    model.Login = await Login.DecryptAsync(OrganizationId);
+                    model.Login = await Login.DecryptAsync(OrganizationId, Key == null, model.Key);
                     break;
                 case Enums.CipherType.SecureNote:
-                    model.SecureNote = await SecureNote.DecryptAsync(OrganizationId);
+                    model.SecureNote = await SecureNote.DecryptAsync(OrganizationId, model.Key);
                     break;
                 case Enums.CipherType.Card:
-                    model.Card = await Card.DecryptAsync(OrganizationId);
+                    model.Card = await Card.DecryptAsync(OrganizationId, model.Key);
                     break;
                 case Enums.CipherType.Identity:
-                    model.Identity = await Identity.DecryptAsync(OrganizationId);
+                    model.Identity = await Identity.DecryptAsync(OrganizationId, model.Key);
                     break;
                 default:
                     break;
@@ -113,7 +136,7 @@ namespace Bit.Core.Models.Domain
                 var tasks = new List<Task>();
                 async Task decryptAndAddAttachmentAsync(Attachment attachment)
                 {
-                    var decAttachment = await attachment.DecryptAsync(OrganizationId);
+                    var decAttachment = await attachment.DecryptAsync(OrganizationId, model.Key);
                     model.Attachments.Add(decAttachment);
                 }
                 foreach (var attachment in Attachments)
@@ -128,7 +151,7 @@ namespace Bit.Core.Models.Domain
                 var tasks = new List<Task>();
                 async Task decryptAndAddFieldAsync(Field field)
                 {
-                    var decField = await field.DecryptAsync(OrganizationId);
+                    var decField = await field.DecryptAsync(OrganizationId, model.Key);
                     model.Fields.Add(decField);
                 }
                 foreach (var field in Fields)
@@ -143,7 +166,7 @@ namespace Bit.Core.Models.Domain
                 var tasks = new List<Task>();
                 async Task decryptAndAddHistoryAsync(PasswordHistory ph)
                 {
-                    var decPh = await ph.DecryptAsync(OrganizationId);
+                    var decPh = await ph.DecryptAsync(OrganizationId, model.Key);
                     model.PasswordHistory.Add(decPh);
                 }
                 foreach (var ph in PasswordHistory)
@@ -167,15 +190,17 @@ namespace Bit.Core.Models.Domain
                 OrganizationUseTotp = OrganizationUseTotp,
                 Favorite = Favorite,
                 RevisionDate = RevisionDate,
+                CreationDate = CreationDate,
                 Type = Type,
                 CollectionIds = CollectionIds.ToList(),
                 DeletedDate = DeletedDate,
                 Reprompt = Reprompt,
+                Key = Key?.EncryptedString
             };
             BuildDataModel(this, c, new HashSet<string>
             {
-                "Name",
-                "Notes"
+                nameof(Name),
+                nameof(Notes)
             });
             switch (c.Type)
             {

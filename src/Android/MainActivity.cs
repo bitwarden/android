@@ -116,7 +116,7 @@ namespace Bit.Droid
                 {
                     ListenYubiKey((bool)message.Data);
                 }
-                else if (message.Command == "updatedTheme")
+                else if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
                 {
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() => AppearanceAdjustments());
                 }
@@ -239,18 +239,22 @@ namespace Bit.Droid
                 string fileName = null;
                 if (data != null && data.Data != null)
                 {
-                    uri = data.Data;
-                    fileName = AndroidHelpers.GetFileName(ApplicationContext, uri);
+                    if (data.Data.ToString()?.Contains(Constants.PACKAGE_NAME) != true)
+                    {
+                        uri = data.Data;
+                        fileName = AndroidHelpers.GetFileName(ApplicationContext, uri);
+                    }
                 }
                 else
                 {
                     // camera
-                    var file = new Java.IO.File(FilesDir, "temp_camera_photo.jpg");
+                    var tmpDir = new Java.IO.File(FilesDir, Constants.TEMP_CAMERA_IMAGE_DIR);
+                    var file = new Java.IO.File(tmpDir, Constants.TEMP_CAMERA_IMAGE_NAME);
                     uri = FileProvider.GetUriForFile(this, "com.x8bit.bitwarden.fileprovider", file);
                     fileName = $"photo_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.jpg";
                 }
 
-                if (uri == null)
+                if (uri == null || fileName == null)
                 {
                     return;
                 }
