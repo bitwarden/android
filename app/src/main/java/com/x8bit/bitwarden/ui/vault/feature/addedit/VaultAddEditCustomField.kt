@@ -69,6 +69,8 @@ fun VaultAddEditCustomField(
             title = stringResource(id = R.string.custom_field_name),
             textFieldLabel = stringResource(id = R.string.name),
             onDismissRequest = { shouldShowEditDialog = false },
+            autoFocus = true,
+            initialText = customField.name,
             onConfirmClick = { name ->
                 onCustomFieldValueChange(customField.updateName(name))
                 shouldShowEditDialog = false
