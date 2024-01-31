@@ -11,11 +11,14 @@ import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.AutofillTotpCopyActivity
 import com.x8bit.bitwarden.MainActivity
+import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
+import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.getSafeParcelableExtra
 
+private const val AUTOFILL_SAVE_ITEM_DATA_KEY = "autofill-save-item-data"
 private const val AUTOFILL_SELECTION_DATA_KEY = "autofill-selection-data"
 private const val AUTOFILL_TOTP_COPY_DATA_KEY = "autofill-totp-copy-data"
 
@@ -73,6 +76,22 @@ fun createTotpCopyIntentSender(
 }
 
 /**
+ * Creates an [Intent] in order to start the cipher saving process during the autofill flow.
+ */
+fun createAutofillSavedItemIntent(
+    autofillAppInfo: AutofillAppInfo,
+    autofillSaveItem: AutofillSaveItem,
+): Intent =
+    Intent(
+        autofillAppInfo.context,
+        MainActivity::class.java,
+    )
+        .apply {
+            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra(AUTOFILL_SAVE_ITEM_DATA_KEY, autofillSaveItem)
+        }
+
+/**
  * Creates an [Intent] in order to specify that there is a successful selection during a manual
  * autofill process.
  */
@@ -90,6 +109,13 @@ fun createAutofillSelectionResultIntent(
  */
 fun Intent.getAutofillAssistStructureOrNull(): AssistStructure? =
     this.getSafeParcelableExtra(AutofillManager.EXTRA_ASSIST_STRUCTURE)
+
+/**
+ * Checks if the given [Intent] contains an [AutofillSaveItem] related to an ongoing save item
+ * process.
+ */
+fun Intent.getAutofillSaveItemOrNull(): AutofillSaveItem? =
+    this.getSafeParcelableExtra(AUTOFILL_SAVE_ITEM_DATA_KEY)
 
 /**
  * Checks if the given [Intent] contains data about an ongoing manual autofill selection process.
