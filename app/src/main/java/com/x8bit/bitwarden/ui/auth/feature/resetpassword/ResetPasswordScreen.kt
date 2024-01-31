@@ -22,9 +22,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -141,6 +145,7 @@ fun ResetPasswordScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Suppress("LongMethod")
 private fun ResetPasswordScreeContent(
@@ -154,6 +159,7 @@ private fun ResetPasswordScreeContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .semantics { testTagsAsResourceId = true }
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
@@ -204,6 +210,7 @@ private fun ResetPasswordScreeContent(
             value = state.currentPasswordInput,
             onValueChange = onCurrentPasswordInputChanged,
             modifier = Modifier
+                .semantics { testTag = "MasterPasswordField" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -215,6 +222,7 @@ private fun ResetPasswordScreeContent(
             value = state.passwordInput,
             onValueChange = onPasswordInputChanged,
             modifier = Modifier
+                .semantics { testTag = "NewPasswordField" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -226,6 +234,7 @@ private fun ResetPasswordScreeContent(
             value = state.retypePasswordInput,
             onValueChange = onRetypePasswordInputChanged,
             modifier = Modifier
+                .semantics { testTag = "RetypePasswordField" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -238,6 +247,7 @@ private fun ResetPasswordScreeContent(
             onValueChange = onPasswordHintInputChanged,
             hint = stringResource(id = R.string.master_password_hint_description),
             modifier = Modifier
+                .semantics { testTag = "MasterPasswordHintLabel" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
