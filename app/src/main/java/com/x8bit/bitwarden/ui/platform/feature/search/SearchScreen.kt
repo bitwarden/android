@@ -12,11 +12,15 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,7 +47,7 @@ import kotlinx.collections.immutable.toImmutableList
  * The search UI for vault items or send items.
  */
 @Suppress("LongMethod")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreen(
     onNavigateBack: () -> Unit,
@@ -90,10 +94,14 @@ fun SearchScreen(
                     navigationIconContentDescription = stringResource(id = R.string.back),
                     onNavigationIconClick = searchHandlers.onBackClick,
                 ),
-                modifier = Modifier.bottomDivider(),
+                modifier = Modifier
+                    .semantics { testTag = "SearchFieldEntry" }
+                    .bottomDivider(),
             )
         },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .semantics { testTagsAsResourceId = true }
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
         Column(
             modifier = Modifier

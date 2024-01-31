@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
@@ -91,6 +93,7 @@ fun SendContent(
                     null
                 },
                 modifier = Modifier
+                    .semantics { testTag = "SendCell" }
                     .padding(
                         start = 16.dp,
                         // There is some built-in padding to the menu button that makes up
