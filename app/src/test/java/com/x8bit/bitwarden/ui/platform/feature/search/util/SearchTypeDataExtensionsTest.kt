@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import android.net.Uri
+import com.bitwarden.core.CipherRepromptType
+import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.FolderView
@@ -11,6 +13,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
+import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -27,6 +30,11 @@ class SearchTypeDataExtensionsTest {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
+
+    @Test
+    fun tearDown() {
+        unmockkStatic(Uri::parse)
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -262,6 +270,7 @@ class SearchTypeDataExtensionsTest {
             searchTerm = "",
             baseIconUrl = "www.test.com",
             isIconLoadingDisabled = false,
+            isAutofill = false,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -284,6 +293,7 @@ class SearchTypeDataExtensionsTest {
             searchTerm = "mock",
             baseIconUrl = "https://vault.bitwarden.com/icons",
             isIconLoadingDisabled = false,
+            isAutofill = false,
         )
 
         assertEquals(
@@ -296,7 +306,70 @@ class SearchTypeDataExtensionsTest {
             ),
             result,
         )
-        unmockkStatic(Uri::parse)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CipherViews toViewState should return content state for autofill when search term is not blank and ciphers is not empty`() {
+        mockkStatic(Uri::parse)
+        every { Uri.parse(any()) } returns mockk {
+            every { host } returns "www.mockuri.com"
+        }
+        val sends = listOf(
+            createMockCipherView(
+                number = 0,
+                cipherType = CipherType.CARD,
+            )
+                .copy(
+                    reprompt = CipherRepromptType.PASSWORD,
+                ),
+            createMockCipherView(number = 1),
+            createMockCipherView(number = 2),
+        )
+
+        val result = sends.toViewState(
+            searchTerm = "mock",
+            baseIconUrl = "https://vault.bitwarden.com/icons",
+            isIconLoadingDisabled = false,
+            isAutofill = true,
+        )
+
+        assertEquals(
+            SearchState.ViewState.Content(
+                displayItems = listOf(
+                    createMockDisplayItemForCipher(
+                        number = 0,
+                        cipherType = CipherType.CARD,
+                    )
+                        .copy(
+                            autofillSelectionOptions = listOf(
+                                AutofillSelectionOption.AUTOFILL,
+                                AutofillSelectionOption.VIEW,
+                            ),
+                            shouldDisplayMasterPasswordReprompt = true,
+                        ),
+                    createMockDisplayItemForCipher(number = 1)
+                        .copy(
+                            autofillSelectionOptions = listOf(
+                                AutofillSelectionOption.AUTOFILL,
+                                AutofillSelectionOption.AUTOFILL_AND_SAVE,
+                                AutofillSelectionOption.VIEW,
+                            ),
+                            shouldDisplayMasterPasswordReprompt = false,
+                        ),
+                    createMockDisplayItemForCipher(number = 2)
+                        .copy(
+                            autofillSelectionOptions = listOf(
+                                AutofillSelectionOption.AUTOFILL,
+                                AutofillSelectionOption.AUTOFILL_AND_SAVE,
+                                AutofillSelectionOption.VIEW,
+                            ),
+                            shouldDisplayMasterPasswordReprompt = false,
+                        ),
+                ),
+            ),
+            result,
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -306,6 +379,7 @@ class SearchTypeDataExtensionsTest {
             searchTerm = "a",
             baseIconUrl = "www.test.com",
             isIconLoadingDisabled = false,
+            isAutofill = false,
         )
 
         assertEquals(

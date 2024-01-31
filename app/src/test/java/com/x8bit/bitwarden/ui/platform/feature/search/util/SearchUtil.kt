@@ -53,6 +53,8 @@ fun createMockDisplayItemForCipher(
                     ),
                 ),
                 totpCode = "mockTotp-$number",
+                autofillSelectionOptions = emptyList(),
+                shouldDisplayMasterPasswordReprompt = false,
             )
         }
 
@@ -80,6 +82,8 @@ fun createMockDisplayItemForCipher(
                     ),
                 ),
                 totpCode = null,
+                autofillSelectionOptions = emptyList(),
+                shouldDisplayMasterPasswordReprompt = false,
             )
         }
 
@@ -87,7 +91,7 @@ fun createMockDisplayItemForCipher(
             SearchState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
-                subtitle = "er-$number",
+                subtitle = "mockBrand-$number, *er-$number",
                 iconData = IconData.Local(R.drawable.ic_card_item),
                 extraIconList = listOf(
                     IconRes(
@@ -110,6 +114,8 @@ fun createMockDisplayItemForCipher(
                     ),
                 ),
                 totpCode = null,
+                autofillSelectionOptions = emptyList(),
+                shouldDisplayMasterPasswordReprompt = false,
             )
         }
 
@@ -134,6 +140,8 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
                 ),
                 totpCode = null,
+                autofillSelectionOptions = emptyList(),
+                shouldDisplayMasterPasswordReprompt = false,
             )
         }
     }
@@ -175,6 +183,8 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
                 totpCode = null,
+                autofillSelectionOptions = emptyList(),
+                shouldDisplayMasterPasswordReprompt = false,
             )
         }
 
@@ -206,6 +216,8 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
                 totpCode = null,
+                autofillSelectionOptions = emptyList(),
+                shouldDisplayMasterPasswordReprompt = false,
             )
         }
     }

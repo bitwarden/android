@@ -3,11 +3,20 @@ package com.x8bit.bitwarden.ui.platform.feature.search
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import app.cash.turbine.turbineScope
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
+import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
+import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -15,11 +24,14 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -30,7 +42,9 @@ import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
+import io.mockk.awaits
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -52,6 +66,9 @@ import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class SearchViewModelTest : BaseViewModelTest() {
+
+    private val autofillSelectionManager: AutofillSelectionManager =
+        AutofillSelectionManagerImpl()
 
     private val clock: Clock = Clock.fixed(
         Instant.parse("2023-10-27T12:00:00Z"),
@@ -79,6 +96,8 @@ class SearchViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
     }
+    private val specialCircumstanceManager: SpecialCircumstanceManager =
+        SpecialCircumstanceManagerImpl()
 
     @BeforeEach
     fun setup() {
@@ -144,6 +163,274 @@ class SearchViewModelTest : BaseViewModelTest() {
             assertEquals(SearchEvent.NavigateToEditSend(sendId = "mock"), awaitItem())
         }
     }
+
+    @Test
+    fun `AutofillItemClick should emit NavigateToViewCipher`() = runTest {
+        val cipherView = setupForAutofill()
+        val cipherId = CIPHER_ID
+        val viewModel = createViewModel()
+
+        autofillSelectionManager.autofillSelectionFlow.test {
+            viewModel.trySendAction(SearchAction.AutofillItemClick(itemId = cipherId))
+            assertEquals(cipherView, awaitItem())
+        }
+    }
+
+    @Test
+    fun `AutofillAndSaveItemClick with request error should show error dialog`() = runTest {
+        val cipherView = setupForAutofill()
+        val cipherId = CIPHER_ID
+        val errorMessage = "Server error"
+        val updatedCipherView = cipherView.copy(
+            login = createMockLoginView(1).copy(
+                uris = listOf(createMockUriView(number = 1)) +
+                    LoginUriView(
+                        uri = AUTOFILL_URI,
+                        match = null,
+                    ),
+            ),
+        )
+        val viewModel = createViewModel()
+        coEvery {
+            vaultRepository.updateCipher(
+                cipherId = cipherId,
+                cipherView = updatedCipherView,
+            )
+        } returns UpdateCipherResult.Error(errorMessage)
+
+        viewModel.stateFlow.test {
+            assertEquals(INITIAL_STATE_FOR_AUTOFILL, awaitItem())
+
+            viewModel.trySendAction(SearchAction.AutofillAndSaveItemClick(itemId = cipherId))
+
+            assertEquals(
+                INITIAL_STATE_FOR_AUTOFILL
+                    .copy(
+                        dialogState = SearchState.DialogState.Loading(
+                            message = R.string.loading.asText(),
+                        ),
+                    ),
+                awaitItem(),
+            )
+
+            assertEquals(
+                INITIAL_STATE_FOR_AUTOFILL
+                    .copy(
+                        dialogState = SearchState.DialogState.Error(
+                            title = null,
+                            message = errorMessage.asText(),
+                        ),
+                    ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AutofillAndSaveItemClick with request success should post to the AutofillSelectionManager`() =
+        runTest {
+            val cipherView = setupForAutofill()
+            val cipherId = CIPHER_ID
+            val updatedCipherView = cipherView.copy(
+                login = createMockLoginView(1).copy(
+                    uris = listOf(createMockUriView(number = 1)) +
+                        LoginUriView(
+                            uri = AUTOFILL_URI,
+                            match = null,
+                        ),
+                ),
+            )
+            val viewModel = createViewModel()
+            coEvery {
+                vaultRepository.updateCipher(
+                    cipherId = cipherId,
+                    cipherView = updatedCipherView,
+                )
+            } returns UpdateCipherResult.Success
+
+            turbineScope {
+                val stateTurbine = viewModel
+                    .stateFlow
+                    .testIn(backgroundScope)
+                val selectionTurbine = autofillSelectionManager
+                    .autofillSelectionFlow
+                    .testIn(backgroundScope)
+
+                assertEquals(INITIAL_STATE_FOR_AUTOFILL, stateTurbine.awaitItem())
+
+                viewModel.trySendAction(SearchAction.AutofillAndSaveItemClick(itemId = cipherId))
+
+                assertEquals(
+                    INITIAL_STATE_FOR_AUTOFILL
+                        .copy(
+                            dialogState = SearchState.DialogState.Loading(
+                                message = R.string.loading.asText(),
+                            ),
+                        ),
+                    stateTurbine.awaitItem(),
+                )
+
+                assertEquals(
+                    INITIAL_STATE_FOR_AUTOFILL,
+                    stateTurbine.awaitItem(),
+                )
+
+                // Autofill flow is completed
+                assertEquals(cipherView, selectionTurbine.awaitItem())
+            }
+        }
+
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
+        runTest {
+            setupMockUri()
+            setupForAutofill()
+            val cipherId = CIPHER_ID
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Error
+            val viewModel = createViewModel()
+            assertEquals(
+                INITIAL_STATE_FOR_AUTOFILL,
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.trySendAction(
+                SearchAction.MasterPasswordRepromptSubmit(
+                    password = password,
+                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                        cipherId = cipherId,
+                        type = MasterPasswordRepromptData.Type.AUTOFILL,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                INITIAL_STATE_FOR_AUTOFILL.copy(
+                    dialogState = SearchState.DialogState.Error(
+                        title = null,
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with an invalid password should show an invalid password dialog`() =
+        runTest {
+            setupMockUri()
+            setupForAutofill()
+            val cipherId = CIPHER_ID
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = false)
+            val viewModel = createViewModel()
+            assertEquals(
+                INITIAL_STATE_FOR_AUTOFILL,
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.trySendAction(
+                SearchAction.MasterPasswordRepromptSubmit(
+                    password = password,
+                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                        cipherId = cipherId,
+                        type = MasterPasswordRepromptData.Type.AUTOFILL,
+                    ),
+                ),
+            )
+
+            assertEquals(
+                INITIAL_STATE_FOR_AUTOFILL.copy(
+                    dialogState = SearchState.DialogState.Error(
+                        title = null,
+                        message = R.string.invalid_master_password.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for autofill should post to the AutofillSelectionManager`() =
+        runTest {
+            setupMockUri()
+            val cipherView = setupForAutofill()
+            val cipherId = CIPHER_ID
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+            val viewModel = createViewModel()
+
+            autofillSelectionManager.autofillSelectionFlow.test {
+                viewModel.trySendAction(
+                    SearchAction.MasterPasswordRepromptSubmit(
+                        password = password,
+                        masterPasswordRepromptData = MasterPasswordRepromptData(
+                            cipherId = cipherId,
+                            type = MasterPasswordRepromptData.Type.AUTOFILL,
+                        ),
+                    ),
+                )
+                assertEquals(
+                    cipherView,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for autofill-and-save should make a the cipher update request`() =
+        runTest {
+            setupMockUri()
+            val cipherView = setupForAutofill()
+            val cipherId = CIPHER_ID
+            val password = "password"
+            val updatedCipherView = cipherView.copy(
+                login = createMockLoginView(1).copy(
+                    uris = listOf(createMockUriView(number = 1)) +
+                        LoginUriView(
+                            uri = AUTOFILL_URI,
+                            match = null,
+                        ),
+                ),
+            )
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+            coEvery {
+                vaultRepository.updateCipher(
+                    cipherId = cipherId,
+                    cipherView = updatedCipherView,
+                )
+            } just awaits
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                SearchAction.MasterPasswordRepromptSubmit(
+                    password = password,
+                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                        cipherId = cipherId,
+                        type = MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE,
+                    ),
+                ),
+            )
+
+            coVerify {
+                vaultRepository.updateCipher(
+                    cipherId = cipherId,
+                    cipherView = updatedCipherView,
+                )
+            }
+        }
 
     @Test
     fun `OverflowOptionClick Send EditClick should emit NavigateToEditSend`() = runTest {
@@ -492,6 +779,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 searchTerm = "",
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
+                isAutofill = false,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -591,6 +879,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 searchTerm = "",
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
+                isAutofill = false,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -700,6 +989,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 searchTerm = "",
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
+                isAutofill = false,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -809,6 +1099,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 searchTerm = "",
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
+                isAutofill = false,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -941,7 +1232,52 @@ class SearchViewModelTest : BaseViewModelTest() {
         environmentRepo = environmentRepository,
         settingsRepo = settingsRepository,
         clipboardManager = clipboardManager,
+        specialCircumstanceManager = specialCircumstanceManager,
+        autofillSelectionManager = autofillSelectionManager,
     )
+
+    /**
+     * Generates and returns [CipherView] to be populated for autofill testing and sets up the
+     * state to return that item.
+     */
+    private fun setupForAutofill(): CipherView {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(
+            autofillSelectionData = AUTOFILL_SELECTION_DATA,
+            shouldFinishWhenComplete = true,
+        )
+        val cipherView = createMockCipherView(number = 1)
+        val ciphers = listOf(cipherView)
+        val expectedViewState = SearchState.ViewState.Content(
+            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+        )
+        every {
+            ciphers.filterAndOrganize(
+                searchTypeData = SearchTypeData.Vault.All,
+                searchTerm = "",
+            )
+        } returns ciphers
+        every {
+            ciphers.toFilteredList(vaultFilterType = VaultFilterType.AllVaults)
+        } returns ciphers
+        every {
+            ciphers.toViewState(
+                searchTerm = "",
+                baseIconUrl = "https://vault.bitwarden.com/icons",
+                isIconLoadingDisabled = false,
+                isAutofill = true,
+            )
+        } returns expectedViewState
+        val dataState = DataState.Loaded(
+            data = VaultData(
+                cipherViewList = ciphers,
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            ),
+        )
+        mutableVaultDataStateFlow.value = dataState
+        return cipherView
+    }
 
     private fun setupMockUri() {
         mockkStatic(Uri::class)
@@ -980,3 +1316,21 @@ private val DEFAULT_USER_STATE = UserState(
         ),
     ),
 )
+
+private const val AUTOFILL_URI = "autofill-uri"
+
+private const val CIPHER_ID = "mockId-1"
+
+private val AUTOFILL_SELECTION_DATA =
+    AutofillSelectionData(
+        type = AutofillSelectionData.Type.LOGIN,
+        uri = AUTOFILL_URI,
+    )
+
+private val INITIAL_STATE_FOR_AUTOFILL =
+    DEFAULT_STATE.copy(
+        viewState = SearchState.ViewState.Content(
+            displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
+        ),
+        autofillSelectionData = AUTOFILL_SELECTION_DATA,
+    )

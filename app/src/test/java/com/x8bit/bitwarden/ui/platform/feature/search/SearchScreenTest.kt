@@ -8,15 +8,18 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -35,6 +38,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
+@Suppress("LargeClass")
 class SearchScreenTest : BaseComposeTest() {
     private val mutableEventFlow = bufferedMutableSharedFlow<SearchEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -195,6 +199,282 @@ class SearchScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(SearchAction.ItemClick("mockId-1"))
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on a display item with autofill options should open the autofill option selection dialog`() {
+        mutableStateFlow.value = createStateForAutofill()
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Do you want to auto-fill or view this item?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Auto-fill")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Auto-fill and save")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("View")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on cancel in selection dialog should close dialog`() {
+        mutableStateFlow.value = createStateForAutofill()
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on autofill option in selection dialog when no reprompt required should send AutofillItemClick and close dialog`() {
+        mutableStateFlow.value = createStateForAutofill()
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Auto-fill")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(SearchAction.AutofillItemClick(itemId = "mockId-1")) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on autofill option in selection dialog when reprompt is required should show master password dialog`() {
+        mutableStateFlow.value = createStateForAutofill(isRepromptRequired = true)
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Auto-fill")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on autofill-and-save option in selection dialog when no reprompt required should send AutofillAndSaveItemClick and close dialog`() {
+        mutableStateFlow.value = createStateForAutofill()
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Auto-fill and save")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(SearchAction.AutofillAndSaveItemClick(itemId = "mockId-1")) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on autofill-and-save option in selection dialog when reprompt is required should show master password dialog`() {
+        mutableStateFlow.value = createStateForAutofill(isRepromptRequired = true)
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Auto-fill and save")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on view option in selection dialog when no reprompt required should send ItemClick and close dialog`() {
+        mutableStateFlow.value = createStateForAutofill()
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(SearchAction.ItemClick(itemId = "mockId-1")) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `clicking cancel on the master password dialog should close the dialog`() {
+        mutableStateFlow.value = createStateForAutofill(isRepromptRequired = true)
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Auto-fill")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking submit on the master password dialog for autofill should close the dialog and send MasterPasswordRepromptSubmit`() {
+        mutableStateFlow.value = createStateForAutofill(isRepromptRequired = true)
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Auto-fill")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("password")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                SearchAction.MasterPasswordRepromptSubmit(
+                    password = "password",
+                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                        cipherId = "mockId-1",
+                        type = MasterPasswordRepromptData.Type.AUTOFILL,
+                    ),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking submit on the master password dialog for autofill-and-save should close the dialog and send MasterPasswordRepromptSubmit`() {
+        mutableStateFlow.value = createStateForAutofill(isRepromptRequired = true)
+        composeTestRule
+            .onNodeWithText(text = "mockName-1")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Auto-fill and save")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("password")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                SearchAction.MasterPasswordRepromptSubmit(
+                    password = "password",
+                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                        cipherId = "mockId-1",
+                        type = MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE,
+                    ),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
@@ -439,3 +719,18 @@ private val DEFAULT_STATE: SearchState = SearchState(
     baseIconUrl = "www.test.com",
     isIconLoadingDisabled = false,
 )
+
+private fun createStateForAutofill(
+    isRepromptRequired: Boolean = false,
+): SearchState = DEFAULT_STATE
+    .copy(
+        viewState = SearchState.ViewState.Content(
+            displayItems = listOf(
+                createMockDisplayItemForCipher(number = 1)
+                    .copy(
+                        autofillSelectionOptions = AutofillSelectionOption.entries,
+                        shouldDisplayMasterPasswordReprompt = isRepromptRequired,
+                    ),
+            ),
+        ),
+    )
