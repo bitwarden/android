@@ -107,7 +107,6 @@ class UserStateJsonExtensionsTest {
                         isPremium = false,
                         isLoggedIn = true,
                         isVaultUnlocked = true,
-                        isVaultPendingUnlock = false,
                         needsPasswordReset = false,
                         organizations = listOf(
                             Organization(
@@ -183,7 +182,6 @@ class UserStateJsonExtensionsTest {
                         isPremium = true,
                         isLoggedIn = false,
                         isVaultUnlocked = false,
-                        isVaultPendingUnlock = false,
                         needsPasswordReset = false,
                         organizations = listOf(
                             Organization(

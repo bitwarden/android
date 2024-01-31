@@ -723,7 +723,6 @@ class VaultLockManagerTest {
                 privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
-            vaultLockManager.completeUnlock(userId = USER_ID)
 
             assertEquals(VaultUnlockResult.Success, result)
             assertEquals(
@@ -827,7 +826,6 @@ class VaultLockManagerTest {
                 privateKey = privateKey,
                 organizationKeys = organizationKeys,
             )
-            vaultLockManager.completeUnlock(userId = USER_ID)
 
             assertEquals(VaultUnlockResult.Success, result)
             assertEquals(
@@ -1362,7 +1360,6 @@ class VaultLockManagerTest {
             ),
             organizationKeys = organizationKeys,
         )
-        vaultLockManager.completeUnlock(userId = userId)
 
         assertEquals(VaultUnlockResult.Success, result)
         coVerify(exactly = 1) {

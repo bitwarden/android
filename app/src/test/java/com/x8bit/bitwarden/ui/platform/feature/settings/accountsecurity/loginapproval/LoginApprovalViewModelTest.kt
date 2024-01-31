@@ -192,7 +192,6 @@ private val DEFAULT_USER_STATE = UserState(
             isPremium = true,
             isLoggedIn = true,
             isVaultUnlocked = true,
-            isVaultPendingUnlock = false,
             needsPasswordReset = false,
             organizations = emptyList(),
         ),

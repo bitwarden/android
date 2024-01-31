@@ -14,7 +14,6 @@ data class VaultUnlockData(
      * The lock status of a user's vault.
      */
     enum class Status {
-        PENDING,
         UNLOCKED,
         UNLOCKING,
     }

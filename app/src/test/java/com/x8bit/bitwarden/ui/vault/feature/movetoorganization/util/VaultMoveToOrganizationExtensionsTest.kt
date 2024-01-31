@@ -94,7 +94,6 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 isPremium = true,
                 isLoggedIn = true,
                 isVaultUnlocked = true,
-                isVaultPendingUnlock = false,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = if (hasOrganizations) {
