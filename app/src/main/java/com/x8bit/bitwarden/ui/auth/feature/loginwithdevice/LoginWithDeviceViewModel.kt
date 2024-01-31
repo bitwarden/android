@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -47,10 +48,7 @@ class LoginWithDeviceViewModel @Inject constructor(
             LoginWithDeviceAction.DismissDialog -> handleErrorDialogDismissed()
             LoginWithDeviceAction.ResendNotificationClick -> handleResendNotificationClicked()
             LoginWithDeviceAction.ViewAllLogInOptionsClick -> handleViewAllLogInOptionsClicked()
-
-            is LoginWithDeviceAction.Internal.NewAuthRequestResultReceive -> {
-                handleNewAuthRequestResultReceived(action)
-            }
+            is LoginWithDeviceAction.Internal -> handleInternalActions(action)
         }
     }
 
@@ -68,6 +66,14 @@ class LoginWithDeviceViewModel @Inject constructor(
 
     private fun handleViewAllLogInOptionsClicked() {
         sendEvent(LoginWithDeviceEvent.NavigateBack)
+    }
+
+    private fun handleInternalActions(action: LoginWithDeviceAction.Internal) {
+        when (action) {
+            is LoginWithDeviceAction.Internal.NewAuthRequestResultReceive -> {
+                handleNewAuthRequestResultReceived(action)
+            }
+        }
     }
 
     @Suppress("LongMethod")
@@ -212,6 +218,14 @@ data class LoginWithDeviceState(
      */
     sealed class DialogState : Parcelable {
         /**
+         * Displays an loading dialog to the user.
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+
+        /**
          * Displays an error dialog to the user.
          */
         @Parcelize
@@ -230,6 +244,18 @@ sealed class LoginWithDeviceEvent {
      * Navigates back to the previous screen.
      */
     data object NavigateBack : LoginWithDeviceEvent()
+
+    /**
+     * Navigates to the captcha verification screen.
+     */
+    data class NavigateToCaptcha(val uri: Uri) : LoginWithDeviceEvent()
+
+    /**
+     * Navigates to the two-factor login screen.
+     */
+    data class NavigateToTwoFactorLogin(
+        val emailAddress: String,
+    ) : LoginWithDeviceEvent()
 
     /**
      * Shows a toast with the given [message].

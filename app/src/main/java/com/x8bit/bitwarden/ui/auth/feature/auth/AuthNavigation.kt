@@ -93,6 +93,12 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         )
         loginWithDeviceDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToTwoFactorLogin = {
+                navController.navigateToTwoFactorLogin(
+                    emailAddress = it,
+                    password = null,
+                )
+            },
         )
         environmentDestination(
             onNavigateBack = { navController.popBackStack() },
