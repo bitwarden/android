@@ -22,6 +22,6 @@ data class ResetPasswordRequestJson(
     @SerialName("masterPasswordHint")
     val passwordHint: String?,
 
-    @SerialName("Key")
+    @SerialName("key")
     val key: String,
 )
