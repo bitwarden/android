@@ -672,6 +672,248 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `in Passcode_Password state, disabled elements should not send events`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            capitalsEnabled = false,
+                            lowercaseEnabled = false,
+                            numbersEnabled = false,
+                            specialCharsEnabled = false,
+                            ambiguousCharsEnabled = false,
+                        ),
+                ),
+            ),
+        )
+
+        composeTestRule.onNodeWithText("A—Z")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.onNodeWithText("a—z")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.onNodeWithText("0-9")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.onNodeWithText("!@#$%^&*")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.onNodeWithText("Avoid ambiguous characters")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleCapitalLettersChange(
+                        useCapitals = false,
+                    ),
+            )
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleLowercaseLettersChange(
+                        useLowercase = false,
+                    ),
+            )
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleNumbersChange(
+                        useNumbers = false,
+                    ),
+            )
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleSpecialCharactersChange(
+                        useSpecialChars = true,
+                    ),
+            )
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Password
+                    .ToggleAvoidAmbigousCharactersChange(
+                        avoidAmbiguousChars = true,
+                    ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Password state, minimum numbers cannot go below minimum threshold`() {
+        val initialMinNumbers = 5
+
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minNumbersAllowed = initialMinNumbers,
+                        ),
+                ),
+            ),
+        )
+
+        composeTestRule.onNodeWithText("Minimum numbers")
+            .assertTextEquals("Minimum numbers", "5")
+            .onSiblings()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
+                    minNumbers = 4,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Passcode_Password state, minimum special characters cannot go below minimum threshold`() {
+        val initialMinSpecials = 5
+
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Password(
+                            minSpecialAllowed = initialMinSpecials,
+                        ),
+                ),
+            ),
+        )
+
+        composeTestRule.onNodeWithText("Minimum special")
+            .assertTextEquals("Minimum special", "5")
+            .onSiblings()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange(
+                    minSpecial = 4,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `in Passcode_Passphrase state, disabled elements should not send events`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(
+                            capitalizeEnabled = false,
+                            includeNumberEnabled = false,
+                        ),
+                ),
+            ),
+        )
+
+        composeTestRule.onNodeWithText("Capitalize")
+            .performScrollTo()
+            .performClick()
+        composeTestRule.onNodeWithText("Include number")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Passphrase
+                    .ToggleCapitalizeChange(
+                        capitalize = true,
+                    ),
+            )
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Passcode
+                    .PasscodeType
+                    .Passphrase
+                    .ToggleIncludeNumberChange(
+                        includeNumber = true,
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Passcode_passphrase state, minimum number of words cannot go below minimum threshold`() {
+        val initialMinWords = 5
+
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState
+                        .MainType
+                        .Passcode
+                        .PasscodeType
+                        .Passphrase(
+                            minNumWords = initialMinWords,
+                        ),
+                ),
+            ),
+        )
+
+        composeTestRule.onNodeWithText("Number of words")
+            .assertTextEquals("Number of words", "5")
+            .onSiblings()
+            .filterToOne(hasContentDescription("\u2212"))
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(
+                GeneratorAction.MainType.Passcode.PasscodeType.Passphrase.NumWordsCounterChange(
+                    numWords = 4,
+                ),
+            )
+        }
+    }
+
     //endregion Passcode Password Tests
 
     //region Passcode Passphrase Tests
