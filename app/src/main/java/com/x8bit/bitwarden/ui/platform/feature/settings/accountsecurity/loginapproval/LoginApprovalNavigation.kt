@@ -4,20 +4,22 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val FINGERPRINT: String = "fingerprint"
 private const val LOGIN_APPROVAL_PREFIX = "login_approval"
-private const val LOGIN_APPROVAL_ROUTE = "$LOGIN_APPROVAL_PREFIX/{$FINGERPRINT}"
+private const val LOGIN_APPROVAL_ROUTE = "$LOGIN_APPROVAL_PREFIX?$FINGERPRINT={$FINGERPRINT}"
 
 /**
  * Class to retrieve login approval arguments from the [SavedStateHandle].
  */
 @OmitFromCoverage
-data class LoginApprovalArgs(val fingerprint: String) {
+data class LoginApprovalArgs(val fingerprint: String?) {
     constructor(savedStateHandle: SavedStateHandle) : this(
-        checkNotNull(savedStateHandle[FINGERPRINT]) as String,
+        fingerprint = savedStateHandle.get<String>(FINGERPRINT),
     )
 }
 
@@ -29,6 +31,13 @@ fun NavGraphBuilder.loginApprovalDestination(
 ) {
     composableWithSlideTransitions(
         route = LOGIN_APPROVAL_ROUTE,
+        arguments = listOf(
+            navArgument(FINGERPRINT) {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            },
+        ),
     ) {
         LoginApprovalScreen(
             onNavigateBack = onNavigateBack,
@@ -40,8 +49,8 @@ fun NavGraphBuilder.loginApprovalDestination(
  * Navigate to the Login Approval screen.
  */
 fun NavController.navigateToLoginApproval(
-    fingerprint: String,
+    fingerprint: String?,
     navOptions: NavOptions? = null,
 ) {
-    navigate("$LOGIN_APPROVAL_PREFIX/$fingerprint", navOptions)
+    navigate("$LOGIN_APPROVAL_PREFIX?$FINGERPRINT=$fingerprint", navOptions)
 }

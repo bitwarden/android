@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
@@ -111,10 +112,21 @@ class MainViewModel @Inject constructor(
         intent: Intent,
         isFirstIntent: Boolean,
     ) {
+        val passwordlessRequestData = intent.getPasswordlessRequestDataIntentOrNull()
         val autofillSaveItem = intent.getAutofillSaveItemOrNull()
         val autofillSelectionData = intent.getAutofillSelectionDataOrNull()
         val shareData = intentManager.getShareDataFromIntent(intent)
         when {
+            passwordlessRequestData != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.PasswordlessRequest(
+                        passwordlessRequestData = passwordlessRequestData,
+                        // Allow users back into the already-running app when completing the
+                        // autofill task when this is not the first intent.
+                        shouldFinishWhenComplete = isFirstIntent,
+                    )
+            }
+
             autofillSaveItem != null -> {
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.AutofillSave(
