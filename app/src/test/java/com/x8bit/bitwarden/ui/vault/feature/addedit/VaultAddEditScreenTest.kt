@@ -305,6 +305,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 viewState = VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(),
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -333,6 +334,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 viewState = VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(),
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -371,6 +373,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 viewState = VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(),
                     type = VaultAddEditState.ViewState.Content.ItemType.Card(),
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -403,6 +406,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(
                         password = "p@ssw0rd",
                     ),
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -440,6 +444,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                         password = "p@ssw0rd",
                         canViewPassword = false,
                     ),
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -2490,6 +2495,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                         originalCipher = createMockCipherView(1),
                     ),
                     type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -2530,6 +2536,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                         ),
                     ),
                     type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -2559,6 +2566,48 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `should display policy warning when personal vault is disabled for add item type`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.AddItem,
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = true,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(
+                text = "An organization policy is affecting your ownership options.",
+            )
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `should not display policy warning when personal vault is disabled for edit item type`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultAddEditType = VaultAddEditType.EditItem("mockId-1"),
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        originalCipher = createMockCipherView(1),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = true,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "An organization policy is affecting your ownership options.")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `Delete dialog ok click should send ConfirmDeleteClick`() {
         mutableStateFlow.update {
             it.copy(
@@ -2568,6 +2617,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                         originalCipher = createMockCipherView(1),
                     ),
                     type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -2615,6 +2665,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                         originalCipher = createMockCipherView(1),
                     ),
                     type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                    isIndividualVaultDisabled = false,
                 ),
             )
         }
@@ -2763,6 +2814,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                isIndividualVaultDisabled = false,
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem,
@@ -2773,6 +2825,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                isIndividualVaultDisabled = false,
             ),
             dialog = null,
         )
@@ -2782,6 +2835,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
+                isIndividualVaultDisabled = false,
             ),
             dialog = null,
         )
@@ -2791,6 +2845,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
+                isIndividualVaultDisabled = false,
             ),
             dialog = null,
         )
@@ -2810,6 +2865,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     ),
                 ),
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                isIndividualVaultDisabled = false,
             ),
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem,
@@ -2820,6 +2876,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+                isIndividualVaultDisabled = false,
             ),
             dialog = null,
         )

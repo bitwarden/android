@@ -30,6 +30,7 @@ import java.util.UUID
  */
 fun CipherView.toViewState(
     isClone: Boolean,
+    isIndividualVaultDisabled: Boolean,
     resourceManager: ResourceManager,
 ): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
@@ -86,6 +87,7 @@ fun CipherView.toViewState(
             availableOwners = emptyList(),
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
         ),
+        isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
 
 /**
@@ -95,6 +97,7 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
     folderViewList: List<FolderView>,
     collectionViewList: List<CollectionView>,
     activeAccount: UserState.Account,
+    isIndividualVaultDisabled: Boolean,
     resourceManager: ResourceManager,
 ): VaultAddEditState.ViewState {
     return (this as? VaultAddEditState.ViewState.Content)?.let { currentContentState ->
@@ -111,6 +114,7 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                 ),
                 availableOwners = activeAccount.toAvailableOwners(
                     collectionViewList = collectionViewList,
+                    isIndividualVaultDisabled = isIndividualVaultDisabled,
                 ),
             ),
         )
@@ -161,10 +165,17 @@ private fun UserState.Account.toSelectedOwnerId(cipherView: CipherView?): String
 
 private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
+    isIndividualVaultDisabled: Boolean,
 ): List<VaultAddEditState.Owner> =
-    listOf(VaultAddEditState.Owner(name = email, id = null, collections = emptyList()))
-        .plus(
-            organizations.map {
+    listOfNotNull(
+        VaultAddEditState.Owner(
+            name = email,
+            id = null,
+            collections = emptyList(),
+        )
+            .takeUnless { isIndividualVaultDisabled },
+        *organizations
+            .map {
                 VaultAddEditState.Owner(
                     name = it.name.orEmpty(),
                     id = it.id,
@@ -181,8 +192,9 @@ private fun UserState.Account.toAvailableOwners(
                             )
                         },
                 )
-            },
-        )
+            }
+            .toTypedArray(),
+    )
 
 private fun FieldView.toCustomField() =
     when (this.type) {

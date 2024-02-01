@@ -28,6 +28,7 @@ class AutofillSaveItemExtensionsTest {
         assertEquals(
             VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
                     number = "number",
                     expirationMonth = VaultCardExpirationMonth.JANUARY,
@@ -41,7 +42,7 @@ class AutofillSaveItemExtensionsTest {
                 expirationYear = "2024",
                 securityCode = "securityCode",
             )
-                .toDefaultAddTypeContent(),
+                .toDefaultAddTypeContent(isIndividualVaultDisabled = false),
         )
     }
 
@@ -53,6 +54,7 @@ class AutofillSaveItemExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(
                     name = "www.test.com",
                 ),
+                isIndividualVaultDisabled = true,
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = "username",
                     password = "password",
@@ -70,7 +72,7 @@ class AutofillSaveItemExtensionsTest {
                 password = "password",
                 uri = "https://www.test.com",
             )
-                .toDefaultAddTypeContent(),
+                .toDefaultAddTypeContent(isIndividualVaultDisabled = true),
         )
     }
 }

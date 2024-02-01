@@ -10,7 +10,9 @@ import java.util.UUID
  * Returns pre-filled content that may be used for an "add" type
  * [VaultAddEditState.ViewState.Content].
  */
-fun AutofillSelectionData.toDefaultAddTypeContent(): VaultAddEditState.ViewState.Content {
+fun AutofillSelectionData.toDefaultAddTypeContent(
+    isIndividualVaultDisabled: Boolean,
+): VaultAddEditState.ViewState.Content {
     val uri = this.uri
     val simpleUri = uri?.toHostOrPathOrNull()
     val defaultAddType = when (this.type) {
@@ -34,6 +36,7 @@ fun AutofillSelectionData.toDefaultAddTypeContent(): VaultAddEditState.ViewState
         common = VaultAddEditState.ViewState.Content.Common(
             name = simpleUri.orEmpty(),
         ),
+        isIndividualVaultDisabled = isIndividualVaultDisabled,
         type = defaultAddType,
     )
 }

@@ -7,10 +7,12 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -52,6 +54,7 @@ class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val clock: Clock,
+    private val policyManager: PolicyManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
@@ -59,7 +62,11 @@ class VaultViewModel @Inject constructor(
         val userState = requireNotNull(authRepository.userStateFlow.value)
         val accountSummaries = userState.toAccountSummaries()
         val activeAccountSummary = userState.toActiveAccountSummary()
-        val vaultFilterData = userState.activeAccount.toVaultFilterData()
+        val vaultFilterData = userState.activeAccount.toVaultFilterData(
+            isIndividualVaultDisabled = policyManager
+                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .any(),
+        )
         val appBarTitle = vaultFilterData.toAppBarTitle()
         VaultState(
             appBarTitle = appBarTitle,
@@ -414,7 +421,11 @@ class VaultViewModel @Inject constructor(
         // navigating.
         if (state.isSwitchingAccounts) return
 
-        val vaultFilterData = userState.activeAccount.toVaultFilterData()
+        val vaultFilterData = userState.activeAccount.toVaultFilterData(
+            isIndividualVaultDisabled = policyManager
+                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .any(),
+        )
         val appBarTitle = vaultFilterData.toAppBarTitle()
         mutableStateFlow.update {
             val accountSummaries = userState.toAccountSummaries()

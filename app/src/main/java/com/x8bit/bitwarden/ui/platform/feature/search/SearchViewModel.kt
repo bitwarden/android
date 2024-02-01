@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
@@ -17,6 +18,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -61,6 +63,7 @@ class SearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
+    private val policyManager: PolicyManager,
     private val autofillSelectionManager: AutofillSelectionManager,
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
@@ -84,7 +87,11 @@ class SearchViewModel @Inject constructor(
                 dialogState = null,
                 vaultFilterData = when (searchType) {
                     is SearchType.Sends -> null
-                    is SearchType.Vault -> userState.activeAccount.toVaultFilterData()
+                    is SearchType.Vault -> userState.activeAccount.toVaultFilterData(
+                        isIndividualVaultDisabled = policyManager
+                            .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                            .any(),
+                    )
                 },
                 baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
                 baseIconUrl = environmentRepo.environment.environmentUrlData.baseIconUrl,

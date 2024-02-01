@@ -6,11 +6,14 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -51,6 +54,11 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>()) } just runs
+    }
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns emptyList()
     }
 
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
@@ -93,7 +101,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct and should trigger a syncIfNecessary call`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        verify { vaultRepository.syncIfNecessary() }
+        verify {
+            vaultRepository.syncIfNecessary()
+            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        }
     }
 
     @Test
@@ -143,7 +154,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UserState updates with a non-null value when not switching accounts should update the account information in the state`() {
+    fun `UserState updates with a non-null value when not switching accounts should update the account information in the state when personal ownership enabled`() {
         val viewModel = createViewModel()
         assertEquals(
             DEFAULT_STATE,
@@ -198,6 +209,82 @@ class VaultViewModelTest : BaseViewModelTest() {
                         VaultFilterType.MyVault,
                         VaultFilterType.OrganizationVault(
                             organizationId = "organiationId",
+                            organizationName = "Test Organization",
+                        ),
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserState updates with a non-null value when not switching accounts should update the account information in the state when personal ownership disabled`() {
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns listOf(
+            SyncResponseJson.Policy(
+                organizationId = "Test Organization",
+                id = "testId",
+                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+                isEnabled = true,
+                data = null,
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value =
+            DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "Test Organization",
+                            ),
+                        ),
+                    ),
+                ),
+            )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                appBarTitle = R.string.vaults.asText(),
+                avatarColorString = "#00aaaa",
+                initials = "OU",
+                accountSummaries = listOf(
+                    AccountSummary(
+                        userId = "activeUserId",
+                        name = "Other User",
+                        email = "active@bitwarden.com",
+                        avatarColorHex = "#00aaaa",
+                        environmentLabel = "bitwarden.com",
+                        isActive = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                    ),
+                ),
+                vaultFilterData = VaultFilterData(
+                    selectedVaultFilterType = VaultFilterType.AllVaults,
+                    vaultFilterTypes = listOf(
+                        VaultFilterType.AllVaults,
+                        VaultFilterType.OrganizationVault(
+                            organizationId = "organizationId",
                             organizationName = "Test Organization",
                         ),
                     ),
@@ -1245,6 +1332,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         VaultViewModel(
             authRepository = authRepository,
             clipboardManager = clipboardManager,
+            policyManager = policyManager,
             clock = clock,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,

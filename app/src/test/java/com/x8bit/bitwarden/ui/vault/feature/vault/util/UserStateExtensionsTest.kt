@@ -273,13 +273,13 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 organizations = emptyList(),
             )
-                .toVaultFilterData(),
+                .toVaultFilterData(isIndividualVaultDisabled = false),
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toVaultFilterData for an account with organizations should return data with the available types in the correct order`() {
+    fun `toVaultFilterData for an account with organizations and individual vault enabled should return data with the available types in the correct order`() {
         assertEquals(
             VaultFilterData(
                 selectedVaultFilterType = VaultFilterType.AllVaults,
@@ -318,7 +318,55 @@ class UserStateExtensionsTest {
                     ),
                 ),
             )
-                .toVaultFilterData(),
+                .toVaultFilterData(
+                    isIndividualVaultDisabled = false,
+                ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toVaultFilterData for an account with organizations and individual vault disabled should return data with the available types in the correct order`() {
+        assertEquals(
+            VaultFilterData(
+                selectedVaultFilterType = VaultFilterType.AllVaults,
+                vaultFilterTypes = listOf(
+                    VaultFilterType.AllVaults,
+                    VaultFilterType.OrganizationVault(
+                        organizationId = "organizationId-A",
+                        organizationName = "Organization A",
+                    ),
+                    VaultFilterType.OrganizationVault(
+                        organizationId = "organizationId-B",
+                        organizationName = "Organization B",
+                    ),
+                ),
+            ),
+            UserState.Account(
+                userId = "activeUserId",
+                name = "name",
+                email = "email",
+                avatarColorHex = "avatarColorHex",
+                environment = Environment.Us,
+                isPremium = true,
+                isLoggedIn = true,
+                isVaultUnlocked = true,
+                needsPasswordReset = false,
+                isBiometricsEnabled = false,
+                organizations = listOf(
+                    Organization(
+                        id = "organizationId-B",
+                        name = "Organization B",
+                    ),
+                    Organization(
+                        id = "organizationId-A",
+                        name = "Organization A",
+                    ),
+                ),
+            )
+                .toVaultFilterData(
+                    isIndividualVaultDisabled = true,
+                ),
         )
     }
 }

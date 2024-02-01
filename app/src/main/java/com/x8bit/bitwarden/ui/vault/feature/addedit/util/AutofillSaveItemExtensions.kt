@@ -11,11 +11,14 @@ import java.util.UUID
  * Returns pre-filled content that may be used for an "add" type
  * [VaultAddEditState.ViewState.Content].
  */
-fun AutofillSaveItem.toDefaultAddTypeContent(): VaultAddEditState.ViewState.Content =
+fun AutofillSaveItem.toDefaultAddTypeContent(
+    isIndividualVaultDisabled: Boolean,
+): VaultAddEditState.ViewState.Content =
     when (this) {
         is AutofillSaveItem.Card -> {
             VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = isIndividualVaultDisabled,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
                     number = this.number.orEmpty(),
                     expirationMonth = VaultCardExpirationMonth
@@ -35,6 +38,7 @@ fun AutofillSaveItem.toDefaultAddTypeContent(): VaultAddEditState.ViewState.Cont
                 common = VaultAddEditState.ViewState.Content.Common(
                     name = simpleUri.orEmpty(),
                 ),
+                isIndividualVaultDisabled = isIndividualVaultDisabled,
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = this.username.orEmpty(),
                     password = this.password.orEmpty(),
