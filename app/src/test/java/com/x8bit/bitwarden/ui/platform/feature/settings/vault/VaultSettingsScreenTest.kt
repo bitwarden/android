@@ -7,8 +7,10 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -23,7 +25,15 @@ class VaultSettingsScreenTest : BaseComposeTest() {
     private var onNavigateToExportVaultCalled = false
     private var onNavigateToFoldersCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultSettingsEvent>()
-    private val mutableStateFlow = MutableStateFlow(Unit)
+    private val mutableStateFlow = MutableStateFlow(
+        VaultSettingsState(
+            baseUrl = "testUrl", importUrl = "testUrl/#/tools/import",
+        ),
+    )
+    private val intentManager: IntentManager = mockk(relaxed = true) {
+        every { launchUri(any()) } returns Unit
+    }
+
     val viewModel = mockk<VaultSettingsViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
@@ -37,6 +47,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
+                intentManager = intentManager,
             )
         }
     }
@@ -100,5 +111,14 @@ class VaultSettingsScreenTest : BaseComposeTest() {
     fun `NavigateToFolders should call onNavigateToFolders`() {
         mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToFolders)
         assertTrue(onNavigateToFoldersCalled)
+    }
+
+    @Test
+    fun `on NavigateToImportVault should invoke IntentManager`() {
+        val testUrl = "testUrl"
+        mutableEventFlow.tryEmit(VaultSettingsEvent.NavigateToImportVault(testUrl))
+        verify {
+            intentManager.launchUri(testUrl.toUri())
+        }
     }
 }

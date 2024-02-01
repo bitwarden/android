@@ -51,6 +51,15 @@ val EnvironmentUrlDataJson.baseWebSendUrl: String
             ?: DEFAULT_WEB_SEND_URL
 
 /**
+ * Returns the base web vault import URL or the default value if one is not present.
+ */
+val EnvironmentUrlDataJson.toBaseWebVaultImportUrl: String
+    get() =
+        this
+            .baseWebVaultUrlOrDefault
+            .let { "$it/#/tools/import" }
+
+/**
  * Returns a base icon url based on the environment or the default value if values are missing.
  */
 val EnvironmentUrlDataJson.baseIconUrl: String
