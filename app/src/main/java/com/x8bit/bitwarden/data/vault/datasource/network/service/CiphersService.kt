@@ -93,4 +93,12 @@ interface CiphersService {
      * Attempt to retrieve a cipher.
      */
     suspend fun getCipher(cipherId: String): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to retrieve a cipher's attachment data.
+     */
+    suspend fun getCipherAttachment(
+        cipherId: String,
+        attachmentId: String,
+    ): Result<SyncResponseJson.Cipher.Attachment>
 }

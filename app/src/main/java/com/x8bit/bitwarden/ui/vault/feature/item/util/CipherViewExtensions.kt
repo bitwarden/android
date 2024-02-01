@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import java.lang.NumberFormatException
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
@@ -43,6 +44,32 @@ fun CipherView.toViewState(
             customFields = fields.orEmpty().map { it.toCustomField() },
             lastUpdated = dateTimeFormatter.format(revisionDate),
             notes = notes,
+            attachments = attachments
+                ?.mapNotNull {
+                    @Suppress("ComplexCondition")
+                    if (it.id == null ||
+                        it.fileName == null ||
+                        it.size == null ||
+                        it.sizeName == null ||
+                        it.url == null
+                    ) {
+                        null
+                    } else {
+                        VaultItemState.ViewState.Content.Common.AttachmentItem(
+                            id = requireNotNull(it.id),
+                            title = requireNotNull(it.fileName),
+                            displaySize = requireNotNull(it.sizeName),
+                            url = requireNotNull(it.url),
+                            isLargeFile = try {
+                                requireNotNull(it.size).toLong() >= 10485760
+                            } catch (exception: NumberFormatException) {
+                                false
+                            },
+                            isDownloadAllowed = isPremiumUser || this.organizationId != null,
+                        )
+                    }
+                }
+                .orEmpty(),
         ),
         type = when (type) {
             CipherType.LOGIN -> {

@@ -150,4 +150,13 @@ class CiphersServiceImpl(
         cipherId: String,
     ): Result<SyncResponseJson.Cipher> =
         ciphersApi.getCipher(cipherId = cipherId)
+
+    override suspend fun getCipherAttachment(
+        cipherId: String,
+        attachmentId: String,
+    ): Result<SyncResponseJson.Cipher.Attachment> =
+        ciphersApi.getCipherAttachment(
+            cipherId = cipherId,
+            attachmentId = attachmentId,
+        )
 }

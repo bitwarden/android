@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
@@ -60,6 +61,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
+import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -109,6 +111,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.io.File
 import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -868,6 +871,63 @@ class VaultRepositoryImpl(
             .fold(
                 onFailure = { CreateAttachmentResult.Error },
                 onSuccess = { CreateAttachmentResult.Success(it) },
+            )
+    }
+
+    @Suppress("ReturnCount")
+    override suspend fun downloadAttachment(
+        cipherView: CipherView,
+        attachmentId: String,
+    ): DownloadAttachmentResult {
+        val userId = requireNotNull(authDiskSource.userState?.activeUserId)
+
+        val cipher = vaultSdkSource
+            .encryptCipher(
+                userId = userId,
+                cipherView = cipherView,
+            )
+            .fold(
+                onSuccess = { it },
+                onFailure = { return DownloadAttachmentResult.Failure },
+            )
+        val attachment = cipher.attachments?.find { it.id == attachmentId }
+            ?: return DownloadAttachmentResult.Failure
+
+        val attachmentData = ciphersService
+            .getCipherAttachment(
+                cipherId = requireNotNull(cipher.id),
+                attachmentId = attachmentId,
+            )
+            .fold(
+                onSuccess = { it },
+                onFailure = { return DownloadAttachmentResult.Failure },
+            )
+
+        val url = attachmentData.url ?: return DownloadAttachmentResult.Failure
+
+        val encryptedFile = when (val result = fileManager.downloadFileToCache(url)) {
+            DownloadResult.Failure -> return DownloadAttachmentResult.Failure
+            is DownloadResult.Success -> result.file
+        }
+
+        val decryptedFile = File(encryptedFile.path + "_decrypted")
+        return vaultSdkSource
+            .decryptFile(
+                userId = userId,
+                cipher = cipher,
+                attachment = attachment,
+                encryptedFilePath = encryptedFile.path,
+                decryptedFilePath = decryptedFile.path,
+            )
+            .fold(
+                onSuccess = {
+                    encryptedFile.delete()
+                    DownloadAttachmentResult.Success(decryptedFile)
+                },
+                onFailure = {
+                    encryptedFile.delete()
+                    DownloadAttachmentResult.Failure
+                },
             )
     }
 

@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
@@ -245,6 +246,19 @@ class CiphersServiceTest : BaseServiceTest() {
             result.getOrThrow(),
         )
     }
+
+    @Test
+    fun `getCipherAttachment should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody(GET_CIPHER_ATTACHMENT_SUCCESS_JSON))
+        val result = ciphersService.getCipherAttachment(
+            cipherId = "mockId-1",
+            attachmentId = "mockId-1",
+        )
+        assertEquals(
+            createMockAttachment(number = 1),
+            result.getOrThrow(),
+        )
+    }
 }
 
 private fun setupMockUri(
@@ -453,5 +467,16 @@ private const val UPDATE_CIPHER_INVALID_JSON = """
 {
   "message": "You do not have permission to edit this.",
   "validationErrors": null
+}
+"""
+
+private const val GET_CIPHER_ATTACHMENT_SUCCESS_JSON = """
+{
+  "fileName": "mockFileName-1",
+  "size": 1,
+  "sizeName": "mockSizeName-1",
+  "id": "mockId-1",
+  "url": "mockUrl-1",
+  "key": "mockKey-1"
 }
 """

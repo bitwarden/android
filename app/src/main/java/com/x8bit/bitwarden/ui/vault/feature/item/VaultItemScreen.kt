@@ -53,7 +53,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHand
 /**
  * Displays the vault item screen.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VaultItemScreen(
@@ -75,6 +75,16 @@ fun VaultItemScreen(
     }
     var pendingDeleteCipher by rememberSaveable { mutableStateOf(false) }
     var pendingRestoreCipher by rememberSaveable { mutableStateOf(false) }
+
+    val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
+        intentManager.getFileDataFromActivityResult(activityResult)
+            ?.let {
+                viewModel.trySendAction(
+                    VaultItemAction.Common.AttachmentFileLocationReceive(it.uri),
+                )
+            }
+            ?: viewModel.trySendAction(VaultItemAction.Common.NoAttachmentFileLocationReceive)
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -103,6 +113,12 @@ fun VaultItemScreen(
 
             is VaultItemEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
+            }
+
+            is VaultItemEvent.NavigateToSelectAttachmentSaveLocation -> {
+                fileChooserLauncher.launch(
+                    intentManager.createAttachmentChooserIntent(event.fileName),
+                )
             }
         }
     }

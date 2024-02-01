@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
@@ -33,7 +34,11 @@ object VaultManagerModule {
     @Singleton
     fun provideFileManager(
         @ApplicationContext context: Context,
-    ): FileManager = FileManagerImpl(context)
+        downloadService: DownloadService,
+    ): FileManager = FileManagerImpl(
+        context = context,
+        downloadService = downloadService,
+    )
 
     @Provides
     @Singleton

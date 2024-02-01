@@ -38,7 +38,8 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(currentCipher = cipherView),
+                common = createCommonContent(isEmpty = false, isPremiumUser = true)
+                    .copy(currentCipher = cipherView),
                 type = createLoginContent(isEmpty = false),
             ),
             viewState,
@@ -62,7 +63,8 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(currentCipher = cipherView),
+                common = createCommonContent(isEmpty = false, isPremiumUser = isPremiumUser)
+                    .copy(currentCipher = cipherView),
                 type = createLoginContent(isEmpty = false).copy(isPremiumUser = isPremiumUser),
             ),
             viewState,
@@ -79,7 +81,7 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = true).copy(
+                common = createCommonContent(isEmpty = true, isPremiumUser = true).copy(
                     currentCipher = cipherView,
                 ),
                 type = createLoginContent(isEmpty = true),
@@ -98,7 +100,8 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(currentCipher = cipherView),
+                common = createCommonContent(isEmpty = false, isPremiumUser = true)
+                    .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = false),
             ),
             viewState,
@@ -115,7 +118,8 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = true).copy(currentCipher = cipherView),
+                common = createCommonContent(isEmpty = true, isPremiumUser = true)
+                    .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = true),
             ),
             viewState,
@@ -142,7 +146,8 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(currentCipher = cipherView),
+                common = createCommonContent(isEmpty = false, isPremiumUser = true)
+                    .copy(currentCipher = cipherView),
                 type = createIdentityContent(
                     isEmpty = false,
                     identityName = "Mx middleName",
@@ -174,7 +179,7 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(
+                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
                     currentCipher = cipherView.copy(
                         identity = cipherView.identity?.copy(
                             address1 = null,
@@ -209,7 +214,8 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false).copy(currentCipher = cipherView),
+                common = createCommonContent(isEmpty = false, isPremiumUser = true)
+                    .copy(currentCipher = cipherView),
                 type = VaultItemState.ViewState.Content.ItemType.SecureNote,
             ),
             viewState,
@@ -226,7 +232,8 @@ class CipherViewExtensionsTest {
         )
 
         val expectedState = VaultItemState.ViewState.Content(
-            common = createCommonContent(isEmpty = true).copy(currentCipher = cipherView),
+            common = createCommonContent(isEmpty = true, isPremiumUser = true)
+                .copy(currentCipher = cipherView),
             type = VaultItemState.ViewState.Content.ItemType.SecureNote,
         )
 

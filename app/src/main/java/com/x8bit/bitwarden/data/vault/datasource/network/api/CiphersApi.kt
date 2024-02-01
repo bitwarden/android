@@ -121,4 +121,13 @@ interface CiphersApi {
     suspend fun getCipher(
         @Path("cipherId") cipherId: String,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Gets a cipher attachment.
+     */
+    @GET("ciphers/{cipherId}/attachment/{attachmentId}")
+    suspend fun getCipherAttachment(
+        @Path("cipherId") cipherId: String,
+        @Path("attachmentId") attachmentId: String,
+    ): Result<SyncResponseJson.Cipher.Attachment>
 }

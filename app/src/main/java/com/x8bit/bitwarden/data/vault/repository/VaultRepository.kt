@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
+import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -218,6 +219,15 @@ interface VaultRepository : VaultLockManager {
         fileName: String,
         fileUri: Uri,
     ): CreateAttachmentResult
+
+    /**
+     * Attempt to download an attachment file, specified by [attachmentId], for the given
+     * [cipherView].
+     */
+    suspend fun downloadAttachment(
+        cipherView: CipherView,
+        attachmentId: String,
+    ): DownloadAttachmentResult
 
     /**
      * Attempt to delete a cipher.

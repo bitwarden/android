@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
@@ -13,9 +14,11 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -42,6 +45,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.io.File
 import java.time.Instant
 
 @Suppress("LargeClass")
@@ -60,6 +64,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         every { getAuthCodeFlow(VAULT_ITEM_ID) } returns mutableAuthCodeItemFlow
         every { getVaultItemStateFlow(VAULT_ITEM_ID) } returns mutableVaultItemFlow
     }
+
+    private val mockFileManager: FileManager = mockk()
 
     @BeforeEach
     fun setup() {
@@ -744,6 +750,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val loginViewState = VaultItemState.ViewState.Content(
                     common = createCommonContent(
                         isEmpty = true,
+                        isPremiumUser = true,
                     ).copy(
                         requiresReprompt = false,
                         customFields = listOf(hiddenField),
@@ -772,7 +779,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     loginState.copy(
                         viewState = loginViewState.copy(
-                            common = createCommonContent(isEmpty = true).copy(
+                            common = createCommonContent(isEmpty = true, isPremiumUser = true).copy(
                                 requiresReprompt = false,
                                 customFields = listOf(hiddenField.copy(isVisible = true)),
                             ),
@@ -993,6 +1000,291 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+        }
+
+        @Test
+        fun `on AttachmentDownloadClick should prompt for password if required`() =
+            runTest {
+                val loginViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = true),
+                )
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginViewState
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
+                val viewModel = createViewModel(state = loginState)
+
+                val attachment = VaultItemState.ViewState.Content.Common.AttachmentItem(
+                    id = "attachment-id",
+                    displaySize = "11 MB",
+                    isLargeFile = true,
+                    isDownloadAllowed = false,
+                    url = "https://example.com",
+                    title = "test.mp4",
+                )
+
+                viewModel.stateFlow.test {
+                    assertEquals(
+                        loginState,
+                        awaitItem(),
+                    )
+
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.AttachmentDownloadClick(attachment),
+                    )
+
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                                action = PasswordRepromptAction.AttachmentDownloadClick(attachment),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                }
+
+                coVerify(exactly = 0) {
+                    vaultRepo.downloadAttachment(any(), any())
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on AttachmentDownloadClick should show loading dialog, attempt to download an attachment, and display an error dialog on failure`() =
+            runTest {
+                val loginViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginViewState
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
+                val viewModel = createViewModel(state = loginState)
+
+                val attachment = VaultItemState.ViewState.Content.Common.AttachmentItem(
+                    id = "attachment-id",
+                    displaySize = "11 MB",
+                    isLargeFile = true,
+                    isDownloadAllowed = false,
+                    url = "https://example.com",
+                    title = "test.mp4",
+                )
+
+                coEvery {
+                    vaultRepo.downloadAttachment(any(), any())
+                } returns DownloadAttachmentResult.Failure
+
+                viewModel.stateFlow.test {
+                    assertEquals(
+                        loginState,
+                        awaitItem(),
+                    )
+
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.AttachmentDownloadClick(attachment),
+                    )
+
+                    assertEquals(
+                        loginState.copy(dialog = VaultItemState.DialogState.Loading(R.string.downloading.asText())),
+                        awaitItem(),
+                    )
+
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.Generic(
+                                R.string.unable_to_download_file.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                }
+
+                coVerify(exactly = 1) {
+                    vaultRepo.downloadAttachment(any(), any())
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on AttachmentDownloadClick should show loading dialog, attempt to download an attachment, and emit NavigateToSelectAttachmentSaveLocation on success`() =
+            runTest {
+                val loginViewState = createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginViewState
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
+                val viewModel = createViewModel(state = loginState)
+
+                val attachment = VaultItemState.ViewState.Content.Common.AttachmentItem(
+                    id = "attachment-id",
+                    displaySize = "11 MB",
+                    isLargeFile = true,
+                    isDownloadAllowed = false,
+                    url = "https://example.com",
+                    title = "test.mp4",
+                )
+
+                val file = mockk<File>()
+                coEvery {
+                    vaultRepo.downloadAttachment(any(), any())
+                } returns DownloadAttachmentResult.Success(file)
+
+                viewModel.stateFlow.test {
+                    assertEquals(
+                        loginState,
+                        awaitItem(),
+                    )
+
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.AttachmentDownloadClick(attachment),
+                    )
+
+                    assertEquals(
+                        loginState.copy(
+                            dialog = VaultItemState.DialogState.Loading(
+                                R.string.downloading.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                }
+
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VaultItemEvent.NavigateToSelectAttachmentSaveLocation("test.mp4"),
+                        awaitItem(),
+                    )
+                }
+
+                coVerify(exactly = 1) {
+                    vaultRepo.downloadAttachment(any(), any())
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on AttachmentFileLocationReceive success should hide loading dialog, copy file, delete file, and show toast`() =
+            runTest {
+                val file = mockk<File>()
+                val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
+
+                coEvery {
+                    mockFileManager.deleteFile(any())
+                } just runs
+
+                val uri = mockk<Uri>()
+                coEvery {
+                    mockFileManager.fileToUri(uri, file)
+                } returns true
+
+                viewModel.trySendAction(
+                    VaultItemAction.Common.AttachmentFileLocationReceive(uri),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE,
+                    viewModel.stateFlow.value,
+                )
+
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VaultItemEvent.ShowToast(R.string.save_attachment_success.asText()),
+                        awaitItem(),
+                    )
+                }
+
+                coVerify(exactly = 1) {
+                    mockFileManager.deleteFile(file)
+                    mockFileManager.fileToUri(uri, file)
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on AttachmentFileLocationReceive failure should hide loading dialog, copy file, delete file, and show dialog`() =
+            runTest {
+                val file = mockk<File>()
+                val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
+
+                coEvery {
+                    mockFileManager.deleteFile(any())
+                } just runs
+
+                val uri = mockk<Uri>()
+                coEvery {
+                    mockFileManager.fileToUri(uri, file)
+                } returns false
+
+                viewModel.stateFlow.test {
+                    viewModel.trySendAction(
+                        VaultItemAction.Common.AttachmentFileLocationReceive(uri),
+                    )
+
+                    assertEquals(
+                        DEFAULT_STATE,
+                        awaitItem(),
+                    )
+
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            dialog = VaultItemState.DialogState.Generic(
+                                R.string.unable_to_save_attachment.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                }
+
+                coVerify(exactly = 1) {
+                    mockFileManager.deleteFile(file)
+                    mockFileManager.fileToUri(uri, file)
+                }
+            }
+
+        @Test
+        fun `on NoAttachmentFileLocationReceive failure should show dialog`() {
+            val file = mockk<File>()
+            val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
+
+            coEvery {
+                mockFileManager.deleteFile(any())
+            } just runs
+
+            viewModel.trySendAction(VaultItemAction.Common.NoAttachmentFileLocationReceive)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultItemState.DialogState.Generic(
+                        R.string.unable_to_save_attachment.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            coVerify { mockFileManager.deleteFile(file) }
         }
     }
 
@@ -1488,20 +1780,25 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("LongParameterList")
     private fun createViewModel(
         state: VaultItemState?,
         vaultItemId: String = VAULT_ITEM_ID,
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         authRepository: AuthRepository = authRepo,
         vaultRepository: VaultRepository = vaultRepo,
+        fileManager: FileManager = mockFileManager,
+        tempAttachmentFile: File? = null,
     ): VaultItemViewModel = VaultItemViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
             set("vault_item_id", vaultItemId)
+            set("tempAttachmentFile", tempAttachmentFile)
         },
         clipboardManager = bitwardenClipboardManager,
         authRepository = authRepository,
         vaultRepository = vaultRepository,
+        fileManager = fileManager,
     )
 
     private fun createViewState(
@@ -1619,6 +1916,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 ),
                 requiresReprompt = true,
                 currentCipher = createMockCipherView(number = 1),
+                attachments = listOf(
+                    VaultItemState.ViewState.Content.Common.AttachmentItem(
+                        id = "attachment-id",
+                        displaySize = "11 MB",
+                        isLargeFile = true,
+                        isDownloadAllowed = true,
+                        url = "https://example.com",
+                        title = "test.mp4",
+                    ),
+                ),
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =

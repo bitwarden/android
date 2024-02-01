@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.provider.Settings
+import android.webkit.MimeTypeMap
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -170,6 +171,19 @@ class IntentManagerImpl(
 
         return chooserIntent
     }
+
+    override fun createAttachmentChooserIntent(fileName: String): Intent =
+        Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+            // Attempt to get the MIME type from the file extension
+            val extension = MimeTypeMap.getFileExtensionFromUrl(fileName)
+            type = extension?.let {
+                MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)
+            }
+                ?: "*/*"
+
+            addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_TITLE, fileName)
+        }
 
     private fun getCameraFileData(): IntentManager.FileData {
         val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)

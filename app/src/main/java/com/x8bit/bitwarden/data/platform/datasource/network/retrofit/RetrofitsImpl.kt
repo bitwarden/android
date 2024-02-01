@@ -53,15 +53,15 @@ class RetrofitsImpl(
 
     //region Other Retrofits
 
-    override val staticRetrofitBuilder: Retrofit.Builder by lazy {
-        baseRetrofitBuilder
-            .client(
-                baseOkHttpClient
-                    .newBuilder()
-                    .addInterceptor(loggingInterceptor)
-                    .build(),
-            )
-    }
+    override val staticRetrofitBuilder: Retrofit.Builder
+        get() =
+            baseRetrofitBuilder
+                .client(
+                    baseOkHttpClient
+                        .newBuilder()
+                        .addInterceptor(loggingInterceptor)
+                        .build(),
+                )
 
     //endregion Other Retrofits
 

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -12,8 +13,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
+import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -32,9 +35,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.io.File
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
 
 /**
  * ViewModel responsible for handling user interactions in the vault item screen
@@ -42,10 +47,11 @@ private const val KEY_STATE = "state"
 @Suppress("LargeClass", "TooManyFunctions")
 @HiltViewModel
 class VaultItemViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
+    private val fileManager: FileManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
@@ -54,6 +60,14 @@ class VaultItemViewModel @Inject constructor(
         dialog = null,
     ),
 ) {
+    /**
+     * Reference to a temporary attachment saved in cache.
+     */
+    private var temporaryAttachmentData: File?
+        get() = savedStateHandle[KEY_TEMP_ATTACHMENT]
+        set(value) {
+            savedStateHandle[KEY_TEMP_ATTACHMENT] = value
+        }
 
     //region Initialization and Overrides
     init {
@@ -116,6 +130,18 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.Common.HiddenFieldVisibilityClicked -> {
                 handleHiddenFieldVisibilityClicked(action)
+            }
+
+            is VaultItemAction.Common.AttachmentDownloadClick -> {
+                handleAttachmentDownloadClick(action)
+            }
+
+            is VaultItemAction.Common.AttachmentFileLocationReceive -> {
+                handleAttachmentFileLocationReceive(action)
+            }
+
+            is VaultItemAction.Common.NoAttachmentFileLocationReceive -> {
+                handleNoAttachmentFileLocationReceive()
             }
 
             is VaultItemAction.Common.AttachmentsClick -> handleAttachmentsClick()
@@ -227,6 +253,83 @@ class VaultItemViewModel @Inject constructor(
                     ),
                 )
             }
+        }
+    }
+
+    private fun handleAttachmentDownloadClick(
+        action: VaultItemAction.Common.AttachmentDownloadClick,
+    ) {
+        onContent { content ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            action = PasswordRepromptAction.AttachmentDownloadClick(
+                                attachment = action.attachment,
+                            ),
+                        ),
+                    )
+                }
+                return@onContent
+            }
+
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultItemState.DialogState.Loading(R.string.downloading.asText()),
+                )
+            }
+
+            viewModelScope.launch {
+                val result = vaultRepository
+                    .downloadAttachment(
+                        cipherView = requireNotNull(content.common.currentCipher),
+                        attachmentId = action.attachment.id,
+                    )
+
+                trySendAction(
+                    VaultItemAction.Internal.AttachmentDecryptReceive(
+                        result = result,
+                        fileName = action.attachment.title,
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleAttachmentFileLocationReceive(
+        action: VaultItemAction.Common.AttachmentFileLocationReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+
+        val file = temporaryAttachmentData ?: return
+        viewModelScope.launch {
+            val result = fileManager
+                .fileToUri(
+                    fileUri = action.fileUri,
+                    file = file,
+                )
+            sendAction(
+                VaultItemAction.Internal.AttachmentFinishedSavingToDisk(
+                    isSaved = result,
+                    file = file,
+                ),
+            )
+        }
+    }
+
+    private fun handleNoAttachmentFileLocationReceive() {
+        viewModelScope.launch {
+            temporaryAttachmentData?.let { fileManager.deleteFile(it) }
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState.DialogState.Generic(
+                    R.string.unable_to_save_attachment.asText(),
+                ),
+            )
         }
     }
 
@@ -553,6 +656,14 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.Internal.DeleteCipherReceive -> handleDeleteCipherReceive(action)
             is VaultItemAction.Internal.RestoreCipherReceive -> handleRestoreCipherReceive(action)
+
+            is VaultItemAction.Internal.AttachmentDecryptReceive -> {
+                handleAttachmentDecryptReceive(action)
+            }
+
+            is VaultItemAction.Internal.AttachmentFinishedSavingToDisk -> {
+                handleAttachmentFinishedSavingToDisk(action)
+            }
         }
     }
 
@@ -737,6 +848,51 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleAttachmentDecryptReceive(
+        action: VaultItemAction.Internal.AttachmentDecryptReceive,
+    ) {
+        when (val result = action.result) {
+            DownloadAttachmentResult.Failure -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = R.string.unable_to_download_file.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is DownloadAttachmentResult.Success -> {
+                temporaryAttachmentData = result.file
+                sendEvent(
+                    VaultItemEvent.NavigateToSelectAttachmentSaveLocation(
+                        fileName = action.fileName,
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleAttachmentFinishedSavingToDisk(
+        action: VaultItemAction.Internal.AttachmentFinishedSavingToDisk,
+    ) {
+        viewModelScope.launch {
+            fileManager.deleteFile(action.file)
+        }
+
+        if (action.isSaved) {
+            sendEvent(VaultItemEvent.ShowToast(R.string.save_attachment_success.asText()))
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultItemState.DialogState.Generic(
+                        R.string.unable_to_save_attachment.asText(),
+                    ),
+                )
+            }
+        }
+    }
+
     //endregion Internal Type Handlers
 
     private inline fun onContent(
@@ -871,7 +1027,21 @@ data class VaultItemState(
                 val requiresReprompt: Boolean,
                 @IgnoredOnParcel
                 val currentCipher: CipherView? = null,
+                val attachments: List<AttachmentItem>?,
             ) : Parcelable {
+
+                /**
+                 * Represents an attachment.
+                 */
+                @Parcelize
+                data class AttachmentItem(
+                    val id: String,
+                    val title: String,
+                    val displaySize: String,
+                    val url: String,
+                    val isLargeFile: Boolean,
+                    val isDownloadAllowed: Boolean,
+                ) : Parcelable
 
                 /**
                  * Represents a custom field, TextField, HiddenField, BooleanField, or LinkedField.
@@ -1110,6 +1280,13 @@ sealed class VaultItemEvent {
     ) : VaultItemEvent()
 
     /**
+     * Navigates to select a location where to save an attachment with the name [fileName].
+     */
+    data class NavigateToSelectAttachmentSaveLocation(
+        val fileName: String,
+    ) : VaultItemEvent()
+
+    /**
      * Places the given [message] in your clipboard.
      */
     data class ShowToast(
@@ -1207,6 +1384,25 @@ sealed class VaultItemAction {
          * The user has clicked the collections button.
          */
         data object CollectionsClick : Common()
+
+        /**
+         * The user has clicked the download button.
+         */
+        data class AttachmentDownloadClick(
+            val attachment: VaultItemState.ViewState.Content.Common.AttachmentItem,
+        ) : Common()
+
+        /**
+         * The user has selected a location to save the file.
+         */
+        data class AttachmentFileLocationReceive(
+            val fileUri: Uri,
+        ) : Common()
+
+        /**
+         * The user skipped selecting a location for the attachment file.
+         */
+        data object NoAttachmentFileLocationReceive : Common()
     }
 
     /**
@@ -1329,6 +1525,23 @@ sealed class VaultItemAction {
         data class RestoreCipherReceive(
             val result: RestoreCipherResult,
         ) : Internal()
+
+        /**
+         * Indicates the attachment download and decryption is complete.
+         */
+        data class AttachmentDecryptReceive(
+            val result: DownloadAttachmentResult,
+            val fileName: String,
+        ) : Internal()
+
+        /**
+         * The attempt to save the temporary [file] attachment to disk has finished. [isSaved]
+         * indicates if it was successful.
+         */
+        data class AttachmentFinishedSavingToDisk(
+            val isSaved: Boolean,
+            val file: File,
+        ) : Internal()
     }
 }
 
@@ -1369,6 +1582,17 @@ sealed class PasswordRepromptAction : Parcelable {
     data object AttachmentsClick : PasswordRepromptAction() {
         override val vaultItemAction: VaultItemAction
             get() = VaultItemAction.Common.AttachmentsClick
+    }
+
+    /**
+     * Indicates an attachment download was clicked.
+     */
+    @Parcelize
+    data class AttachmentDownloadClick(
+        val attachment: VaultItemState.ViewState.Content.Common.AttachmentItem,
+    ) : PasswordRepromptAction() {
+        override val vaultItemAction: VaultItemAction
+            get() = VaultItemAction.Common.AttachmentDownloadClick(attachment)
     }
 
     /**
