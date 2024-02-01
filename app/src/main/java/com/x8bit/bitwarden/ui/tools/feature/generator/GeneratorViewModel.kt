@@ -1450,6 +1450,7 @@ data class GeneratorState(
     val selectedType: MainType,
     val generatorMode: GeneratorMode = GeneratorMode.Default,
     val currentEmailAddress: String,
+    val isUnderPolicy: Boolean = false,
 ) : Parcelable {
 
     /**
@@ -1540,13 +1541,24 @@ data class GeneratorState(
                 @Parcelize
                 data class Password(
                     val length: Int = DEFAULT_PASSWORD_LENGTH,
+                    val minLength: Int = PASSWORD_LENGTH_SLIDER_MIN,
+                    val maxLength: Int = PASSWORD_LENGTH_SLIDER_MAX,
                     val useCapitals: Boolean = true,
+                    val capitalsEnabled: Boolean = true,
                     val useLowercase: Boolean = true,
+                    val lowercaseEnabled: Boolean = true,
                     val useNumbers: Boolean = true,
+                    val numbersEnabled: Boolean = true,
                     val useSpecialChars: Boolean = false,
+                    val specialCharsEnabled: Boolean = true,
                     val minNumbers: Int = MIN_NUMBERS,
+                    val minNumbersAllowed: Int = PASSWORD_COUNTER_MIN,
+                    val maxNumbersAllowed: Int = PASSWORD_COUNTER_MAX,
                     val minSpecial: Int = MIN_SPECIAL,
+                    val minSpecialAllowed: Int = PASSWORD_COUNTER_MIN,
+                    val maxSpecialAllowed: Int = PASSWORD_COUNTER_MAX,
                     val avoidAmbiguousChars: Boolean = false,
+                    val ambiguousCharsEnabled: Boolean = true,
                     val isUserInteracting: Boolean = false,
                 ) : PasscodeType(), Parcelable {
                     override val displayStringResId: Int
@@ -1576,9 +1588,13 @@ data class GeneratorState(
                 @Parcelize
                 data class Passphrase(
                     val numWords: Int = DEFAULT_NUM_WORDS,
+                    val minNumWords: Int = PASSPHRASE_MIN_NUMBER_OF_WORDS,
+                    val maxNumWords: Int = PASSPHRASE_MAX_NUMBER_OF_WORDS,
                     val wordSeparator: Char? = DEFAULT_PASSPHRASE_SEPARATOR,
                     val capitalize: Boolean = false,
+                    val capitalizeEnabled: Boolean = true,
                     val includeNumber: Boolean = false,
+                    val includeNumberEnabled: Boolean = true,
                 ) : PasscodeType(), Parcelable {
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSPHRASE.labelRes
