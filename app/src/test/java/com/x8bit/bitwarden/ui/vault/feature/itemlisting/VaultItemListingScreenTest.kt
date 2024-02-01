@@ -292,6 +292,34 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `policy warning should update according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    message = "There are no Sends in your account.".asText(),
+                    shouldShowAddButton = true,
+                ),
+            )
+        }
+        val policyText = "Due to an enterprise policy, you are only " +
+            "able to delete an existing Send."
+        composeTestRule
+            .onNodeWithText(policyText)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                policyDisablesSend = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(policyText)
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `floating action button click should send AddItemClick action`() {
         composeTestRule
             .onNodeWithContentDescription("Add Item")
@@ -834,6 +862,31 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `send item overflow item button should update according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(createDisplayItem(number = 1)),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                policyDisablesSend = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `on send item overflow click should display dialog`() {
         val number = 1
         mutableStateFlow.update {
@@ -1071,6 +1124,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
     isPullToRefreshSettingEnabled = false,
     dialogState = null,
+    policyDisablesSend = false,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(

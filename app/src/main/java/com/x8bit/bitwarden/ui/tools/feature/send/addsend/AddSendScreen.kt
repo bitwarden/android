@@ -140,6 +140,7 @@ fun AddSendScreen(
                 actions = {
                     BitwardenTextButton(
                         label = stringResource(id = R.string.save),
+                        isEnabled = !state.policyDisablesSend,
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(AddSendAction.SaveClick) }
                         },
@@ -157,19 +158,21 @@ fun AddSendScreen(
                                         }
                                     },
                                 )
-                                    .takeIf { state.hasPassword },
+                                    .takeIf { state.hasPassword && !state.policyDisablesSend },
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.copy_link),
                                     onClick = remember(viewModel) {
                                         { viewModel.trySendAction(AddSendAction.CopyLinkClick) }
                                     },
-                                ),
+                                )
+                                    .takeIf { !state.policyDisablesSend },
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.share_link),
                                     onClick = remember(viewModel) {
                                         { viewModel.trySendAction(AddSendAction.ShareLinkClick) }
                                     },
-                                ),
+                                )
+                                    .takeIf { !state.policyDisablesSend },
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.delete),
                                     onClick = { shouldShowDeleteConfirmationDialog = true },
@@ -189,6 +192,7 @@ fun AddSendScreen(
         when (val viewState = state.viewState) {
             is AddSendState.ViewState.Content -> AddSendContent(
                 state = viewState,
+                policyDisablesSend = state.policyDisablesSend,
                 isAddMode = state.isAddMode,
                 isShared = state.isShared,
                 addSendHandlers = addSendHandlers,

@@ -27,6 +27,7 @@ import kotlin.time.Duration.Companion.minutes
  * @param timeFormatPattern The pattern for displaying the time.
  * @param onDateSelect The callback for being notified of updates to the selected date and time.
  * This will only be `null` when there is no selected time.
+ * @param isEnabled Whether the button is enabled.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  */
 @Composable
@@ -35,6 +36,7 @@ fun AddSendCustomDateChooser(
     dateFormatPattern: String,
     timeFormatPattern: String,
     onDateSelect: (ZonedDateTime?) -> Unit,
+    isEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     // This tracks the date component (year, month, and day) and ignores lower level
@@ -60,6 +62,7 @@ fun AddSendCustomDateChooser(
             modifier = Modifier.weight(1f),
             formatPattern = dateFormatPattern,
             currentZonedDateTime = currentZonedDateTime,
+            isEnabled = isEnabled,
             onDateSelect = {
                 date = it
                 onDateSelect(derivedDateTimeMillis)
@@ -70,6 +73,7 @@ fun AddSendCustomDateChooser(
             modifier = Modifier.weight(1f),
             formatPattern = timeFormatPattern,
             currentZonedDateTime = currentZonedDateTime,
+            isEnabled = isEnabled,
             onTimeSelect = { hour, minute ->
                 timeMillis = hour.hours.inWholeMilliseconds + minute.minutes.inWholeMilliseconds
                 onDateSelect(derivedDateTimeMillis)

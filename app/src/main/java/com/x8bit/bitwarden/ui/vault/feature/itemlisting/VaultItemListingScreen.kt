@@ -234,6 +234,8 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.Content -> {
                 VaultItemListingContent(
                     state = state.viewState,
+                    policyDisablesSend = state.policyDisablesSend &&
+                        state.itemListingType is VaultItemListingState.ItemListingType.Send,
                     vaultItemClick = vaultItemListingHandlers.itemClick,
                     masterPasswordRepromptSubmit =
                     vaultItemListingHandlers.masterPasswordRepromptSubmit,
@@ -245,6 +247,8 @@ private fun VaultItemListingScaffold(
             is VaultItemListingState.ViewState.NoItems -> {
                 VaultItemListingEmpty(
                     state = state.viewState,
+                    policyDisablesSend = state.policyDisablesSend &&
+                        state.itemListingType is VaultItemListingState.ItemListingType.Send,
                     addItemClickAction = vaultItemListingHandlers.addVaultItemClick,
                     modifier = modifier,
                 )

@@ -19,11 +19,13 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultNoItems
 @Composable
 fun VaultItemListingEmpty(
     state: VaultItemListingState.ViewState.NoItems,
+    policyDisablesSend: Boolean,
     addItemClickAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (state.shouldShowAddButton) {
         VaultNoItems(
+            policyDisablesSend = policyDisablesSend,
             message = state.message(),
             modifier = modifier,
             addItemClickAction = addItemClickAction,

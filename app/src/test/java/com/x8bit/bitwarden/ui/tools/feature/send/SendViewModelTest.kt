@@ -3,12 +3,14 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
@@ -26,6 +28,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -47,6 +50,10 @@ class SendViewModelTest : BaseViewModelTest() {
     }
     private val vaultRepo: VaultRepository = mockk {
         every { sendDataStateFlow } returns mutableSendDataFlow
+    }
+    private val policyManager: PolicyManager = mockk {
+        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
+        every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
     }
 
     @BeforeEach
@@ -435,12 +442,14 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("LongParameterList")
     private fun createViewModel(
         state: SendState? = null,
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         environmentRepository: EnvironmentRepository = environmentRepo,
         settingsRepository: SettingsRepository = settingsRepo,
         vaultRepository: VaultRepository = vaultRepo,
+        policyManager: PolicyManager = this.policyManager,
     ): SendViewModel = SendViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
@@ -449,6 +458,7 @@ class SendViewModelTest : BaseViewModelTest() {
         environmentRepo = environmentRepository,
         settingsRepo = settingsRepository,
         vaultRepo = vaultRepository,
+        policyManager = policyManager,
     )
 }
 
@@ -456,4 +466,5 @@ private val DEFAULT_STATE: SendState = SendState(
     viewState = SendState.ViewState.Loading,
     dialogState = null,
     isPullToRefreshSettingEnabled = false,
+    policyDisablesSend = false,
 )

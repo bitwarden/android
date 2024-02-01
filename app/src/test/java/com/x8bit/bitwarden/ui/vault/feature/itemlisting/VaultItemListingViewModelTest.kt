@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -51,6 +53,7 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -112,6 +115,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
+    private val policyManager: PolicyManager = mockk {
+        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
+        every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+    }
+
     private val initialState = createVaultItemListingState()
     private val initialSavedStateHandle = createSavedStateHandleWithVaultItemListingType(
         vaultItemListingType = VaultItemListingType.Login,
@@ -1340,6 +1348,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             autofillSelectionManager = autofillSelectionManager,
             cipherMatchingManager = cipherMatchingManager,
             specialCircumstanceManager = specialCircumstanceManager,
+            policyManager = policyManager,
         )
 
     @Suppress("MaxLineLength")
@@ -1360,6 +1369,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             dialogState = null,
             autofillSelectionData = null,
             shouldFinishOnComplete = false,
+            policyDisablesSend = false,
         )
 }
 

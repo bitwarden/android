@@ -27,6 +27,7 @@ import kotlinx.collections.immutable.toPersistentList
  * @param label The primary text label to display for the item.
  * @param supportingLabel An secondary text label to display beneath the label.
  * @param startIcon The [Painter] object used to draw the icon at the start of the item.
+ * @param showMoreOptions Whether to show the button for the overflow options.
  * @param onClick The lambda to be invoked when the item is clicked.
  * @param onEditClick The lambda to be invoked when the edit option is clicked from the menu.
  * @param onCopyClick The lambda to be invoked when the copy option is clicked from the menu.
@@ -44,6 +45,7 @@ fun SendListItem(
     supportingLabel: String,
     startIcon: IconData,
     trailingLabelIcons: List<IconRes>,
+    showMoreOptions: Boolean,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
     onCopyClick: () -> Unit,
@@ -89,7 +91,10 @@ fun SendListItem(
                 text = stringResource(id = R.string.delete),
                 onClick = { shouldShowDeleteConfirmationDialog = true },
             ),
-        ),
+        )
+            // Only show options if allowed
+            .filter { showMoreOptions }
+            .toPersistentList(),
         modifier = modifier,
     )
     if (shouldShowDeleteConfirmationDialog) {
@@ -117,6 +122,7 @@ private fun SendListItem_preview() {
             supportingLabel = "Jan 3, 2024, 10:35 AM",
             startIcon = IconData.Local(R.drawable.ic_send_text),
             trailingLabelIcons = emptyList(),
+            showMoreOptions = true,
             onClick = {},
             onCopyClick = {},
             onEditClick = {},

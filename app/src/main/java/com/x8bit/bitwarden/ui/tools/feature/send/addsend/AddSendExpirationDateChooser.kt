@@ -36,6 +36,7 @@ fun SendExpirationDateChooser(
     dateFormatPattern: String,
     timeFormatPattern: String,
     onDateSelect: (ZonedDateTime?) -> Unit,
+    isEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val defaultOption = ExpirationOptions.NEVER
@@ -46,6 +47,7 @@ fun SendExpirationDateChooser(
     ) {
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.expiration_date),
+            isEnabled = isEnabled,
             options = options.values.toImmutableList(),
             selectedOption = selectedOption.text(),
             onOptionSelected = { selected ->
@@ -69,6 +71,7 @@ fun SendExpirationDateChooser(
                     dateFormatPattern = dateFormatPattern,
                     timeFormatPattern = timeFormatPattern,
                     onDateSelect = onDateSelect,
+                    isEnabled = isEnabled,
                 )
             }
         }

@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 
@@ -27,11 +28,23 @@ import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 @Suppress("LongMethod")
 @Composable
 fun SendContent(
+    policyDisablesSend: Boolean,
     state: SendState.ViewState.Content,
     sendHandlers: SendHandlers,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
+        item {
+            if (policyDisablesSend) {
+                BitwardenPolicyWarningText(
+                    text = stringResource(id = R.string.send_disabled_warning),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
+        }
+
         item {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.types),
@@ -82,6 +95,7 @@ fun SendContent(
                 label = it.name,
                 supportingLabel = it.deletionDate,
                 trailingLabelIcons = it.iconList,
+                showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
                 onCopyClick = { sendHandlers.onCopySendClick(it) },
                 onEditClick = { sendHandlers.onEditSendClick(it) },

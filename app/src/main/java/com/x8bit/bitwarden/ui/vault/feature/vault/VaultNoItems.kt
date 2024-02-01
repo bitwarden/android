@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 
 /**
  * No items view for the [VaultScreen].
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.R
 @Composable
 fun VaultNoItems(
     addItemClickAction: () -> Unit,
+    policyDisablesSend: Boolean,
     modifier: Modifier = Modifier,
     message: String = stringResource(id = R.string.no_items),
 ) {
@@ -32,6 +34,17 @@ fun VaultNoItems(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        if (policyDisablesSend) {
+            BitwardenPolicyWarningText(
+                text = stringResource(id = R.string.send_disabled_warning),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1F))
+
         Text(
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -58,5 +71,7 @@ fun VaultNoItems(
                 style = MaterialTheme.typography.labelLarge,
             )
         }
+
+        Spacer(modifier = Modifier.weight(1F))
     }
 }

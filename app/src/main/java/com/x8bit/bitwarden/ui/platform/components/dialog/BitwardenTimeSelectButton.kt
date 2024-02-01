@@ -34,6 +34,7 @@ import java.time.ZonedDateTime
  * @param currentZonedDateTime The currently displayed time.
  * @param formatPattern The pattern to format the displayed time.
  * @param onTimeSelect The callback to be invoked when a new time is selected.
+ * @param isEnabled Whether the button is enabled.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  * @param is24Hour Indicates if the time selector should use a 24 hour format or a 12 hour format
  * with AM/PM.
@@ -43,6 +44,7 @@ fun BitwardenTimeSelectButton(
     currentZonedDateTime: ZonedDateTime?,
     formatPattern: String,
     onTimeSelect: (hour: Int, minute: Int) -> Unit,
+    isEnabled: Boolean,
     modifier: Modifier = Modifier,
     is24Hour: Boolean = false,
 ) {
@@ -62,6 +64,7 @@ fun BitwardenTimeSelectButton(
                 contentDescription = "$label, $formattedTime"
             }
             .clickable(
+                enabled = isEnabled,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { shouldShowDialog = !shouldShowDialog },
