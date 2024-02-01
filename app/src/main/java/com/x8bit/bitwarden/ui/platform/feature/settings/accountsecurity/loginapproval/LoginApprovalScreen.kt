@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
@@ -53,6 +56,7 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 @Composable
 fun LoginApprovalScreen(
     viewModel: LoginApprovalViewModel = hiltViewModel(),
+    exitManager: ExitManager = LocalExitManager.current,
     onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
@@ -60,6 +64,7 @@ fun LoginApprovalScreen(
     val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            LoginApprovalEvent.ExitApp -> exitManager.exitApplication()
             LoginApprovalEvent.NavigateBack -> onNavigateBack()
 
             is LoginApprovalEvent.ShowToast -> {
@@ -82,6 +87,11 @@ fun LoginApprovalScreen(
         },
     )
 
+    BackHandler(
+        onBack = remember(viewModel) {
+            { viewModel.trySendAction(LoginApprovalAction.CloseClick) }
+        },
+    )
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         modifier = Modifier

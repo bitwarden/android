@@ -6,10 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -25,17 +31,25 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LoginApprovalViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginApprovalState, LoginApprovalEvent, LoginApprovalAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: LoginApprovalState(
-            fingerprint = requireNotNull(LoginApprovalArgs(savedStateHandle).fingerprint),
-            masterPasswordHash = null,
-            publicKey = "",
-            requestId = "",
-            shouldShowErrorDialog = false,
-            viewState = LoginApprovalState.ViewState.Loading,
-        ),
+        ?: run {
+            val specialCircumstance = specialCircumstanceManager.specialCircumstance
+                as? SpecialCircumstance.PasswordlessRequest
+            LoginApprovalState(
+                specialCircumstance = specialCircumstance,
+                fingerprint = specialCircumstance
+                    ?.let { "" }
+                    ?: requireNotNull(LoginApprovalArgs(savedStateHandle).fingerprint),
+                masterPasswordHash = null,
+                publicKey = "",
+                requestId = "",
+                shouldShowErrorDialog = false,
+                viewState = LoginApprovalState.ViewState.Loading,
+            )
+        },
 ) {
     private val dateTimeFormatter
         get() = DateTimeFormatter
@@ -43,13 +57,22 @@ class LoginApprovalViewModel @Inject constructor(
             .withZone(TimeZone.getDefault().toZoneId())
 
     init {
-        viewModelScope.launch {
-            trySendAction(
-                LoginApprovalAction.Internal.AuthRequestResultReceive(
-                    authRequestResult = authRepository.getAuthRequest(state.fingerprint),
-                ),
-            )
-        }
+        state
+            .specialCircumstance
+            ?.let {
+                authRepository
+                    .getAuthRequestByIdFlow(it.passwordlessRequestData.loginRequestId)
+                    .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
+                    .onEach(::sendAction)
+                    .launchIn(viewModelScope)
+            }
+            ?: run {
+                authRepository
+                    .getAuthRequestByFingerprintFlow(state.fingerprint)
+                    .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
+                    .onEach(::sendAction)
+                    .launchIn(viewModelScope)
+            }
     }
 
     override fun handleAction(action: LoginApprovalAction) {
@@ -89,7 +112,7 @@ class LoginApprovalViewModel @Inject constructor(
     }
 
     private fun handleCloseClicked() {
-        sendEvent(LoginApprovalEvent.NavigateBack)
+        closeScreen()
     }
 
     private fun handleDeclineRequestClicked() {
@@ -135,8 +158,9 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         val email = authRepository.userStateFlow.value?.activeAccount?.email ?: return
         when (val result = action.authRequestResult) {
-            is AuthRequestResult.Success -> mutableStateFlow.update {
+            is AuthRequestUpdatesResult.Update -> mutableStateFlow.update {
                 it.copy(
+                    fingerprint = result.authRequest.fingerprint,
                     masterPasswordHash = result.authRequest.masterPasswordHash,
                     publicKey = result.authRequest.publicKey,
                     requestId = result.authRequest.id,
@@ -151,10 +175,17 @@ class LoginApprovalViewModel @Inject constructor(
                 )
             }
 
-            is AuthRequestResult.Error -> mutableStateFlow.update {
+            is AuthRequestUpdatesResult.Error -> mutableStateFlow.update {
                 it.copy(
                     viewState = LoginApprovalState.ViewState.Error,
                 )
+            }
+
+            AuthRequestUpdatesResult.Approved,
+            AuthRequestUpdatesResult.Declined,
+            AuthRequestUpdatesResult.Expired,
+            -> {
+                closeScreen()
             }
         }
     }
@@ -174,6 +205,14 @@ class LoginApprovalViewModel @Inject constructor(
             }
         }
     }
+
+    private fun closeScreen() {
+        if (state.specialCircumstance?.shouldFinishWhenComplete == true) {
+            sendEvent(LoginApprovalEvent.ExitApp)
+        } else {
+            sendEvent(LoginApprovalEvent.NavigateBack)
+        }
+    }
 }
 
 /**
@@ -184,6 +223,7 @@ data class LoginApprovalState(
     val viewState: ViewState,
     val shouldShowErrorDialog: Boolean,
     // Internal
+    val specialCircumstance: SpecialCircumstance.PasswordlessRequest?,
     val fingerprint: String,
     val masterPasswordHash: String?,
     val publicKey: String,
@@ -227,6 +267,11 @@ data class LoginApprovalState(
  * Models events for the Login Approval screen.
  */
 sealed class LoginApprovalEvent {
+    /**
+     * Closes the app.
+     */
+    data object ExitApp : LoginApprovalEvent()
+
     /**
      * Navigates back.
      */
@@ -279,7 +324,7 @@ sealed class LoginApprovalAction {
          * An auth request result has been received to populate the data on the screen.
          */
         data class AuthRequestResultReceive(
-            val authRequestResult: AuthRequestResult,
+            val authRequestResult: AuthRequestUpdatesResult,
         ) : Internal()
 
         /**
