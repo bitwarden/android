@@ -149,6 +149,32 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `on overflow button click should only display delete when policy disables send`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            policyDisablesSend = true,
+        )
+
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Remove password")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Copy link")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Share link")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Delete")
+            .assert(hasAnyAncestor(isPopup()))
+            .isDisplayed()
+    }
+
+    @Test
     fun `overflow remove password button should be hidden when hasPassword is false`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             addSendType = AddSendType.EditItem(sendItemId = "sendId"),
@@ -265,6 +291,25 @@ class AddSendScreenTest : BaseComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(AddSendAction.CopyLinkClick)
         }
+    }
+
+    @Test
+    fun `policy warning should update according to state`() {
+        val policyText = "Due to an enterprise policy, you are only " +
+            "able to delete an existing Send."
+        composeTestRule
+            .onNodeWithText(policyText)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                policyDisablesSend = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(policyText)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -932,6 +977,7 @@ class AddSendScreenTest : BaseComposeTest() {
             isShared = false,
             isPremiumUser = false,
             baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
+            policyDisablesSend = false,
         )
     }
 }

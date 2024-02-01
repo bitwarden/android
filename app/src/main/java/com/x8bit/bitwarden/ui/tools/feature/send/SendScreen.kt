@@ -176,24 +176,26 @@ fun SendScreen(
             .padding(padding)
         when (val viewState = state.viewState) {
             is SendState.ViewState.Content -> SendContent(
-                modifier = modifier,
+                policyDisablesSend = state.policyDisablesSend,
                 state = viewState,
                 sendHandlers = sendHandlers,
+                modifier = modifier,
             )
 
             SendState.ViewState.Empty -> SendEmpty(
-                modifier = modifier,
+                policyDisablesSend = state.policyDisablesSend,
                 onAddItemClick = remember(viewModel) {
                     { viewModel.trySendAction(SendAction.AddSendClick) }
                 },
+                modifier = modifier,
             )
 
             is SendState.ViewState.Error -> BitwardenErrorContent(
-                modifier = modifier,
                 message = viewState.message(),
                 onTryAgainClick = remember(viewModel) {
                     { viewModel.trySendAction(SendAction.RefreshClick) }
                 },
+                modifier = modifier,
             )
 
             SendState.ViewState.Loading -> BitwardenLoadingContent(modifier = modifier)

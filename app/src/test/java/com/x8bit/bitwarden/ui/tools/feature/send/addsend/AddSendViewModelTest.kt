@@ -7,11 +7,14 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -69,6 +72,9 @@ class AddSendViewModelTest : BaseViewModelTest() {
     private val mutableSendDataStateFlow = MutableStateFlow<DataState<SendView>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
         every { getSendStateFlow(any()) } returns mutableSendDataStateFlow
+    }
+    private val policyManager: PolicyManager = mockk {
+        every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
     }
 
     @BeforeEach
@@ -812,6 +818,27 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `FileTypeClick should display error dialog when policy disables send`() {
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+        } returns listOf(createMockPolicy())
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(AddSendAction.FileTypeClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = null,
+                    message = R.string.send_disabled_warning.asText(),
+                ),
+                policyDisablesSend = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `NameChange should update name input`() = runTest {
         val viewModel = createViewModel()
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
@@ -954,6 +981,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         clock = clock,
         clipboardManager = clipboardManager,
         vaultRepo = vaultRepository,
+        policyManager = policyManager,
     )
 
     companion object {
@@ -991,6 +1019,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             isShared = false,
             isPremiumUser = false,
             baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+            policyDisablesSend = false,
         )
 
         private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(

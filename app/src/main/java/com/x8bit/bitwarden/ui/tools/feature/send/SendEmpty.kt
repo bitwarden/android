@@ -22,6 +22,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 
 /**
  * Content for the empty state of the [SendScreen].
@@ -29,35 +30,47 @@ import com.x8bit.bitwarden.R
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SendEmpty(
+    policyDisablesSend: Boolean,
     onAddItemClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.semantics { testTagsAsResourceId = true },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.semantics { testTagsAsResourceId = true },
     ) {
+        if (policyDisablesSend) {
+            BitwardenPolicyWarningText(
+                text = stringResource(id = R.string.send_disabled_warning),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1F))
+
         Text(
             textAlign = TextAlign.Center,
+            text = stringResource(id = R.string.no_sends),
+            style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
                 .semantics { testTag = "NoSearchResultsLabel" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            text = stringResource(id = R.string.no_sends),
-            style = MaterialTheme.typography.bodyMedium,
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
             onClick = onAddItemClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         ) {
             Text(
                 text = stringResource(id = R.string.add_a_send),
@@ -65,5 +78,7 @@ fun SendEmpty(
             )
         }
         Spacer(modifier = Modifier.navigationBarsPadding())
+
+        Spacer(modifier = Modifier.weight(1F))
     }
 }

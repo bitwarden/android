@@ -41,6 +41,7 @@ import java.time.ZonedDateTime
  * @param currentZonedDateTime The currently displayed time.
  * @param formatPattern The pattern to format the displayed time.
  * @param onDateSelect The callback to be invoked when a new date is selected.
+ * @param isEnabled Whether the button is enabled.
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  */
 @Suppress("LongMethod")
@@ -50,6 +51,7 @@ fun BitwardenDateSelectButton(
     currentZonedDateTime: ZonedDateTime?,
     formatPattern: String,
     onDateSelect: (ZonedDateTime) -> Unit,
+    isEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -70,6 +72,7 @@ fun BitwardenDateSelectButton(
                 contentDescription = "$label, $formattedDate"
             }
             .clickable(
+                enabled = isEnabled,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = { shouldShowDialog = !shouldShowDialog },

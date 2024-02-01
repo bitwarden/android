@@ -36,6 +36,7 @@ fun SendDeletionDateChooser(
     dateFormatPattern: String,
     timeFormatPattern: String,
     onDateSelect: (ZonedDateTime) -> Unit,
+    isEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val defaultOption = DeletionOptions.SEVEN_DAYS
@@ -46,6 +47,7 @@ fun SendDeletionDateChooser(
     ) {
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.deletion_date),
+            isEnabled = isEnabled,
             options = options.values.toImmutableList(),
             selectedOption = selectedOption.text(),
             onOptionSelected = { selected ->
@@ -67,6 +69,7 @@ fun SendDeletionDateChooser(
                     dateFormatPattern = dateFormatPattern,
                     timeFormatPattern = timeFormatPattern,
                     onDateSelect = { onDateSelect(requireNotNull(it)) },
+                    isEnabled = isEnabled,
                 )
             }
         }

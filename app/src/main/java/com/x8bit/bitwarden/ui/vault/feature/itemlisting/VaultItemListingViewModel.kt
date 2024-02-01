@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.map
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -69,6 +71,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val autofillSelectionManager: AutofillSelectionManager,
     private val cipherMatchingManager: CipherMatchingManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val policyManager: PolicyManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -89,6 +92,9 @@ class VaultItemListingViewModel @Inject constructor(
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             dialogState = null,
+            policyDisablesSend = policyManager
+                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .any(),
             autofillSelectionData = specialCircumstance?.autofillSelectionData,
             shouldFinishOnComplete = specialCircumstance?.shouldFinishWhenComplete ?: false,
         )
@@ -116,6 +122,12 @@ class VaultItemListingViewModel @Inject constructor(
                     ),
                 )
             }
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
+            .map { VaultItemListingsAction.Internal.PolicyUpdateReceive(it.any()) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -425,6 +437,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.ValidatePasswordResultReceive -> {
                 handleMasterPasswordRepromptResultReceive(action)
             }
+
+            is VaultItemListingsAction.Internal.PolicyUpdateReceive -> {
+                handlePolicyUpdateReceive(action)
+            }
         }
     }
 
@@ -612,6 +628,16 @@ class VaultItemListingViewModel @Inject constructor(
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = false)
     }
 
+    private fun handlePolicyUpdateReceive(
+        action: VaultItemListingsAction.Internal.PolicyUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                policyDisablesSend = action.policyDisablesSend,
+            )
+        }
+    }
+
     private fun updateStateWithVaultData(vaultData: VaultData, clearDialogState: Boolean) {
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -698,6 +724,7 @@ data class VaultItemListingState(
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
+    val policyDisablesSend: Boolean,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
     val autofillSelectionData: AutofillSelectionData? = null,
@@ -1156,6 +1183,13 @@ sealed class VaultItemListingsAction {
         data class ValidatePasswordResultReceive(
             val cipherId: String,
             val result: ValidatePasswordResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a policy update has been received.
+         */
+        data class PolicyUpdateReceive(
+            val policyDisablesSend: Boolean,
         ) : Internal()
     }
 }

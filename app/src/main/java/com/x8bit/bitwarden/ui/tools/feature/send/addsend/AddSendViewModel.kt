@@ -8,12 +8,14 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
@@ -64,6 +66,7 @@ class AddSendViewModel @Inject constructor(
     private val environmentRepo: EnvironmentRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepo: VaultRepository,
+    private val policyManager: PolicyManager,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -106,6 +109,9 @@ class AddSendViewModel @Inject constructor(
             dialogState = null,
             isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
             baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
+            policyDisablesSend = policyManager
+                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .any(),
         )
     },
 ) {
@@ -541,6 +547,17 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleFileTypeClick() {
+        if (state.policyDisablesSend) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = AddSendState.DialogState.Error(
+                        title = null,
+                        message = R.string.send_disabled_warning.asText(),
+                    ),
+                )
+            }
+            return
+        }
         if (!state.isPremiumUser) {
             mutableStateFlow.update {
                 it.copy(
@@ -675,6 +692,7 @@ data class AddSendState(
     val isPremiumUser: Boolean,
     val isShared: Boolean,
     val baseWebSendUrl: String,
+    val policyDisablesSend: Boolean,
 ) : Parcelable {
 
     /**

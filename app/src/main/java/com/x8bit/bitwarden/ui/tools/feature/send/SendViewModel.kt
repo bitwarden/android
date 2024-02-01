@@ -5,11 +5,13 @@ import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
@@ -43,6 +45,7 @@ class SendViewModel @Inject constructor(
     private val environmentRepo: EnvironmentRepository,
     private val settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
+    private val policyManager: PolicyManager,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -50,6 +53,9 @@ class SendViewModel @Inject constructor(
             viewState = SendState.ViewState.Loading,
             dialogState = null,
             isPullToRefreshSettingEnabled = settingsRepo.getPullToRefreshEnabledFlow().value,
+            policyDisablesSend = policyManager
+                .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
+                .any(),
         ),
 ) {
 
@@ -57,6 +63,11 @@ class SendViewModel @Inject constructor(
         settingsRepo
             .getPullToRefreshEnabledFlow()
             .map { SendAction.Internal.PullToRefreshEnableReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
+            .map { SendAction.Internal.PolicyUpdateReceive(it.any()) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
         vaultRepo
@@ -96,6 +107,8 @@ class SendViewModel @Inject constructor(
         }
 
         is SendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
+
+        is SendAction.Internal.PolicyUpdateReceive -> handlePolicyUpdateReceive(action)
     }
 
     private fun handlePullToRefreshEnableReceive(
@@ -215,6 +228,14 @@ class SendViewModel @Inject constructor(
         }
     }
 
+    private fun handlePolicyUpdateReceive(action: SendAction.Internal.PolicyUpdateReceive) {
+        mutableStateFlow.update {
+            it.copy(
+                policyDisablesSend = action.policyDisablesSend,
+            )
+        }
+    }
+
     private fun handleAboutSendClick() {
         sendEvent(SendEvent.NavigateToAboutSend)
     }
@@ -306,6 +327,7 @@ data class SendState(
     val viewState: ViewState,
     val dialogState: DialogState?,
     private val isPullToRefreshSettingEnabled: Boolean,
+    val policyDisablesSend: Boolean,
 ) : Parcelable {
 
     /**
@@ -532,6 +554,13 @@ sealed class SendAction {
          */
         data class SendDataReceive(
             val sendDataState: DataState<SendData>,
+        ) : Internal()
+
+        /**
+         * Indicates that a policy update has been received.
+         */
+        data class PolicyUpdateReceive(
+            val policyDisablesSend: Boolean,
         ) : Internal()
     }
 }

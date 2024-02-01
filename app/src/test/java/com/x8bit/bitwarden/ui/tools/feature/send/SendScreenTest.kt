@@ -187,6 +187,26 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `policy warning should update according to state`() {
+        val policyText = "Due to an enterprise policy, you are only " +
+            "able to delete an existing Send."
+        composeTestRule
+            .onNodeWithText(policyText)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Empty,
+                policyDisablesSend = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(policyText)
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `fab should be displayed according to state`() {
         mutableStateFlow.update {
             it.copy(viewState = SendState.ViewState.Loading)
@@ -377,6 +397,32 @@ class SendScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(SendAction.SendClick(DEFAULT_SEND_ITEM))
         }
+    }
+
+    @Test
+    fun `send item overflow button should update according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 1,
+                    sendItems = listOf(DEFAULT_SEND_ITEM),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                policyDisablesSend = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -664,6 +710,7 @@ private val DEFAULT_STATE: SendState = SendState(
     viewState = SendState.ViewState.Loading,
     dialogState = null,
     isPullToRefreshSettingEnabled = false,
+    policyDisablesSend = false,
 )
 
 private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =

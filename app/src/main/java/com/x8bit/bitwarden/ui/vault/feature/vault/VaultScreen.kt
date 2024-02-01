@@ -285,6 +285,7 @@ private fun VaultScreenScaffold(
 
                     is VaultState.ViewState.NoItems -> VaultNoItems(
                         modifier = innerModifier,
+                        policyDisablesSend = false,
                         addItemClickAction = vaultHandlers.addItemClickAction,
                     )
 

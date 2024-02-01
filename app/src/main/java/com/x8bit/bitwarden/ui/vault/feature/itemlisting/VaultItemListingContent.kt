@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
@@ -33,6 +34,7 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
+    policyDisablesSend: Boolean,
     vaultItemClick: (id: String) -> Unit,
     masterPasswordRepromptSubmit: (id: String, password: String) -> Unit,
     onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
@@ -96,6 +98,17 @@ fun VaultItemListingContent(
         modifier = modifier,
     ) {
         item {
+            if (policyDisablesSend) {
+                BitwardenPolicyWarningText(
+                    text = stringResource(id = R.string.send_disabled_warning),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
+        }
+
+        item {
             BitwardenListHeaderTextWithSupportLabel(
                 label = stringResource(id = R.string.items),
                 supportingLabel = state.displayItemList.size.toString(),
@@ -136,6 +149,8 @@ fun VaultItemListingContent(
                             },
                         )
                     }
+                    // Only show options if allowed
+                    .filter { !policyDisablesSend }
                     .toPersistentList(),
                 modifier = Modifier
                     .fillMaxWidth()

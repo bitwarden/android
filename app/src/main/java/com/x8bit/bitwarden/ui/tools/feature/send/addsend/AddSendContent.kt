@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 @Composable
 fun AddSendContent(
     state: AddSendState.ViewState.Content,
+    policyDisablesSend: Boolean,
     isAddMode: Boolean,
     isShared: Boolean,
     addSendHandlers: AddSendHandlers,
@@ -68,12 +70,23 @@ fun AddSendContent(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
+        if (policyDisablesSend) {
+            BitwardenPolicyWarningText(
+                text = stringResource(id = R.string.send_disabled_warning),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         BitwardenTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             label = stringResource(id = R.string.name),
             hint = stringResource(id = R.string.name_info),
+            readOnly = policyDisablesSend,
             value = state.common.name,
             onValueChange = addSendHandlers.onNamChange,
         )
@@ -205,6 +218,7 @@ fun AddSendContent(
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.text),
                     hint = stringResource(id = R.string.type_text_info),
+                    readOnly = policyDisablesSend,
                     value = type.input,
                     singleLine = false,
                     onValueChange = addSendHandlers.onTextChange,
@@ -217,6 +231,7 @@ fun AddSendContent(
                     label = stringResource(id = R.string.hide_text_by_default),
                     isChecked = type.isHideByDefaultChecked,
                     onCheckedChange = addSendHandlers.onIsHideByDefaultToggle,
+                    readOnly = policyDisablesSend,
                 )
             }
         }
@@ -224,6 +239,7 @@ fun AddSendContent(
         Spacer(modifier = Modifier.height(16.dp))
         AddSendOptions(
             state = state,
+            sendRestrictionPolicy = policyDisablesSend,
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
@@ -237,6 +253,8 @@ fun AddSendContent(
  * Displays a collapsable set of new send options.
  *
  * @param state The content state.
+ * @param sendRestrictionPolicy When `true`, indicates that there's a policy preventing the user
+ * from editing or creating sends.
  * @param isAddMode When `true`, indicates that we are creating a new send and `false` when editing
  * an existing send.
  * @param addSendHandlers THe handlers various events.
@@ -245,6 +263,7 @@ fun AddSendContent(
 @Composable
 private fun AddSendOptions(
     state: AddSendState.ViewState.Content,
+    sendRestrictionPolicy: Boolean,
     isAddMode: Boolean,
     addSendHandlers: AddSendHandlers,
 ) {
@@ -297,6 +316,7 @@ private fun AddSendOptions(
                     timeFormatPattern = state.common.timeFormatPattern,
                     currentZonedDateTime = state.common.deletionDate,
                     onDateSelect = addSendHandlers.onDeletionDateChange,
+                    isEnabled = !sendRestrictionPolicy,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 SendExpirationDateChooser(
@@ -307,6 +327,7 @@ private fun AddSendOptions(
                     timeFormatPattern = state.common.timeFormatPattern,
                     currentZonedDateTime = state.common.expirationDate,
                     onDateSelect = addSendHandlers.onExpirationDateChange,
+                    isEnabled = !sendRestrictionPolicy,
                 )
             } else {
                 BitwardenListHeaderText(
@@ -323,6 +344,7 @@ private fun AddSendOptions(
                     dateFormatPattern = state.common.dateFormatPattern,
                     timeFormatPattern = state.common.timeFormatPattern,
                     currentZonedDateTime = state.common.deletionDate,
+                    isEnabled = !sendRestrictionPolicy,
                     onDateSelect = { addSendHandlers.onDeletionDateChange(requireNotNull(it)) },
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -351,6 +373,7 @@ private fun AddSendOptions(
                     timeFormatPattern = state.common.timeFormatPattern,
                     currentZonedDateTime = state.common.expirationDate,
                     onDateSelect = addSendHandlers.onExpirationDateChange,
+                    isEnabled = !sendRestrictionPolicy,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(
@@ -369,7 +392,7 @@ private fun AddSendOptions(
                     BitwardenTextButton(
                         label = stringResource(id = R.string.clear),
                         onClick = addSendHandlers.onClearExpirationDateClick,
-                        isEnabled = state.common.expirationDate != null,
+                        isEnabled = state.common.expirationDate != null && !sendRestrictionPolicy,
                         modifier = Modifier.wrapContentWidth(),
                     )
                 }
@@ -379,9 +402,10 @@ private fun AddSendOptions(
                 label = stringResource(id = R.string.maximum_access_count),
                 value = state.common.maxAccessCount,
                 onValueChange = addSendHandlers.onMaxAccessCountChange,
-                isDecrementEnabled = state.common.maxAccessCount != null,
+                isDecrementEnabled = state.common.maxAccessCount != null && !sendRestrictionPolicy,
+                isIncrementEnabled = !sendRestrictionPolicy,
                 range = 0..Int.MAX_VALUE,
-                textFieldReadOnly = false,
+                textFieldReadOnly = sendRestrictionPolicy,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -423,6 +447,7 @@ private fun AddSendOptions(
             BitwardenPasswordField(
                 label = stringResource(id = R.string.new_password),
                 hint = stringResource(id = R.string.password_info),
+                readOnly = sendRestrictionPolicy,
                 value = state.common.passwordInput,
                 onValueChange = addSendHandlers.onPasswordChange,
                 modifier = Modifier
@@ -433,6 +458,7 @@ private fun AddSendOptions(
             BitwardenTextField(
                 label = stringResource(id = R.string.notes),
                 hint = stringResource(id = R.string.notes_info),
+                readOnly = sendRestrictionPolicy,
                 value = state.common.noteInput,
                 singleLine = false,
                 onValueChange = addSendHandlers.onNoteChange,
@@ -448,6 +474,7 @@ private fun AddSendOptions(
                 label = stringResource(id = R.string.hide_email),
                 isChecked = state.common.isHideEmailChecked,
                 onCheckedChange = addSendHandlers.onHideEmailToggle,
+                readOnly = sendRestrictionPolicy,
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
@@ -457,6 +484,7 @@ private fun AddSendOptions(
                 label = stringResource(id = R.string.disable_send),
                 isChecked = state.common.isDeactivateChecked,
                 onCheckedChange = addSendHandlers.onDeactivateSendToggle,
+                readOnly = sendRestrictionPolicy,
             )
         }
     }
