@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
@@ -55,6 +56,7 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
@@ -190,6 +192,21 @@ private fun VaultScreenScaffold(
         )
     }
 
+    var masterPasswordRepromptAction by remember {
+        mutableStateOf<ListingItemOverflowAction.VaultAction?>(null)
+    }
+    masterPasswordRepromptAction?.let { action ->
+        BitwardenMasterPasswordDialog(
+            onConfirmClick = { password ->
+                masterPasswordRepromptAction = null
+                vaultHandlers.masterPasswordRepromptSubmit(action, password)
+            },
+            onDismissRequest = {
+                masterPasswordRepromptAction = null
+            },
+        )
+    }
+
     BitwardenScaffold(
         topBar = {
             BitwardenMediumTopAppBar(
@@ -276,6 +293,7 @@ private fun VaultScreenScaffold(
                     is VaultState.ViewState.Content -> VaultContent(
                         state = viewState,
                         vaultHandlers = vaultHandlers,
+                        onOverflowOptionClick = { masterPasswordRepromptAction = it },
                         modifier = innerModifier,
                     )
 

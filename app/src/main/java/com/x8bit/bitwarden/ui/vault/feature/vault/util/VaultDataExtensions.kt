@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
@@ -160,6 +161,7 @@ private fun CipherView.toVaultItemOrNull(
             ),
             overflowOptions = toOverflowActions(),
             extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
@@ -167,6 +169,7 @@ private fun CipherView.toVaultItemOrNull(
             name = name.asText(),
             overflowOptions = toOverflowActions(),
             extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
@@ -178,6 +181,7 @@ private fun CipherView.toVaultItemOrNull(
                 ?.asText(),
             overflowOptions = toOverflowActions(),
             extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
@@ -186,6 +190,7 @@ private fun CipherView.toVaultItemOrNull(
             firstName = identity?.firstName?.asText(),
             overflowOptions = toOverflowActions(),
             extraIconList = toLabelIcons(),
+            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
     }
 }

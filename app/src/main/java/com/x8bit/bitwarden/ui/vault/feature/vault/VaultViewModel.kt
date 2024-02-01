@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -144,6 +145,11 @@ class VaultViewModel @Inject constructor(
             is VaultAction.DialogDismiss -> handleDialogDismiss()
             is VaultAction.RefreshPull -> handleRefreshPull()
             is VaultAction.OverflowOptionClick -> handleOverflowOptionClick(action)
+
+            is VaultAction.MasterPasswordRepromptSubmit -> {
+                handleMasterPasswordRepromptSubmit(action)
+            }
+
             is VaultAction.Internal -> handleInternalAction(action)
         }
     }
@@ -326,6 +332,20 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    private fun handleMasterPasswordRepromptSubmit(
+        action: VaultAction.MasterPasswordRepromptSubmit,
+    ) {
+        viewModelScope.launch {
+            val result = authRepository.validatePassword(action.password)
+            sendAction(
+                VaultAction.Internal.ValidatePasswordResultReceive(
+                    overflowAction = action.overflowAction,
+                    result = result,
+                ),
+            )
+        }
+    }
+
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
         clipboardManager.setText(action.notes)
     }
@@ -390,6 +410,10 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal.IconLoadingSettingReceive -> handleIconLoadingSettingReceive(
                 action,
             )
+
+            is VaultAction.Internal.ValidatePasswordResultReceive -> {
+                handleValidatePasswordResultReceive(action)
+            }
         }
     }
 
@@ -522,6 +546,39 @@ class VaultViewModel @Inject constructor(
                     vaultFilterType = vaultFilterTypeOrDefault,
                 ),
             )
+        }
+    }
+
+    private fun handleValidatePasswordResultReceive(
+        action: VaultAction.Internal.ValidatePasswordResultReceive,
+    ) {
+        when (val result = action.result) {
+            ValidatePasswordResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is ValidatePasswordResult.Success -> {
+                if (!result.isValid) {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialog = VaultState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.invalid_master_password.asText(),
+                            ),
+                        )
+                    }
+                    return
+                }
+                // Complete the overflow action.
+                trySendAction(VaultAction.OverflowOptionClick(action.overflowAction))
+            }
         }
     }
 
@@ -722,6 +779,11 @@ data class VaultState(
             abstract val overflowOptions: List<ListingItemOverflowAction.VaultAction>
 
             /**
+             * Whether to prompt the user for their password when they select an overflow option.
+             */
+            abstract val shouldShowMasterPasswordReprompt: Boolean
+
+            /**
              * Represents a login item within the vault.
              *
              * @property username The username associated with this login item.
@@ -733,6 +795,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
                 val username: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = username
@@ -751,6 +814,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_card_item),
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
                 val brand: Text? = null,
                 val lastFourDigits: Text? = null,
             ) : VaultItem() {
@@ -779,6 +843,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_identity_item),
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
                 val firstName: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = firstName
@@ -795,6 +860,7 @@ data class VaultState(
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_secure_note_item),
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+                override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
             }
@@ -1034,6 +1100,15 @@ sealed class VaultAction {
     ) : VaultAction()
 
     /**
+     * User submitted their master password to authenticate before continuing with
+     * the selected overflow action.
+     */
+    data class MasterPasswordRepromptSubmit(
+        val overflowAction: ListingItemOverflowAction.VaultAction,
+        val password: String,
+    ) : VaultAction()
+
+    /**
      * Models actions that the [VaultViewModel] itself might send.
      */
     sealed class Internal : VaultAction() {
@@ -1069,6 +1144,14 @@ sealed class VaultAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
+        ) : Internal()
+
+        /**
+         * Indicates that a result for verifying the user's master password has been received.
+         */
+        data class ValidatePasswordResultReceive(
+            val overflowAction: ListingItemOverflowAction.VaultAction,
+            val result: ValidatePasswordResult,
         ) : Internal()
     }
 }

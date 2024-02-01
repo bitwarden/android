@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -1327,6 +1328,104 @@ class VaultViewModelTest : BaseViewModelTest() {
             assertEquals(VaultEvent.NavigateToVaultItem(cipherId), awaitItem())
         }
     }
+
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Error
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    VaultAction.MasterPasswordRepromptSubmit(
+                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            password = password,
+                        ),
+                        password = password,
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with an invalid password should show an invalid password dialog`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = false)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    VaultAction.MasterPasswordRepromptSubmit(
+                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            password = password,
+                        ),
+                        password = password,
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.invalid_master_password.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password should continue the action`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.MasterPasswordRepromptSubmit(
+                    overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        password = password,
+                    ),
+                    password = password,
+                ),
+            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(password)
+            }
+        }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(

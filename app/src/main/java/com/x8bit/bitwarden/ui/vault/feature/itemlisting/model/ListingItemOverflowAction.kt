@@ -66,11 +66,18 @@ sealed class ListingItemOverflowAction : Parcelable {
      */
     sealed class VaultAction : ListingItemOverflowAction() {
         /**
+         * Whether the action requires a master password re-prompt if that
+         * setting is enabled for the selected item.
+         */
+        abstract val requiresPasswordReprompt: Boolean
+
+        /**
          * Click on the view cipher overflow option.
          */
         @Parcelize
         data class ViewClick(val cipherId: String) : VaultAction() {
             override val title: Text get() = R.string.view.asText()
+            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**
@@ -79,6 +86,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class EditClick(val cipherId: String) : VaultAction() {
             override val title: Text get() = R.string.edit.asText()
+            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
@@ -87,6 +95,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyUsernameClick(val username: String) : VaultAction() {
             override val title: Text get() = R.string.copy_username.asText()
+            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**
@@ -95,6 +104,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyPasswordClick(val password: String) : VaultAction() {
             override val title: Text get() = R.string.copy_password.asText()
+            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
@@ -103,6 +113,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyTotpClick(val totpCode: String) : VaultAction() {
             override val title: Text get() = R.string.copy_totp.asText()
+            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**
@@ -111,6 +122,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyNumberClick(val number: String) : VaultAction() {
             override val title: Text get() = R.string.copy_number.asText()
+            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
@@ -119,6 +131,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopySecurityCodeClick(val securityCode: String) : VaultAction() {
             override val title: Text get() = R.string.copy_security_code.asText()
+            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
@@ -127,6 +140,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class CopyNoteClick(val notes: String) : VaultAction() {
             override val title: Text get() = R.string.copy_notes.asText()
+            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**
@@ -135,6 +149,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class LaunchClick(val url: String) : VaultAction() {
             override val title: Text get() = R.string.launch.asText()
+            override val requiresPasswordReprompt: Boolean get() = false
         }
     }
 }
