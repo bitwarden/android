@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -75,6 +76,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val vaultRepository: VaultRepository,
     private val generatorRepository: GeneratorRepository,
+    private val settingsRepository: SettingsRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val resourceManager: ResourceManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
@@ -90,6 +92,17 @@ class VaultAddEditViewModel @Inject constructor(
             val autofillSelectionData = specialCircumstanceManager
                 .specialCircumstance
                 ?.toAutofillSelectionDataOrNull()
+
+            val dialogState =
+                if (!settingsRepository.initialAutofillDialogShown &&
+                    vaultAddEditType is VaultAddEditType.AddItem &&
+                    autofillSelectionData == null
+                ) {
+                    VaultAddEditState.DialogState.InitialAutofillPrompt
+                } else {
+                    null
+                }
+
             val defaultAddTypeContent = autofillSelectionData
                 ?.toDefaultAddTypeContent()
                 ?: autofillSaveItem
@@ -106,7 +119,7 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.EditItem -> VaultAddEditState.ViewState.Loading
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
-                dialog = null,
+                dialog = dialogState,
                 // Set special conditions for autofill save
                 shouldShowCloseButton = autofillSaveItem == null,
                 shouldExitOnSave = autofillSaveItem != null,
@@ -195,6 +208,9 @@ class VaultAddEditViewModel @Inject constructor(
             )
 
             is VaultAddEditAction.Common.CollectionSelect -> handleCollectionSelect(action)
+            is VaultAddEditAction.Common.InitialAutofillDialogDismissed -> {
+                handleInitialAutofillDialogDismissed()
+            }
         }
     }
 
@@ -357,6 +373,13 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDismissDialog() {
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+    }
+
+    private fun handleInitialAutofillDialogDismissed() {
+        settingsRepository.initialAutofillDialogShown = true
         mutableStateFlow.update {
             it.copy(dialog = null)
         }
@@ -1716,6 +1739,12 @@ data class VaultAddEditState(
          */
         @Parcelize
         data class Loading(val label: Text) : DialogState()
+
+        /**
+         * Displays the initial autofill dialog to the user.
+         */
+        @Parcelize
+        data object InitialAutofillPrompt : DialogState()
     }
 }
 
@@ -1814,6 +1843,11 @@ sealed class VaultAddEditAction {
          * The user has clicked the attachments overflow option.
          */
         data object AttachmentsClick : Common()
+
+        /**
+         * The user has dismissed the initial autofill dialog.
+         */
+        data object InitialAutofillDialogDismissed : Common()
 
         /**
          * The user has clicked the move to organization overflow option.
