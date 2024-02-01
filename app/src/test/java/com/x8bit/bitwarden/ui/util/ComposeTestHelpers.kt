@@ -5,6 +5,9 @@ import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
@@ -42,6 +45,35 @@ fun ComposeContentTestRule.assertNoDialogExists() {
     this
         .onNode(isDialog())
         .assertDoesNotExist()
+}
+
+/**
+ * Asserts that the master password reprompt dialog is displayed.
+ */
+fun ComposeContentTestRule.assertMasterPasswordDialogDisplayed() {
+    this
+        .onAllNodesWithText(text = "Master password confirmation")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(
+            text = "This action is protected, to continue please re-enter your master " +
+                "password to verify your identity.",
+        )
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(text = "Master password")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(text = "Cancel")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(text = "Submit")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
 }
 
 /**

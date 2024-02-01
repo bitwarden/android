@@ -190,7 +190,7 @@ private fun CipherView.toDisplayItem(
             .filter {
                 this.login != null || (it != AutofillSelectionOption.AUTOFILL_AND_SAVE)
             },
-        shouldDisplayMasterPasswordReprompt = isAutofill && reprompt == CipherRepromptType.PASSWORD,
+        shouldDisplayMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
 
 private fun CipherView.toIconData(

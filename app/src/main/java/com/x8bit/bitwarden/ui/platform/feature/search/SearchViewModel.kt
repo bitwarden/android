@@ -517,25 +517,53 @@ class SearchViewModel @Inject constructor(
                     }
                     return
                 }
+                handleMasterPasswordRepromptData(data = action.masterPasswordRepromptData)
+            }
+        }
+    }
 
-                // Complete the deferred actions
-                when (action.masterPasswordRepromptData.type) {
-                    MasterPasswordRepromptData.Type.AUTOFILL -> {
-                        trySendAction(
-                            SearchAction.AutofillItemClick(
-                                itemId = action.masterPasswordRepromptData.cipherId,
-                            ),
-                        )
-                    }
+    private fun handleMasterPasswordRepromptData(
+        data: MasterPasswordRepromptData,
+    ) {
+        // Complete the deferred actions
+        val cipherId = data.cipherId
+        when (val type = data.type) {
+            MasterPasswordRepromptData.Type.Autofill -> {
+                trySendAction(
+                    SearchAction.AutofillItemClick(
+                        itemId = cipherId,
+                    ),
+                )
+            }
 
-                    MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE -> {
-                        trySendAction(
-                            SearchAction.AutofillAndSaveItemClick(
-                                itemId = action.masterPasswordRepromptData.cipherId,
+            MasterPasswordRepromptData.Type.AutofillAndSave -> {
+                trySendAction(
+                    SearchAction.AutofillAndSaveItemClick(
+                        itemId = cipherId,
+                    ),
+                )
+            }
+
+            MasterPasswordRepromptData.Type.Edit -> {
+                trySendAction(
+                    SearchAction.OverflowOptionClick(
+                        overflowAction = ListingItemOverflowAction.VaultAction.EditClick(
+                            cipherId = cipherId,
+                        ),
+                    ),
+                )
+            }
+
+            is MasterPasswordRepromptData.Type.CopyPassword -> {
+                trySendAction(
+                    SearchAction.OverflowOptionClick(
+                        overflowAction = ListingItemOverflowAction
+                            .VaultAction
+                            .CopyPasswordClick(
+                                password = type.password,
                             ),
-                        )
-                    }
-                }
+                    ),
+                )
             }
         }
     }
@@ -1100,8 +1128,32 @@ data class MasterPasswordRepromptData(
     /**
      * The type of action that requires the prompt.
      */
-    enum class Type {
-        AUTOFILL,
-        AUTOFILL_AND_SAVE,
+    sealed class Type : Parcelable {
+
+        /**
+         * Autofill was selected.
+         */
+        @Parcelize
+        data object Autofill : Type()
+
+        /**
+         * Autofill-and-save was selected.
+         */
+        @Parcelize
+        data object AutofillAndSave : Type()
+
+        /**
+         * Edit was selected.
+         */
+        @Parcelize
+        data object Edit : Type()
+
+        /**
+         * Copy password was selected.
+         */
+        @Parcelize
+        data class CopyPassword(
+            val password: String,
+        ) : Type()
     }
 }

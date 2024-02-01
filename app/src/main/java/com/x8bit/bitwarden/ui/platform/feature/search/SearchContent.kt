@@ -133,6 +133,34 @@ fun SearchContent(
                                         showConfirmationDialog = option
                                     }
 
+                                    is ListingItemOverflowAction.VaultAction.EditClick -> {
+                                        if (it.shouldDisplayMasterPasswordReprompt) {
+                                            masterPasswordRepromptData =
+                                                MasterPasswordRepromptData(
+                                                    cipherId = it.id,
+                                                    type = MasterPasswordRepromptData.Type.Edit,
+                                                )
+                                        } else {
+                                            searchHandlers.onOverflowItemClick(option)
+                                        }
+                                    }
+
+                                    is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
+                                        if (it.shouldDisplayMasterPasswordReprompt) {
+                                            masterPasswordRepromptData =
+                                                MasterPasswordRepromptData(
+                                                    cipherId = it.id,
+                                                    type = MasterPasswordRepromptData
+                                                        .Type
+                                                        .CopyPassword(
+                                                            password = option.password,
+                                                        ),
+                                                )
+                                        } else {
+                                            searchHandlers.onOverflowItemClick(option)
+                                        }
+                                    }
+
                                     else -> searchHandlers.onOverflowItemClick(option)
                                 }
                             },
@@ -179,13 +207,15 @@ private fun AutofillSelectionDialog(
                 )
             } else {
                 when (type) {
-                    MasterPasswordRepromptData.Type.AUTOFILL -> {
+                    MasterPasswordRepromptData.Type.Autofill -> {
                         onAutofillItemClick(item.id)
                     }
 
-                    MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE -> {
+                    MasterPasswordRepromptData.Type.AutofillAndSave -> {
                         onAutofillAndSaveItemClick(item.id)
                     }
+
+                    else -> Unit
                 }
             }
         }
@@ -199,7 +229,7 @@ private fun AutofillSelectionDialog(
                     onClick = {
                         selectionCallback(
                             displayItem,
-                            MasterPasswordRepromptData.Type.AUTOFILL,
+                            MasterPasswordRepromptData.Type.Autofill,
                         )
                     },
                 )
@@ -210,7 +240,7 @@ private fun AutofillSelectionDialog(
                     onClick = {
                         selectionCallback(
                             displayItem,
-                            MasterPasswordRepromptData.Type.AUTOFILL_AND_SAVE,
+                            MasterPasswordRepromptData.Type.AutofillAndSave,
                         )
                     },
                 )
