@@ -5,7 +5,8 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
@@ -27,8 +28,8 @@ import java.time.ZoneId
 
 class AboutViewModelTest : BaseViewModelTest() {
 
+    private val environmentRepository = FakeEnvironmentRepository()
     private val clipboardManager: BitwardenClipboardManager = mockk()
-    private val settingsRepository: SettingsRepository = mockk()
     private val crashLogsManager: CrashLogsManager = mockk {
         every { isEnabled } returns false
         every { isEnabled = any() } just runs
@@ -115,7 +116,15 @@ class AboutViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
         viewModel.eventFlow.test {
             viewModel.trySendAction(AboutAction.WebVaultClick)
-            assertEquals(AboutEvent.NavigateToWebVault, awaitItem())
+            assertEquals(
+                AboutEvent.NavigateToWebVault(
+                    vaultUrl = environmentRepository
+                        .environment
+                        .environmentUrlData
+                        .baseWebVaultUrlOrDefault,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -125,7 +134,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
         clipboardManager = clipboardManager,
         clock = fixedClock,
-        settingsRepository = settingsRepository,
+        environmentRepository = environmentRepository,
         crashLogsManager = crashLogsManager,
     )
 }
