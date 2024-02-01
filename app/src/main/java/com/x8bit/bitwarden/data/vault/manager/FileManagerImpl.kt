@@ -3,8 +3,10 @@ package com.x8bit.bitwarden.data.vault.manager
 import android.content.Context
 import android.net.Uri
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
+import kotlinx.coroutines.withContext
 import okio.use
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -24,10 +26,13 @@ private const val BUFFER_SIZE: Int = 1024
 class FileManagerImpl(
     private val context: Context,
     private val downloadService: DownloadService,
+    private val dispatcherManager: DispatcherManager,
 ) : FileManager {
 
     override suspend fun deleteFile(file: File) {
-        file.delete()
+        withContext(dispatcherManager.io) {
+            file.delete()
+        }
     }
 
     @Suppress("NestedBlockDepth", "ReturnCount")
@@ -41,22 +46,25 @@ class FileManagerImpl(
 
         // Create a temporary file in cache to write to
         val file = File(context.cacheDir, UUID.randomUUID().toString())
-        val stream = response.byteStream()
-        stream.use {
-            val buffer = ByteArray(BUFFER_SIZE)
-            var progress = 0
-            FileOutputStream(file).use { fos ->
-                @Suppress("TooGenericExceptionCaught")
-                try {
-                    var read = stream.read(buffer)
-                    while (read > 0) {
-                        fos.write(buffer, 0, read)
-                        progress += read
-                        read = stream.read(buffer)
+
+        withContext(dispatcherManager.io) {
+            val stream = response.byteStream()
+            stream.use {
+                val buffer = ByteArray(BUFFER_SIZE)
+                var progress = 0
+                FileOutputStream(file).use { fos ->
+                    @Suppress("TooGenericExceptionCaught")
+                    try {
+                        var read = stream.read(buffer)
+                        while (read > 0) {
+                            fos.write(buffer, 0, read)
+                            progress += read
+                            read = stream.read(buffer)
+                        }
+                        fos.flush()
+                    } catch (e: RuntimeException) {
+                        return@withContext DownloadResult.Failure
                     }
-                    fos.flush()
-                } catch (e: RuntimeException) {
-                    return DownloadResult.Failure
                 }
             }
         }
@@ -68,37 +76,41 @@ class FileManagerImpl(
     override suspend fun fileToUri(fileUri: Uri, file: File): Boolean {
         @Suppress("TooGenericExceptionCaught")
         return try {
-            context
-                .contentResolver
-                .openOutputStream(fileUri)
-                ?.use { outputStream ->
-                    FileInputStream(file).use { inputStream ->
-                        val buffer = ByteArray(BUFFER_SIZE)
-                        var length: Int
-                        while (inputStream.read(buffer).also { length = it } != -1) {
-                            outputStream.write(buffer, 0, length)
+            withContext(dispatcherManager.io) {
+                context
+                    .contentResolver
+                    .openOutputStream(fileUri)
+                    ?.use { outputStream ->
+                        FileInputStream(file).use { inputStream ->
+                            val buffer = ByteArray(BUFFER_SIZE)
+                            var length: Int
+                            while (inputStream.read(buffer).also { length = it } != -1) {
+                                outputStream.write(buffer, 0, length)
+                            }
                         }
                     }
-                }
+            }
             true
         } catch (exception: RuntimeException) {
             false
         }
     }
 
-    override fun uriToByteArray(fileUri: Uri): ByteArray =
-        context
-            .contentResolver
-            .openInputStream(fileUri)
-            ?.use { inputStream ->
-                ByteArrayOutputStream().use { outputStream ->
-                    val buffer = ByteArray(BUFFER_SIZE)
-                    var length: Int
-                    while (inputStream.read(buffer).also { length = it } != -1) {
-                        outputStream.write(buffer, 0, length)
+    override suspend fun uriToByteArray(fileUri: Uri): ByteArray =
+        withContext(dispatcherManager.io) {
+            context
+                .contentResolver
+                .openInputStream(fileUri)
+                ?.use { inputStream ->
+                    ByteArrayOutputStream().use { outputStream ->
+                        val buffer = ByteArray(BUFFER_SIZE)
+                        var length: Int
+                        while (inputStream.read(buffer).also { length = it } != -1) {
+                            outputStream.write(buffer, 0, length)
+                        }
+                        outputStream.toByteArray()
                     }
-                    outputStream.toByteArray()
                 }
-            }
-            ?: byteArrayOf()
+                ?: byteArrayOf()
+        }
 }

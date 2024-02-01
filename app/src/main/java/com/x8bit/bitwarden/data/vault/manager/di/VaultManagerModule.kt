@@ -35,9 +35,11 @@ object VaultManagerModule {
     fun provideFileManager(
         @ApplicationContext context: Context,
         downloadService: DownloadService,
+        dispatcherManager: DispatcherManager,
     ): FileManager = FileManagerImpl(
         context = context,
         downloadService = downloadService,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides

@@ -31,5 +31,5 @@ interface FileManager {
     /**
      * Reads the [fileUri] into memory and returns the raw [ByteArray]
      */
-    fun uriToByteArray(fileUri: Uri): ByteArray
+    suspend fun uriToByteArray(fileUri: Uri): ByteArray
 }

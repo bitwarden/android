@@ -2347,7 +2347,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            every { fileManager.uriToByteArray(any()) } returns byteArray
+            coEvery { fileManager.uriToByteArray(any()) } returns byteArray
             coEvery {
                 vaultSdkSource.encryptBuffer(
                     userId = userId,
@@ -2384,7 +2384,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            every { fileManager.uriToByteArray(any()) } returns byteArray
+            coEvery { fileManager.uriToByteArray(any()) } returns byteArray
             coEvery {
                 vaultSdkSource.encryptBuffer(
                     userId = userId,
@@ -2429,7 +2429,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            every { fileManager.uriToByteArray(any()) } returns byteArray
+            coEvery { fileManager.uriToByteArray(any()) } returns byteArray
             coEvery {
                 vaultSdkSource.encryptBuffer(
                     userId = userId,
@@ -3052,7 +3052,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3096,7 +3096,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3151,7 +3151,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3213,7 +3213,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3284,7 +3284,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            every { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
