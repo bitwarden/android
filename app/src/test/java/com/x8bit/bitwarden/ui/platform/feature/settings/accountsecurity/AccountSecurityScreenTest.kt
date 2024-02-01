@@ -10,6 +10,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -635,6 +636,35 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `session timeout policy warning should update according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicyMinutes = 100,
+            )
+        }
+        val timeOnlyText = "Your organization policies have set your maximum allowed " +
+            "vault timeout to 1 hour(s) and 40 minute(s)."
+        composeTestRule
+            .onNodeWithText(timeOnlyText)
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicyMinutes = 100,
+                vaultTimeoutPolicyAction = "lock",
+            )
+        }
+        val bothText = "Your organization policies are affecting your vault timeout. " +
+            "Maximum allowed vault timeout is 1 hour(s) and 40 minute(s). Your vault " +
+            "timeout action is set to Lock."
+        composeTestRule
+            .onNodeWithText(bothText)
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `session timeout should be updated on or off according to state`() {
         composeTestRule
             .onAllNodesWithText("Session timeout")
@@ -697,6 +727,66 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performScrollTo()
             .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Custom")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performScrollTo()
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on session timeout click should update according to state`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicyMinutes = 100,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Session timeout")
+            .filterToOne(hasClickAction())
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Immediately")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("1 minute")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("5 minutes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("15 minutes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("30 minutes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText("1 hour")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("4 hours")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("On app restart")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Never")
+            .assertDoesNotExist()
         composeTestRule
             .onAllNodesWithText("Custom")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -954,6 +1044,47 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 AccountSecurityAction.CustomVaultTimeoutSelect(
                     VaultTimeout.Custom(vaultTimeoutInMinutes = 123),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `custom session timeout dialog Ok click should dismiss the dialog and show an error if value exceeds policy limit`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeout = VaultTimeout.Custom(vaultTimeoutInMinutes = 123),
+                vaultTimeoutPolicyMinutes = 100,
+            )
+        }
+        composeTestRule
+            .onNode(hasTextExactly("Custom", "02:03"))
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Your vault timeout exceeds the restrictions set by your organization.")
+            .assert(hasAnyAncestor(isDialog()))
+            .isDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.CustomVaultTimeoutSelect(
+                    VaultTimeout.Custom(vaultTimeoutInMinutes = 100),
                 ),
             )
         }
@@ -1354,6 +1485,8 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             isUnlockWithPinEnabled = false,
             vaultTimeout = VaultTimeout.ThirtyMinutes,
             vaultTimeoutAction = VaultTimeoutAction.LOCK,
+            vaultTimeoutPolicyMinutes = null,
+            vaultTimeoutPolicyAction = null,
         )
     }
 }

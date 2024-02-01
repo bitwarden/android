@@ -37,10 +37,14 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLogoutConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
@@ -60,6 +64,7 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
+import com.x8bit.bitwarden.ui.platform.util.minutes
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.LocalTime
 
@@ -210,7 +215,15 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
+            SessionTimeoutPolicyRow(
+                vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
+                vaultTimeoutPolicyAction = state.vaultTimeoutPolicyAction,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
             SessionTimeoutRow(
+                vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
                 selectedVaultTimeoutType = state.vaultTimeout.type,
                 onVaultTimeoutTypeSelect = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
@@ -219,6 +232,7 @@ fun AccountSecurityScreen(
             )
             (state.vaultTimeout as? VaultTimeout.Custom)?.let { customTimeout ->
                 SessionCustomTimeoutRow(
+                    vaultTimeoutPolicyMinutes = state.vaultTimeoutPolicyMinutes,
                     customVaultTimeout = customTimeout,
                     onCustomVaultTimeoutSelect = remember(viewModel) {
                         {
@@ -231,6 +245,7 @@ fun AccountSecurityScreen(
                 )
             }
             SessionTimeoutActionRow(
+                vaultTimeoutPolicyAction = state.vaultTimeoutPolicyAction,
                 selectedVaultTimeoutAction = state.vaultTimeoutAction,
                 onVaultTimeoutActionSelect = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it)) }
@@ -468,9 +483,44 @@ private fun UnlockWithPinRow(
     }
 }
 
+@Composable
+private fun SessionTimeoutPolicyRow(
+    vaultTimeoutPolicyMinutes: Int?,
+    vaultTimeoutPolicyAction: String?,
+    modifier: Modifier = Modifier,
+) {
+    // Show the policy warning if applicable.
+    if (vaultTimeoutPolicyMinutes != null || !vaultTimeoutPolicyAction.isNullOrBlank()) {
+        // Calculate the hours and minutes to show in the policy label.
+        val hours = vaultTimeoutPolicyMinutes?.floorDiv(MINUTES_PER_HOUR)
+        val minutes = vaultTimeoutPolicyMinutes?.mod(MINUTES_PER_HOUR)
+
+        // Get the localized version of the action.
+        val action = if (vaultTimeoutPolicyAction == "lock") {
+            R.string.lock.asText()
+        } else {
+            R.string.log_out.asText()
+        }
+
+        val policyText = if (hours == null || minutes == null) {
+            R.string.vault_timeout_action_policy_in_effect.asText(action)
+        } else if (vaultTimeoutPolicyAction.isNullOrBlank()) {
+            R.string.vault_timeout_policy_in_effect.asText(hours, minutes)
+        } else {
+            R.string.vault_timeout_policy_with_action_in_effect.asText(hours, minutes, action)
+        }
+
+        BitwardenPolicyWarningText(
+            text = policyText(),
+            modifier = modifier,
+        )
+    }
+}
+
 @Suppress("LongMethod")
 @Composable
 private fun SessionTimeoutRow(
+    vaultTimeoutPolicyMinutes: Int?,
     selectedVaultTimeoutType: VaultTimeout.Type,
     onVaultTimeoutTypeSelect: (VaultTimeout.Type) -> Unit,
     modifier: Modifier = Modifier,
@@ -492,6 +542,10 @@ private fun SessionTimeoutRow(
     when {
         shouldShowSelectionDialog -> {
             val vaultTimeoutOptions = VaultTimeout.Type.entries
+                .filter {
+                    it.minutes <= (vaultTimeoutPolicyMinutes ?: Int.MAX_VALUE)
+                }
+
             BitwardenSelectionDialog(
                 title = stringResource(id = R.string.session_timeout),
                 onDismissRequest = { shouldShowSelectionDialog = false },
@@ -535,11 +589,13 @@ private fun SessionTimeoutRow(
 @Suppress("LongMethod")
 @Composable
 private fun SessionCustomTimeoutRow(
+    vaultTimeoutPolicyMinutes: Int?,
     customVaultTimeout: VaultTimeout.Custom,
     onCustomVaultTimeoutSelect: (VaultTimeout.Custom) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowTimePickerDialog by rememberSaveable { mutableStateOf(false) }
+    var shouldShowViolatesPoliciesDialog by remember { mutableStateOf(false) }
     val vaultTimeoutInMinutes = customVaultTimeout.vaultTimeoutInMinutes
     BitwardenTextRow(
         text = stringResource(id = R.string.custom),
@@ -564,14 +620,41 @@ private fun SessionCustomTimeoutRow(
             initialMinute = vaultTimeoutInMinutes.mod(MINUTES_PER_HOUR),
             onTimeSelect = { hour, minute ->
                 shouldShowTimePickerDialog = false
-                onCustomVaultTimeoutSelect(
-                    VaultTimeout.Custom(
-                        vaultTimeoutInMinutes = hour * MINUTES_PER_HOUR + minute,
-                    ),
-                )
+
+                val totalMinutes = (hour * MINUTES_PER_HOUR) + minute
+                if (vaultTimeoutPolicyMinutes != null &&
+                    totalMinutes > vaultTimeoutPolicyMinutes
+                ) {
+                    shouldShowViolatesPoliciesDialog = true
+                } else {
+                    onCustomVaultTimeoutSelect(
+                        VaultTimeout.Custom(
+                            vaultTimeoutInMinutes = totalMinutes,
+                        ),
+                    )
+                }
             },
             onDismissRequest = { shouldShowTimePickerDialog = false },
             is24Hour = true,
+        )
+    }
+
+    if (shouldShowViolatesPoliciesDialog) {
+        BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = R.string.warning.asText(),
+                message = R.string.vault_timeout_to_large.asText(),
+            ),
+            onDismissRequest = {
+                shouldShowViolatesPoliciesDialog = false
+                vaultTimeoutPolicyMinutes?.let {
+                    onCustomVaultTimeoutSelect(
+                        VaultTimeout.Custom(
+                            vaultTimeoutInMinutes = it,
+                        ),
+                    )
+                }
+            },
         )
     }
 }
@@ -579,6 +662,7 @@ private fun SessionCustomTimeoutRow(
 @Suppress("LongMethod")
 @Composable
 private fun SessionTimeoutActionRow(
+    vaultTimeoutPolicyAction: String?,
     selectedVaultTimeoutAction: VaultTimeoutAction,
     onVaultTimeoutActionSelect: (VaultTimeoutAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -587,7 +671,11 @@ private fun SessionTimeoutActionRow(
     var shouldShowLogoutActionConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(
         text = stringResource(id = R.string.session_timeout_action),
-        onClick = { shouldShowSelectionDialog = true },
+        onClick = {
+            // The option is not selectable if there's a policy in place.
+            if (vaultTimeoutPolicyAction != null) return@BitwardenTextRow
+            shouldShowSelectionDialog = true
+        },
         modifier = modifier,
     ) {
         Text(

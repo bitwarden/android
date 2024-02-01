@@ -5,9 +5,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -46,21 +46,7 @@ class SyncResponseJsonExtensionsTest {
     }
 
     @Test
-    @OptIn(ExperimentalSerializationApi::class)
-    fun `policyInformation converts the Json data to policy information`() {
-        val masterPasswordData = buildJsonObject {
-            put(key = "minLength", value = 10)
-            put(key = "minComplexity", value = 3)
-            put(key = "requireUpper", value = null)
-            put(key = "requireLower", value = null)
-            put(key = "requireNumbers", value = true)
-            put(key = "requireSpecial", value = null)
-            put(key = "enforceOnLogin", value = true)
-        }
-        val masterPasswordPolicy = createMockPolicy(
-            type = PolicyTypeJson.MASTER_PASSWORD,
-            data = masterPasswordData,
-        )
+    fun `policyInformation converts the MasterPassword Json data to policy information`() {
         val policyInformation = PolicyInformation.MasterPassword(
             minLength = 10,
             minComplexity = 3,
@@ -70,10 +56,57 @@ class SyncResponseJsonExtensionsTest {
             requireSpecial = null,
             enforceOnLogin = true,
         )
+        val policy = createMockPolicy(
+            type = PolicyTypeJson.MASTER_PASSWORD,
+            data = Json.encodeToJsonElement(policyInformation).jsonObject,
+        )
 
         assertEquals(
             policyInformation,
-            masterPasswordPolicy.policyInformation,
+            policy.policyInformation,
+        )
+    }
+
+    @Test
+    fun `policyInformation converts the PasswordGenerator Json data to policy information`() {
+        val policyInformation = PolicyInformation.PasswordGenerator(
+            defaultType = "password",
+            minLength = null,
+            useUpper = true,
+            useLower = true,
+            useNumbers = null,
+            useSpecial = null,
+            minNumbers = null,
+            minSpecial = null,
+            minNumberWords = 4,
+            capitalize = true,
+            includeNumber = null,
+        )
+        val policy = createMockPolicy(
+            type = PolicyTypeJson.PASSWORD_GENERATOR,
+            data = Json.encodeToJsonElement(policyInformation).jsonObject,
+        )
+
+        assertEquals(
+            policyInformation,
+            policy.policyInformation,
+        )
+    }
+
+    @Test
+    fun `policyInformation converts the VaultTimeout Json data to policy information`() {
+        val policyInformation = PolicyInformation.VaultTimeout(
+            minutes = 10,
+            action = "lock",
+        )
+        val policy = createMockPolicy(
+            type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
+            data = Json.encodeToJsonElement(policyInformation).jsonObject,
+        )
+
+        assertEquals(
+            policyInformation,
+            policy.policyInformation,
         )
     }
 

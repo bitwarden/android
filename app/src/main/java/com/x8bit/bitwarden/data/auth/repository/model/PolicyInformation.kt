@@ -98,4 +98,16 @@ sealed class PolicyInformation {
             const val TYPE_PASSPHRASE: String = "passphrase"
         }
     }
+
+    /**
+     * Represents a policy enforcing rules on the user's vault timeout settings.
+     */
+    @Serializable
+    data class VaultTimeout(
+        @SerialName("minutes")
+        val minutes: Int?,
+
+        @SerialName("action")
+        val action: String?,
+    ) : PolicyInformation()
 }
