@@ -76,7 +76,8 @@ namespace Bit.Droid
 
             //We need to get and set the Options before calling OnCreate as that will "trigger" CreateWindow on App.xaml.cs
             _appOptions = GetOptions();
-            ((Bit.App.App)Microsoft.Maui.Controls.Application.Current).SetOptions(_appOptions);
+            //This does not replace existing Options in App.xaml.cs if it exists already. It only updates properties in Options related with Autofill/CreateSend/etc..
+            ((Bit.App.App)Microsoft.Maui.Controls.Application.Current).SetAndroidOptions(_appOptions);
 
             base.OnCreate(savedInstanceState);
 
