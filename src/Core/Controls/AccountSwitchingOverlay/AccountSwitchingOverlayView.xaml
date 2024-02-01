@@ -12,12 +12,14 @@
     BackgroundColor="#22000000"
     Padding="0"
     IsVisible="False">
-    <VerticalStackLayout
+    <Grid
         x:Name="_accountListContainer"
         VerticalOptions="Fill"
-        HorizontalOptions="FillAndExpand"
-        BackgroundColor="Transparent">
+        HorizontalOptions="Fill"
+        BackgroundColor="Transparent"
+        RowDefinitions="Auto, *">
         <Frame
+            Grid.Row="0"
             Padding="0"
             HorizontalOptions="Fill"
             VerticalOptions="Start">
@@ -49,12 +51,13 @@
             </ListView>
         </Frame>
         <BoxView
+            Grid.Row="1"
             BackgroundColor="Transparent"
             HorizontalOptions="Fill"
-            VerticalOptions="FillAndExpand">
+            VerticalOptions="Fill">
             <BoxView.GestureRecognizers>
                 <TapGestureRecognizer Tapped="FreeSpaceOverlay_Tapped" />
             </BoxView.GestureRecognizers>
         </BoxView>
-    </VerticalStackLayout>
+    </Grid>
 </ContentView>
