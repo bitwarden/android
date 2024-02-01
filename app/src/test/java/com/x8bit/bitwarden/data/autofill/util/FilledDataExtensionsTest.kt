@@ -70,6 +70,7 @@ class FilledDataExtensionsTest {
                     data = AutofillView.Data(
                         autofillId = autofillId,
                         isFocused = true,
+                        textValue = null,
                     ),
                 ),
             ),

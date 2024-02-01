@@ -10,16 +10,14 @@ import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 private const val ANDROID_APP_SCHEME: String = "androidapp"
 
 /**
- * Try and build a URI. The try progression looks like this:
- * 1. Try searching traversal data for website URIs.
- * 2. Try searching traversal data for package names, if one is found, convert it into a URI.
- * 3. Try extracting a package name from [assistStructure], if one is found, convert it into a URI.
+ * Try and build a URI. First, try building a website from the list of [ViewNodeTraversalData]. If
+ * that fails, try converting [packageName] into an Android app URI.
  */
 @Suppress("ReturnCount")
 fun List<ViewNodeTraversalData>.buildUriOrNull(
-    assistStructure: AssistStructure,
+    packageName: String?,
 ): String? {
-    // Search list of [ViewNodeTraversalData] for a website URI.
+    // Search list of ViewNodeTraversalData for a website URI.
     this
         .firstOrNull { it.website != null }
         ?.website
@@ -27,26 +25,32 @@ fun List<ViewNodeTraversalData>.buildUriOrNull(
             return websiteUri
         }
 
-    // Search list of [ViewNodeTraversalData] for a valid package name.
-    this
+    // If the package name is available, build a URI out of that.
+    return packageName
+        ?.let { nonNullPackageName ->
+            buildUri(
+                domain = nonNullPackageName,
+                scheme = ANDROID_APP_SCHEME,
+            )
+        }
+}
+
+/**
+ * Try and build a package name. First, try searching traversal data for package names. If that
+ * fails, try extracting a package name from [assistStructure].
+ */
+fun List<ViewNodeTraversalData>.buildPackageNameOrNull(
+    assistStructure: AssistStructure,
+): String? {
+    // Search list of ViewNodeTraversalData for a valid package name.
+    val traversalDataPackageName = this
         .firstOrNull { it.idPackage != null }
         ?.idPackage
-        ?.let { packageName ->
-            return buildUri(
-                domain = packageName,
-                scheme = ANDROID_APP_SCHEME,
-            )
-        }
 
-    // Try getting the package name from the [AssistStructure] as a last ditch effort.
-    return assistStructure
-        .buildPackageNameOrNull()
-        ?.let { packageName ->
-            buildUri(
-                domain = packageName,
-                scheme = ANDROID_APP_SCHEME,
-            )
-        }
+    // Try getting the package name from the AssistStructure as a last ditch effort.
+    return traversalDataPackageName
+        ?: assistStructure
+            .buildPackageNameOrNull()
 }
 
 /**

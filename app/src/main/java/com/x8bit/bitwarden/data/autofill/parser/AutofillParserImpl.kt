@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
+import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
@@ -78,8 +79,11 @@ class AutofillParserImpl(
         // Find the focused view.
         val focusedView = autofillViews.firstOrNull { it.data.isFocused }
 
-        val uri = traversalDataList.buildUriOrNull(
+        val packageName = traversalDataList.buildPackageNameOrNull(
             assistStructure = assistStructure,
+        )
+        val uri = traversalDataList.buildUriOrNull(
+            packageName = packageName,
         )
 
         val blockListedURIs = settingsRepository.blockedAutofillUris + BLOCK_LISTED_URIS
@@ -122,6 +126,7 @@ class AutofillParserImpl(
             inlinePresentationSpecs = inlinePresentationSpecs,
             ignoreAutofillIds = ignoreAutofillIds,
             maxInlineSuggestionsCount = maxInlineSuggestionsCount,
+            packageName = packageName,
             partition = partition,
             uri = uri,
         )

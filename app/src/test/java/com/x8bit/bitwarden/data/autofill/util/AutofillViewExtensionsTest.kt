@@ -20,6 +20,7 @@ class AutofillViewExtensionsTest {
     private val autofillViewData = AutofillView.Data(
         autofillId = autofillId,
         isFocused = false,
+        textValue = null,
     )
 
     @BeforeEach

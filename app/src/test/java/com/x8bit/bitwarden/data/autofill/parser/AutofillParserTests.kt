@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
+import com.x8bit.bitwarden.data.autofill.util.buildPackageNameOrNull
 import com.x8bit.bitwarden.data.autofill.util.buildUriOrNull
 import com.x8bit.bitwarden.data.autofill.util.getInlinePresentationSpecs
 import com.x8bit.bitwarden.data.autofill.util.getMaxInlineSuggestionsCount
@@ -115,7 +116,10 @@ class AutofillParserTests {
                 isInlineAutofillEnabled = false,
             )
         } returns 0
-        every { any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure) } returns URI
+        every {
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+        } returns PACKAGE_NAME
+        every { any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME) } returns URI
         parser = AutofillParserImpl(
             settingsRepository = settingsRepository,
         )
@@ -184,7 +188,9 @@ class AutofillParserTests {
             data = AutofillView.Data(
                 autofillId = parentAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
+            monthValue = null,
         )
         val parentViewNode: AssistStructure.ViewNode = mockk {
             every { this@mockk.autofillHints } returns arrayOf(parentAutofillHint)
@@ -206,6 +212,7 @@ class AutofillParserTests {
             inlinePresentationSpecs = inlinePresentationSpecs,
             maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             partition = autofillPartition,
+            packageName = PACKAGE_NAME,
             uri = URI,
         )
         every { assistStructure.windowNodeCount } returns 1
@@ -228,7 +235,8 @@ class AutofillParserTests {
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = true,
             )
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -240,12 +248,15 @@ class AutofillParserTests {
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
+            monthValue = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = false,
+                textValue = null,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -255,6 +266,7 @@ class AutofillParserTests {
             ignoreAutofillIds = emptyList(),
             inlinePresentationSpecs = inlinePresentationSpecs,
             maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
             partition = autofillPartition,
             uri = URI,
         )
@@ -278,7 +290,8 @@ class AutofillParserTests {
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = true,
             )
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -290,12 +303,15 @@ class AutofillParserTests {
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = false,
+                textValue = null,
             ),
+            monthValue = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
         )
         val autofillPartition = AutofillPartition.Login(
@@ -305,6 +321,7 @@ class AutofillParserTests {
             ignoreAutofillIds = emptyList(),
             inlinePresentationSpecs = inlinePresentationSpecs,
             maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
             partition = autofillPartition,
             uri = URI,
         )
@@ -328,7 +345,8 @@ class AutofillParserTests {
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = true,
             )
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -340,12 +358,15 @@ class AutofillParserTests {
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
+            monthValue = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -355,6 +376,7 @@ class AutofillParserTests {
             ignoreAutofillIds = emptyList(),
             inlinePresentationSpecs = inlinePresentationSpecs,
             maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
             partition = autofillPartition,
             uri = URI,
         )
@@ -378,7 +400,8 @@ class AutofillParserTests {
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = true,
             )
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -391,12 +414,15 @@ class AutofillParserTests {
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
+            monthValue = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -406,6 +432,7 @@ class AutofillParserTests {
             ignoreAutofillIds = emptyList(),
             inlinePresentationSpecs = emptyList(),
             maxInlineSuggestionsCount = 0,
+            packageName = PACKAGE_NAME,
             partition = autofillPartition,
             uri = URI,
         )
@@ -429,7 +456,8 @@ class AutofillParserTests {
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = false,
             )
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -442,12 +470,15 @@ class AutofillParserTests {
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
+            monthValue = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -457,6 +488,7 @@ class AutofillParserTests {
             ignoreAutofillIds = emptyList(),
             inlinePresentationSpecs = emptyList(),
             maxInlineSuggestionsCount = 0,
+            packageName = PACKAGE_NAME,
             partition = autofillPartition,
             uri = URI,
         )
@@ -480,7 +512,8 @@ class AutofillParserTests {
                 autofillAppInfo = autofillAppInfo,
                 isInlineAutofillEnabled = false,
             )
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -492,12 +525,15 @@ class AutofillParserTests {
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
+            monthValue = null,
         )
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
                 isFocused = true,
+                textValue = null,
             ),
         )
         val remoteBlockList = listOf(
@@ -512,7 +548,7 @@ class AutofillParserTests {
         fun testBlockListedUri(blockListedUri: String) {
             // Setup
             every {
-                any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+                any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
             } returns blockListedUri
 
             // Test
@@ -531,7 +567,8 @@ class AutofillParserTests {
 
         // Verify all tests
         verify(exactly = BLOCK_LISTED_URIS.size + remoteBlockList.size) {
-            any<List<ViewNodeTraversalData>>().buildUriOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
         }
     }
 
@@ -554,5 +591,6 @@ private val BLOCK_LISTED_URIS: List<String> = listOf(
 )
 private const val ID_PACKAGE: String = "com.x8bit.bitwarden"
 private const val MAX_INLINE_SUGGESTION_COUNT: Int = 42
+private const val PACKAGE_NAME: String = "com.google"
 private const val URI: String = "androidapp://com.google"
 private const val WEBSITE: String = "https://www.google.com"

@@ -12,10 +12,12 @@ sealed class AutofillView {
      *
      * @param autofillId The [AutofillId] associated with this view.
      * @param isFocused Whether the view is currently focused.
+     * @param textValue A text value that represents the input present in the field.
      */
     data class Data(
         val autofillId: AutofillId,
         val isFocused: Boolean,
+        val textValue: String?,
     )
 
     /**
@@ -29,10 +31,14 @@ sealed class AutofillView {
     sealed class Card : AutofillView() {
 
         /**
-         * The expiration month [AutofillView] for the [Card] data partition.
+         * The expiration month [AutofillView] for the [Card] data partition. This implementation
+         * also has its own [monthValue] because it can be present in lists, in which case there
+         * is specialized logic for determining its [monthValue]. The [Data.textValue] is very
+         * likely going to be a very different value.
          */
         data class ExpirationMonth(
             override val data: Data,
+            val monthValue: String?,
         ) : Card()
 
         /**

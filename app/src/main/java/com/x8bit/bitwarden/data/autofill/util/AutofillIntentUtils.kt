@@ -76,13 +76,13 @@ fun createTotpCopyIntentSender(
 }
 
 /**
- * Creates an [Intent] in order to start the cipher saving process during the autofill flow.
+ * Creates an [IntentSender] in order to start the cipher saving process during the autofill flow.
  */
-fun createAutofillSavedItemIntent(
+fun createAutofillSavedItemIntentSender(
     autofillAppInfo: AutofillAppInfo,
     autofillSaveItem: AutofillSaveItem,
-): Intent =
-    Intent(
+): IntentSender {
+    val intent = Intent(
         autofillAppInfo.context,
         MainActivity::class.java,
     )
@@ -90,6 +90,16 @@ fun createAutofillSavedItemIntent(
             setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             putExtra(AUTOFILL_SAVE_ITEM_DATA_KEY, autofillSaveItem)
         }
+
+    return PendingIntent
+        .getActivity(
+            autofillAppInfo.context,
+            0,
+            intent,
+            PendingIntent.FLAG_CANCEL_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+        .intentSender
+}
 
 /**
  * Creates an [Intent] in order to specify that there is a successful selection during a manual

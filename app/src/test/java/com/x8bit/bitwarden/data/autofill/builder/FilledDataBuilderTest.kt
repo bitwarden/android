@@ -36,6 +36,7 @@ class FilledDataBuilderTest {
     private val autofillViewData = AutofillView.Data(
         autofillId = autofillId,
         isFocused = false,
+        textValue = null,
     )
 
     @BeforeEach
@@ -83,6 +84,7 @@ class FilledDataBuilderTest {
             ignoreAutofillIds = ignoreAutofillIds,
             inlinePresentationSpecs = emptyList(),
             maxInlineSuggestionsCount = 0,
+            packageName = null,
             partition = autofillPartition,
             uri = URI,
         )
@@ -153,6 +155,7 @@ class FilledDataBuilderTest {
                 ignoreAutofillIds = ignoreAutofillIds,
                 inlinePresentationSpecs = emptyList(),
                 maxInlineSuggestionsCount = 0,
+                packageName = null,
                 partition = autofillPartition,
                 uri = null,
             )
@@ -196,6 +199,7 @@ class FilledDataBuilderTest {
         )
         val autofillViewExpirationMonth = AutofillView.Card.ExpirationMonth(
             data = autofillViewData,
+            monthValue = null,
         )
         val autofillViewExpirationYear = AutofillView.Card.ExpirationYear(
             data = autofillViewData,
@@ -216,6 +220,7 @@ class FilledDataBuilderTest {
             ignoreAutofillIds = ignoreAutofillIds,
             inlinePresentationSpecs = emptyList(),
             maxInlineSuggestionsCount = 0,
+            packageName = null,
             partition = autofillPartition,
             uri = URI,
         )
@@ -302,6 +307,7 @@ class FilledDataBuilderTest {
                     inlinePresentationSpec,
                 ),
                 maxInlineSuggestionsCount = 3,
+                packageName = null,
                 partition = autofillPartition,
                 uri = URI,
             )

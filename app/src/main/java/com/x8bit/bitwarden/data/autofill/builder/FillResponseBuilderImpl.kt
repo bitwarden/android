@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.builder
 
 import android.content.IntentSender
 import android.service.autofill.FillResponse
+import android.service.autofill.SaveInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
@@ -18,9 +19,15 @@ class FillResponseBuilderImpl : FillResponseBuilder {
     override fun build(
         autofillAppInfo: AutofillAppInfo,
         filledData: FilledData,
+        saveInfo: SaveInfo?,
     ): FillResponse? =
         if (filledData.fillableAutofillIds.isNotEmpty()) {
             val fillResponseBuilder = FillResponse.Builder()
+
+            saveInfo
+                ?.let { nonNullSaveInfo ->
+                    fillResponseBuilder.setSaveInfo(nonNullSaveInfo)
+                }
 
             filledData
                 .filledPartitions
