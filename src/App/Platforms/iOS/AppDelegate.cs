@@ -460,20 +460,21 @@ namespace Bit.iOS
             _eventTimer?.Invalidate();
             _eventTimer?.Dispose();
             _eventTimer = null;
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                try
-                {
-                    _eventTimer = NSTimer.CreateScheduledTimer(60, true, timer =>
-                    {
-                        _eventService?.UploadEventsAsync().FireAndForget();
-                    });
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                }
-            });
+            // TODO: Uncomment, this is just a test to see if this is causing the background crash on release when sending the app to background
+            //MainThread.BeginInvokeOnMainThread(() =>
+            //{
+            //    try
+            //    {
+            //        _eventTimer = NSTimer.CreateScheduledTimer(60, true, timer =>
+            //        {
+            //            _eventService?.UploadEventsAsync().FireAndForget();
+            //        });
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        LoggerHelper.LogEvenIfCantBeResolved(ex);
+            //    }
+            //});
         }
 
         private async Task StopEventTimerAsync()
@@ -483,19 +484,20 @@ namespace Bit.iOS
                 _eventTimer?.Invalidate();
                 _eventTimer?.Dispose();
                 _eventTimer = null;
-                if (_eventBackgroundTaskId > 0)
-                {
-                    UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
-                    _eventBackgroundTaskId = 0;
-                }
-                _eventBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
-                {
-                    UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
-                    _eventBackgroundTaskId = 0;
-                });
-                await _eventService.UploadEventsAsync();
-                UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
-                _eventBackgroundTaskId = 0;
+                // TODO: Uncomment, this is just a test to see if this is causing the background crash on release when sending the app to background
+                //if (_eventBackgroundTaskId > 0)
+                //{
+                //    UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+                //    _eventBackgroundTaskId = 0;
+                //}
+                //_eventBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
+                //{
+                //    UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+                //    _eventBackgroundTaskId = 0;
+                //});
+                //await _eventService.UploadEventsAsync();
+                //UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+                //_eventBackgroundTaskId = 0;
             }
             catch (Exception ex)
             {

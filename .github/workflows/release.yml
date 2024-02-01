@@ -38,7 +38,7 @@ jobs:
           fi
 
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Check Release Version
         id: version
@@ -68,7 +68,7 @@ jobs:
 
       - name: Download all artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -76,7 +76,7 @@ jobs:
 
       - name: Dry Run - Download all artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -126,11 +126,11 @@ jobs:
     if: inputs.fdroid_publish
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -139,7 +139,7 @@ jobs:
 
       - name: Dry Run - Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
         with:
           workflow: build.yml
           workflow_conclusion: success

@@ -1,6 +1,11 @@
 <Project>
  <PropertyGroup>
    <MauiVersion>8.0.4-nightly.*</MauiVersion>
+   <ReleaseCodesignProvision>Automatic:AppStore</ReleaseCodesignProvision>
+   <ReleaseCodesignKey>iPhone Distribution</ReleaseCodesignKey>
+   <IncludeBitwardeniOSExtensions>True</IncludeBitwardeniOSExtensions>
+   <IncludeBitwardenWatchOSApp>True</IncludeBitwardenWatchOSApp>
+   
    <!-- Uncomment this when Unit Testing-->
    <!-- <CustomConstants>UT</CustomConstants> -->
  </PropertyGroup>

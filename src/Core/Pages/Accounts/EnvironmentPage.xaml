@@ -37,7 +37,7 @@
                         Text="{Binding BaseUrl}"
                         Keyboard="Url"
                         Placeholder="ex. https://bitwarden.company.com"
-                        StyleClass="box-value"
+                        StyleClass="box-value, no-keyboard-auto-help"
                         ReturnType="Go"
                         ReturnCommand="{Binding SubmitCommand}"
                         AutomationId="ServerUrlEntry"/>
@@ -59,7 +59,7 @@
                         x:Name="_webVaultEntry"
                         Text="{Binding WebVaultUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value"
+                        StyleClass="box-value, no-keyboard-auto-help"
                         AutomationId="WebVaultUrlEntry"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
@@ -70,7 +70,7 @@
                         x:Name="_apiEntry"
                         Text="{Binding ApiUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value"
+                        StyleClass="box-value, no-keyboard-auto-help"
                         AutomationId="ApiUrlEntry"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
@@ -81,7 +81,7 @@
                         x:Name="_identityEntry"
                         Text="{Binding IdentityUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value"
+                        StyleClass="box-value, no-keyboard-auto-help"
                         AutomationId="IdentityUrlEntry"/>
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
@@ -92,7 +92,7 @@
                         x:Name="_iconsEntry"
                         Text="{Binding IconsUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value"
+                        StyleClass="box-value, no-keyboard-auto-help"
                         ReturnType="Go"
                         ReturnCommand="{Binding SubmitCommand}"
                         AutomationId="IconsUrlEntry"/>

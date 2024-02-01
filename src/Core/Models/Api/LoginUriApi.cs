@@ -6,5 +6,6 @@ namespace Bit.Core.Models.Api
     {
         public string Uri { get; set; }
         public UriMatchType? Match { get; set; }
+        public string UriChecksum { get; set; }
     }
 }

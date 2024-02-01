@@ -2820,6 +2820,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>サポートに連絡しますか?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>プライバシーポリシーを確認しますか？</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>アプリストアに進みますか?</value>
   </data>
@@ -2838,6 +2841,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>お探しのものが見つかりませんか? bitwarden.com で Bitwarden のサポートにご連絡ください。</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>bitwarden.com でプライバシーポリシーをご覧ください。</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Bitwarden アカウントの機能をウェブアプリでご確認ください。</value>

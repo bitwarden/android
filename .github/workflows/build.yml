@@ -80,7 +80,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
+        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402 # v1.3.2
 
       # This step might be obsolete at some point as .NET MAUI workloads 
       # are starting to come pre-installed on the GH Actions build agents.
@@ -157,7 +157,7 @@ jobs:
         run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx" /p:CustomConstants=UT
 
       - name: Report test results
-        uses: dorny/test-reporter@c9b3d0e2bd2a4e96aaf424dbaa31c46b42318226 # v1.6.0
+        uses: dorny/test-reporter@eaa763f6ffc21c7a37837f56cd5f9737f27fc6c8 # v1.8.0
         if: always()
         with:
           name: Test Results
@@ -226,7 +226,7 @@ jobs:
 
       - name: Upload Prod .aab artifact
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
@@ -234,7 +234,7 @@ jobs:
 
       - name: Upload Prod .apk artifact
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
@@ -242,7 +242,7 @@ jobs:
 
       - name: Upload Other .apk artifact
         if: ${{ matrix.variant != 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
@@ -262,7 +262,7 @@ jobs:
 
       - name: Upload .apk sha file for prod
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: bw-android-apk-sha256.txt
           path: ./bw-android-apk-sha256.txt
@@ -270,7 +270,7 @@ jobs:
 
       - name: Upload .apk sha file for other
         if: ${{ matrix.variant != 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: bw-android-${{ matrix.variant }}-apk-sha256.txt
           path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
@@ -310,7 +310,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
+        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402 # v1.3.2
 
       # This step might be obsolete at some point as .NET MAUI workloads 
       # are starting to come pre-installed on the GH Actions build agents.
@@ -465,7 +465,7 @@ jobs:
           Copy-Item $signedApkPath $signedApkDestPath
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
@@ -477,7 +477,7 @@ jobs:
             -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
 
       - name: Upload F-Droid sha file
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: bw-fdroid-apk-sha256.txt
           path: ./bw-fdroid-apk-sha256.txt
@@ -525,7 +525,7 @@ jobs:
           submodules: 'true'
 
       - name: Login to Azure - CI Subscription
-        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.6
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
@@ -705,7 +705,7 @@ jobs:
           cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
 
       - name: Upload App Store .ipa & dSYMs artifacts
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: Bitwarden iOS
           path: |
@@ -714,7 +714,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload .app file for Automation CI
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@26f96dfa697d77e81fd5907df203aa23a56210a8 # v4.3.0
         with:
           name: ${{ env.app_ci_output_filename }}.app.zip
           path: ./bitwarden-export/${{ env.app_ci_output_filename }}.app.zip
@@ -799,7 +799,7 @@ jobs:
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
       - name: Login to Azure - CI Subscription
-        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.6
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
@@ -811,7 +811,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
-        uses: crowdin/github-action@965d501f160af7b1f88aed4c29154b0caf1e94b9 # v1.9.0
+        uses: crowdin/github-action@6fb7e99759b996fd142995636fd8c88c1fb8ecd9 # v1.16.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
@@ -858,7 +858,7 @@ jobs:
           fi
 
       - name: Login to Azure - CI Subscription
-        uses: Azure/login@92a5484dfaf04ca78a94597f4f19fea633851fa2 # v1.4.6
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
         if: failure()
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}

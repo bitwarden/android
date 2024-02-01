@@ -360,7 +360,7 @@
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URI (länk)</value>
+    <value>URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -862,7 +862,7 @@ Vänligen använd en enhet som stöds och/eller lägg till fler metoder som har 
     <value>Lägg till ny bilaga</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Bifogade filer</value>
+    <value>Bilagor</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
     <value>Kunde ej hämta fil.</value>
@@ -2822,6 +2822,9 @@ Vill du byta till detta konto?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Fortsätt att kontakta supporten?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Fortsätt till integritetspolicy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Fortsätt till appbutiken?</value>
   </data>
@@ -2840,6 +2843,9 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Hittar du inte det du söker? Hör av dig till Bitwardens support på bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Kolla in vår integritetspolicy på bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Utforska fler funktioner i ditt Bitwarden-konto i webbappen.</value>
