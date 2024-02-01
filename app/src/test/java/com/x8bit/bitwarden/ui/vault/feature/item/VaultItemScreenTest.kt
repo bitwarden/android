@@ -771,7 +771,8 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `menu Delete option click should send show deletion confirmation dialog`() {
+    fun `menu Delete option click should be displayed`() {
+
         // Confirm dropdown version of item is absent
         composeTestRule
             .onAllNodesWithText("Delete")
@@ -785,52 +786,22 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText("Delete")
             .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Do you really want to send to the trash?")
             .assertIsDisplayed()
-    }
-
-    @Test
-    fun `Delete dialog cancel click should hide deletion confirmation menu`() {
-        // Open the overflow menu
-        composeTestRule
-            .onNodeWithContentDescription("More")
-            .performClick()
-        // Click on the delete item in the dropdown
-        composeTestRule
-            .onAllNodesWithText("Delete")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Do you really want to send to the trash?")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("Cancel")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Do you really want to send to the trash?")
-            .assertIsNotDisplayed()
     }
 
     @Test
     fun `Delete dialog ok click should send ConfirmDeleteClick`() {
-        // Open the overflow menu
-        composeTestRule
-            .onNodeWithContentDescription("More")
-            .performClick()
-        // Click on the delete item in the dropdown
-        composeTestRule
-            .onAllNodesWithText("Delete")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState
+                    .DialogState
+                    .DeleteConfirmationPrompt("TestText".asText()),
+            )
+        }
 
         composeTestRule
-            .onNodeWithText("Do you really want to send to the trash?")
+            .onAllNodesWithText("Delete")
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
         composeTestRule
@@ -843,41 +814,25 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Delete dialog text should display according to state`() {
-        // Open the overflow menu
-        composeTestRule
-            .onNodeWithContentDescription("More")
-            .performClick()
-        // Click on the delete item in the dropdown
-        composeTestRule
-            .onAllNodesWithText("Delete")
-            .filterToOne(hasAnyAncestor(isPopup()))
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Do you really want to send to the trash?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
+    fun `Delete Confirmation dialog text should display according to state`() {
         mutableStateFlow.update {
             it.copy(
-                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON.copy(
-                        currentCipher = createMockCipherView(
-                            number = 1,
-                            isDeleted = true,
-                        ),
-                    ),
-                ),
+                dialog = VaultItemState
+                    .DialogState
+                    .DeleteConfirmationPrompt("TestText".asText()),
             )
         }
 
         composeTestRule
-            .onAllNodesWithText(
-                text = "Do you really want to permanently delete? This cannot be undone.",
-            )
+            .onAllNodesWithText("Delete")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test

@@ -67,13 +67,10 @@ fun VaultItemScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
-    val confirmDeleteClickAction = remember(viewModel) {
-        { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
-    }
     val confirmRestoreAction = remember(viewModel) {
         { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
     }
-    var pendingDeleteCipher by rememberSaveable { mutableStateOf(false) }
+
     var pendingRestoreCipher by rememberSaveable { mutableStateOf(false) }
 
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
@@ -138,26 +135,15 @@ fun VaultItemScreen(
                 )
             }
         },
+        onConfirmDeleteClick = remember {
+            {
+                viewModel.trySendAction(
+                    VaultItemAction.Common.ConfirmDeleteClick,
+                )
+            }
+        },
     )
 
-    if (pendingDeleteCipher) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.delete),
-            message = state.deletionConfirmationText(),
-            confirmButtonText = stringResource(id = R.string.ok),
-            dismissButtonText = stringResource(id = R.string.cancel),
-            onConfirmClick = {
-                pendingDeleteCipher = false
-                confirmDeleteClickAction()
-            },
-            onDismissClick = {
-                pendingDeleteCipher = false
-            },
-            onDismissRequest = {
-                pendingDeleteCipher = false
-            },
-        )
-    }
     if (pendingRestoreCipher) {
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.restore),
@@ -241,7 +227,13 @@ fun VaultItemScreen(
                                 .takeIf { state.isCipherInCollection },
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.delete),
-                                onClick = { pendingDeleteCipher = true },
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.DeleteClick,
+                                        )
+                                    }
+                                },
                             ),
                         ),
                     )
@@ -292,6 +284,7 @@ fun VaultItemScreen(
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
+    onConfirmDeleteClick: () -> Unit,
     onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
 ) {
     when (dialog) {
@@ -310,6 +303,18 @@ private fun VaultItemDialogs(
         is VaultItemState.DialogState.MasterPasswordDialog -> {
             BitwardenMasterPasswordDialog(
                 onConfirmClick = { onSubmitMasterPassword(it, dialog.action) },
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemState.DialogState.DeleteConfirmationPrompt -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.delete),
+                message = dialog.message.invoke(),
+                confirmButtonText = stringResource(id = R.string.ok),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = onConfirmDeleteClick,
+                onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,
             )
         }

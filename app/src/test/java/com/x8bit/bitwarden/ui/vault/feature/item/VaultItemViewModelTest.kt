@@ -134,7 +134,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `ConfirmDeleteClick should show password dialog when re-prompt is required`() =
+        fun `DeleteClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
                 val mockCipherView = mockk<CipherView> {
@@ -149,7 +149,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
 
                 assertEquals(loginState, viewModel.stateFlow.value)
-                viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
+                viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
                 assertEquals(
                     loginState.copy(
                         dialog = VaultItemState.DialogState.MasterPasswordDialog(
@@ -165,6 +165,78 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         totpCodeItemData = null,
                     )
                 }
+            }
+
+        @Test
+        fun `DeleteClick should update state when re-prompt is not required`() =
+            runTest {
+                val loginState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON
+                        .copy(requiresReprompt = false),
+                )
+
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginState
+                }
+
+                val expected = DEFAULT_STATE.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON.copy(
+                            requiresReprompt = false,
+                        ),
+                    ),
+                    dialog = VaultItemState.DialogState.DeleteConfirmationPrompt(
+                        R.string.do_you_really_want_to_soft_delete_cipher.asText(),
+                    ),
+                )
+
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
+                assertEquals(expected, viewModel.stateFlow.value)
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `DeleteClick should update state when re-prompt is not required and it is a hard delete`() =
+            runTest {
+                val loginState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON
+                        .copy(
+                            requiresReprompt = false,
+                            currentCipher = DEFAULT_COMMON
+                                .currentCipher
+                                ?.copy(deletedDate = Instant.MIN),
+                        ),
+                )
+
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns loginState
+                }
+
+                val expected = DEFAULT_STATE.copy(
+                    viewState = loginState,
+                    dialog = VaultItemState.DialogState.DeleteConfirmationPrompt(
+                        R.string.do_you_really_want_to_permanently_delete_cipher.asText(),
+                    ),
+                )
+
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
+                assertEquals(expected, viewModel.stateFlow.value)
             }
 
         @Test
