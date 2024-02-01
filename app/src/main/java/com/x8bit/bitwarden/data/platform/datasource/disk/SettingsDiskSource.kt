@@ -19,6 +19,11 @@ interface SettingsDiskSource {
     var appLanguage: AppLanguage?
 
     /**
+     * Has the initial autofill dialog been shown to the user.
+     */
+    var initialAutofillDialogShown: Boolean?
+
+    /**
      * The currently persisted app theme (or `null` if not set).
      */
     var appTheme: AppTheme

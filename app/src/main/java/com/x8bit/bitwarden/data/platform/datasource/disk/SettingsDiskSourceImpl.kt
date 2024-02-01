@@ -32,6 +32,7 @@ private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIn
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
 private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
 private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "$BASE_KEY:clearClipboard"
+private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "$BASE_KEY:addSitePromptShown"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -74,6 +75,15 @@ class SettingsDiskSourceImpl(
             putString(
                 key = APP_LANGUAGE_KEY,
                 value = value?.localeName,
+            )
+        }
+
+    override var initialAutofillDialogShown: Boolean?
+        get() = getBoolean(key = INITIAL_AUTOFILL_DIALOG_SHOWN)
+        set(value) {
+            putBoolean(
+                key = INITIAL_AUTOFILL_DIALOG_SHOWN,
+                value = value,
             )
         }
 

@@ -65,6 +65,12 @@ class SettingsRepositoryImpl(
                 initialValue = settingsDiskSource.appTheme,
             )
 
+    override var initialAutofillDialogShown: Boolean
+        get() = settingsDiskSource.initialAutofillDialogShown ?: false
+        set(value) {
+            settingsDiskSource.initialAutofillDialogShown = value
+        }
+
     override var vaultLastSync: Instant?
         get() = vaultLastSyncStateFlow.value
         set(value) {
