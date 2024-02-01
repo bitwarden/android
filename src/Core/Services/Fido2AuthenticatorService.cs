@@ -233,6 +233,10 @@ namespace Bit.Core.Services
         private async Task<string[]> FindExcludedCredentialsAsync(
             PublicKeyCredentialDescriptor[] credentials
         ) {
+            if (credentials == null || credentials.Length == 0) {
+                return [];
+            }
+
             var ids = new List<string>();
 
             foreach (var credential in credentials) 
