@@ -82,6 +82,20 @@ interface SettingsDiskSource {
     )
 
     /**
+     * Retrieves the preference indicating whether the TOTP code should be automatically copied to
+     * the clipboard for autofill suggestions associated with the specified [userId].
+     */
+    fun getAutoCopyTotpDisabled(userId: String): Boolean?
+
+    /**
+     * Stores the given [isAutomaticallyCopyTotpDisabled] for the given [userId].
+     */
+    fun storeAutoCopyTotpDisabled(
+        userId: String,
+        isAutomaticallyCopyTotpDisabled: Boolean?,
+    )
+
+    /**
      * Gets the last time the app synced the vault data for a given [userId] (or `null` if the
      * vault has never been synced).
      */

@@ -45,6 +45,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedVaultTimeoutInMinutes = mutableMapOf<String, Int?>()
     private val storedUriMatchTypes = mutableMapOf<String, UriMatchType?>()
     private val storedClearClipboardFrequency = mutableMapOf<String, Int?>()
+    private val storedDisableAutoTotpCopy = mutableMapOf<String, Boolean?>()
     private val storedDisableAutofillSavePrompt = mutableMapOf<String, Boolean?>()
     private val storedPullToRefreshEnabled = mutableMapOf<String, Boolean?>()
     private val storedInlineAutofillEnabled = mutableMapOf<String, Boolean?>()
@@ -124,6 +125,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedVaultTimeoutActions.remove(userId)
         storedVaultTimeoutInMinutes.remove(userId)
         storedUriMatchTypes.remove(userId)
+        storedDisableAutoTotpCopy.remove(userId)
         storedDisableAutofillSavePrompt.remove(userId)
         storedPullToRefreshEnabled.remove(userId)
         storedInlineAutofillEnabled.remove(userId)
@@ -192,6 +194,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         uriMatchType: UriMatchType?,
     ) {
         storedUriMatchTypes[userId] = uriMatchType
+    }
+
+    override fun getAutoCopyTotpDisabled(userId: String): Boolean? =
+        storedDisableAutoTotpCopy[userId]
+
+    override fun storeAutoCopyTotpDisabled(
+        userId: String,
+        isAutomaticallyCopyTotpDisabled: Boolean?,
+    ) {
+        storedDisableAutoTotpCopy[userId] = isAutomaticallyCopyTotpDisabled
     }
 
     override fun getAutofillSavePromptDisabled(userId: String): Boolean? =

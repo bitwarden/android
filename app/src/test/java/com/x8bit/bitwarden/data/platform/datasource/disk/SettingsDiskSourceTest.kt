@@ -107,6 +107,10 @@ class SettingsDiskSourceTest {
             userId = userId,
             uriMatchType = UriMatchType.REGULAR_EXPRESSION,
         )
+        settingsDiskSource.storeAutoCopyTotpDisabled(
+            userId = userId,
+            isAutomaticallyCopyTotpDisabled = true,
+        )
         settingsDiskSource.storeAutofillSavePromptDisabled(
             userId = userId,
             isAutofillSavePromptDisabled = true,
@@ -147,6 +151,7 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
         assertNull(settingsDiskSource.getVaultTimeoutAction(userId = userId))
         assertNull(settingsDiskSource.getDefaultUriMatchType(userId = userId))
+        assertNull(settingsDiskSource.getAutoCopyTotpDisabled(userId = userId))
         assertNull(settingsDiskSource.getAutofillSavePromptDisabled(userId = userId))
         assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = userId))
         assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = userId))
@@ -559,6 +564,50 @@ class SettingsDiskSourceTest {
             uriMatchType = null,
         )
         assertFalse(fakeSharedPreferences.contains(defaultUriMatchTypeKey))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAutoCopyTotpDisabled when values are present should pull from SharedPreferences`() {
+        val disableAutoTotpCopyBaseKey = "bwPreferencesStorage:disableAutoTotpCopy"
+        val mockUserId = "mockUserId"
+        val disableAutoTotpCopyKey = "${disableAutoTotpCopyBaseKey}_$mockUserId"
+        fakeSharedPreferences
+            .edit {
+                putBoolean(disableAutoTotpCopyKey, true)
+            }
+        assertEquals(true, settingsDiskSource.getAutoCopyTotpDisabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `getAutoCopyTotpDisabled when values are absent should return null`() {
+        val mockUserId = "mockUserId"
+        assertNull(settingsDiskSource.getAutoCopyTotpDisabled(userId = mockUserId))
+    }
+
+    @Test
+    fun `storeAutoCopyTotpDisabled for non-null values should update SharedPreferences`() {
+        val disableAutoTotpCopyBaseKey = "bwPreferencesStorage:disableAutoTotpCopy"
+        val mockUserId = "mockUserId"
+        val disableAutoTotpCopyKey = "${disableAutoTotpCopyBaseKey}_$mockUserId"
+        settingsDiskSource.storeAutoCopyTotpDisabled(
+            userId = mockUserId,
+            isAutomaticallyCopyTotpDisabled = true,
+        )
+        assertTrue(fakeSharedPreferences.getBoolean(disableAutoTotpCopyKey, false))
+    }
+
+    @Test
+    fun `storeAutoCopyTotpDisabled for null values should clear SharedPreferences`() {
+        val disableAutoTotpCopyBaseKey = "bwPreferencesStorage:disableAutoTotpCopy"
+        val mockUserId = "mockUserId"
+        val disableAutoTotpCopyKey = "${disableAutoTotpCopyBaseKey}_$mockUserId"
+        fakeSharedPreferences.edit { putBoolean(disableAutoTotpCopyKey, false) }
+        settingsDiskSource.storeAutoCopyTotpDisabled(
+            userId = mockUserId,
+            isAutomaticallyCopyTotpDisabled = null,
+        )
+        assertFalse(fakeSharedPreferences.contains(disableAutoTotpCopyKey))
     }
 
     @Suppress("MaxLineLength")

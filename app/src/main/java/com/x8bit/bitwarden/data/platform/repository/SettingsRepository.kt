@@ -104,6 +104,11 @@ interface SettingsRepository {
     var isInlineAutofillEnabled: Boolean
 
     /**
+     * Whether or not the auto copying totp when autofilling is disabled for the current user.
+     */
+    var isAutoCopyTotpDisabled: Boolean
+
+    /**
      * Whether or not the autofill save prompt is disabled for the current user.
      */
     var isAutofillSavePromptDisabled: Boolean

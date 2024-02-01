@@ -201,6 +201,18 @@ class SettingsRepositoryImpl(
             )
         }
 
+    override var isAutoCopyTotpDisabled: Boolean
+        get() = activeUserId
+            ?.let { settingsDiskSource.getAutoCopyTotpDisabled(userId = it) }
+            ?: false
+        set(value) {
+            val userId = activeUserId ?: return
+            settingsDiskSource.storeAutoCopyTotpDisabled(
+                userId = userId,
+                isAutomaticallyCopyTotpDisabled = value,
+            )
+        }
+
     override var isAutofillSavePromptDisabled: Boolean
         get() = activeUserId
             ?.let { settingsDiskSource.getAutofillSavePromptDisabled(userId = it) }

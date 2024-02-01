@@ -7,7 +7,6 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -31,7 +30,7 @@ class AutoFillViewModel @Inject constructor(
         ?: AutoFillState(
             isAskToAddLoginEnabled = !settingsRepository.isAutofillSavePromptDisabled,
             isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
-            isCopyTotpAutomaticallyEnabled = false,
+            isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
             defaultUriMatchType = settingsRepository.defaultUriMatchType,
         ),
@@ -84,8 +83,7 @@ class AutoFillViewModel @Inject constructor(
     private fun handleCopyTotpAutomaticallyClick(
         action: AutoFillAction.CopyTotpAutomaticallyClick,
     ) {
-        // TODO BIT-1093: Persist selection
-        sendEvent(AutoFillEvent.ShowToast("Not yet implemented.".asText()))
+        settingsRepository.isAutoCopyTotpDisabled = !action.isEnabled
         mutableStateFlow.update { it.copy(isCopyTotpAutomaticallyEnabled = action.isEnabled) }
     }
 
