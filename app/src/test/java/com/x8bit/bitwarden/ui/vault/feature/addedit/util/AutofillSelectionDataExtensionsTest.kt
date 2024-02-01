@@ -27,13 +27,14 @@ class AutofillSelectionDataExtensionsTest {
         assertEquals(
             VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
             ),
             AutofillSelectionData(
                 type = AutofillSelectionData.Type.CARD,
                 uri = null,
             )
-                .toDefaultAddTypeContent(),
+                .toDefaultAddTypeContent(isIndividualVaultDisabled = false),
         )
     }
 
@@ -45,6 +46,7 @@ class AutofillSelectionDataExtensionsTest {
                 common = VaultAddEditState.ViewState.Content.Common(
                     name = "www.test.com",
                 ),
+                isIndividualVaultDisabled = true,
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(
                     uriList = listOf(
                         UriItem(
@@ -59,7 +61,7 @@ class AutofillSelectionDataExtensionsTest {
                 type = AutofillSelectionData.Type.LOGIN,
                 uri = "https://www.test.com",
             )
-                .toDefaultAddTypeContent(),
+                .toDefaultAddTypeContent(isIndividualVaultDisabled = true),
         )
     }
 }

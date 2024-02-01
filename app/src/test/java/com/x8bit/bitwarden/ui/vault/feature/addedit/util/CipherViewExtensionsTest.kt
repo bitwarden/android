@@ -52,6 +52,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
         )
 
@@ -76,6 +77,7 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(
                     cardHolderName = "Bit Warden",
                     number = "4012888888881881",
@@ -94,6 +96,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isIndividualVaultDisabled = true,
             resourceManager = resourceManager,
         )
 
@@ -118,6 +121,7 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
+                isIndividualVaultDisabled = true,
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(
                     firstName = "John",
                     middleName = "Richard",
@@ -141,6 +145,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
         )
 
@@ -165,6 +170,7 @@ class CipherViewExtensionsTest {
                         ),
                     ),
                 ),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = "username",
                     password = "password",
@@ -183,6 +189,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = false,
+            isIndividualVaultDisabled = true,
             resourceManager = resourceManager,
         )
 
@@ -202,6 +209,7 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
+                isIndividualVaultDisabled = true,
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             ),
             result,
@@ -214,6 +222,7 @@ class CipherViewExtensionsTest {
 
         val result = cipherView.toViewState(
             isClone = true,
+            isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
         )
 
@@ -233,6 +242,7 @@ class CipherViewExtensionsTest {
                     availableFolders = emptyList(),
                     availableOwners = emptyList(),
                 ),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
             ),
             result,

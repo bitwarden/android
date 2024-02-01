@@ -47,16 +47,18 @@ fun UserState.Account.toAccountSummary(
  * Converts the given [UserState.Account] to a [VaultFilterData] (if applicable). Filter data is
  * only relevant when the given account is associated with one or more organizations.
  */
-fun UserState.Account.toVaultFilterData(): VaultFilterData? =
+fun UserState.Account.toVaultFilterData(
+    isIndividualVaultDisabled: Boolean,
+): VaultFilterData? =
     this
         .organizations
         .takeIf { it.isNotEmpty() }
         ?.let { organizations ->
             VaultFilterData(
                 selectedVaultFilterType = VaultFilterType.AllVaults,
-                vaultFilterTypes = listOf(
+                vaultFilterTypes = listOfNotNull(
                     VaultFilterType.AllVaults,
-                    VaultFilterType.MyVault,
+                    VaultFilterType.MyVault.takeUnless { isIndividualVaultDisabled },
                     *organizations
                         .sortedBy { it.name }
                         .map { organization ->

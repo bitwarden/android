@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
@@ -17,6 +18,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -74,6 +76,7 @@ class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
+    private val policyManager: PolicyManager,
     private val vaultRepository: VaultRepository,
     private val generatorRepository: GeneratorRepository,
     private val settingsRepository: SettingsRepository,
@@ -84,6 +87,9 @@ class VaultAddEditViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             val vaultAddEditType = VaultAddEditArgs(savedStateHandle).vaultAddEditType
+            val isIndividualVaultDisabled = policyManager
+                .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                .any()
 
             // Check for autofill data to pre-populate
             val autofillSaveItem = specialCircumstanceManager
@@ -104,11 +110,12 @@ class VaultAddEditViewModel @Inject constructor(
                 }
 
             val defaultAddTypeContent = autofillSelectionData
-                ?.toDefaultAddTypeContent()
+                ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                 ?: autofillSaveItem
-                    ?.toDefaultAddTypeContent()
+                    ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                 ?: VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(),
+                    isIndividualVaultDisabled = isIndividualVaultDisabled,
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 )
 
@@ -1140,8 +1147,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun VaultAddEditState.determineContentState(
         vaultData: VaultData,
         userData: UserState?,
-    ): VaultAddEditState =
-        copy(
+    ): VaultAddEditState {
+        val isIndividualVaultDisabled = policyManager
+            .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+            .any()
+        return copy(
             viewState = vaultData.cipherViewList
                 .find { it.id == vaultAddEditType.vaultItemId }
                 .validateCipherOrReturnErrorState(
@@ -1152,6 +1162,7 @@ class VaultAddEditViewModel @Inject constructor(
                     // or use the current state for Add
                     (cipherView?.toViewState(
                         isClone = isCloneMode,
+                        isIndividualVaultDisabled = isIndividualVaultDisabled,
                         resourceManager = resourceManager,
                     ) ?: viewState)
                         .appendFolderAndOwnerData(
@@ -1159,10 +1170,12 @@ class VaultAddEditViewModel @Inject constructor(
                             collectionViewList = vaultData.collectionViewList
                                 .filter { !it.readOnly },
                             activeAccount = currentAccount,
+                            isIndividualVaultDisabled = isIndividualVaultDisabled,
                             resourceManager = resourceManager,
                         )
                 },
         )
+    }
 
     private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
         when (action.totpResult) {
@@ -1473,6 +1486,7 @@ data class VaultAddEditState(
         data class Content(
             val common: Common,
             val type: ItemType,
+            val isIndividualVaultDisabled: Boolean,
             val previousItemTypes: Map<ItemTypeOption, ItemType> = emptyMap(),
         ) : ViewState() {
 
@@ -1512,6 +1526,7 @@ data class VaultAddEditState(
                  */
                 val selectedOwner: Owner?
                     get() = availableOwners.find { it.id == selectedOwnerId }
+                        ?: availableOwners.firstOrNull()
 
                 /**
                  * Helper to provide the currently selected folder.

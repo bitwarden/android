@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -26,6 +27,8 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
@@ -95,6 +98,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { getString(R.string.folder_none) } returns "No Folder"
     }
     private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns emptyList()
+    }
     private val vaultRepository: VaultRepository = mockk {
         every { vaultDataStateFlow } returns mutableVaultDataFlow
         every { totpCodeFlow } returns totpTestCodeFlow
@@ -134,6 +142,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+        verify {
+            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        }
     }
 
     @Test
@@ -156,6 +167,57 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `initial add state should be correct with individual vault disabled`() = runTest {
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns listOf(
+            SyncResponseJson.Policy(
+                organizationId = "Test Org",
+                id = "testId",
+                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+                isEnabled = true,
+                data = null,
+            ),
+        )
+        val vaultAddEditType = VaultAddEditType.AddItem
+        mutableVaultDataFlow.value = DataState.Loaded(
+            data = createVaultData(),
+        )
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = null,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            VaultAddEditState(
+                vaultAddEditType = vaultAddEditType,
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(
+                        availableOwners = listOf(
+                            VaultAddEditState.Owner(
+                                id = "organizationId",
+                                name = "organizationName",
+                                collections = emptyList(),
+                            ),
+                        ),
+                    ),
+                    isIndividualVaultDisabled = true,
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                ),
+                dialog = null,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            vaultRepository.vaultDataStateFlow
+        }
+        verify {
+            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        }
+    }
+
+    @Test
     fun `initial add state should be correct when autofill selection`() = runTest {
         val autofillSelectionData = AutofillSelectionData(
             type = AutofillSelectionData.Type.LOGIN,
@@ -165,7 +227,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             autofillSelectionData = autofillSelectionData,
             shouldFinishWhenComplete = true,
         )
-        val autofillContentState = autofillSelectionData.toDefaultAddTypeContent()
+        val autofillContentState = autofillSelectionData.toDefaultAddTypeContent(
+            isIndividualVaultDisabled = false,
+        )
         val vaultAddEditType = VaultAddEditType.AddItem
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
@@ -197,7 +261,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSave(
             autofillSaveItem = autofillSaveItem,
         )
-        val autofillContentState = autofillSaveItem.toDefaultAddTypeContent()
+        val autofillContentState = autofillSaveItem.toDefaultAddTypeContent(false)
         val vaultAddEditType = VaultAddEditType.AddItem
         val initState = createVaultAddItemState(
             vaultAddEditType = vaultAddEditType,
@@ -685,6 +749,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isIndividualVaultDisabled = false,
                     resourceManager = resourceManager,
                 )
             } returns stateWithName.viewState
@@ -713,6 +778,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             coVerify(exactly = 1) {
                 cipherView.toViewState(
                     isClone = false,
+                    isIndividualVaultDisabled = false,
                     resourceManager = resourceManager,
                 )
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
@@ -744,6 +810,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             every {
                 cipherView.toViewState(
                     isClone = false,
+                    isIndividualVaultDisabled = false,
                     resourceManager = resourceManager,
                 )
             } returns stateWithName.viewState
@@ -801,7 +868,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val errorMessage = "You do not have permission to edit this."
 
             every {
-                cipherView.toViewState(isClone = false, resourceManager = resourceManager)
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    resourceManager = resourceManager,
+                )
             } returns stateWithName.viewState
             coEvery {
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
@@ -907,6 +978,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
                 common = createCommonContentViewState(),
+                isIndividualVaultDisabled = false,
                 type = createLoginTypeContentViewState(),
                 previousItemTypes = mapOf(
                     VaultAddEditState.ItemTypeOption.LOGIN
@@ -936,6 +1008,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
                 common = createCommonContentViewState(),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
                 previousItemTypes = mapOf(
                     VaultAddEditState.ItemTypeOption.LOGIN
@@ -965,6 +1038,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
                 common = createCommonContentViewState(),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
                 previousItemTypes = mapOf(
                     VaultAddEditState.ItemTypeOption.LOGIN
@@ -994,6 +1068,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
                 common = createCommonContentViewState(),
+                isIndividualVaultDisabled = false,
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
                 previousItemTypes = mapOf(
                     VaultAddEditState.ItemTypeOption.LOGIN
@@ -1074,6 +1149,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val loginState = loginInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(
                         password = password,
                     ),
@@ -1209,6 +1285,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val expectedState = loginInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(
                         totpCode = null,
                     ),
@@ -1233,6 +1310,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val expectedState = loginInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(
                         totpCode = "TestKey",
                     ),
@@ -1274,6 +1352,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val expectedState = loginInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(
                         uri = listOf(UriItem("testID", "Test", null)),
                     ),
@@ -1306,6 +1385,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val expectedState = loginInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState(),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(
                         uri = listOf(),
                     ),
@@ -1772,6 +1852,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository = vaultRepository,
                 generatorRepository = generatorRepository,
                 specialCircumstanceManager = specialCircumstanceManager,
+                policyManager = policyManager,
                 resourceManager = resourceManager,
                 authRepository = authRepository,
                 settingsRepository = settingsRepository,
@@ -1789,6 +1870,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     common = createCommonContentViewState(
                         name = "newName",
                     ),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(),
                 ),
             )
@@ -1811,6 +1893,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState()
                         .copy(selectedFolderId = "mockId-1"),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(),
                 ),
             )
@@ -1829,6 +1912,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     common = createCommonContentViewState(
                         favorite = true,
                     ),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(),
                 ),
             )
@@ -1850,6 +1934,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     common = createCommonContentViewState(
                         masterPasswordReprompt = true,
                     ),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(),
                 ),
             )
@@ -1869,6 +1954,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     common = createCommonContentViewState(
                         notes = "newNotes",
                     ),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(),
                 ),
             )
@@ -1892,6 +1978,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewState = VaultAddEditState.ViewState.Content(
                     common = createCommonContentViewState()
                         .copy(selectedOwnerId = "mockId-1"),
+                    isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(),
                 ),
             )
@@ -2217,6 +2304,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private fun createVaultAddItemState(
         vaultAddEditType: VaultAddEditType = VaultAddEditType.AddItem,
         commonContentViewState: VaultAddEditState.ViewState.Content.Common = createCommonContentViewState(),
+        isIndividualVaultDisabled: Boolean = false,
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
     ): VaultAddEditState =
@@ -2224,6 +2312,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultAddEditType = vaultAddEditType,
             viewState = VaultAddEditState.ViewState.Content(
                 common = commonContentViewState,
+                isIndividualVaultDisabled = isIndividualVaultDisabled,
                 type = typeContentViewState,
             ),
             dialog = dialogState,
@@ -2313,6 +2402,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepo,
             generatorRepository = generatorRepo,
             specialCircumstanceManager = specialCircumstanceManager,
+            policyManager = policyManager,
             resourceManager = bitwardenResourceManager,
             authRepository = authRepository,
             settingsRepository = settingsRepository,

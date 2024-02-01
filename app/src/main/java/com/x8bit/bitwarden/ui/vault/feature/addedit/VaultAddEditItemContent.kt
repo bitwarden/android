@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -58,6 +59,17 @@ fun VaultAddEditContent(
         modifier = modifier
             .semantics { testTagsAsResourceId = true },
     ) {
+        item {
+            if (state.isIndividualVaultDisabled && isAddItemMode) {
+                BitwardenPolicyWarningText(
+                    text = stringResource(R.string.personal_ownership_policy_in_effect),
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
+        }
+
         item {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),

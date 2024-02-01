@@ -47,6 +47,7 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 selectedOwnerId = "mockOwnerId-1",
             ),
+            isIndividualVaultDisabled = false,
             type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
@@ -124,6 +125,7 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 selectedOwnerId = "mockOwnerId-1",
             ),
+            isIndividualVaultDisabled = false,
             type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
@@ -212,6 +214,7 @@ class VaultAddItemStateExtensionsTest {
                     VaultAddEditState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
                 ),
             ),
+            isIndividualVaultDisabled = false,
             type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
         )
 
@@ -281,6 +284,7 @@ class VaultAddItemStateExtensionsTest {
                 selectedOwnerId = "mockOwnerId-1",
                 customFieldData = emptyList(),
             ),
+            isIndividualVaultDisabled = false,
             type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
         )
 
@@ -314,6 +318,7 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 selectedOwnerId = "mockOwnerId-1",
             ),
+            isIndividualVaultDisabled = false,
             type = VaultAddEditState.ViewState.Content.ItemType.Identity(
                 selectedTitle = VaultIdentityTitle.MR,
                 firstName = "mockFirstName",
@@ -411,6 +416,7 @@ class VaultAddItemStateExtensionsTest {
                 notes = "mockNotes-1",
                 selectedOwnerId = "mockOwnerId-1",
             ),
+            isIndividualVaultDisabled = false,
             type = VaultAddEditState.ViewState.Content.ItemType.Identity(
                 selectedTitle = VaultIdentityTitle.MR,
                 firstName = "mockFirstName",

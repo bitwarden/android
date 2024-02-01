@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -21,6 +22,8 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -77,6 +80,11 @@ class SearchViewModelTest : BaseViewModelTest() {
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>()) } just runs
     }
+    private val policyManager: PolicyManager = mockk<PolicyManager> {
+        every {
+            getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns emptyList()
+    }
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
     private val vaultRepository: VaultRepository = mockk {
@@ -122,6 +130,26 @@ class SearchViewModelTest : BaseViewModelTest() {
         val state = DEFAULT_STATE.copy(searchType = SearchTypeData.Sends.All)
         val viewModel = createViewModel(initialState = state)
         assertEquals(state, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct when user has PERSONAL_OWNERSHIP policy`() {
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        } returns listOf(
+            SyncResponseJson.Policy(
+                organizationId = "Test Org",
+                id = "testId",
+                type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+                isEnabled = true,
+                data = null,
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        verify {
+            policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+        }
     }
 
     @Test
@@ -1232,6 +1260,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         environmentRepo = environmentRepository,
         settingsRepo = settingsRepository,
         clipboardManager = clipboardManager,
+        policyManager = policyManager,
         specialCircumstanceManager = specialCircumstanceManager,
         autofillSelectionManager = autofillSelectionManager,
     )
