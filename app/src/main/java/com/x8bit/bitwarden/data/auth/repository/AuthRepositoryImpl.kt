@@ -821,41 +821,6 @@ class AuthRepositoryImpl(
         mutableSsoCallbackResultFlow.tryEmit(result)
     }
 
-    override suspend fun createAuthRequest(
-        email: String,
-    ): AuthRequestResult =
-        authSdkSource
-            .getNewAuthRequest(email)
-            .flatMap { authRequest ->
-                newAuthRequestService
-                    .createAuthRequest(
-                        email = email,
-                        publicKey = authRequest.publicKey,
-                        deviceId = authDiskSource.uniqueAppId,
-                        accessCode = authRequest.accessCode,
-                        fingerprint = authRequest.fingerprint,
-                    )
-                    .map { request ->
-                        AuthRequest(
-                            id = request.id,
-                            publicKey = request.publicKey,
-                            platform = request.platform,
-                            ipAddress = request.ipAddress,
-                            key = request.key,
-                            masterPasswordHash = request.masterPasswordHash,
-                            creationDate = request.creationDate,
-                            responseDate = request.responseDate,
-                            requestApproved = request.requestApproved ?: false,
-                            originUrl = request.originUrl,
-                            fingerprint = authRequest.fingerprint,
-                        )
-                    }
-            }
-            .fold(
-                onFailure = { AuthRequestResult.Error },
-                onSuccess = { AuthRequestResult.Success(it) },
-            )
-
     @Suppress("LongMethod")
     override fun createAuthRequestWithUpdates(
         email: String,

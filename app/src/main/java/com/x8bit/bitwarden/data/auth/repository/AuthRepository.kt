@@ -222,11 +222,6 @@ interface AuthRepository : AuthenticatorProvider {
     fun setSsoCallbackResult(result: SsoCallbackResult)
 
     /**
-     * Creates a new authentication request.
-     */
-    suspend fun createAuthRequest(email: String): AuthRequestResult
-
-    /**
      * Creates a new authentication request and then continues to emit updates over time.
      */
     fun createAuthRequestWithUpdates(email: String): Flow<CreateAuthRequestResult>
