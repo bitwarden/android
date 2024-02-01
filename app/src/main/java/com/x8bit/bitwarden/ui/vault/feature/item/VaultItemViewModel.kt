@@ -150,6 +150,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.CollectionsClick -> handleCollectionsClick()
             is VaultItemAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultItemAction.Common.ConfirmRestoreClick -> handleConfirmRestoreClick()
+            is VaultItemAction.Common.DeleteClick -> handleDeleteClick()
         }
     }
 
@@ -159,6 +160,29 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleDismissDialogClick() {
         mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleDeleteClick() {
+        onContent { content ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            action = PasswordRepromptAction.DeleteClick,
+                        ),
+                    )
+                }
+                return@onContent
+            } else {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState
+                            .DialogState
+                            .DeleteConfirmationPrompt(state.deletionConfirmationText),
+                    )
+                }
+            }
+        }
     }
 
     private fun handleEditClick() {
@@ -387,16 +411,6 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleConfirmDeleteClick() {
         onContent { content ->
-            if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.DeleteClick,
-                        ),
-                    )
-                }
-                return@onContent
-            }
             mutableStateFlow.update {
                 it.copy(
                     dialog = VaultItemState.DialogState.Loading(
@@ -1224,6 +1238,14 @@ data class VaultItemState(
         data class MasterPasswordDialog(
             val action: PasswordRepromptAction,
         ) : DialogState()
+
+        /**
+         * Displays the dialog for deleting the item to the user.
+         */
+        @Parcelize
+        data class DeleteConfirmationPrompt(
+            val message: Text,
+        ) : DialogState()
     }
 }
 
@@ -1309,6 +1331,11 @@ sealed class VaultItemAction {
          * The user has clicked the close button.
          */
         data object CloseClick : Common()
+
+        /**
+         * The user has clicked the delete button.
+         */
+        data object DeleteClick : Common()
 
         /**
          * The user has confirmed to deleted the cipher.
@@ -1482,6 +1509,7 @@ sealed class VaultItemAction {
      * Models actions that the [VaultItemViewModel] itself might send.
      */
     sealed class Internal : VaultItemAction() {
+
         /**
          * Copies the given [value] to the clipboard.
          */
@@ -1622,7 +1650,7 @@ sealed class PasswordRepromptAction : Parcelable {
     @Parcelize
     data object DeleteClick : PasswordRepromptAction() {
         override val vaultItemAction: VaultItemAction
-            get() = VaultItemAction.Common.ConfirmDeleteClick
+            get() = VaultItemAction.Common.DeleteClick
     }
 
     /**
