@@ -21,9 +21,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -37,6 +41,7 @@ import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHand
 /**
  * The top level content UI state for the [AttachmentsScreen] when viewing a content.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 fun AttachmentsContent(
@@ -45,7 +50,8 @@ fun AttachmentsContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier
+            .semantics { testTagsAsResourceId = true },
     ) {
         if (viewState.attachments.isEmpty()) {
             item {
@@ -56,6 +62,7 @@ fun AttachmentsContent(
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
+                        .semantics { testTag = "NoAttachmentsLabel" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -67,6 +74,7 @@ fun AttachmentsContent(
                     attachmentItem = it,
                     onDeleteClick = attachmentsHandlers.onDeleteClick,
                     modifier = Modifier
+                        .semantics { testTag = "AttachmentRow" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
