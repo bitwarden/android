@@ -11,7 +11,10 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
@@ -41,6 +44,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -50,6 +54,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+import kotlin.math.max
 
 private const val KEY_STATE = "state"
 private const val KEY_GENERATOR_MODE = "key_generator_mode"
@@ -70,6 +75,7 @@ class GeneratorViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
     private val authRepository: AuthRepository,
+    private val policyManager: PolicyManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: GeneratorState(
         generatedText = "",
@@ -81,6 +87,9 @@ class GeneratorViewModel @Inject constructor(
         generatorMode = GeneratorArgs(savedStateHandle).type,
         currentEmailAddress =
         requireNotNull(authRepository.userStateFlow.value?.activeAccount?.email),
+        isUnderPolicy = policyManager
+            .getActivePolicies<PolicyInformation.PasswordGenerator>()
+            .any(),
     ),
 ) {
 
@@ -238,17 +247,25 @@ class GeneratorViewModel @Inject constructor(
 
     //region Generation Handlers
 
+    @Suppress("CyclomaticComplexMethod")
     private fun loadPasscodeOptions(selectedType: Passcode) {
         val options = generatorRepository.getPasscodeGenerationOptions()
             ?: generatePasscodeDefaultOptions()
 
+        val policy = policyManager
+            .getActivePolicies<PolicyInformation.PasswordGenerator>()
+            .toStrictestPolicy()
         when (selectedType.selectedType) {
             is Passphrase -> {
+                val minNumWords = policy.minNumberWords ?: Passphrase.PASSPHRASE_MIN_NUMBER_OF_WORDS
                 val passphrase = Passphrase(
-                    numWords = options.numWords,
+                    numWords = max(options.numWords, minNumWords),
+                    minNumWords = minNumWords,
                     wordSeparator = options.wordSeparator.toCharArray().first(),
-                    capitalize = options.allowCapitalize,
-                    includeNumber = options.allowIncludeNumber,
+                    capitalize = options.allowCapitalize || policy.capitalize == true,
+                    capitalizeEnabled = policy.capitalize != true,
+                    includeNumber = options.allowIncludeNumber || policy.includeNumber == true,
+                    includeNumberEnabled = policy.includeNumber != true,
                 )
                 updateGeneratorMainType {
                     Passcode(selectedType = passphrase)
@@ -256,14 +273,22 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is Password -> {
+                val minLength = policy.minLength ?: Password.PASSWORD_LENGTH_SLIDER_MIN
                 val password = Password(
-                    length = options.length,
-                    useCapitals = options.hasUppercase,
-                    useLowercase = options.hasLowercase,
-                    useNumbers = options.hasNumbers,
-                    useSpecialChars = options.allowSpecial,
-                    minNumbers = options.minNumber,
-                    minSpecial = options.minSpecial,
+                    length = max(options.length, minLength),
+                    minLength = minLength,
+                    useCapitals = options.hasUppercase || policy.useUpper == true,
+                    capitalsEnabled = policy.useUpper != true,
+                    useLowercase = options.hasLowercase || policy.useLower == true,
+                    lowercaseEnabled = policy.useLower != true,
+                    useNumbers = options.hasNumbers || policy.useNumbers == true,
+                    numbersEnabled = policy.useNumbers != true,
+                    useSpecialChars = options.allowSpecial || policy.useSpecial == true,
+                    specialCharsEnabled = policy.useSpecial != true,
+                    minNumbers = max(options.minNumber, policy.minNumbers ?: 0),
+                    minNumbersAllowed = policy.minNumbers ?: 0,
+                    minSpecial = max(options.minSpecial, policy.minSpecial ?: 0),
+                    minSpecialAllowed = policy.minSpecial ?: 0,
                     avoidAmbiguousChars = options.allowAmbiguousChar,
                 )
                 updateGeneratorMainType {
