@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import kotlinx.collections.immutable.toPersistentList
 
@@ -28,6 +29,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun VaultContent(
     state: VaultState.ViewState.Content,
     vaultHandlers: VaultHandlers,
+    onOverflowOptionClick: (action: ListingItemOverflowAction.VaultAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -86,7 +88,15 @@ fun VaultContent(
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
                     overflowOptions = favoriteItem.overflowOptions,
-                    onOverflowOptionClick = vaultHandlers.overflowOptionClick,
+                    onOverflowOptionClick = { action ->
+                        if (favoriteItem.shouldShowMasterPasswordReprompt &&
+                            action.requiresPasswordReprompt
+                        ) {
+                            onOverflowOptionClick(action)
+                        } else {
+                            vaultHandlers.overflowOptionClick(action)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
@@ -245,7 +255,15 @@ fun VaultContent(
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(noFolderItem) },
                     overflowOptions = noFolderItem.overflowOptions,
-                    onOverflowOptionClick = vaultHandlers.overflowOptionClick,
+                    onOverflowOptionClick = { action ->
+                        if (noFolderItem.shouldShowMasterPasswordReprompt &&
+                            action.requiresPasswordReprompt
+                        ) {
+                            onOverflowOptionClick(action)
+                        } else {
+                            vaultHandlers.overflowOptionClick(action)
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),

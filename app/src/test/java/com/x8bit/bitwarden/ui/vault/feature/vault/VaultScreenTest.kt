@@ -736,6 +736,7 @@ class VaultScreenTest : BaseComposeTest() {
             name = itemText.asText(),
             username = username.asText(),
             overflowOptions = emptyList(),
+            shouldShowMasterPasswordReprompt = false,
         )
         mutableStateFlow.update {
             it.copy(
@@ -857,6 +858,7 @@ class VaultScreenTest : BaseComposeTest() {
             name = itemText.asText(),
             username = userName.asText(),
             overflowOptions = emptyList(),
+            shouldShowMasterPasswordReprompt = false,
         )
         mutableStateFlow.update {
             it.copy(

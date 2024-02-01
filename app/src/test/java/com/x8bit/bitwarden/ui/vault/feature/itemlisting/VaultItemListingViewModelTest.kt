@@ -386,7 +386,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `MasterPasswordRepromptSubmit for a request Success with a valid password should should post to the AutofillSelectionManager`() =
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password should post to the AutofillSelectionManager`() =
         runTest {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)

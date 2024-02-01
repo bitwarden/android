@@ -33,6 +33,7 @@ data class VaultHandlers(
     val tryAgainClick: () -> Unit,
     val dialogDismiss: () -> Unit,
     val overflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
+    val masterPasswordRepromptSubmit: (ListingItemOverflowAction.VaultAction, String) -> Unit,
 ) {
     companion object {
         /**
@@ -78,6 +79,14 @@ data class VaultHandlers(
                 dialogDismiss = { viewModel.trySendAction(VaultAction.DialogDismiss) },
                 overflowOptionClick = {
                     viewModel.trySendAction(VaultAction.OverflowOptionClick(it))
+                },
+                masterPasswordRepromptSubmit = { action, password ->
+                    viewModel.trySendAction(
+                        VaultAction.MasterPasswordRepromptSubmit(
+                            overflowAction = action,
+                            password = password,
+                        ),
+                    )
                 },
             )
     }
