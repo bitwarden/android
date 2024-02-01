@@ -59,6 +59,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     private var onNavigateToVaultEditItemId: String? = null
     private var onNavigateToMoveToOrganizationItemId: String? = null
     private var onNavigateToAttachmentsId: String? = null
+    private var onNavigateToPasswordHistoryId: String? = null
 
     private val intentManager = mockk<IntentManager>(relaxed = true)
 
@@ -80,6 +81,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                     onNavigateToMoveToOrganizationItemId = id
                 },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
+                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryId = it },
                 intentManager = intentManager,
             )
         }
@@ -105,6 +107,13 @@ class VaultItemScreenTest : BaseComposeTest() {
         val id = "id1234"
         mutableEventFlow.tryEmit(VaultItemEvent.NavigateToAttachments(itemId = id))
         assertEquals(id, onNavigateToAttachmentsId)
+    }
+
+    @Test
+    fun `NavigateToPasswordHistory event should invoke onNavigateToPasswordHistory`() {
+        val id = "id1234"
+        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToPasswordHistory(itemId = id))
+        assertEquals(id, onNavigateToPasswordHistoryId)
     }
 
     @Test

@@ -31,6 +31,7 @@ fun NavGraphBuilder.vaultItemDestination(
     onNavigateToVaultEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
+    onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = VAULT_ITEM_ROUTE,
@@ -43,6 +44,7 @@ fun NavGraphBuilder.vaultItemDestination(
             onNavigateToVaultAddEditItem = onNavigateToVaultEditItem,
             onNavigateToMoveToOrganization = onNavigateToMoveToOrganization,
             onNavigateToAttachments = onNavigateToAttachments,
+            onNavigateToPasswordHistory = onNavigateToPasswordHistory,
         )
     }
 }

@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.navigateToFolder
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.VAULT_UNLOCKED_NAV_BAR_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.vaultUnlockedNavBarDestination
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorModalDestination
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorModal
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
@@ -90,7 +91,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
             onNavigateToPendingRequests = { navController.navigateToPendingRequests() },
-            onNavigateToPasswordHistory = { navController.navigateToPasswordHistory() },
+            onNavigateToPasswordHistory = {
+                navController.navigateToPasswordHistory(
+                    passwordHistoryMode = GeneratorPasswordHistoryMode.Default,
+                )
+            },
         )
         deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
         loginApprovalDestination(onNavigateBack = { navController.popBackStack() })
@@ -136,6 +141,11 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 )
             },
             onNavigateToAttachments = { navController.navigateToAttachment(it) },
+            onNavigateToPasswordHistory = {
+                navController.navigateToPasswordHistory(
+                    passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
+                )
+            },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {

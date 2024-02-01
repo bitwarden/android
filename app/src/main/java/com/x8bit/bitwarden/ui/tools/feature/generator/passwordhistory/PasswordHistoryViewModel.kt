@@ -1,16 +1,21 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
 import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.CipherView
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.PasswordHistoryState.GeneratedPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -21,24 +26,45 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+private const val KEY_STATE = "state"
+
 /**
  * ViewModel responsible for handling user interactions in the PasswordHistoryScreen.
  */
 @HiltViewModel
 @Suppress("TooManyFunctions")
 class PasswordHistoryViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
+    private val vaultRepository: VaultRepository,
 ) : BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
-    initialState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading),
+    initialState = savedStateHandle[KEY_STATE]
+        ?: run {
+            PasswordHistoryState(
+                passwordHistoryMode = PasswordHistoryArgs(savedStateHandle).passwordHistoryMode,
+                viewState = PasswordHistoryState.ViewState.Loading,
+            )
+        },
 ) {
 
     init {
-        generatorRepository
-            .passwordHistoryStateFlow
-            .map { PasswordHistoryAction.Internal.UpdatePasswordHistoryReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
+        when (val passwordHistoryMode = state.passwordHistoryMode) {
+            is GeneratorPasswordHistoryMode.Default -> {
+                generatorRepository
+                    .passwordHistoryStateFlow
+                    .map { PasswordHistoryAction.Internal.UpdatePasswordHistoryReceive(it) }
+                    .onEach(::sendAction)
+                    .launchIn(viewModelScope)
+            }
+            is GeneratorPasswordHistoryMode.Item -> {
+                vaultRepository
+                    .getVaultItemStateFlow(passwordHistoryMode.itemId)
+                    .map { PasswordHistoryAction.Internal.CipherDataReceive(it) }
+                    .onEach(::sendAction)
+                    .launchIn(viewModelScope)
+            }
+        }
     }
 
     override fun handleAction(action: PasswordHistoryAction) {
@@ -49,6 +75,8 @@ class PasswordHistoryViewModel @Inject constructor(
             is PasswordHistoryAction.Internal.UpdatePasswordHistoryReceive -> {
                 handleUpdatePasswordHistoryReceive(action)
             }
+
+            is PasswordHistoryAction.Internal.CipherDataReceive -> handleCipherDataReceive(action)
         }
     }
 
@@ -62,27 +90,27 @@ class PasswordHistoryViewModel @Inject constructor(
                 PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
             }
 
-            is LocalDataState.Loaded -> {
-                val passwords = state.data.map { passwordHistoryView ->
-                    GeneratedPassword(
-                        password = passwordHistoryView.password,
-                        date = passwordHistoryView.lastUsedDate.toFormattedPattern(
-                            pattern = "MM/dd/yy h:mm a",
-                        ),
-                    )
-                }
-
-                if (passwords.isEmpty()) {
-                    PasswordHistoryState.ViewState.Empty
-                } else {
-                    PasswordHistoryState.ViewState.Content(passwords)
-                }
-            }
+            is LocalDataState.Loaded -> state.data.toViewState()
         }
 
         mutableStateFlow.update {
             it.copy(viewState = newState)
         }
+    }
+
+    private fun handleCipherDataReceive(action: PasswordHistoryAction.Internal.CipherDataReceive) {
+        val newState: PasswordHistoryState.ViewState = when (action.state) {
+            is DataState.Error -> {
+                PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
+            }
+            is DataState.Loaded -> action.state.data?.passwordHistory.toViewState()
+            is DataState.Loading -> PasswordHistoryState.ViewState.Loading
+            is DataState.NoNetwork -> {
+                PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
+            }
+            is DataState.Pending -> action.state.data?.passwordHistory.toViewState()
+        }
+        mutableStateFlow.update { it.copy(viewState = newState) }
     }
 
     private fun handleCloseClick() {
@@ -100,18 +128,41 @@ class PasswordHistoryViewModel @Inject constructor(
     private fun handleCopyClick(password: GeneratedPassword) {
         clipboardManager.setText(text = password.password)
     }
+
+    private fun List<PasswordHistoryView>?.toViewState(): PasswordHistoryState.ViewState {
+        val passwords = this?.map { passwordHistoryView ->
+            GeneratedPassword(
+                password = passwordHistoryView.password,
+                date = passwordHistoryView.lastUsedDate.toFormattedPattern(
+                    pattern = "MM/dd/yy h:mm a",
+                ),
+            )
+        }
+       return if (passwords?.isNotEmpty() == true) {
+            PasswordHistoryState.ViewState.Content(passwords)
+        } else {
+            PasswordHistoryState.ViewState.Empty
+        }
+    }
 }
 
 /**
  * Represents the possible states for the password history screen.
  *
+ * @property passwordHistoryMode Indicates whether tje VM is in default or item mode.
  * @property viewState The current view state of the password history screen.
  */
 @Parcelize
 data class PasswordHistoryState(
+    val passwordHistoryMode: GeneratorPasswordHistoryMode,
     val viewState: ViewState,
 ) : Parcelable {
 
+    /**
+     * Helper that represents if the menu is enabled.
+     */
+    val menuEnabled: Boolean
+        get() = passwordHistoryMode is GeneratorPasswordHistoryMode.Default
     /**
      * Represents the specific view states for the password history screen.
      */
@@ -210,6 +261,13 @@ sealed class PasswordHistoryAction {
          */
         data class UpdatePasswordHistoryReceive(
             val state: LocalDataState<List<PasswordHistoryView>>,
+        ) : Internal()
+
+        /**
+         * Indicates cipher data is received.
+         */
+        data class CipherDataReceive(
+            val state: DataState<CipherView?>,
         ) : Internal()
     }
 }

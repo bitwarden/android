@@ -9,6 +9,7 @@ import com.bitwarden.core.FieldView
 import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
+import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -33,7 +34,7 @@ fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
         localData = common.originalCipher?.localData,
         attachments = common.originalCipher?.attachments,
         organizationUseTotp = common.originalCipher?.organizationUseTotp ?: false,
-        passwordHistory = common.originalCipher?.passwordHistory,
+        passwordHistory = toPasswordHistory(),
         creationDate = common.originalCipher?.creationDate ?: Instant.now(),
         deletedDate = common.originalCipher?.deletedDate,
         revisionDate = common.originalCipher?.revisionDate ?: Instant.now(),
@@ -113,6 +114,26 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toIdentityView(): Ident
             licenseNumber = it.licenseNumber.orNullIfBlank(),
         )
     }
+
+@Suppress("MagicNumber")
+private fun VaultAddEditState.ViewState.Content.toPasswordHistory(): List<PasswordHistoryView>? {
+    val oldPassword = common.originalCipher?.login?.password
+
+    return if (oldPassword != null &&
+        oldPassword != (type as? VaultAddEditState.ViewState.Content.ItemType.Login)?.password
+    ) {
+        listOf(
+            PasswordHistoryView(
+                password = oldPassword,
+                lastUsedDate = Instant.now(),
+            ),
+        )
+            .plus(common.originalCipher?.passwordHistory.orEmpty())
+            .take(5)
+    } else {
+        common.originalCipher?.passwordHistory
+    }
+}
 
 private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
     common: VaultAddEditState.ViewState.Content.Common,
