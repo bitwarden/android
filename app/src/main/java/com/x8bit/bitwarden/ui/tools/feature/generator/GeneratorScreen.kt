@@ -58,6 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
@@ -75,10 +76,6 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MAX_NUMBER_OF_WORDS
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Passphrase.Companion.PASSPHRASE_MIN_NUMBER_OF_WORDS
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MAX
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_COUNTER_MIN
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MAX
-import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Passcode.PasscodeType.Password.Companion.PASSWORD_LENGTH_SLIDER_MIN
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -317,6 +314,17 @@ private fun ScrollContent(
             .verticalScroll(rememberScrollState()),
     ) {
 
+        if (state.isUnderPolicy) {
+            BitwardenPolicyWarningText(
+                text = stringResource(id = R.string.password_generator_policy_in_effect),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
         GeneratedStringItem(
             generatedText = state.generatedText,
             onCopyClick = onCopyClick,
@@ -499,6 +507,8 @@ private fun ColumnScope.PasswordTypeContent(
     PasswordLengthSliderItem(
         length = passwordTypeState.length,
         onPasswordSliderLengthChange = passwordHandlers.onPasswordSliderLengthChange,
+        minValue = passwordTypeState.minLength,
+        maxValue = passwordTypeState.maxLength,
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -511,21 +521,25 @@ private fun ColumnScope.PasswordTypeContent(
             useCapitals = passwordTypeState.useCapitals,
             onPasswordToggleCapitalLettersChange =
             passwordHandlers.onPasswordToggleCapitalLettersChange,
+            enabled = passwordTypeState.capitalsEnabled,
         )
         PasswordLowercaseLettersToggleItem(
             useLowercase = passwordTypeState.useLowercase,
             onPasswordToggleLowercaseLettersChange =
             passwordHandlers.onPasswordToggleLowercaseLettersChange,
+            enabled = passwordTypeState.lowercaseEnabled,
         )
         PasswordNumbersToggleItem(
             useNumbers = passwordTypeState.useNumbers,
             onPasswordToggleNumbersChange =
             passwordHandlers.onPasswordToggleNumbersChange,
+            enabled = passwordTypeState.numbersEnabled,
         )
         PasswordSpecialCharactersToggleItem(
             useSpecialChars = passwordTypeState.useSpecialChars,
             onPasswordToggleSpecialCharactersChange =
             passwordHandlers.onPasswordToggleSpecialCharactersChange,
+            enabled = passwordTypeState.specialCharsEnabled,
         )
     }
 
@@ -535,6 +549,8 @@ private fun ColumnScope.PasswordTypeContent(
         minNumbers = passwordTypeState.minNumbers,
         onPasswordMinNumbersCounterChange =
         passwordHandlers.onPasswordMinNumbersCounterChange,
+        maxValue = passwordTypeState.maxNumbersAllowed,
+        minValue = passwordTypeState.minNumbersAllowed,
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -543,6 +559,8 @@ private fun ColumnScope.PasswordTypeContent(
         minSpecial = passwordTypeState.minSpecial,
         onPasswordMinSpecialCharactersChange =
         passwordHandlers.onPasswordMinSpecialCharactersChange,
+        maxValue = passwordTypeState.maxSpecialAllowed,
+        minValue = passwordTypeState.minSpecialAllowed,
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -551,6 +569,7 @@ private fun ColumnScope.PasswordTypeContent(
         avoidAmbiguousChars = passwordTypeState.avoidAmbiguousChars,
         onPasswordToggleAvoidAmbiguousCharsChange =
         passwordHandlers.onPasswordToggleAvoidAmbiguousCharsChange,
+        enabled = passwordTypeState.ambiguousCharsEnabled,
     )
 }
 
@@ -558,11 +577,15 @@ private fun ColumnScope.PasswordTypeContent(
 private fun PasswordLengthSliderItem(
     length: Int,
     onPasswordSliderLengthChange: (value: Int, isUserInteracting: Boolean) -> Unit,
+    minValue: Int,
+    maxValue: Int,
 ) {
-    var sliderValue by remember { mutableStateOf(length) }
+    var sliderValue by remember { mutableStateOf(length.coerceIn(minValue, maxValue)) }
     var labelTextWidth by remember { mutableStateOf(Dp.Unspecified) }
 
     val density = LocalDensity.current
+    val sliderRange = minValue.toFloat()..maxValue.toFloat()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -571,7 +594,7 @@ private fun PasswordLengthSliderItem(
             .semantics(mergeDescendants = true) {},
     ) {
         OutlinedTextField(
-            value = length.toString(),
+            value = sliderValue.toString(),
             readOnly = true,
             onValueChange = { },
             label = {
@@ -588,22 +611,20 @@ private fun PasswordLengthSliderItem(
             modifier = Modifier
                 .semantics { testTag = "PasswordLengthLabel" }
                 .wrapContentWidth()
-                // We want the width to be no wider than the label + 16dp on either side
                 .width(labelTextWidth + 16.dp + 16.dp),
         )
 
         Slider(
             value = sliderValue.toFloat(),
             onValueChange = { newValue ->
-                sliderValue = newValue.toInt()
+                sliderValue = newValue.toInt().coerceIn(minValue, maxValue)
                 onPasswordSliderLengthChange(sliderValue, true)
             },
             onValueChangeFinished = {
                 onPasswordSliderLengthChange(sliderValue, false)
             },
-            valueRange =
-            PASSWORD_LENGTH_SLIDER_MIN.toFloat()..PASSWORD_LENGTH_SLIDER_MAX.toFloat(),
-            steps = PASSWORD_LENGTH_SLIDER_MAX - 1,
+            valueRange = sliderRange,
+            steps = maxValue - 1,
             modifier = Modifier
                 .semantics { testTag = "PasswordLengthSlider" }
                 .weight(1f),
@@ -615,11 +636,13 @@ private fun PasswordLengthSliderItem(
 private fun PasswordCapitalLettersToggleItem(
     useCapitals: Boolean,
     onPasswordToggleCapitalLettersChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     BitwardenWideSwitch(
         label = "A—Z",
         isChecked = useCapitals,
         onCheckedChange = onPasswordToggleCapitalLettersChange,
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
             .semantics { testTag = "UppercaseAtoZToggle" }
@@ -632,11 +655,13 @@ private fun PasswordCapitalLettersToggleItem(
 private fun PasswordLowercaseLettersToggleItem(
     useLowercase: Boolean,
     onPasswordToggleLowercaseLettersChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     BitwardenWideSwitch(
         label = "a—z",
         isChecked = useLowercase,
         onCheckedChange = onPasswordToggleLowercaseLettersChange,
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
             .semantics { testTag = "LowercaseAtoZToggle" }
@@ -649,11 +674,13 @@ private fun PasswordLowercaseLettersToggleItem(
 private fun PasswordNumbersToggleItem(
     useNumbers: Boolean,
     onPasswordToggleNumbersChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     BitwardenWideSwitch(
         label = "0-9",
         isChecked = useNumbers,
         onCheckedChange = onPasswordToggleNumbersChange,
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
             .semantics { testTag = "NumbersZeroToNineToggle" }
@@ -666,11 +693,13 @@ private fun PasswordNumbersToggleItem(
 private fun PasswordSpecialCharactersToggleItem(
     useSpecialChars: Boolean,
     onPasswordToggleSpecialCharactersChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     BitwardenWideSwitch(
         label = "!@#$%^&*",
         isChecked = useSpecialChars,
         onCheckedChange = onPasswordToggleSpecialCharactersChange,
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
             .semantics { testTag = "SpecialCharactersToggle" }
@@ -683,11 +712,13 @@ private fun PasswordSpecialCharactersToggleItem(
 private fun PasswordMinNumbersCounterItem(
     minNumbers: Int,
     onPasswordMinNumbersCounterChange: (Int) -> Unit,
+    minValue: Int,
+    maxValue: Int,
 ) {
     BitwardenStepper(
         label = stringResource(id = R.string.min_numbers),
-        value = minNumbers,
-        range = PASSWORD_COUNTER_MIN..PASSWORD_COUNTER_MAX,
+        value = minNumbers.coerceIn(minValue, maxValue),
+        range = minValue..maxValue,
         onValueChange = onPasswordMinNumbersCounterChange,
         modifier = Modifier
             .semantics { testTag = "MinNumberValueLabel" }
@@ -699,11 +730,13 @@ private fun PasswordMinNumbersCounterItem(
 private fun PasswordMinSpecialCharactersCounterItem(
     minSpecial: Int,
     onPasswordMinSpecialCharactersChange: (Int) -> Unit,
+    minValue: Int,
+    maxValue: Int,
 ) {
     BitwardenStepper(
         label = stringResource(id = R.string.min_special),
-        value = minSpecial,
-        range = PASSWORD_COUNTER_MIN..PASSWORD_COUNTER_MAX,
+        value = minSpecial.coerceIn(minValue, maxValue),
+        range = minValue..maxValue,
         onValueChange = onPasswordMinSpecialCharactersChange,
         modifier = Modifier
             .semantics { testTag = "MinSpecialValueLabel" }
@@ -715,10 +748,12 @@ private fun PasswordMinSpecialCharactersCounterItem(
 private fun PasswordAvoidAmbiguousCharsToggleItem(
     avoidAmbiguousChars: Boolean,
     onPasswordToggleAvoidAmbiguousCharsChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     BitwardenWideSwitch(
         label = stringResource(id = R.string.avoid_ambiguous_characters),
         isChecked = avoidAmbiguousChars,
+        enabled = enabled,
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
         modifier = Modifier
             .fillMaxWidth()
@@ -742,6 +777,8 @@ private fun ColumnScope.PassphraseTypeContent(
         numWords = passphraseTypeState.numWords,
         onPassphraseNumWordsCounterChange =
         passphraseHandlers.onPassphraseNumWordsCounterChange,
+        minValue = passphraseTypeState.minNumWords,
+        maxValue = passphraseTypeState.maxNumWords,
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -761,11 +798,13 @@ private fun ColumnScope.PassphraseTypeContent(
             capitalize = passphraseTypeState.capitalize,
             onPassphraseCapitalizeToggleChange =
             passphraseHandlers.onPassphraseCapitalizeToggleChange,
+            enabled = passphraseTypeState.capitalizeEnabled,
         )
         PassphraseIncludeNumberToggleItem(
             includeNumber = passphraseTypeState.includeNumber,
             onPassphraseIncludeNumberToggleChange =
             passphraseHandlers.onPassphraseIncludeNumberToggleChange,
+            enabled = passphraseTypeState.includeNumberEnabled,
         )
     }
 }
@@ -774,11 +813,15 @@ private fun ColumnScope.PassphraseTypeContent(
 private fun PassphraseNumWordsCounterItem(
     numWords: Int,
     onPassphraseNumWordsCounterChange: (Int) -> Unit,
+    minValue: Int = PASSPHRASE_MIN_NUMBER_OF_WORDS,
+    maxValue: Int = PASSPHRASE_MAX_NUMBER_OF_WORDS,
 ) {
+    val coercedNumWords = numWords.coerceIn(minValue, maxValue)
+
     BitwardenStepper(
         label = stringResource(id = R.string.number_of_words),
-        value = numWords,
-        range = PASSPHRASE_MIN_NUMBER_OF_WORDS..PASSPHRASE_MAX_NUMBER_OF_WORDS,
+        value = coercedNumWords,
+        range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
         increaseButtonTestTag = "NumberOfWordsIncreaseButton",
         decreaseButtonTestTag = "NumberOfWordsDecreaseButton",
@@ -810,11 +853,13 @@ private fun PassphraseWordSeparatorInputItem(
 private fun PassphraseCapitalizeToggleItem(
     capitalize: Boolean,
     onPassphraseCapitalizeToggleChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     BitwardenWideSwitch(
         label = stringResource(id = R.string.capitalize),
         isChecked = capitalize,
         onCheckedChange = onPassphraseCapitalizeToggleChange,
+        enabled = enabled,
         modifier = Modifier
             .semantics { testTag = "CapitalizePassphraseToggle" }
             .fillMaxWidth()
@@ -826,10 +871,12 @@ private fun PassphraseCapitalizeToggleItem(
 private fun PassphraseIncludeNumberToggleItem(
     includeNumber: Boolean,
     onPassphraseIncludeNumberToggleChange: (Boolean) -> Unit,
+    enabled: Boolean,
 ) {
     BitwardenWideSwitch(
         label = stringResource(id = R.string.include_number),
         isChecked = includeNumber,
+        enabled = enabled,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
         modifier = Modifier
             .semantics { testTag = "IncludeNumbersToggle" }
