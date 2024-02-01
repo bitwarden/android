@@ -7,7 +7,8 @@ import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -32,8 +33,8 @@ class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val clock: Clock,
-    private val settingsRepository: SettingsRepository,
     private val crashLogsManager: CrashLogsManager,
+    private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
     initialState = savedStateHandle[KEY_STATE] ?: createInitialState(
         clock = clock,
@@ -86,7 +87,11 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleWebVaultClick() {
-        sendEvent(AboutEvent.NavigateToWebVault)
+        sendEvent(
+            AboutEvent.NavigateToWebVault(
+                environmentRepository.environment.environmentUrlData.baseWebVaultUrlOrDefault,
+            ),
+        )
     }
 
     companion object {
@@ -142,7 +147,7 @@ sealed class AboutEvent {
     /**
      * Navigates to the web vault.
      */
-    data object NavigateToWebVault : AboutEvent()
+    data class NavigateToWebVault(val vaultUrl: String) : AboutEvent()
 
     /**
      * Navigates to rate the app.

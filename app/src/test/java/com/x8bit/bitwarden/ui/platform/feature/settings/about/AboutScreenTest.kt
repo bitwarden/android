@@ -144,9 +144,10 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Test
     fun `on NavigateToWebVault should call launchUri on IntentManager`() {
-        mutableEventFlow.tryEmit(AboutEvent.NavigateToWebVault)
+        val testUrl = "www.testUrl.com"
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToWebVault(testUrl))
         verify {
-            intentManager.launchUri("https://vault.bitwarden.com".toUri())
+            intentManager.launchUri(testUrl.toUri())
         }
     }
 

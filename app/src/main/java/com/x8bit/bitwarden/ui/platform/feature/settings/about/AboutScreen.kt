@@ -62,10 +62,12 @@ fun AboutScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            is AboutEvent.NavigateToWebVault -> {
+                intentManager.launchUri(event.vaultUrl.toUri())
+            }
+
             AboutEvent.NavigateBack -> onNavigateBack.invoke()
 
             AboutEvent.NavigateToHelpCenter -> {
@@ -74,10 +76,6 @@ fun AboutScreen(
 
             AboutEvent.NavigateToLearnAboutOrganizations -> {
                 intentManager.launchUri("https://bitwarden.com/help/about-organizations".toUri())
-            }
-
-            AboutEvent.NavigateToWebVault -> {
-                intentManager.launchUri("https://vault.bitwarden.com".toUri())
             }
 
             AboutEvent.NavigateToRateApp -> {
@@ -181,7 +179,7 @@ private fun ContentColumn(
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.learn_org),
             onConfirmClick = onLearnAboutOrgsClick,
-            dialogTitle = stringResource(id = R.string.continue_to_web_app),
+            dialogTitle = stringResource(id = R.string.continue_to_x, "bitwarden.com"),
             dialogMessage = stringResource(
                 id = R.string.learn_about_organizations_description_long,
             ),
