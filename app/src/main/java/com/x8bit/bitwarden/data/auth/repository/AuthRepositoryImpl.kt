@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -98,9 +99,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import java.time.Clock
 import javax.inject.Singleton
+import kotlin.coroutines.coroutineContext
 
 private const val PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS: Long = 15L * 60L * 1_000L
 private const val PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS: Long = 4L * 1_000L
+private const val PASSWORDLESS_APPROVER_INTERVAL_MILLIS: Long = 5L * 60L * 1_000L
 
 /**
  * Default implementation of [AuthRepository].
@@ -897,20 +900,113 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun getAuthRequest(
-        fingerprint: String,
-    ): AuthRequestResult =
-        when (val authRequestsResult = getAuthRequests()) {
-            AuthRequestsResult.Error -> AuthRequestResult.Error
-            is AuthRequestsResult.Success -> {
-                val request = authRequestsResult.authRequests
-                    .firstOrNull { it.fingerprint == fingerprint }
+    private fun getAuthRequest(
+        initialRequest: suspend () -> AuthRequestUpdatesResult,
+    ): Flow<AuthRequestUpdatesResult> = flow {
+        val result = initialRequest()
+        emit(result)
+        if (result is AuthRequestUpdatesResult.Error) return@flow
+        var isComplete = false
+        while (coroutineContext.isActive && !isComplete) {
+            delay(PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
+            val updateResult = result as AuthRequestUpdatesResult.Update
+            authRequestsService
+                .getAuthRequest(result.authRequest.id)
+                .map { request ->
+                    AuthRequest(
+                        id = request.id,
+                        publicKey = request.publicKey,
+                        platform = request.platform,
+                        ipAddress = request.ipAddress,
+                        key = request.key,
+                        masterPasswordHash = request.masterPasswordHash,
+                        creationDate = request.creationDate,
+                        responseDate = request.responseDate,
+                        requestApproved = request.requestApproved ?: false,
+                        originUrl = request.originUrl,
+                        fingerprint = updateResult.authRequest.fingerprint,
+                    )
+                }
+                .fold(
+                    onFailure = { emit(AuthRequestUpdatesResult.Error) },
+                    onSuccess = { updateAuthRequest ->
+                        when {
+                            updateAuthRequest.requestApproved -> {
+                                isComplete = true
+                                emit(AuthRequestUpdatesResult.Approved)
+                            }
 
-                request
-                    ?.let { AuthRequestResult.Success(it) }
-                    ?: AuthRequestResult.Error
+                            !updateAuthRequest.requestApproved &&
+                                updateAuthRequest.responseDate != null -> {
+                                isComplete = true
+                                emit(AuthRequestUpdatesResult.Declined)
+                            }
+
+                            updateAuthRequest
+                                .creationDate
+                                .toInstant()
+                                .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
+                                .isBefore(clock.instant()) -> {
+                                isComplete = true
+                                emit(AuthRequestUpdatesResult.Expired)
+                            }
+
+                            else -> {
+                                emit(AuthRequestUpdatesResult.Update(updateAuthRequest))
+                            }
+                        }
+                    },
+                )
+        }
+    }
+
+    override fun getAuthRequestByFingerprintFlow(
+        fingerprint: String,
+    ): Flow<AuthRequestUpdatesResult> = getAuthRequest {
+        when (val authRequestsResult = getAuthRequests()) {
+            AuthRequestsResult.Error -> AuthRequestUpdatesResult.Error
+            is AuthRequestsResult.Success -> {
+                authRequestsResult
+                    .authRequests
+                    .firstOrNull { it.fingerprint == fingerprint }
+                    ?.let { AuthRequestUpdatesResult.Update(it) }
+                    ?: AuthRequestUpdatesResult.Error
             }
         }
+    }
+
+    override fun getAuthRequestByIdFlow(
+        requestId: String,
+    ): Flow<AuthRequestUpdatesResult> = getAuthRequest {
+        authRequestsService
+            .getAuthRequest(requestId)
+            .map { request ->
+                when (val result = getFingerprintPhrase(request.publicKey)) {
+                    is UserFingerprintResult.Error -> null
+                    is UserFingerprintResult.Success -> AuthRequest(
+                        id = request.id,
+                        publicKey = request.publicKey,
+                        platform = request.platform,
+                        ipAddress = request.ipAddress,
+                        key = request.key,
+                        masterPasswordHash = request.masterPasswordHash,
+                        creationDate = request.creationDate,
+                        responseDate = request.responseDate,
+                        requestApproved = request.requestApproved ?: false,
+                        originUrl = request.originUrl,
+                        fingerprint = result.fingerprint,
+                    )
+                }
+            }
+            .fold(
+                onFailure = { AuthRequestUpdatesResult.Error },
+                onSuccess = { authRequest ->
+                    authRequest
+                        ?.let { AuthRequestUpdatesResult.Update(it) }
+                        ?: AuthRequestUpdatesResult.Error
+                },
+            )
+    }
 
     override suspend fun getAuthRequests(): AuthRequestsResult =
         authRequestsService

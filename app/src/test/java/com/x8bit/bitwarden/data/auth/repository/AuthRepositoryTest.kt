@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -3011,93 +3012,489 @@ class AuthRepositoryTest {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getAuthRequest should return failure when getAuthRequests returns failure`() = runTest {
-        val fingerprint = "fingerprint"
-        coEvery {
-            authRequestsService.getAuthRequests()
-        } returns Throwable("Fail").asFailure()
+    fun `getAuthRequestByFingerprintFlow should emit failure and cancel flow when getAuthRequests fails`() =
+        runTest {
+            val fingerprint = "fingerprint"
+            coEvery {
+                authRequestsService.getAuthRequests()
+            } returns Throwable("Fail").asFailure()
 
-        val result = repository.getAuthRequest(fingerprint)
+            repository
+                .getAuthRequestByFingerprintFlow(fingerprint)
+                .test {
+                    assertEquals(AuthRequestUpdatesResult.Error, awaitItem())
+                    awaitComplete()
+                }
 
-        coVerify(exactly = 1) {
-            authRequestsService.getAuthRequests()
+            coVerify(exactly = 1) {
+                authRequestsService.getAuthRequests()
+            }
         }
-        assertEquals(AuthRequestResult.Error, result)
-    }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getAuthRequest should return success when service returns success`() = runTest {
-        val fingerprint = "fingerprint"
-        val responseJson = AuthRequestsResponseJson(
-            authRequests = listOf(
-                AuthRequestsResponseJson.AuthRequest(
-                    id = "1",
-                    publicKey = PUBLIC_KEY,
-                    platform = "Android",
-                    ipAddress = "192.168.0.1",
-                    key = "public",
-                    masterPasswordHash = "verySecureHash",
-                    creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
-                    responseDate = null,
-                    requestApproved = true,
-                    originUrl = "www.bitwarden.com",
-                ),
-            ),
-        )
-        val expected = AuthRequestResult.Success(
-            authRequest = AuthRequest(
-                id = "1",
-                publicKey = PUBLIC_KEY,
-                platform = "Android",
-                ipAddress = "192.168.0.1",
-                key = "public",
-                masterPasswordHash = "verySecureHash",
-                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
-                responseDate = null,
-                requestApproved = true,
-                originUrl = "www.bitwarden.com",
-                fingerprint = fingerprint,
-            ),
-        )
-        coEvery {
-            authSdkSource.getUserFingerprint(
-                email = EMAIL,
-                publicKey = PUBLIC_KEY,
+    fun `getAuthRequestByFingerprintFlow should emit update then not cancel on failure when initial request succeeds and second fails`() =
+        runTest {
+            val authRequestsResponseJson = AuthRequestsResponseJson(
+                authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
             )
-        } returns Result.success(fingerprint)
-        coEvery {
-            authRequestsService.getAuthRequests()
-        } returns responseJson.asSuccess()
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            val authRequest = AUTH_REQUEST
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = authRequest,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Error
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequests()
+            } returns authRequestsResponseJson.asSuccess()
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns Result.failure(mockk())
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
-        val result = repository.getAuthRequest(fingerprint)
+            repository
+                .getAuthRequestByFingerprintFlow(FINGER_PRINT)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    cancelAndConsumeRemainingEvents()
+                }
 
-        coVerify(exactly = 1) {
-            authRequestsService.getAuthRequests()
-            authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+            coVerify(exactly = 1) {
+                authRequestsService.getAuthRequests()
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            }
         }
-        assertEquals(expected, result)
-    }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getAuthRequest should return error when no matching fingerprint exists`() = runTest {
-        val fingerprint = "fingerprint"
-        val responseJson = AuthRequestsResponseJson(
-            authRequests = listOf(),
-        )
-        val expected = AuthRequestResult.Error
-        coEvery {
-            authRequestsService.getAuthRequests()
-        } returns responseJson.asSuccess()
+    fun `getAuthRequestByFingerprintFlow should emit update then approved and cancel when initial request succeeds and second succeeds with requestApproved`() =
+        runTest {
+            val responseJsonOne = AuthRequestsResponseJson(
+                authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
+            )
+            val authRequestsResponse = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                requestApproved = true,
+            )
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Approved
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequests()
+            } returns responseJsonOne.asSuccess()
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns Result.success(authRequestsResponse)
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
-        val result = repository.getAuthRequest(fingerprint)
+            repository
+                .getAuthRequestByFingerprintFlow(FINGER_PRINT)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    awaitComplete()
+                }
 
-        coVerify(exactly = 1) {
-            authRequestsService.getAuthRequests()
+            coVerify(exactly = 1) {
+                authRequestsService.getAuthRequests()
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            }
         }
-        assertEquals(expected, result)
-    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByFingerprintFlow should emit update then declined and cancel when initial request succeeds and second succeeds with valid response data`() =
+        runTest {
+            val responseJsonOne = AuthRequestsResponseJson(
+                authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
+            )
+            val authRequestsResponse = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                responseDate = mockk(),
+                requestApproved = false,
+            )
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Declined
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequests()
+            } returns responseJsonOne.asSuccess()
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns Result.success(authRequestsResponse)
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByFingerprintFlow(FINGER_PRINT)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    awaitComplete()
+                }
+
+            coVerify(exactly = 1) {
+                authRequestsService.getAuthRequests()
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByFingerprintFlow should emit update then expired and cancel when initial request succeeds and second succeeds after 15 mins have passed`() =
+        runTest {
+            val responseJsonOne = AuthRequestsResponseJson(
+                authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
+            )
+            val fixedClock: Clock = Clock.fixed(
+                Instant.parse("2022-11-12T00:00:00Z"),
+                ZoneOffset.UTC,
+            )
+            val authRequestsResponse = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                creationDate = ZonedDateTime.ofInstant(fixedClock.instant(), ZoneOffset.UTC),
+                requestApproved = false,
+            )
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Expired
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequests()
+            } returns responseJsonOne.asSuccess()
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns Result.success(authRequestsResponse)
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByFingerprintFlow(FINGER_PRINT)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    awaitComplete()
+                }
+
+            coVerify(exactly = 1) {
+                authRequestsService.getAuthRequests()
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByFingerprintFlow should emit update then update and not cancel when initial request succeeds and second succeeds before 15 mins passes`() =
+        runTest {
+            val responseJsonOne = AuthRequestsResponseJson(
+                authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
+            )
+            val newHash = "evenMoreSecureHash"
+            val authRequestsResponse = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                masterPasswordHash = newHash,
+                requestApproved = false,
+            )
+            val authRequest = AUTH_REQUEST.copy(
+                masterPasswordHash = newHash,
+                requestApproved = false,
+            )
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Update(
+                authRequest = authRequest,
+            )
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequests()
+            } returns responseJsonOne.asSuccess()
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns Result.success(authRequestsResponse)
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByFingerprintFlow(FINGER_PRINT)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    cancelAndConsumeRemainingEvents()
+                }
+
+            coVerify(exactly = 1) {
+                authRequestsService.getAuthRequests()
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByIdFlow should emit failure and cancel flow when getAuthRequests fails`() =
+        runTest {
+            coEvery {
+                authRequestsService.getAuthRequest(REQUEST_ID)
+            } returns Throwable("Fail").asFailure()
+
+            repository
+                .getAuthRequestByIdFlow(REQUEST_ID)
+                .test {
+                    assertEquals(AuthRequestUpdatesResult.Error, awaitItem())
+                    awaitComplete()
+                }
+
+            coVerify(exactly = 1) {
+                authRequestsService.getAuthRequest(REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByIdFlow should emit update then not cancel on failure when initial request succeeds and second fails`() =
+        runTest {
+            val authRequestResponseOne = Result.success(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE)
+            val authRequestResponseTwo = Result.failure<AuthRequestsResponseJson.AuthRequest>(
+                exception = mockk(),
+            )
+            val authRequest = AUTH_REQUEST.copy(
+                id = REQUEST_ID,
+            )
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = authRequest,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Error
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns authRequestResponseOne andThen authRequestResponseTwo
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByIdFlow(REQUEST_ID)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    cancelAndConsumeRemainingEvents()
+                }
+
+            coVerify(exactly = 1) {
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+            }
+            coVerify(exactly = 2) {
+                authRequestsService.getAuthRequest(REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByIdFlow should emit update then approved and cancel when initial request succeeds and second succeeds with requestApproved`() =
+        runTest {
+            val authRequestResponseOne = Result.success(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE)
+            val authRequestResponseJson = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                requestApproved = true,
+            )
+            val authRequestResponseTwo = Result.success(authRequestResponseJson)
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Approved
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns authRequestResponseOne andThen authRequestResponseTwo
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByIdFlow(REQUEST_ID)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    awaitComplete()
+                }
+
+            coVerify(exactly = 1) {
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+            }
+            coVerify(exactly = 2) {
+                authRequestsService.getAuthRequest(REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByIdFlow should emit update then declined and cancel when initial request succeeds and second succeeds with valid response data`() =
+        runTest {
+            val authRequestResponseOne = Result.success(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE)
+            val authRequestResponseJson = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                responseDate = mockk(),
+                requestApproved = false,
+            )
+            val authRequestResponseTwo = Result.success(authRequestResponseJson)
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Declined
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns authRequestResponseOne andThen authRequestResponseTwo
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByIdFlow(REQUEST_ID)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    awaitComplete()
+                }
+
+            coVerify(exactly = 1) {
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+            }
+            coVerify(exactly = 2) {
+                authRequestsService.getAuthRequest(REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByIdFlow should emit update then expired and cancel when initial request succeeds and second succeeds after 15 mins have passed`() =
+        runTest {
+            val fixedClock: Clock = Clock.fixed(
+                Instant.parse("2022-11-12T00:00:00Z"),
+                ZoneOffset.UTC,
+            )
+            val authRequestResponseOne = Result.success(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE)
+            val authRequestResponseJson = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                creationDate = ZonedDateTime.ofInstant(fixedClock.instant(), ZoneOffset.UTC),
+                requestApproved = false,
+            )
+            val authRequestResponseTwo = Result.success(authRequestResponseJson)
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Expired
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns authRequestResponseOne andThen authRequestResponseTwo
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByIdFlow(REQUEST_ID)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    awaitComplete()
+                }
+
+            coVerify(exactly = 1) {
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+            }
+            coVerify(exactly = 2) {
+                authRequestsService.getAuthRequest(REQUEST_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestByIdFlow should emit update then update and not cancel when initial request succeeds and second succeeds before 15 mins passes`() =
+        runTest {
+            val newHash = "evenMoreSecureHash"
+            val authRequestResponseOne = Result.success(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE)
+            val authRequestResponseJson = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(
+                masterPasswordHash = newHash,
+                requestApproved = false,
+            )
+            val authRequestResponseTwo = Result.success(authRequestResponseJson)
+            val authRequest = AUTH_REQUEST.copy(
+                masterPasswordHash = newHash,
+                requestApproved = false,
+            )
+            val expectedOne = AuthRequestUpdatesResult.Update(
+                authRequest = AUTH_REQUEST,
+            )
+            val expectedTwo = AuthRequestUpdatesResult.Update(
+                authRequest = authRequest,
+            )
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            coEvery {
+                authRequestsService.getAuthRequest(requestId = REQUEST_ID)
+            } returns authRequestResponseOne andThen authRequestResponseTwo
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestByIdFlow(REQUEST_ID)
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    assertEquals(expectedTwo, awaitItem())
+                    cancelAndConsumeRemainingEvents()
+                }
+
+            coVerify(exactly = 1) {
+                authSdkSource.getUserFingerprint(EMAIL, PUBLIC_KEY)
+            }
+            coVerify(exactly = 2) {
+                authRequestsService.getAuthRequest(REQUEST_ID)
+            }
+        }
 
     @Test
     fun `getAuthRequests should return failure when service returns failure`() = runTest {
@@ -3650,7 +4047,6 @@ class AuthRepositoryTest {
         private const val EMAIL_2 = "test2@bitwarden.com"
         private const val PASSWORD = "password"
         private const val PASSWORD_HASH = "passwordHash"
-        private const val PASSWORD_HASH_LOCAL = "passwordHashLocal"
         private const val ACCESS_TOKEN = "accessToken"
         private const val ACCESS_TOKEN_2 = "accessToken2"
         private const val REFRESH_TOKEN = "refreshToken"
@@ -3795,6 +4191,34 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 status = VaultUnlockData.Status.UNLOCKED,
             ),
+        )
+        private const val FINGER_PRINT = "FINGER_PRINT"
+        private const val REQUEST_ID: String = "REQUEST_ID"
+        private val AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE =
+            AuthRequestsResponseJson.AuthRequest(
+                id = REQUEST_ID,
+                publicKey = PUBLIC_KEY,
+                platform = "Android",
+                ipAddress = "192.168.0.1",
+                key = "public",
+                masterPasswordHash = "verySecureHash",
+                creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+                responseDate = null,
+                requestApproved = true,
+                originUrl = "www.bitwarden.com",
+            )
+        private val AUTH_REQUEST = AuthRequest(
+            id = REQUEST_ID,
+            publicKey = PUBLIC_KEY,
+            platform = "Android",
+            ipAddress = "192.168.0.1",
+            key = "public",
+            masterPasswordHash = "verySecureHash",
+            creationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
+            responseDate = null,
+            requestApproved = true,
+            originUrl = "www.bitwarden.com",
+            fingerprint = FINGER_PRINT,
         )
     }
 }

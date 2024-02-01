@@ -9,8 +9,11 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -22,6 +25,9 @@ class LoginApprovalScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
 
+    private val exitManager: ExitManager = mockk {
+        every { exitApplication() } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<LoginApprovalEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LoginApprovalViewModel>(relaxed = true) {
@@ -35,6 +41,7 @@ class LoginApprovalScreenTest : BaseComposeTest() {
             LoginApprovalScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
+                exitManager = exitManager,
             )
         }
     }
@@ -43,6 +50,14 @@ class LoginApprovalScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(LoginApprovalEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on ExitApp should call exit appliction`() {
+        mutableEventFlow.tryEmit(LoginApprovalEvent.ExitApp)
+        verify(exactly = 1) {
+            exitManager.exitApplication()
+        }
     }
 
     @Test
@@ -93,6 +108,7 @@ class LoginApprovalScreenTest : BaseComposeTest() {
 
 private const val FINGERPRINT = "fingerprint"
 private val DEFAULT_STATE: LoginApprovalState = LoginApprovalState(
+    specialCircumstance = null,
     fingerprint = FINGERPRINT,
     masterPasswordHash = null,
     publicKey = "publicKey",

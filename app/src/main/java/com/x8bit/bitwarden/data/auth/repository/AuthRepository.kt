@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -227,9 +228,14 @@ interface AuthRepository : AuthenticatorProvider {
     fun createAuthRequestWithUpdates(email: String): Flow<CreateAuthRequestResult>
 
     /**
-     * Get an auth request by its [fingerprint].
+     * Get an auth request by its [fingerprint] and emits updates for that request.
      */
-    suspend fun getAuthRequest(fingerprint: String): AuthRequestResult
+    fun getAuthRequestByFingerprintFlow(fingerprint: String): Flow<AuthRequestUpdatesResult>
+
+    /**
+     * Get an auth request by its request ID and emits updates for that request.
+     */
+    fun getAuthRequestByIdFlow(requestId: String): Flow<AuthRequestUpdatesResult>
 
     /**
      * Get a list of the current user's [AuthRequest]s.
