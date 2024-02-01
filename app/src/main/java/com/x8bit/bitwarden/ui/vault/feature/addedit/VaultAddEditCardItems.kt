@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -177,6 +179,7 @@ fun LazyListScope.vaultAddEditCardItems(
             isChecked = commonState.favorite,
             onCheckedChange = commonHandlers.onToggleFavorite,
             modifier = Modifier
+                .semantics { testTag = "ItemFavoriteToggle" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -189,6 +192,7 @@ fun LazyListScope.vaultAddEditCardItems(
             isChecked = commonState.masterPasswordReprompt,
             onCheckedChange = commonHandlers.onToggleMasterPasswordReprompt,
             modifier = Modifier
+                .semantics { testTag = "MasterPasswordRepromptToggle" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             actions = {
@@ -223,6 +227,7 @@ fun LazyListScope.vaultAddEditCardItems(
             value = commonState.notes,
             onValueChange = commonHandlers.onNotesTextChange,
             modifier = Modifier
+                .semantics { testTag = "ItemNotesEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -295,6 +300,7 @@ fun LazyListScope.vaultAddEditCardItems(
                     )
                 },
                 modifier = Modifier
+                    .semantics { testTag = "ItemOwnershipPicker" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )

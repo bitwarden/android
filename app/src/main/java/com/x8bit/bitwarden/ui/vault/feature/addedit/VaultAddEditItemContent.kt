@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
@@ -24,6 +27,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * The top level content UI state for the [VaultAddEditScreen].
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 @Suppress("LongMethod")
 fun VaultAddEditContent(
@@ -51,7 +55,8 @@ fun VaultAddEditContent(
     )
 
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier
+            .semantics { testTagsAsResourceId = true },
     ) {
         item {
             BitwardenListHeaderText(
