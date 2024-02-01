@@ -70,6 +70,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -79,6 +80,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -194,9 +196,15 @@ class AuthRepositoryTest {
 
     private val mutableLogoutFlow = bufferedMutableSharedFlow<Unit>()
     private val mutableSyncOrgKeysFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val pushManager: PushManager = mockk {
         every { logoutFlow } returns mutableLogoutFlow
         every { syncOrgKeysFlow } returns mutableSyncOrgKeysFlow
+    }
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePoliciesFlow(type = PolicyTypeJson.MASTER_PASSWORD)
+        } returns mutableActivePolicyFlow
     }
 
     private var elapsedRealtimeMillis = 123456789L
@@ -219,6 +227,7 @@ class AuthRepositoryTest {
         userLogoutManager = userLogoutManager,
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
+        policyManager = policyManager,
         elapsedRealtimeMillisProvider = { elapsedRealtimeMillis },
     )
 
@@ -406,9 +415,8 @@ class AuthRepositoryTest {
             val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
 
             // Set policies that will fail the password.
-            fakeAuthDiskSource.storePolicies(
-                userId = USER_ID_1,
-                policies = listOf(
+            mutableActivePolicyFlow.emit(
+                listOf(
                     createMockPolicy(
                         type = PolicyTypeJson.MASTER_PASSWORD,
                         isEnabled = true,
@@ -507,38 +515,6 @@ class AuthRepositoryTest {
         // Updating AuthDiskSource updates the repository
         fakeAuthDiskSource.rememberedOrgIdentifier = null
         assertNull(repository.rememberedOrgIdentifier)
-    }
-
-    @Test
-    fun `hasExportVaultPoliciesEnabled checks if any export vault policies are enabled`() {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-        // No stored policies returns false.
-        assertFalse(repository.hasExportVaultPoliciesEnabled)
-
-        // Stored but disabled policies returns false.
-        fakeAuthDiskSource.storePolicies(
-            userId = USER_ID_1,
-            policies = listOf(
-                createMockPolicy(
-                    type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-                    isEnabled = false,
-                ),
-            ),
-        )
-        assertFalse(repository.hasExportVaultPoliciesEnabled)
-
-        // Stored enabled policies returns true.
-        fakeAuthDiskSource.storePolicies(
-            userId = USER_ID_1,
-            policies = listOf(
-                createMockPolicy(
-                    type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT,
-                    isEnabled = true,
-                ),
-            ),
-        )
-        assertTrue(repository.hasExportVaultPoliciesEnabled)
     }
 
     @Test
@@ -3702,7 +3678,7 @@ class AuthRepositoryTest {
     fun `validatePasswordAgainstPolicy validates password against policy requirements`() = runTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
-        // A helper method to set a policy in the store with the given parameters.
+        // A helper method to set a policy with the given parameters.
         fun setPolicy(
             minLength: Int = 0,
             minComplexity: Int? = null,
@@ -3711,22 +3687,21 @@ class AuthRepositoryTest {
             requireNumbers: Boolean = false,
             requireSpecial: Boolean = false,
         ) {
-            fakeAuthDiskSource.storePolicies(
-                userId = USER_ID_1,
-                policies = listOf(
-                    createMockPolicy(
-                        type = PolicyTypeJson.MASTER_PASSWORD,
-                        isEnabled = true,
-                        data = buildJsonObject {
-                            put(key = "minLength", value = minLength)
-                            put(key = "minComplexity", value = minComplexity)
-                            put(key = "requireUpper", value = requireUpper)
-                            put(key = "requireLower", value = requireLower)
-                            put(key = "requireNumbers", value = requireNumbers)
-                            put(key = "requireSpecial", value = requireSpecial)
-                            put(key = "enforceOnLogin", value = true)
-                        },
-                    ),
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD)
+            } returns listOf(
+                createMockPolicy(
+                    type = PolicyTypeJson.MASTER_PASSWORD,
+                    isEnabled = true,
+                    data = buildJsonObject {
+                        put(key = "minLength", value = minLength)
+                        put(key = "minComplexity", value = minComplexity)
+                        put(key = "requireUpper", value = requireUpper)
+                        put(key = "requireLower", value = requireLower)
+                        put(key = "requireNumbers", value = requireNumbers)
+                        put(key = "requireSpecial", value = requireSpecial)
+                        put(key = "enforceOnLogin", value = true)
+                    },
                 ),
             )
         }

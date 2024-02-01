@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserD
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
@@ -72,6 +73,7 @@ class GeneratorRepositoryTest {
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val dispatcherManager = FakeDispatcherManager()
+    private val policyManager: PolicyManager = mockk()
 
     private val repository = GeneratorRepositoryImpl(
         generatorSdkSource = generatorSdkSource,
@@ -80,6 +82,7 @@ class GeneratorRepositoryTest {
         passwordHistoryDiskSource = passwordHistoryDiskSource,
         vaultSdkSource = vaultSdkSource,
         dispatcherManager = dispatcherManager,
+        policyManager = policyManager,
     )
 
     @AfterEach
@@ -769,35 +772,35 @@ class GeneratorRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getPasswordGeneratorPolicy returns default settings when no policies are present`() = runTest {
-        val userId = "testUserId"
-        coEvery { authDiskSource.userState?.activeUserId } returns userId
-        coEvery { authDiskSource.getPolicies(userId) } returns emptyList()
+    fun `getPasswordGeneratorPolicy returns default settings when no policies are present`() =
+        runTest {
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR)
+            } returns emptyList()
 
-        val policy = repository.getPasswordGeneratorPolicy()
+            val policy = repository.getPasswordGeneratorPolicy()
 
-        val expectedPolicy = PolicyInformation.PasswordGenerator(
-            defaultType = "password",
-            minLength = null,
-            useUpper = false,
-            useLower = false,
-            useNumbers = false,
-            useSpecial = false,
-            minNumbers = null,
-            minSpecial = null,
-            minNumberWords = null,
-            capitalize = false,
-            includeNumber = false,
-        )
+            val expectedPolicy = PolicyInformation.PasswordGenerator(
+                defaultType = "password",
+                minLength = null,
+                useUpper = false,
+                useLower = false,
+                useNumbers = false,
+                useSpecial = false,
+                minNumbers = null,
+                minSpecial = null,
+                minNumberWords = null,
+                capitalize = false,
+                includeNumber = false,
+            )
 
-        assertNotNull(policy)
-        assertEquals(expectedPolicy, policy)
-    }
+            assertNotNull(policy)
+            assertEquals(expectedPolicy, policy)
+        }
 
     @Suppress("MaxLineLength")
     @Test
     fun `getPasswordGeneratorPolicy applies strictest settings from multiple policies`() = runTest {
-        val userId = "testUserId"
         val policy1 = PolicyInformation.PasswordGenerator(
             defaultType = "password",
             minLength = 8,
@@ -840,8 +843,7 @@ class GeneratorRepositoryTest {
                 organizationId = "id2",
             ),
         )
-        coEvery { authDiskSource.userState?.activeUserId } returns userId
-        coEvery { authDiskSource.getPolicies(userId) } returns policies
+        every { policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR) } returns policies
 
         val resultPolicy = repository.getPasswordGeneratorPolicy()
 

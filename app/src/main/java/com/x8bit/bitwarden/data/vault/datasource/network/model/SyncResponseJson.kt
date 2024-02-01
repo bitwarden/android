@@ -246,7 +246,7 @@ data class SyncResponseJson(
             val keyConnectorUrl: String?,
 
             @SerialName("type")
-            val type: Int,
+            val type: OrganizationType,
 
             @SerialName("seats")
             val seats: Int?,
@@ -326,7 +326,7 @@ data class SyncResponseJson(
             val familySponsorshipValidUntil: ZonedDateTime?,
 
             @SerialName("status")
-            val status: Int,
+            val status: OrganizationStatusType,
         )
 
         /**

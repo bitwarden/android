@@ -87,11 +87,6 @@ interface AuthRepository : AuthenticatorProvider {
     val passwordPolicies: List<PolicyInformation.MasterPassword>
 
     /**
-     * Return whether there are any export vault policies enabled for the current user.
-     */
-    val hasExportVaultPoliciesEnabled: Boolean
-
-    /**
      * The reason for resetting the password.
      */
     val passwordResetReason: ForcePasswordResetReason?

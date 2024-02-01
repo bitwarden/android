@@ -56,7 +56,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
-import com.x8bit.bitwarden.data.auth.repository.util.currentUserPoliciesListFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -65,8 +64,10 @@ import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -123,6 +124,7 @@ class AuthRepositoryImpl(
     private val vaultRepository: VaultRepository,
     private val userLogoutManager: UserLogoutManager,
     private val pushManager: PushManager,
+    private val policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository {
@@ -235,21 +237,7 @@ class AuthRepositoryImpl(
         by mutableHasPendingAccountAdditionStateFlow::value
 
     override val passwordPolicies: List<PolicyInformation.MasterPassword>
-        get() = activeUserId?.let { userId ->
-            authDiskSource
-                .getPolicies(userId)
-                ?.filter { it.type == PolicyTypeJson.MASTER_PASSWORD && it.isEnabled }
-                ?.mapNotNull { it.policyInformation as? PolicyInformation.MasterPassword }
-                .orEmpty()
-        } ?: emptyList()
-
-    override val hasExportVaultPoliciesEnabled: Boolean
-        get() = activeUserId?.let { userId ->
-            authDiskSource
-                .getPolicies(userId)
-                ?.any { it.type == PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT && it.isEnabled }
-                ?: false
-        } ?: false
+        get() = policyManager.getActivePolicies()
 
     override val passwordResetReason: ForcePasswordResetReason?
         get() = authDiskSource
@@ -274,7 +262,8 @@ class AuthRepositoryImpl(
             .launchIn(unconfinedScope)
 
         // When the policies for the user have been set, complete the login process.
-        authDiskSource.currentUserPoliciesListFlow
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.MASTER_PASSWORD)
             .onEach { policies ->
                 val userId = activeUserId ?: return@onEach
 
@@ -1148,7 +1137,6 @@ class AuthRepositoryImpl(
         // If there are no master password policies that are enabled and should be
         // enforced on login, the check should complete.
         val passwordPolicies = policyList
-            .filter { it.type == PolicyTypeJson.MASTER_PASSWORD && it.isEnabled }
             .mapNotNull { it.policyInformation as? PolicyInformation.MasterPassword }
             .filter { it.enforceOnLogin == true }
 

@@ -8,7 +8,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -151,39 +150,6 @@ class AuthDiskSourceExtensionsTest {
                             organizations = emptyList(),
                         ),
                     ),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
-    fun `currentUserPoliciesListFlow should emit changes to current user's policy data`() =
-        runTest {
-            val userId = "userId1"
-            val userStateJson = mockk<UserStateJson>() {
-                every { activeUserId } returns userId
-            }
-            authDiskSource.apply {
-                userState = userStateJson
-                storePolicies(
-                    userId = userId,
-                    policies = listOf(createMockPolicy()),
-                )
-            }
-
-            authDiskSource.currentUserPoliciesListFlow.test {
-                assertEquals(
-                    listOf(createMockPolicy()),
-                    awaitItem(),
-                )
-
-                authDiskSource.storePolicies(
-                    userId = userId,
-                    policies = listOf(createMockPolicy(number = 3)),
-                )
-
-                assertEquals(
-                    listOf(createMockPolicy(number = 3)),
                     awaitItem(),
                 )
             }
