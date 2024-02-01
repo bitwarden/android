@@ -358,7 +358,8 @@ class VaultItemListingDataExtensionsTest {
                         number = 1,
                         cipherType = CipherType.LOGIN,
                         subtitle = null,
-                    ),
+                    )
+                        .copy(shouldShowMasterPasswordReprompt = true),
                     createMockDisplayItemForCipher(
                         number = 2,
                         cipherType = CipherType.CARD,
@@ -421,12 +422,16 @@ class VaultItemListingDataExtensionsTest {
                         cipherType = CipherType.LOGIN,
                         subtitle = null,
                     )
-                        .copy(shouldShowMasterPasswordReprompt = true),
+                        .copy(
+                            isAutofill = true,
+                            shouldShowMasterPasswordReprompt = true,
+                        ),
                     createMockDisplayItemForCipher(
                         number = 2,
                         cipherType = CipherType.CARD,
                         subtitle = null,
-                    ),
+                    )
+                        .copy(isAutofill = true),
                 ),
             ),
             result,

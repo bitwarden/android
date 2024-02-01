@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers
 
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.MasterPasswordRepromptData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingViewModel
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -17,7 +18,7 @@ data class VaultItemListingHandlers(
     val searchIconClick: () -> Unit,
     val addVaultItemClick: () -> Unit,
     val itemClick: (id: String) -> Unit,
-    val masterPasswordRepromptSubmit: (id: String, password: String) -> Unit,
+    val masterPasswordRepromptSubmit: (password: String, MasterPasswordRepromptData) -> Unit,
     val refreshClick: () -> Unit,
     val syncClick: () -> Unit,
     val lockClick: () -> Unit,
@@ -49,11 +50,11 @@ data class VaultItemListingHandlers(
                     viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
                 },
                 itemClick = { viewModel.trySendAction(VaultItemListingsAction.ItemClick(it)) },
-                masterPasswordRepromptSubmit = { cipherId, password ->
+                masterPasswordRepromptSubmit = { password, data ->
                     viewModel.trySendAction(
                         VaultItemListingsAction.MasterPasswordRepromptSubmit(
-                            cipherId = cipherId,
                             password = password,
+                            masterPasswordRepromptData = data,
                         ),
                     )
                 },

@@ -317,8 +317,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 VaultItemListingsAction.MasterPasswordRepromptSubmit(
-                    cipherId = cipherId,
                     password = password,
+                    masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
+                        cipherId = cipherId,
+                    ),
                 ),
             )
 
@@ -368,8 +370,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 VaultItemListingsAction.MasterPasswordRepromptSubmit(
-                    cipherId = cipherId,
                     password = password,
+                    masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
+                        cipherId = cipherId,
+                    ),
                 ),
             )
 
@@ -386,7 +390,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `MasterPasswordRepromptSubmit for a request Success with a valid password should post to the AutofillSelectionManager`() =
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for autofill should post to the AutofillSelectionManager`() =
         runTest {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
@@ -408,14 +412,43 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             autofillSelectionManager.autofillSelectionFlow.test {
                 viewModel.trySendAction(
                     VaultItemListingsAction.MasterPasswordRepromptSubmit(
-                        cipherId = cipherId,
                         password = password,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
+                            cipherId = cipherId,
+                        ),
                     ),
                 )
                 assertEquals(
                     cipherView,
                     awaitItem(),
                 )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for overflow actions should process the action`() =
+        runTest {
+            val cipherId = "cipherId-1234"
+            val password = "password"
+            val viewModel = createVaultItemListingViewModel()
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.MasterPasswordRepromptSubmit(
+                        password = password,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
+                            action = ListingItemOverflowAction.VaultAction.EditClick(
+                                cipherId = cipherId,
+                            ),
+                        ),
+                    ),
+                )
+                // An Edit action navigates to the Edit screen
+                assertEquals(VaultItemListingEvent.NavigateToEditCipher(cipherId), awaitItem())
             }
         }
 
@@ -843,7 +876,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.Content(
                         displayItemList = listOf(
-                            createMockDisplayItemForCipher(number = 1),
+                            createMockDisplayItemForCipher(number = 1).copy(isAutofill = true),
                         ),
                     ),
                 )

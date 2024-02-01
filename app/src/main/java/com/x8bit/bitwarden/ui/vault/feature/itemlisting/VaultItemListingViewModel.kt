@@ -260,7 +260,7 @@ class VaultItemListingViewModel @Inject constructor(
             val result = authRepository.validatePassword(action.password)
             sendAction(
                 VaultItemListingsAction.Internal.ValidatePasswordResultReceive(
-                    cipherId = action.cipherId,
+                    masterPasswordRepromptData = action.masterPasswordRepromptData,
                     result = result,
                 ),
             )
@@ -573,9 +573,27 @@ class VaultItemListingViewModel @Inject constructor(
                     }
                     return
                 }
+                handleMasterPasswordRepromptData(
+                    data = action.masterPasswordRepromptData,
+                )
+            }
+        }
+    }
+
+    private fun handleMasterPasswordRepromptData(
+        data: MasterPasswordRepromptData,
+    ) {
+        when (data) {
+            is MasterPasswordRepromptData.Autofill -> {
                 // Complete the autofill selection flow
-                val cipherView = getCipherViewOrNull(cipherId = action.cipherId) ?: return
+                val cipherView = getCipherViewOrNull(cipherId = data.cipherId) ?: return
                 autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
+            }
+
+            is MasterPasswordRepromptData.OverflowItem -> {
+                handleOverflowOptionClick(
+                    VaultItemListingsAction.OverflowOptionClick(data.action),
+                )
             }
         }
     }
@@ -848,6 +866,9 @@ data class VaultItemListingState(
      * @property subtitle subtitle of the item (nullable).
      * @property iconData data for the icon to be displayed (nullable).
      * @property overflowOptions list of options for the item's overflow menu.
+     * @property isAutofill whether or not this screen is part of an autofill flow.
+     * @property shouldShowMasterPasswordReprompt whether or not a master password reprompt is
+     * required for various secure actions.
      */
     data class DisplayItem(
         val id: String,
@@ -856,6 +877,7 @@ data class VaultItemListingState(
         val iconData: IconData,
         val extraIconList: List<IconRes>,
         val overflowOptions: List<ListingItemOverflowAction>,
+        val isAutofill: Boolean,
         val shouldShowMasterPasswordReprompt: Boolean,
     )
 
@@ -1122,12 +1144,12 @@ sealed class VaultItemListingsAction {
     data class ItemClick(val id: String) : VaultItemListingsAction()
 
     /**
-     * A master password prompt was encountered when trying to access the cipher with the given
-     * [cipherId] and the given [password] was submitted.
+     * A master password prompt was encountered when trying to perform a senstive action described
+     * by the given [masterPasswordRepromptData] and the given [password] was submitted.
      */
     data class MasterPasswordRepromptSubmit(
-        val cipherId: String,
         val password: String,
+        val masterPasswordRepromptData: MasterPasswordRepromptData,
     ) : VaultItemListingsAction()
 
     /**
@@ -1181,7 +1203,7 @@ sealed class VaultItemListingsAction {
          * Indicates that a result for verifying the user's master password has been received.
          */
         data class ValidatePasswordResultReceive(
-            val cipherId: String,
+            val masterPasswordRepromptData: MasterPasswordRepromptData,
             val result: ValidatePasswordResult,
         ) : Internal()
 
@@ -1192,4 +1214,26 @@ sealed class VaultItemListingsAction {
             val policyDisablesSend: Boolean,
         ) : Internal()
     }
+}
+
+/**
+ * Data tracking the type of request that triggered a master password reprompt.
+ */
+sealed class MasterPasswordRepromptData : Parcelable {
+
+    /**
+     * Autofill was selected.
+     */
+    @Parcelize
+    data class Autofill(
+        val cipherId: String,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * A cipher overflow menu item action was selected.
+     */
+    @Parcelize
+    data class OverflowItem(
+        val action: ListingItemOverflowAction.VaultAction,
+    ) : MasterPasswordRepromptData()
 }
