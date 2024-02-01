@@ -162,6 +162,7 @@ private fun AttachmentListEntry(
                 color = MaterialTheme.colorScheme.outlineVariant,
             )
             .defaultMinSize(minHeight = 56.dp)
+            .semantics { testTag = "CipherAttachment" }
             .padding(vertical = 8.dp)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
