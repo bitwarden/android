@@ -63,6 +63,7 @@ fun VaultItemScreen(
     onNavigateToVaultAddEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
+    onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -92,8 +93,7 @@ fun VaultItemScreen(
             }
 
             is VaultItemEvent.NavigateToPasswordHistory -> {
-                // TODO Implement password history in BIT-617
-                Toast.makeText(context, "Not yet implemented.", Toast.LENGTH_SHORT).show()
+                onNavigateToPasswordHistory(event.itemId)
             }
 
             is VaultItemEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())

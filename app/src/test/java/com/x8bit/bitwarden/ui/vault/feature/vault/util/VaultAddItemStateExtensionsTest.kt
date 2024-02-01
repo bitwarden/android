@@ -104,6 +104,8 @@ class VaultAddItemStateExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toCipherView should transform Login ItemType to CipherView with original cipher`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MIN
         val cipherView = DEFAULT_LOGIN_CIPHER_VIEW
         val viewState = VaultAddEditState.ViewState.Content(
             common = VaultAddEditState.ViewState.Content.Common(
@@ -147,7 +149,7 @@ class VaultAddItemStateExtensionsTest {
                 login = LoginView(
                     username = "mockUsername-1",
                     password = "mockPassword-1",
-                    passwordRevisionDate = Instant.ofEpochSecond(1_000L),
+                    passwordRevisionDate = Instant.MIN,
                     uris = listOf(
                         LoginUriView(
                             uri = "mockUri-1",
@@ -187,8 +189,12 @@ class VaultAddItemStateExtensionsTest {
                 ),
                 passwordHistory = listOf(
                     PasswordHistoryView(
+                        password = "password",
+                        lastUsedDate = Instant.MIN,
+                    ),
+                    PasswordHistoryView(
                         password = "old_password",
-                        lastUsedDate = Instant.ofEpochSecond(1_000L),
+                        lastUsedDate = Instant.MIN,
                     ),
                 ),
             ),
@@ -500,7 +506,7 @@ class VaultAddItemStateExtensionsTest {
                 passwordHistory = listOf(
                     PasswordHistoryView(
                         password = "old_password",
-                        lastUsedDate = Instant.ofEpochSecond(1_000L),
+                        lastUsedDate = Instant.MIN,
                     ),
                 ),
             ),
@@ -564,12 +570,12 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     passwordHistory = listOf(
         PasswordHistoryView(
             password = "old_password",
-            lastUsedDate = Instant.ofEpochSecond(1_000L),
+            lastUsedDate = Instant.MIN,
         ),
     ),
-    creationDate = Instant.ofEpochSecond(1_000L),
+    creationDate = Instant.MIN,
     deletedDate = null,
-    revisionDate = Instant.ofEpochSecond(1_000L),
+    revisionDate = Instant.MIN,
 )
 
 private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
@@ -577,7 +583,7 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
     login = LoginView(
         username = "username",
         password = "password",
-        passwordRevisionDate = Instant.ofEpochSecond(1_000L),
+        passwordRevisionDate = Instant.MIN,
         uris = listOf(
             LoginUriView(
                 uri = "www.example.com",

@@ -1,19 +1,26 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.CipherView
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
+import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -22,10 +29,14 @@ import java.time.Instant
 
 class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
-    private val initialState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading)
+    private val initialState = createPasswordHistoryState()
 
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val fakeGeneratorRepository = FakeGeneratorRepository()
+    private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
+    private val fakeVaultRepository: VaultRepository = mockk {
+        every { getVaultItemStateFlow("mockId-1") } returns mutableVaultItemFlow
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -41,7 +52,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            val expectedState = PasswordHistoryState(PasswordHistoryState.ViewState.Loading)
+            val expectedState = createPasswordHistoryState()
             val actualState = awaitItem()
             assertEquals(expectedState, actualState)
         }
@@ -55,8 +66,10 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            val expectedState = PasswordHistoryState(
-                PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText()),
+            val expectedState = createPasswordHistoryState(
+               viewState = PasswordHistoryState.ViewState.Error(
+                  message = R.string.an_error_has_occurred.asText(),
+               ),
             )
             val actualState = awaitItem()
             assertEquals(expectedState, actualState)
@@ -69,7 +82,92 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
-            val expectedState = PasswordHistoryState(PasswordHistoryState.ViewState.Empty)
+            val expectedState = createPasswordHistoryState(
+                viewState = PasswordHistoryState.ViewState.Empty,
+            )
+            val actualState = awaitItem()
+            assertEquals(expectedState, actualState)
+        }
+    }
+
+    @Test
+    fun `when VaultRepository emits Loading state the state updates correctly`() = runTest {
+        mutableVaultItemFlow.value = DataState.Loading
+        val viewModel = createViewModel(
+            initialState = createPasswordHistoryState(
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            val expectedState = createPasswordHistoryState(
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            )
+            val actualState = awaitItem()
+            assertEquals(expectedState, actualState)
+        }
+    }
+
+    @Test
+    fun `when VaultRepository emits Error state the state updates correctly`() = runTest {
+        mutableVaultItemFlow.value = DataState.Error(error = IllegalStateException())
+        val viewModel = createViewModel(
+            initialState = createPasswordHistoryState(
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            ),
+        )
+        viewModel.stateFlow.test {
+            val expectedState = createPasswordHistoryState(
+                viewState = PasswordHistoryState.ViewState.Error(
+                    message = R.string.an_error_has_occurred.asText(),
+                ),
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            )
+            val actualState = awaitItem()
+            assertEquals(expectedState, actualState)
+        }
+    }
+
+    @Test
+    fun `when VaultRepository emits Empty state the state updates correctly`() = runTest {
+        mutableVaultItemFlow.value = DataState.Loaded(null)
+        val viewModel = createViewModel(
+            initialState = createPasswordHistoryState(
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            val expectedState = createPasswordHistoryState(
+                viewState = PasswordHistoryState.ViewState.Empty,
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            )
+            val actualState = awaitItem()
+            assertEquals(expectedState, actualState)
+        }
+    }
+
+    @Test
+    fun `when VaultRepository emits Pending state the state updates correctly`() = runTest {
+        mutableVaultItemFlow.value = DataState.Pending(createMockCipherView(1))
+        val viewModel = createViewModel(
+            initialState = createPasswordHistoryState(
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            val expectedState = createPasswordHistoryState(
+                viewState = PasswordHistoryState.ViewState.Content(
+                    passwords = listOf(
+                        PasswordHistoryState.GeneratedPassword(
+                            password = "mockPassword-1",
+                            date = "10/27/23 6:00 AM",
+                        ),
+                    ),
+                ),
+                passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = "mockId-1"),
+            )
             val actualState = awaitItem()
             assertEquals(expectedState, actualState)
         }
@@ -82,7 +180,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         val passwordHistoryView = PasswordHistoryView("password", Instant.now())
         fakeGeneratorRepository.storePasswordHistory(passwordHistoryView)
 
-        val expectedState = PasswordHistoryState(
+        val expectedState = createPasswordHistoryState(
             viewState = PasswordHistoryState.ViewState.Content(
                 passwords = listOf(
                     PasswordHistoryState.GeneratedPassword(
@@ -146,10 +244,41 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     //region Helper Functions
 
-    private fun createViewModel(): PasswordHistoryViewModel = PasswordHistoryViewModel(
+    private fun createViewModel(
+        initialState: PasswordHistoryState = createPasswordHistoryState(),
+    ): PasswordHistoryViewModel = PasswordHistoryViewModel(
+        savedStateHandle = createSavedStateHandleWithState(state = initialState),
         clipboardManager = clipboardManager,
         generatorRepository = fakeGeneratorRepository,
+        vaultRepository = fakeVaultRepository,
     )
+
+    private fun createPasswordHistoryState(
+        viewState: PasswordHistoryState.ViewState = PasswordHistoryState.ViewState.Loading,
+        passwordHistoryMode: GeneratorPasswordHistoryMode = GeneratorPasswordHistoryMode.Default,
+    ): PasswordHistoryState =
+        PasswordHistoryState(
+            viewState = viewState,
+            passwordHistoryMode = passwordHistoryMode,
+        )
+
+    private fun createSavedStateHandleWithState(
+        state: PasswordHistoryState? = createPasswordHistoryState(),
+        passwordHistoryMode: GeneratorPasswordHistoryMode = GeneratorPasswordHistoryMode.Default,
+    ) = SavedStateHandle().apply {
+        set("state", state)
+        set(
+            "password_history_mode",
+            when (passwordHistoryMode) {
+                is GeneratorPasswordHistoryMode.Default -> "default"
+                is GeneratorPasswordHistoryMode.Item -> "item"
+            },
+        )
+        set(
+            "password_history_id",
+            (passwordHistoryMode as? GeneratorPasswordHistoryMode.Item)?.itemId,
+        )
+    }
 
     //endregion Helper Functions
 }
