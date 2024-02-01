@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.app.Application
+import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import dagger.hilt.android.HiltAndroidApp
@@ -18,4 +19,7 @@ class BitwardenApplication : Application() {
 
     @Inject
     lateinit var crashLogsManager: CrashLogsManager
+
+    @Inject
+    lateinit var authRequestNotificationManager: AuthRequestNotificationManager
 }
