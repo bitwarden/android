@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import com.bitwarden.core.Attachment
 import com.bitwarden.core.AttachmentEncryptResult
 import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
@@ -273,6 +274,18 @@ interface VaultSdkSource {
         userId: String,
         folderList: List<Folder>,
     ): Result<List<FolderView>>
+
+    /**
+     * Decrypts a [cipher] [attachment] file found at [encryptedFilePath] saving it at
+     * [decryptedFilePath] for the user with the given [userId]
+     */
+    suspend fun decryptFile(
+        userId: String,
+        cipher: Cipher,
+        attachment: Attachment,
+        encryptedFilePath: String,
+        decryptedFilePath: String,
+    ): Result<Unit>
 
     /**
      * Encrypts a given password history item for the user with the given [userId].

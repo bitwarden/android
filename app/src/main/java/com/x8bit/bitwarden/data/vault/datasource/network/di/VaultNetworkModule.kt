@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.vault.datasource.network.di
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersServiceImpl
+import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
+import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadServiceImpl
 import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderServiceImpl
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
@@ -77,5 +79,18 @@ object VaultNetworkModule {
         retrofits: Retrofits,
     ): SyncService = SyncServiceImpl(
         syncApi = retrofits.authenticatedApiRetrofit.create(),
+    )
+
+    @Provides
+    @Singleton
+    fun provideDownloadService(
+        retrofits: Retrofits,
+    ): DownloadService = DownloadServiceImpl(
+        downloadApi = retrofits
+            .staticRetrofitBuilder
+            // This URL will be overridden dynamically
+            .baseUrl("https://www.bitwarden.com")
+            .build()
+            .create(),
     )
 }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
+import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
@@ -86,7 +87,17 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         edit = false,
         viewPassword = false,
         localData = null,
-        attachments = null,
+        attachments = listOf(
+            AttachmentView(
+                id = "attachment-id",
+                sizeName = "11 MB",
+                size = "11000000",
+                url = "https://example.com",
+                fileName = "test.mp4",
+                key = "key",
+            ),
+        )
+            .takeUnless { isEmpty },
         fields = listOf(
             FieldView(
                 name = "text",
@@ -132,7 +143,10 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         revisionDate = Instant.ofEpochSecond(1_000L),
     )
 
-fun createCommonContent(isEmpty: Boolean): VaultItemState.ViewState.Content.Common =
+fun createCommonContent(
+    isEmpty: Boolean,
+    isPremiumUser: Boolean,
+): VaultItemState.ViewState.Content.Common =
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
@@ -140,6 +154,7 @@ fun createCommonContent(isEmpty: Boolean): VaultItemState.ViewState.Content.Comm
             notes = null,
             customFields = emptyList(),
             requiresReprompt = true,
+            attachments = emptyList(),
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -172,6 +187,16 @@ fun createCommonContent(isEmpty: Boolean): VaultItemState.ViewState.Content.Comm
                 ),
             ),
             requiresReprompt = true,
+            attachments = listOf(
+                VaultItemState.ViewState.Content.Common.AttachmentItem(
+                    id = "attachment-id",
+                    displaySize = "11 MB",
+                    isLargeFile = true,
+                    isDownloadAllowed = isPremiumUser,
+                    url = "https://example.com",
+                    title = "test.mp4",
+                ),
+            ),
         )
     }
 

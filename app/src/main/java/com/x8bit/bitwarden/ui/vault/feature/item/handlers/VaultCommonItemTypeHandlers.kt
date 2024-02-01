@@ -20,6 +20,7 @@ data class VaultCommonItemTypeHandlers(
         VaultItemState.ViewState.Content.Common.Custom.HiddenField,
         Boolean,
     ) -> Unit,
+    val onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
 ) {
     companion object {
         /**
@@ -46,6 +47,9 @@ data class VaultCommonItemTypeHandlers(
                             field = customField,
                         ),
                     )
+                },
+                onAttachmentDownloadClick = {
+                    viewModel.trySendAction(VaultItemAction.Common.AttachmentDownloadClick(it))
                 },
             )
     }

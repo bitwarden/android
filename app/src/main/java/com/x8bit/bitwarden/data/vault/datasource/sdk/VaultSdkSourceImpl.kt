@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import com.bitwarden.core.Attachment
 import com.bitwarden.core.AttachmentEncryptResult
 import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
@@ -282,6 +283,25 @@ class VaultSdkSourceImpl(
                 .vault()
                 .folders()
                 .decryptList(folderList)
+        }
+
+    override suspend fun decryptFile(
+        userId: String,
+        cipher: Cipher,
+        attachment: Attachment,
+        encryptedFilePath: String,
+        decryptedFilePath: String,
+    ): Result<Unit> =
+        runCatching {
+            getClient(userId = userId)
+                .vault()
+                .attachments()
+                .decryptFile(
+                    cipher = cipher,
+                    attachment = attachment,
+                    encryptedFilePath = encryptedFilePath,
+                    decryptedFilePath = decryptedFilePath,
+                )
         }
 
     override suspend fun encryptPasswordHistory(

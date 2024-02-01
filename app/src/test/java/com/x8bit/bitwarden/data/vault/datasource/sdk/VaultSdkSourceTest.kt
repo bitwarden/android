@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import com.bitwarden.core.Attachment
 import com.bitwarden.core.AttachmentEncryptResult
 import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
@@ -656,6 +657,42 @@ class VaultSdkSourceTest {
         coVerify {
             clientVault.folders().decryptList(
                 folders = mockFolders,
+            )
+        }
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+    }
+
+    @Test
+    fun `File decrypt should call SDK and return a Result with correct data`() = runBlocking {
+        val userId = "userId"
+        val mockCipher = mockk<Cipher>()
+        val mockAttachment = mockk<Attachment>()
+        val expectedResult = Unit
+        coEvery {
+            clientVault.attachments().decryptFile(
+                cipher = mockCipher,
+                attachment = mockAttachment,
+                encryptedFilePath = "encrypted_path",
+                decryptedFilePath = "decrypted_path",
+            )
+        } just runs
+        val result = vaultSdkSource.decryptFile(
+            userId = userId,
+            cipher = mockCipher,
+            attachment = mockAttachment,
+            encryptedFilePath = "encrypted_path",
+            decryptedFilePath = "decrypted_path",
+        )
+        assertEquals(
+            expectedResult.asSuccess(),
+            result,
+        )
+        coVerify {
+            clientVault.attachments().decryptFile(
+                cipher = mockCipher,
+                attachment = mockAttachment,
+                encryptedFilePath = "encrypted_path",
+                decryptedFilePath = "decrypted_path",
             )
         }
         verify { sdkClientManager.getOrCreateClient(userId = userId) }

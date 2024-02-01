@@ -60,7 +60,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     private var onNavigateToMoveToOrganizationItemId: String? = null
     private var onNavigateToAttachmentsId: String? = null
 
-    private val intentManager = mockk<IntentManager>()
+    private val intentManager = mockk<IntentManager>(relaxed = true)
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -132,6 +132,15 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         verify(exactly = 1) {
             intentManager.launchUri(uri)
+        }
+    }
+
+    @Test
+    fun `NavigateToSelectAttachmentSaveLocation should invoke createAttachmentChooserIntent`() {
+        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToSelectAttachmentSaveLocation("test.mp4"))
+
+        verify(exactly = 1) {
+            intentManager.createAttachmentChooserIntent("test.mp4")
         }
     }
 
@@ -309,6 +318,179 @@ class VaultItemScreenTest : BaseComposeTest() {
                 composeTestRule.assertScrollableNodeDoesNotExist("hidden")
                 composeTestRule.assertScrollableNodeDoesNotExist("boolean")
             }
+    }
+
+    @Test
+    fun `attachments should be displayed according to state`() {
+        DEFAULT_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { it.copy(viewState = typeState) }
+                composeTestRule.onNodeWithTextAfterScroll("Attachments").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("test.mp4").assertIsDisplayed()
+                composeTestRule.onNodeWithTextAfterScroll("11 MB").assertIsDisplayed()
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) { copy(attachments = emptyList()) }
+                }
+
+                composeTestRule.assertScrollableNodeDoesNotExist("Attachments")
+                composeTestRule.assertScrollableNodeDoesNotExist("test.mp4")
+                composeTestRule.assertScrollableNodeDoesNotExist("11 MB")
+            }
+    }
+
+    @Test
+    fun `attachment download click for non-premium users should show an error dialog`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        attachments = listOf(
+                            VaultItemState.ViewState.Content.Common.AttachmentItem(
+                                id = "attachment-id",
+                                displaySize = "11 MB",
+                                isLargeFile = true,
+                                isDownloadAllowed = false,
+                                url = "https://example.com",
+                                title = "test.mp4",
+                            ),
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "A premium membership is required to use this feature.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `attachment download click for large downloads should show a prompt and dismiss when clicking No`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        attachments = listOf(
+                            VaultItemState.ViewState.Content.Common.AttachmentItem(
+                                id = "attachment-id",
+                                displaySize = "11 MB",
+                                isLargeFile = true,
+                                isDownloadAllowed = true,
+                                url = "https://example.com",
+                                title = "test.mp4",
+                            ),
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "This attachment is 11 MB in size. Are you sure you want to download it onto " +
+                    "your device?",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("No")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `attachment download click for large downloads should show a prompt and emit AttachmentDownloadClick`() {
+        val attachment = VaultItemState.ViewState.Content.Common.AttachmentItem(
+            id = "attachment-id",
+            displaySize = "11 MB",
+            isLargeFile = true,
+            isDownloadAllowed = true,
+            url = "https://example.com",
+            title = "test.mp4",
+        )
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        attachments = listOf(attachment),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+
+        composeTestRule
+            .onAllNodesWithText(
+                "This attachment is 11 MB in size. Are you sure you want to download it onto " +
+                    "your device?",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Yes")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.AttachmentDownloadClick(attachment))
+        }
+    }
+
+    @Test
+    fun `attachment download click for smaller downloads should emit AttachmentDownloadClick`() {
+        val attachment = VaultItemState.ViewState.Content.Common.AttachmentItem(
+            id = "attachment-id",
+            displaySize = "9 MB",
+            isLargeFile = false,
+            isDownloadAllowed = true,
+            url = "https://example.com",
+            title = "test.mp4",
+        )
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = EMPTY_COMMON.copy(
+                        attachments = listOf(attachment),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithContentDescriptionAfterScroll("Download").performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.AttachmentDownloadClick(attachment))
+        }
     }
 
     @Test
@@ -1913,6 +2095,16 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             ),
         ),
         requiresReprompt = true,
+        attachments = listOf(
+            VaultItemState.ViewState.Content.Common.AttachmentItem(
+                id = "attachment-id",
+                displaySize = "11 MB",
+                isLargeFile = true,
+                isDownloadAllowed = true,
+                url = "https://example.com",
+                title = "test.mp4",
+            ),
+        ),
     )
 
 private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
@@ -1970,6 +2162,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         notes = null,
         customFields = emptyList(),
         requiresReprompt = true,
+        attachments = emptyList(),
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

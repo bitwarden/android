@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.repository
 import android.net.Uri
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
+import com.bitwarden.core.Attachment
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
@@ -79,6 +80,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
+import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
@@ -89,6 +91,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
+import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -130,6 +133,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import retrofit2.HttpException
+import java.io.File
 import java.net.UnknownHostException
 import java.time.Clock
 import java.time.Instant
@@ -3327,6 +3331,312 @@ class VaultRepositoryTest {
         }
 
     @Test
+    fun `downloadAttachment with missing attachment should return Failure`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val attachmentId = "mockId-1"
+        val attachment = mockk<Attachment> {
+            every { id } returns attachmentId
+        }
+        val cipher = mockk<Cipher> {
+            every { attachments } returns emptyList()
+            every { id } returns "mockId-1"
+        }
+        val cipherView = createMockCipherView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+        } returns cipher.asSuccess()
+
+        assertEquals(
+            DownloadAttachmentResult.Failure,
+            vaultRepository.downloadAttachment(
+                cipherView = cipherView,
+                attachmentId = attachmentId,
+            ),
+        )
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+        }
+        coVerify(exactly = 0) {
+            ciphersService.getCipherAttachment(any(), any())
+        }
+    }
+
+    @Test
+    fun `downloadAttachment with failed attachment details request should return Failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val attachmentId = "mockId-1"
+            val attachment = mockk<Attachment> {
+                every { id } returns attachmentId
+            }
+            val cipher = mockk<Cipher> {
+                every { attachments } returns listOf(attachment)
+                every { id } returns "mockId-1"
+            }
+            val cipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+            } returns cipher.asSuccess()
+
+            coEvery {
+                ciphersService.getCipherAttachment(any(), any())
+            } returns Throwable().asFailure()
+
+            assertEquals(
+                DownloadAttachmentResult.Failure,
+                vaultRepository.downloadAttachment(
+                    cipherView = cipherView,
+                    attachmentId = attachmentId,
+                ),
+            )
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+                ciphersService.getCipherAttachment(
+                    cipherId = requireNotNull(cipherView.id),
+                    attachmentId = attachmentId,
+                )
+            }
+        }
+
+    @Test
+    fun `downloadAttachment with attachment details missing url should return Failure`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val attachmentId = "mockId-1"
+        val attachment = mockk<Attachment> {
+            every { id } returns attachmentId
+        }
+        val cipher = mockk<Cipher> {
+            every { attachments } returns listOf(attachment)
+            every { id } returns "mockId-1"
+        }
+        val cipherView = createMockCipherView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+        } returns cipher.asSuccess()
+
+        val response = mockk<SyncResponseJson.Cipher.Attachment> {
+            every { url } returns null
+        }
+        coEvery {
+            ciphersService.getCipherAttachment(any(), any())
+        } returns response.asSuccess()
+
+        assertEquals(
+            DownloadAttachmentResult.Failure,
+            vaultRepository.downloadAttachment(
+                cipherView = cipherView,
+                attachmentId = attachmentId,
+            ),
+        )
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+            ciphersService.getCipherAttachment(
+                cipherId = requireNotNull(cipherView.id),
+                attachmentId = attachmentId,
+            )
+        }
+    }
+
+    @Test
+    fun `downloadAttachment with failed download should return Failure`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+        val attachmentId = "mockId-1"
+        val attachment = mockk<Attachment> {
+            every { id } returns attachmentId
+        }
+        val cipher = mockk<Cipher> {
+            every { attachments } returns listOf(attachment)
+            every { id } returns "mockId-1"
+        }
+
+        val cipherView = createMockCipherView(number = 1)
+        coEvery {
+            vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+        } returns cipher.asSuccess()
+
+        val response = mockk<SyncResponseJson.Cipher.Attachment> {
+            every { url } returns "https://bitwarden.com"
+        }
+        coEvery {
+            ciphersService.getCipherAttachment(any(), any())
+        } returns response.asSuccess()
+
+        coEvery {
+            fileManager.downloadFileToCache(any())
+        } returns DownloadResult.Failure
+
+        assertEquals(
+            DownloadAttachmentResult.Failure,
+            vaultRepository.downloadAttachment(
+                cipherView = cipherView,
+                attachmentId = attachmentId,
+            ),
+        )
+
+        coVerify(exactly = 1) {
+            vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+            ciphersService.getCipherAttachment(
+                cipherId = requireNotNull(cipherView.id),
+                attachmentId = attachmentId,
+            )
+            fileManager.downloadFileToCache("https://bitwarden.com")
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `downloadAttachment with failed decryption should delete file and return Failure`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val attachmentId = "mockId-1"
+            val attachment = mockk<Attachment> {
+                every { id } returns attachmentId
+            }
+            val cipher = mockk<Cipher> {
+                every { attachments } returns listOf(attachment)
+                every { id } returns "mockId-1"
+            }
+            val cipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+            } returns cipher.asSuccess()
+
+            val response = mockk<SyncResponseJson.Cipher.Attachment> {
+                every { url } returns "https://bitwarden.com"
+            }
+            coEvery {
+                ciphersService.getCipherAttachment(any(), any())
+            } returns response.asSuccess()
+
+            val file = mockk<File> {
+                every { path } returns "path/to/encrypted/file"
+                every { delete() } returns true
+            }
+            coEvery {
+                fileManager.downloadFileToCache(any())
+            } returns DownloadResult.Success(file)
+
+            coEvery {
+                vaultSdkSource.decryptFile(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipher = cipher,
+                    attachment = attachment,
+                    encryptedFilePath = "path/to/encrypted/file",
+                    decryptedFilePath = "path/to/encrypted/file_decrypted",
+                )
+            } returns Throwable().asFailure()
+
+            assertEquals(
+                DownloadAttachmentResult.Failure,
+                vaultRepository.downloadAttachment(
+                    cipherView = cipherView,
+                    attachmentId = attachmentId,
+                ),
+            )
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+                ciphersService.getCipherAttachment(
+                    cipherId = requireNotNull(cipherView.id),
+                    attachmentId = attachmentId,
+                )
+                fileManager.downloadFileToCache("https://bitwarden.com")
+                vaultSdkSource.decryptFile(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipher = cipher,
+                    attachment = attachment,
+                    encryptedFilePath = "path/to/encrypted/file",
+                    decryptedFilePath = "path/to/encrypted/file_decrypted",
+                )
+            }
+            verify(exactly = 1) {
+                file.delete()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `downloadAttachment with successful decryption should delete file and return Success`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            val attachmentId = "mockId-1"
+            val attachment = mockk<Attachment> {
+                every { id } returns attachmentId
+            }
+            val cipher = mockk<Cipher> {
+                every { attachments } returns listOf(attachment)
+                every { id } returns "mockId-1"
+            }
+            val cipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+            } returns cipher.asSuccess()
+
+            val response = mockk<SyncResponseJson.Cipher.Attachment> {
+                every { url } returns "https://bitwarden.com"
+            }
+            coEvery {
+                ciphersService.getCipherAttachment(any(), any())
+            } returns response.asSuccess()
+
+            val file = mockk<File> {
+                every { path } returns "path/to/encrypted/file"
+                every { delete() } returns true
+            }
+            coEvery {
+                fileManager.downloadFileToCache(any())
+            } returns DownloadResult.Success(file)
+
+            coEvery {
+                vaultSdkSource.decryptFile(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipher = cipher,
+                    attachment = attachment,
+                    encryptedFilePath = "path/to/encrypted/file",
+                    decryptedFilePath = "path/to/encrypted/file_decrypted",
+                )
+            } returns Unit.asSuccess()
+
+            assertEquals(
+                DownloadAttachmentResult.Success(
+                    file = File("path/to/encrypted/file_decrypted"),
+                ),
+                vaultRepository.downloadAttachment(
+                    cipherView = cipherView,
+                    attachmentId = attachmentId,
+                ),
+            )
+
+            coVerify(exactly = 1) {
+                vaultSdkSource.encryptCipher(MOCK_USER_STATE.activeUserId, cipherView)
+                ciphersService.getCipherAttachment(
+                    cipherId = requireNotNull(cipherView.id),
+                    attachmentId = attachmentId,
+                )
+                fileManager.downloadFileToCache("https://bitwarden.com")
+                vaultSdkSource.decryptFile(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipher = cipher,
+                    attachment = attachment,
+                    encryptedFilePath = "path/to/encrypted/file",
+                    decryptedFilePath = "path/to/encrypted/file_decrypted",
+                )
+            }
+            verify(exactly = 1) {
+                file.delete()
+            }
+        }
+
+    @Test
     fun `generateTotp with no active user should return GenerateTotpResult Error`() =
         runTest {
             fakeAuthDiskSource.userState = null
@@ -3901,179 +4211,184 @@ class VaultRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `syncCipherUpsertFlow create with local cipher with no common collections should do nothing`() = runTest {
-        val number = 1
-        val cipherId = "mockId-$number"
+    fun `syncCipherUpsertFlow create with local cipher with no common collections should do nothing`() =
+        runTest {
+            val number = 1
+            val cipherId = "mockId-$number"
 
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val cipherView = createMockCipherView(number = number)
-        coEvery {
-            vaultSdkSource.decryptCipherList(
-                userId = MOCK_USER_STATE.activeUserId,
-                cipherList = listOf(createMockSdkCipher(number = number)),
-            )
-        } returns listOf(cipherView).asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherView = createMockCipherView(number = number)
+            coEvery {
+                vaultSdkSource.decryptCipherList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherList = listOf(createMockSdkCipher(number = number)),
+                )
+            } returns listOf(cipherView).asSuccess()
 
-        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
-        setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
+            val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+            setupVaultDiskSourceFlows(ciphersFlow = ciphersFlow)
 
-        vaultRepository.ciphersStateFlow.test {
-            // Populate and consume items related to the ciphers flow
-            awaitItem()
-            ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
-            awaitItem()
+            vaultRepository.ciphersStateFlow.test {
+                // Populate and consume items related to the ciphers flow
+                awaitItem()
+                ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
+                awaitItem()
 
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = false,
-                    collectionIds = null,
-                    organizationId = null,
-                ),
-            )
+                mutableSyncCipherUpsertFlow.tryEmit(
+                    SyncCipherUpsertData(
+                        cipherId = cipherId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = false,
+                        collectionIds = null,
+                        organizationId = null,
+                    ),
+                )
+            }
+
+            coVerify(exactly = 0) {
+                ciphersService.getCipher(any())
+                vaultDiskSource.saveCipher(any(), any())
+            }
         }
-
-        coVerify(exactly = 0) {
-            ciphersService.getCipher(any())
-            vaultDiskSource.saveCipher(any(), any())
-        }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `syncCipherUpsertFlow create with local cipher, and with common collections, should make a request and save cipher to disk`() = runTest {
-        val number = 1
-        val cipherId = "mockId-$number"
+    fun `syncCipherUpsertFlow create with local cipher, and with common collections, should make a request and save cipher to disk`() =
+        runTest {
+            val number = 1
+            val cipherId = "mockId-$number"
 
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val cipherView = createMockCipherView(number = number)
-        coEvery {
-            vaultSdkSource.decryptCipherList(
-                userId = MOCK_USER_STATE.activeUserId,
-                cipherList = listOf(createMockSdkCipher(number = number)),
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherView = createMockCipherView(number = number)
+            coEvery {
+                vaultSdkSource.decryptCipherList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherList = listOf(createMockSdkCipher(number = number)),
+                )
+            } returns listOf(cipherView).asSuccess()
+            val collectionView = createMockCollectionView(number = number)
+            coEvery {
+                vaultSdkSource.decryptCollectionList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    collectionList = listOf(createMockSdkCollection(number = number)),
+                )
+            } returns listOf(collectionView).asSuccess()
+
+            val cipher: SyncResponseJson.Cipher = mockk()
+            coEvery {
+                ciphersService.getCipher(cipherId)
+            } returns cipher.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = MOCK_USER_STATE.activeUserId, cipher = cipher)
+            } just runs
+
+            val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+            val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
+            setupVaultDiskSourceFlows(
+                ciphersFlow = ciphersFlow,
+                collectionsFlow = collectionsFlow,
             )
-        } returns listOf(cipherView).asSuccess()
-        val collectionView = createMockCollectionView(number = number)
-        coEvery {
-            vaultSdkSource.decryptCollectionList(
-                userId = MOCK_USER_STATE.activeUserId,
-                collectionList = listOf(createMockSdkCollection(number = number)),
-            )
-        } returns listOf(collectionView).asSuccess()
 
-        val cipher: SyncResponseJson.Cipher = mockk()
-        coEvery {
-            ciphersService.getCipher(cipherId)
-        } returns cipher.asSuccess()
-        coEvery {
-            vaultDiskSource.saveCipher(userId = MOCK_USER_STATE.activeUserId, cipher = cipher)
-        } just runs
+            turbineScope {
+                val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
+                val collectionsStateFlow =
+                    vaultRepository.collectionsStateFlow.testIn(backgroundScope)
 
-        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
-        val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
-        setupVaultDiskSourceFlows(
-            ciphersFlow = ciphersFlow,
-            collectionsFlow = collectionsFlow,
-        )
+                // Populate and consume items related to the ciphers flow
+                ciphersStateFlow.awaitItem()
+                ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
+                ciphersStateFlow.awaitItem()
 
-        turbineScope {
-            val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
-            val collectionsStateFlow = vaultRepository.collectionsStateFlow.testIn(backgroundScope)
+                // Populate and consume items related to the collections flow
+                collectionsStateFlow.awaitItem()
+                collectionsFlow.tryEmit(listOf(createMockCollection(number = number)))
+                collectionsStateFlow.awaitItem()
 
-            // Populate and consume items related to the ciphers flow
-            ciphersStateFlow.awaitItem()
-            ciphersFlow.tryEmit(listOf(createMockCipher(number = number)))
-            ciphersStateFlow.awaitItem()
+                mutableSyncCipherUpsertFlow.tryEmit(
+                    SyncCipherUpsertData(
+                        cipherId = cipherId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = false,
+                        collectionIds = listOf("mockId-1"),
+                        organizationId = "mock-id",
+                    ),
+                )
+            }
 
-            // Populate and consume items related to the collections flow
-            collectionsStateFlow.awaitItem()
-            collectionsFlow.tryEmit(listOf(createMockCollection(number = number)))
-            collectionsStateFlow.awaitItem()
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = false,
-                    collectionIds = listOf("mockId-1"),
-                    organizationId = "mock-id",
-                ),
-            )
+            coVerify(exactly = 1) {
+                ciphersService.getCipher(any())
+                vaultDiskSource.saveCipher(any(), any())
+            }
         }
-
-        coVerify(exactly = 1) {
-            ciphersService.getCipher(any())
-            vaultDiskSource.saveCipher(any(), any())
-        }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `syncCipherUpsertFlow update with no local cipher, but with common collections, should make a request save cipher to disk`() = runTest {
-        val number = 1
-        val cipherId = "mockId-$number"
+    fun `syncCipherUpsertFlow update with no local cipher, but with common collections, should make a request save cipher to disk`() =
+        runTest {
+            val number = 1
+            val cipherId = "mockId-$number"
 
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery {
-            vaultSdkSource.decryptCipherList(
-                userId = MOCK_USER_STATE.activeUserId,
-                cipherList = listOf(),
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery {
+                vaultSdkSource.decryptCipherList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherList = listOf(),
+                )
+            } returns listOf<CipherView>().asSuccess()
+            val collectionView = createMockCollectionView(number = number)
+            coEvery {
+                vaultSdkSource.decryptCollectionList(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    collectionList = listOf(createMockSdkCollection(number = number)),
+                )
+            } returns listOf(collectionView).asSuccess()
+
+            val cipher: SyncResponseJson.Cipher = mockk()
+            coEvery {
+                ciphersService.getCipher(cipherId)
+            } returns cipher.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = MOCK_USER_STATE.activeUserId, cipher = cipher)
+            } just runs
+
+            val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+            val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
+            setupVaultDiskSourceFlows(
+                ciphersFlow = ciphersFlow,
+                collectionsFlow = collectionsFlow,
             )
-        } returns listOf<CipherView>().asSuccess()
-        val collectionView = createMockCollectionView(number = number)
-        coEvery {
-            vaultSdkSource.decryptCollectionList(
-                userId = MOCK_USER_STATE.activeUserId,
-                collectionList = listOf(createMockSdkCollection(number = number)),
-            )
-        } returns listOf(collectionView).asSuccess()
 
-        val cipher: SyncResponseJson.Cipher = mockk()
-        coEvery {
-            ciphersService.getCipher(cipherId)
-        } returns cipher.asSuccess()
-        coEvery {
-            vaultDiskSource.saveCipher(userId = MOCK_USER_STATE.activeUserId, cipher = cipher)
-        } just runs
+            turbineScope {
+                val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
+                val collectionsStateFlow =
+                    vaultRepository.collectionsStateFlow.testIn(backgroundScope)
 
-        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
-        val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
-        setupVaultDiskSourceFlows(
-            ciphersFlow = ciphersFlow,
-            collectionsFlow = collectionsFlow,
-        )
+                // Populate and consume items related to the ciphers flow
+                ciphersStateFlow.awaitItem()
+                ciphersFlow.tryEmit(listOf())
+                ciphersStateFlow.awaitItem()
 
-        turbineScope {
-            val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
-            val collectionsStateFlow = vaultRepository.collectionsStateFlow.testIn(backgroundScope)
+                // Populate and consume items related to the collections flow
+                collectionsStateFlow.awaitItem()
+                collectionsFlow.tryEmit(listOf(createMockCollection(number = number)))
+                collectionsStateFlow.awaitItem()
 
-            // Populate and consume items related to the ciphers flow
-            ciphersStateFlow.awaitItem()
-            ciphersFlow.tryEmit(listOf())
-            ciphersStateFlow.awaitItem()
+                mutableSyncCipherUpsertFlow.tryEmit(
+                    SyncCipherUpsertData(
+                        cipherId = cipherId,
+                        revisionDate = ZonedDateTime.now(),
+                        isUpdate = true,
+                        collectionIds = listOf("mockId-1"),
+                        organizationId = "mock-id",
+                    ),
+                )
+            }
 
-            // Populate and consume items related to the collections flow
-            collectionsStateFlow.awaitItem()
-            collectionsFlow.tryEmit(listOf(createMockCollection(number = number)))
-            collectionsStateFlow.awaitItem()
-
-            mutableSyncCipherUpsertFlow.tryEmit(
-                SyncCipherUpsertData(
-                    cipherId = cipherId,
-                    revisionDate = ZonedDateTime.now(),
-                    isUpdate = true,
-                    collectionIds = listOf("mockId-1"),
-                    organizationId = "mock-id",
-                ),
-            )
+            coVerify(exactly = 1) {
+                ciphersService.getCipher(any())
+                vaultDiskSource.saveCipher(any(), any())
+            }
         }
-
-        coVerify(exactly = 1) {
-            ciphersService.getCipher(any())
-            vaultDiskSource.saveCipher(any(), any())
-        }
-    }
 
     @Test
     fun `syncCipherUpsertFlow update with no local cipher should do nothing`() = runTest {

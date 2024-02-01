@@ -178,6 +178,29 @@ fun VaultItemLoginContent(
             }
         }
 
+        commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
+            item {
+                Spacer(modifier = Modifier.height(4.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.attachments),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+            items(attachments) { attachmentItem ->
+                AttachmentItemContent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp),
+                    attachmentItem = attachmentItem,
+                    onAttachmentDownloadClick =
+                    vaultCommonItemTypeHandlers.onAttachmentDownloadClick,
+                )
+            }
+            item { Spacer(modifier = Modifier.height(8.dp)) }
+        }
+
         item {
             Spacer(modifier = Modifier.height(24.dp))
             VaultItemUpdateText(
