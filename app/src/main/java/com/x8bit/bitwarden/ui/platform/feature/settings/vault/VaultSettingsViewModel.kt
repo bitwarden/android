@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.platform.repository.util.toBaseWebVaultImportUrl
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -8,10 +11,23 @@ import javax.inject.Inject
  * View model for the vault screen.
  */
 @HiltViewModel
-class VaultSettingsViewModel @Inject constructor() :
-    BaseViewModel<Unit, VaultSettingsEvent, VaultSettingsAction>(
-        initialState = Unit,
-    ) {
+class VaultSettingsViewModel @Inject constructor(
+    val environmentRepository: EnvironmentRepository,
+) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
+    initialState = run {
+        VaultSettingsState(
+            baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault,
+            importUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .toBaseWebVaultImportUrl,
+        )
+    },
+) {
+
     override fun handleAction(action: VaultSettingsAction): Unit = when (action) {
         VaultSettingsAction.BackClick -> handleBackClicked()
         VaultSettingsAction.ExportVaultClick -> handleExportVaultClicked()
@@ -32,10 +48,19 @@ class VaultSettingsViewModel @Inject constructor() :
     }
 
     private fun handleImportItemsClicked() {
-        // TODO BIT-972 implement import items functionality
-        sendEvent(VaultSettingsEvent.ShowToast("Not yet implemented."))
+        sendEvent(
+            VaultSettingsEvent.NavigateToImportVault(state.importUrl),
+        )
     }
 }
+
+/**
+ * Models the state for the VaultSettingScreen.
+ */
+data class VaultSettingsState(
+    val baseUrl: String,
+    val importUrl: String,
+)
 
 /**
  * Models events for the vault screen.
@@ -45,6 +70,11 @@ sealed class VaultSettingsEvent {
      * Navigate back.
      */
     data object NavigateBack : VaultSettingsEvent()
+
+    /**
+     * Navigate to the import vault URL.
+     */
+    data class NavigateToImportVault(val url: String) : VaultSettingsEvent()
 
     /**
      * Navigate to the Export Vault screen.

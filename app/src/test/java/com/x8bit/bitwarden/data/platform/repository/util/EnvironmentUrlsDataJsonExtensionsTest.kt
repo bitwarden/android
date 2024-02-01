@@ -236,6 +236,29 @@ class EnvironmentUrlsDataJsonExtensionsTest {
                 .baseIconUrl,
         )
     }
+
+    @Test
+    fun `toBaseWebVaultImportUrl should return correct url if webVault is empty`() {
+        val expectedUrl = "base/#/tools/import"
+
+        assertEquals(
+            expectedUrl,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(
+                webVault = null,
+            )
+                .toBaseWebVaultImportUrl,
+        )
+    }
+
+    @Test
+    fun `toBaseWebVaultImportUrl should correctly convert to the import url`() {
+        val expectedUrl = "webVault/#/tools/import"
+
+        assertEquals(
+            expectedUrl,
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.toBaseWebVaultImportUrl,
+        )
+    }
 }
 
 private val DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA = EnvironmentUrlDataJson(

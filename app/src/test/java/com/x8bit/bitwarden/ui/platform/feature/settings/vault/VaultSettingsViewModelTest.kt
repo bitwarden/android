@@ -1,12 +1,14 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class VaultSettingsViewModelTest : BaseViewModelTest() {
+    private val environmentRepository = FakeEnvironmentRepository()
 
     @Test
     fun `BackClick should emit NavigateBack`() = runTest {
@@ -30,16 +32,19 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ImportItemsClick should emit ShowToast`() = runTest {
+    fun `ImportItemsClick should emit send NavigateToImportVault with correct url`() = runTest {
         val viewModel = createViewModel()
+        val expected = "https://vault.bitwarden.com/#/tools/import"
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
             assertEquals(
-                VaultSettingsEvent.ShowToast("Not yet implemented."),
+                VaultSettingsEvent.NavigateToImportVault(expected),
                 awaitItem(),
             )
         }
     }
 
-    private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel()
+    private fun createViewModel(): VaultSettingsViewModel = VaultSettingsViewModel(
+        environmentRepository = environmentRepository,
+    )
 }

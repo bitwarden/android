@@ -17,13 +17,17 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 
 /**
  * Displays the vault settings screen.
@@ -36,7 +40,10 @@ fun VaultSettingsScreen(
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
+    val state = viewModel.stateFlow.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -45,6 +52,10 @@ fun VaultSettingsScreen(
             VaultSettingsEvent.NavigateToFolders -> onNavigateToFolders()
             is VaultSettingsEvent.ShowToast -> {
                 Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            }
+
+            is VaultSettingsEvent.NavigateToImportVault -> {
+                intentManager.launchUri(event.url.toUri())
             }
         }
     }
@@ -96,8 +107,12 @@ fun VaultSettingsScreen(
                     { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
                 },
                 withDivider = true,
-                dialogTitle = stringResource(id = R.string.import_items_confirmation),
-                dialogMessage = stringResource(id = R.string.import_items_description),
+                dialogTitle = stringResource(id = R.string.continue_to_web_app),
+                dialogMessage =
+                stringResource(
+                    id = R.string.you_can_import_data_to_your_vault_on_x,
+                    state.value.baseUrl,
+                ),
                 modifier = Modifier.fillMaxWidth(),
             )
         }
