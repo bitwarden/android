@@ -220,6 +220,45 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking dismiss dialog button on InitialAutofillPrompt should send InitialAutofillDialogDismissed action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG.copy(
+            dialog = VaultAddEditState.DialogState.InitialAutofillPrompt,
+        )
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.InitialAutofillDialogDismissed,
+            )
+        }
+    }
+
+    @Test
+    fun `InitialAutofillPrompt is shown according to state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG.copy(
+            dialog = VaultAddEditState.DialogState.InitialAutofillPrompt,
+        )
+
+        composeTestRule
+            .onAllNodesWithText("Bitwarden Auto-fill Service")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG.copy(
+            dialog = VaultAddEditState.DialogState.Loading("Loading".asText()),
+        )
+    }
+
     @Test
     fun `clicking dismiss dialog button should send DismissDialog action`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN_DIALOG

@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -70,6 +71,10 @@ import java.util.UUID
 @Suppress("LargeClass")
 class VaultAddEditViewModelTest : BaseViewModelTest() {
 
+    private val settingsRepository: SettingsRepository = mockk {
+        every { initialAutofillDialogShown = any() } just runs
+        every { initialAutofillDialogShown } returns true
+    }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(createUserState())
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
@@ -1769,6 +1774,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 specialCircumstanceManager = specialCircumstanceManager,
                 resourceManager = resourceManager,
                 authRepository = authRepository,
+                settingsRepository = settingsRepository,
             )
         }
 
@@ -2195,8 +2201,16 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             }
         }
-    }
 
+        @Test
+        fun `InitialAutofillDialogDismissed should update the settings value to true`() {
+            viewModel.trySendAction(VaultAddEditAction.Common.InitialAutofillDialogDismissed)
+
+            verify {
+                settingsRepository.initialAutofillDialogShown = true
+            }
+        }
+    }
     //region Helper functions
 
     @Suppress("MaxLineLength")
@@ -2301,6 +2315,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             resourceManager = bitwardenResourceManager,
             authRepository = authRepository,
+            settingsRepository = settingsRepository,
         )
 
     private fun createVaultData(

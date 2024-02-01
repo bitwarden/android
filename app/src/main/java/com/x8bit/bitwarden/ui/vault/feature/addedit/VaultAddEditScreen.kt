@@ -23,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorContent
@@ -135,6 +136,9 @@ fun VaultAddEditScreen(
         dialogState = state.dialog,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultAddEditAction.Common.DismissDialog) }
+        },
+        onAutofillDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(VaultAddEditAction.Common.InitialAutofillDialogDismissed) }
         },
     )
 
@@ -267,6 +271,7 @@ fun VaultAddEditScreen(
 private fun VaultAddEditItemDialogs(
     dialogState: VaultAddEditState.DialogState?,
     onDismissRequest: () -> Unit,
+    onAutofillDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.Loading -> {
@@ -282,6 +287,16 @@ private fun VaultAddEditItemDialogs(
                     message = dialogState.message,
                 ),
                 onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.InitialAutofillPrompt -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = R.string.bitwarden_autofill_service.asText(),
+                    message = R.string.bitwarden_autofill_service_alert2.asText(),
+                ),
+                onDismissRequest = onAutofillDismissRequest,
             )
         }
 
