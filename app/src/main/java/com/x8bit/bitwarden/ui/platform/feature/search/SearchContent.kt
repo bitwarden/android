@@ -133,28 +133,13 @@ fun SearchContent(
                                         showConfirmationDialog = option
                                     }
 
-                                    is ListingItemOverflowAction.VaultAction.EditClick -> {
-                                        if (it.shouldDisplayMasterPasswordReprompt) {
+                                    is ListingItemOverflowAction.VaultAction -> {
+                                        if (option.requiresPasswordReprompt &&
+                                            it.shouldDisplayMasterPasswordReprompt
+                                        ) {
                                             masterPasswordRepromptData =
-                                                MasterPasswordRepromptData(
-                                                    cipherId = it.id,
-                                                    type = MasterPasswordRepromptData.Type.Edit,
-                                                )
-                                        } else {
-                                            searchHandlers.onOverflowItemClick(option)
-                                        }
-                                    }
-
-                                    is ListingItemOverflowAction.VaultAction.CopyPasswordClick -> {
-                                        if (it.shouldDisplayMasterPasswordReprompt) {
-                                            masterPasswordRepromptData =
-                                                MasterPasswordRepromptData(
-                                                    cipherId = it.id,
-                                                    type = MasterPasswordRepromptData
-                                                        .Type
-                                                        .CopyPassword(
-                                                            password = option.password,
-                                                        ),
+                                                MasterPasswordRepromptData.OverflowItem(
+                                                    action = option,
                                                 )
                                         } else {
                                             searchHandlers.onOverflowItemClick(option)
@@ -195,24 +180,19 @@ private fun AutofillSelectionDialog(
     onMasterPasswordRepromptRequest: (MasterPasswordRepromptData) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    val selectionCallback: (SearchState.DisplayItem, MasterPasswordRepromptData.Type) -> Unit =
-        { item, type ->
+    val selectionCallback: (SearchState.DisplayItem, MasterPasswordRepromptData) -> Unit =
+        { item, data ->
             onDismissRequest()
             if (item.shouldDisplayMasterPasswordReprompt) {
-                onMasterPasswordRepromptRequest(
-                    MasterPasswordRepromptData(
-                        cipherId = item.id,
-                        type = type,
-                    ),
-                )
+                onMasterPasswordRepromptRequest(data)
             } else {
-                when (type) {
-                    MasterPasswordRepromptData.Type.Autofill -> {
-                        onAutofillItemClick(item.id)
+                when (data) {
+                    is MasterPasswordRepromptData.Autofill -> {
+                        onAutofillItemClick(data.cipherId)
                     }
 
-                    MasterPasswordRepromptData.Type.AutofillAndSave -> {
-                        onAutofillAndSaveItemClick(item.id)
+                    is MasterPasswordRepromptData.AutofillAndSave -> {
+                        onAutofillAndSaveItemClick(data.cipherId)
                     }
 
                     else -> Unit
@@ -229,7 +209,7 @@ private fun AutofillSelectionDialog(
                     onClick = {
                         selectionCallback(
                             displayItem,
-                            MasterPasswordRepromptData.Type.Autofill,
+                            MasterPasswordRepromptData.Autofill(cipherId = displayItem.id),
                         )
                     },
                 )
@@ -240,7 +220,7 @@ private fun AutofillSelectionDialog(
                     onClick = {
                         selectionCallback(
                             displayItem,
-                            MasterPasswordRepromptData.Type.AutofillAndSave,
+                            MasterPasswordRepromptData.AutofillAndSave(cipherId = displayItem.id),
                         )
                     },
                 )

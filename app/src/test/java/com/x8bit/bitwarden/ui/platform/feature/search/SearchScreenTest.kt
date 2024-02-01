@@ -389,9 +389,8 @@ class SearchScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 SearchAction.MasterPasswordRepromptSubmit(
                     password = "password",
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                    masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
                         cipherId = "mockId-1",
-                        type = MasterPasswordRepromptData.Type.Autofill,
                     ),
                 ),
             )
@@ -425,9 +424,8 @@ class SearchScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 SearchAction.MasterPasswordRepromptSubmit(
                     password = "password",
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                    masterPasswordRepromptData = MasterPasswordRepromptData.AutofillAndSave(
                         cipherId = "mockId-1",
-                        type = MasterPasswordRepromptData.Type.AutofillAndSave,
                     ),
                 ),
             )
@@ -613,7 +611,7 @@ class SearchScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on cipher item overflow edit click when reprompt required should show the master password dialog`() {
+    fun `on cipher item overflow item click when reprompt required should show the master password dialog`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
@@ -642,7 +640,7 @@ class SearchScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `clicking submit on the master password dialog for edit should close the dialog and send MasterPasswordRepromptSubmit`() {
+    fun `clicking submit on the master password dialog for overflow item should close the dialog and send MasterPasswordRepromptSubmit`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SearchState.ViewState.Content(
@@ -676,85 +674,9 @@ class SearchScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 SearchAction.MasterPasswordRepromptSubmit(
                     password = "password",
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
-                        cipherId = "mockId-1",
-                        type = MasterPasswordRepromptData.Type.Edit,
-                    ),
-                ),
-            )
-        }
-        composeTestRule.assertNoDialogExists()
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on cipher item overflow copy password click when reprompt required should show the master password dialog`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
-                        createMockDisplayItemForCipher(number = 1)
-                            .copy(shouldDisplayMasterPasswordReprompt = true),
-                    ),
-                ),
-            )
-        }
-        composeTestRule
-            .onNodeWithContentDescription("Options")
-            .assertIsDisplayed()
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Copy password")
-            .assert(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-            .performClick()
-
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
-
-        composeTestRule.assertMasterPasswordDialogDisplayed()
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `clicking submit on the master password dialog for copy password should close the dialog and send MasterPasswordRepromptSubmit`() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = SearchState.ViewState.Content(
-                    displayItems = listOf(
-                        createMockDisplayItemForCipher(number = 1)
-                            .copy(shouldDisplayMasterPasswordReprompt = true),
-                    ),
-                ),
-            )
-        }
-        composeTestRule
-            .onNodeWithContentDescription("Options")
-            .assertIsDisplayed()
-            .performClick()
-        composeTestRule
-            .onNodeWithText("Copy password")
-            .assert(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText(text = "Master password")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performTextInput("password")
-        composeTestRule
-            .onAllNodesWithText(text = "Submit")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                SearchAction.MasterPasswordRepromptSubmit(
-                    password = "password",
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
-                        cipherId = "mockId-1",
-                        type = MasterPasswordRepromptData.Type.CopyPassword(
-                            password = "mockPassword-1",
+                    masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
+                        action = ListingItemOverflowAction.VaultAction.EditClick(
+                            cipherId = "mockId-1",
                         ),
                     ),
                 ),
