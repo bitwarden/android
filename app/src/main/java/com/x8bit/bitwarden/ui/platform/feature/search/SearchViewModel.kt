@@ -526,42 +526,27 @@ class SearchViewModel @Inject constructor(
         data: MasterPasswordRepromptData,
     ) {
         // Complete the deferred actions
-        val cipherId = data.cipherId
-        when (val type = data.type) {
-            MasterPasswordRepromptData.Type.Autofill -> {
+        when (data) {
+            is MasterPasswordRepromptData.Autofill -> {
                 trySendAction(
                     SearchAction.AutofillItemClick(
-                        itemId = cipherId,
+                        itemId = data.cipherId,
                     ),
                 )
             }
 
-            MasterPasswordRepromptData.Type.AutofillAndSave -> {
+            is MasterPasswordRepromptData.AutofillAndSave -> {
                 trySendAction(
                     SearchAction.AutofillAndSaveItemClick(
-                        itemId = cipherId,
+                        itemId = data.cipherId,
                     ),
                 )
             }
 
-            MasterPasswordRepromptData.Type.Edit -> {
+            is MasterPasswordRepromptData.OverflowItem -> {
                 trySendAction(
                     SearchAction.OverflowOptionClick(
-                        overflowAction = ListingItemOverflowAction.VaultAction.EditClick(
-                            cipherId = cipherId,
-                        ),
-                    ),
-                )
-            }
-
-            is MasterPasswordRepromptData.Type.CopyPassword -> {
-                trySendAction(
-                    SearchAction.OverflowOptionClick(
-                        overflowAction = ListingItemOverflowAction
-                            .VaultAction
-                            .CopyPasswordClick(
-                                password = type.password,
-                            ),
+                        overflowAction = data.action,
                     ),
                 )
             }
@@ -1116,44 +1101,31 @@ sealed class SearchEvent {
 }
 
 /**
- * Data tracking the type of request that triggered a master password reprompt during an autofill
- * selection process.
+ * Data tracking the type of request that triggered a master password reprompt.
  */
-@Parcelize
-data class MasterPasswordRepromptData(
-    val cipherId: String,
-    val type: Type,
-) : Parcelable {
+sealed class MasterPasswordRepromptData : Parcelable {
 
     /**
-     * The type of action that requires the prompt.
+     * Autofill was selected.
      */
-    sealed class Type : Parcelable {
+    @Parcelize
+    data class Autofill(
+        val cipherId: String,
+    ) : MasterPasswordRepromptData()
 
-        /**
-         * Autofill was selected.
-         */
-        @Parcelize
-        data object Autofill : Type()
+    /**
+     * Autofill-and-save was selected.
+     */
+    @Parcelize
+    data class AutofillAndSave(
+        val cipherId: String,
+    ) : MasterPasswordRepromptData()
 
-        /**
-         * Autofill-and-save was selected.
-         */
-        @Parcelize
-        data object AutofillAndSave : Type()
-
-        /**
-         * Edit was selected.
-         */
-        @Parcelize
-        data object Edit : Type()
-
-        /**
-         * Copy password was selected.
-         */
-        @Parcelize
-        data class CopyPassword(
-            val password: String,
-        ) : Type()
-    }
+    /**
+     * A cipher overflow menu item action was selected.
+     */
+    @Parcelize
+    data class OverflowItem(
+        val action: ListingItemOverflowAction.VaultAction,
+    ) : MasterPasswordRepromptData()
 }

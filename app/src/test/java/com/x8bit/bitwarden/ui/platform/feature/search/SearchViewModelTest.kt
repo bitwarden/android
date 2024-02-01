@@ -328,9 +328,8 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.MasterPasswordRepromptSubmit(
                     password = password,
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                    masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
                         cipherId = cipherId,
-                        type = MasterPasswordRepromptData.Type.Autofill,
                     ),
                 ),
             )
@@ -366,9 +365,8 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.MasterPasswordRepromptSubmit(
                     password = password,
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                    masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
                         cipherId = cipherId,
-                        type = MasterPasswordRepromptData.Type.Autofill,
                     ),
                 ),
             )
@@ -401,9 +399,8 @@ class SearchViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     SearchAction.MasterPasswordRepromptSubmit(
                         password = password,
-                        masterPasswordRepromptData = MasterPasswordRepromptData(
+                        masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
                             cipherId = cipherId,
-                            type = MasterPasswordRepromptData.Type.Autofill,
                         ),
                     ),
                 )
@@ -445,9 +442,8 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.MasterPasswordRepromptSubmit(
                     password = password,
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
+                    masterPasswordRepromptData = MasterPasswordRepromptData.AutofillAndSave(
                         cipherId = cipherId,
-                        type = MasterPasswordRepromptData.Type.AutofillAndSave,
                     ),
                 ),
             )
@@ -462,7 +458,7 @@ class SearchViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for edit should emit NavigateToEditCipher`() =
+    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for an overflow action should perform the action`() =
         runTest {
             val cipherId = "cipherId-1234"
             val password = "password"
@@ -475,41 +471,15 @@ class SearchViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     SearchAction.MasterPasswordRepromptSubmit(
                         password = password,
-                        masterPasswordRepromptData = MasterPasswordRepromptData(
-                            cipherId = cipherId,
-                            type = MasterPasswordRepromptData.Type.Edit,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
+                            action = ListingItemOverflowAction.VaultAction.EditClick(
+                                cipherId = cipherId,
+                            ),
                         ),
                     ),
                 )
+                // Edit actions should navigate to the Edit screen
                 assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `MasterPasswordRepromptSubmit for a request Success with a valid password for copy password should call setText on the ClipboardManager`() =
-        runTest {
-            val cipherId = "cipherId-1234"
-            val password = "password"
-            val viewModel = createViewModel()
-            coEvery {
-                authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Success(isValid = true)
-
-            viewModel.trySendAction(
-                SearchAction.MasterPasswordRepromptSubmit(
-                    password = password,
-                    masterPasswordRepromptData = MasterPasswordRepromptData(
-                        cipherId = cipherId,
-                        type = MasterPasswordRepromptData.Type.CopyPassword(
-                            password = password,
-                        ),
-                    ),
-                ),
-            )
-
-            verify(exactly = 1) {
-                clipboardManager.setText(password)
             }
         }
 
