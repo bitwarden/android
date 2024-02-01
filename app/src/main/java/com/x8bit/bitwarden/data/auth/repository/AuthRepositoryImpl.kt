@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
@@ -822,6 +823,19 @@ class AuthRepositoryImpl(
 
     override fun setSsoCallbackResult(result: SsoCallbackResult) {
         mutableSsoCallbackResultFlow.tryEmit(result)
+    }
+
+    override fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult> = flow {
+        while (currentCoroutineContext().isActive) {
+            when (val result = getAuthRequests()) {
+                AuthRequestsResult.Error -> emit(AuthRequestsUpdatesResult.Error)
+
+                is AuthRequestsResult.Success -> {
+                    emit(AuthRequestsUpdatesResult.Update(authRequests = result.authRequests))
+                }
+            }
+            delay(timeMillis = PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
+        }
     }
 
     @Suppress("LongMethod")

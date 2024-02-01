@@ -6,13 +6,13 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -26,9 +26,11 @@ import java.util.TimeZone
 
 class PendingRequestsViewModelTest : BaseViewModelTest() {
 
+    private val mutableAuthRequestsWithUpdatesFlow =
+        bufferedMutableSharedFlow<AuthRequestsUpdatesResult>()
     private val authRepository = mockk<AuthRepository> {
         // This is called during init, anything that cares about this will handle it
-        coEvery { getAuthRequests() } just awaits
+        coEvery { getAuthRequestsWithUpdates() } returns mutableAuthRequestsWithUpdatesFlow
     }
     private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository> {
@@ -48,16 +50,13 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `initial state should be correct and trigger a getAuthRequests call`() {
-        coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Success(
-            authRequests = emptyList(),
+    fun `init should call getAuthRequestsWithUpdates`() {
+        createViewModel(state = null)
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
         )
-        val viewModel = createViewModel(state = null)
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         coVerify {
-            authRepository.getAuthRequests()
+            authRepository.getAuthRequestsWithUpdates()
         }
     }
 
@@ -122,11 +121,6 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 fingerprint = "fingerprint",
             ),
         )
-        coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Success(
-            authRequests = requestList,
-        )
         val expected = DEFAULT_STATE.copy(
             authRequests = requestList,
             viewState = PendingRequestsState.ViewState.Content(
@@ -140,6 +134,9 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = requestList),
+        )
         assertEquals(expected, viewModel.stateFlow.value)
     }
 
@@ -159,13 +156,11 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `getPendingResults failure with error should update state`() {
-        coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Error
         val expected = DEFAULT_STATE.copy(
             viewState = PendingRequestsState.ViewState.Error,
         )
         val viewModel = createViewModel()
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(AuthRequestsUpdatesResult.Error)
         assertEquals(expected, viewModel.stateFlow.value)
     }
 
@@ -184,7 +179,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(PendingRequestsAction.RefreshPull)
         coVerify(exactly = 2) {
             // This should be called twice since we also call it on init
-            authRepository.getAuthRequests()
+            authRepository.getAuthRequestsWithUpdates()
         }
     }
 
@@ -243,14 +238,6 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             fingerprint = "pantry-overdue-survive-sleep-jab",
         )
         coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Success(
-            authRequests = listOf(
-                authRequest1,
-                authRequest2,
-            ),
-        )
-        coEvery {
             authRepository.updateAuthRequest(
                 requestId = "2",
                 masterPasswordHash = "verySecureHash",
@@ -275,6 +262,9 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = listOf(authRequest1, authRequest2)),
+        )
         viewModel.actionChannel.trySend(PendingRequestsAction.DeclineAllRequestsConfirm)
 
         coVerify {
@@ -343,20 +333,17 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 fingerprint = "pantry-overdue-survive-sleep-jab",
             ),
         )
-        coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Success(emptyList())
         val viewModel = createViewModel()
-
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = emptyList()),
+        )
         assertEquals(
             DEFAULT_STATE,
             viewModel.stateFlow.value,
         )
 
-        coEvery {
-            authRepository.getAuthRequests()
-        } returns AuthRequestsResult.Success(
-            authRequests = requestList,
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            AuthRequestsUpdatesResult.Update(authRequests = requestList),
         )
         val expected = DEFAULT_STATE.copy(
             authRequests = requestList,
@@ -379,7 +366,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         assertEquals(expected, viewModel.stateFlow.value)
 
         coVerify(exactly = 2) {
-            authRepository.getAuthRequests()
+            authRepository.getAuthRequestsWithUpdates()
         }
     }
 
