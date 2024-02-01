@@ -22,10 +22,13 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
+import java.util.TimeZone
 
 class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
@@ -36,6 +39,16 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val fakeVaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow("mockId-1") } returns mutableVaultItemFlow
+    }
+
+    @BeforeEach
+    fun setUp() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    }
+
+    @AfterEach
+    fun tearDown() {
+        TimeZone.setDefault(null)
     }
 
     @Test
@@ -67,9 +80,9 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             val expectedState = createPasswordHistoryState(
-               viewState = PasswordHistoryState.ViewState.Error(
-                  message = R.string.an_error_has_occurred.asText(),
-               ),
+                viewState = PasswordHistoryState.ViewState.Error(
+                    message = R.string.an_error_has_occurred.asText(),
+                ),
             )
             val actualState = awaitItem()
             assertEquals(expectedState, actualState)
@@ -162,7 +175,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
                     passwords = listOf(
                         PasswordHistoryState.GeneratedPassword(
                             password = "mockPassword-1",
-                            date = "10/27/23 6:00 AM",
+                            date = "10/27/23 12:00 PM",
                         ),
                     ),
                 ),
