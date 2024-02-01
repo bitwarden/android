@@ -11,6 +11,7 @@ fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
     when (this) {
         is SpecialCircumstance.AutofillSave -> this.autofillSaveItem
         is SpecialCircumstance.AutofillSelection -> null
+        is SpecialCircumstance.PasswordlessRequest -> null
         is SpecialCircumstance.ShareNewSend -> null
     }
 
@@ -21,5 +22,6 @@ fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? 
     when (this) {
         is SpecialCircumstance.AutofillSave -> null
         is SpecialCircumstance.AutofillSelection -> this.autofillSelectionData
+        is SpecialCircumstance.PasswordlessRequest -> null
         is SpecialCircumstance.ShareNewSend -> null
     }

@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -131,6 +133,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val shareData = mockk<IntentManager.ShareData>()
+        every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
@@ -155,6 +158,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val autofillSelectionData = mockk<AutofillSelectionData>()
+        every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
@@ -179,6 +183,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val autofillSaveItem = mockk<AutofillSaveItem>()
+        every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
@@ -198,10 +203,38 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with a passwordless request data should set the special circumstance to PasswordlessRequest`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val passwordlessRequestData = mockk<PasswordlessRequestData>()
+        every {
+            mockIntent.getPasswordlessRequestDataIntentOrNull()
+        } returns passwordlessRequestData
+        every { mockIntent.getAutofillSaveItemOrNull() } returns null
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = passwordlessRequestData,
+                shouldFinishWhenComplete = true,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val shareData = mockk<IntentManager.ShareData>()
+        every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
@@ -226,6 +259,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val autofillSelectionData = mockk<AutofillSelectionData>()
+        every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
@@ -250,6 +284,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
         val autofillSaveItem = mockk<AutofillSaveItem>()
+        every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
         every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
@@ -262,6 +297,33 @@ class MainViewModelTest : BaseViewModelTest() {
         assertEquals(
             SpecialCircumstance.AutofillSave(
                 autofillSaveItem = autofillSaveItem,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with a passwordless auth request data should set the special circumstance to PasswordlessRequest`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val passwordlessRequestData = mockk<PasswordlessRequestData>()
+        every {
+            mockIntent.getPasswordlessRequestDataIntentOrNull()
+        } returns passwordlessRequestData
+        every { mockIntent.getAutofillSaveItemOrNull() } returns null
+        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = passwordlessRequestData,
+                shouldFinishWhenComplete = false,
             ),
             specialCircumstanceManager.specialCircumstance,
         )

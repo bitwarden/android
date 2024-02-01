@@ -29,7 +29,7 @@ class LoginApprovalViewModel @Inject constructor(
 ) : BaseViewModel<LoginApprovalState, LoginApprovalEvent, LoginApprovalAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: LoginApprovalState(
-            fingerprint = LoginApprovalArgs(savedStateHandle).fingerprint,
+            fingerprint = requireNotNull(LoginApprovalArgs(savedStateHandle).fingerprint),
             masterPasswordHash = null,
             publicKey = "",
             requestId = "",

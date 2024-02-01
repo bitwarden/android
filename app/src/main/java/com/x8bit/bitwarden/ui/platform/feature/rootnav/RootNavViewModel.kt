@@ -83,6 +83,10 @@ class RootNavViewModel @Inject constructor(
 
                     is SpecialCircumstance.ShareNewSend -> RootNavState.VaultUnlockedForNewSend
 
+                    is SpecialCircumstance.PasswordlessRequest -> {
+                        RootNavState.VaultUnlockedForAuthRequest
+                    }
+
                     null -> {
                         RootNavState.VaultUnlocked(
                             activeUserId = userState.activeAccount.userId,
@@ -156,6 +160,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object VaultUnlockedForNewSend : RootNavState()
+
+    /**
+     * App should show the auth confirmation screen for an unlocked user.
+     */
+    @Parcelize
+    data object VaultUnlockedForAuthRequest : RootNavState()
 }
 
 /**

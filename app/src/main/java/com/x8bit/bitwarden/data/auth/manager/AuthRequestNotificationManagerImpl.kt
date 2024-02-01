@@ -3,14 +3,13 @@ package com.x8bit.bitwarden.data.auth.manager
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.util.createPasswordlessRequestDataIntent
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -79,9 +78,7 @@ class AuthRequestNotificationManagerImpl(
         PendingIntent.getActivity(
             context,
             NOTIFICATION_REQUEST_CODE,
-            Intent(context, MainActivity::class.java)
-                .setAction(NOTIFICATION_ACTION)
-                .putExtra(NOTIFICATION_DATA, data),
+            createPasswordlessRequestDataIntent(context, data),
             PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
         )
 
@@ -101,9 +98,7 @@ class AuthRequestNotificationManagerImpl(
         ?: NotificationManagerCompat.IMPORTANCE_DEFAULT
 }
 
-const val NOTIFICATION_ACTION: String = "com.x8bit.bitwarden.data.auth.manager.AUTH_REQUEST"
 private const val NOTIFICATION_CHANNEL_ID: String = "general_notification_channel"
 private const val NOTIFICATION_ID: Int = 2_6072_022
-private const val NOTIFICATION_DATA: String = "notificationData"
 private const val NOTIFICATION_REQUEST_CODE: Int = 20220801
 private const val NOTIFICATION_DEFAULT_TIMEOUT_MILLIS: Long = 15L * 60L * 1_000L
