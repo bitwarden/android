@@ -19,6 +19,7 @@ class SendViewExtensionsTest {
         val result = sendView.toViewState(
             clock = FIXED_CLOCK,
             baseWebSendUrl = "www.test.com/",
+            isHideEmailAddressEnabled = true,
         )
 
         assertEquals(
@@ -36,6 +37,7 @@ class SendViewExtensionsTest {
         val result = sendView.toViewState(
             clock = FIXED_CLOCK,
             baseWebSendUrl = "www.test.com/",
+            isHideEmailAddressEnabled = true,
         )
 
         assertEquals(
@@ -72,6 +74,7 @@ private val DEFAULT_COMMON: AddSendState.ViewState.Content.Common =
         ),
         sendUrl = "www.test.com/mockAccessId-1/mockKey-1",
         hasPassword = true,
+        isHideEmailAddressEnabled = true,
     )
 
 private val DEFAULT_TEXT_TYPE: AddSendState.ViewState.Content.SendType.Text =

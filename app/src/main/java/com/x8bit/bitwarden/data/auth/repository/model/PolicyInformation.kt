@@ -100,6 +100,18 @@ sealed class PolicyInformation {
     }
 
     /**
+     * Represents a policy enforcing rules on the user's add & edit send options.
+     *
+     * @property shouldDisableHideEmail Indicates whether the user should have the ability to hide
+     * their email address from send recipients.
+     */
+    @Serializable
+    data class SendOptions(
+        @SerialName("disableHideEmail")
+        val shouldDisableHideEmail: Boolean?,
+    ) : PolicyInformation()
+
+    /**
      * Represents a policy enforcing rules on the user's vault timeout settings.
      */
     @Serializable

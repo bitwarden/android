@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
@@ -88,6 +90,9 @@ class AddSendViewModel @Inject constructor(
                         noteInput = "",
                         isHideEmailChecked = false,
                         isDeactivateChecked = false,
+                        isHideEmailAddressEnabled = !policyManager
+                            .getActivePolicies<PolicyInformation.SendOptions>()
+                            .any { it.shouldDisableHideEmail ?: false },
                         deletionDate = ZonedDateTime
                             .now(clock)
                             // We want the default time to be midnight, so we remove all values
@@ -319,6 +324,7 @@ class AddSendViewModel @Inject constructor(
                                     .environment
                                     .environmentUrlData
                                     .baseWebSendUrl,
+                                isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
                             ?: AddSendState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
@@ -356,6 +362,7 @@ class AddSendViewModel @Inject constructor(
                                     .environment
                                     .environmentUrlData
                                     .baseWebSendUrl,
+                                isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
                             ?: AddSendState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
@@ -625,6 +632,11 @@ class AddSendViewModel @Inject constructor(
         )
     }
 
+    private val isHideEmailAddressEnabled: Boolean
+        get() = !policyManager
+            .getActivePolicies<PolicyInformation.SendOptions>()
+            .any { it.shouldDisableHideEmail ?: false }
+
     private inline fun onContent(
         crossinline block: (AddSendState.ViewState.Content) -> Unit,
     ) {
@@ -764,6 +776,7 @@ data class AddSendState(
                 val noteInput: String,
                 val isHideEmailChecked: Boolean,
                 val isDeactivateChecked: Boolean,
+                val isHideEmailAddressEnabled: Boolean,
                 val deletionDate: ZonedDateTime,
                 val expirationDate: ZonedDateTime?,
                 val sendUrl: String?,

@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -39,6 +41,9 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -75,6 +80,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
+        every { getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS) } returns emptyList()
     }
 
     @BeforeEach
@@ -99,6 +105,30 @@ class AddSendViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct when a sendOption includes shouldDisableHideEmail`() {
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS)
+        } returns listOf(
+            SyncResponseJson.Policy(
+                id = "123",
+                type = PolicyTypeJson.SEND_OPTIONS,
+                isEnabled = true,
+                data = Json.encodeToJsonElement(
+                    PolicyInformation.SendOptions(shouldDisableHideEmail = true),
+                ).jsonObject,
+                organizationId = "id2",
+            ),
+        )
+        val viewModel = createViewModel()
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(
+                isHideEmailAddressEnabled = false,
+            ),
+        )
+        assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
     }
 
     @Test
@@ -270,7 +300,13 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 viewState = viewState,
             )
             val mockSendView = createMockSendView(number = 1)
-            every { mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL) } returns viewState
+            every {
+                mockSendView.toViewState(
+                    clock = clock,
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                )
+            } returns viewState
             every { viewState.toSendView(clock) } returns mockSendView
             val sendUrl = "www.test.com/send/test"
             val resultSendView = mockk<SendView> {
@@ -308,7 +344,13 @@ class AddSendViewModelTest : BaseViewModelTest() {
             every { id } returns sendId
         }
         val errorMessage = "Failure"
-        every { mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL) } returns viewState
+        every {
+            mockSendView.toViewState(
+                clock = clock,
+                baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                isHideEmailAddressEnabled = true,
+            )
+        } returns viewState
         every { viewState.toSendView(clock) } returns mockSendView
         coEvery {
             vaultRepository.updateSend(sendId = sendId, sendView = mockSendView)
@@ -426,7 +468,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         val mockSendView = createMockSendView(number = 1)
         every {
-            mockSendView.toViewState(clock = clock, baseWebSendUrl = DEFAULT_ENVIRONMENT_URL)
+            mockSendView.toViewState(
+                clock = clock,
+                baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                isHideEmailAddressEnabled = true,
+            )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
@@ -467,7 +513,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
             )
             val mockSendView = createMockSendView(number = 1)
             every {
-                mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL)
+                mockSendView.toViewState(
+                    clock = clock,
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
             val viewModel = createViewModel(
@@ -509,7 +559,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
             } returns RemovePasswordSendResult.Error(errorMessage = errorMessage)
             val mockSendView = createMockSendView(number = 1)
             every {
-                mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL)
+                mockSendView.toViewState(
+                    clock = clock,
+                    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                    isHideEmailAddressEnabled = true,
+                )
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
             val initialState = DEFAULT_STATE.copy(
@@ -575,7 +629,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         val mockSendView = createMockSendView(number = 1)
         every {
-            mockSendView.toViewState(clock, DEFAULT_ENVIRONMENT_URL)
+            mockSendView.toViewState(
+                clock = clock,
+                baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                isHideEmailAddressEnabled = true,
+            )
         } returns DEFAULT_VIEW_STATE
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
@@ -630,7 +688,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         val mockSendView = createMockSendView(number = 1)
         every {
-            mockSendView.toViewState(clock = clock, baseWebSendUrl = DEFAULT_ENVIRONMENT_URL)
+            mockSendView.toViewState(
+                clock = clock,
+                baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+                isHideEmailAddressEnabled = true,
+            )
         } returns viewState
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
@@ -997,6 +1059,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             expirationDate = null,
             sendUrl = null,
             hasPassword = false,
+            isHideEmailAddressEnabled = true,
         )
 
         private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
