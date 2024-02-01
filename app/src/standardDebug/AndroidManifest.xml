@@ -3,6 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application tools:ignore="MissingApplicationIcon">
+        <service
+            android:name="com.x8bit.bitwarden.data.push.BitwardenFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <!-- Disable Crashlytics for debug builds -->
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
