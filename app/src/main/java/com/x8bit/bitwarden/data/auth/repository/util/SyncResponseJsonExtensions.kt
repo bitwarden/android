@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.serialization.json.Json
@@ -29,10 +30,15 @@ val SyncResponseJson.Policy.policyInformation: PolicyInformation?
     get() = data?.toString()?.let {
         when (type) {
             PolicyTypeJson.MASTER_PASSWORD -> {
-                Json.decodeFromString<PolicyInformation.MasterPassword>(it)
+                Json.decodeFromStringOrNull<PolicyInformation.MasterPassword>(it)
             }
+
             PolicyTypeJson.PASSWORD_GENERATOR -> {
-                Json.decodeFromString<PolicyInformation.PasswordGenerator>(it)
+                Json.decodeFromStringOrNull<PolicyInformation.PasswordGenerator>(it)
+            }
+
+            PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
+                Json.decodeFromStringOrNull<PolicyInformation.VaultTimeout>(it)
             }
 
             else -> null

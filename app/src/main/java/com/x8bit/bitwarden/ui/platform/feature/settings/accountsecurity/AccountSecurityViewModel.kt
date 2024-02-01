@@ -5,19 +5,24 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -36,6 +41,7 @@ class AccountSecurityViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val settingsRepository: SettingsRepository,
     private val environmentRepository: EnvironmentRepository,
+    private val policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -47,6 +53,8 @@ class AccountSecurityViewModel @Inject constructor(
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
+            vaultTimeoutPolicyMinutes = null,
+            vaultTimeoutPolicyAction = null,
         ),
 ) {
     private val webSettingsUrl: String
@@ -61,6 +69,18 @@ class AccountSecurityViewModel @Inject constructor(
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+            .map { policies ->
+                AccountSecurityAction.Internal.PolicyUpdateReceive(
+                    vaultTimeoutPolicies = policies.mapNotNull {
+                        it.policyInformation as? PolicyInformation.VaultTimeout
+                    },
+                )
+            }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         viewModelScope.launch {
@@ -268,6 +288,10 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.FingerprintResultReceive -> {
                 handleFingerprintResultReceived(action)
             }
+
+            is AccountSecurityAction.Internal.PolicyUpdateReceive -> {
+                handlePolicyUpdateReceive(action)
+            }
         }
     }
 
@@ -308,6 +332,20 @@ class AccountSecurityViewModel @Inject constructor(
             )
         }
     }
+
+    private fun handlePolicyUpdateReceive(
+        action: AccountSecurityAction.Internal.PolicyUpdateReceive,
+    ) {
+        // The vault timeout policy can only be implemented in organizations that have
+        // the single organization policy, meaning that if this is enabled, the user is
+        // only in one organization and hence there is only one result in the list.
+        mutableStateFlow.update {
+            it.copy(
+                vaultTimeoutPolicyMinutes = action.vaultTimeoutPolicies?.firstOrNull()?.minutes,
+                vaultTimeoutPolicyAction = action.vaultTimeoutPolicies?.firstOrNull()?.action,
+            )
+        }
+    }
 }
 
 /**
@@ -322,6 +360,8 @@ data class AccountSecurityState(
     val isUnlockWithPinEnabled: Boolean,
     val vaultTimeout: VaultTimeout,
     val vaultTimeoutAction: VaultTimeoutAction,
+    val vaultTimeoutPolicyMinutes: Int?,
+    val vaultTimeoutPolicyAction: String?,
 ) : Parcelable
 
 /**
@@ -347,14 +387,6 @@ sealed class AccountSecurityDialog : Parcelable {
     data class Loading(
         val message: Text,
     ) : AccountSecurityDialog()
-}
-
-/**
- * A representation of the Session timeout action.
- */
-enum class SessionTimeoutAction(val text: Text) {
-    LOCK(text = R.string.lock.asText()),
-    LOG_OUT(text = R.string.log_out.asText()),
 }
 
 /**
@@ -568,6 +600,13 @@ sealed class AccountSecurityAction {
          */
         data class FingerprintResultReceive(
             val fingerprintResult: UserFingerprintResult,
+        ) : Internal()
+
+        /**
+         * A policy update has been received.
+         */
+        data class PolicyUpdateReceive(
+            val vaultTimeoutPolicies: List<PolicyInformation.VaultTimeout>?,
         ) : Internal()
     }
 }

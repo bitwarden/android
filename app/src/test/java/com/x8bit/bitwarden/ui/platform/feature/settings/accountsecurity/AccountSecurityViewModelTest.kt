@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -12,6 +14,10 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -23,6 +29,9 @@ import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -41,6 +50,12 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { vaultTimeoutAction } returns VaultTimeoutAction.LOCK
         coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
     }
+    private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+        } returns mutableActivePolicyFlow
+    }
 
     @Test
     fun `initial state should be correct when saved state is set`() {
@@ -58,6 +73,35 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify { settingsRepository.getUserFingerprint() }
+    }
+
+    @Test
+    fun `state updates when policies change`() = runTest {
+        val viewModel = createViewModel()
+
+        val policyInformation = PolicyInformation.VaultTimeout(
+            minutes = 10,
+            action = "lock",
+        )
+        mutableActivePolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    isEnabled = true,
+                    type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT,
+                    data = Json.encodeToJsonElement(policyInformation).jsonObject,
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    vaultTimeoutPolicyMinutes = 10,
+                    vaultTimeoutPolicyAction = "lock",
+                ),
+                awaitItem(),
+            )
+        }
     }
 
     @Test
@@ -488,17 +532,20 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: AccountSecurityState? = DEFAULT_STATE,
         authRepository: AuthRepository = this.authRepository,
         vaultRepository: VaultRepository = this.vaultRepository,
         environmentRepository: EnvironmentRepository = this.fakeEnvironmentRepository,
         settingsRepository: SettingsRepository = this.settingsRepository,
+        policyManager: PolicyManager = this.policyManager,
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
         environmentRepository = environmentRepository,
+        policyManager = policyManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
         },
@@ -515,4 +562,6 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     isUnlockWithPinEnabled = false,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
+    vaultTimeoutPolicyMinutes = null,
+    vaultTimeoutPolicyAction = null,
 )

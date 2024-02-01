@@ -3,16 +3,21 @@ package com.x8bit.bitwarden.data.platform.repository
 import android.view.autofill.AutofillManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -24,7 +29,9 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -42,6 +49,7 @@ class SettingsRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    private val policyManager: PolicyManager,
     private val dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
@@ -286,6 +294,13 @@ class SettingsRepositoryImpl(
                     ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
             )
 
+    init {
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
+            .onEach { updateVaultUnlockSettingsIfNecessary(it) }
+            .launchIn(unconfinedScope)
+    }
+
     override fun disableAutofill() {
         autofillManager.disableAutofillServices()
 
@@ -449,6 +464,36 @@ class SettingsRepositoryImpl(
                 userId = userId,
                 pinProtectedUserKey = null,
             )
+        }
+    }
+
+    /**
+     * Check the parameters of the vault unlock policy against the user's
+     * settings to determine whether to update the user's settings.
+     */
+    private fun updateVaultUnlockSettingsIfNecessary(
+        policies: List<SyncResponseJson.Policy>,
+    ) {
+        // The vault timeout policy can only be implemented in organizations that have
+        // the single organization policy, meaning that if this is enabled, the user is
+        // only in one organization and hence there is only one result in the list.
+        val vaultUnlockPolicy = policies
+            .firstOrNull()
+            ?.policyInformation as? PolicyInformation.VaultTimeout
+            ?: return
+
+        // Adjust the user's timeout or method if necessary to meet the policy requirements.
+        vaultUnlockPolicy.minutes?.let { maxMinutes ->
+            if ((vaultTimeout.vaultTimeoutInMinutes ?: Int.MAX_VALUE) > maxMinutes) {
+                vaultTimeout = VaultTimeout.Custom(maxMinutes)
+            }
+        }
+        vaultUnlockPolicy.action?.let {
+            vaultTimeoutAction = if (it == "lock") {
+                VaultTimeoutAction.LOCK
+            } else {
+                VaultTimeoutAction.LOGOUT
+            }
         }
     }
 }

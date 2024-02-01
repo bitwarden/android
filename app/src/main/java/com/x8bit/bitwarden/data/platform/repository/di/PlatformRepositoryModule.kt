@@ -5,8 +5,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
@@ -44,12 +44,12 @@ object PlatformRepositoryModule {
     fun provideSettingsRepository(
         autofillManager: AutofillManager,
         autofillEnabledManager: AutofillEnabledManager,
-        appForegroundManager: AppForegroundManager,
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
         vaultSdkSource: VaultSdkSource,
         encryptionManager: BiometricsEncryptionManager,
         dispatcherManager: DispatcherManager,
+        policyManager: PolicyManager,
     ): SettingsRepository =
         SettingsRepositoryImpl(
             autofillManager = autofillManager,
@@ -59,5 +59,6 @@ object PlatformRepositoryModule {
             vaultSdkSource = vaultSdkSource,
             biometricsEncryptionManager = encryptionManager,
             dispatcherManager = dispatcherManager,
+            policyManager = policyManager,
         )
 }
