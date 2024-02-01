@@ -12,6 +12,8 @@ inline fun <reified T : PolicyInformation> PolicyManager.getActivePolicies(): Li
     val type = when (T::class.java) {
         PolicyInformation.MasterPassword::class.java -> PolicyTypeJson.MASTER_PASSWORD
         PolicyInformation.PasswordGenerator::class.java -> PolicyTypeJson.PASSWORD_GENERATOR
+        PolicyInformation.SendOptions::class.java -> PolicyTypeJson.SEND_OPTIONS
+        PolicyInformation.VaultTimeout::class.java -> PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT
 
         else -> {
             throw IllegalStateException(

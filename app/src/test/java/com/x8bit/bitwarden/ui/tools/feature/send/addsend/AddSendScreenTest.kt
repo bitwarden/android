@@ -763,6 +763,49 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `hide email toggle should be disabled according to state`() = runTest {
+        // Expand options section:
+        composeTestRule
+            .onNodeWithText("Options")
+            .performScrollTo()
+            .performClick()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isHideEmailAddressEnabled = false,
+                    ),
+                ),
+            )
+        }
+
+        // Toggle should be disabled
+        composeTestRule
+            .onNodeWithText("Hide my email address", substring = true)
+            .performScrollTo()
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isHideEmailChecked = true,
+                    ),
+                ),
+            )
+        }
+
+        // Toggle should be enabled
+        composeTestRule
+            .onNodeWithText("Hide my email address", substring = true)
+            .performScrollTo()
+            .assertIsDisplayed()
+            .assertIsEnabled()
+    }
+
+    @Test
     fun `on deactivate this send toggle should send DeactivateThisSendToggle`() = runTest {
         // Expand options section:
         composeTestRule
@@ -957,6 +1000,7 @@ class AddSendScreenTest : BaseComposeTest() {
             expirationDate = null,
             sendUrl = null,
             hasPassword = true,
+            isHideEmailAddressEnabled = true,
         )
 
         private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(

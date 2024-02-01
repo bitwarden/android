@@ -475,6 +475,7 @@ private fun AddSendOptions(
                 isChecked = state.common.isHideEmailChecked,
                 onCheckedChange = addSendHandlers.onHideEmailToggle,
                 readOnly = sendRestrictionPolicy,
+                enabled = state.common.isHideEmailChecked || state.common.isHideEmailAddressEnabled,
             )
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(

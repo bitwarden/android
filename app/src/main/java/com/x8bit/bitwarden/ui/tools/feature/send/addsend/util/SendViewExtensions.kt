@@ -13,6 +13,7 @@ import java.time.ZonedDateTime
 fun SendView.toViewState(
     clock: Clock,
     baseWebSendUrl: String,
+    isHideEmailAddressEnabled: Boolean,
 ): AddSendState.ViewState.Content =
     AddSendState.ViewState.Content(
         common = AddSendState.ViewState.Content.Common(
@@ -30,6 +31,7 @@ fun SendView.toViewState(
             expirationDate = this.expirationDate?.let { ZonedDateTime.ofInstant(it, clock.zone) },
             sendUrl = this.toSendUrl(baseWebSendUrl),
             hasPassword = this.hasPassword,
+            isHideEmailAddressEnabled = isHideEmailAddressEnabled,
         ),
         selectedType = when (type) {
             SendType.TEXT -> {
