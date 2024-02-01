@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class ViewNodeTraversalDataExtensionsTest {
@@ -17,6 +18,7 @@ class ViewNodeTraversalDataExtensionsTest {
     private val autofillViewData = AutofillView.Data(
         autofillId = mockk(),
         isFocused = false,
+        textValue = null,
     )
 
     @Test
@@ -31,7 +33,7 @@ class ViewNodeTraversalDataExtensionsTest {
 
         // Test
         val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
+            packageName = PACKAGE_NAME,
         )
 
         // Verify
@@ -39,27 +41,7 @@ class ViewNodeTraversalDataExtensionsTest {
     }
 
     @Test
-    fun `buildUriOrNull should return idPackage URI when WEBSITE is null`() {
-        // Setup
-        val viewNodeTraversalData = ViewNodeTraversalData(
-            autofillViews = emptyList(),
-            idPackage = ID_PACKAGE,
-            ignoreAutofillIds = emptyList(),
-            website = null,
-        )
-        val expected = "androidapp://$ID_PACKAGE"
-
-        // Test
-        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
-        )
-
-        // Verify
-        assertEquals(expected, actual)
-    }
-
-    @Test
-    fun `buildUriOrNull should return title URI when website and idPackage are null`() {
+    fun `buildUriOrNull should return package name URI when website is null`() {
         // Setup
         val viewNodeTraversalData = ViewNodeTraversalData(
             autofillViews = emptyList(),
@@ -67,20 +49,77 @@ class ViewNodeTraversalDataExtensionsTest {
             ignoreAutofillIds = emptyList(),
             website = null,
         )
-        val expected = "androidapp://com.x8bit.bitwarden"
-        every { windowNode.title } returns "com.x8bit.bitwarden/path.deeper.into.app"
+        val expected = "androidapp://$PACKAGE_NAME"
 
         // Test
         val actual = listOf(viewNodeTraversalData).buildUriOrNull(
-            assistStructure = assistStructure,
+            packageName = PACKAGE_NAME,
         )
 
         // Verify
         assertEquals(expected, actual)
     }
 
-    companion object {
-        private const val ID_PACKAGE: String = "com.x8bit.bitwarden"
-        private const val WEBSITE: String = "https://www.google.com"
+    @Test
+    fun `buildUriOrNull should return null when website and packageName are null`() {
+        // Setup
+        val viewNodeTraversalData = ViewNodeTraversalData(
+            autofillViews = emptyList(),
+            idPackage = null,
+            ignoreAutofillIds = emptyList(),
+            website = null,
+        )
+
+        // Test
+        val actual = listOf(viewNodeTraversalData).buildUriOrNull(
+            packageName = null,
+        )
+
+        // Verify
+        assertNull(actual)
+    }
+
+    @Test
+    fun `buildPackageNameOrNull should return idPackage when available`() {
+        // Setup
+        val viewNodeTraversalData = ViewNodeTraversalData(
+            autofillViews = emptyList(),
+            idPackage = ID_PACKAGE,
+            ignoreAutofillIds = emptyList(),
+            website = null,
+        )
+
+        // Test
+        val actual = listOf(viewNodeTraversalData).buildPackageNameOrNull(
+            assistStructure = assistStructure,
+        )
+
+        // Verify
+        assertEquals(ID_PACKAGE, actual)
+    }
+
+    @Test
+    fun `buildPackageNameOrNull should return title URI when idPackage is null`() {
+        // Setup
+        val viewNodeTraversalData = ViewNodeTraversalData(
+            autofillViews = emptyList(),
+            idPackage = null,
+            ignoreAutofillIds = emptyList(),
+            website = null,
+        )
+        val expected = "com.x8bit.bitwarden"
+        every { windowNode.title } returns "com.x8bit.bitwarden/path.deeper.into.app"
+
+        // Test
+        val actual = listOf(viewNodeTraversalData).buildPackageNameOrNull(
+            assistStructure = assistStructure,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
     }
 }
+
+private const val ID_PACKAGE: String = "com.x8bit.bitwarden"
+private const val PACKAGE_NAME: String = "com.google"
+private const val WEBSITE: String = "https://www.google.com"

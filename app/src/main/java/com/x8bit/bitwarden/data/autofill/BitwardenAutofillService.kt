@@ -25,6 +25,15 @@ class BitwardenAutofillService : AutofillService() {
      */
     @Inject
     lateinit var processor: AutofillProcessor
+    /**
+     * App information for the autofill feature.
+     */
+    private val autofillAppInfo: AutofillAppInfo
+        get() = AutofillAppInfo(
+            context = applicationContext,
+            packageName = packageName,
+            sdkInt = Build.VERSION.SDK_INT,
+        )
 
     override fun onFillRequest(
         request: FillRequest,
@@ -32,11 +41,7 @@ class BitwardenAutofillService : AutofillService() {
         fillCallback: FillCallback,
     ) {
         processor.processFillRequest(
-            autofillAppInfo = AutofillAppInfo(
-                context = applicationContext,
-                packageName = packageName,
-                sdkInt = Build.VERSION.SDK_INT,
-            ),
+            autofillAppInfo = autofillAppInfo,
             cancellationSignal = cancellationSignal,
             fillCallback = fillCallback,
             request = request,
@@ -47,6 +52,10 @@ class BitwardenAutofillService : AutofillService() {
         saverRequest: SaveRequest,
         saveCallback: SaveCallback,
     ) {
-        // TODO: add save request behavior (BIT-1299)
+        processor.processSaveRequest(
+            autofillAppInfo = autofillAppInfo,
+            request = saverRequest,
+            saveCallback = saveCallback,
+        )
     }
 }

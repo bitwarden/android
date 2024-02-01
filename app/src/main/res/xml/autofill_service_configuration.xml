@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <autofill-service xmlns:android="http://schemas.android.com/apk/res/android">
     <!--
-    These compatibility packages must be kept in sync with
-    /xml-v30/autofill_service_configuration.xml
+    "Maintain alphabetical order for these compatibility packages and ensure synchronization with
+    both /xml-v30/autofill_service_configuration.xml and the COMPAT_BROWSERS list within
+    SaveInfoBuilderImpl.kt."
     -->
     <compatibility-package
         android:name="alook.browser"

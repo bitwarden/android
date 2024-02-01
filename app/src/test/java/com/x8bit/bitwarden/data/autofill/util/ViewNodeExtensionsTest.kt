@@ -4,6 +4,7 @@ import android.app.assist.AssistStructure
 import android.view.View
 import android.view.ViewStructure.HtmlInfo
 import android.view.autofill.AutofillId
+import android.view.autofill.AutofillValue
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import io.mockk.every
 import io.mockk.mockk
@@ -23,10 +24,18 @@ class ViewNodeExtensionsTest {
     private val autofillViewData = AutofillView.Data(
         autofillId = expectedAutofillId,
         isFocused = expectedIsFocused,
+        textValue = TEXT_VALUE,
     )
+    private val testAutofillOptions = arrayOf(
+        "option one",
+        "option two",
+    )
+    private val testAutofillValue: AutofillValue = mockk()
 
     private val viewNode: AssistStructure.ViewNode = mockk {
         every { this@mockk.autofillId } returns expectedAutofillId
+        every { this@mockk.autofillOptions } returns testAutofillOptions
+        every { this@mockk.autofillValue } returns testAutofillValue
         every { this@mockk.childCount } returns 0
         every { this@mockk.inputType } returns 1
         every { this@mockk.isFocused } returns expectedIsFocused
@@ -38,6 +47,14 @@ class ViewNodeExtensionsTest {
         mockkStatic(HtmlInfo::isPasswordField)
         mockkStatic(Int::isPasswordInputType)
         mockkStatic(Int::isUsernameInputType)
+        mockkStatic(AutofillValue::extractMonthValue)
+        mockkStatic(AutofillValue::extractTextValue)
+        every {
+            testAutofillValue.extractMonthValue(
+                autofillOptions = testAutofillOptions.toList(),
+            )
+        } returns MONTH_VALUE
+        every { testAutofillValue.extractTextValue() } returns TEXT_VALUE
     }
 
     @AfterEach
@@ -46,6 +63,8 @@ class ViewNodeExtensionsTest {
         unmockkStatic(HtmlInfo::isPasswordField)
         unmockkStatic(Int::isPasswordInputType)
         unmockkStatic(Int::isUsernameInputType)
+        unmockkStatic(AutofillValue::extractMonthValue)
+        unmockkStatic(AutofillValue::extractTextValue)
     }
 
     @Test
@@ -54,6 +73,7 @@ class ViewNodeExtensionsTest {
         val autofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH
         val expected = AutofillView.Card.ExpirationMonth(
             data = autofillViewData,
+            monthValue = MONTH_VALUE,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
 
@@ -474,3 +494,5 @@ private val SUPPORTED_RAW_USERNAME_HINTS: List<String> = listOf(
     "phone",
     "username",
 )
+private const val MONTH_VALUE: String = "MONTH_VALUE"
+private const val TEXT_VALUE: String = "TEXT_VALUE"

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.service.autofill.FillResponse
+import android.service.autofill.SaveInfo
 import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -68,6 +69,7 @@ class FillResponseBuilderTest {
         every { this@mockk.filledItems } returns listOf(mockk())
         every { this@mockk.autofillCipher } returns autofillCipherTotpDisabled
     }
+    private val saveInfo: SaveInfo = mockk()
 
     @BeforeEach
     fun setup() {
@@ -117,14 +119,16 @@ class FillResponseBuilderTest {
         val actual = fillResponseBuilder.build(
             autofillAppInfo = appInfo,
             filledData = filledData,
+            saveInfo = saveInfo,
         )
 
         // Verify
         assertNull(actual)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `build should apply FilledPartitions with filledItems and ignore ignoreAutofillIds`() {
+    fun `build should apply FilledPartitions with filledItems, ignore ignoreAutofillIds, and set valid SaveInfo`() {
         // Setup
         val ignoredAutofillIdOne: AutofillId = mockk()
         val ignoredAutofillIdTwo: AutofillId = mockk()
@@ -147,6 +151,116 @@ class FillResponseBuilderTest {
                         data = AutofillView.Data(
                             autofillId = mockk(),
                             isFocused = true,
+                            textValue = null,
+                        ),
+                    ),
+                ),
+            ),
+            uri = null,
+            vaultItemInlinePresentationSpec = null,
+            isVaultLocked = false,
+        )
+        every {
+            filledPartitionOne.buildDataset(
+                authIntentSender = intentSender,
+                autofillAppInfo = appInfo,
+            )
+        } returns dataset
+        every {
+            filledPartitionThree.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = appInfo,
+            )
+        } returns dataset
+        every {
+            filledPartitionFour.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = appInfo,
+            )
+        } returns dataset
+        every {
+            filledData.buildVaultItemDataset(
+                autofillAppInfo = appInfo,
+            )
+        } returns vaultItemDataSet
+        mockBuilder<FillResponse.Builder> {
+            it.addDataset(dataset)
+            it.addDataset(vaultItemDataSet)
+        }
+        mockBuilder<FillResponse.Builder> {
+            it.setIgnoredIds(
+                ignoredAutofillIdOne,
+                ignoredAutofillIdTwo,
+            )
+        }
+        mockBuilder<FillResponse.Builder> {
+            it.setSaveInfo(saveInfo)
+        }
+
+        // Test
+        val actual = fillResponseBuilder.build(
+            autofillAppInfo = appInfo,
+            filledData = filledData,
+            saveInfo = saveInfo,
+        )
+
+        // Verify
+        assertEquals(fillResponse, actual)
+
+        verify(exactly = 1) {
+            filledPartitionOne.buildDataset(
+                authIntentSender = intentSender,
+                autofillAppInfo = appInfo,
+            )
+            filledPartitionThree.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = appInfo,
+            )
+            filledPartitionFour.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = appInfo,
+            )
+            filledData.buildVaultItemDataset(
+                autofillAppInfo = appInfo,
+            )
+            anyConstructed<FillResponse.Builder>().addDataset(vaultItemDataSet)
+            anyConstructed<FillResponse.Builder>().setIgnoredIds(
+                ignoredAutofillIdOne,
+                ignoredAutofillIdTwo,
+            )
+            anyConstructed<FillResponse.Builder>().setSaveInfo(saveInfo)
+        }
+        verify(exactly = 3) {
+            anyConstructed<FillResponse.Builder>().addDataset(dataset)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `build should apply FilledPartitions with filledItems, ignore ignoreAutofillIds, and skip valid SaveInfo`() {
+        // Setup
+        val ignoredAutofillIdOne: AutofillId = mockk()
+        val ignoredAutofillIdTwo: AutofillId = mockk()
+        val ignoreAutofillIds = listOf(
+            ignoredAutofillIdOne,
+            ignoredAutofillIdTwo,
+        )
+        val filledPartitions = listOf(
+            filledPartitionOne,
+            filledPartitionTwo,
+            filledPartitionThree,
+            filledPartitionFour,
+        )
+        val filledData = FilledData(
+            filledPartitions = filledPartitions,
+            ignoreAutofillIds = ignoreAutofillIds,
+            originalPartition = AutofillPartition.Login(
+                views = listOf(
+                    AutofillView.Login.Username(
+                        data = AutofillView.Data(
+                            autofillId = mockk(),
+                            isFocused = true,
+                            textValue = null,
                         ),
                     ),
                 ),
@@ -193,6 +307,7 @@ class FillResponseBuilderTest {
         val actual = fillResponseBuilder.build(
             autofillAppInfo = appInfo,
             filledData = filledData,
+            saveInfo = null,
         )
 
         // Verify

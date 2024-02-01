@@ -3,12 +3,20 @@ package com.x8bit.bitwarden.data.autofill.processor
 import android.os.CancellationSignal
 import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
+import android.service.autofill.SaveCallback
+import android.service.autofill.SaveRequest
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
+import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
+import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
+import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -17,11 +25,15 @@ import kotlinx.coroutines.launch
  * The default implementation of [AutofillProcessor]. Its purpose is to handle autofill related
  * processing.
  */
+@Suppress("LongParameterList")
 class AutofillProcessorImpl(
     dispatcherManager: DispatcherManager,
+    private val policyManager: PolicyManager,
     private val filledDataBuilder: FilledDataBuilder,
     private val fillResponseBuilder: FillResponseBuilder,
     private val parser: AutofillParser,
+    private val saveInfoBuilder: SaveInfoBuilder,
+    private val settingsRepository: SettingsRepository,
 ) : AutofillProcessor {
 
     /**
@@ -45,6 +57,47 @@ class AutofillProcessorImpl(
         )
     }
 
+    override fun processSaveRequest(
+        autofillAppInfo: AutofillAppInfo,
+        request: SaveRequest,
+        saveCallback: SaveCallback,
+    ) {
+        if (settingsRepository.isAutofillSavePromptDisabled) {
+            saveCallback.onSuccess()
+            return
+        }
+
+        if (policyManager.getActivePolicies(PolicyTypeJson.PERSONAL_OWNERSHIP).any()) {
+            saveCallback.onSuccess()
+            return
+        }
+
+        request
+            .fillContexts
+            .lastOrNull()
+            ?.structure
+            ?.let { assistStructure ->
+                val autofillRequest = parser.parse(
+                    assistStructure = assistStructure,
+                    autofillAppInfo = autofillAppInfo,
+                )
+
+                when (autofillRequest) {
+                    is AutofillRequest.Fillable -> {
+                        val intentSender = createAutofillSavedItemIntentSender(
+                            autofillAppInfo = autofillAppInfo,
+                            autofillSaveItem = autofillRequest.toAutofillSaveItem(),
+                        )
+
+                        saveCallback.onSuccess(intentSender)
+                    }
+
+                    AutofillRequest.Unfillable -> saveCallback.onSuccess()
+                }
+            }
+            ?: saveCallback.onSuccess()
+    }
+
     /**
      * Process the [fillRequest] and invoke the [FillCallback] with the response.
      */
@@ -65,11 +118,18 @@ class AutofillProcessorImpl(
                     val filledData = filledDataBuilder.build(
                         autofillRequest = autofillRequest,
                     )
+                    val saveInfo = saveInfoBuilder.build(
+                        autofillAppInfo = autofillAppInfo,
+                        autofillPartition = autofillRequest.partition,
+                        fillRequest = fillRequest,
+                        packageName = autofillRequest.packageName,
+                    )
 
-                    // Load the [filledData] into a [FillResponse].
+                    // Load the filledData and saveInfo into a FillResponse.
                     val response = fillResponseBuilder.build(
                         autofillAppInfo = autofillAppInfo,
                         filledData = filledData,
+                        saveInfo = saveInfo,
                     )
 
                     fillCallback.onSuccess(response)

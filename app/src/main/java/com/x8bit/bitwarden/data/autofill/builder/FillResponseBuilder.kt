@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.builder
 
 import android.service.autofill.FillResponse
+import android.service.autofill.SaveInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.FilledData
 
@@ -14,5 +15,6 @@ interface FillResponseBuilder {
     fun build(
         autofillAppInfo: AutofillAppInfo,
         filledData: FilledData,
+        saveInfo: SaveInfo?,
     ): FillResponse?
 }

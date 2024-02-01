@@ -7,6 +7,8 @@ import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilderImpl
+import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilder
+import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilderImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
@@ -17,6 +19,7 @@ import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -90,12 +93,18 @@ object AutofillModule {
         filledDataBuilder: FilledDataBuilder,
         fillResponseBuilder: FillResponseBuilder,
         parser: AutofillParser,
+        policyManager: PolicyManager,
+        saveInfoBuilder: SaveInfoBuilder,
+        settingsRepository: SettingsRepository,
     ): AutofillProcessor =
         AutofillProcessorImpl(
             dispatcherManager = dispatcherManager,
             filledDataBuilder = filledDataBuilder,
             fillResponseBuilder = fillResponseBuilder,
             parser = parser,
+            policyManager = policyManager,
+            saveInfoBuilder = saveInfoBuilder,
+            settingsRepository = settingsRepository,
         )
 
     @Provides
@@ -107,4 +116,13 @@ object AutofillModule {
 
     @Provides
     fun providesFillResponseBuilder(): FillResponseBuilder = FillResponseBuilderImpl()
+
+    @Singleton
+    @Provides
+    fun providesSaveInfoBuilder(
+        settingsRepository: SettingsRepository,
+    ): SaveInfoBuilder =
+        SaveInfoBuilderImpl(
+            settingsRepository = settingsRepository,
+        )
 }

@@ -15,6 +15,7 @@ sealed class AutofillRequest {
         val ignoreAutofillIds: List<AutofillId>,
         val inlinePresentationSpecs: List<InlinePresentationSpec>,
         val maxInlineSuggestionsCount: Int,
+        val packageName: String?,
         val partition: AutofillPartition,
         val uri: String?,
     ) : AutofillRequest()
