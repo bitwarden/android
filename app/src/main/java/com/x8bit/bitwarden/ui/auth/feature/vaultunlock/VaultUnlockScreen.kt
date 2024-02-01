@@ -22,15 +22,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenKeyboardType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
@@ -58,7 +64,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * The top level composable for the Vault Unlock screen.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 fun VaultUnlockScreen(
@@ -127,6 +133,7 @@ fun VaultUnlockScreen(
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
+            .semantics { testTagsAsResourceId = true }
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
@@ -138,6 +145,7 @@ fun VaultUnlockScreen(
                         initials = state.initials,
                         color = state.avatarColor,
                         onClick = { accountMenuVisible = !accountMenuVisible },
+                        actionTestTag = "AccountIconButton",
                     )
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(
@@ -165,7 +173,9 @@ fun VaultUnlockScreen(
                         { viewModel.trySendAction(VaultUnlockAction.InputChanged(it)) }
                     },
                     keyboardType = state.vaultUnlockType.unlockScreenKeyboardType,
+                    showPasswordTestTag = state.vaultUnlockType.inputFieldVisibilityToggleTestTag,
                     modifier = Modifier
+                        .semantics { testTag = state.vaultUnlockType.unlockScreenInputTestTag }
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
@@ -220,6 +230,7 @@ fun VaultUnlockScreen(
                     },
                     isEnabled = state.input.isNotEmpty(),
                     modifier = Modifier
+                        .semantics { testTag = "UnlockVaultButton" }
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
