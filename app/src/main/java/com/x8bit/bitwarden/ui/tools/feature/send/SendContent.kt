@@ -39,6 +39,7 @@ fun SendContent(
                 BitwardenPolicyWarningText(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
+                        .semantics { testTag = "SendOptionsPolicyInEffectLabel" }
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )

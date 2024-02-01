@@ -57,3 +57,15 @@ private fun AddSendState.ViewState.Content.toSendTextView(): SendTextView? =
             hidden = it.isHideByDefaultChecked,
         )
     }
+
+/**
+ * Extension function to get the semantic test tag based on the AddSendState.ViewState.
+ */
+val AddSendState.ViewState.testTag: String
+    get() = when (this) {
+        is AddSendState.ViewState.Content -> {
+            if (isFileType) "SendFileButton" else "SendTextButton"
+        }
+        is AddSendState.ViewState.Error -> ""
+        AddSendState.ViewState.Loading -> ""
+    }

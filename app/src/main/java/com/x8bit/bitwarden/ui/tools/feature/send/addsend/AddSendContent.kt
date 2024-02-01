@@ -27,11 +27,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
@@ -51,6 +54,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 /**
  * Content view for the [AddSendScreen].
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 fun AddSendContent(
@@ -68,6 +72,7 @@ fun AddSendContent(
 
     Column(
         modifier = modifier
+            .semantics { testTagsAsResourceId = true }
             .verticalScroll(rememberScrollState()),
     ) {
         if (policyDisablesSend) {
@@ -82,6 +87,7 @@ fun AddSendContent(
 
         BitwardenTextField(
             modifier = Modifier
+                .semantics { testTag = "SendNameEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             label = stringResource(id = R.string.name),
@@ -150,7 +156,9 @@ fun AddSendContent(
                     )
                 } else if (isAddMode) {
                     Text(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        modifier = Modifier
+                            .semantics { testTag = "SendCurrentFileNameLabel" }
+                            .align(Alignment.CenterHorizontally),
                         text = type.name ?: stringResource(id = R.string.no_file_chosen),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
@@ -168,6 +176,7 @@ fun AddSendContent(
                             }
                         },
                         modifier = Modifier
+                            .semantics { testTag = "SendChooseFileButton" }
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                     )
@@ -214,6 +223,7 @@ fun AddSendContent(
             is AddSendState.ViewState.Content.SendType.Text -> {
                 BitwardenTextField(
                     modifier = Modifier
+                        .semantics { testTag = "SendTextContentEntry" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.text),
@@ -226,6 +236,7 @@ fun AddSendContent(
                 Spacer(modifier = Modifier.height(16.dp))
                 BitwardenWideSwitch(
                     modifier = Modifier
+                        .semantics { testTag = "SendHideTextByDefaultToggle" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.hide_text_by_default),
@@ -270,6 +281,7 @@ private fun AddSendOptions(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = Modifier
+            .semantics { testTag = "SendShowHideOptionsButton" }
             .fillMaxWidth()
             .clickable(
                 onClickLabel = if (isExpanded) {
@@ -310,6 +322,7 @@ private fun AddSendOptions(
             if (isAddMode) {
                 SendDeletionDateChooser(
                     modifier = Modifier
+                        .semantics { testTag = "SendDeletionOptionsPicker" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateFormatPattern = state.common.dateFormatPattern,
@@ -321,6 +334,7 @@ private fun AddSendOptions(
                 Spacer(modifier = Modifier.height(8.dp))
                 SendExpirationDateChooser(
                     modifier = Modifier
+                        .semantics { testTag = "SendExpirationOptionsPicker" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateFormatPattern = state.common.dateFormatPattern,
@@ -407,6 +421,7 @@ private fun AddSendOptions(
                 range = 0..Int.MAX_VALUE,
                 textFieldReadOnly = sendRestrictionPolicy,
                 modifier = Modifier
+                    .semantics { testTag = "SendMaxAccessCountEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -451,6 +466,7 @@ private fun AddSendOptions(
                 value = state.common.passwordInput,
                 onValueChange = addSendHandlers.onPasswordChange,
                 modifier = Modifier
+                    .semantics { testTag = "SendNewPasswordEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -469,6 +485,7 @@ private fun AddSendOptions(
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
                 modifier = Modifier
+                    .semantics { testTag = "SendHideEmailSwitch" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.hide_email),
@@ -480,6 +497,7 @@ private fun AddSendOptions(
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
                 modifier = Modifier
+                    .semantics { testTag = "SendDeactivateSwitch" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.disable_send),
