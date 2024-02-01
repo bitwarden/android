@@ -6,7 +6,9 @@ import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
@@ -16,6 +18,8 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandom
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -26,6 +30,9 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -82,6 +89,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         setMockGeneratePasswordResult(
             GeneratedPasswordResult.Success("defaultPassword"),
         )
+    }
+
+    private val policyManager: PolicyManager = mockk {
+        every { getActivePolicies(PolicyTypeJson.PASSWORD_GENERATOR) } returns emptyList()
     }
 
     @Test
@@ -329,6 +340,111 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         verify(exactly = 1) {
             clipboardManager.setText(text = viewModel.stateFlow.value.generatedText)
         }
+    }
+
+    @Test
+    fun `Policy should overwrite password options if stricter`() {
+        val policy = createMockPolicy(
+            number = 1,
+            type = PolicyTypeJson.PASSWORD_GENERATOR,
+            isEnabled = true,
+            data = JsonObject(
+                mapOf(
+                    "defaultType" to JsonNull,
+                    "minLength" to JsonPrimitive(10),
+                    "useUpper" to JsonPrimitive(true),
+                    "useNumbers" to JsonPrimitive(true),
+                    "useSpecial" to JsonPrimitive(true),
+                    "minNumbers" to JsonPrimitive(3),
+                    "minSpecial" to JsonPrimitive(3),
+                    "minNumberWords" to JsonPrimitive(5),
+                    "capitalize" to JsonPrimitive(true),
+                    "includeNumber" to JsonPrimitive(true),
+                    "useLower" to JsonPrimitive(true),
+                ),
+            ),
+        )
+        every {
+            policyManager.getActivePolicies(any())
+        } returns listOf(policy)
+
+        val viewModel = createViewModel()
+        assertEquals(
+            initialPasscodeState.copy(
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState.MainType.Passcode.PasscodeType.Password(
+                        length = 14,
+                        minLength = 10,
+                        useCapitals = true,
+                        capitalsEnabled = false,
+                        useLowercase = true,
+                        lowercaseEnabled = false,
+                        useNumbers = true,
+                        numbersEnabled = false,
+                        useSpecialChars = true,
+                        specialCharsEnabled = false,
+                        minNumbers = 3,
+                        minNumbersAllowed = 3,
+                        minSpecial = 3,
+                        minSpecialAllowed = 3,
+                        avoidAmbiguousChars = false,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `Policy should overwrite passphrase options if stricter`() {
+        val policy = createMockPolicy(
+            number = 1,
+            type = PolicyTypeJson.PASSWORD_GENERATOR,
+            isEnabled = true,
+            data = JsonObject(
+                mapOf(
+                    "defaultType" to JsonNull,
+                    "minLength" to JsonPrimitive(10),
+                    "useUpper" to JsonPrimitive(true),
+                    "useNumbers" to JsonPrimitive(true),
+                    "useSpecial" to JsonPrimitive(true),
+                    "minNumbers" to JsonPrimitive(3),
+                    "minSpecial" to JsonPrimitive(3),
+                    "minNumberWords" to JsonPrimitive(5),
+                    "capitalize" to JsonPrimitive(true),
+                    "includeNumber" to JsonPrimitive(true),
+                    "useLower" to JsonPrimitive(true),
+                ),
+            ),
+        )
+        every {
+            policyManager.getActivePolicies(any())
+        } returns listOf(policy)
+
+        val viewModel = createViewModel()
+        val action = GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect(
+            passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
+        )
+
+        viewModel.actionChannel.trySend(action)
+
+        assertEquals(
+            initialPasscodeState.copy(
+                generatedText = "updatedPassphrase",
+                selectedType = GeneratorState.MainType.Passcode(
+                    GeneratorState.MainType.Passcode.PasscodeType.Passphrase(
+                        numWords = 5,
+                        minNumWords = 5,
+                        maxNumWords = 20,
+                        capitalize = true,
+                        capitalizeEnabled = false,
+                        includeNumber = true,
+                        includeNumberEnabled = false,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -1775,6 +1891,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         clipboardManager = clipboardManager,
         generatorRepository = fakeGeneratorRepository,
         authRepository = authRepository,
+        policyManager = policyManager,
     )
 
     private fun createViewModel(
