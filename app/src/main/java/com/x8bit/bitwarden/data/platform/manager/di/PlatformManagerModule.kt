@@ -20,6 +20,8 @@ import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.PolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
@@ -122,6 +124,14 @@ object PlatformManagerModule {
         application: Application,
     ): NetworkConnectionManager = NetworkConnectionManagerImpl(
         context = application.applicationContext,
+    )
+
+    @Provides
+    @Singleton
+    fun providePolicyManager(
+        authDiskSource: AuthDiskSource,
+    ): PolicyManager = PolicyManagerImpl(
+        authDiskSource = authDiskSource,
     )
 
     @Provides

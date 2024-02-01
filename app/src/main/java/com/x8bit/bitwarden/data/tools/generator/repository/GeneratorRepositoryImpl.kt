@@ -8,8 +8,9 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
@@ -26,7 +27,6 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandom
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
@@ -48,12 +48,14 @@ import kotlin.math.max
  * Default implementation of [GeneratorRepository].
  */
 @Singleton
+@Suppress("LongParameterList")
 class GeneratorRepositoryImpl(
     private val generatorSdkSource: GeneratorSdkSource,
     private val generatorDiskSource: GeneratorDiskSource,
     private val authDiskSource: AuthDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
+    private val policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
 ) : GeneratorRepository {
 
@@ -201,10 +203,9 @@ class GeneratorRepositoryImpl(
                 },
             )
 
-    @Suppress("LongMethod", "ReturnCount", "CyclomaticComplexMethod")
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun getPasswordGeneratorPolicy(): PolicyInformation.PasswordGenerator? {
-        val userId = authDiskSource.userState?.activeUserId ?: return null
-        val policies = authDiskSource.getPolicies(userId) ?: return null
+        val policies: List<PolicyInformation.PasswordGenerator> = policyManager.getActivePolicies()
 
         var minLength: Int? = null
         var useUpper = false
@@ -218,8 +219,7 @@ class GeneratorRepositoryImpl(
         var includeNumber = false
 
         var isPassphrasePresent = false
-        policies.filter { it.type == PolicyTypeJson.PASSWORD_GENERATOR && it.isEnabled }
-            .mapNotNull { it.policyInformation as? PolicyInformation.PasswordGenerator }
+        policies
             .forEach { policy ->
                 if (policy.defaultType == PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE) {
                     isPassphrasePresent = true

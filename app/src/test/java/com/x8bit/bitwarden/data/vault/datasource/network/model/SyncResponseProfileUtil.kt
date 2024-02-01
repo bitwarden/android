@@ -30,13 +30,17 @@ fun createMockProfile(number: Int): SyncResponseJson.Profile =
 /**
  * Create a mock [SyncResponseJson.Profile.Organization] with a given [number].
  */
-fun createMockOrganization(number: Int): SyncResponseJson.Profile.Organization =
+fun createMockOrganization(
+    number: Int,
+    isEnabled: Boolean = false,
+    shouldUsePolicies: Boolean = false,
+): SyncResponseJson.Profile.Organization =
     SyncResponseJson.Profile.Organization(
-        shouldUsePolicies = false,
+        shouldUsePolicies = shouldUsePolicies,
         keyConnectorUrl = "mockKeyConnectorUrl-$number",
-        type = 1,
+        type = OrganizationType.ADMIN,
         seats = 1,
-        isEnabled = false,
+        isEnabled = isEnabled,
         providerType = 1,
         maxCollections = 1,
         isSelfHost = false,
@@ -60,7 +64,7 @@ fun createMockOrganization(number: Int): SyncResponseJson.Profile.Organization =
         name = "mockName-$number",
         shouldUseApi = false,
         familySponsorshipValidUntil = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-        status = 1,
+        status = OrganizationStatusType.ACCEPTED,
     )
 
 /**

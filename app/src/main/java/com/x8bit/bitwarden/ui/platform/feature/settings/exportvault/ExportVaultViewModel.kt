@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -26,6 +28,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class ExportVaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ExportVaultState, ExportVaultEvent, ExportVaultAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -33,7 +36,9 @@ class ExportVaultViewModel @Inject constructor(
             dialogState = null,
             exportFormat = ExportVaultFormat.JSON,
             passwordInput = "",
-            policyPreventsExport = authRepository.hasExportVaultPoliciesEnabled,
+            policyPreventsExport = policyManager
+                .getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
+                .any(),
         ),
 ) {
     init {

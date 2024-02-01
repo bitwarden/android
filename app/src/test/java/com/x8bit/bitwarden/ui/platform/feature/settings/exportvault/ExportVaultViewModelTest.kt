@@ -5,6 +5,9 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
@@ -16,15 +19,21 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class ExportVaultViewModelTest : BaseViewModelTest() {
-    private val authRepository: AuthRepository = mockk {
-        every { hasExportVaultPoliciesEnabled } returns false
+    private val authRepository: AuthRepository = mockk()
+
+    private val policyManager: PolicyManager = mockk {
+        every {
+            getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
+        } returns emptyList()
     }
 
     private val savedStateHandle = SavedStateHandle()
 
     @Test
     fun `initial state should be correct`() = runTest {
-        every { authRepository.hasExportVaultPoliciesEnabled } returns true
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
+        } returns listOf(createMockPolicy())
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -185,6 +194,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     private fun createViewModel(): ExportVaultViewModel =
         ExportVaultViewModel(
             authRepository = authRepository,
+            policyManager = policyManager,
             savedStateHandle = savedStateHandle,
         )
 }
