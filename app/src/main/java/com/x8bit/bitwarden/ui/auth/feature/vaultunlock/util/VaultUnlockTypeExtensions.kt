@@ -27,6 +27,15 @@ val VaultUnlockType.unlockScreenMessage: Text
         .asText()
 
 /**
+ * The semantic test tag to use for the main input field on the Vault Unlock screen.
+ */
+val VaultUnlockType.unlockScreenInputTestTag: String
+    get() = when (this) {
+        VaultUnlockType.MASTER_PASSWORD -> "MasterPasswordEntry"
+        VaultUnlockType.PIN -> "PinEntry"
+    }
+
+/**
  * The label for the main text input to use on the Vault Unlock screen.
  */
 val VaultUnlockType.unlockScreenInputLabel: Text
@@ -35,6 +44,15 @@ val VaultUnlockType.unlockScreenInputLabel: Text
         VaultUnlockType.PIN -> R.string.pin
     }
         .asText()
+
+/**
+ * The semantic test tag to use for the hide button in the input field on the Vault Unlock screen.
+ */
+val VaultUnlockType.inputFieldVisibilityToggleTestTag: String
+    get() = when (this) {
+        VaultUnlockType.MASTER_PASSWORD -> "PasswordVisibilityToggle"
+        VaultUnlockType.PIN -> "PinVisibilityToggle"
+    }
 
 /**
  * The error message to use for a failed unlock on the Vault Unlock screen.

@@ -4,10 +4,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -31,11 +34,19 @@ fun BitwardenAccountActionItem(
     initials: String,
     color: Color,
     onClick: () -> Unit,
+    actionTestTag: String? = null,
 ) {
     val iconPainter = painterResource(id = R.drawable.ic_account_initials_container)
     val contentDescription = stringResource(id = R.string.account)
 
-    IconButton(onClick = onClick) {
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier.semantics {
+            if (actionTestTag != null) {
+                testTag = actionTestTag
+            }
+        },
+    ) {
         Icon(
             painter = iconPainter,
             contentDescription = contentDescription,
