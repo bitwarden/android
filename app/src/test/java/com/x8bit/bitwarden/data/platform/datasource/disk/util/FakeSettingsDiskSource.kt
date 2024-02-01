@@ -51,6 +51,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
     private var storedIsCrashLoggingEnabled: Boolean? = null
+    private var storedInitialAutofillDialogShown: Boolean? = null
     private val storedApprovePasswordLoginsEnabled = mutableMapOf<String, Boolean?>()
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
     private var storedSystemBiometricIntegritySource: String? = null
@@ -81,6 +82,12 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         set(value) {
             storedIsIconLoadingDisabled = value
             mutableIsIconLoadingDisabled.tryEmit(value)
+        }
+
+    override var initialAutofillDialogShown: Boolean?
+        get() = storedInitialAutofillDialogShown
+        set(value) {
+            storedInitialAutofillDialogShown = value
         }
 
     override val isIconLoadingDisabledFlow: Flow<Boolean?>

@@ -898,6 +898,19 @@ class SettingsRepositoryTest {
                 settingsRepository.clearClipboardFrequency,
             )
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initialAutofillDialogShown should pull from and update SettingsDiskSource`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+
+            fakeSettingsDiskSource.initialAutofillDialogShown = true
+            assertTrue(settingsRepository.initialAutofillDialogShown)
+
+            settingsRepository.initialAutofillDialogShown = false
+            assertEquals(false, fakeSettingsDiskSource.initialAutofillDialogShown)
+        }
 }
 
 private val MOCK_USER_STATE =

@@ -33,6 +33,11 @@ interface SettingsRepository {
     val appThemeStateFlow: StateFlow<AppTheme>
 
     /**
+     * Has the initial autofill dialog been shown to the user.
+     */
+    var initialAutofillDialogShown: Boolean
+
+    /**
      * The currently stored last time the vault was synced.
      */
     var vaultLastSync: Instant?

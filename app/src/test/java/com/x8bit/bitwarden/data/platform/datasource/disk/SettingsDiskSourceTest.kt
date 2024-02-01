@@ -936,4 +936,53 @@ class SettingsDiskSourceTest {
             settingsDiskSource.getClearClipboardFrequencySeconds(mockUserId),
         )
     }
+
+    @Test
+    fun `initialAutofillDialogShown should pull from and update SharedPreferences`() {
+        val initialAutofillDialogShownKey = "bwPreferencesStorage:addSitePromptShown"
+        val expectedValue = true
+
+        assertEquals(null, settingsDiskSource.initialAutofillDialogShown)
+        assertFalse(fakeSharedPreferences.getBoolean(initialAutofillDialogShownKey, false))
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit {
+            putBoolean(initialAutofillDialogShownKey, expectedValue)
+        }
+
+        assertEquals(
+            expectedValue,
+            settingsDiskSource.initialAutofillDialogShown,
+        )
+
+        // Updating the disk source updates shared preferences
+        settingsDiskSource.initialAutofillDialogShown = false
+
+        assertFalse(fakeSharedPreferences.getBoolean(initialAutofillDialogShownKey, true))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `initialAutofillDialogShown should clear the SharedPreferences value if the value is null `() {
+        val initialAutofillDialogShownKey = "bwPreferencesStorage:addSitePromptShown"
+        val expectedValue = true
+
+        assertEquals(null, settingsDiskSource.initialAutofillDialogShown)
+        assertFalse(fakeSharedPreferences.getBoolean(initialAutofillDialogShownKey, false))
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit {
+            putBoolean(initialAutofillDialogShownKey, expectedValue)
+        }
+
+        assertEquals(
+            expectedValue,
+            settingsDiskSource.initialAutofillDialogShown,
+        )
+
+        // Updating the disk source updates shared preferences
+        settingsDiskSource.initialAutofillDialogShown = null
+
+        assertFalse(fakeSharedPreferences.contains(initialAutofillDialogShownKey))
+    }
 }
