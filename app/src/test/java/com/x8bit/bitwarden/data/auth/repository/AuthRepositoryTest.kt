@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
@@ -97,7 +98,9 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.buildJsonObject
@@ -3493,6 +3496,46 @@ class AuthRepositoryTest {
             }
             coVerify(exactly = 2) {
                 authRequestsService.getAuthRequest(REQUEST_ID)
+            }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAuthRequestsWithUpdates should emit error then success and not cancel flow when getAuthRequests fails then succeeds`() =
+        runTest {
+            val threeMinutes = 3L * 60L * 1_000L
+            val authRequests = listOf(AUTH_REQUEST)
+            val authRequestsResponseJson = AuthRequestsResponseJson(
+                authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
+            )
+            val expectedOne = AuthRequestsUpdatesResult.Error
+            val expectedTwo = AuthRequestsUpdatesResult.Update(authRequests = authRequests)
+            coEvery {
+                authRequestsService.getAuthRequests()
+            } returns Throwable("Fail").asFailure() andThen authRequestsResponseJson.asSuccess()
+            coEvery {
+                authSdkSource.getUserFingerprint(
+                    email = EMAIL,
+                    publicKey = PUBLIC_KEY,
+                )
+            } returns Result.success(FINGER_PRINT)
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+
+            repository
+                .getAuthRequestsWithUpdates()
+                .test {
+                    assertEquals(expectedOne, awaitItem())
+                    advanceTimeBy(threeMinutes)
+                    expectNoEvents()
+                    advanceTimeBy(threeMinutes)
+                    assertEquals(expectedTwo, awaitItem())
+                    advanceTimeBy(threeMinutes)
+                    cancelAndIgnoreRemainingEvents()
+                }
+
+            coVerify(exactly = 2) {
+                authRequestsService.getAuthRequests()
             }
         }
 

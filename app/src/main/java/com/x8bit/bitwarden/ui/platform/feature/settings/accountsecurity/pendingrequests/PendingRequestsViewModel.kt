@@ -5,12 +5,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
+import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.isOverFiveMinutesOld
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -38,6 +39,8 @@ class PendingRequestsViewModel @Inject constructor(
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
     ),
 ) {
+    private var authJob: Job = Job().apply { complete() }
+
     private val dateTimeFormatter
         get() = DateTimeFormatter
             .ofPattern("M/d/yy hh:mm a")
@@ -126,8 +129,8 @@ class PendingRequestsViewModel @Inject constructor(
     private fun handleAuthRequestsResultReceived(
         action: PendingRequestsAction.Internal.AuthRequestsResultReceive,
     ) {
-        when (val result = action.authRequestsResult) {
-            is AuthRequestsResult.Success -> {
+        when (val result = action.authRequestsUpdatesResult) {
+            is AuthRequestsUpdatesResult.Update -> {
                 val requests = result
                     .authRequests
                     .filterRespondedAndExpired()
@@ -160,7 +163,7 @@ class PendingRequestsViewModel @Inject constructor(
                 }
             }
 
-            AuthRequestsResult.Error -> {
+            AuthRequestsUpdatesResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         authRequests = emptyList(),
@@ -173,13 +176,12 @@ class PendingRequestsViewModel @Inject constructor(
     }
 
     private fun updateAuthRequestList() {
-        viewModelScope.launch {
-            trySendAction(
-                PendingRequestsAction.Internal.AuthRequestsResultReceive(
-                    authRequestsResult = authRepository.getAuthRequests(),
-                ),
-            )
-        }
+        authJob.cancel()
+        authJob = authRepository
+            .getAuthRequestsWithUpdates()
+            .map { PendingRequestsAction.Internal.AuthRequestsResultReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 }
 
@@ -332,7 +334,7 @@ sealed class PendingRequestsAction {
          * Indicates that a new auth requests result has been received.
          */
         data class AuthRequestsResultReceive(
-            val authRequestsResult: AuthRequestsResult,
+            val authRequestsUpdatesResult: AuthRequestsUpdatesResult,
         ) : Internal()
     }
 }
