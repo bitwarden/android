@@ -218,7 +218,8 @@ private fun CipherView.toDisplayItem(
         ),
         extraIconList = toLabelIcons(),
         overflowOptions = toOverflowActions(),
-        shouldShowMasterPasswordReprompt = isAutofill && reprompt == CipherRepromptType.PASSWORD,
+        isAutofill = isAutofill,
+        shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
 
 private fun CipherView.toIconData(
@@ -255,6 +256,7 @@ private fun SendView.toDisplayItem(
         ),
         extraIconList = toLabelIcons(clock = clock),
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
+        isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
     )
 

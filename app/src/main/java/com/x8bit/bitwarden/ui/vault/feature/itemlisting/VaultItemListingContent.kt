@@ -36,7 +36,7 @@ fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
     policyDisablesSend: Boolean,
     vaultItemClick: (id: String) -> Unit,
-    masterPasswordRepromptSubmit: (id: String, password: String) -> Unit,
+    masterPasswordRepromptSubmit: (password: String, data: MasterPasswordRepromptData) -> Unit,
     onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -76,20 +76,18 @@ fun VaultItemListingContent(
         -> Unit
     }
 
-    var masterPasswordRepromptCipherId by remember { mutableStateOf<String?>(null) }
-    if (masterPasswordRepromptCipherId != null) {
+    var masterPasswordRepromptData by remember { mutableStateOf<MasterPasswordRepromptData?>(null) }
+    masterPasswordRepromptData?.let { data ->
         BitwardenMasterPasswordDialog(
-            onConfirmClick = {
-                val cipherId = masterPasswordRepromptCipherId
-                    ?: return@BitwardenMasterPasswordDialog
-                masterPasswordRepromptCipherId = null
+            onConfirmClick = { password ->
+                masterPasswordRepromptData = null
                 masterPasswordRepromptSubmit(
-                    cipherId,
-                    it,
+                    password,
+                    data,
                 )
             },
             onDismissRequest = {
-                masterPasswordRepromptCipherId = null
+                masterPasswordRepromptData = null
             },
         )
     }
@@ -123,8 +121,11 @@ fun VaultItemListingContent(
                 label = it.title,
                 supportingLabel = it.subtitle,
                 onClick = {
-                    if (it.shouldShowMasterPasswordReprompt) {
-                        masterPasswordRepromptCipherId = it.id
+                    if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
+                        masterPasswordRepromptData =
+                            MasterPasswordRepromptData.Autofill(
+                                cipherId = it.id,
+                            )
                     } else {
                         vaultItemClick(it.id)
                     }
@@ -142,6 +143,19 @@ fun VaultItemListingContent(
                                 when (option) {
                                     is ListingItemOverflowAction.SendAction.DeleteClick -> {
                                         showConfirmationDialog = option
+                                    }
+
+                                    is ListingItemOverflowAction.VaultAction -> {
+                                        if (option.requiresPasswordReprompt &&
+                                            it.shouldShowMasterPasswordReprompt
+                                        ) {
+                                            masterPasswordRepromptData =
+                                                MasterPasswordRepromptData.OverflowItem(
+                                                    action = option,
+                                                )
+                                        } else {
+                                            onOverflowItemClick(option)
+                                        }
                                     }
 
                                     else -> onOverflowItemClick(option)

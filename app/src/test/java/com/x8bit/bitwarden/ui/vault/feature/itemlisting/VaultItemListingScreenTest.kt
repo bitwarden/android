@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
+import com.x8bit.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
@@ -639,7 +640,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
                         createDisplayItem(number = 1)
-                            .copy(shouldShowMasterPasswordReprompt = false),
+                            .copy(
+                                isAutofill = false,
+                                shouldShowMasterPasswordReprompt = false,
+                            ),
                     ),
                 ),
             )
@@ -656,13 +660,16 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `clicking on a display item when master password reprompt is required should show the master password dialog`() {
+    fun `clicking on a display item when master password reprompt is required for autofill should show the master password dialog`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
                         createDisplayItem(number = 1)
-                            .copy(shouldShowMasterPasswordReprompt = true),
+                            .copy(
+                                isAutofill = true,
+                                shouldShowMasterPasswordReprompt = true,
+                            ),
                     ),
                 ),
             )
@@ -709,7 +716,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
                         createDisplayItem(number = 1)
-                            .copy(shouldShowMasterPasswordReprompt = true),
+                            .copy(
+                                isAutofill = true,
+                                shouldShowMasterPasswordReprompt = true,
+                            ),
                     ),
                 ),
             )
@@ -735,7 +745,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(
                         createDisplayItem(number = 1)
-                            .copy(shouldShowMasterPasswordReprompt = true),
+                            .copy(
+                                isAutofill = true,
+                                shouldShowMasterPasswordReprompt = true,
+                            ),
                     ),
                 ),
             )
@@ -757,8 +770,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultItemListingsAction.MasterPasswordRepromptSubmit(
-                    cipherId = "mockId-1",
                     password = "password",
+                    masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
+                        cipherId = "mockId-1",
+                    ),
                 ),
             )
         }
@@ -859,6 +874,72 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(VaultItemListingsAction.LockClick)
         }
+    }
+
+    @Test
+    fun `on cipher item overflow option click should emit the appropriate action`() {
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(createCipherDisplayItem(number = 1)),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Edit")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-1",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on cipher item overflow option click when reprompt is required should show the master password dialog`() {
+        mutableStateFlow.update {
+            it.copy(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = listOf(
+                        createCipherDisplayItem(number = 1)
+                            .copy(shouldShowMasterPasswordReprompt = true),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription("Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText("Edit")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
+
+        composeTestRule.assertMasterPasswordDialogDisplayed()
     }
 
     @Test
@@ -1166,5 +1247,20 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
             ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
             ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
         ),
+        isAutofill = false,
+        shouldShowMasterPasswordReprompt = false,
+    )
+
+private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayItem =
+    VaultItemListingState.DisplayItem(
+        id = "mockId-$number",
+        title = "mockTitle-$number",
+        subtitle = "mockSubtitle-$number",
+        iconData = IconData.Local(R.drawable.ic_vault),
+        extraIconList = emptyList(),
+        overflowOptions = listOf(
+            ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+        ),
+        isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
     )
