@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.provider
 
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -41,7 +42,14 @@ class AutofillCipherProviderImpl(
             .mapNotNull { cipherView ->
                 cipherView
                     // We only care about non-deleted card ciphers.
-                    .takeIf { cipherView.type == CipherType.CARD && cipherView.deletedDate == null }
+                    .takeIf {
+                        // Must be card type.
+                        cipherView.type == CipherType.CARD &&
+                            // Must not be deleted.
+                            cipherView.deletedDate == null &&
+                            // Must not require a reprompt.
+                            it.reprompt == CipherRepromptType.NONE
+                    }
                     ?.let { nonNullCipherView ->
                         AutofillCipher.Card(
                             cipherId = cipherView.id,
@@ -63,7 +71,14 @@ class AutofillCipherProviderImpl(
         val cipherViews = getUnlockedCiphersOrNull() ?: return emptyList()
         // We only care about non-deleted login ciphers.
         val loginCiphers = cipherViews
-            .filter { it.type == CipherType.LOGIN && it.deletedDate == null }
+            .filter {
+                // Must be login type
+                it.type == CipherType.LOGIN &&
+                    // Must not be deleted.
+                    it.deletedDate == null &&
+                    // Must not require a reprompt.
+                    it.reprompt == CipherRepromptType.NONE
+            }
 
         return cipherMatchingManager
             // Filter for ciphers that match the uri in some way.

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.processor
 
 import com.bitwarden.core.CardView
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.LoginView
@@ -43,6 +44,7 @@ class AutofillCipherProviderTest {
         every { deletedDate } returns null
         every { id } returns CIPHER_ID
         every { name } returns CARD_NAME
+        every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherType.CARD
     }
     private val loginViewWithoutTotp: LoginView = mockk {
@@ -55,6 +57,7 @@ class AutofillCipherProviderTest {
         every { id } returns CIPHER_ID
         every { login } returns loginViewWithoutTotp
         every { name } returns LOGIN_NAME
+        every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherType.LOGIN
     }
     private val loginViewWithTotp: LoginView = mockk {
@@ -67,6 +70,7 @@ class AutofillCipherProviderTest {
         every { id } returns CIPHER_ID
         every { login } returns loginViewWithTotp
         every { name } returns LOGIN_NAME
+        every { reprompt } returns CipherRepromptType.NONE
         every { type } returns CipherType.LOGIN
     }
     private val authRepository: AuthRepository = mockk {
@@ -153,15 +157,21 @@ class AutofillCipherProviderTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getCardAutofillCiphers when unlocked should return non-null and non-deleted card ciphers`() =
+    fun `getCardAutofillCiphers when unlocked should return non-null, non-deleted, and non-reprompt card ciphers`() =
         runTest {
             val deletedCardCipherView: CipherView = mockk {
                 every { deletedDate } returns mockk()
                 every { type } returns CipherType.CARD
             }
+            val repromptCardCipherView: CipherView = mockk {
+                every { deletedDate } returns null
+                every { reprompt } returns CipherRepromptType.PASSWORD
+                every { type } returns CipherType.CARD
+            }
             val cipherViews = listOf(
                 cardCipherView,
                 deletedCardCipherView,
+                repromptCardCipherView,
                 loginCipherViewWithTotp,
                 loginCipherViewWithoutTotp,
             )
@@ -197,10 +207,15 @@ class AutofillCipherProviderTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getLoginAutofillCiphers when unlocked should return matched, non-deleted, login ciphers`() =
+    fun `getLoginAutofillCiphers when unlocked should return matched, non-deleted, non-reprompt, login ciphers`() =
         runTest {
             val deletedLoginCipherView: CipherView = mockk {
                 every { deletedDate } returns mockk()
+                every { type } returns CipherType.LOGIN
+            }
+            val repromptLoginCipherView: CipherView = mockk {
+                every { deletedDate } returns null
+                every { reprompt } returns CipherRepromptType.PASSWORD
                 every { type } returns CipherType.LOGIN
             }
             val cipherViews = listOf(
@@ -208,6 +223,7 @@ class AutofillCipherProviderTest {
                 loginCipherViewWithTotp,
                 loginCipherViewWithoutTotp,
                 deletedLoginCipherView,
+                repromptLoginCipherView,
             )
             val filteredCipherViews = listOf(
                 loginCipherViewWithTotp,
