@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.autofill.util.getAutofillAssistStructureOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import io.mockk.coEvery
@@ -63,6 +64,7 @@ class AutofillCompletionManagerTest {
     private val filledDataBuilder: FilledDataBuilder = mockk()
     private val filledPartition: FilledPartition = mockk()
     private val mockIntent: Intent = mockk()
+    private val settingsRepository: SettingsRepository = mockk()
     private val resultIntent: Intent = mockk()
     private val toast: Toast = mockk {
         every { show() } just runs
@@ -76,6 +78,7 @@ class AutofillCompletionManagerTest {
             clipboardManager = clipboardManager,
             dispatcherManager = dispatcherManager,
             filledDataBuilderProvider = { filledDataBuilder },
+            settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
         )
 
@@ -239,6 +242,7 @@ class AutofillCompletionManagerTest {
                 autofillAppInfo = autofillAppInfo,
             )
         } returns dataset
+        every { settingsRepository.isAutoCopyTotpDisabled } returns false
         every { createAutofillSelectionResultIntent(dataset = dataset) } returns resultIntent
         coEvery {
             vaultRepository.generateTotp(
@@ -278,6 +282,7 @@ class AutofillCompletionManagerTest {
                 authIntentSender = null,
                 autofillAppInfo = autofillAppInfo,
             )
+            settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
             Toast.makeText(
                 context,
@@ -319,6 +324,7 @@ class AutofillCompletionManagerTest {
                 autofillAppInfo = autofillAppInfo,
             )
         } returns dataset
+        every { settingsRepository.isAutoCopyTotpDisabled } returns false
         every { createAutofillSelectionResultIntent(dataset = dataset) } returns resultIntent
         coEvery {
             vaultRepository.generateTotp(
@@ -350,6 +356,7 @@ class AutofillCompletionManagerTest {
                 authIntentSender = null,
                 autofillAppInfo = autofillAppInfo,
             )
+            settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
         }
         coVerify {
@@ -385,6 +392,7 @@ class AutofillCompletionManagerTest {
                 autofillAppInfo = autofillAppInfo,
             )
         } returns dataset
+        every { settingsRepository.isAutoCopyTotpDisabled } returns false
         every { createAutofillSelectionResultIntent(dataset = dataset) } returns resultIntent
         mutableUserStateFlow.value = mockk {
             every { activeAccount.isPremium } returns true
@@ -400,6 +408,7 @@ class AutofillCompletionManagerTest {
             activity.finish()
         }
         verify {
+            settingsRepository.isAutoCopyTotpDisabled
             activity.intent
             mockIntent.getAutofillAssistStructureOrNull()
             autofillParser.parse(
@@ -410,6 +419,7 @@ class AutofillCompletionManagerTest {
                 authIntentSender = null,
                 autofillAppInfo = autofillAppInfo,
             )
+            settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
         }
         coVerify {
@@ -441,6 +451,7 @@ class AutofillCompletionManagerTest {
                 autofillAppInfo = autofillAppInfo,
             )
         } returns dataset
+        every { settingsRepository.isAutoCopyTotpDisabled } returns false
         every { createAutofillSelectionResultIntent(dataset = dataset) } returns resultIntent
         mutableUserStateFlow.value = mockk {
             every { activeAccount.isPremium } returns false
@@ -466,6 +477,65 @@ class AutofillCompletionManagerTest {
                 authIntentSender = null,
                 autofillAppInfo = autofillAppInfo,
             )
+            settingsRepository.isAutoCopyTotpDisabled
+            createAutofillSelectionResultIntent(dataset = dataset)
+        }
+        coVerify {
+            filledDataBuilder.build(autofillRequest = fillableRequest)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `completeAutofill when filled partition and totp copy disabled should build a dataset, place it in a result Intent, and finish the Activity`() {
+        val filledData: FilledData = mockk {
+            every { filledPartitions } returns listOf(filledPartition)
+        }
+        every { activity.intent } returns mockIntent
+        every { mockIntent.getAutofillAssistStructureOrNull() } returns assistStructure
+        every {
+            autofillParser.parse(
+                autofillAppInfo = autofillAppInfo,
+                assistStructure = assistStructure,
+            )
+        } returns fillableRequest
+        every { cipherView.login?.totp } returns TOTP_CODE
+        coEvery {
+            filledDataBuilder.build(autofillRequest = fillableRequest)
+        } returns filledData
+        every {
+            filledPartition.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = autofillAppInfo,
+            )
+        } returns dataset
+        every { settingsRepository.isAutoCopyTotpDisabled } returns true
+        every { createAutofillSelectionResultIntent(dataset = dataset) } returns resultIntent
+        mutableUserStateFlow.value = mockk {
+            every { activeAccount.isPremium } returns true
+        }
+
+        autofillCompletionManager.completeAutofill(
+            activity = activity,
+            cipherView = cipherView,
+        )
+
+        verify {
+            activity.setResult(Activity.RESULT_OK, resultIntent)
+            activity.finish()
+        }
+        verify {
+            activity.intent
+            mockIntent.getAutofillAssistStructureOrNull()
+            autofillParser.parse(
+                autofillAppInfo = autofillAppInfo,
+                assistStructure = assistStructure,
+            )
+            filledPartition.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = autofillAppInfo,
+            )
+            settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
         }
         coVerify {

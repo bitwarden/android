@@ -57,6 +57,7 @@ object AutofillModule {
         authRepository: AuthRepository,
         clipboardManager: BitwardenClipboardManager,
         dispatcherManager: DispatcherManager,
+        settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
     ): AutofillCompletionManager =
         AutofillCompletionManagerImpl(
@@ -64,6 +65,7 @@ object AutofillModule {
             autofillParser = autofillParser,
             clipboardManager = clipboardManager,
             dispatcherManager = dispatcherManager,
+            settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
         )
 

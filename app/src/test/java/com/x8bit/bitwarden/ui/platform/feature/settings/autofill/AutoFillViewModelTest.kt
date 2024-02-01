@@ -5,7 +5,6 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -22,6 +21,8 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     private val settingsRepository: SettingsRepository = mockk() {
         every { isInlineAutofillEnabled } returns true
         every { isInlineAutofillEnabled = any() } just runs
+        every { isAutoCopyTotpDisabled } returns true
+        every { isAutoCopyTotpDisabled = any() } just runs
         every { isAutofillSavePromptDisabled } returns true
         every { isAutofillSavePromptDisabled = any() } just runs
         every { defaultUriMatchType } returns UriMatchType.DOMAIN
@@ -117,19 +118,23 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on CopyTotpAutomaticallyClick should update the isCopyTotpAutomaticallyEnabled state`() =
+    fun `on CopyTotpAutomaticallyClick should update the isCopyTotpAutomaticallyEnabled state and save new value to settings`() =
         runTest {
             val viewModel = createViewModel()
             val isEnabled = true
+            viewModel.trySendAction(AutoFillAction.CopyTotpAutomaticallyClick(isEnabled))
             viewModel.eventFlow.test {
-                viewModel.trySendAction(AutoFillAction.CopyTotpAutomaticallyClick(isEnabled))
-                assertEquals(AutoFillEvent.ShowToast("Not yet implemented.".asText()), awaitItem())
+                expectNoEvents()
             }
             assertEquals(
                 DEFAULT_STATE.copy(isCopyTotpAutomaticallyEnabled = isEnabled),
                 viewModel.stateFlow.value,
             )
+
+            // The UI enables the value, so the value gets flipped to save it as a "disabled" value.
+            verify { settingsRepository.isAutoCopyTotpDisabled = !isEnabled }
         }
 
     @Test

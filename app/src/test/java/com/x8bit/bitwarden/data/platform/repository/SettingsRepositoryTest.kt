@@ -474,6 +474,24 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isAutoCopyTotpDisabled should pull from and update SettingsDiskSource`() {
+        val userId = "userId"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertFalse(settingsRepository.isAutoCopyTotpDisabled)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.storeAutoCopyTotpDisabled(
+            userId = userId,
+            isAutomaticallyCopyTotpDisabled = true,
+        )
+        assertTrue(settingsRepository.isAutoCopyTotpDisabled)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.isAutoCopyTotpDisabled = false
+        assertFalse(fakeSettingsDiskSource.getAutoCopyTotpDisabled(userId = userId)!!)
+    }
+
+    @Test
     fun `isAutofillSavePromptDisabled should pull from and update SettingsDiskSource`() {
         val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE

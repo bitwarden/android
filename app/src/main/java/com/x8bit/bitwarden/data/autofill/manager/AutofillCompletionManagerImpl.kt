@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.util.toAutofillCipherProvider
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +27,7 @@ import kotlinx.coroutines.launch
 /**
  * Primary implementation of [AutofillCompletionManager].
  */
+@Suppress("LongParameterList")
 class AutofillCompletionManagerImpl(
     private val authRepository: AuthRepository,
     private val autofillParser: AutofillParser,
@@ -33,6 +35,7 @@ class AutofillCompletionManagerImpl(
     private val dispatcherManager: DispatcherManager,
     private val filledDataBuilderProvider: (CipherView) -> FilledDataBuilder =
         { createSingleItemFilledDataBuilder(cipherView = it) },
+    private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
 ) : AutofillCompletionManager {
     private val mainScope = CoroutineScope(dispatcherManager.main)
@@ -97,9 +100,9 @@ class AutofillCompletionManagerImpl(
     ) {
         val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
         val totpCode = cipherView.login?.totp
+        val isTotpDisabled = settingsRepository.isAutoCopyTotpDisabled
 
-        // TODO check global TOTP enabled status BIT-1093
-        if (isPremium && totpCode != null) {
+        if (!isTotpDisabled && isPremium && totpCode != null) {
             val totpResult = vaultRepository.generateTotp(
                 time = DateTime.now(),
                 totpCode = totpCode,
