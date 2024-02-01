@@ -15,7 +15,6 @@ plugins {
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
-    kotlin("kapt")
 }
 
 android {
@@ -177,7 +176,7 @@ dependencies {
     implementation(libs.bitwarden.sdk)
     implementation(libs.bumptech.glide)
     implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    ksp(libs.google.hilt.compiler)
     implementation(libs.jakewharton.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
