@@ -25,12 +25,12 @@
 	  <CodesignKey>iPhone Developer</CodesignKey>
 	  <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
 	  <MtouchInterpreter>all</MtouchInterpreter>
-    <!--<MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>-->
-  
-		<!--TODO: add argon2id load when library is built with the corresponding architecture for iOS Simulator-->
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|iossimulator-x64'">
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|ios-arm64'">
-		<MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
 	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
     <CreatePackage>false</CreatePackage>
@@ -38,7 +38,7 @@
     <CodesignKey>$(ReleaseCodesignKey)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
 	  <UseInterpreter>true</UseInterpreter>
-    <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
   </PropertyGroup>
 	<ItemGroup>
 		<TrimmerRootAssembly Include="System.Security.Cryptography" />
