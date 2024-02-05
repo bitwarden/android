@@ -48,7 +48,7 @@ jobs:
           fi
 
       - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@d6f3f49f3345e29369fe57596a3ca8f94c4d2ca7 # v5.4.0
+        uses: crazy-max/ghaction-import-gpg@01dd5d3ca463c7f10f7f4f7b4f177225ac661ee4 # v6.1.0
         with:
           gpg_private_key: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key }}
           passphrase: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key-passphrase }}
